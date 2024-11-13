@@ -1,0 +1,21 @@
+image: oven/bun:alpine
+
+stages:
+  - test
+
+variables:
+  NODE_ENV: 'test'
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - bun install
+
+test:
+  stage: test
+  script:
+    - bun test
+  only:
+    - merge_requests
