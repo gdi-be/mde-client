@@ -3,7 +3,10 @@
   import { ParaglideJS } from '@inlang/paraglide-sveltekit';
   import Header from '../components/Header.svelte';
   import Footer from '../components/Footer.svelte';
-  let { children } = $props();
+  let { children, data } = $props();
+
+  console.log({data});
+
 </script>
 
 <ParaglideJS {i18n}>
