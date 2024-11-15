@@ -2,16 +2,26 @@
   let { text = 'Footer' } = $props();
 </script>
 
+<footer>
+  <div>
+  </div>
+  <div>
+    {text}
+  </div>
+  <div>
+  </div>
+</footer>
+
 <style>
   footer {
     background-color: #f8f9fa;
-    padding: 1rem;
+    height: 3em;
     text-align: center;
-    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
     align-self: stretch;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 </style>
-
-<footer>
-  {text}
-</footer>

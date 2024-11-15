@@ -1,6 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "title": "Hallo, {name}!",
+  "title": "Hallo {name}!",
   "welcome": "Willkommen beim Metadateneditor",
   "login": "Login",
   "pageNotFound": "Seite nicht gefunden"

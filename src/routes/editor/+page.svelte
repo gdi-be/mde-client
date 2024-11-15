@@ -1,8 +1,12 @@
-<form>
-  <input type="text" placeholder="Page title" />
-  <textarea placeholder="Page content"></textarea>
-  <button type="submit">Save</button>
-</form>
+<div>
+  <form>
+    <input type="text" placeholder="Page title" />
+    <textarea placeholder="Page content"></textarea>
+    <button type="submit">Save</button>
+  </form>
+  <a href="/">Zurück</a>
+</div>
+
 
 <style lang="less">
   form {
