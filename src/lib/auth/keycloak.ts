@@ -1,6 +1,10 @@
 import { env } from '$env/dynamic/public';
 import Keycloak from 'keycloak-js';
 
+if (!env.PUBLIC_KEYCLOAK_URL || !env.PUBLIC_KEYCLOAK_REALM || !env.PUBLIC_KEYCLOAK_ID) {
+  throw new Error('Missing Keycloak configuration in environment variables');
+}
+
 const keycloak = new Keycloak({
   url: env.PUBLIC_KEYCLOAK_URL,
   realm: env.PUBLIC_KEYCLOAK_REALM,
@@ -15,7 +19,7 @@ keycloak.onTokenExpired = async () => {
   }
 };
 
-export async function initKeycloak() {
+export const initKeycloak = async () => {
   const authenticated = await keycloak.init({
     checkLoginIframe: false,
     onLoad: 'check-sso',
