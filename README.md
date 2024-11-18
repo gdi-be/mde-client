@@ -1,16 +1,25 @@
 # Webclient for the GDI-Berlin Metadateneditor
 
-## Development
 
 ---
 This documentation uses `bun` as a JavaScript runtime. In most cases this can be
 replaced with `npm` if `bun` does not work as expected.
 ---
 
+## Requirements
+
 Install the required packages.
 ```bash
 bun install
 ```
+
+Generate an auth secret which encrypts tokens. [Learn more](https://authjs.dev/getting-started/deployment)
+
+```bash
+bunx auth secret
+```
+
+## Development
 
 ```bash
 bun run dev
@@ -20,6 +29,9 @@ bun run dev -- --open
 ```
 
 ### paraglide i18n
+
+:warning: currently the vite plugin for paraglide is not compatible with the podman setup! You
+may need to restart the server to use translations as expected.
 
 Translations can be added to the `messages/de.json`.
 To use translations just `import * as m from '$lib/paraglide/messages'` and

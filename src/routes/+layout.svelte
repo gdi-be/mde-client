@@ -4,6 +4,7 @@
   import Header from '../components/Header.svelte';
   import Footer from '../components/Footer.svelte';
   let { children } = $props();
+
 </script>
 
 <ParaglideJS {i18n}>
@@ -25,6 +26,11 @@
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
+  }
+
+  :global(a) {
+    color: #007bff;
+    text-decoration: none;
   }
 
   .container {
