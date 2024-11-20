@@ -1,30 +1,32 @@
-import { env } from '$env/dynamic/public';
-import Keycloak from 'keycloak-js';
+import jwt from 'jsonwebtoken';
+import {
+  AUTH_KEYCLOAK_REALM,
+  AUTH_KEYCLOAK_URL,
+} from '$env/static/private';
 
-if (!env.PUBLIC_KEYCLOAK_URL || !env.PUBLIC_KEYCLOAK_REALM || !env.PUBLIC_KEYCLOAK_ID) {
-  throw new Error('Missing Keycloak configuration in environment variables');
+export const verifyToken = async (token: string) => {
+  const publicKey = await fetchPublicKey();
+  return jwt.verify(token, publicKey, { algorithms: ['RS256'] });
 }
 
-const keycloak = new Keycloak({
-  url: env.PUBLIC_KEYCLOAK_URL,
-  realm: env.PUBLIC_KEYCLOAK_REALM,
-  clientId: env.PUBLIC_KEYCLOAK_ID
-});
+export const fetchPublicKey = async() => {
+  const certsUrl = `${AUTH_KEYCLOAK_URL}/realms/${AUTH_KEYCLOAK_REALM}/protocol/openid-connect/certs`;
 
-keycloak.onTokenExpired = async () => {
-  try {
-    await keycloak.updateToken(0);
-  } catch (error) {
-    console.error('Failed to refresh token:', error);
+  const response = await fetch(certsUrl);
+  if (!response.ok) {
+    throw new Error('Failed to fetch Keycloak public keys');
   }
-};
 
-export const initKeycloak = async () => {
-  const authenticated = await keycloak.init({
-    checkLoginIframe: false,
-    onLoad: 'check-sso',
-  });
-  return { authenticated, token: keycloak.token, keycloak };
+  const { keys } = (await response.json());
+  if (!keys || keys.length === 0) {
+    throw new Error('No public keys available');
+  }
+
+  const { n, e } = keys[0];
+
+  const modulus = Buffer.from(n, 'base64url').toString('base64');
+  const exponent = Buffer.from(e, 'base64url').toString('base64');
+
+  const pemKey = `-----BEGIN PUBLIC KEY-----\n${modulus}\n${exponent}\n-----END PUBLIC KEY-----`;
+  return pemKey;
 }
-
-export default keycloak;

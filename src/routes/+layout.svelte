@@ -3,13 +3,13 @@
   import { ParaglideJS } from '@inlang/paraglide-sveltekit';
   import Header from '../components/Header.svelte';
   import Footer from '../components/Footer.svelte';
-  let { children } = $props();
+  let { children, data } = $props();
 
 </script>
 
 <ParaglideJS {i18n}>
   <div class="container">
-    <Header />
+    <Header token={data.token}/>
     <main>
       {#if children}
         {@render children()}

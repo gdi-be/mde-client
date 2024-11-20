@@ -1,14 +1,12 @@
 <script>
   import * as m from '$lib/paraglide/messages';
-  import keycloak from '$lib/auth/keycloak';
   import LoginButton from './LoginButton.svelte';
 
-  let user = $derived(keycloak.tokenParsed);
-  let authenticated = $derived(keycloak.authenticated || false);
+  const { token } = $props();
 </script>
 
 <div class="welcome">
-  {#if !authenticated}
+  {#if !token}
     <h2>
       Hallo Schönheit!
     </h2>
@@ -17,7 +15,7 @@
     </p>
     <LoginButton />
   {:else}
-    <h1>{m.title({ name: user?.given_name || user?.preferred_username})}</h1>
+    <h1>{m.title({ name: token?.given_name || token?.preferred_username})}</h1>
     <p>
       {m.welcome()}
     </p>
