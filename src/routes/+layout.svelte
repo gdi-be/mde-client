@@ -7,6 +7,10 @@
 
 </script>
 
+<svelte:head>
+  <title>GDI Berlin - Metadateneditor</title>
+</svelte:head>
+
 <ParaglideJS {i18n}>
   <div class="container">
     <Header token={data.token}/>
