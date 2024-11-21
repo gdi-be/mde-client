@@ -1,35 +1,20 @@
-<div>
-  <form>
-    <input type="text" placeholder="Page title" />
-    <textarea placeholder="Page content"></textarea>
-    <button type="submit">Save</button>
-  </form>
-  <a href="/">Zurück</a>
+<script>
+  let { data } = $props();
+</script>
+
+<div class="metadata-list">
+  {#each data.metadata as metadata}
+      <a href="/editor/{metadata.id}">
+        {metadata.title}
+      </a>
+  {/each}
 </div>
 
-
 <style lang="less">
-  form {
+  .metadata-list {
+    padding: 1em 0;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-
-    input, textarea {
-      padding: 0.5rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 0.25rem;
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-    }
+    gap: 1em;
   }
 </style>
