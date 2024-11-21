@@ -10,7 +10,7 @@
     if (reload === 'force') {
       goto('/', {
         replaceState: true,
-        noScroll:true,
+        noScroll: true,
         invalidateAll: true
       })
     }
