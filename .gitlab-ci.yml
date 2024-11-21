@@ -1,3 +1,4 @@
+image: terrestris/gitlab-runner-image:node20-bullseye-jdk21-1
 services:
   - docker:dind
 
@@ -9,7 +10,7 @@ test:
   stage: test
   only:
     - merge_requests
-  image: oven/bun:alpine
+  image: oven/bun:1.1.36-alpine
   variables:
     NODE_ENV: 'test'
   script:
