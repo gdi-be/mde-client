@@ -1,6 +1,6 @@
 import type { Cookies } from '@sveltejs/kit';
 
-export const setTokens = (cookies: Cookies, accessToken: string, refreshToken: string): void => {
+export const setAccessToken = (cookies: Cookies, accessToken: string): void => {
   cookies.set('access_token', accessToken, {
     httpOnly: true,
     secure: true,
@@ -9,7 +9,9 @@ export const setTokens = (cookies: Cookies, accessToken: string, refreshToken: s
     // 1 hour
     maxAge: 3600,
   });
+};
 
+export const setRefreshToken = (cookies: Cookies, refreshToken: string): void => {
   cookies.set('refresh_token', refreshToken, {
     httpOnly: true,
     secure: true,
@@ -25,6 +27,10 @@ export const getAccessToken = (cookies: Cookies, parsed = false) => {
   if (!token) return;
   return parsed ? parseToken(token) : token;
 };
+
+export const getRefreshToken = (cookies: Cookies) => {
+  return cookies.get('refresh_token');
+}
 
 export const parseToken = (token: string) => {
   try {

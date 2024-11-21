@@ -6,7 +6,7 @@ import {
   AUTH_KEYCLOAK_URL,
   AUTH_REDIRECT_URI,
 } from '$env/static/private';
-import { setTokens } from '$lib/auth/cookies';
+import { setRefreshToken, setAccessToken } from '$lib/auth/cookies';
 
 export async function GET({ url, cookies }) {
   const code = url.searchParams.get('code');
@@ -18,9 +18,10 @@ export async function GET({ url, cookies }) {
     throw new Error('Token exchange failed');
   }
 
-  setTokens(cookies, tokenResponse.access_token, tokenResponse.refresh_token);
+  setAccessToken(cookies, tokenResponse.access_token);
+  setRefreshToken(cookies, tokenResponse.refresh_token);
 
-  throw redirect(302, '/');
+  throw redirect(302, '/?reload=force');
 }
 
 async function exchangeCodeForTokens(code: string) {
