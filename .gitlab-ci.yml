@@ -1,21 +1,28 @@
-image: oven/bun:alpine
-
 stages:
   - test
-
-variables:
-  NODE_ENV: 'test'
-
-cache:
-  paths:
-    - node_modules/
-
-before_script:
-  - bun install
+  - build
 
 test:
   stage: test
-  script:
-    - bun test
   only:
     - merge_requests
+  image: oven/bun:alpine
+  variables:
+    NODE_ENV: 'test'
+  script:
+    - bun install
+    - bun test
+
+build:
+  stage: build
+  only:
+    - main
+  tags: ['intranet']
+  script:
+    - mkdir -p $HOME/.m2
+    - echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"><servers><server><id>nexus.terrestris.de-releases-berlin</id><username>${NEXUS_USER}</username><password>${NEXUS_PASSWORD}</password></server><server><id>nexus.terrestris.de-snapshots-berlin</id><username>${NEXUS_USER}</username><password>${NEXUS_PASSWORD}</password></server></servers></settings>' > $HOME/.m2/settings.xml
+    - ./mvnw -v || true
+    - docker login -u $NEXUS_USER -p $NEXUS_PASSWORD gdi-berlin-docker.terrestris.de
+    # TODO: Add a version tag to the image
+    - docker build -t gdi-berlin-docker.terrestris.de/gdi-berlin/mde-client:latest .
+    - docker push gdi-berlin-docker.terrestris.de/gdi-berlin/mde-client:latest
