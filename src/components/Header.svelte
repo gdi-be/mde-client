@@ -1,7 +1,11 @@
 <script>
   import LoginButton from "./LoginButton.svelte";
+  import LogoutButton from "./LogoutButton.svelte";
 
-  let { text = 'Header' } = $props();
+  let {
+    text = 'Header',
+    token
+  } = $props();
 </script>
 
 <header>
@@ -10,7 +14,15 @@
     {text}
   </div>
   <div>
-    <LoginButton />
+    {#if token}
+      <div>
+        <LogoutButton />
+      </div>
+    {:else}
+      <div>
+        <LoginButton />
+      </div>
+    {/if}
   </div>
 </header>
 
