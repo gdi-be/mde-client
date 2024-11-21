@@ -1,3 +1,6 @@
+services:
+  - docker:dind
+
 stages:
   - test
   - build
@@ -19,9 +22,6 @@ build:
     - main
   tags: ['intranet']
   script:
-    - mkdir -p $HOME/.m2
-    - echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"><servers><server><id>nexus.terrestris.de-releases-berlin</id><username>${NEXUS_USER}</username><password>${NEXUS_PASSWORD}</password></server><server><id>nexus.terrestris.de-snapshots-berlin</id><username>${NEXUS_USER}</username><password>${NEXUS_PASSWORD}</password></server></servers></settings>' > $HOME/.m2/settings.xml
-    - ./mvnw -v || true
     - docker login -u $NEXUS_USER -p $NEXUS_PASSWORD gdi-berlin-docker.terrestris.de
     # TODO: Add a version tag to the image
     - docker build -t gdi-berlin-docker.terrestris.de/gdi-berlin/mde-client:latest .
