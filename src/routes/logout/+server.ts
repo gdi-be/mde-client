@@ -1,9 +1,4 @@
-import {
-  AUTH_KEYCLOAK_URL,
-  AUTH_KEYCLOAK_REALM,
-  AUTH_KEYCLOAK_CLIENT_ID,
-  AUTH_KEYCLOAK_CLIENT_SECRET
-} from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { redirect } from '@sveltejs/kit';
 
 export async function GET({ cookies }) {
@@ -11,11 +6,11 @@ export async function GET({ cookies }) {
   const refreshToken = cookies.get('refresh_token');
 
   if (refreshToken) {
-    const logoutUrl = `${AUTH_KEYCLOAK_URL}/realms/${AUTH_KEYCLOAK_REALM}/protocol/openid-connect/logout`;
+    const logoutUrl = `${env.AUTH_KEYCLOAK_URL}/realms/${env.AUTH_KEYCLOAK_REALM}/protocol/openid-connect/logout`;
 
     const params = new URLSearchParams({
-      client_id: AUTH_KEYCLOAK_CLIENT_ID,
-      client_secret: AUTH_KEYCLOAK_CLIENT_SECRET,
+      client_id: env.AUTH_KEYCLOAK_CLIENT_ID,
+      client_secret: env.AUTH_KEYCLOAK_CLIENT_SECRET,
       refresh_token: refreshToken
     });
 

@@ -4,7 +4,9 @@ import { getAll } from '../../lib/api/metadata.js';
 
 export async function load({ cookies }) {
 
-  const token = getAccessToken(cookies);
+  const token = await getAccessToken(cookies);
+  if (!token) return error(401, 'Unauthorized');
+
   const metadata = await getAll(token);
   if (metadata) return { metadata };
 
