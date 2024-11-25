@@ -1,11 +1,5 @@
 import { json, redirect } from '@sveltejs/kit';
-import {
-  AUTH_KEYCLOAK_CLIENT_ID,
-  AUTH_KEYCLOAK_CLIENT_SECRET,
-  AUTH_KEYCLOAK_REALM,
-  AUTH_KEYCLOAK_URL,
-  AUTH_REDIRECT_URI,
-} from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { setRefreshToken, setAccessToken } from '$lib/auth/cookies';
 
 export async function GET({ url, cookies }) {
@@ -25,14 +19,14 @@ export async function GET({ url, cookies }) {
 }
 
 async function exchangeCodeForTokens(code: string) {
-  const tokenUrl = `${AUTH_KEYCLOAK_URL}/realms/${AUTH_KEYCLOAK_REALM}/protocol/openid-connect/token`;
+  const tokenUrl = `${env.AUTH_KEYCLOAK_URL}/realms/${env.AUTH_KEYCLOAK_REALM}/protocol/openid-connect/token`;
 
   const params = new URLSearchParams({
     grant_type: 'authorization_code',
     code,
-    client_id: AUTH_KEYCLOAK_CLIENT_ID,
-    redirect_uri: AUTH_REDIRECT_URI,
-    client_secret: AUTH_KEYCLOAK_CLIENT_SECRET,
+    client_id: env.AUTH_KEYCLOAK_CLIENT_ID,
+    redirect_uri: env.AUTH_REDIRECT_URI,
+    client_secret: env.AUTH_KEYCLOAK_CLIENT_SECRET,
   });
 
   const response = await fetch(tokenUrl, {

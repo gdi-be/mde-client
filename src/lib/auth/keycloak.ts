@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
-import {
-  AUTH_KEYCLOAK_REALM,
-  AUTH_KEYCLOAK_URL,
-} from '$env/static/private';
+import { env } from '$env/dynamic/private';
+import { getRefreshToken, isTokenExpired, setAccessToken, setRefreshToken } from './cookies';
+import { type Cookies } from '@sveltejs/kit';
+import log from 'loggisch';
 
 export const verifyToken = async (token: string) => {
   const publicKey = await fetchPublicKey();
@@ -10,7 +10,7 @@ export const verifyToken = async (token: string) => {
 }
 
 export const fetchPublicKey = async() => {
-  const certsUrl = `${AUTH_KEYCLOAK_URL}/realms/${AUTH_KEYCLOAK_REALM}/protocol/openid-connect/certs`;
+  const certsUrl = `${env.AUTH_KEYCLOAK_URL}/realms/${env.AUTH_KEYCLOAK_REALM}/protocol/openid-connect/certs`;
 
   const response = await fetch(certsUrl);
   if (!response.ok) {
@@ -30,3 +30,45 @@ export const fetchPublicKey = async() => {
   const pemKey = `-----BEGIN PUBLIC KEY-----\n${modulus}\n${exponent}\n-----END PUBLIC KEY-----`;
   return pemKey;
 }
+
+export const updateTokens = async (cookies: Cookies): Promise<boolean> => {
+  const refreshToken = getRefreshToken(cookies);
+
+  if (!refreshToken || isTokenExpired(refreshToken)) {
+    return Promise.reject('No valid refresh token found');
+  }
+
+  try {
+    const body = new URLSearchParams();
+    body.append('grant_type', 'refresh_token');
+    body.append('client_id', env.AUTH_KEYCLOAK_CLIENT_ID);
+    body.append('client_secret', env.AUTH_KEYCLOAK_CLIENT_SECRET);
+    body.append('refresh_token', refreshToken);
+    const response = await fetch(`${env.AUTH_KEYCLOAK_URL}/realms/${env.AUTH_KEYCLOAK_REALM}/protocol/openid-connect/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: body.toString(),
+    });
+
+    if (!response.ok) {
+      log.warning('Could not refresh tokens: ' + response.status);
+      return false;
+    }
+
+    const data = await response.json();
+
+    if (data.access_token) {
+      setAccessToken(cookies, data.access_token);
+    }
+    if (data.refresh_token) {
+      setRefreshToken(cookies, data.refresh_token);
+    }
+
+    return true;
+  } catch (error) {
+    log.warning('Error refreshing tokens: ' + error);
+    return false;
+  }
+};
