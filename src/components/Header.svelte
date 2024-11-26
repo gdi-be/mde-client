@@ -1,4 +1,5 @@
 <script>
+  import Breadcrumbs from "./Breadcrumbs.svelte";
   import LoginButton from "./LoginButton.svelte";
   import LogoutButton from "./LogoutButton.svelte";
 
@@ -9,11 +10,13 @@
 </script>
 
 <header>
-  <div></div>
-  <div>
+  <div class="left-items">
+    <Breadcrumbs />
+  </div>
+  <div class="center-items">
     {text}
   </div>
-  <div>
+  <div class="right-items">
     {#if token}
       <div>
         <LogoutButton />
@@ -39,8 +42,22 @@
     justify-content: space-between;
 
     > div {
-      align-items: center;
+      display: flex;
       flex: 1;
+    }
+
+    .left-items {
+      justify-content: left;
+      padding-left: 1em;
+    }
+
+    .center-items {
+      justify-content: center;
+    }
+
+    .right-items {
+      justify-content: right;
+      padding-right: 1em;
     }
   }
 </style>
