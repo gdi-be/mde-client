@@ -25,7 +25,7 @@
   </div>
 </ParaglideJS>
 
-<style lang="less">
+<style lang="scss">
   :global(html, body) {
     margin: 0;
     padding: 0;
@@ -41,7 +41,7 @@
     height: 100dvh;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
 
     main {
       flex: 1;

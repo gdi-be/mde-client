@@ -18,7 +18,6 @@
     height: 3em;
     text-align: center;
     border-bottom: 1px solid #dee2e6;
-    align-self: stretch;
 
     display: flex;
     align-items: center;

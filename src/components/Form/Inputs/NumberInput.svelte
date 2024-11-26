@@ -1,16 +1,19 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
+  import type { FormItemConfig } from "../../../lib/models/form";
 
   type InputProps = {
-    type: 'integer' | 'float',
-    key: string,
-    label: string,
+    config: FormItemConfig;
   }
   let {
-    type,
-    label,
-    key
+    config
   }: InputProps = $props();
+
+  const {
+    type,
+    key,
+    label
+  } = config;
 </script>
 
 <Textfield

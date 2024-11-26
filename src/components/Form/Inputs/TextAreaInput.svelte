@@ -1,30 +1,20 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
   import CharacterCounter from "@smui/textfield/character-counter";
+  import type { FormItemConfig } from "../../../lib/models/form";
 
   type InputProps = {
-    key: string,
-    label: string
+    config: FormItemConfig;
   }
-  type InputConfig = {
-    // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern
-    pattern?: string,
-    // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/required
-    required?: boolean,
-    // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title
-    title?: string,
-    // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/maxlength
-    maxlength?: number
-  }
-
   let {
-    key,
-    label
+    config
   }: InputProps = $props();
 
-  const config: InputConfig = {
-    maxlength: 500
-  };
+  const {
+    key,
+    label,
+    maxlength
+  } = config;
 
 </script>
 
@@ -33,11 +23,11 @@
   id={key}
   textarea
   name={key}
-  input$maxlength={config.maxlength}
+  input$maxlength={maxlength}
   value=""
 >
   {#snippet internalCounter()}
-    {#if config.maxlength}
+    {#if maxlength}
       <CharacterCounter />
     {/if}
   {/snippet}

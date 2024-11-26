@@ -28,7 +28,7 @@
   {/if}
 </div>
 
-<style lang="less">
+<style lang="scss">
   .welcome {
     display: flex;
     flex-direction: column;

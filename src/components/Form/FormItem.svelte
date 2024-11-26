@@ -6,71 +6,67 @@
   import SelectInput from "./Inputs/SelectInput.svelte";
   import TextAreaInput from "./Inputs/TextAreaInput.svelte";
   import TextInput from "./Inputs/TextInput.svelte";
-  import Tooltip, { Content, RichActions, Title, Wrapper } from "@smui/tooltip";
-  import Button, { Icon, Label } from "@smui/button";
+  import { Icon } from "@smui/button";
+  import type { FormItemConfig } from "../../lib/models/form";
+  import IconButton from "@smui/icon-button";
 
-  type FormItemType = 'text' | 'integer' | 'float' | 'textarea' | 'boolean' | 'select' | 'autocomplete' | 'date';
   type FormItemProps = {
-    type: FormItemType,
-    label: string,
-    key: string,
-    dataSource?: string
+    config: FormItemConfig;
+    onHelpClick: (key: string, helpText: string) => void;
+    helpActive: boolean;
   }
 
   let {
-    type,
-    label,
-    key
+    config,
+    onHelpClick,
+    helpActive
   }: FormItemProps = $props();
 
 </script>
 
 <div class="form-item">
   <div class="form-input">
-    {#if type === 'text'}
-      <TextInput {key} {label}/>
+    {#if config.type ==='text'}
+      <TextInput {config} />
     {/if}
-    {#if type === 'integer'}
-      <NumberInput type="integer" {key} {label}  />
+    {#if config.type ==='integer'}
+      <NumberInput {config} />
     {/if}
-    {#if type === 'float'}
-      <NumberInput type="float" {key} {label} />
+    {#if config.type ==='float'}
+      <NumberInput {config} />
     {/if}
-    {#if type === 'textarea'}
-      <TextAreaInput {key} {label} />
+    {#if config.type ==='textarea'}
+      <TextAreaInput {config} />
     {/if}
-    {#if type === 'boolean'}
-      <BooleanInput {key} {label} />
+    {#if config.type ==='boolean'}
+      <BooleanInput {config} />
     {/if}
-    {#if type === 'date'}
-      <DateInput {key} {label} />
+    {#if config.type ==='date'}
+      <DateInput {config} />
     {/if}
-    {#if type === 'select'}
-      <SelectInput {key} {label} />
+    {#if config.type ==='select'}
+      <SelectInput {config} />
     {/if}
-    {#if type === 'autocomplete'}
-      <AutoCompleteInput {key} {label} />
+    {#if config.type ==='autocomplete'}
+      <AutoCompleteInput {config} />
     {/if}
   </div>
-  <div class="help-icon">
-    <Wrapper rich>
-      <Icon class="material-icons">
-        info
-      </Icon>
-      <Tooltip interactive>
-        <Title>{key}</Title>
-        <Content>
-          An interactive rich tooltip can have <a href="/editor">links</a>.
-        </Content>
-        <RichActions>
-          <Button><Label>Action</Label></Button>
-        </RichActions>
-      </Tooltip>
-    </Wrapper>
-  </div>
+  {#if config.help}
+    <div class="help-icon" class:active={helpActive}>
+      <IconButton
+        toggle
+        size="button"
+        pressed={helpActive}
+        onclick={() => onHelpClick(config.key, config.help!)}
+      >
+        <Icon class="material-icons" on>info</Icon>
+        <Icon class="material-icons">info</Icon>
+      </IconButton>
+    </div>
+  {/if}
 </div>
 
-<style lang="less">
+<style lang="scss">
   .form-item {
     display: flex;
     flex-direction: row;
@@ -85,13 +81,10 @@
     .help-icon {
       color: grey;
 
-      :global(i.material-icons) {
-        cursor: pointer;
+      :global(button[aria-pressed="true"]) {
+        color: green;
       }
 
-      :global(.mdc-tooltip) {
-        min-width: 200px;
-      }
     }
   }
 

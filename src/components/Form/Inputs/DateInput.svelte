@@ -1,19 +1,19 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
   import Icon from "@smui/textfield/icon";
+  import type { FormItemConfig } from "../../../lib/models/form";
 
   type InputProps = {
-    key: string,
-    label: string
+    config: FormItemConfig;
   }
-
   let {
-    key,
-    label
+    config
   }: InputProps = $props();
 
-  // type InputConfig = {}
-  // const config: InputConfig = {};
+  const {
+    key,
+    label
+  } = config;
 
 </script>
 
@@ -25,8 +25,9 @@
   value=""
 >
   {#snippet leadingIcon()}
-    <!-- // TODO: replace with real icon -->
-    <Icon>🗓️</Icon>
+    <Icon class="material-icons">
+      calendar_month
+    </Icon>
   {/snippet}
 </Textfield>
 

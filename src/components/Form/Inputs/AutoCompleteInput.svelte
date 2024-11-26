@@ -1,27 +1,15 @@
 <script lang="ts">
   import Autocomplete from "@smui-extra/autocomplete";
+  import type { FormItemConfig, Option } from "../../../lib/models/form";
 
   type InputProps = {
-    key: string,
-    label: string
+    config: FormItemConfig;
   }
-
   let {
-    key,
-    label
+    config
   }: InputProps = $props();
 
-  type Option = Record<string, string | number>;
-  type InputConfig = {
-    options: Option[]
-  }
-  const config: InputConfig = {
-    options: [
-      { value: 'apple', label: 'Apple' },
-      { value: 'banana', label: 'Banana' },
-      { value: 'cherry', label: 'Cherry' }
-    ]
-  }
+  const { key, label } = config;
 
   let value: Option | null = $state({ value: 'apple', label: 'Apple' });
 </script>

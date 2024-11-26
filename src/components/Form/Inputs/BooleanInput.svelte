@@ -1,22 +1,23 @@
 <script lang="ts">
   import FormField from "@smui/form-field";
   import Switch from "@smui/switch";
+  import type { FormItemConfig } from "../../../lib/models/form";
 
   type InputProps = {
-    key: string,
-    label: string
+    config: FormItemConfig;
   }
   let {
-    label: inputLabel,
-    // key
+    config
   }: InputProps = $props();
 
-  // type InputConfig = {}
-  // const config: InputConfig = {}
+  const {
+    // key,
+    label: inputLabel
+  } = config;
 </script>
 
 <FormField>
-  <Switch />
+  <Switch/>
   {#snippet label()}
     {inputLabel}
   {/snippet}

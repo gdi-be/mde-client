@@ -10,7 +10,7 @@
   {/each}
 </div>
 
-<style lang="less">
+<style lang="scss">
   .metadata-list {
     padding: 1em 0;
     display: flex;

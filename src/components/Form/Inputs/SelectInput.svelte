@@ -1,30 +1,24 @@
 <script lang="ts">
   import Select, { Option } from "@smui/select";
+  import type { FormItemConfig } from "../../../lib/models/form";
 
   type InputProps = {
-    key: string,
-    label: string
+    config: FormItemConfig;
   }
   let {
-    label,
-    // key
+    config
   }: InputProps = $props();
 
-  type InputConfig = {
-    options: Record<string, string | number>[]
-  }
-  const config: InputConfig = {
-    options: [
-      { value: 'apple', label: 'Apple' },
-      { value: 'banana', label: 'Banana' },
-      { value: 'cherry', label: 'Cherry' }
-    ]
-  }
+  const { key, label, options = [] } = config;
 
 </script>
 
-<Select {label}>
-  {#each config.options as option}
-    <Option value={option.value}>{option.label}</Option>
+<Select {label} input$id={key} >
+  {#each options as option}
+    <Option
+      value={option.value}
+    >
+      {option.label}
+    </Option>
   {/each}
 </Select>
