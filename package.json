@@ -12,7 +12,10 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
-    "test": "bun test"
+    "test": "bun test",
+    "prepare": "npm run smui-theme-light && npm run smui-theme-dark",
+    "smui-theme-light": "smui-theme compile static/smui.css -i src/theme",
+    "smui-theme-dark": "smui-theme compile static/smui-dark.css -i src/theme/dark"
   },
   "devDependencies": {
     "@inlang/paraglide-sveltekit": "^0.12.1",
@@ -31,6 +34,7 @@
     "mdsvex": "^0.12.3",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.8",
+    "smui-theme": "^8.0.0-beta.0",
     "svelte": "^5.1.16",
     "svelte-adapter-bun": "^0.5.2",
     "svelte-check": "^4.0.7",
@@ -39,6 +43,13 @@
     "vite": "^5.4.11"
   },
   "dependencies": {
+    "@smui-extra/autocomplete": "^8.0.0-beta.0",
+    "@smui/button": "^8.0.0-beta.0",
+    "@smui/form-field": "^8.0.0-beta.0",
+    "@smui/select": "^8.0.0-beta.0",
+    "@smui/switch": "^8.0.0-beta.0",
+    "@smui/textfield": "^8.0.0-beta.0",
+    "@smui/tooltip": "^8.0.0-beta.0",
     "cookie": "^1.0.1",
     "jsonwebtoken": "^9.0.2",
     "loggisch": "^0.0.1"

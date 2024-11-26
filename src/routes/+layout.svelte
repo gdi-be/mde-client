@@ -39,7 +39,6 @@
 
   .container {
     height: 100dvh;
-    width: 100dvw;
     display: flex;
     flex-direction: column;
     align-items: center;
