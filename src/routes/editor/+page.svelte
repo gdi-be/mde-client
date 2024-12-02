@@ -1,12 +1,14 @@
 <script>
   let { data } = $props();
+
+  const metadata = $derived(data.metadata.content);
 </script>
 
 <div class="metadata-list">
-  {#each data.metadata as metadata}
-      <a href="/editor/{metadata.id}">
-        {metadata.title}
-      </a>
+  {#each metadata as metadataEntry}
+    <a href="/editor/{metadataEntry.id}">
+      {metadataEntry.title}
+    </a>
   {/each}
 </div>
 
