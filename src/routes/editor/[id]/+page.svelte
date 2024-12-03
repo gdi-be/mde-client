@@ -8,6 +8,8 @@
     metadata
   } = data;
 
+  console.log(data)
+
 </script>
 
 <div class="metadata">
