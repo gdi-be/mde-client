@@ -1,8 +1,8 @@
 import { error } from '@sveltejs/kit';
-import { getById } from '../../../lib/api/metadata.js';
-import { getAccessToken } from '../../../lib/auth/cookies.js';
-import { getFormConfig } from '../../../lib/api/config.js';
-import type { IsoMetadata } from '../../../lib/models/metadata.js';
+import { getById } from '$lib/api/metadata.js';
+import { getAccessToken } from '$lib/auth/cookies.js';
+import { getFormConfig } from '$lib/api/config.js';
+import type { IsoMetadata } from '$lib/models/metadata.js';
 
 export async function load({ params, cookies }) {
 

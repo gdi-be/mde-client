@@ -1,5 +1,5 @@
 <script>
-  import Welcome from '../components/Welcome.svelte';
+  import Welcome from '$lib/components/Welcome.svelte';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
