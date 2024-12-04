@@ -42,6 +42,7 @@
   "dependencies": {
     "@smui-extra/autocomplete": "^8.0.0-beta.0",
     "@smui/button": "^8.0.0-beta.0",
+    "@smui/card": "^8.0.0-beta.0",
     "@smui/form-field": "^8.0.0-beta.0",
     "@smui/icon-button": "^8.0.0-beta.0",
     "@smui/select": "^8.0.0-beta.0",

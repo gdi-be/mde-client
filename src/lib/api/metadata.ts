@@ -13,7 +13,7 @@ const defaultPage: PageAbleProps = {
  * @param {string} [token] - Optional authorization token for the request.
  * @returns {Promise<PageAbleResponse<Metadata>>} - A promise that resolves to the fetched metadata.
  */
-export const getAll = async <T extends Metadata>(token: string, page = defaultPage): Promise<PageAbleResponse<T>> => {
+export const getAll = async <T extends Metadata>(token: string, pagingOpts = defaultPage): Promise<PageAbleResponse<T>> => {
   if (!token) {
     log.error("No token provided.");
     return Promise.reject(new Error("No token provided."));
@@ -26,11 +26,11 @@ export const getAll = async <T extends Metadata>(token: string, page = defaultPa
   // TODO: Endpoint depends on metadata type
   const url: URL = new URL(`${env.BACKEND_URL}/metadata/iso`);
 
-  if (page) {
-    url.searchParams.append('page', page.page.toString());
-    url.searchParams.append('size', page.size.toString());
-    if (page.sort) {
-      page.sort.forEach((sort) => {
+  if (pagingOpts) {
+    url.searchParams.append('page', pagingOpts.page.toString());
+    url.searchParams.append('size', pagingOpts.size.toString());
+    if (pagingOpts.sort) {
+      pagingOpts.sort.forEach((sort) => {
         url.searchParams.append('sort', `${sort.field},${sort.direction}`);
       });
     }

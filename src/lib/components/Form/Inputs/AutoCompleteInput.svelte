@@ -1,6 +1,6 @@
 <script lang="ts">
   import Autocomplete from "@smui-extra/autocomplete";
-  import type { FormItemConfig, Option } from "../../../lib/models/form";
+  import type { FormItemConfig, Option } from "$lib/models/form";
 
   type InputProps = {
     config: FormItemConfig;

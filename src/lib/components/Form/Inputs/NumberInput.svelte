@@ -1,6 +1,6 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
-  import type { FormItemConfig } from "../../../lib/models/form";
+  import type { FormItemConfig } from "$lib/models/form";
 
   type InputProps = {
     config: FormItemConfig;
