@@ -1,3 +1,17 @@
+/**
+  * This file is used to define the theme for the application.
+  * It is used by the SMUI components to style themselves.
+  * It is also used by the application to style itself.
+  *
+  * This file is written in SCSS, which is a superset of CSS.
+  * SCSS allows us to define variables, functions, and other
+  * useful features that are not available in CSS.
+  *
+  * For more information on SCSS, see the documentation at
+  * https://sass-lang.com/documentation
+  *
+  * List of available colors: https://sveltematerialui.com/THEMING.md
+  */
 @use 'sass:color';
 
 @use '@material/theme/color-palette';
@@ -11,6 +25,8 @@
   $error: color-palette.$red-900
 );
 
+@use '@material/theme/styles';
+
 html,
 body {
   background-color: theme.$surface;
@@ -20,6 +36,7 @@ body {
 a {
   color: #40b3ff;
 }
+
 a:visited {
   color: color.scale(#40b3ff, $lightness: -35%);
 }

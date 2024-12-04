@@ -4,6 +4,7 @@
   import type { FormConfig } from "$lib/models/form";
   import FormItem from "./FormItem.svelte";
   import { goto } from "$app/navigation";
+  import { onMount, tick } from "svelte";
 
   export type FormProps = {
     metadata?: unknown;
@@ -20,8 +21,28 @@
   if (!activeSection) {
     activeSection = config.sections[0];
   }
+
+  let tabs = $state<HTMLElement | null>(null);
   let helpMarkdown = $state<string | undefined>();
   let activeHelpKey = $state<string | undefined>();
+  let borderStyles = $state<{ width: string; left: string }>({
+    width: "0",
+    left: "0"
+  });
+
+  const updateBorder = () => {
+    if (!tabs) return;
+    const buttonEl = tabs.querySelector(`button.section-button.active`);
+
+    if (activeSection && buttonEl) {
+      const { left: tabsLeft } = tabs.getBoundingClientRect();
+      const { left: buttonLeft, width: buttonWidth } = buttonEl.getBoundingClientRect();
+      borderStyles = {
+        width: `${buttonWidth}px`,
+        left: `${buttonLeft - tabsLeft}px`
+      };
+    }
+  };
 
   const onHelpClick = (key: string, help: string) => {
     if (activeHelpKey === key) {
@@ -33,19 +54,25 @@
     }
   };
 
-  const onSectionClick = (section: string) => {
+  const onSectionClick = async (section: string) => {
     activeSection = section;
     goto(`#${section}`, {
       replaceState: true
     });
+    await tick();
+    updateBorder();
   };
+
+  onMount(() => {
+    updateBorder();
+  });
 
 </script>
 
 <div class="metadata-form">
   <div></div>
   <div>
-    <nav class="tabs">
+    <nav class="tabs" bind:this={tabs}>
       {#each config.sections as section}
         <button
           class="section-button"
@@ -54,7 +81,14 @@
         >
           {section}
         </button>
-      {/each}
+        {/each}
+      <div
+        class="active-border"
+        style="
+          --border-width: {borderStyles.width};
+          --border-left: {borderStyles.left};
+        ">
+      </div>
     </nav>
     <form>
       {#each config.formItems as itemConfig}
@@ -91,25 +125,34 @@
       flex: 1;
     }
 
-    .tabs {
+    nav.tabs {
+      position: relative;
       display: flex;
       padding-bottom: 0.25rem;
 
-      button {
+      button.section-button {
         cursor: pointer;
         flex: 1;
         background-color: transparent;
         border: none;
+        font-size: 1.25em;
+      }
 
-        &.active {
-          border-bottom: 2px solid red;
-        }
+      .active-border {
+        position: absolute;
+        bottom: 0;
+        height: 3px;
+        background: linear-gradient(to right, transparent, var(--mdc-theme-primary) 5% 95%, transparent);
+        transition: width 0.3s ease, left 0.3s ease;
+        width: var(--border-width, 0px);
+        left: var(--border-left, 0px);
       }
     }
 
     form {
       display: flex;
       flex-direction: column;
+      padding-top: 0.25rem;
     }
 
     .help-section {
