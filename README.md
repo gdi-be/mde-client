@@ -28,6 +28,12 @@ bun run dev
 bun run dev -- --open
 ```
 
+If typing gets messed up in your IDE you can regenerate them with:
+
+```bash
+bun run check
+```
+
 ### paraglide i18n
 
 :warning: currently the vite plugin for paraglide is not compatible with the podman setup! You

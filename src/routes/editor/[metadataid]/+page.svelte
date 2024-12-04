@@ -19,7 +19,6 @@
     <Form {config} {activeSection} />
   {:else if data.mode === 'edit' && data.metadata}
     <h1>{ data.metadata.title }</h1>
-    <h2>{ data.metadata.metadataId}</h2>
     <Form {metadata} {config} {activeSection} />
   {/if}
 </div>

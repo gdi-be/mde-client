@@ -56,6 +56,8 @@
 
   const onSectionClick = async (section: string) => {
     activeSection = section;
+    activeHelpKey = undefined;
+    helpMarkdown = undefined;
     goto(`#${section}`, {
       replaceState: true
     });

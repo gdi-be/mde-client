@@ -23,6 +23,7 @@ export const getAll = async <T extends Metadata>(token: string, page = defaultPa
     Authorization: `Bearer ${token}`
   });
 
+  // TODO: Endpoint depends on metadata type
   const url: URL = new URL(`${env.BACKEND_URL}/metadata/iso`);
 
   if (page) {
@@ -58,7 +59,33 @@ export const getById = async <T extends Metadata>(id: number, token: string): Pr
   const headers = new Headers({
     Authorization: `Bearer ${token}`
   });
+  // TODO: Endpoint depends on metadata type
   const response = await fetch(`${env.BACKEND_URL}/metadata/iso/${id}`, {
+    headers
+  });
+
+  return await response.json();
+}
+
+/**
+ * Fetches metadata by ID from the backend.
+ *
+ * @param id - The ID of the metadata to fetch.
+ * @param token - Optional authorization token for the request.
+ * @returns A promise that resolves to the fetched metadata.
+ */
+export const getByMetadataId = async <T extends Metadata>(id: string, token: string): Promise<T> => {
+  if (!token) {
+    log.error("No token provided.");
+    return Promise.reject(new Error("No token provided."));
+  }
+
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  // TODO: Endpoint depends on metadata type
+  const response = await fetch(`${env.BACKEND_URL}/metadata/iso/m/${id}`, {
     headers
   });
 

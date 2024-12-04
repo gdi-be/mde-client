@@ -6,7 +6,7 @@
 
 <div class="metadata-list">
   {#each metadata as metadataEntry}
-    <a href="/editor/{metadataEntry.id}">
+    <a href="/editor/{metadataEntry.metadataId}">
       {metadataEntry.title}
     </a>
   {/each}
