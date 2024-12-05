@@ -13,7 +13,6 @@
   }
 
   let {
-    // metadata = undefined,
     config,
     activeSection
   }: FormProps = $props();
@@ -104,6 +103,7 @@
     </form>
   </div>
   <div>
+    <!-- TODO: i18n -->
     <div class="help-section">
       {#if helpMarkdown}
         {#await parse(helpMarkdown)}
