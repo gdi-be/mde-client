@@ -1,10 +1,16 @@
-import type { FormConfig } from "../models/form";
+import type { FormConfig } from "$lib/models/form";
 
 export const getFormConfig = async (): Promise<FormConfig> => {
 
   // TODO: this config should be fetched from a static resource
   return {
+    sections: [
+      'start',
+      'metadata',
+      'end'
+    ],
     formItems: [{
+      section: 'start',
       type: "integer",
       key: "isometadata.number",
       label: "Zahlenfeld (Ganzahl)",
@@ -37,31 +43,37 @@ This document showcases the power of Markdown. It's simple, flexible, and easy t
   - Links and images
 `,
     }, {
+      section: 'start',
       type: "float",
       key: "isometadata.float",
       label: "Zahlenfeld (Dezimal)",
       help: "This is a help text for the float field."
     }, {
+      section: 'start',
       type: "text",
       key: "isometadata.text",
       label: "Freitextfeld",
       help: "This is a help text for the text field."
     }, {
+      section: 'metadata',
       type: "textarea",
       key: "isometadata.textarea",
       label: "Fließtextfeld",
       help: "This is a help text for the textarea field."
     }, {
+      section: 'metadata',
       type: "boolean",
       key: "isometadata.boolean",
       label: "Entscheidung",
       help: "This is a help text for the boolean field."
     }, {
+      section: 'metadata',
       type: "date",
       key: "isometadata.date",
       label: "Datumsauswahl",
       help: "This is a help text for the date field."
     }, {
+      section: 'end',
       type: "select",
       key: "isometadata.select",
       label: "Auswahlliste",
@@ -74,6 +86,7 @@ This document showcases the power of Markdown. It's simple, flexible, and easy t
         value: "option2"
       }]
     }, {
+      section: 'end',
       type: "autocomplete",
       key: "isometadata.autocomplete",
       label: "Thesaurusaufschlag",

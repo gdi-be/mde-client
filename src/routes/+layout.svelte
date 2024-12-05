@@ -1,8 +1,8 @@
 <script lang="ts">
   import { i18n } from '$lib/i18n';
   import { ParaglideJS } from '@inlang/paraglide-sveltekit';
-  import Header from '../components/Header.svelte';
-  import Footer from '../components/Footer.svelte';
+  import Header from '$lib/components/Header.svelte';
+  import Footer from '$lib/components/Footer.svelte';
   let { children, data } = $props();
 
 </script>

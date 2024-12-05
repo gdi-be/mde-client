@@ -3,6 +3,7 @@ export type Option = Record<string, string | number>;
 export type FormItemType = 'text' | 'integer' | 'float' | 'textarea' | 'boolean' | 'select' | 'autocomplete' | 'date';
 
 export interface BaseFormItemConfig {
+  section: string;
   key: string;
   label: string;
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/required
@@ -71,5 +72,6 @@ export type FormItemConfig =
   AutocompleteInputConfig;
 
 export type FormConfig = {
+  sections: string[];
   formItems: FormItemConfig[];
 }

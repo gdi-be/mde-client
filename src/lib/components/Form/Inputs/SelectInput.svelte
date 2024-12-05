@@ -1,6 +1,6 @@
 <script lang="ts">
   import Select, { Option } from "@smui/select";
-  import type { FormItemConfig } from "../../../lib/models/form";
+  import type { FormItemConfig } from "$lib/models/form";
 
   type InputProps = {
     config: FormItemConfig;

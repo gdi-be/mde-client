@@ -7,25 +7,27 @@
   import TextAreaInput from "./Inputs/TextAreaInput.svelte";
   import TextInput from "./Inputs/TextInput.svelte";
   import { Icon } from "@smui/button";
-  import type { FormItemConfig } from "../../lib/models/form";
+  import type { FormItemConfig } from "$lib/models/form";
   import IconButton from "@smui/icon-button";
 
   type FormItemProps = {
     config: FormItemConfig;
     onHelpClick: (key: string, helpText: string) => void;
-    helpActive: boolean;
+    helpActive?: boolean;
+    hidden?: boolean;
   }
 
   let {
     config,
     onHelpClick,
-    helpActive
+    helpActive = false,
+    hidden = false
   }: FormItemProps = $props();
 
 </script>
 
-<div class="form-item">
-  <div class="form-input">
+<div class="form-item" class:hidden={hidden}>
+  <div class="form-input" >
     {#if config.type ==='text'}
       <TextInput {config} />
     {/if}
@@ -73,6 +75,10 @@
     justify-content: space-between;
     padding: 1em;
     border-radius: 5px;
+
+    &.hidden {
+      display: none;
+    }
 
     &:nth-child(odd) {
       background-color: #f6f6f6;

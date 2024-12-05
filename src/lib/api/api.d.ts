@@ -1,4 +1,4 @@
-type PageAbleProps = {
+type PageableProps = {
   page: number;
   size: number;
   sort?: {
@@ -7,7 +7,7 @@ type PageAbleProps = {
   }[];
 }
 
-type PageAbleResponse<T> = {
+export type PageableResponse<T> = {
   content: T[];
   pageable: {
     sort: {

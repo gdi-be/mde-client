@@ -1,7 +1,7 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
   import CharacterCounter from "@smui/textfield/character-counter";
-  import type { FormItemConfig } from "../../../lib/models/form";
+  import type { FormItemConfig } from "$lib/models/form";
 
   type InputProps = {
     config: FormItemConfig;
@@ -10,19 +10,24 @@
     config
   }: InputProps = $props();
 
-  const { key, label } = config;
+  const {
+    key,
+    label,
+    maxlength
+  } = config;
 
 </script>
 
 <Textfield
   {label}
   id={key}
+  textarea
   name={key}
-  input$maxlength={config.maxlength}
+  input$maxlength={maxlength}
   value=""
 >
-  {#snippet helper()}
-    {#if config.maxlength}
+  {#snippet internalCounter()}
+    {#if maxlength}
       <CharacterCounter />
     {/if}
   {/snippet}
