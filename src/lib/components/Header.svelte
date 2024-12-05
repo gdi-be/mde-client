@@ -7,6 +7,7 @@
     text = 'Header',
     token
   } = $props();
+
 </script>
 
 <header>

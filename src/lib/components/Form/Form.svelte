@@ -43,7 +43,7 @@
     }
   };
 
-  const onHelpClick = (key: string, help: string) => {
+  const onHelpClick = (key: string | undefined, help: string) => {
     if (activeHelpKey === key) {
       helpMarkdown = undefined;
       activeHelpKey = undefined;

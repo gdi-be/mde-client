@@ -39,12 +39,19 @@
 
   .container {
     height: 100dvh;
+    max-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: stretch;
 
+    :global(header),
+    :global(footer) {
+      flex: 0 0 auto;
+    }
+
     main {
       flex: 1;
+      overflow: auto;
     }
   }
 </style>

@@ -7,19 +7,35 @@
   import TextAreaInput from "./Inputs/TextAreaInput.svelte";
   import TextInput from "./Inputs/TextInput.svelte";
   import { Icon } from "@smui/button";
-  import type { FormItemConfig } from "$lib/models/form";
+  import {
+    isAutocompleteInputConfig,
+    isBooleanInputConfig,
+    isDateInputConfig,
+    isFloatInputConfig,
+    isFormItemConfig,
+    isFormItemGroupConfig,
+    isFormItemListConfig,
+    isIntegerInputConfig,
+    isSelectInputConfig,
+    isTextAreaInputConfig,
+    isTextInputConfig,
+    type FormItemConfig,
+    type FormStructureConfig,
+  } from "$lib/models/form";
   import IconButton from "@smui/icon-button";
+  import FormItemList from "./FormItemList.svelte";
+  import FormItemGroup from "./FormItemGroup.svelte";
 
   type FormItemProps = {
-    config: FormItemConfig;
-    onHelpClick: (key: string, helpText: string) => void;
+    config: FormItemConfig | FormStructureConfig;
+    onHelpClick?: (key: string | undefined, helpText: string) => void;
     helpActive?: boolean;
     hidden?: boolean;
   }
 
   let {
     config,
-    onHelpClick,
+    onHelpClick = () => {},
     helpActive = false,
     hidden = false
   }: FormItemProps = $props();
@@ -28,32 +44,38 @@
 
 <div class="form-item" class:hidden={hidden}>
   <div class="form-input" >
-    {#if config.type ==='text'}
+    {#if isTextInputConfig(config)}
       <TextInput {config} />
     {/if}
-    {#if config.type ==='integer'}
+    {#if isIntegerInputConfig(config)}
       <NumberInput {config} />
     {/if}
-    {#if config.type ==='float'}
+    {#if isFloatInputConfig(config)}
       <NumberInput {config} />
     {/if}
-    {#if config.type ==='textarea'}
+    {#if isTextAreaInputConfig(config)}
       <TextAreaInput {config} />
     {/if}
-    {#if config.type ==='boolean'}
+    {#if isBooleanInputConfig(config)}
       <BooleanInput {config} />
     {/if}
-    {#if config.type ==='date'}
+    {#if isDateInputConfig(config)}
       <DateInput {config} />
     {/if}
-    {#if config.type ==='select'}
+    {#if isSelectInputConfig(config)}
       <SelectInput {config} />
     {/if}
-    {#if config.type ==='autocomplete'}
+    {#if isAutocompleteInputConfig(config)}
       <AutoCompleteInput {config} />
     {/if}
+    {#if isFormItemListConfig(config)}
+      <FormItemList {config} />
+    {/if}
+    {#if isFormItemGroupConfig(config)}
+      <FormItemGroup {config} />
+    {/if}
   </div>
-  {#if config.help}
+  {#if isFormItemConfig(config) && config.help}
     <div class="help-icon" class:active={helpActive}>
       <IconButton
         toggle

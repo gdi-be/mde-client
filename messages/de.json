@@ -3,5 +3,7 @@
   "title": "Hallo {name}!",
   "welcome": "Willkommen beim Metadateneditor",
   "login": "Login",
-  "pageNotFound": "Seite nicht gefunden"
+  "pageNotFound": "Seite nicht gefunden",
+  "page": "Seite",
+  "dataPerPage": "Datensätze pro Seite"
 }

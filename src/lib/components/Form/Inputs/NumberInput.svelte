@@ -1,9 +1,9 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
-  import type { FormItemConfig } from "$lib/models/form";
+  import type { FloatInputConfig, IntegerInputConfig } from "$lib/models/form";
 
   type InputProps = {
-    config: FormItemConfig;
+    config: IntegerInputConfig | FloatInputConfig;
   }
   let {
     config
@@ -20,7 +20,7 @@
   type="number"
   {label}
   input$step={type === 'float' ? '0.1' : undefined}
-  id={key}
+  input$id={key}
   name={key}
   value={0}
 >

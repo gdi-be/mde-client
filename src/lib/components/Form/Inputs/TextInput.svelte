@@ -1,10 +1,10 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
   import CharacterCounter from "@smui/textfield/character-counter";
-  import type { FormItemConfig } from "$lib/models/form";
+  import type { TextInputConfig } from "$lib/models/form";
 
   type InputProps = {
-    config: FormItemConfig;
+    config: TextInputConfig;
   }
   let {
     config
@@ -16,8 +16,7 @@
 
 <Textfield
   {label}
-  id={key}
-  name={key}
+  input$name={key}
   input$maxlength={config.maxlength}
   value=""
 >
