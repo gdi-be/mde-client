@@ -42,7 +42,8 @@ export const getFormConfig = async (): Promise<FormConfig> => {
         { label: 'US', value: 'US' },
       ],
       key: "inspireTheme",
-      label: "Inspire Thema"
+      label: "Inspire Thema",
+      visibilityCondition: "metadataProfile == INSPIRE"
     }, {
       section: 'Basisdaten',
       type: "text",
@@ -240,5 +241,5 @@ This document showcases the power of Markdown. It's simple, flexible, and easy t
         value: "option2"
       }]
     }]
-  };
+  } satisfies FormConfig;
 }

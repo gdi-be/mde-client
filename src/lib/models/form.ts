@@ -3,8 +3,8 @@ export type Option = Record<string, string | number>;
 
 export type FormItemType = 'text' | 'integer' | 'float' | 'textarea' | 'boolean' | 'select' | 'autocomplete' | 'date' | 'list' | 'group';
 
+export type VisibilityCondition = `${string}` | `${string} == ${string}` | `${string} != ${string}`;
 
-// TODO: add conditions
 export interface BaseFormItemConfig {
   type: FormItemType;
   section?: string;
@@ -15,7 +15,15 @@ export interface BaseFormItemConfig {
   help?: string;
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title
   title?: string;
+  /**
+   * Id of a list item. This is a computed value and should not be set manually.
+   */
   listId?: string;
+  /**
+   * Visibility condition for form items.
+   * e.g. `"metadataProfile == INSPIRE"`
+   */
+  visibilityCondition?: VisibilityCondition;
 }
 
 export type TextInputConfig = BaseFormItemConfig & {

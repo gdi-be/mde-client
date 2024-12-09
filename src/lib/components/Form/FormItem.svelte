@@ -28,6 +28,7 @@
 
   type FormItemProps = {
     config: FormItemConfig | FormStructureConfig;
+    onChange?: (key: string, value: unknown) => void;
     onHelpClick?: (key: string | undefined, helpText: string) => void;
     helpActive?: boolean;
     hidden?: boolean;
@@ -36,6 +37,7 @@
   let {
     config,
     onHelpClick = () => {},
+    onChange,
     helpActive = false,
     hidden = false
   }: FormItemProps = $props();
@@ -63,7 +65,7 @@
       <DateInput {config} />
     {/if}
     {#if isSelectInputConfig(config)}
-      <SelectInput {config} />
+      <SelectInput {config} {onChange} />
     {/if}
     {#if isAutocompleteInputConfig(config)}
       <AutoCompleteInput {config} />

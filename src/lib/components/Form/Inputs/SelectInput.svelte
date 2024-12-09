@@ -3,17 +3,30 @@
   import type { SelectInputConfig } from "$lib/models/form";
 
   type InputProps = {
+    onChange?: (key: string, value: string | undefined) => void;
+    value?: string;
     config: SelectInputConfig;
   }
+
   let {
-    config
+    config,
+    onChange,
+    value = $bindable<string | undefined>(undefined),
   }: InputProps = $props();
 
   const { key, label, options = [] } = config;
 
+  $effect(() => {
+    onChange?.(key, value);
+  });
 </script>
 
-<Select {label} input$id={key} >
+<Select
+  {label}
+  hiddenInput
+  input$name={key}
+  bind:value={value}
+>
   {#each options as option}
     <Option
       value={option.value}
