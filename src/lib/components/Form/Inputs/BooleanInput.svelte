@@ -1,10 +1,10 @@
 <script lang="ts">
   import FormField from "@smui/form-field";
   import Switch from "@smui/switch";
-  import type { FormItemConfig } from "$lib/models/form";
+  import type { BooleanInputConfig } from "$lib/models/form";
 
   type InputProps = {
-    config: FormItemConfig;
+    config: BooleanInputConfig;
   }
   let {
     config

@@ -5,6 +5,7 @@
   import FormItem from "./FormItem.svelte";
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
+  import { isVisible } from "../../util/Form";
 
   export type FormProps = {
     metadata?: unknown;
@@ -20,6 +21,8 @@
   if (!activeSection) {
     activeSection = config.sections[0];
   }
+
+  let formValues = $state<Record<string, unknown>>({});
 
   let tabs = $state<HTMLElement | null>(null);
   let helpMarkdown = $state<string | undefined>();
@@ -43,7 +46,7 @@
     }
   };
 
-  const onHelpClick = (key: string, help: string) => {
+  const onHelpClick = (key: string | undefined, help: string) => {
     if (activeHelpKey === key) {
       helpMarkdown = undefined;
       activeHelpKey = undefined;
@@ -64,14 +67,28 @@
     updateBorder();
   };
 
+  const onFormValueChange = (key: string, value: unknown) => {
+    if (formValues[key] === value) return
+    formValues = {
+      ...formValues,
+      [key]: value
+    }
+  };
+
   onMount(() => {
     updateBorder();
   });
 
+  const filteredItems = $derived(
+    config.formItems.filter(itemConfig => isVisible(formValues, itemConfig.visibilityCondition))
+  );
+
 </script>
 
 <div class="metadata-form">
-  <div></div>
+  <div>
+    <!-- placeholder for flex layout-->
+  </div>
   <div>
     <nav class="tabs" bind:this={tabs}>
       {#each config.sections as section}
@@ -92,9 +109,10 @@
       </div>
     </nav>
     <form>
-      {#each config.formItems as itemConfig}
+      {#each filteredItems as itemConfig}
         <FormItem
           hidden={itemConfig.section !== activeSection}
+          onChange={onFormValueChange}
           onHelpClick={onHelpClick}
           config={itemConfig}
           helpActive={activeHelpKey === itemConfig.key}

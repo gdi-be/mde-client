@@ -1,10 +1,10 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
   import CharacterCounter from "@smui/textfield/character-counter";
-  import type { FormItemConfig } from "$lib/models/form";
+  import type { TextAreaInputConfig } from "$lib/models/form";
 
   type InputProps = {
-    config: FormItemConfig;
+    config: TextAreaInputConfig;
   }
   let {
     config
