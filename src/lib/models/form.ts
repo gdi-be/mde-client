@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type Option = Record<string, string | number>;
+export type Option = Record<string, unknown>;
 
-export type FormItemType = 'text' | 'integer' | 'float' | 'textarea' | 'boolean' | 'select' | 'autocomplete' | 'date' | 'list' | 'group';
+export type FormItemType = 'text' | 'integer' | 'float' | 'textarea' | 'boolean' | 'select' | 'autocomplete' | 'date' | 'list' | 'group' | 'tags';
 
 export type VisibilityCondition = `${string}` | `${string} == ${string}` | `${string} != ${string}`;
 
@@ -67,11 +67,22 @@ export type DateInputConfig = BaseFormItemConfig & {
 export type SelectInputConfig = BaseFormItemConfig & {
   type: 'select';
   options: Option[];
+  optionValueField?: string;
+  optionLabelField?: string;
 }
 
 export type AutocompleteInputConfig = BaseFormItemConfig & {
   type: 'autocomplete';
   options: Option[];
+  optionValueField?: string;
+  optionLabelField?: string;
+}
+
+export type TagsInputConfig = BaseFormItemConfig & {
+  type: 'tags';
+  options?: Option[];
+  optionValueField?: string;
+  optionLabelField?: string;
 }
 
 export type FormListConfig = BaseFormItemConfig & {
@@ -94,7 +105,8 @@ export type FormItemConfig =
   BooleanInputConfig |
   DateInputConfig |
   SelectInputConfig |
-  AutocompleteInputConfig;
+  AutocompleteInputConfig |
+  TagsInputConfig;
 
 export type FormStructureConfig = FormListConfig | FormGroupConfig;
 
@@ -150,6 +162,10 @@ export function isSelectInputConfig(config: any): config is SelectInputConfig {
 
 export function isAutocompleteInputConfig(config: any): config is AutocompleteInputConfig {
   return config.type === 'autocomplete';
+}
+
+export function isTagsInputConfig(config: any): config is TagsInputConfig {
+  return config.type === 'tags';
 }
 
 export function isFormItemListConfig(config: any): config is FormListConfig {

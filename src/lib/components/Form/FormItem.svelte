@@ -17,6 +17,7 @@
     isFormItemListConfig,
     isIntegerInputConfig,
     isSelectInputConfig,
+    isTagsInputConfig,
     isTextAreaInputConfig,
     isTextInputConfig,
     type FormItemConfig,
@@ -25,6 +26,7 @@
   import IconButton from "@smui/icon-button";
   import FormItemList from "./FormItemList.svelte";
   import FormItemGroup from "./FormItemGroup.svelte";
+  import TagsInput from "./Inputs/TagsInput.svelte";
 
   type FormItemProps = {
     config: FormItemConfig | FormStructureConfig;
@@ -69,6 +71,9 @@
     {/if}
     {#if isAutocompleteInputConfig(config)}
       <AutoCompleteInput {config} />
+    {/if}
+    {#if isTagsInputConfig(config)}
+      <TagsInput {config} />
     {/if}
     {#if isFormItemListConfig(config)}
       <FormItemList {config} />
