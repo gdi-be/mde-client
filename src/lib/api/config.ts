@@ -80,9 +80,21 @@ export const getFormConfig = async (): Promise<FormConfig> => {
       label: "Services"
     }, {
       section: 'Basisdaten',
-      type: "text",
+      type: "tags",
       key: "keywords",
-      label: "Schlagworte"
+      label: "Schlagworte",
+      options: [{
+        label: 'Abwasser',
+        value: 'Abwasser'
+      }, {
+        label: 'Kanal',
+        value: 'Kanal'
+      }, {
+        label: 'Wasser',
+        value: 'Wasser'
+      }],
+      optionValueField: "value",
+      optionLabelField: "label"
     }, {
       section: 'Basisdaten',
       type: "date",

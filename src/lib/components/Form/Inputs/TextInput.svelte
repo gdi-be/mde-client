@@ -5,9 +5,11 @@
 
   type InputProps = {
     config: TextInputConfig;
+    value?: string;
   }
   let {
-    config
+    config,
+    value = ''
   }: InputProps = $props();
 
   const { key, label } = config;
@@ -18,7 +20,7 @@
   {label}
   input$name={key}
   input$maxlength={config.maxlength}
-  value=""
+  bind:value
 >
   {#snippet helper()}
     {#if config.maxlength}

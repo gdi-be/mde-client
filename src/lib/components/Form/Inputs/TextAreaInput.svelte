@@ -5,9 +5,11 @@
 
   type InputProps = {
     config: TextAreaInputConfig;
+    value?: string;
   }
   let {
-    config
+    config,
+    value = ''
   }: InputProps = $props();
 
   const {
@@ -22,9 +24,10 @@
   {label}
   id={key}
   textarea
+  input$name={key}
   name={key}
   input$maxlength={maxlength}
-  value=""
+  bind:value
 >
   {#snippet internalCounter()}
     {#if maxlength}

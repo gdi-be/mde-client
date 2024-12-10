@@ -4,9 +4,11 @@
 
   type InputProps = {
     config: IntegerInputConfig | FloatInputConfig;
+    value?: number;
   }
   let {
-    config
+    config,
+    value = 0
   }: InputProps = $props();
 
   const {
@@ -20,8 +22,8 @@
   type="number"
   {label}
   input$step={type === 'float' ? '0.1' : undefined}
-  input$id={key}
+  input$name={key}
   name={key}
-  value={0}
+  bind:value
 >
 </Textfield>
