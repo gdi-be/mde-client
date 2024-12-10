@@ -109,7 +109,7 @@
       </div>
     </nav>
     <form>
-      {#each filteredItems as itemConfig}
+      {#each filteredItems as itemConfig (itemConfig.key)}
         <FormItem
           hidden={itemConfig.section !== activeSection}
           onChange={onFormValueChange}

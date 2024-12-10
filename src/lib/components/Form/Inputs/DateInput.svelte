@@ -5,9 +5,11 @@
 
   type InputProps = {
     config: DateInputConfig;
+    value?: string;
   }
   let {
-    config
+    config,
+    value = ''
   }: InputProps = $props();
 
   const {
@@ -21,8 +23,9 @@
   type="date"
   {label}
   id={key}
+  input$name={key}
   name={key}
-  value=""
+  bind:value
 >
   {#snippet leadingIcon()}
     <Icon class="material-icons">

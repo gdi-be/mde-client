@@ -5,18 +5,23 @@
 
   type InputProps = {
     config: BooleanInputConfig;
+    value?: boolean;
   }
   let {
-    config
+    config,
+    value = false
   }: InputProps = $props();
 
   const {
-    // key,
+    key,
     label: inputLabel
   } = config;
 </script>
 
-<FormField>
+<FormField
+  input$name={key}
+  bind:value
+>
   <Switch/>
   {#snippet label()}
     {inputLabel}

@@ -4,19 +4,24 @@
 
   type InputProps = {
     config: AutocompleteInputConfig;
+    value?: Option;
   }
   let {
-    config
+    config,
+    value = $bindable<Option>({
+      key: "",
+      label: ""
+    })
   }: InputProps = $props();
 
-  const { key, label } = config;
+  const { key, label, options } = config;
 
-  let value: Option | null = $state({ value: 'apple', label: 'Apple' });
 </script>
 
 <Autocomplete
   {label}
   bind:value
-  options={config.options}
+  input$name={key}
+  options={options}
   getOptionLabel={(option: Option) => option?.label}
 />

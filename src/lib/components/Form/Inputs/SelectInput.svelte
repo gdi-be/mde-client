@@ -25,7 +25,7 @@
   {label}
   hiddenInput
   input$name={key}
-  bind:value={value}
+  bind:value
 >
   {#each options as option}
     <Option
