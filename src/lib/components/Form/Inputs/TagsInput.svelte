@@ -80,6 +80,9 @@
   .tags-input {
     :global(.smui-chip-input ) {
       gap: 0;
+      :global(.mdc-chip:last-of-type) {
+        margin-right: 8px;
+      }
     }
   }
 </style>
