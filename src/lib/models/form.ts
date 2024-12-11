@@ -1,3 +1,5 @@
+import type { MetadataType } from "./metadata";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Option = Record<string, unknown>;
 
@@ -8,7 +10,8 @@ export type VisibilityCondition = `${string}` | `${string} == ${string}` | `${st
 export interface BaseFormItemConfig {
   type: FormItemType;
   section?: string;
-  key: string;
+  metadataType?: MetadataType;
+  key: `${string}`;
   label?: string;
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/required
   required?: boolean;

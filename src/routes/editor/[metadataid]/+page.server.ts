@@ -1,8 +1,7 @@
 import { error } from '@sveltejs/kit';
-import { getByMetadataId } from '$lib/api/metadata.js';
+import { getMetadataCollectionByMetadataId } from '$lib/api/metadata.js';
 import { getAccessToken } from '$lib/auth/cookies.js';
 import { getFormConfig } from '$lib/api/config.js';
-import type { IsoMetadata } from '$lib/models/metadata.js';
 
 export async function load({ params, cookies }) {
 
@@ -19,7 +18,7 @@ export async function load({ params, cookies }) {
     }
   }
 
-  const metadata = await getByMetadataId<IsoMetadata>(params.metadataid, token);
+  const metadata = await getMetadataCollectionByMetadataId(params.metadataid, token);
   if (!metadata) return error(404, `Metadata with ID ${params.metadataid} could not be found`);
 
   return {

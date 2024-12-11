@@ -11,13 +11,17 @@ export const getFormConfig = async (): Promise<FormConfig> => {
     formItems: [{
       section: 'Basisdaten',
       type: "select",
+      metadataType: "ISO",
       label: "Metadatenprofil",
       options: [{
         label: "ISO",
         value: "ISO"
       }, {
-        label: "INSPIRE",
-        value: "INSPIRE"
+        label: "INSPIRE (harmonisiert)",
+        value: "INSPIRE_HARMONISED"
+      }, {
+        label: "INSPIRE (identifiziert)",
+        value: "INSPIRE_IDENTIFIED"
       }],
       key: "metadataProfile",
     }, {
@@ -42,17 +46,20 @@ export const getFormConfig = async (): Promise<FormConfig> => {
         { label: 'US', value: 'US' },
       ],
       key: "inspireTheme",
+      metadataType: "ISO",
       label: "Inspire Thema",
       visibilityCondition: "metadataProfile == INSPIRE"
     }, {
       section: 'Basisdaten',
       type: "text",
       key: "fileIdentifier",
+      metadataType: "ISO",
       label: "Datei-Identifikator"
     }, {
       section: 'Basisdaten',
       type: "group",
       key: "dataIdentificator",
+      metadataType: "ISO",
       label: "Daten-Identifikator",
       layout: "horizontal",
       items: [{
@@ -68,6 +75,7 @@ export const getFormConfig = async (): Promise<FormConfig> => {
       section: 'Basisdaten',
       type: "list",
       key: "serviceIds",
+      metadataType: "ISO",
       label: "Service-IDs",
       item: {
         type: "text",
@@ -77,11 +85,13 @@ export const getFormConfig = async (): Promise<FormConfig> => {
       section: 'Basisdaten',
       type: "text",
       key: "services",
+      metadataType: "ISO",
       label: "Services"
     }, {
       section: 'Basisdaten',
       type: "tags",
       key: "keywords",
+      metadataType: "ISO",
       label: "Schlagworte",
       options: [{
         label: 'Abwasser',
@@ -99,71 +109,81 @@ export const getFormConfig = async (): Promise<FormConfig> => {
       section: 'Basisdaten',
       type: "date",
       key: "dateTime",
+      metadataType: "ISO",
       label: "Datum/Zeit"
     }, {
       section: 'Basisdaten',
       type: "date",
       key: "created",
+      metadataType: "ISO",
       label: "Erstellt"
     }, {
       section: 'Basisdaten',
       type: "date",
       key: "published",
+      metadataType: "ISO",
       label: "Veröffentlicht"
     }, {
       section: 'Basisdaten',
       type: "date",
       key: "modified",
+      metadataType: "ISO",
       label: "Geändert"
     }, {
       section: 'Basisdaten',
       type: "date",
       key: "validFrom",
+      metadataType: "ISO",
       label: "Gültig ab"
     }, {
       section: 'Basisdaten',
       type: "text",
       key: "preview",
+      metadataType: "ISO",
       label: "Vorschau"
     }, {
       section: 'Basisdaten',
       type: "text",
       key: "url",
+      metadataType: "ISO",
       label: "URL"
     }, {
       section: 'Basisdaten',
       type: "text",
       key: "capabilities",
+      metadataType: "ISO",
       label: "Fähigkeiten"
     }, {
       section: 'Basisdaten',
       type: "text",
       key: "contacts",
+      metadataType: "ISO",
       label: "Kontakte"
     }, {
       section: 'Basisdaten',
       type: "integer",
       key: "scale",
+      metadataType: "ISO",
       label: "Maßstab"
     }, {
       section: 'Basisdaten',
       type: "text",
       key: "previewMap",
+      metadataType: "ISO",
       label: "Vorschau-Karte"
     }, {
       section: 'Basisdaten',
       type: "text",
       key: "previewMapInternal",
+      metadataType: "ISO",
       label: "Vorschau-Karte intern"
     }, {
       section: 'Basisdaten',
       type: "text",
       key: "extent",
+      metadataType: "ISO",
       label: "Umfang"
-    },
-
-
-    {
+    },{
       section: 'sample',
       type: "integer",
       key: "isometadata.number",

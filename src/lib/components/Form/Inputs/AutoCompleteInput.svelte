@@ -14,14 +14,13 @@
     })
   }: InputProps = $props();
 
-  const { key, label, options } = config;
+  const { label, options } = config;
 
 </script>
 
 <Autocomplete
   {label}
   bind:value
-  input$name={key}
   options={options}
   getOptionLabel={(option: Option) => option?.label}
 />
