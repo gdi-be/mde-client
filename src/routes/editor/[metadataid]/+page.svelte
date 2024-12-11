@@ -10,15 +10,14 @@
     config,
     metadata
   } = data;
-
 </script>
 
 <div class="metadata">
   {#if mode === 'create' && config}
     <h1>Create Metadata</h1>
     <Form {config} {activeSection} />
-  {:else if data.mode === 'edit' && data.metadata}
-    <h1>{ data.metadata.title }</h1>
+  {:else if mode === 'edit' && metadata}
+    <h1>{ metadata.isoMetadata.title }</h1>
     <Form {metadata} {config} {activeSection} />
   {/if}
 </div>

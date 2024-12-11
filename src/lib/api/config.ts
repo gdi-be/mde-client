@@ -48,7 +48,7 @@ export const getFormConfig = async (): Promise<FormConfig> => {
       key: "inspireTheme",
       metadataType: "ISO",
       label: "Inspire Thema",
-      visibilityCondition: "metadataProfile == INSPIRE"
+      // visibilityCondition: "metadataProfile == INSPIRE"
     }, {
       section: 'Basisdaten',
       type: "text",
