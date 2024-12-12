@@ -13,13 +13,11 @@
   }: InputProps = $props();
 
   const {
-    key,
     label: inputLabel
   } = config;
 </script>
 
 <FormField
-  input$name={key}
   bind:value
 >
   <Switch/>

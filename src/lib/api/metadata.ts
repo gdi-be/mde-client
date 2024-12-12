@@ -1,6 +1,6 @@
 import { env } from "$env/dynamic/private";
 import log from "loggisch";
-import type { Metadata } from "../models/metadata";
+import type { IsoMetadata, MetadataCollection, MetadataType } from "../models/metadata";
 import type { PageableProps, PageableResponse } from "./api";
 
 const defaultPage: PageableProps = {
@@ -9,12 +9,12 @@ const defaultPage: PageableProps = {
 };
 
 /**
- * Fetches all metadata from the backend.
+ * Fetches all iso metadata from the backend.
  *
  * @param {string} [token] - Optional authorization token for the request.
  * @returns {Promise<PageAbleResponse<Metadata>>} - A promise that resolves to the fetched metadata.
  */
-export const getAll = async <T extends Metadata>(token: string, pagingOpts = defaultPage): Promise<PageableResponse<T>> => {
+export const getAll = async (token: string, pagingOpts = defaultPage): Promise<PageableResponse<IsoMetadata>> => {
   if (!token) {
     log.error("No token provided.");
     return Promise.reject(new Error("No token provided."));
@@ -24,7 +24,6 @@ export const getAll = async <T extends Metadata>(token: string, pagingOpts = def
     Authorization: `Bearer ${token}`
   });
 
-  // TODO: Endpoint depends on metadata type
   const url: URL = new URL(`${env.BACKEND_URL}/metadata/iso`);
 
   if (pagingOpts) {
@@ -49,13 +48,13 @@ export const getAll = async <T extends Metadata>(token: string, pagingOpts = def
 }
 
 /**
- * Fetches metadata by ID from the backend.
+ * Fetches metadata by metadataId from the backend.
  *
- * @param id - The ID of the metadata to fetch.
+ * @param metadataId - The metadataId to fetch.
  * @param token - Optional authorization token for the request.
  * @returns A promise that resolves to the fetched metadata.
  */
-export const getById = async <T extends Metadata>(id: number, token: string): Promise<T> => {
+export const getMetadataCollectionByMetadataId = async (metadataId: string, token: string): Promise<MetadataCollection> => {
   if (!token) {
     log.error("No token provided.");
     return Promise.reject(new Error("No token provided."));
@@ -64,8 +63,8 @@ export const getById = async <T extends Metadata>(id: number, token: string): Pr
   const headers = new Headers({
     Authorization: `Bearer ${token}`
   });
-  // TODO: Endpoint depends on metadata type
-  const response = await fetch(`${env.BACKEND_URL}/metadata/iso/${id}`, {
+
+  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataId}`, {
     headers
   });
 
@@ -76,26 +75,40 @@ export const getById = async <T extends Metadata>(id: number, token: string): Pr
   return await response.json();
 }
 
-/**
- * Fetches metadata by ID from the backend.
- *
- * @param id - The ID of the metadata to fetch.
- * @param token - Optional authorization token for the request.
- * @returns A promise that resolves to the fetched metadata.
- */
-export const getByMetadataId = async <T extends Metadata>(id: string, token: string): Promise<T> => {
+export type UpdateProps = {
+  metadataId: string;
+  metadataType: MetadataType;
+  key: string;
+  value: unknown;
+  token: string;
+}
+
+export const updateDataValue = async ({
+  metadataId,
+  metadataType,
+  key,
+  value,
+  token
+}: UpdateProps): Promise<unknown> => {
+
   if (!token) {
     log.error("No token provided.");
     return Promise.reject(new Error("No token provided."));
   }
 
   const headers = new Headers({
+    'content-type': 'application/json',
     Authorization: `Bearer ${token}`
   });
 
-  // TODO: Endpoint depends on metadata type
-  const response = await fetch(`${env.BACKEND_URL}/metadata/iso/m/${id}`, {
-    headers
+  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataId}`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify({
+      type: metadataType,
+      key,
+      value
+    })
   });
 
   if (!response.ok) {
@@ -103,4 +116,6 @@ export const getByMetadataId = async <T extends Metadata>(id: string, token: str
   }
 
   return await response.json();
+
+
 }

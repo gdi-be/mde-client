@@ -3,7 +3,7 @@
   import type { SelectInputConfig } from "$lib/models/form";
 
   type InputProps = {
-    onChange?: (key: string, value: string | undefined) => void;
+    onChange?: (value: string | undefined) => void;
     value?: string;
     config: SelectInputConfig;
   }
@@ -16,9 +16,9 @@
 
   const { key, label, options = [] } = config;
 
-  $effect(() => {
-    onChange?.(key, value);
-  });
+  const onSelect = () => {
+    onChange?.(value);
+  };
 </script>
 
 <Select
@@ -29,6 +29,7 @@
 >
   {#each options as option}
     <Option
+      onSMUIAction={onSelect}
       value={option.value}
     >
       {option.label}

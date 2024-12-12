@@ -27,10 +27,10 @@
   import FormItemList from "./FormItemList.svelte";
   import FormItemGroup from "./FormItemGroup.svelte";
   import TagsInput from "./Inputs/TagsInput.svelte";
+  import { page } from "$app/stores";
 
   type FormItemProps = {
     config: FormItemConfig | FormStructureConfig;
-    onChange?: (key: string, value: unknown) => void;
     onHelpClick?: (key: string | undefined, helpText: string) => void;
     helpActive?: boolean;
     hidden?: boolean;
@@ -39,10 +39,25 @@
   let {
     config,
     onHelpClick = () => {},
-    onChange,
     helpActive = false,
     hidden = false
   }: FormItemProps = $props();
+
+  const onChange = async (value: unknown) => {
+    if (!config.metadataType) return;
+
+    fetch($page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        metadataType: config.metadataType,
+        key: config.key,
+        value
+      })
+    });
+  };
 
 </script>
 

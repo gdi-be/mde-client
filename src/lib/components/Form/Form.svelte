@@ -5,7 +5,7 @@
   import FormItem from "./FormItem.svelte";
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
-  import { isVisible } from "../../util/Form";
+  import { isVisible } from "$lib/util/Form";
 
   export type FormProps = {
     metadata?: unknown;
@@ -67,14 +67,6 @@
     updateBorder();
   };
 
-  const onFormValueChange = (key: string, value: unknown) => {
-    if (formValues[key] === value) return
-    formValues = {
-      ...formValues,
-      [key]: value
-    }
-  };
-
   onMount(() => {
     updateBorder();
   });
@@ -112,7 +104,6 @@
       {#each filteredItems as itemConfig (itemConfig.key)}
         <FormItem
           hidden={itemConfig.section !== activeSection}
-          onChange={onFormValueChange}
           onHelpClick={onHelpClick}
           config={itemConfig}
           helpActive={activeHelpKey === itemConfig.key}
