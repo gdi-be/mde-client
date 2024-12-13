@@ -1,6 +1,6 @@
 import { env } from "$env/dynamic/private";
 import log from "loggisch";
-import type { IsoMetadata, MetadataCollection, MetadataType } from "../models/metadata";
+import type { IsoMetadata, MetadataProfile, MetadataCollection, MetadataId, MetadataType } from "../models/metadata";
 import type { PageableProps, PageableResponse } from "./api";
 
 const defaultPage: PageableProps = {
@@ -83,6 +83,13 @@ export type UpdateProps = {
   token: string;
 }
 
+export type CreateProps = {
+  token: string;
+  title: string;
+  metadataProfile: MetadataProfile;
+  cloneMetadataId?: MetadataId;
+}
+
 export const updateDataValue = async ({
   metadataId,
   metadataType,
@@ -116,6 +123,36 @@ export const updateDataValue = async ({
   }
 
   return await response.json();
+}
 
+export const createMetadataCollection = async ({
+  token,
+  title,
+  metadataProfile,
+  cloneMetadataId
+}: CreateProps): Promise<MetadataCollection> => {
+  if (!token) {
+    log.error("No token provided.");
+    return Promise.reject(new Error("No token provided."));
+  }
 
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  const response = await fetch(`${env.BACKEND_URL}/metadata`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      metadataProfile,
+      title,
+      cloneMetadataId
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  return await response.json();
 }
