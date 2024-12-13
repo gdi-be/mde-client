@@ -1,25 +1,25 @@
 # 1. build the app
-FROM oven/bun:1.1.36-alpine AS builder
+FROM node:22 AS builder
 
 WORKDIR /app
 
-COPY package.json bun.lockb ./
-
-RUN bun install
-
 COPY . .
-
+COPY .env.example .env
+COPY .npmrc .npmrc
+RUN npm i -g bun
+RUN bun install --frozen-lockfile
 RUN bun run build
 
-#2. run the app
-FROM oven/bun:1.1.36-alpine
+# 2. run the app
+FROM node:22
 
 WORKDIR /app
 
 COPY --from=builder /app/build ./build
+COPY --from=builder /app/node_modules ./node_modules
 
 COPY package.json bun.lockb ./
-RUN bun install
+RUN npm i -g bun
 
 EXPOSE 3000
 
