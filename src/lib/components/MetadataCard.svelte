@@ -10,7 +10,7 @@
   let { metadata }: MetadataCardProps = $props();
 
   const onclick = () => {
-    goto(`/editor/${metadata.metadataId}`);
+    goto(`/metadata/${metadata.metadataId}`);
   };
 
 </script>
@@ -42,6 +42,7 @@
 <style lang="scss">
   :global(.metadata-card) {
     width: 15rem;
+    max-height: 288px;
 
     :global(.metadata-card-content) {
       height: 15rem;

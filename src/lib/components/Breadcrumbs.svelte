@@ -1,5 +1,10 @@
-<script>
+<script lang="ts">
   import { page } from '$app/stores';
+  import * as m from '$lib/paraglide/messages';
+
+  type TranslatedParts = {
+    metadata: string;
+  };
 
   const breadcrumbs = $derived.by(() => {
     const parts = $page.url.pathname.split('/').filter(a => a !== '');
@@ -11,19 +16,20 @@
     });
   });
 
+  const getUrlPartName = (part: keyof TranslatedParts) => m[part] ? m[part]() : part;
 </script>
 
 <nav>
   <ul>
     <li>
-      <a href="/">home</a>
+      <a href="/">🏠</a>
     </li>
     {#each breadcrumbs as {name, url}}
       <li>
         {#if url === $page.url.pathname}
-          <i>/</i>{name}
+          <i>/</i>{getUrlPartName(name as keyof TranslatedParts)}
         {:else}
-          <i>/</i><a href={url}>{name}</a>
+          <i>/</i><a href={url}>{getUrlPartName(name as keyof TranslatedParts)}</a>
         {/if}
       </li>
     {/each}

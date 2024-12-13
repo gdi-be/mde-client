@@ -5,5 +5,6 @@
   "login": "Login",
   "pageNotFound": "Seite nicht gefunden",
   "page": "Seite",
-  "dataPerPage": "Datensätze pro Seite"
+  "dataPerPage": "Datensätze pro Seite",
+  "metadata": "Metadaten"
 }

@@ -52,6 +52,11 @@
     main {
       flex: 1;
       overflow: auto;
+      position: relative;
+
+      :global(>*) {
+        max-height: 100%;
+      }
     }
   }
 </style>
