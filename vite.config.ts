@@ -1,14 +1,14 @@
-// import { paraglide } from '@inlang/paraglide-sveltekit/vite';
+import { paraglide } from '@inlang/paraglide-sveltekit/vite';
 import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
   plugins: [
     sveltekit(),
-    // paraglide({
-    //   project: './project.inlang',
-    //   outdir: './src/lib/paraglide'
-    // })
+    paraglide({
+      project: './project.inlang',
+      outdir: './src/lib/paraglide'
+    })
   ],
   server: {
     host: '0.0.0.0',
