@@ -9,7 +9,10 @@
 
 </script>
 
-<div>
+<div class="metadata-overview">
+  <div class="metadata-toolbar">
+    <h1>Metadaten</h1>
+  </div>
   <div class="metadata-list">
     {#each metadata as metadataEntry}
       <MetadataCard metadata={metadataEntry} />
@@ -21,11 +24,26 @@
 </div>
 
 <style lang="scss">
-  .metadata-list {
-    padding: 1em 0;
-    justify-content: center;
+  .metadata-overview {
+    height: 100%;
     display: flex;
-    flex-wrap: wrap;
-    gap: 1em;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+
+    .metadata-toolbar,
+    .pagination {
+      flex: 0 0 auto;
+    }
+
+    .metadata-list {
+      flex: 1;
+      padding: 1em;
+      display: inline-grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1em;
+      overflow-y: auto;
+    }
   }
+
 </style>

@@ -20,7 +20,7 @@
       {m.welcome()}
     </p>
     <p>
-      <a href="/editor">Hier geht's zum Spaß!</a>
+      <a href="/metadata">Hier geht's zum Spaß!</a>
     </p>
     <p>
       Ausloggen kannst du dich oben rechts.
