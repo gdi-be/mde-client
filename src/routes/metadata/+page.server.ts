@@ -1,7 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
 import { getAll } from '$lib/api/metadata.js';
-import type { IsoMetadata } from '$lib/models/metadata.js';
 import type { PageableProps } from '$lib/api/api.js';
 
 export async function load({ cookies, url }) {
@@ -21,7 +20,7 @@ export async function load({ cookies, url }) {
     };
   }
 
-  const metadata = await getAll<IsoMetadata>(token, pagingOptions);
+  const metadata = await getAll(token, pagingOptions);
   if (metadata) return { metadata, pagingOptions };
 
   error(404, 'Not found');
