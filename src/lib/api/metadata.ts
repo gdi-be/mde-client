@@ -137,10 +137,11 @@ export const createMetadataCollection = async ({
   }
 
   const headers = new Headers({
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${token}`,
+    'content-type': 'application/json'
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/`, {
     method: 'POST',
     headers,
     body: JSON.stringify({

@@ -14,12 +14,10 @@ export async function POST({ cookies, request }) {
     return error(400, 'Bad Request');
   }
 
-  const updateResponse = await createMetadataCollection({
-    title: data.title,
-    metadataProfile: data.metadataProfile,
-    cloneMetadataId: data.cloneMetadataId,
+  const createResponse = await createMetadataCollection({
+    ...data,
     token
-  })
+  });
 
-  return json(updateResponse);
+  return json(createResponse);
 }

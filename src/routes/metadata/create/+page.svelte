@@ -1,19 +1,25 @@
 <script lang=ts>
+  import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import {
-    type MetadataProfile,
-    type MetadataId
+    type MetadataProfile
   } from "$lib/models/metadata";
   import Button from "@smui/button";
   import Select, { Option } from "@smui/select";
   import Textfield from "@smui/textfield";
+  import log from "loggisch";
+  import MetadataSearchField from "$lib/components/MetadataSearchField.svelte";
 
   let title = $state<string>('');
   let metadataProfile = $state<MetadataProfile>('ISO');
-  let metadataCloneID = $state<MetadataId | undefined>();
+  let cloneMetadataId = $state<Option>();
+
+  const allFieldsValid = $derived.by(() => {
+    return title.length > 0 && metadataProfile.length;
+  });
 
   const onCreateClick = async () => {
-    fetch($page.url, {
+    const response = await fetch($page.url, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
@@ -21,9 +27,20 @@
       body: JSON.stringify({
         title,
         metadataProfile,
-        metadataCloneID
+        cloneMetadataId: cloneMetadataId?.key
       })
     });
+
+    if (response.ok) {
+      const { metadataId } = await response.json();
+
+      if (metadataId) {
+        goto(`/metadata/${metadataId}`);
+      } else {
+        log.error('No metadataId in response');
+        console.log(metadataId);
+      }
+    }
   };
 
 </script>
@@ -41,12 +58,17 @@
     required
   >
       <Option value="ISO">ISO</Option>
-      <Option value="INSPIRE_HARMONIZED">Inspire (harmonisiert)</Option>
+      <Option value="INSPIRE_HARMONISED">Inspire (harmonisiert)</Option>
       <Option value="INSPIRE_IDENTIFIED">Inspire (identified)</Option>
   </Select>
+  <MetadataSearchField
+    bind:value={cloneMetadataId}
+    label="Metadaten kopieren"
+  />
   <Button
     variant="raised"
     onclick={onCreateClick}
+    disabled={!allFieldsValid}
   >
     Metadaten anlegen
   </Button>

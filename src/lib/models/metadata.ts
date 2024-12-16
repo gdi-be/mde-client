@@ -2,7 +2,7 @@ export type JsonClientMetadata = Record<string, unknown>;
 export type JsonIsoMetadata = Record<string, unknown>;
 export type JsonTechnialMetadata = Record<string, unknown>;
 
-export type MetadataProfile = 'ISO' | 'INSPIRE_HARMONIZED' | 'INSPIRE_IDENTIFIED';
+export type MetadataProfile = 'ISO' | 'INSPIRE_HARMONISED' | 'INSPIRE_IDENTIFIED';
 
 export type MetadataType = 'CLIENT' | 'ISO' | 'TECHNICAL';
 
