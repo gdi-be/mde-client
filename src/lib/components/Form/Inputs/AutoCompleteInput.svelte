@@ -22,5 +22,5 @@
   {label}
   bind:value
   options={options}
-  getOptionLabel={(option: Option) => option?.label}
+  getOptionLabel={(option: Option) => option?.label as string || ''}
 />

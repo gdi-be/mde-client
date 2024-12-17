@@ -24,7 +24,6 @@
   {label}
   id={key}
   input$name={key}
-  name={key}
   bind:value
 >
   {#snippet leadingIcon()}
