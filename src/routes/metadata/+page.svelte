@@ -29,6 +29,7 @@
   <div class="metadata-list">
     <Card class="create-card">
       <PrimaryAction
+        title="Neuerfassung"
         class="create-card-content"
         onclick={() => goto('/metadata/create')}
       >

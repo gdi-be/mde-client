@@ -5,24 +5,23 @@
   import FormItem from "./FormItem.svelte";
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
-  import { isVisible } from "$lib/util/Form";
+  import { getValueFromMetadata, isVisible } from "$lib/util/Form";
 
-  export type FormProps = {
-    metadata?: unknown;
+  type FormProps = {
+    metadata?: Record<string, unknown>;
     config: FormConfig;
     activeSection?: string;
   }
 
   let {
     config,
-    activeSection
+    activeSection,
+    metadata
   }: FormProps = $props();
 
   if (!activeSection) {
     activeSection = config.sections[0];
   }
-
-  let formValues = $state<Record<string, unknown>>({});
 
   let tabs = $state<HTMLElement | null>(null);
   let helpMarkdown = $state<string | undefined>();
@@ -72,7 +71,7 @@
   });
 
   const filteredItems = $derived(
-    config.formItems.filter(itemConfig => isVisible(formValues, itemConfig.visibilityCondition))
+    config.formItems.filter(itemConfig => isVisible(metadata, itemConfig.visibilityCondition))
   );
 
 </script>
@@ -107,6 +106,7 @@
           onHelpClick={onHelpClick}
           config={itemConfig}
           helpActive={activeHelpKey === itemConfig.key}
+          value={getValueFromMetadata(metadata, itemConfig.key)}
         />
       {/each}
     </form>

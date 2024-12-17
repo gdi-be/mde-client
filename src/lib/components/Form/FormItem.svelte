@@ -34,13 +34,15 @@
     onHelpClick?: (key: string | undefined, helpText: string) => void;
     helpActive?: boolean;
     hidden?: boolean;
+    value?: unknown;
   }
 
   let {
     config,
     onHelpClick = () => {},
     helpActive = false,
-    hidden = false
+    hidden = false,
+    value
   }: FormItemProps = $props();
 
   const onChange = async (value: unknown) => {
@@ -82,7 +84,7 @@
       <DateInput {config} />
     {/if}
     {#if isSelectInputConfig(config)}
-      <SelectInput {config} {onChange} />
+      <SelectInput {config} {onChange} {value} />
     {/if}
     {#if isAutocompleteInputConfig(config)}
       <AutoCompleteInput {config} />

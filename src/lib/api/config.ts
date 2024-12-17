@@ -23,7 +23,7 @@ export const getFormConfig = async (): Promise<FormConfig> => {
         label: "INSPIRE (identifiziert)",
         value: "INSPIRE_IDENTIFIED"
       }],
-      key: "metadataProfile",
+      key: "isoMetadata.metadataProfile",
     }, {
       section: 'Basisdaten',
       type: "select",
@@ -45,36 +45,36 @@ export const getFormConfig = async (): Promise<FormConfig> => {
         { label: 'SU', value: 'SU' },
         { label: 'US', value: 'US' },
       ],
-      key: "inspireTheme",
+      key: "isoMetadata.inspireTheme",
       metadataType: "ISO",
       label: "Inspire Thema",
       // visibilityCondition: "metadataProfile == INSPIRE"
     }, {
       section: 'Basisdaten',
       type: "text",
-      key: "fileIdentifier",
+      key: "isoMetadata.fileIdentifier",
       metadataType: "ISO",
       label: "Datei-Identifikator"
     }, {
       section: 'Basisdaten',
       type: "group",
-      key: "dataIdentificator",
+      key: "isoMetadata.dataIdentificator",
       metadataType: "ISO",
       label: "Daten-Identifikator",
       layout: "horizontal",
       items: [{
         type: "text",
-        key: "id",
+        key: "isoMetadata.id",
         label: "id"
       }, {
         type: "text",
-        key: "namespace",
+        key: "isoMetadata.namespace",
         label: "Namensraum"
       }]
     }, {
       section: 'Basisdaten',
       type: "list",
-      key: "serviceIds",
+      key: "isoMetadata.serviceIds",
       metadataType: "ISO",
       label: "Service-IDs",
       item: {
@@ -84,13 +84,13 @@ export const getFormConfig = async (): Promise<FormConfig> => {
     }, {
       section: 'Basisdaten',
       type: "text",
-      key: "services",
+      key: "isoMetadata.services",
       metadataType: "ISO",
       label: "Services"
     }, {
       section: 'Basisdaten',
       type: "tags",
-      key: "keywords",
+      key: "isoMetadata.keywords",
       metadataType: "ISO",
       label: "Schlagworte",
       options: [{
@@ -108,85 +108,85 @@ export const getFormConfig = async (): Promise<FormConfig> => {
     }, {
       section: 'Basisdaten',
       type: "date",
-      key: "dateTime",
+      key: "isoMetadata.dateTime",
       metadataType: "ISO",
       label: "Datum/Zeit"
     }, {
       section: 'Basisdaten',
       type: "date",
-      key: "created",
+      key: "isoMetadata.created",
       metadataType: "ISO",
       label: "Erstellt"
     }, {
       section: 'Basisdaten',
       type: "date",
-      key: "published",
+      key: "isoMetadata.published",
       metadataType: "ISO",
       label: "Veröffentlicht"
     }, {
       section: 'Basisdaten',
       type: "date",
-      key: "modified",
+      key: "isoMetadata.modified",
       metadataType: "ISO",
       label: "Geändert"
     }, {
       section: 'Basisdaten',
       type: "date",
-      key: "validFrom",
+      key: "isoMetadata.validFrom",
       metadataType: "ISO",
       label: "Gültig ab"
     }, {
       section: 'Basisdaten',
       type: "text",
-      key: "preview",
+      key: "isoMetadata.preview",
       metadataType: "ISO",
       label: "Vorschau"
     }, {
       section: 'Basisdaten',
       type: "text",
-      key: "url",
+      key: "isoMetadata.url",
       metadataType: "ISO",
       label: "URL"
     }, {
       section: 'Basisdaten',
       type: "text",
-      key: "capabilities",
+      key: "isoMetadata.capabilities",
       metadataType: "ISO",
       label: "Fähigkeiten"
     }, {
       section: 'Basisdaten',
       type: "text",
-      key: "contacts",
+      key: "isoMetadata.contacts",
       metadataType: "ISO",
       label: "Kontakte"
     }, {
       section: 'Basisdaten',
       type: "integer",
-      key: "scale",
+      key: "isoMetadata.scale",
       metadataType: "ISO",
       label: "Maßstab"
     }, {
       section: 'Basisdaten',
       type: "text",
-      key: "previewMap",
+      key: "isoMetadata.previewMap",
       metadataType: "ISO",
       label: "Vorschau-Karte"
     }, {
       section: 'Basisdaten',
       type: "text",
-      key: "previewMapInternal",
+      key: "isoMetadata.previewMapInternal",
       metadataType: "ISO",
       label: "Vorschau-Karte intern"
     }, {
       section: 'Basisdaten',
       type: "text",
-      key: "extent",
+      key: "isoMetadata.extent",
       metadataType: "ISO",
       label: "Umfang"
     },{
       section: 'sample',
       type: "integer",
-      key: "isometadata.number",
+      key: "isoMetadata.number",
       label: "Zahlenfeld (Ganzahl)",
       // consider if this should be stored elsewhere
       help: `
@@ -219,37 +219,37 @@ This document showcases the power of Markdown. It's simple, flexible, and easy t
     }, {
       section: 'sample',
       type: "float",
-      key: "isometadata.float",
+      key: "isoMetadata.float",
       label: "Zahlenfeld (Dezimal)",
       help: "This is a help text for the float field."
     }, {
       section: 'sample',
       type: "text",
-      key: "isometadata.text",
+      key: "isoMetadata.text",
       label: "Freitextfeld",
       help: "This is a help text for the text field."
     }, {
       section: 'sample',
       type: "textarea",
-      key: "isometadata.textarea",
+      key: "isoMetadata.textarea",
       label: "Fließtextfeld",
       help: "This is a help text for the textarea field."
     }, {
       section: 'sample',
       type: "boolean",
-      key: "isometadata.boolean",
+      key: "isoMetadata.boolean",
       label: "Entscheidung",
       help: "This is a help text for the boolean field."
     }, {
       section: 'sample',
       type: "date",
-      key: "isometadata.date",
+      key: "isoMetadata.date",
       label: "Datumsauswahl",
       help: "This is a help text for the date field."
     }, {
       section: 'sample',
       type: "select",
-      key: "isometadata.select",
+      key: "isoMetadata.select",
       label: "Auswahlliste",
       help: "This is a help text for the select field.",
       options: [{
@@ -262,7 +262,7 @@ This document showcases the power of Markdown. It's simple, flexible, and easy t
     }, {
       section: 'sample',
       type: "autocomplete",
-      key: "isometadata.autocomplete",
+      key: "isoMetadata.autocomplete",
       label: "Thesaurusaufschlag",
       help: "This is a help text for the autocomplete field.",
       options: [{

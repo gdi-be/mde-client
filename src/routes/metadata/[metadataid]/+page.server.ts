@@ -11,18 +11,10 @@ export async function load({ params, cookies }) {
   const config = await getFormConfig();
   if (!config) return error(500, 'Failed to fetch form config');
 
-  if (params.metadataid === 'new') {
-    return {
-      mode: 'create',
-      config
-    }
-  }
-
   const metadata = await getMetadataCollectionByMetadataId(params.metadataid, token);
   if (!metadata) return error(404, `Metadata with ID ${params.metadataid} could not be found`);
 
   return {
-    mode: 'edit',
     metadata,
     config
   }
