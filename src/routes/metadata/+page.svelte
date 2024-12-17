@@ -1,20 +1,30 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import MetadataCard from "../../lib/components/MetadataCard.svelte";
-  import Pagination from "../../lib/components/Pagination.svelte";
+  import MetadataCard from "$lib/components/MetadataCard.svelte";
+  import MetadataSearchField from "$lib/components/MetadataSearchField.svelte";
+  import Pagination from "$lib/components/Pagination.svelte";
   import { Icon } from "@smui/button";
   import Card, { PrimaryAction } from '@smui/card';
+  import type { Option } from "$lib/models/form.js";
 
   let { data } = $props();
 
   const metadata = $derived(data.metadata.content);
   const pageable = $derived(data.metadata);
 
+  let searchValue = $state<Option>()
+
+  $effect(() => {
+    if (searchValue) {
+      goto(`/metadata/${searchValue.key}`);
+    }
+  });
+
 </script>
 
 <div class="metadata-overview">
   <div class="metadata-toolbar">
-    <h1>Metadaten</h1>
+    <MetadataSearchField bind:value={searchValue}/>
   </div>
   <div class="metadata-list">
     <Card class="create-card">
@@ -45,6 +55,12 @@
     .metadata-toolbar,
     .pagination {
       flex: 0 0 auto;
+    }
+
+    .metadata-toolbar {
+      :global(.metadata-search-field .mdc-text-field) {
+        width: 600px;
+      }
     }
 
     .metadata-list {

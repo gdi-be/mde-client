@@ -1,11 +1,11 @@
 <script lang="ts">
   import Autocomplete from "@smui-extra/autocomplete";
   import { Text } from "@smui/list";
-  import type { MetadataId } from "$lib/models/metadata";
+  import type { IsoMetadata } from "$lib/models/metadata";
   import { type Option } from "$lib/models/form";
 
   export type MetadataSearchFieldProps = {
-    value: MetadataId | undefined;
+    value: Option | undefined;
     label?: string;
   };
 
@@ -14,32 +14,45 @@
     label = 'Suche nach Metadaten'
   }: MetadataSearchFieldProps = $props();
 
+  let text = $state('');
+
   async function searchItems(input: string) {
     if (input === '') {
       return [];
     }
 
-    // TODO: implement search
-    return [{
-      key: 'a10f5c2b-0a31-3a9a-99b0-db903996b5c5',
-      label: 'Straßenparkplätze'
-    }, {
-      key: '886873a2-813e-33a6-bad4-f80364f94e24',
-      label: 'Gebäudegeschosse'
-    }, {
-      key: 'c54eebcb-9eae-3b60-b112-bcb291eeddc7',
-      label: 'Pflegeeinrichtungen'
-    }]
+    const url = new URL('/metadata/search', window.location.origin);
+    url.searchParams.append('query', input);
+
+    const response = await fetch(url);
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.map((isoMetadata: IsoMetadata) => ({
+        key: isoMetadata.metadataId,
+        label: isoMetadata.title
+      }));
+    }
+
+    return [];
   }
+
+  const splitLabel = (l: string) => {
+    const regex = new RegExp(`(${text})`, 'gi');
+    const parts = l.split(regex);
+    return parts;
+  };
 
 </script>
 
 <Autocomplete
+  class="metadata-search-field"
   search={searchItems}
   bind:value
+  bind:text
   getOptionLabel={(option: Option) => {
     if (!option) return '';
-    return option.label;
+    return option.label as string || '';
   }}
   showMenuWithNoInput={false}
   {label}
@@ -51,9 +64,20 @@
   {#snippet noMatches()}
     <Text>No results found</Text>
   {/snippet}
+
+  {#snippet match(item)}
+    <Text>
+      {#each splitLabel(item.label) as part}
+        {#if part.toLowerCase() === text.toLowerCase()}
+          <strong>{part}</strong>
+        {:else}
+          {part}
+        {/if}
+      {/each}
+    </Text>
+  {/snippet}
+
 </Autocomplete>
 
 <style lang="scss">
-
-
 </style>

@@ -38,7 +38,6 @@
         goto(`/metadata/${metadataId}`);
       } else {
         log.error('No metadataId in response');
-        console.log(metadataId);
       }
     }
   };

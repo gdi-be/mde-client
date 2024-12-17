@@ -75,6 +75,38 @@ export const getMetadataCollectionByMetadataId = async (metadataId: string, toke
   return await response.json();
 }
 
+export const searchForMetadata = async (token: string, searchTerm: string, pagingOpts = defaultPage): Promise<SearchResponse<IsoMetadata>> => {
+  if (!token) {
+    log.error("No token provided.");
+    return Promise.reject(new Error("No token provided."));
+  }
+
+  const url: URL = new URL(`${env.BACKEND_URL}/metadata/iso/search`);
+  url.searchParams.append('searchTerm', searchTerm);
+
+  if (pagingOpts) {
+    const offset = pagingOpts.page * pagingOpts.size;
+    const limit = pagingOpts.size;
+    url.searchParams.append('offset', offset.toString());
+    url.searchParams.append('limit', limit.toString());
+  }
+
+  const response = await fetch(url, {
+    headers: new Headers({
+      Authorization: `Bearer ${token}`,
+      'accept': 'application/json'
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  return data;
+}
+
 export type UpdateProps = {
   metadataId: string;
   metadataType: MetadataType;
@@ -82,14 +114,6 @@ export type UpdateProps = {
   value: unknown;
   token: string;
 }
-
-export type CreateProps = {
-  token: string;
-  title: string;
-  metadataProfile: MetadataProfile;
-  cloneMetadataId?: MetadataId;
-}
-
 export const updateDataValue = async ({
   metadataId,
   metadataType,
@@ -123,6 +147,13 @@ export const updateDataValue = async ({
   }
 
   return await response.json();
+}
+
+export type CreateProps = {
+  token: string;
+  title: string;
+  metadataProfile: MetadataProfile;
+  cloneMetadataId?: MetadataId;
 }
 
 export const createMetadataCollection = async ({
