@@ -17,10 +17,10 @@
   } = config;
 </script>
 
-<FormField
-  bind:value
->
-  <Switch/>
+<FormField>
+  <Switch
+    bind:checked={value}
+  />
   {#snippet label()}
     {inputLabel}
   {/snippet}

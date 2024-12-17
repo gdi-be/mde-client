@@ -5,10 +5,12 @@
     type MetadataProfile
   } from "$lib/models/metadata";
   import Button from "@smui/button";
-  import Select, { Option } from "@smui/select";
+  import Select, { Option as SelectOption } from "@smui/select";
   import Textfield from "@smui/textfield";
   import log from "loggisch";
   import MetadataSearchField from "$lib/components/MetadataSearchField.svelte";
+  import type { Option } from "$lib/models/form";
+  import Card, { Content } from "@smui/card";
 
   let title = $state<string>('');
   let metadataProfile = $state<MetadataProfile>('ISO');
@@ -38,50 +40,65 @@
         goto(`/metadata/${metadataId}`);
       } else {
         log.error('No metadataId in response');
-        console.log(metadataId);
       }
     }
   };
 
 </script>
 
-<div>
-  <h1>Neuerfassung</h1>
-  <Textfield
-    bind:value={title}
-    label="Titel"
-    required
-  />
-  <Select
-    bind:value={metadataProfile}
-    label="Vorlage"
-    required
-  >
-      <Option value="ISO">ISO</Option>
-      <Option value="INSPIRE_HARMONISED">Inspire (harmonisiert)</Option>
-      <Option value="INSPIRE_IDENTIFIED">Inspire (identified)</Option>
-  </Select>
-  <MetadataSearchField
-    bind:value={cloneMetadataId}
-    label="Metadaten kopieren"
-  />
-  <Button
-    variant="raised"
-    onclick={onCreateClick}
-    disabled={!allFieldsValid}
-  >
-    Metadaten anlegen
-  </Button>
+<div class="create-metadata">
+  <Card>
+    <Content>
+      <h1>Neuerfassung</h1>
+      <Textfield
+        bind:value={title}
+        label="Titel"
+        required
+      />
+      <Select
+        bind:value={metadataProfile}
+        label="Vorlage"
+        required
+      >
+          <SelectOption value="ISO">ISO</SelectOption>
+          <SelectOption value="INSPIRE_HARMONISED">Inspire (harmonisiert)</SelectOption>
+          <SelectOption value="INSPIRE_IDENTIFIED">Inspire (identified)</SelectOption>
+      </Select>
+      <MetadataSearchField
+        bind:value={cloneMetadataId}
+        label="Metadaten kopieren"
+      />
+      <Button
+        variant="raised"
+        onclick={onCreateClick}
+        disabled={!allFieldsValid}
+      >
+        Metadaten anlegen
+      </Button>
+    </Content>
+  </Card>
 </div>
 
 <style lang="scss">
-  div {
+  .create-metadata {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
     text-align: center;
-    gap: 1em
+    gap: 1em;
+
+    :global(.smui-card__content) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+    }
+
+    :global(.mdc-text-field),
+    :global(.mdc-select) {
+      width: 25em;
+    }
   }
 </style>
