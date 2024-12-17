@@ -11,15 +11,15 @@ RUN bun install --frozen-lockfile
 RUN bun run build
 
 # 2. run the app
-FROM node:22
+FROM oven/bun:1.1.36-alpine
 
 WORKDIR /app
 
 COPY --from=builder /app/build ./build
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/static ./static
 
 COPY package.json bun.lockb ./
-RUN npm i -g bun
+RUN bun install --frozen-lockfile
 
 EXPOSE 3000
 
