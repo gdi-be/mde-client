@@ -6,20 +6,14 @@
 
   let { data } = $props();
   const {
-    mode,
     config,
     metadata
   } = data;
 </script>
 
 <div class="metadata">
-  {#if mode === 'create' && config}
-    <h1>Create Metadata</h1>
-    <Form {config} {activeSection} />
-  {:else if mode === 'edit' && metadata}
-    <h1>{ metadata.isoMetadata.title }</h1>
-    <Form {metadata} {config} {activeSection} />
-  {/if}
+  <h1>{ metadata.isoMetadata.title }</h1>
+  <Form {metadata} {config} {activeSection} />
 </div>
 
 <style lang="scss">

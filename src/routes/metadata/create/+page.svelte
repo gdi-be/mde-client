@@ -50,6 +50,13 @@
   <Card>
     <Content>
       <h1>Neuerfassung</h1>
+      <p>
+        Hier können Sie neue Metadaten anlegen.
+        Wählen sie dazu einen Titel und eine Vorlage aus.
+      </p><p>
+        Optional können sie die Daten auch von bestehenden Metadaten ableiten.
+        Durchsuchen sie dazu unten die Metadaten und wählen sie den gewünschten Datensatz aus.
+      </p>
       <Textfield
         bind:value={title}
         label="Titel"
@@ -90,6 +97,7 @@
     gap: 1em;
 
     :global(.smui-card__content) {
+      width: 30em;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -97,7 +105,8 @@
     }
 
     :global(.mdc-text-field),
-    :global(.mdc-select) {
+    :global(.mdc-select),
+    :global(.mdc-menu) {
       width: 25em;
     }
   }

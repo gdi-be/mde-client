@@ -16,7 +16,12 @@
 </script>
 
 <Card class="metadata-card">
-  <PrimaryAction class="metadata-card-content" onclick={onclick} padded>
+  <PrimaryAction
+    class="metadata-card-content"
+    onclick={onclick}
+    padded
+    title={metadata.title}
+  >
     {metadata.title}
   </PrimaryAction>
   <ActionIcons class="metadata-card-actions" >
