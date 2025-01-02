@@ -109,14 +109,12 @@ export const searchForMetadata = async (token: string, searchTerm: string, pagin
 
 export type UpdateProps = {
   metadataId: string;
-  metadataType: MetadataType;
   key: string;
   value: unknown;
   token: string;
 }
 export const updateDataValue = async ({
   metadataId,
-  metadataType,
   key,
   value,
   token
@@ -132,12 +130,20 @@ export const updateDataValue = async ({
     Authorization: `Bearer ${token}`
   });
 
+  const metadataTypeMap = new Map<string, MetadataType>([
+    ['clientMetadata', 'CLIENT'],
+    ['isoMetadata', 'ISO'],
+    ['technicalMetadata', 'TECHNICAL']
+  ]);
+  const [type, restKey] = key.split('.');
+  const metadataType = metadataTypeMap.get(type);
+
   const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataId}`, {
     method: 'PATCH',
     headers,
     body: JSON.stringify({
       type: metadataType,
-      key,
+      key: restKey,
       value
     })
   });

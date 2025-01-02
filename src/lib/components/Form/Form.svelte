@@ -1,30 +1,28 @@
 <script lang="ts">
   /* eslint-disable svelte/no-at-html-tags */
   import { parse } from "marked";
-  import type { FormConfig } from "$lib/models/form";
-  import FormItem from "./FormItem.svelte";
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
-  import { getValueFromMetadata, isVisible } from "$lib/util/Form";
-
+  import TitleField from "./Field/TitleField_01.svelte";
+  import { setFormData, initializeFormContext } from "./FormContext.svelte";
   type FormProps = {
     metadata?: Record<string, unknown>;
-    config: FormConfig;
     activeSection?: string;
   }
 
   let {
-    config,
     activeSection,
     metadata
   }: FormProps = $props();
 
-  if (!activeSection) {
-    activeSection = config.sections[0];
+  initializeFormContext();
+
+  if (metadata) {
+    setFormData(metadata);
   }
 
   let tabs = $state<HTMLElement | null>(null);
-  let helpMarkdown = $state<string | undefined>();
+  let helpMarkdown= $state<string | undefined>();
   let activeHelpKey = $state<string | undefined>();
   let borderStyles = $state<{ width: string; left: string }>({
     width: "0",
@@ -70,10 +68,6 @@
     updateBorder();
   });
 
-  const filteredItems = $derived(
-    config.formItems.filter(itemConfig => isVisible(metadata, itemConfig.visibilityCondition))
-  );
-
 </script>
 
 <div class="metadata-form">
@@ -82,15 +76,48 @@
   </div>
   <div>
     <nav class="tabs" bind:this={tabs}>
-      {#each config.sections as section}
-        <button
-          class="section-button"
-          class:active={section === activeSection}
-          onclick={() => onSectionClick(section)}
-        >
-          {section}
-        </button>
-        {/each}
+      <button
+        class="section-button"
+        class:active={activeSection === "basedata"}
+        onclick={() => onSectionClick("basedata")}
+      >
+        Basisangaben
+      </button>
+      <button
+        class="section-button"
+        class:active={activeSection === "classification"}
+        onclick={() => onSectionClick("classification")}
+      >
+        Einordnung
+      </button>
+      <button
+        class="section-button"
+        class:active={activeSection === "temp_and_spatial"}
+        onclick={() => onSectionClick("temp_and_spatial")}
+      >
+        Zeitliche und Räumliche Angaben
+      </button>
+      <button
+        class="section-button"
+        class:active={activeSection === "additional"}
+        onclick={() => onSectionClick("additional")}
+      >
+        Weitere Angaben
+      </button>
+      <button
+        class="section-button"
+        class:active={activeSection === "display_services"}
+        onclick={() => onSectionClick("display_services")}
+      >
+        Darstellungsdienste
+      </button>
+      <button
+        class="section-button"
+        class:active={activeSection === "download_services"}
+        onclick={() => onSectionClick("download_services")}
+      >
+        Downloaddienste
+      </button>
       <div
         class="active-border"
         style="
@@ -100,15 +127,37 @@
       </div>
     </nav>
     <form>
-      {#each filteredItems as itemConfig (itemConfig.key)}
-        <FormItem
-          hidden={itemConfig.section !== activeSection}
-          onHelpClick={onHelpClick}
-          config={itemConfig}
-          helpActive={activeHelpKey === itemConfig.key}
-          value={getValueFromMetadata(metadata, itemConfig.key)}
-        />
-      {/each}
+      <section
+        class:active={activeSection === "basedata"}
+        id="basedata"
+      >
+        <TitleField />
+      </section>
+      <section
+        class:active={activeSection === "classification"}
+        id="classification"
+      >
+      </section>
+      <section
+        class:active={activeSection === "temp_and_spatial"}
+        id="temp_and_spatial"
+      >
+      </section>
+      <section
+        class:active={activeSection === "additional"}
+        id="additional"
+      >
+      </section>
+      <section
+        class:active={activeSection === "display_services"}
+        id="display_services"
+      >
+      </section>
+      <section
+        class:active={activeSection === "download_services"}
+        id="download_services"
+      >
+      </section>
     </form>
   </div>
   <div>
@@ -164,6 +213,16 @@
       display: flex;
       flex-direction: column;
       padding-top: 0.25rem;
+
+      section {
+        display: flex;
+        flex-direction: column;
+        padding-top: 0.25rem;
+
+        &:not(.active) {
+          display: none;
+        }
+      }
     }
 
     .help-section {
