@@ -1,22 +1,24 @@
 <script lang="ts">
-  import type { FormGroupConfig } from "$lib/models/form";
-  import FormItem from "./FormItem.svelte";
+  import type { Snippet } from "svelte";
 
   type InputProps = {
-    config: FormGroupConfig;
+    label?: string;
+    layout?: 'horizontal' | 'vertical';
+    children: Snippet;
   }
+
   let {
-    config
+    label,
+    layout = 'vertical',
+    children
   }: InputProps = $props();
 
 </script>
 
 <div class="form-item-group">
-  <fieldset class={config.layout}>
-    <legend>{config.label}</legend>
-    {#each config.items as item}
-      <FormItem config={item} />
-    {/each}
+  <fieldset class={layout}>
+    <legend>{label}</legend>
+      {@render children?.()}
   </fieldset>
 </div>
 

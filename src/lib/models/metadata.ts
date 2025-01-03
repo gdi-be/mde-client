@@ -8,6 +8,30 @@ export type MetadataType = 'CLIENT' | 'ISO' | 'TECHNICAL';
 
 export type MetadataId = `${string}-${string}-${string}-${string}-${string}`;
 
+export type KeyWords = {
+  "Spatial scope"?: {
+    keyword: string;
+    namespace: string;
+  }[],
+  default: {
+    keyword: string;
+  }[]
+}
+
+export type Previews = {
+  content: string;
+}[];
+
+export type Contacts = {
+  name?: string;
+  code?: string;
+  email?: string;
+  organisation?: string;
+  phone?: string;
+  roleCode?: string;
+  url?: string;
+}[]
+
 export type ClientMedata = {
   id: number;
   title: string;

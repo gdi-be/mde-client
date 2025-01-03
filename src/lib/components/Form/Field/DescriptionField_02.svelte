@@ -1,12 +1,11 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
-  import Paper from "@smui/paper";
   import Checkmark from "../../Checkmark.svelte";
   import { getValue } from "../FormContext.svelte";
+  import TextAreaInput from "../Inputs/TextAreaInput.svelte";
 
-  const KEY = 'isoMetadata.title';
-  const LABEL = 'Titel Datenbestand';
+  const KEY = 'isoMetadata.description';
+  const LABEL = 'Kurzbeschreibung Datenbestand';
 
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue);
@@ -34,28 +33,26 @@
 
 </script>
 
-<div class="title-field">
-  <Paper>
-    <TextInput
-      bind:value
-      key={KEY}
-      label={LABEL}
-      maxlength={100}
-      onblur={onBlur}
-    />
-  </Paper>
+<div class="description-field">
+  <TextAreaInput
+    bind:value
+    key={KEY}
+    label={LABEL}
+    maxlength={500}
+    onblur={onBlur}
+  />
   <Checkmark
     bind:running={showCheckmark}
   />
 </div>
 
 <style lang="scss">
-  .title-field {
+  .description-field {
     position: relative;
     display: flex;
     gap: 1em;
 
-    :global(.smui-paper) {
+    :global(.text-area-input) {
       flex: 1;
     }
 

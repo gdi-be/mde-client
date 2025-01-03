@@ -5,10 +5,10 @@
   import Checkmark from "../../Checkmark.svelte";
   import { getValue } from "../FormContext.svelte";
 
-  const KEY = 'isoMetadata.title';
-  const LABEL = 'Titel Datenbestand';
+  const KEY = 'isoMetadata.internal_comment';
+  const LABEL = 'Kommentar zur Aktualisierung';
 
-  let initialValue = getValue<string>(KEY);
+  let initialValue = getValue<string>(KEY) || '';
   let value = $state(initialValue);
   let showCheckmark = $state(false);
 
@@ -34,13 +34,13 @@
 
 </script>
 
-<div class="title-field">
+<div class="internal-comment-field">
   <Paper>
     <TextInput
+      disabled
       bind:value
       key={KEY}
       label={LABEL}
-      maxlength={100}
       onblur={onBlur}
     />
   </Paper>
@@ -50,7 +50,7 @@
 </div>
 
 <style lang="scss">
-  .title-field {
+  .internal-comment-field {
     position: relative;
     display: flex;
     gap: 1em;
