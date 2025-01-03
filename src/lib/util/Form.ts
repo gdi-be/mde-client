@@ -19,12 +19,7 @@ export function isVisible(values: Record<string, unknown> = {}, condition?: Visi
 
 };
 
-export function getValueFromMetadata(metadata: Record<string, unknown> | undefined, key: string): unknown {
-  if (!metadata) return undefined;
-  return key
-    .split('.')
-    .reduce((obj, k) => {
-      return (obj && obj[k] !== undefined) ? obj[k] : undefined
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }, metadata as Record<string, any>);
+export function getHelpMarkdown(key: string): string {
+  // TODO: Implement this
+  return `# ${key}`;
 }

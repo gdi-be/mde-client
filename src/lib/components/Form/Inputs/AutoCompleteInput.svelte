@@ -1,26 +1,27 @@
 <script lang="ts">
   import Autocomplete from "@smui-extra/autocomplete";
-  import type { AutocompleteInputConfig, Option } from "$lib/models/form";
+  import type { Option } from "$lib/models/form";
+  import type { ComponentProps } from "svelte";
 
   type InputProps = {
-    config: AutocompleteInputConfig;
-    value?: Option;
-  }
+    key: string;
+    label: string;
+    search?: (input: string) => Promise<Option[] | false>;
+    options?: Option[] | (() => Promise<Option[]>);
+  } & ComponentProps<typeof Autocomplete>;
+
   let {
-    config,
     value = $bindable<Option>({
       key: "",
       label: ""
-    })
+    }),
+    ...restProps
   }: InputProps = $props();
-
-  const { label, options } = config;
 
 </script>
 
 <Autocomplete
-  {label}
   bind:value
-  options={options}
   getOptionLabel={(option: Option) => option?.label as string || ''}
+  {...restProps}
 />

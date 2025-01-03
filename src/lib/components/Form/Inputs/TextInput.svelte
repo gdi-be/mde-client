@@ -1,34 +1,35 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
   import CharacterCounter from "@smui/textfield/character-counter";
-  import type { TextInputConfig } from "$lib/models/form";
+  import type { ComponentProps } from "svelte";
 
   type InputProps = {
-    config: TextInputConfig;
+    key: string;
+    label: string;
+    maxlength?: number;
     value?: string;
-  }
-  let {
-    config,
-    value = ''
-  }: InputProps = $props();
+  } & ComponentProps<typeof Textfield>;
 
-  const { key, label } = config;
+  let {
+    key,
+    label,
+    maxlength,
+    value = $bindable(""),
+    ...restProps
+  }: InputProps = $props();
 
 </script>
 
 <Textfield
   {label}
   input$name={key}
-  input$maxlength={config.maxlength}
+  input$maxlength={maxlength}
   bind:value
+  {...restProps}
 >
   {#snippet helper()}
-    {#if config.maxlength}
+    {#if maxlength}
       <CharacterCounter />
     {/if}
   {/snippet}
 </Textfield>
-
-<style>
-
-</style>

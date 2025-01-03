@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { MetadataType } from "./metadata";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export type Option = Record<string, unknown>;
+export type Option = {
+  key: string;
+  label: string;
+};
 
 export type FormItemType = 'text' | 'integer' | 'float' | 'textarea' | 'boolean' | 'select' | 'autocomplete' | 'date' | 'list' | 'group' | 'tags';
 

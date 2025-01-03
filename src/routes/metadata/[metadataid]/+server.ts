@@ -11,7 +11,7 @@ export async function PATCH({ cookies, request, params }) {
 
   const data = await request.json();
 
-  if (!data.key || !data.value || !data.metadataType) {
+  if (!data.key || !data.value) {
     return error(400, 'Bad Request');
   }
 
@@ -19,7 +19,6 @@ export async function PATCH({ cookies, request, params }) {
     metadataId: params.metadataid,
     key: data.key,
     value: data.value,
-    metadataType: data.metadataType,
     token
   })
 
