@@ -2,8 +2,8 @@
   import { page } from "$app/stores";
   import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
-  import Checkmark from "../../Checkmark.svelte";
   import { getValue } from "../FormContext.svelte";
+  import FieldTools from "../FieldTools.svelte";
 
   const KEY = 'isoMetadata.internal_comment';
   const LABEL = 'Kommentar zur Aktualisierung';
@@ -42,9 +42,11 @@
       key={KEY}
       label={LABEL}
       onblur={onBlur}
+      required
     />
   </Paper>
-  <Checkmark
+  <FieldTools
+    key={KEY}
     bind:running={showCheckmark}
   />
 </div>

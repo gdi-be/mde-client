@@ -3,9 +3,9 @@
   import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import type { Previews } from "$lib/models/metadata";
   import IconButton, { Icon } from "@smui/icon-button";
-  import Checkmark from "../../Checkmark.svelte";
   import { getValue } from "../FormContext.svelte";
   import Paper from "@smui/paper";
+  import FieldTools from "../FieldTools.svelte";
 
   const KEY = 'isoMetadata.previews';
   const LABEL = 'Vorschau';
@@ -50,6 +50,7 @@
       key={KEY}
       label={LABEL}
       onblur={onBlur}
+      required
     />
     {#if isValidLink}
       <IconButton
@@ -61,7 +62,8 @@
       </IconButton>
     {/if}
   </Paper>
-  <Checkmark
+  <FieldTools
+    key={KEY}
     bind:running={showCheckmark}
   />
 </div>

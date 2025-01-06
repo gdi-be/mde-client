@@ -2,9 +2,9 @@
   import { page } from "$app/stores";
   import type { Contacts } from "$lib/models/metadata";
   import IconButton from "@smui/icon-button";
-  import Checkmark from "../../Checkmark.svelte";
   import { getValue } from "../FormContext.svelte";
   import TextInput from "../Inputs/TextInput.svelte";
+  import FieldTools from "../FieldTools.svelte";
 
   const KEY = 'isoMetadata.contacts';
   const LABEL = 'Kontaktdaten';
@@ -70,7 +70,7 @@
 
 <div class="contacts-field">
   <fieldset>
-    <legend>{LABEL}
+    <legend>{LABEL + '*'}
       <IconButton
         class="material-icons"
         onclick={() => addItem()}
@@ -97,29 +97,34 @@
           key={KEY}
           label="Name"
           onblur={persistContacts}
+          required
         />
         <TextInput
           bind:value={contact.organisation}
           key={KEY}
           label="Organisation"
           onblur={persistContacts}
+          required
         />
         <TextInput
           bind:value={contact.phone}
           key={KEY}
           label="Telefon"
           onblur={persistContacts}
+          required
         />
         <TextInput
           bind:value={contact.email}
           key={KEY}
           label="E-Mail"
           onblur={persistContacts}
+          required
         />
       </fieldset>
     {/each}
   </fieldset>
-  <Checkmark
+  <FieldTools
+    key={KEY}
     bind:running={showCheckmark}
   />
 </div>

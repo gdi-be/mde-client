@@ -2,8 +2,8 @@
   import { page } from "$app/stores";
   import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
-  import Checkmark from "../../Checkmark.svelte";
   import { getValue } from "../FormContext.svelte";
+  import FieldTools from "../FieldTools.svelte";
 
   const KEY = 'isoMetadata.title';
   const LABEL = 'Titel Datenbestand';
@@ -13,9 +13,7 @@
   let showCheckmark = $state(false);
 
   const onBlur = async () => {
-    if (value === initialValue) {
-      return;
-    }
+    // TODO check if value has changed
     const response = await fetch($page.url, {
       method: 'PATCH',
       headers: {
@@ -27,7 +25,6 @@
       })
     });
     if (response.ok) {
-      initialValue = value;
       showCheckmark = true;
     }
   };
@@ -42,9 +39,11 @@
       label={LABEL}
       maxlength={100}
       onblur={onBlur}
+      required
     />
   </Paper>
-  <Checkmark
+  <FieldTools
+    key={KEY}
     bind:running={showCheckmark}
   />
 </div>

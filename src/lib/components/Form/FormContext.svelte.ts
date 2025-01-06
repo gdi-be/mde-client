@@ -1,11 +1,16 @@
 import { getContext, setContext } from "svelte";
+import type { FieldKey, FormHelp } from "../../models/form";
 
 export type FormState = {
   data: Record<string, unknown>;
+  help: FormHelp;
+  activeHelpKey?: FieldKey;
 };
 
 const formState = $state<FormState>({
   data: {},
+  help: {},
+  activeHelpKey: undefined
 });
 
 const formStateKey = Symbol('formState');
@@ -35,6 +40,10 @@ export function setFormData(data: Record<string, unknown>) {
   formState.data = data;
 }
 
+export function setHelp(help: FormHelp) {
+  formState.help = help;
+}
+
 export function setValue<T>(key: string, value: T) {
   if (!formState || !formState.data) return;
 
@@ -48,5 +57,31 @@ export function setValue<T>(key: string, value: T) {
   });
   if (lastKey) {
     obj[lastKey] = value;
+  }
+}
+
+export function hasHelpMarkdown(key?: FieldKey) {
+  if (!key) {
+    return false;
+  }
+  return !!formState.help[key];
+}
+
+export function getHelpMarkdown(key?: FieldKey) {
+  if (!key) {
+    return '';
+  }
+  return formState.help[key];
+}
+
+export function clearActiveHelp() {
+  formState.activeHelpKey = undefined;
+}
+
+export function toggleActiveHelp(key: FieldKey) {
+  if (formState.activeHelpKey === key) {
+    formState.activeHelpKey = undefined;
+  } else {
+    formState.activeHelpKey = key;
   }
 }

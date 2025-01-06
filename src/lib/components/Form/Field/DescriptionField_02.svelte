@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import Checkmark from "../../Checkmark.svelte";
+  import FieldTools from "../FieldTools.svelte";
   import { getValue } from "../FormContext.svelte";
   import TextAreaInput from "../Inputs/TextAreaInput.svelte";
 
@@ -12,9 +12,7 @@
   let showCheckmark = $state(false);
 
   const onBlur = async () => {
-    if (value === initialValue) {
-      return;
-    }
+    // TODO: check if value has changed
     const response = await fetch($page.url, {
       method: 'PATCH',
       headers: {
@@ -26,7 +24,6 @@
       })
     });
     if (response.ok) {
-      initialValue = value;
       showCheckmark = true;
     }
   };
@@ -40,8 +37,10 @@
     label={LABEL}
     maxlength={500}
     onblur={onBlur}
+    required
   />
-  <Checkmark
+  <FieldTools
+    key={KEY}
     bind:running={showCheckmark}
   />
 </div>

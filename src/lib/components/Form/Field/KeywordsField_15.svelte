@@ -2,10 +2,10 @@
   import { page } from "$app/stores";
   import type { KeyWords } from "$lib/models/metadata";
   import type { Option } from "$lib/models/form";
-  import Checkmark from "../../Checkmark.svelte";
   import { getValue } from "../FormContext.svelte";
   import ChipInput from "../Inputs/ChipInput.svelte";
   import Paper from "@smui/paper";
+  import FieldTools from "../FieldTools.svelte";
 
   const KEY = 'isoMetadata.keywords';
   const LABEL = 'Schlagwörter';
@@ -62,12 +62,13 @@
   <Paper>
     <ChipInput
       bind:chips={value}
-      fieldLabel={LABEL}
+      fieldLabel={LABEL + '*'}
       search={searchItems}
       onChange={onChange}
     />
   </Paper>
-  <Checkmark
+  <FieldTools
+    key={KEY}
     bind:running={showCheckmark}
   />
 </div>

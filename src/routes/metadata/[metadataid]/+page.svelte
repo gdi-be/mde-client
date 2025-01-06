@@ -6,14 +6,15 @@
 
   let { data } = $props();
   const {
-    config,
+    help,
     metadata
   } = data;
+
 </script>
 
 <div class="metadata">
   <h1>{ metadata.isoMetadata.title }</h1>
-  <Form {metadata} {config} {activeSection} />
+  <Form {metadata} {help} {activeSection} />
 </div>
 
 <style lang="scss">

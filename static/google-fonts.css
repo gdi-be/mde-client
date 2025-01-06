@@ -5,9 +5,15 @@
   font-weight: 400;
   src: url(/material-symbols.woff2) format('woff2');
 }
+@font-face {
+  font-family: 'Material Symbols Filled';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/material-symbols-filled.woff2) format('woff2');
+}
 
-.material-icons {
-  font-family: 'Material Symbols Outlined';
+.material-icons,
+.material-icons-filled {
   font-weight: normal;
   font-style: normal;
   line-height: 1;
@@ -20,6 +26,14 @@
   font-feature-settings: 'liga';
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+}
+
+.material-icons {
+  font-family: 'Material Symbols Outlined';
+}
+
+.material-icons-filled {
+  font-family: 'Material Symbols Filled';
 }
 
 /* cyrillic-ext */

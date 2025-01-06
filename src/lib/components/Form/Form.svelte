@@ -4,20 +4,23 @@
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
   import TitleField_01 from "./Field/TitleField_01.svelte";
-  import { setFormData, initializeFormContext } from "./FormContext.svelte";
+  import { setFormData, initializeFormContext, getFormContext, clearActiveHelp, setHelp, getHelpMarkdown } from "./FormContext.svelte";
   import DescriptionField_02 from "./Field/DescriptionField_02.svelte";
   import InternalCommentField_03 from "./Field/InternalCommentField_03.svelte";
   import KeywordsField_15 from "./Field/KeywordsField_15.svelte";
   import PreviewField_29 from "./Field/PreviewField_29.svelte";
   import ContactsField_19 from "./Field/ContactsField_19.svelte";
+  import type { FormHelp } from "../../models/form";
   type FormProps = {
     metadata?: Record<string, unknown>;
     activeSection?: string;
+    help: FormHelp;
   }
 
   let {
     activeSection,
-    metadata
+    metadata,
+    help
   }: FormProps = $props();
 
   initializeFormContext();
@@ -26,9 +29,14 @@
     setFormData(metadata);
   }
 
+  if (help) {
+    setHelp(help);
+  }
+
+  const activeHelpKey = $derived(getFormContext().activeHelpKey);
+  const helpMarkdown = $derived(getHelpMarkdown(activeHelpKey));
+
   let tabs = $state<HTMLElement | null>(null);
-  let helpMarkdown= $state<string | undefined>();
-  let activeHelpKey = $state<string | undefined>();
   let borderStyles = $state<{ width: string; left: string }>({
     width: "0",
     left: "0"
@@ -48,20 +56,9 @@
     }
   };
 
-  const onHelpClick = (key: string | undefined, help: string) => {
-    if (activeHelpKey === key) {
-      helpMarkdown = undefined;
-      activeHelpKey = undefined;
-    } else {
-      helpMarkdown = help;
-      activeHelpKey = key;
-    }
-  };
-
   const onSectionClick = async (section: string) => {
     activeSection = section;
-    activeHelpKey = undefined;
-    helpMarkdown = undefined;
+    clearActiveHelp();
     goto(`#${section}`, {
       replaceState: true
     });
@@ -76,124 +73,125 @@
 </script>
 
 <div class="metadata-form">
-  <div>
-    <!-- placeholder for flex layout-->
-  </div>
-  <div>
-    <nav class="tabs" bind:this={tabs}>
-      <button
-        class="section-button"
-        class:active={activeSection === "basedata"}
-        onclick={() => onSectionClick("basedata")}
-      >
-        Basisangaben
-      </button>
-      <button
-        class="section-button"
-        class:active={activeSection === "classification"}
-        onclick={() => onSectionClick("classification")}
-      >
-        Einordnung
-      </button>
-      <button
-        class="section-button"
-        class:active={activeSection === "temp_and_spatial"}
-        onclick={() => onSectionClick("temp_and_spatial")}
-      >
-        Zeitliche und Räumliche Angaben
-      </button>
-      <button
-        class="section-button"
-        class:active={activeSection === "additional"}
-        onclick={() => onSectionClick("additional")}
-      >
-        Weitere Angaben
-      </button>
-      <button
-        class="section-button"
-        class:active={activeSection === "display_services"}
-        onclick={() => onSectionClick("display_services")}
-      >
-        Darstellungsdienste
-      </button>
-      <button
-        class="section-button"
-        class:active={activeSection === "download_services"}
-        onclick={() => onSectionClick("download_services")}
-      >
-        Downloaddienste
-      </button>
-      <div
-        class="active-border"
-        style="
-          --border-width: {borderStyles.width};
-          --border-left: {borderStyles.left};
-        ">
+  <nav class="tabs" bind:this={tabs}>
+    <button
+      class="section-button"
+      class:active={activeSection === "basedata"}
+      onclick={() => onSectionClick("basedata")}
+    >
+      Basisangaben
+    </button>
+    <button
+      class="section-button"
+      class:active={activeSection === "classification"}
+      onclick={() => onSectionClick("classification")}
+    >
+      Einordnung
+    </button>
+    <button
+      class="section-button"
+      class:active={activeSection === "temp_and_spatial"}
+      onclick={() => onSectionClick("temp_and_spatial")}
+    >
+      Zeitliche und Räumliche Angaben
+    </button>
+    <button
+      class="section-button"
+      class:active={activeSection === "additional"}
+      onclick={() => onSectionClick("additional")}
+    >
+      Weitere Angaben
+    </button>
+    <button
+      class="section-button"
+      class:active={activeSection === "display_services"}
+      onclick={() => onSectionClick("display_services")}
+    >
+      Darstellungsdienste
+    </button>
+    <button
+      class="section-button"
+      class:active={activeSection === "download_services"}
+      onclick={() => onSectionClick("download_services")}
+    >
+      Downloaddienste
+    </button>
+    <div
+      class="active-border"
+      style="
+        --border-width: {borderStyles.width};
+        --border-left: {borderStyles.left};
+      ">
+    </div>
+  </nav>
+  <div class="form-wrapper">
+    <div>
+      <!-- placeholder for flex layout-->
+    </div>
+    <div>
+      <form>
+        <section
+          class:active={activeSection === "basedata"}
+          id="basedata"
+        >
+          <TitleField_01 />
+          <DescriptionField_02 />
+          <InternalCommentField_03 />
+          <KeywordsField_15 />
+          <PreviewField_29 />
+          <ContactsField_19 />
+        </section>
+        <section
+          class:active={activeSection === "classification"}
+          id="classification"
+        >
+        </section>
+        <section
+          class:active={activeSection === "temp_and_spatial"}
+          id="temp_and_spatial"
+        >
+        </section>
+        <section
+          class:active={activeSection === "additional"}
+          id="additional"
+        >
+        </section>
+        <section
+          class:active={activeSection === "display_services"}
+          id="display_services"
+        >
+        </section>
+        <section
+          class:active={activeSection === "download_services"}
+          id="download_services"
+        >
+        </section>
+      </form>
+    </div>
+    <div>
+      <!-- TODO: i18n -->
+      <div class="help-section">
+        {#if helpMarkdown}
+          {#await parse(helpMarkdown)}
+            <p>Loading...</p>
+          {:then parsed}
+            {@html parsed}
+          {:catch error}
+            <p>Error: {error.message}</p>
+          {/await}
+        {/if}
       </div>
-    </nav>
-    <form>
-      <section
-        class:active={activeSection === "basedata"}
-        id="basedata"
-      >
-        <TitleField_01 />
-        <DescriptionField_02 />
-        <InternalCommentField_03 />
-        <KeywordsField_15 />
-        <PreviewField_29 />
-        <ContactsField_19 />
-      </section>
-      <section
-        class:active={activeSection === "classification"}
-        id="classification"
-      >
-      </section>
-      <section
-        class:active={activeSection === "temp_and_spatial"}
-        id="temp_and_spatial"
-      >
-      </section>
-      <section
-        class:active={activeSection === "additional"}
-        id="additional"
-      >
-      </section>
-      <section
-        class:active={activeSection === "display_services"}
-        id="display_services"
-      >
-      </section>
-      <section
-        class:active={activeSection === "download_services"}
-        id="download_services"
-      >
-      </section>
-    </form>
-  </div>
-  <div>
-    <!-- TODO: i18n -->
-    <div class="help-section">
-      {#if helpMarkdown}
-        {#await parse(helpMarkdown)}
-          <p>Loading...</p>
-        {:then parsed}
-          {@html parsed}
-        {:catch error}
-          <p>Error: {error.message}</p>
-        {/await}
-      {/if}
     </div>
   </div>
 </div>
 
 <style lang="scss">
   .metadata-form {
-    align-self: stretch;
+    width: 100%;
+    overflow: hidden;
     display: flex;
-
-    > * {
-      flex: 1;
-    }
+    flex-direction: column;
+    align-self: stretch;
 
     nav.tabs {
       position: relative;
@@ -219,26 +217,37 @@
       }
     }
 
-    form {
+    .form-wrapper {
       display: flex;
-      flex-direction: column;
-      padding-top: 0.25rem;
+      overflow: auto;
+      flex: 1;
 
-      section {
+      > * {
+        flex: 1;
+      }
+
+      form {
         display: flex;
         flex-direction: column;
         padding-top: 0.25rem;
-        gap: 1em;
 
-        &:not(.active) {
-          display: none;
+        section {
+          display: flex;
+          flex-direction: column;
+          padding-top: 0.25rem;
+          gap: 1em;
+
+          &:not(.active) {
+            display: none;
+          }
         }
+      }
+
+      .help-section {
+        padding: 0 3rem;
       }
     }
 
-    .help-section {
-      padding: 0 3rem;
-    }
   }
 
 </style>
