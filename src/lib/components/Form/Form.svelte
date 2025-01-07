@@ -11,6 +11,7 @@
   import PreviewField_29 from "./Field/PreviewField_29.svelte";
   import ContactsField_19 from "./Field/ContactsField_19.svelte";
   import type { FormHelp } from "../../models/form";
+  import Progress from "./Progress.svelte";
   type FormProps = {
     metadata?: Record<string, unknown>;
     activeSection?: string;
@@ -32,6 +33,13 @@
   if (help) {
     setHelp(help);
   }
+
+  let baseDataProgress = $state({ required: 10, optional: 25 });
+  let classificationProgress = $state({ required: 100, optional: 0 });
+  let tempAndSpatialProgress = $state({ required: 100, optional: 0 });
+  let additionalProgress = $state({ required: 100, optional: 0 });
+  let displayServicesProgress = $state({ required: 100, optional: 0 });
+  let downloadServicesProgress = $state({ required: 100, optional: 0 });
 
   const activeHelpKey = $derived(getFormContext().activeHelpKey);
   const helpMarkdown = $derived(getHelpMarkdown(activeHelpKey));
@@ -59,6 +67,7 @@
   const onSectionClick = async (section: string) => {
     activeSection = section;
     clearActiveHelp();
+
     goto(`#${section}`, {
       replaceState: true
     });
@@ -79,42 +88,42 @@
       class:active={activeSection === "basedata"}
       onclick={() => onSectionClick("basedata")}
     >
-      Basisangaben
+      Basisangaben <Progress {...baseDataProgress} />
     </button>
     <button
       class="section-button"
       class:active={activeSection === "classification"}
       onclick={() => onSectionClick("classification")}
     >
-      Einordnung
+      Einordnung <Progress {...classificationProgress} />
     </button>
     <button
       class="section-button"
       class:active={activeSection === "temp_and_spatial"}
       onclick={() => onSectionClick("temp_and_spatial")}
     >
-      Zeitliche und Räumliche Angaben
+      Zeitliche und Räumliche Angaben <Progress {...tempAndSpatialProgress} />
     </button>
     <button
       class="section-button"
       class:active={activeSection === "additional"}
       onclick={() => onSectionClick("additional")}
     >
-      Weitere Angaben
+      Weitere Angaben <Progress {...additionalProgress} />
     </button>
     <button
       class="section-button"
       class:active={activeSection === "display_services"}
       onclick={() => onSectionClick("display_services")}
     >
-      Darstellungsdienste
+      Darstellungsdienste <Progress {...displayServicesProgress} />
     </button>
     <button
       class="section-button"
       class:active={activeSection === "download_services"}
       onclick={() => onSectionClick("download_services")}
     >
-      Downloaddienste
+      Downloaddienste <Progress {...downloadServicesProgress} />
     </button>
     <div
       class="active-border"
@@ -199,6 +208,10 @@
       padding-bottom: 0.25rem;
 
       button.section-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.25em;
         cursor: pointer;
         flex: 1;
         background-color: transparent;
