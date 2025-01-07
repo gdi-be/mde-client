@@ -12,6 +12,8 @@
   import ContactsField_19 from "./Field/ContactsField_19.svelte";
   import type { FormHelp } from "../../models/form";
   import Progress from "./Progress.svelte";
+  import { getProgress } from "../../util/Form";
+
   type FormProps = {
     metadata?: Record<string, unknown>;
     activeSection?: string;
@@ -34,12 +36,12 @@
     setHelp(help);
   }
 
-  let baseDataProgress = $state({ required: 10, optional: 25 });
-  let classificationProgress = $state({ required: 100, optional: 0 });
-  let tempAndSpatialProgress = $state({ required: 100, optional: 0 });
-  let additionalProgress = $state({ required: 100, optional: 0 });
-  let displayServicesProgress = $state({ required: 100, optional: 0 });
-  let downloadServicesProgress = $state({ required: 100, optional: 0 });
+  let baseDataProgress = $derived(getProgress("basedata", metadata));
+  let classificationProgress = $derived(getProgress("classification", metadata));
+  let tempAndSpatialProgress = $derived(getProgress("temp_and_spatial", metadata));
+  let additionalProgress = $derived(getProgress("additional", metadata));
+  let displayServicesProgress = $derived(getProgress("display_services", metadata));
+  let downloadServicesProgress = $derived(getProgress("download_services", metadata));
 
   const activeHelpKey = $derived(getFormContext().activeHelpKey);
   const helpMarkdown = $derived(getHelpMarkdown(activeHelpKey));

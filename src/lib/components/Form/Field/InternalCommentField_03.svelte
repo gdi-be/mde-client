@@ -4,6 +4,7 @@
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
+  import { invalidateAll } from "$app/navigation";
 
   const KEY = 'isoMetadata.internal_comment';
   const LABEL = 'Kommentar zur Aktualisierung';
@@ -29,6 +30,7 @@
     if (response.ok) {
       initialValue = value;
       showCheckmark = true;
+      invalidateAll();
     }
   };
 
@@ -42,7 +44,6 @@
       key={KEY}
       label={LABEL}
       onblur={onBlur}
-      required
     />
   </Paper>
   <FieldTools

@@ -6,6 +6,7 @@
   import { getValue } from "../FormContext.svelte";
   import Paper from "@smui/paper";
   import FieldTools from "../FieldTools.svelte";
+  import { invalidateAll } from "$app/navigation";
 
   const KEY = 'isoMetadata.previews';
   const LABEL = 'Vorschau';
@@ -38,6 +39,7 @@
     if (response.ok) {
       initialValue = value;
       showCheckmark = true;
+      invalidateAll();
     }
   };
 

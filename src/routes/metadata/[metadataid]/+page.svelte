@@ -8,7 +8,7 @@
   const {
     help,
     metadata
-  } = data;
+  } = $derived(data);
 
 </script>
 

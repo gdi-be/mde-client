@@ -4,6 +4,7 @@
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
+  import { invalidateAll } from "$app/navigation";
 
   const KEY = 'isoMetadata.title';
   const LABEL = 'Titel Datenbestand';
@@ -26,6 +27,7 @@
     });
     if (response.ok) {
       showCheckmark = true;
+      invalidateAll();
     }
   };
 

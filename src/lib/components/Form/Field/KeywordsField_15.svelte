@@ -6,13 +6,15 @@
   import ChipInput from "../Inputs/ChipInput.svelte";
   import Paper from "@smui/paper";
   import FieldTools from "../FieldTools.svelte";
+  import { invalidateAll } from "$app/navigation";
 
   const KEY = 'isoMetadata.keywords';
   const LABEL = 'Schlagwörter';
 
   let initialKeyWords = getValue<KeyWords>(KEY);
-  let initialValue = (initialKeyWords?.default
-    .map((entry) => ({ key: entry.keyword, label: entry.keyword })) || []);
+  let initialValue = initialKeyWords?.default?.map(
+    (entry) => ({ key: entry.keyword, label: entry.keyword })
+  ) || [];
   let value = $state(initialValue);
   let showCheckmark = $state(false);
 
@@ -53,6 +55,7 @@
     });
     if (response.ok) {
       showCheckmark = true;
+      invalidateAll();
     }
   };
 

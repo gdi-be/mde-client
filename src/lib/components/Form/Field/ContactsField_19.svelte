@@ -5,6 +5,7 @@
   import { getValue } from "../FormContext.svelte";
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
+  import { invalidateAll } from "$app/navigation";
 
   const KEY = 'isoMetadata.contacts';
   const LABEL = 'Kontaktdaten';
@@ -43,6 +44,7 @@
     });
     if (response.ok) {
       showCheckmark = true;
+      invalidateAll();
     }
   };
 

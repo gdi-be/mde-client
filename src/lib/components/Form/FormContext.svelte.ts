@@ -23,15 +23,15 @@ export function getFormContext() {
   return getContext<FormState>(formStateKey);
 }
 
-export function getValue<T>(key: string) {
-  if (!formState?.data) return undefined;
-
+export function getValue<T>(key: string, metadata?: Record<string, unknown>): T | undefined {
+  const data = metadata || formState.data;
+  if (!data) return undefined;
   const value = key
     .split('.')
     .reduce((obj, k) => {
       return (obj && obj[k] !== undefined) ? obj[k] : undefined
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    }, formState.data as Record<string, any>);
+    }, data as Record<string, any>);
 
   return value as T
 }

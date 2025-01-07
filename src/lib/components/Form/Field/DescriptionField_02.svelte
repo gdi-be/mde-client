@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
   import FieldTools from "../FieldTools.svelte";
   import { getValue } from "../FormContext.svelte";
@@ -7,7 +8,7 @@
   const KEY = 'isoMetadata.description';
   const LABEL = 'Kurzbeschreibung Datenbestand';
 
-  let initialValue = getValue<string>(KEY);
+  let initialValue = getValue<string>(KEY) || '';
   let value = $state(initialValue);
   let showCheckmark = $state(false);
 
@@ -25,6 +26,7 @@
     });
     if (response.ok) {
       showCheckmark = true;
+      invalidateAll();
     }
   };
 
