@@ -2,7 +2,7 @@
   import { page } from "$app/stores";
   import Form from "$lib/components/Form/Form.svelte";
 
-  const activeSection = $page.url.hash.slice(1);
+  const activeSection = $page.url.hash.slice(1) || "basedata";
 
   let { data } = $props();
   const {
