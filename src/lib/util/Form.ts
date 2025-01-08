@@ -66,6 +66,9 @@ const formValidators: FormValidators = {
     }, {
       key: 'isoMetadata.dataProtection',
       validator: (val) => val?.length > 0
+    }, {
+      key: 'isoMetadata.termsOfUse',
+      validator: (val) => val !== undefined && val !== null && val !== ''
     }],
     optional: []
   },

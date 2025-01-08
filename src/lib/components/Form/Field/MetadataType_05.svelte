@@ -8,7 +8,7 @@
   import type { MetadataProfile } from "$lib/models/metadata";
 
   const KEY = 'isoMetadata.metadataProfile';
-  const LABEL = 'Metadaten-Typ';
+  const LABEL = 'Metadaten-Typ*';
   const OPTIONS: {
     key: MetadataProfile;
     label: string;

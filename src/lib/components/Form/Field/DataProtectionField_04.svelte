@@ -1,14 +1,11 @@
 <script lang="ts">
-  // import { page } from "$app/stores";
-  // import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
-  // import { invalidateAll } from "$app/navigation";
   import CheckboxInput from "../Inputs/CheckboxInput.svelte";
 
   const KEY = 'isoMetadata.dataProtection';
-  const LABEL = 'Datenschutz';
+  const LABEL = 'Datenschutz*';
   const OPTIONS: {
     key: string;
     label: string;

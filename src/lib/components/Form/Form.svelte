@@ -15,6 +15,7 @@
   import { getProgress } from "../../util/Form";
   import MetadataType_05 from "./Field/MetadataType_05.svelte";
   import DataProtectionField_04 from "./Field/DataProtectionField_04.svelte";
+  import TermsOfUseField_24 from "./Field/TermsOfUseField_24.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -161,6 +162,7 @@
           id="classification"
         >
           <DataProtectionField_04 />
+          <TermsOfUseField_24 />
           <MetadataType_05 />
         </section>
         <section
