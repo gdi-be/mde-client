@@ -60,7 +60,13 @@ const formValidators: FormValidators = {
     ]
   },
   classification: {
-    required: [],
+    required: [{
+      key: 'isoMetadata.metadataProfile',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.dataProtection',
+      validator: (val) => val?.length > 0
+    }],
     optional: []
   },
   temp_and_spatial: {

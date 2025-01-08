@@ -14,6 +14,7 @@
   import Progress from "./Progress.svelte";
   import { getProgress } from "../../util/Form";
   import MetadataType_05 from "./Field/MetadataType_05.svelte";
+  import DataProtectionField_04 from "./Field/DataProtectionField_04.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -81,6 +82,8 @@
   onMount(() => {
     updateBorder();
   });
+
+  $inspect(metadata);
 
 </script>
 
@@ -157,8 +160,9 @@
           class:active={activeSection === "classification"}
           id="classification"
         >
-        </section>
+          <DataProtectionField_04 />
           <MetadataType_05 />
+        </section>
         <section
           class:active={activeSection === "temp_and_spatial"}
           id="temp_and_spatial"
