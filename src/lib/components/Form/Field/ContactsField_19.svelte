@@ -8,7 +8,7 @@
   import { invalidateAll } from "$app/navigation";
 
   const KEY = 'isoMetadata.contacts';
-  const LABEL = 'Kontaktdaten';
+  const LABEL = 'Kontaktangaben';
 
   let initialContacts = getValue<Contacts>(KEY);
   let initialValue = initialContacts?.map(contact => {

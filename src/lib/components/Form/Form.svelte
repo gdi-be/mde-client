@@ -13,6 +13,7 @@
   import type { FormHelp } from "../../models/form";
   import Progress from "./Progress.svelte";
   import { getProgress } from "../../util/Form";
+  import MetadataType_05 from "./Field/MetadataType_05.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -157,6 +158,7 @@
           id="classification"
         >
         </section>
+          <MetadataType_05 />
         <section
           class:active={activeSection === "temp_and_spatial"}
           id="temp_and_spatial"
@@ -198,6 +200,7 @@
 
 <style lang="scss">
   .metadata-form {
+    flex: 1;
     width: 100%;
     overflow: hidden;
     display: flex;
@@ -236,6 +239,7 @@
       display: flex;
       overflow: auto;
       flex: 1;
+      padding: 1em 0;
 
       > * {
         flex: 1;
