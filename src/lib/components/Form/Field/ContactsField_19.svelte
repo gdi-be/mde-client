@@ -6,6 +6,8 @@
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
+  import { fly, scale } from "svelte/transition";
+  import { backIn } from "svelte/easing";
 
   const KEY = 'isoMetadata.contacts';
   const LABEL = 'Kontaktangaben';
@@ -51,14 +53,14 @@
   const addItem = () => {
     const listId = Date.now().toString(36);
     contacts = [
-      ...contacts,
       {
         listId,
         name: '',
         organisation: '',
         phone: '',
         email: ''
-      }
+      },
+      ...contacts
     ];
   };
 
@@ -83,7 +85,7 @@
       </IconButton>
     </legend>
     {#each contacts as contact (contact.listId)}
-      <fieldset class="contact">
+      <fieldset class="contact" in:fly={{ y: -100 }} out:scale={{ easing: backIn }}>
         <legend>
           <IconButton
           class="material-icons"
