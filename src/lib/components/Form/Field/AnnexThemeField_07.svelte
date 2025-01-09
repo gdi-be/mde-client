@@ -17,7 +17,7 @@
   };
 
   const fetchOptions = async () => {
-    const response = await fetch('/annex_themes');
+    const response = await fetch('/data/annex_themes');
     const data = await response.json();
 
     if (!data.register) {

@@ -23,7 +23,7 @@
       return [];
     }
 
-    const options = await fetch(`/keywords?terms=${input}`)
+    const options = await fetch(`/data/keywords?terms=${input}`)
     const data = await options.json();
 
     if (data.total_results === 0) {
