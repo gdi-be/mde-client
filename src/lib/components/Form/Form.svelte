@@ -24,6 +24,7 @@
   import DataProtectionField_04 from "./Field/DataProtectionField_04.svelte";
   import TermsOfUseField_24 from "./Field/TermsOfUseField_24.svelte";
   import AnnexThemeField_07 from "./Field/AnnexThemeField_07.svelte";
+  import QualityReportCheckField_37 from "./Field/QualityReportCheckField_37.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -167,10 +168,11 @@
           class:active={activeSection === "classification"}
           id="classification"
         >
+          <MetadataType_05 />
           <DataProtectionField_04 />
           <TermsOfUseField_24 />
-          <MetadataType_05 />
           <AnnexThemeField_07 />
+          <QualityReportCheckField_37 {metadata} />
         </section>
         <section
           class:active={activeSection === "temp_and_spatial"}

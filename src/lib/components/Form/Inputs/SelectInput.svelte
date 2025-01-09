@@ -18,9 +18,10 @@
     options
   }: InputProps = $props();
 
-  const onSelect = () => {
-    onChange?.(value);
+  const onSelect = (newValue: string) => {
+    onChange?.(newValue);
   };
+
 </script>
 
 <Select
@@ -31,7 +32,7 @@
 >
   {#each options as option}
     <SelectOption
-      onSMUIAction={onSelect}
+      onSMUIAction={() => onSelect(option.key)}
       value={option.key}
     >
       {option.label}

@@ -59,9 +59,5 @@
     :global(.smui-paper) {
       flex: 1;
     }
-
-    :global(.mdc-text-field) {
-      display: flex;
-    }
   }
 </style>
