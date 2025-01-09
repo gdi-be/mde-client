@@ -4,18 +4,26 @@
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
   import TitleField_01 from "./Field/TitleField_01.svelte";
-  import { setFormData, initializeFormContext, getFormContext, clearActiveHelp, setHelp, getHelpMarkdown } from "./FormContext.svelte";
+  import {
+    setFormData,
+    initializeFormContext,
+    getFormContext,
+    clearActiveHelp,
+    setHelp,
+    getHelpMarkdown,
+    getProgress
+  } from "./FormContext.svelte";
   import DescriptionField_02 from "./Field/DescriptionField_02.svelte";
   import InternalCommentField_03 from "./Field/InternalCommentField_03.svelte";
   import KeywordsField_15 from "./Field/KeywordsField_15.svelte";
   import PreviewField_29 from "./Field/PreviewField_29.svelte";
   import ContactsField_19 from "./Field/ContactsField_19.svelte";
-  import type { FormHelp } from "../../models/form";
+  import type { FormHelp } from "$lib/models/form";
   import Progress from "./Progress.svelte";
-  import { getProgress } from "../../util/Form";
   import MetadataType_05 from "./Field/MetadataType_05.svelte";
   import DataProtectionField_04 from "./Field/DataProtectionField_04.svelte";
   import TermsOfUseField_24 from "./Field/TermsOfUseField_24.svelte";
+  import AnnexThemeField_07 from "./Field/AnnexThemeField_07.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -83,8 +91,6 @@
   onMount(() => {
     updateBorder();
   });
-
-  $inspect(metadata);
 
 </script>
 
@@ -164,6 +170,7 @@
           <DataProtectionField_04 />
           <TermsOfUseField_24 />
           <MetadataType_05 />
+          <AnnexThemeField_07 />
         </section>
         <section
           class:active={activeSection === "temp_and_spatial"}
