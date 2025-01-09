@@ -28,6 +28,7 @@
   import QualityReportCheckField_37 from "./Field/QualityReportCheckField_37.svelte";
   import HighValueDatasetField_06 from "./Field/HighValueDatasetField_06.svelte";
   import TopicCategory_13 from "./Field/TopicCategory_13.svelte";
+  import { fade } from "svelte/transition";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -156,49 +157,43 @@
     </div>
     <div>
       <form>
-        <section
-          class:active={activeSection === "basedata"}
-          id="basedata"
-        >
-          <TitleField_01 />
-          <DescriptionField_02 />
-          <InternalCommentField_03 />
-          <KeywordsField_15 />
-          <PreviewField_29 />
-          <ContactsField_19 />
-        </section>
-        <section
-          class:active={activeSection === "classification"}
-          id="classification"
-        >
-          <MetadataType_05 />
-          <DataProtectionField_04 />
-          <TermsOfUseField_24 />
-          <AnnexThemeField_07 />
-          <QualityReportCheckField_37 {metadata} />
-          <HighValueDatasetField_06 />
-          <TopicCategory_13 />
-        </section>
-        <section
-          class:active={activeSection === "temp_and_spatial"}
-          id="temp_and_spatial"
-        >
-        </section>
-        <section
-          class:active={activeSection === "additional"}
-          id="additional"
-        >
-        </section>
-        <section
-          class:active={activeSection === "display_services"}
-          id="display_services"
-        >
-        </section>
-        <section
-          class:active={activeSection === "download_services"}
-          id="download_services"
-        >
-        </section>
+        {#if activeSection === "basedata"}
+          <section id="basedata" transition:fade >
+            <TitleField_01 />
+            <DescriptionField_02 />
+            <InternalCommentField_03 />
+            <KeywordsField_15 />
+            <PreviewField_29 />
+            <ContactsField_19 />
+          </section>
+        {/if}
+        {#if activeSection === "classification"}
+          <section id="classification" transition:fade >
+            <MetadataType_05 />
+            <DataProtectionField_04 />
+            <TermsOfUseField_24 />
+            <AnnexThemeField_07 />
+            <QualityReportCheckField_37 {metadata} />
+            <HighValueDatasetField_06 />
+            <TopicCategory_13 />
+          </section>
+        {/if}
+        {#if activeSection === "temp_and_spatial"}
+          <section id="temp_and_spatial" transition:fade >
+          </section>
+        {/if}
+        {#if activeSection === "additional"}
+          <section id="additional" transition:fade >
+          </section>
+        {/if}
+        {#if activeSection === "display_services"}
+          <section id="display_services" transition:fade >
+          </section>
+        {/if}
+        {#if activeSection === "download_services"}
+          <section id="download_services" transition:fade >
+          </section>
+        {/if}
       </form>
     </div>
     <div>
@@ -257,28 +252,23 @@
 
     .form-wrapper {
       display: flex;
-      overflow: auto;
+      overflow-y: scroll;
       flex: 1;
-      padding: 1em 0;
+      margin: 2em 0;
 
       > * {
         flex: 1;
       }
 
       form {
-        display: flex;
-        flex-direction: column;
-        padding-top: 0.25rem;
+        position: relative;
 
         section {
+          position: absolute;
+          top: 0;
           display: flex;
           flex-direction: column;
-          padding-top: 0.25rem;
           gap: 1em;
-
-          &:not(.active) {
-            display: none;
-          }
         }
       }
 
