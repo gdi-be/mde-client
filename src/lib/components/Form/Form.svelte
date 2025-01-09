@@ -3,7 +3,6 @@
   import { parse } from "marked";
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
-  import TitleField_01 from "./Field/TitleField_01.svelte";
   import {
     setFormData,
     initializeFormContext,
@@ -13,18 +12,22 @@
     getHelpMarkdown,
     getProgress
   } from "./FormContext.svelte";
+  import type { FormHelp } from "$lib/models/form";
+  import Progress from "./Progress.svelte";
+
+  import TitleField_01 from "./Field/TitleField_01.svelte";
   import DescriptionField_02 from "./Field/DescriptionField_02.svelte";
   import InternalCommentField_03 from "./Field/InternalCommentField_03.svelte";
   import KeywordsField_15 from "./Field/KeywordsField_15.svelte";
   import PreviewField_29 from "./Field/PreviewField_29.svelte";
   import ContactsField_19 from "./Field/ContactsField_19.svelte";
-  import type { FormHelp } from "$lib/models/form";
-  import Progress from "./Progress.svelte";
   import MetadataType_05 from "./Field/MetadataType_05.svelte";
   import DataProtectionField_04 from "./Field/DataProtectionField_04.svelte";
   import TermsOfUseField_24 from "./Field/TermsOfUseField_24.svelte";
   import AnnexThemeField_07 from "./Field/AnnexThemeField_07.svelte";
   import QualityReportCheckField_37 from "./Field/QualityReportCheckField_37.svelte";
+  import HighValueDatasetField_06 from "./Field/HighValueDatasetField_06.svelte";
+  import TopicCategory_13 from "./Field/TopicCategory_13.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -173,6 +176,8 @@
           <TermsOfUseField_24 />
           <AnnexThemeField_07 />
           <QualityReportCheckField_37 {metadata} />
+          <HighValueDatasetField_06 />
+          <TopicCategory_13 />
         </section>
         <section
           class:active={activeSection === "temp_and_spatial"}
