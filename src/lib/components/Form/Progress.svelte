@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { expoOut } from "svelte/easing";
   import { Tween } from "svelte/motion";
 
   let {
@@ -20,8 +21,8 @@
   const optionalPercent = $derived(optional / total * 100);
   const redDash = $derived(requiredPercent * arc / 100);
   const yellowDash = $derived((optionalPercent * arc / 100) + redDash);
-  const redDashTween = Tween.of(() => redDash);
-  const yellowDashTween = Tween.of(() => yellowDash);
+  const redDashTween = Tween.of(() => redDash, { easing: expoOut, duration: 1000 });
+  const yellowDashTween = Tween.of(() => yellowDash, { easing: expoOut, duration: 1000});
 
 </script>
 
