@@ -10,7 +10,8 @@
     clearActiveHelp,
     setHelp,
     getHelpMarkdown,
-    getProgress
+    getProgress,
+    type Section
   } from "./FormContext.svelte";
   import type { FormHelp } from "$lib/models/form";
   import Progress from "./Progress.svelte";
@@ -29,6 +30,7 @@
   import HighValueDatasetField_06 from "./Field/HighValueDatasetField_06.svelte";
   import TopicCategory_13 from "./Field/TopicCategory_13.svelte";
   import { fade } from "svelte/transition";
+  import { Label } from "@smui/button";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -42,6 +44,26 @@
     help
   }: FormProps = $props();
 
+  const SECTIONS: { section: Section, label: string }[] = [{
+    section: 'basedata',
+    label: 'Basisangaben'
+  }, {
+    section: 'classification',
+    label: 'Einordnung'
+  }, {
+    section: 'temp_and_spatial',
+    label: 'Zeitliche und Räumliche Angaben'
+  }, {
+    section: 'additional',
+    label: 'Weitere Angaben'
+  }, {
+    section: 'display_services',
+    label: 'Darstellungsdienste'
+  }, {
+    section: 'download_services',
+    label: 'Downloaddienste'
+  }];
+
   initializeFormContext();
 
   if (metadata) {
@@ -51,13 +73,6 @@
   if (help) {
     setHelp(help);
   }
-
-  let baseDataProgress = $derived(getProgress("basedata", metadata));
-  let classificationProgress = $derived(getProgress("classification", metadata));
-  let tempAndSpatialProgress = $derived(getProgress("temp_and_spatial", metadata));
-  let additionalProgress = $derived(getProgress("additional", metadata));
-  let displayServicesProgress = $derived(getProgress("display_services", metadata));
-  let downloadServicesProgress = $derived(getProgress("download_services", metadata));
 
   const activeHelpKey = $derived(getFormContext().activeHelpKey);
   const helpMarkdown = $derived(getHelpMarkdown(activeHelpKey));
@@ -101,48 +116,16 @@
 
 <div class="metadata-form">
   <nav class="tabs" bind:this={tabs}>
-    <button
-      class="section-button"
-      class:active={activeSection === "basedata"}
-      onclick={() => onSectionClick("basedata")}
-    >
-      Basisangaben <Progress {...baseDataProgress} />
-    </button>
-    <button
-      class="section-button"
-      class:active={activeSection === "classification"}
-      onclick={() => onSectionClick("classification")}
-    >
-      Einordnung <Progress {...classificationProgress} />
-    </button>
-    <button
-      class="section-button"
-      class:active={activeSection === "temp_and_spatial"}
-      onclick={() => onSectionClick("temp_and_spatial")}
-    >
-      Zeitliche und Räumliche Angaben <Progress {...tempAndSpatialProgress} />
-    </button>
-    <button
-      class="section-button"
-      class:active={activeSection === "additional"}
-      onclick={() => onSectionClick("additional")}
-    >
-      Weitere Angaben <Progress {...additionalProgress} />
-    </button>
-    <button
-      class="section-button"
-      class:active={activeSection === "display_services"}
-      onclick={() => onSectionClick("display_services")}
-    >
-      Darstellungsdienste <Progress {...displayServicesProgress} />
-    </button>
-    <button
-      class="section-button"
-      class:active={activeSection === "download_services"}
-      onclick={() => onSectionClick("download_services")}
-    >
-      Downloaddienste <Progress {...downloadServicesProgress} />
-    </button>
+    {#each SECTIONS as { section, label }}
+      <button
+        class="section-button"
+        class:active={activeSection === section}
+        onclick={() => onSectionClick(section)}
+      >
+        <Label>{label}</Label>
+        <Progress {...(getProgress(section, metadata))} />
+      </button>
+    {/each}
     <div
       class="active-border"
       style="

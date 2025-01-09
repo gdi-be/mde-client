@@ -85,7 +85,7 @@ export function toggleActiveHelp(key: FieldKey) {
   }
 }
 
-type Section = 'basedata' | 'classification' | 'temp_and_spatial' | 'additional' | 'display_services' | 'download_services';
+export type Section = 'basedata' | 'classification' | 'temp_and_spatial' | 'additional' | 'display_services' | 'download_services';
 
 type Progress = {
   total: number;

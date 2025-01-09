@@ -31,7 +31,7 @@
   title={title(required, optional, total)}
 >
   <svg viewBox="0 0 20 20">
-    <circle r={RADIUS} cx="10" cy="10" fill="#48bb46" />
+    <circle r={RADIUS} cx="10" cy="10" fill="#0f913b" />
     <circle
       r={RADIUS / 2}
       cx="10"
