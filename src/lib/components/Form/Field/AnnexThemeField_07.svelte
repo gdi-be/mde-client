@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import SelectInput from "../Inputs/SelectInput.svelte";
+  import { invalidateAll } from "$app/navigation";
 
-  const KEY = 'isoMetadata.UNKNOWN';
+  const KEY = 'isoMetadata.inspireTheme';
   const LABEL = 'Annex-Thema';
 
   let initialValue = getValue<string>(KEY);
@@ -12,8 +14,20 @@
   let showCheckmark = $state(false);
 
   const onChange = async (newValue?: string) => {
-    // TODO: Implement
-    console.log(newValue);
+    const response = await fetch($page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        key: KEY,
+        value: newValue
+      })
+    });
+    if (response.ok) {
+      showCheckmark = true;
+      invalidateAll();
+    }
   };
 
   const fetchOptions = async () => {
@@ -25,7 +39,7 @@
     };
 
     return data.register.containeditems.map((entry) => ({
-      key: entry.theme.id,
+      key: entry.theme.id.split('/').at(-1).toUpperCase(),
       label: entry.theme.label.text
     }));
   };

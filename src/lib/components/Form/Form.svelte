@@ -112,6 +112,8 @@
     updateBorder();
   });
 
+  $inspect(metadata);
+
 </script>
 
 <div class="metadata-form">
@@ -135,63 +137,56 @@
     </div>
   </nav>
   <div class="form-wrapper">
-    <div>
-      <!-- placeholder for flex layout-->
-    </div>
-    <div>
-      <form>
-        {#if activeSection === "basedata"}
-          <section id="basedata" transition:fade >
-            <TitleField_01 />
-            <DescriptionField_02 />
-            <InternalCommentField_03 />
-            <KeywordsField_15 />
-            <PreviewField_29 />
-            <ContactsField_19 />
-          </section>
-        {/if}
-        {#if activeSection === "classification"}
-          <section id="classification" transition:fade >
-            <MetadataType_05 />
-            <DataProtectionField_04 />
-            <TermsOfUseField_24 />
-            <AnnexThemeField_07 />
-            <QualityReportCheckField_37 {metadata} />
-            <HighValueDatasetField_06 />
-            <TopicCategory_13 />
-          </section>
-        {/if}
-        {#if activeSection === "temp_and_spatial"}
-          <section id="temp_and_spatial" transition:fade >
-          </section>
-        {/if}
-        {#if activeSection === "additional"}
-          <section id="additional" transition:fade >
-          </section>
-        {/if}
-        {#if activeSection === "display_services"}
-          <section id="display_services" transition:fade >
-          </section>
-        {/if}
-        {#if activeSection === "download_services"}
-          <section id="download_services" transition:fade >
-          </section>
-        {/if}
-      </form>
-    </div>
-    <div>
+    <form>
+      {#if activeSection === "basedata"}
+        <section id="basedata" transition:fade >
+          <TitleField_01 />
+          <DescriptionField_02 />
+          <InternalCommentField_03 />
+          <KeywordsField_15 />
+          <PreviewField_29 />
+          <ContactsField_19 />
+        </section>
+      {/if}
+      {#if activeSection === "classification"}
+        <section id="classification" transition:fade >
+          <MetadataType_05 />
+          <DataProtectionField_04 />
+          <TermsOfUseField_24 />
+          <AnnexThemeField_07 />
+          <QualityReportCheckField_37 {metadata} />
+          <HighValueDatasetField_06 />
+          <TopicCategory_13 />
+        </section>
+      {/if}
+      {#if activeSection === "temp_and_spatial"}
+        <section id="temp_and_spatial" transition:fade >
+        </section>
+      {/if}
+      {#if activeSection === "additional"}
+        <section id="additional" transition:fade >
+        </section>
+      {/if}
+      {#if activeSection === "display_services"}
+        <section id="display_services" transition:fade >
+        </section>
+      {/if}
+      {#if activeSection === "download_services"}
+        <section id="download_services" transition:fade >
+        </section>
+      {/if}
+    </form>
       <!-- TODO: i18n -->
-      <div class="help-section">
-        {#if helpMarkdown}
-          {#await parse(helpMarkdown)}
-            <p>Loading...</p>
-          {:then parsed}
-            {@html parsed}
-          {:catch error}
-            <p>Error: {error.message}</p>
-          {/await}
-        {/if}
-      </div>
+    <div class="help-section">
+      {#if helpMarkdown}
+        {#await parse(helpMarkdown)}
+          <p>Loading...</p>
+        {:then parsed}
+          {@html parsed}
+        {:catch error}
+          <p>Error: {error.message}</p>
+        {/await}
+      {/if}
     </div>
   </div>
 </div>
@@ -219,7 +214,12 @@
         flex: 1;
         background-color: transparent;
         border: none;
+        font-family: 'Roboto', sans-serif;
         font-size: 1.25em;
+
+        :global(.progress-chart) {
+          flex: 0 0 auto;
+        }
       }
 
       .active-border {
@@ -237,14 +237,12 @@
       display: flex;
       overflow-y: scroll;
       flex: 1;
-      margin: 2em 0;
-
-      > * {
-        flex: 1;
-      }
+      padding: 2em 0;
 
       form {
+        flex: 2;
         position: relative;
+        padding-left: 2em;
 
         section {
           position: absolute;
@@ -256,6 +254,7 @@
       }
 
       .help-section {
+        flex: 1;
         padding: 0 3rem;
       }
     }

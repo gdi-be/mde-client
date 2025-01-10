@@ -29,7 +29,7 @@
   :global(html, body) {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
 
   :global(a) {

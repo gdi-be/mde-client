@@ -101,7 +101,7 @@
       appearance: textfield;
       -moz-appearance: textfield;
       border: none;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Roboto', sans-serif;
     }
 
     input.page-input::-webkit-outer-spin-button,

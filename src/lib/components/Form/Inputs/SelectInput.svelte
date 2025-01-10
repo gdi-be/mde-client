@@ -18,6 +18,9 @@
     options
   }: InputProps = $props();
 
+  // Remove duplicates
+  options = Array.from(new Map(options.map(item => [item.key, item])).values());
+
   const onSelect = (newValue: string) => {
     onChange?.(newValue);
   };
