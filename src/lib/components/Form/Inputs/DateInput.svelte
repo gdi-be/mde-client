@@ -1,21 +1,20 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
   import Icon from "@smui/textfield/icon";
-  import type { DateInputConfig } from "$lib/models/form";
+  import type { ComponentProps } from "svelte";
 
   type InputProps = {
-    config: DateInputConfig;
     value?: string;
-  }
-  let {
-    config,
-    value = ''
-  }: InputProps = $props();
+    key?: string;
+    label?: string;
+  } & ComponentProps<typeof Textfield>;
 
-  const {
+  let {
     key,
-    label
-  } = config;
+    label,
+    value = $bindable(''),
+    ...restProps
+  }: InputProps = $props();
 
 </script>
 
@@ -25,6 +24,7 @@
   id={key}
   input$name={key}
   bind:value
+  {...restProps}
 >
   {#snippet leadingIcon()}
     <Icon class="material-icons">

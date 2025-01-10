@@ -3,6 +3,8 @@
   import { parse } from "marked";
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
+  import { fade } from "svelte/transition";
+  import { Label } from "@smui/button";
   import {
     setFormData,
     initializeFormContext,
@@ -29,8 +31,8 @@
   import QualityReportCheckField_37 from "./Field/QualityReportCheckField_37.svelte";
   import HighValueDatasetField_06 from "./Field/HighValueDatasetField_06.svelte";
   import TopicCategory_13 from "./Field/TopicCategory_13.svelte";
-  import { fade } from "svelte/transition";
-  import { Label } from "@smui/button";
+  import DateTimeField_09 from "./Field/DateTimeField_09.svelte";
+  import PublishedField_10 from "./Field/PublishedField_10.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -161,6 +163,8 @@
       {/if}
       {#if activeSection === "temp_and_spatial"}
         <section id="temp_and_spatial" transition:fade >
+          <DateTimeField_09 />
+          <PublishedField_10 />
         </section>
       {/if}
       {#if activeSection === "additional"}
@@ -246,6 +250,7 @@
 
         section {
           position: absolute;
+          width: 100%;
           top: 0;
           display: flex;
           flex-direction: column;
