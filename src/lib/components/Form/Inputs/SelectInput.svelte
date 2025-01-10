@@ -1,24 +1,27 @@
 <script lang="ts">
-  import Select, { Option } from "@smui/select";
-  import type { SelectInputConfig } from "$lib/models/form";
+  import Select, { Option as SelectOption } from "@smui/select";
+  import type { Option } from "$lib/models/form";
 
   type InputProps = {
     onChange?: (value: string | undefined) => void;
     value?: string;
-    config: SelectInputConfig;
+    key: string;
+    label: string;
+    options: Option[];
   }
 
   let {
-    config,
     onChange,
     value = $bindable<string | undefined>(undefined),
+    key,
+    label,
+    options
   }: InputProps = $props();
 
-  const { key, label, options = [] } = config;
-
-  const onSelect = () => {
-    onChange?.(value);
+  const onSelect = (newValue: string) => {
+    onChange?.(newValue);
   };
+
 </script>
 
 <Select
@@ -28,11 +31,11 @@
   bind:value
 >
   {#each options as option}
-    <Option
-      onSMUIAction={onSelect}
-      value={option.value}
+    <SelectOption
+      onSMUIAction={() => onSelect(option.key)}
+      value={option.key}
     >
       {option.label}
-    </Option>
+    </SelectOption>
   {/each}
 </Select>

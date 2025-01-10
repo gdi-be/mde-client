@@ -1,31 +1,83 @@
 <script lang="ts">
   /* eslint-disable svelte/no-at-html-tags */
   import { parse } from "marked";
-  import type { FormConfig } from "$lib/models/form";
-  import FormItem from "./FormItem.svelte";
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
-  import { getValueFromMetadata, isVisible } from "$lib/util/Form";
+  import {
+    setFormData,
+    initializeFormContext,
+    getFormContext,
+    clearActiveHelp,
+    setHelp,
+    getHelpMarkdown,
+    getProgress,
+    type Section
+  } from "./FormContext.svelte";
+  import type { FormHelp } from "$lib/models/form";
+  import Progress from "./Progress.svelte";
+
+  import TitleField_01 from "./Field/TitleField_01.svelte";
+  import DescriptionField_02 from "./Field/DescriptionField_02.svelte";
+  import InternalCommentField_03 from "./Field/InternalCommentField_03.svelte";
+  import KeywordsField_15 from "./Field/KeywordsField_15.svelte";
+  import PreviewField_29 from "./Field/PreviewField_29.svelte";
+  import ContactsField_19 from "./Field/ContactsField_19.svelte";
+  import MetadataType_05 from "./Field/MetadataType_05.svelte";
+  import DataProtectionField_04 from "./Field/DataProtectionField_04.svelte";
+  import TermsOfUseField_24 from "./Field/TermsOfUseField_24.svelte";
+  import AnnexThemeField_07 from "./Field/AnnexThemeField_07.svelte";
+  import QualityReportCheckField_37 from "./Field/QualityReportCheckField_37.svelte";
+  import HighValueDatasetField_06 from "./Field/HighValueDatasetField_06.svelte";
+  import TopicCategory_13 from "./Field/TopicCategory_13.svelte";
+  import { fade } from "svelte/transition";
+  import { Label } from "@smui/button";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
-    config: FormConfig;
     activeSection?: string;
+    help: FormHelp;
   }
 
   let {
-    config,
     activeSection,
-    metadata
+    metadata,
+    help
   }: FormProps = $props();
 
-  if (!activeSection) {
-    activeSection = config.sections[0];
+  const SECTIONS: { section: Section, label: string }[] = [{
+    section: 'basedata',
+    label: 'Basisangaben'
+  }, {
+    section: 'classification',
+    label: 'Einordnung'
+  }, {
+    section: 'temp_and_spatial',
+    label: 'Zeitliche und Räumliche Angaben'
+  }, {
+    section: 'additional',
+    label: 'Weitere Angaben'
+  }, {
+    section: 'display_services',
+    label: 'Darstellungsdienste'
+  }, {
+    section: 'download_services',
+    label: 'Downloaddienste'
+  }];
+
+  initializeFormContext();
+
+  if (metadata) {
+    setFormData(metadata);
   }
 
+  if (help) {
+    setHelp(help);
+  }
+
+  const activeHelpKey = $derived(getFormContext().activeHelpKey);
+  const helpMarkdown = $derived(getHelpMarkdown(activeHelpKey));
+
   let tabs = $state<HTMLElement | null>(null);
-  let helpMarkdown = $state<string | undefined>();
-  let activeHelpKey = $state<string | undefined>();
   let borderStyles = $state<{ width: string; left: string }>({
     width: "0",
     left: "0"
@@ -45,20 +97,10 @@
     }
   };
 
-  const onHelpClick = (key: string | undefined, help: string) => {
-    if (activeHelpKey === key) {
-      helpMarkdown = undefined;
-      activeHelpKey = undefined;
-    } else {
-      helpMarkdown = help;
-      activeHelpKey = key;
-    }
-  };
-
   const onSectionClick = async (section: string) => {
     activeSection = section;
-    activeHelpKey = undefined;
-    helpMarkdown = undefined;
+    clearActiveHelp();
+
     goto(`#${section}`, {
       replaceState: true
     });
@@ -70,71 +112,98 @@
     updateBorder();
   });
 
-  const filteredItems = $derived(
-    config.formItems.filter(itemConfig => isVisible(metadata, itemConfig.visibilityCondition))
-  );
-
 </script>
 
 <div class="metadata-form">
-  <div>
-    <!-- placeholder for flex layout-->
-  </div>
-  <div>
-    <nav class="tabs" bind:this={tabs}>
-      {#each config.sections as section}
-        <button
-          class="section-button"
-          class:active={section === activeSection}
-          onclick={() => onSectionClick(section)}
-        >
-          {section}
-        </button>
-        {/each}
-      <div
-        class="active-border"
-        style="
-          --border-width: {borderStyles.width};
-          --border-left: {borderStyles.left};
-        ">
+  <nav class="tabs" bind:this={tabs}>
+    {#each SECTIONS as { section, label }}
+      <button
+        class="section-button"
+        class:active={activeSection === section}
+        onclick={() => onSectionClick(section)}
+      >
+        <Label>{label}</Label>
+        <Progress {...(getProgress(section, metadata))} />
+      </button>
+    {/each}
+    <div
+      class="active-border"
+      style="
+        --border-width: {borderStyles.width};
+        --border-left: {borderStyles.left};
+      ">
+    </div>
+  </nav>
+  <div class="form-wrapper">
+    <div>
+      <!-- placeholder for flex layout-->
+    </div>
+    <div>
+      <form>
+        {#if activeSection === "basedata"}
+          <section id="basedata" transition:fade >
+            <TitleField_01 />
+            <DescriptionField_02 />
+            <InternalCommentField_03 />
+            <KeywordsField_15 />
+            <PreviewField_29 />
+            <ContactsField_19 />
+          </section>
+        {/if}
+        {#if activeSection === "classification"}
+          <section id="classification" transition:fade >
+            <MetadataType_05 />
+            <DataProtectionField_04 />
+            <TermsOfUseField_24 />
+            <AnnexThemeField_07 />
+            <QualityReportCheckField_37 {metadata} />
+            <HighValueDatasetField_06 />
+            <TopicCategory_13 />
+          </section>
+        {/if}
+        {#if activeSection === "temp_and_spatial"}
+          <section id="temp_and_spatial" transition:fade >
+          </section>
+        {/if}
+        {#if activeSection === "additional"}
+          <section id="additional" transition:fade >
+          </section>
+        {/if}
+        {#if activeSection === "display_services"}
+          <section id="display_services" transition:fade >
+          </section>
+        {/if}
+        {#if activeSection === "download_services"}
+          <section id="download_services" transition:fade >
+          </section>
+        {/if}
+      </form>
+    </div>
+    <div>
+      <!-- TODO: i18n -->
+      <div class="help-section">
+        {#if helpMarkdown}
+          {#await parse(helpMarkdown)}
+            <p>Loading...</p>
+          {:then parsed}
+            {@html parsed}
+          {:catch error}
+            <p>Error: {error.message}</p>
+          {/await}
+        {/if}
       </div>
-    </nav>
-    <form>
-      {#each filteredItems as itemConfig (itemConfig.key)}
-        <FormItem
-          hidden={itemConfig.section !== activeSection}
-          onHelpClick={onHelpClick}
-          config={itemConfig}
-          helpActive={activeHelpKey === itemConfig.key}
-          value={getValueFromMetadata(metadata, itemConfig.key)}
-        />
-      {/each}
-    </form>
-  </div>
-  <div>
-    <!-- TODO: i18n -->
-    <div class="help-section">
-      {#if helpMarkdown}
-        {#await parse(helpMarkdown)}
-          <p>Loading...</p>
-        {:then parsed}
-          {@html parsed}
-        {:catch error}
-          <p>Error: {error.message}</p>
-        {/await}
-      {/if}
     </div>
   </div>
 </div>
 
 <style lang="scss">
   .metadata-form {
-    align-self: stretch;
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
     display: flex;
-
-    > * {
-      flex: 1;
-    }
+    flex-direction: column;
+    align-self: stretch;
 
     nav.tabs {
       position: relative;
@@ -142,6 +211,10 @@
       padding-bottom: 0.25rem;
 
       button.section-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.25em;
         cursor: pointer;
         flex: 1;
         background-color: transparent;
@@ -160,15 +233,33 @@
       }
     }
 
-    form {
+    .form-wrapper {
       display: flex;
-      flex-direction: column;
-      padding-top: 0.25rem;
+      overflow-y: scroll;
+      flex: 1;
+      margin: 2em 0;
+
+      > * {
+        flex: 1;
+      }
+
+      form {
+        position: relative;
+
+        section {
+          position: absolute;
+          top: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 1em;
+        }
+      }
+
+      .help-section {
+        padding: 0 3rem;
+      }
     }
 
-    .help-section {
-      padding: 0 3rem;
-    }
   }
 
 </style>

@@ -2,18 +2,19 @@
   import { page } from "$app/stores";
   import Form from "$lib/components/Form/Form.svelte";
 
-  const activeSection = $page.url.hash.slice(1);
+  const activeSection = $page.url.hash.slice(1) || "basedata";
 
   let { data } = $props();
   const {
-    config,
+    help,
     metadata
-  } = data;
+  } = $derived(data);
+
 </script>
 
 <div class="metadata">
   <h1>{ metadata.isoMetadata.title }</h1>
-  <Form {metadata} {config} {activeSection} />
+  <Form {metadata} {help} {activeSection} />
 </div>
 
 <style lang="scss">
