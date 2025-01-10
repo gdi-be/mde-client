@@ -152,12 +152,24 @@ const formValidators: FormValidators = {
     }, {
       key: 'isoMetadata.termsOfUse',
       validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.inspireTheme',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.topicCategory',
+      validator: (val) => val !== undefined && val !== null && val !== ''
     }],
     optional: []
   },
   temp_and_spatial: {
-    required: [],
-    optional: []
+    required: [{
+      key: 'isoMetadata.published',
+      validator: (val) => val?.length > 0
+    }],
+    optional: [{
+      key: 'isoMetadata.dateTime',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }]
   },
   additional: {
     required: [],
