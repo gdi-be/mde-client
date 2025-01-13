@@ -36,6 +36,8 @@
   import MaintenanceFrequencyField_14 from "./Field/MaintenanceFrequencyField_14.svelte";
   import LastUpdatedField_11 from "./Field/LastUpdatedField_11.svelte";
   import ValidityRangeField_12 from "./Field/ValidityRangeField_12.svelte";
+  import DeliveredCoordinateSystemField_16 from "./Field/DeliveredCoordinateSystemField_16.svelte";
+  import CoordinateSystemField_17 from "./Field/CoordinateSystemField_17.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -171,6 +173,8 @@
           <MaintenanceFrequencyField_14 />
           <LastUpdatedField_11 />
           <ValidityRangeField_12 />
+          <DeliveredCoordinateSystemField_16 />
+          <CoordinateSystemField_17 />
         </section>
       {/if}
       {#if activeSection === "additional"}
