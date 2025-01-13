@@ -35,6 +35,7 @@
   import PublishedField_10 from "./Field/PublishedField_10.svelte";
   import MaintenanceFrequencyField_14 from "./Field/MaintenanceFrequencyField_14.svelte";
   import LastUpdatedField_11 from "./Field/LastUpdatedField_11.svelte";
+  import ValidityRangeField_12 from "./Field/ValidityRangeField_12.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -169,6 +170,7 @@
           <PublishedField_10 />
           <MaintenanceFrequencyField_14 />
           <LastUpdatedField_11 />
+          <ValidityRangeField_12 />
         </section>
       {/if}
       {#if activeSection === "additional"}
