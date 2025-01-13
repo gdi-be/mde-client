@@ -33,6 +33,7 @@
   import TopicCategory_13 from "./Field/TopicCategory_13.svelte";
   import DateTimeField_09 from "./Field/DateTimeField_09.svelte";
   import PublishedField_10 from "./Field/PublishedField_10.svelte";
+  import MaintenanceFrequencyField_14 from "./Field/MaintenanceFrequencyField_14.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -165,6 +166,7 @@
         <section id="temp_and_spatial" transition:fade >
           <DateTimeField_09 />
           <PublishedField_10 />
+          <MaintenanceFrequencyField_14 />
         </section>
       {/if}
       {#if activeSection === "additional"}

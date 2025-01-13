@@ -4,6 +4,8 @@ export type JsonTechnialMetadata = Record<string, unknown>;
 
 export type MetadataProfile = 'ISO' | 'INSPIRE_HARMONISED' | 'INSPIRE_IDENTIFIED';
 
+export type MaintenanceFrequency = 'continual' | 'daily' | 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'biannually' | 'annually' | 'asNeeded' | 'irregular' | 'notPlanned' | 'unknown';
+
 export type MetadataType = 'CLIENT' | 'ISO' | 'TECHNICAL';
 
 export type MetadataId = `${string}-${string}-${string}-${string}-${string}`;
