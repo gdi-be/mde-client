@@ -62,6 +62,7 @@
       updateDate = getLastUpdateDateDaily(publishedDate, 14);
       break;
     case 'monthly':
+      updateDate = todayDate;
       if (todayDate.getDate() > publishedDate.getDate()) {
         updateDate.setDate(publishedDate.getDate());
       } else {
