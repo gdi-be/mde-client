@@ -38,6 +38,7 @@
   import ValidityRangeField_12 from "./Field/ValidityRangeField_12.svelte";
   import DeliveredCoordinateSystemField_16 from "./Field/DeliveredCoordinateSystemField_16.svelte";
   import CoordinateSystemField_17 from "./Field/CoordinateSystemField_17.svelte";
+  import ExtentField_18 from "./Field/ExtentField_18.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -175,6 +176,7 @@
           <ValidityRangeField_12 />
           <DeliveredCoordinateSystemField_16 />
           <CoordinateSystemField_17 />
+          <ExtentField_18 />
         </section>
       {/if}
       {#if activeSection === "additional"}

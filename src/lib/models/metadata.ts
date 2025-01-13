@@ -10,6 +10,13 @@ export type MetadataType = 'CLIENT' | 'ISO' | 'TECHNICAL';
 
 export type MetadataId = `${string}-${string}-${string}-${string}-${string}`;
 
+export type Extent = {
+  maxx: number;
+  maxy: number;
+  minx: number;
+  miny: number;
+}
+
 export type KeyWords = {
   "Spatial scope"?: {
     keyword: string;
