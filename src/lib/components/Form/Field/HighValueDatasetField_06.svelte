@@ -6,6 +6,7 @@
   import FormField from "@smui/form-field";
   import SelectInput from "../Inputs/SelectInput.svelte";
 
+  const CHECKED_KEY = 'clientMetadata.highValueDataset';
   const KEY = 'isoMetadata.UNKNOWN';
   const LABEL = 'High Value Dataset';
   const OPTIONS = [{
@@ -28,7 +29,7 @@
     label: 'Mobilitätsdaten (Mobility)'
   }];
 
-  let initialCheckedValue = getValue<boolean>(KEY) || false;
+  let initialCheckedValue = getValue<boolean>(CHECKED_KEY) || false;
   let checkedValue = $state(initialCheckedValue);
   let initialSelectionValue = getValue<string>(KEY);
   let selectionValue = $state(initialSelectionValue);
