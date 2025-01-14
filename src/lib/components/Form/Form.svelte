@@ -44,6 +44,7 @@
   import ContentDescriptionTextarea_31 from "./Field/ContentDescriptionTextarea_31.svelte";
   import ContentDescription_30 from "./Field/ContentDescription_30.svelte";
   import TechnicalDescription_60 from "./Field/TechnicalDescription_60.svelte";
+  import Lineage_32 from "./Field/Lineage_32.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -191,6 +192,7 @@
           <ContentDescriptionTextarea_31 />
           <ContentDescription_30 />
           <TechnicalDescription_60 />
+          <Lineage_32 />
         </section>
       {/if}
       {#if activeSection === "display_services"}

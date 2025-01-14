@@ -17,6 +17,12 @@ export type Extent = {
   miny: number;
 }
 
+export type Lineage = {
+  title: string;
+  source: string;
+  publishDate: string
+};
+
 export type KeyWords = {
   "Spatial scope"?: {
     keyword: string;
