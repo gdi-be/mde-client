@@ -2,6 +2,66 @@ export type JsonClientMetadata = Record<string, unknown>;
 export type JsonIsoMetadata = Record<string, unknown>;
 export type JsonTechnialMetadata = Record<string, unknown>;
 
+export type ServiceType = 'WFS' | 'WMS' | 'ATOM' | 'WMTS';
+
+export type ColumnType = 'BigDecimal' | 'Date' | 'Double' | 'Float' | 'Geometry' | 'Integer' | 'Link' | 'Long' | 'Text' | 'Short' | 'Timestamp';
+
+export type FilterType = 'SelectBox' | 'CatalogBox' | 'DoubleEditOrderField' | 'EditField' | 'EditOrderField';
+
+export type ColumnInfo = {
+  name?: string;
+  title?: string;
+  description?: string;
+  type?: ColumnType;
+  listView?: boolean;
+  listViewEnabled?: boolean;
+  elementView?: boolean;
+  elementViewEnabled?: boolean;
+  statisticsView?: boolean;
+  filterType?: FilterType;
+  minFilterValue?: string;
+  maxFilterValue?: string;
+  minOrderValue?: string;
+  maxOrderValue?: string;
+}
+
+export type Source = {
+  type?: string;
+  content?: string;
+}
+
+export type LegendImage = {
+  format?: string;
+  url?: string;
+  width?: number;
+  height?: number;
+}
+
+export type ServiceDescription = {
+  type?: string;
+  url?: string;
+}
+
+export type Service = {
+  title?: string;
+  shortDescription?: string;
+  contentDescription?: string;
+  technicalDescription?: string;
+  fileIdentifier?: string;
+  serviceIdentification?: string;
+  serviceType?: ServiceType;
+  url?: string;
+  serviceDescriptions?: ServiceDescription[];
+  legendImage?: LegendImage;
+  dataBases?: Source[];
+  publications?: Source[];
+  created?: string;
+  updated?: string;
+  published?: string;
+  previews?: Source[];
+  columns?: ColumnInfo[];
+};
+
 export type MetadataProfile = 'ISO' | 'INSPIRE_HARMONISED' | 'INSPIRE_IDENTIFIED';
 
 export type MaintenanceFrequency = 'continual' | 'daily' | 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'biannually' | 'annually' | 'asNeeded' | 'irregular' | 'notPlanned' | 'unknown';
