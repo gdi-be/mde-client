@@ -43,6 +43,7 @@
   import ResolutionField_28 from "./Field/ResolutionField_28.svelte";
   import ContentDescriptionTextarea_31 from "./Field/ContentDescriptionTextarea_31.svelte";
   import ContentDescription_30 from "./Field/ContentDescription_30.svelte";
+  import TechnicalDescription_60 from "./Field/TechnicalDescription_60.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -189,6 +190,7 @@
         <section id="additional" transition:fade >
           <ContentDescriptionTextarea_31 />
           <ContentDescription_30 />
+          <TechnicalDescription_60 />
         </section>
       {/if}
       {#if activeSection === "display_services"}

@@ -1,47 +1,29 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
-  import { invalidateAll } from "$app/navigation";
 
-  const KEY = 'isoMetadata.title';
-  const LABEL = 'Titel Datenbestand';
+  const KEY = 'isoMetadata.UNKNOWN';
+  const LABEL = 'Technische Beschreibung';
 
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue || '');
   let showCheckmark = $state(false);
 
   const onBlur = async () => {
-    // TODO check if value has changed
-    const response = await fetch($page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value
-      })
-    });
-    if (response.ok) {
-      showCheckmark = true;
-      invalidateAll();
-    }
+    // TODO implement
   };
 
 </script>
 
-<div class="title-field">
+<div class="technical-description-field">
   <Paper>
     <TextInput
       bind:value
       key={KEY}
       label={LABEL}
-      maxlength={100}
       onblur={onBlur}
-      required
     />
   </Paper>
   <FieldTools
@@ -51,7 +33,7 @@
 </div>
 
 <style lang="scss">
-  .title-field {
+  .technical-description-field {
     position: relative;
     display: flex;
     gap: 1em;
