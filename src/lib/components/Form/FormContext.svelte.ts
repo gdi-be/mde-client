@@ -208,7 +208,22 @@ const formValidators: FormValidators = {
   },
   additional: {
     required: [],
-    optional: []
+    optional: [{
+      key: 'isoMetadata.contentDescription',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.contentDescriptionTextarea',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    },{
+      key: 'isoMetadata.technicalDescription',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.lineage',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    },{
+      key: 'isoMetadata.additionalInformation',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }]
   },
   display_services: {
     required: [],
