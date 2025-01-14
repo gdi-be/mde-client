@@ -41,6 +41,8 @@
   import ExtentField_18 from "./Field/ExtentField_18.svelte";
   import RepresentiveFractionField_27 from "./Field/RepresentiveFractionField_27.svelte";
   import ResolutionField_28 from "./Field/ResolutionField_28.svelte";
+  import ContentDescriptionTextarea_31 from "./Field/ContentDescriptionTextarea_31.svelte";
+  import ContentDescription_30 from "./Field/ContentDescription_30.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -185,6 +187,8 @@
       {/if}
       {#if activeSection === "additional"}
         <section id="additional" transition:fade >
+          <ContentDescriptionTextarea_31 />
+          <ContentDescription_30 />
         </section>
       {/if}
       {#if activeSection === "display_services"}
