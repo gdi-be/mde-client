@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
 import { getAll } from '$lib/api/metadata.js';
 import type { PageableProps } from '$lib/api/api.js';
@@ -9,7 +9,7 @@ export async function load({ cookies, url }) {
   const sort = url.searchParams.get('sort');
 
   const token = await getAccessToken(cookies);
-  if (!token) return error(401, 'Unauthorized');
+  if (!token) return redirect(302, '/login');
 
   let pagingOptions: PageableProps | undefined;
   if (page && size) {
