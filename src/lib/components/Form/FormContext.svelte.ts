@@ -85,7 +85,7 @@ export function toggleActiveHelp(key: FieldKey) {
   }
 }
 
-export type Section = 'basedata' | 'classification' | 'temp_and_spatial' | 'additional' | 'display_services' | 'download_services';
+export type Section = 'basedata' | 'classification' | 'temp_and_spatial' | 'additional' | 'services';
 
 type Progress = {
   total: number;
@@ -225,11 +225,7 @@ const formValidators: FormValidators = {
       validator: (val) => val !== undefined && val !== null && val !== ''
     }]
   },
-  display_services: {
-    required: [],
-    optional: []
-  },
-  download_services: {
+  services: {
     required: [],
     optional: []
   }
