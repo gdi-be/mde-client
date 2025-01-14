@@ -144,20 +144,67 @@ const formValidators: FormValidators = {
   },
   classification: {
     required: [{
+      // Metadaten-Typ
       key: 'isoMetadata.metadataProfile',
       validator: (val) => val !== undefined && val !== null && val !== ''
     }, {
-      key: 'isoMetadata.dataProtection',
-      validator: (val) => val?.length > 0
+      // Datenschutz
+      // TODO: check this
+      key: 'isoMetadata.resourceConstraints',
+      validator: (val) => val !== undefined && val !== null && val !== ''
     }, {
-      key: 'isoMetadata.termsOfUse',
+      // Nutzungsbedingung
+      // TODO: check this
+      key: 'isoMetadata.resourceConstraints',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.inspireTheme',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.qualityReportCheck',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'clientMetadata.highValueDataset',
+      validator: (val) => val !== undefined && val !== null
+    }, {
+      key: 'isoMetadata.topicCategory',
       validator: (val) => val !== undefined && val !== null && val !== ''
     }],
     optional: []
   },
   temp_and_spatial: {
-    required: [],
-    optional: []
+    required: [{
+      key: 'isoMetadata.published',
+      validator: (val) => val?.length > 0
+    }, {
+      key: 'isoMetadata.maintenanceFrequency',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.maintained',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.deliveredCrs',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.crs',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.extent',
+      validator: (val) => !!val.maxX && !!val.maxY && !!val.minX && !!val.minY
+    }, {
+      key: 'isoMetadata.resolution',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.representiveFraction',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }],
+    optional: [{
+      key: 'isoMetadata.dateTime',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }, {
+      key: 'isoMetadata.validityRange',
+      validator: (val) => val !== undefined && val !== null && val !== ''
+    }]
   },
   additional: {
     required: [],

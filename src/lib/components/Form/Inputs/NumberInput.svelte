@@ -1,29 +1,30 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
-  import type { FloatInputConfig, IntegerInputConfig } from "$lib/models/form";
+  import type { ComponentProps } from "svelte";
 
   type InputProps = {
-    config: IntegerInputConfig | FloatInputConfig;
     value?: number;
-  }
+    key?: string;
+    label?: string;
+    type?: 'float' | 'integer';
+  } & ComponentProps<typeof Textfield>;
+
   let {
-    config,
-    value = 0
+    value = $bindable(0),
+    key,
+    label,
+    type = 'integer',
+    ...restProps
   }: InputProps = $props();
 
-  const {
-    type,
-    key,
-    label
-  } = config;
 </script>
 
 <Textfield
+  {...restProps}
   type="number"
   {label}
   input$step={type === 'float' ? '0.1' : undefined}
   input$name={key}
-  name={key}
   bind:value
 >
 </Textfield>

@@ -1,19 +1,20 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
-  import SelectInput from "../Inputs/SelectInput.svelte";
   import { invalidateAll } from "$app/navigation";
 
-  const KEY = 'isoMetadata.inspireTheme';
-  const LABEL = 'Annex-Thema';
+  const KEY = 'isoMetadata.crs';
+  const LABEL = 'Koordinatensystem';
 
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
 
-  const onChange = async (newValue?: string) => {
+  const onBlur = async () => {
+    // TODO check if value has changed
     const response = await fetch($page.url, {
       method: 'PATCH',
       headers: {
@@ -21,7 +22,7 @@
       },
       body: JSON.stringify({
         key: KEY,
-        value: newValue
+        value
       })
     });
     if (response.ok) {
@@ -30,35 +31,18 @@
     }
   };
 
-  const fetchOptions = async () => {
-    const response = await fetch('/data/annex_themes');
-    const data = await response.json();
-
-    if (!data.register) {
-      return [];
-    };
-
-    return data.register.containeditems.map((entry) => ({
-      key: entry.theme.id.split('/').at(-1).toUpperCase(),
-      label: entry.theme.label.text
-    }));
-  };
-
 </script>
 
-<div class="annex-theme-field">
+<div class="title-field">
   <Paper>
-    {#await fetchOptions()}
-      <p>Lade Annex Themen</p>
-    {:then OPTIONS}
-      <SelectInput
-        key={KEY}
-        label={LABEL}
-        options={OPTIONS}
-        {value}
-        {onChange}
-      />
-    {/await}
+    <TextInput
+      bind:value
+      key={KEY}
+      label={LABEL}
+      maxlength={100}
+      onblur={onBlur}
+      required
+    />
   </Paper>
   <FieldTools
     key={KEY}
@@ -67,7 +51,7 @@
 </div>
 
 <style lang="scss">
-  .annex-theme-field {
+  .title-field {
     position: relative;
     display: flex;
     gap: 1em;
@@ -76,7 +60,7 @@
       flex: 1;
     }
 
-    :global(.mdc-select) {
+    :global(.mdc-text-field) {
       display: flex;
     }
   }

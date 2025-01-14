@@ -18,6 +18,9 @@
     ...restProps
   }: InputProps = $props();
 
+  // Remove duplicates
+  chips = Array.from(new Map(chips.map(item => [item.key, item])).values());
+
   let value = $state('');
 
   function handleChipInputSelect(event: CustomEvent<Option>) {

@@ -11,7 +11,7 @@ export async function PATCH({ cookies, request, params }) {
 
   const data = await request.json();
 
-  if (!data.key || !data.value) {
+  if (!data.key || data.value === undefined) {
     return error(400, 'Bad Request');
   }
 

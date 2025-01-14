@@ -3,6 +3,8 @@
   import { parse } from "marked";
   import { goto } from "$app/navigation";
   import { onMount, tick } from "svelte";
+  import { fade } from "svelte/transition";
+  import { Label } from "@smui/button";
   import {
     setFormData,
     initializeFormContext,
@@ -29,8 +31,16 @@
   import QualityReportCheckField_37 from "./Field/QualityReportCheckField_37.svelte";
   import HighValueDatasetField_06 from "./Field/HighValueDatasetField_06.svelte";
   import TopicCategory_13 from "./Field/TopicCategory_13.svelte";
-  import { fade } from "svelte/transition";
-  import { Label } from "@smui/button";
+  import DateTimeField_09 from "./Field/DateTimeField_09.svelte";
+  import PublishedField_10 from "./Field/PublishedField_10.svelte";
+  import MaintenanceFrequencyField_14 from "./Field/MaintenanceFrequencyField_14.svelte";
+  import LastUpdatedField_11 from "./Field/LastUpdatedField_11.svelte";
+  import ValidityRangeField_12 from "./Field/ValidityRangeField_12.svelte";
+  import DeliveredCoordinateSystemField_16 from "./Field/DeliveredCoordinateSystemField_16.svelte";
+  import CoordinateSystemField_17 from "./Field/CoordinateSystemField_17.svelte";
+  import ExtentField_18 from "./Field/ExtentField_18.svelte";
+  import RepresentiveFractionField_27 from "./Field/RepresentiveFractionField_27.svelte";
+  import ResolutionField_28 from "./Field/ResolutionField_28.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -112,6 +122,8 @@
     updateBorder();
   });
 
+  $inspect(metadata);
+
 </script>
 
 <div class="metadata-form">
@@ -135,63 +147,66 @@
     </div>
   </nav>
   <div class="form-wrapper">
-    <div>
-      <!-- placeholder for flex layout-->
-    </div>
-    <div>
-      <form>
-        {#if activeSection === "basedata"}
-          <section id="basedata" transition:fade >
-            <TitleField_01 />
-            <DescriptionField_02 />
-            <InternalCommentField_03 />
-            <KeywordsField_15 />
-            <PreviewField_29 />
-            <ContactsField_19 />
-          </section>
-        {/if}
-        {#if activeSection === "classification"}
-          <section id="classification" transition:fade >
-            <MetadataType_05 />
-            <DataProtectionField_04 />
-            <TermsOfUseField_24 />
-            <AnnexThemeField_07 />
-            <QualityReportCheckField_37 {metadata} />
-            <HighValueDatasetField_06 />
-            <TopicCategory_13 />
-          </section>
-        {/if}
-        {#if activeSection === "temp_and_spatial"}
-          <section id="temp_and_spatial" transition:fade >
-          </section>
-        {/if}
-        {#if activeSection === "additional"}
-          <section id="additional" transition:fade >
-          </section>
-        {/if}
-        {#if activeSection === "display_services"}
-          <section id="display_services" transition:fade >
-          </section>
-        {/if}
-        {#if activeSection === "download_services"}
-          <section id="download_services" transition:fade >
-          </section>
-        {/if}
-      </form>
-    </div>
-    <div>
+    <form>
+      {#if activeSection === "basedata"}
+        <section id="basedata" transition:fade >
+          <TitleField_01 />
+          <DescriptionField_02 />
+          <InternalCommentField_03 />
+          <KeywordsField_15 />
+          <PreviewField_29 />
+          <ContactsField_19 />
+        </section>
+      {/if}
+      {#if activeSection === "classification"}
+        <section id="classification" transition:fade >
+          <MetadataType_05 />
+          <DataProtectionField_04 />
+          <TermsOfUseField_24 />
+          <AnnexThemeField_07 />
+          <QualityReportCheckField_37 {metadata} />
+          <HighValueDatasetField_06 />
+          <TopicCategory_13 />
+        </section>
+      {/if}
+      {#if activeSection === "temp_and_spatial"}
+        <section id="temp_and_spatial" transition:fade >
+          <DateTimeField_09 />
+          <PublishedField_10 />
+          <MaintenanceFrequencyField_14 />
+          <LastUpdatedField_11 />
+          <ValidityRangeField_12 />
+          <DeliveredCoordinateSystemField_16 />
+          <CoordinateSystemField_17 />
+          <ExtentField_18 />
+          <RepresentiveFractionField_27 />
+          <ResolutionField_28 />
+        </section>
+      {/if}
+      {#if activeSection === "additional"}
+        <section id="additional" transition:fade >
+        </section>
+      {/if}
+      {#if activeSection === "display_services"}
+        <section id="display_services" transition:fade >
+        </section>
+      {/if}
+      {#if activeSection === "download_services"}
+        <section id="download_services" transition:fade >
+        </section>
+      {/if}
+    </form>
       <!-- TODO: i18n -->
-      <div class="help-section">
-        {#if helpMarkdown}
-          {#await parse(helpMarkdown)}
-            <p>Loading...</p>
-          {:then parsed}
-            {@html parsed}
-          {:catch error}
-            <p>Error: {error.message}</p>
-          {/await}
-        {/if}
-      </div>
+    <div class="help-section">
+      {#if helpMarkdown}
+        {#await parse(helpMarkdown)}
+          <p>Loading...</p>
+        {:then parsed}
+          {@html parsed}
+        {:catch error}
+          <p>Error: {error.message}</p>
+        {/await}
+      {/if}
     </div>
   </div>
 </div>
@@ -219,7 +234,12 @@
         flex: 1;
         background-color: transparent;
         border: none;
+        font-family: 'Roboto', sans-serif;
         font-size: 1.25em;
+
+        :global(.progress-chart) {
+          flex: 0 0 auto;
+        }
       }
 
       .active-border {
@@ -237,17 +257,16 @@
       display: flex;
       overflow-y: scroll;
       flex: 1;
-      margin: 2em 0;
-
-      > * {
-        flex: 1;
-      }
+      padding: 2em 0;
 
       form {
+        flex: 2;
         position: relative;
+        padding-left: 2em;
 
         section {
           position: absolute;
+          width: 100%;
           top: 0;
           display: flex;
           flex-direction: column;
@@ -256,6 +275,7 @@
       }
 
       .help-section {
+        flex: 1;
         padding: 0 3rem;
       }
     }

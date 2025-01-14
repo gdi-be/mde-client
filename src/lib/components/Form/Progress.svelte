@@ -58,8 +58,8 @@
 <style lang="scss">
   .progress-chart {
     cursor: default;
-    height: 0.75em;
-    width: 0.75em;
+    height: 1em;
+    width: 1em;
 
     svg {
       display: block;
