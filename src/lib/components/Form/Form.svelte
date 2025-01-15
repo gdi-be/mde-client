@@ -228,7 +228,7 @@
     nav.tabs {
       position: relative;
       display: flex;
-      padding-bottom: 0.25rem;
+      padding: 0 2em 0.25em 2em;
       margin-bottom: 1em;
 
       button.section-button {
