@@ -10,6 +10,23 @@ export type MetadataType = 'CLIENT' | 'ISO' | 'TECHNICAL';
 
 export type MetadataId = `${string}-${string}-${string}-${string}-${string}`;
 
+export type CI_OnLineFunctionCode = 'download' | 'information' | 'offlineAccess' | 'order' | 'search';
+
+export type PreviewMap = {
+  crs: string;
+  minx: number;
+  miny: number;
+  maxx: number;
+  maxy: number;
+  url: string;
+}
+
+export type ContentDescription = {
+  url: string;
+  description: string;
+  code: CI_OnLineFunctionCode;
+}
+
 export type Extent = {
   maxx: number;
   maxy: number;

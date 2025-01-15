@@ -1,16 +1,19 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import DateInput from "../Inputs/DateInput.svelte";
+  import { invalidateAll } from "$app/navigation";
 
-  const KEY = 'isoMetadata.UNKNOWN';
+  const FROM_KEY = 'isoMetadata.validFrom';
+  const TO_KEY = 'isoMetadata.validTo';
   const LABEL = 'Gültigkeitszeitraum';
   const START_LABEL = 'Anfangsdatum';
   const END_LABEL = 'Enddatum';
 
-  let initialStartValue = getValue<string>(KEY)?.[0];
-  let initialEndValue = getValue<string>(KEY)?.[1];
+  let initialStartValue = getValue<string>(FROM_KEY);
+  let initialEndValue = getValue<string>(TO_KEY);
   if (initialStartValue) {
     initialStartValue = new Date(initialStartValue).toISOString().split('T')[0];
   }
@@ -21,8 +24,23 @@
   let endValue = $state(initialEndValue || '');
   let showCheckmark = $state(false);
 
-  const onBlur = async () => {
-    // TODO: implement
+  const onBlur = async (key: string) => {
+    // TODO check if value has changed
+    const value = key === FROM_KEY ? startValue : endValue!;
+    const response = await fetch($page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        key,
+        value: (new Date(value)).toISOString()
+      })
+    });
+    if (response.ok) {
+      showCheckmark = true;
+      invalidateAll();
+    }
   };
 
 </script>
@@ -34,17 +52,17 @@
       <DateInput
         bind:value={startValue}
         label={START_LABEL}
-        onblur={onBlur}
+        onblur={() => onBlur(FROM_KEY)}
       />
       <DateInput
         bind:value={endValue}
         label={END_LABEL}
-        onblur={onBlur}
+        onblur={() => onBlur(TO_KEY)}
       />
     </fieldset>
   </Paper>
   <FieldTools
-    key={KEY}
+    key={FROM_KEY}
     bind:running={showCheckmark}
   />
 </div>

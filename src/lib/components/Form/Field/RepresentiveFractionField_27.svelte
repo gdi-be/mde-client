@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
+  import { invalidateAll } from "$app/navigation";
 
-  const KEY = 'isoMetadata.UNKNOWN';
+  const KEY = 'isoMetadata.scale';
   const LABEL = 'Vergleichsmaßstab'
 
   let initialValue = getValue<number>(KEY);
@@ -12,7 +14,21 @@
   let showCheckmark = $state(false);
 
   const onBlur = async () => {
-    // TODO implement
+    // TODO check if value has changed
+    const response = await fetch($page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        key: KEY,
+        value
+      })
+    });
+    if (response.ok) {
+      showCheckmark = true;
+      invalidateAll();
+    }
   };
 
 </script>

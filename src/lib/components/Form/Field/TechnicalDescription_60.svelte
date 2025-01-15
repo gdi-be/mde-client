@@ -1,18 +1,35 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
+  import { invalidateAll } from "$app/navigation";
 
-  const KEY = 'isoMetadata.UNKNOWN';
+  const KEY = 'technicalMetadata.descriptions';
   const LABEL = 'Technische Beschreibung';
 
-  let initialValue = getValue<string>(KEY);
+  // TODO: check why this is a List on the server
+  let initialValue = getValue<string[]>(KEY)?.[0];
   let value = $state(initialValue || '');
   let showCheckmark = $state(false);
 
   const onBlur = async () => {
     // TODO implement
+    const response = await fetch($page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        key: KEY,
+        value: [value]
+      })
+    });
+    if (response.ok) {
+      showCheckmark = true;
+      invalidateAll();
+    }
   };
 
 </script>
@@ -21,7 +38,6 @@
   <Paper>
     <TextInput
       bind:value
-      key={KEY}
       label={LABEL}
       onblur={onBlur}
     />

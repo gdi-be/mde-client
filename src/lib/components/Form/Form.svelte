@@ -31,7 +31,7 @@
   import QualityReportCheckField_37 from "./Field/QualityReportCheckField_37.svelte";
   import HighValueDatasetField_06 from "./Field/HighValueDatasetField_06.svelte";
   import TopicCategory_13 from "./Field/TopicCategory_13.svelte";
-  import DateTimeField_09 from "./Field/DateTimeField_09.svelte";
+  import CreatedField_09 from "./Field/CreatedField_09.svelte";
   import PublishedField_10 from "./Field/PublishedField_10.svelte";
   import MaintenanceFrequencyField_14 from "./Field/MaintenanceFrequencyField_14.svelte";
   import LastUpdatedField_11 from "./Field/LastUpdatedField_11.svelte";
@@ -176,7 +176,7 @@
       {/if}
       {#if activeSection === "temp_and_spatial"}
         <section id="temp_and_spatial" transition:fade >
-          <DateTimeField_09 />
+          <CreatedField_09 />
           <PublishedField_10 />
           <MaintenanceFrequencyField_14 />
           <LastUpdatedField_11 />

@@ -1,20 +1,24 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import IconButton from "@smui/icon-button";
   import { getValue } from "../FormContext.svelte";
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { fly, scale } from "svelte/transition";
   import { backIn } from "svelte/easing";
+  import type { ContentDescription } from "../../../models/metadata";
+  import { invalidateAll } from "$app/navigation";
 
-  const KEY = 'isoMetadata.UNKNOWN';
+  const KEY = 'isoMetadata.contentDescriptions';
   const LABEL = 'Inhaltliche Beschreibung';
 
-  let initialDescriptions = getValue<string[]>(KEY);
-  let initialValue = initialDescriptions?.map(value => {
+  let initialDescriptions = getValue<ContentDescription[]>(KEY);
+  let initialValue = initialDescriptions?.map(description => {
     const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
     return {
       listId,
-      value
+      url: description.url || '',
+      description: description.description || ''
     };
   });
 
@@ -22,7 +26,25 @@
   let showCheckmark = $state(false);
 
   const persist = async () => {
-    // TODO implement
+    // TODO check if value has changed
+    const response = await fetch($page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        key: KEY,
+        value: values.map(contentDescription => ({
+          description: contentDescription.description,
+          url: contentDescription.url,
+          code: 'information'
+        } satisfies ContentDescription))
+      })
+    });
+    if (response.ok) {
+      showCheckmark = true;
+      invalidateAll();
+    }
   };
 
   const addItem = () => {
@@ -30,7 +52,8 @@
     values = [
       {
         listId,
-        value: ''
+        url: '',
+        description: ''
       },
       ...values
     ];
@@ -38,7 +61,7 @@
 
   const removeItem = (listId: string) => {
     // TODO: add popconfirm
-    values = values.filter(contact => contact.listId !== listId);
+    values = values.filter(contentDescription => contentDescription.listId !== listId);
     persist();
   };
 
@@ -56,12 +79,12 @@
         add
       </IconButton>
     </legend>
-    {#each values as contact (contact.listId)}
-      <fieldset class="contact" in:fly={{ y: -100 }} out:scale={{ easing: backIn }}>
+    {#each values as contentDescription (contentDescription.listId)}
+      <fieldset class="contentDescription" in:fly={{ y: -100 }} out:scale={{ easing: backIn }}>
         <legend>
           <IconButton
           class="material-icons"
-          onclick={() => removeItem(contact.listId)}
+          onclick={() => removeItem(contentDescription.listId)}
           size="button"
           title="Quelle entfernen"
         >
@@ -69,9 +92,15 @@
         </IconButton>
         </legend>
         <TextInput
-          bind:value={contact.value}
+          bind:value={contentDescription.url}
           key={KEY}
           label="URL (Dokument oder Website)"
+          onblur={persist}
+        />
+        <TextInput
+          bind:value={contentDescription.description}
+          key={KEY}
+          label="Beschreibung der Quelle"
           onblur={persist}
         />
       </fieldset>
@@ -102,7 +131,7 @@
       }
     }
 
-    .contact {
+    .contentDescription {
       legend {
         text-align: right;
       }

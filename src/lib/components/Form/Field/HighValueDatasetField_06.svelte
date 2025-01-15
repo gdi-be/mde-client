@@ -1,14 +1,17 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import Switch from "@smui/switch";
   import FormField from "@smui/form-field";
   import SelectInput from "../Inputs/SelectInput.svelte";
+  import { invalidateAll } from "$app/navigation";
 
   const CHECKED_KEY = 'clientMetadata.highValueDataset';
-  const KEY = 'isoMetadata.UNKNOWN';
-  const LABEL = 'High Value Dataset';
+  const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
+  const CHECK_LABEL = 'High Value Data Set';
+  const LABEL = 'High Value Data Kategorie';
   const OPTIONS = [{
     key: 'geospatial',
     label: 'Geodaten (Geospatial)'
@@ -31,19 +34,43 @@
 
   let initialCheckedValue = getValue<boolean>(CHECKED_KEY) || false;
   let checkedValue = $state(initialCheckedValue);
-  let initialSelectionValue = getValue<string>(KEY);
+  let initialSelectionValue = getValue<string>(CATEGORY_KEY);
   let selectionValue = $state(initialSelectionValue);
 
   let showCheckmark = $state(false);
 
-  const onCheckChange = async (newCheckedValue: boolean) => {
-    // TODO: Implement
-    console.log(newCheckedValue);
+  const onCheckChange = async (event: CustomEvent<{ selected: boolean}>) => {
+    const response = await fetch($page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        key: CHECKED_KEY,
+        value: event.detail.selected
+      })
+    });
+    if (response.ok) {
+      showCheckmark = true;
+      invalidateAll();
+    }
   };
 
   const onSelectionChange = async (newSelection?: string) => {
-    // TODO: Implement
-    console.log(newSelection);
+    const response = await fetch($page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        key: CATEGORY_KEY,
+        value: newSelection
+      })
+    });
+    if (response.ok) {
+      showCheckmark = true;
+      invalidateAll();
+    }
   };
 
 </script>
@@ -52,16 +79,16 @@
   <Paper>
     <FormField align="end">
       {#snippet label()}
-        {LABEL}
+        {CHECK_LABEL}
       {/snippet}
       <Switch
         bind:checked={checkedValue}
-        onSMUISwitchChange={() => onCheckChange(!checkedValue)}
+        onSMUISwitchChange={onCheckChange}
       />
     </FormField>
     {#if checkedValue}
       <SelectInput
-        key={KEY}
+        key={CATEGORY_KEY}
         label={LABEL}
         options={OPTIONS}
         value={selectionValue}
@@ -70,7 +97,7 @@
     {/if}
   </Paper>
   <FieldTools
-    key={KEY}
+    key={CATEGORY_KEY}
     bind:running={showCheckmark}
   />
 </div>
