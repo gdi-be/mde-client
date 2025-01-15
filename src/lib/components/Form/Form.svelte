@@ -229,6 +229,7 @@
       position: relative;
       display: flex;
       padding-bottom: 0.25rem;
+      margin-bottom: 1em;
 
       button.section-button {
         display: flex;
@@ -262,7 +263,7 @@
       display: flex;
       overflow-y: scroll;
       flex: 1;
-      padding: 2em 0;
+      position: relative;
 
       form {
         flex: 2;
@@ -275,6 +276,7 @@
           top: 0;
           display: flex;
           flex-direction: column;
+          padding: 1em 0 2em 0;
           gap: 1em;
         }
       }
