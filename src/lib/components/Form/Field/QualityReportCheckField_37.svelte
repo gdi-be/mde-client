@@ -1,32 +1,40 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
-  import CheckboxInput from "../Inputs/CheckboxInput.svelte";
+  import { invalidateAll } from "$app/navigation";
+  import FormField from "@smui/form-field";
+  import Switch from "@smui/switch";
 
   const {
     metadata
   } = $props();
 
-  const KEY = 'isoMetadata.UNKNOWN';
-  const LABEL = 'Qualitätsbericht: Überprüfung';
-  const OPTIONS: {
-    key: string;
-    label: string;
-  }[] = [{
-    key: 'true',
-    label: 'Geprüft'
-  }];
+  const KEY = 'isoMetadata.valid';
+  const LABEL = 'Überprüft durch INSPIRE Qualitätssicherung';
 
   const metadataProfile = $derived(getValue<string>('isoMetadata.metadataProfile', metadata));
 
-  let initialValue = getValue<string[]>(KEY);
+  let initialValue = getValue<boolean>(KEY);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
 
-  const onChange = async (data?: string[]) => {
-    // TODO: Implement
-    console.log(data);
+  const onCheckChange = async (event: CustomEvent<{ selected: boolean}>) => {
+    const response = await fetch($page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        key: KEY,
+        value: event.detail.selected
+      })
+    });
+    if (response.ok) {
+      showCheckmark = true;
+      invalidateAll();
+    }
   };
 
 </script>
@@ -34,13 +42,15 @@
 {#if metadataProfile === 'INSPIRE_HARMONISED'}
   <div class="quality-report-check-field">
     <Paper>
-      <CheckboxInput
-        key={KEY}
-        label={LABEL}
-        options={OPTIONS}
-        {value}
-        {onChange}
-      />
+      <FormField align="end">
+        {#snippet label()}
+          {LABEL}
+        {/snippet}
+        <Switch
+          bind:checked={value}
+          onSMUISwitchChange={onCheckChange}
+        />
+      </FormField>
     </Paper>
     <FieldTools
       key={KEY}
