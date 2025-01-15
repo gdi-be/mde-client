@@ -8,10 +8,10 @@
 <div class="welcome">
   {#if !token}
     <h2>
-      Hallo Schönheit!
+      Metadateneditor der GDI-Berlin
     </h2>
     <p>
-      Melde dich an für Spaß mit Metadaten!
+      Anmelden, um Metadaten zu bearbeiten.
     </p>
     <LoginButton />
   {:else}
@@ -20,10 +20,7 @@
       {m.welcome()}
     </p>
     <p>
-      <a href="/metadata">Hier geht's zum Spaß!</a>
-    </p>
-    <p>
-      Ausloggen kannst du dich oben rechts.
+      <a href="/metadata">Zur Metadaten Übersicht</a>
     </p>
   {/if}
 </div>
