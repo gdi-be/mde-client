@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  // import { page } from "$app/stores";
   import type { Lineage } from "$lib/models/metadata";
   import IconButton from "@smui/icon-button";
   import { getValue } from "../FormContext.svelte";
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
-  import { invalidateAll } from "$app/navigation";
+  // import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
   import { backIn } from "svelte/easing";
   import DateInput from "../Inputs/DateInput.svelte";

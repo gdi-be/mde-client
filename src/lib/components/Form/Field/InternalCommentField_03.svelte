@@ -6,7 +6,7 @@
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
 
-  const KEY = 'isoMetadata.internal_comment';
+  const KEY = 'technicalMetadata.UNKNOWN';
   const LABEL = 'Kommentar zur Aktualisierung';
 
   let initialValue = getValue<string>(KEY) || '';

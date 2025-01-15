@@ -6,7 +6,7 @@
   import { invalidateAll } from "$app/navigation";
   import DateInput from "../Inputs/DateInput.svelte";
 
-  const KEY = 'isoMetadata.dateTime';
+  const KEY = 'isoMetadata.created';
   const LABEL = 'Erstellungsdatum';
 
   let initialValue = getValue<string>(KEY);

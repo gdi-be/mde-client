@@ -4,7 +4,7 @@
   import type { ComponentProps } from "svelte";
 
   type InputProps = {
-    key: string;
+    key?: string;
     label: string;
     maxlength?: number;
     value?: string;

@@ -8,7 +8,7 @@
   import Dialog, { Actions, Content, Title } from "@smui/dialog";
   import Textfield from "@smui/textfield";
 
-  const KEY = 'isoMetadata.termsOfUse';
+  const KEY = 'isoMetadata.resourceConstraints';
   const LABEL = 'Nutzungsbedingungen*';
 
   // TODO: Options are extendable and so need to be fetched from the server/db

@@ -6,12 +6,11 @@
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
 
-  // TODO: fix key
-  const KEY = 'isoMetadata.crs';
+  const KEY = 'technicalMetadata.deliveredCrs';
   const LABEL = 'Geliefertes Koordinatensystem';
 
   let initialValue = getValue<string>(KEY);
-  let value = $state(initialValue);
+  let value = $state(initialValue || '');
   let showCheckmark = $state(false);
 
   const onBlur = async () => {
@@ -43,7 +42,6 @@
       maxlength={100}
       onblur={onBlur}
       required
-      disabled
     />
   </Paper>
   <FieldTools
