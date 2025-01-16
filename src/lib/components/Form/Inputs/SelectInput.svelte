@@ -5,7 +5,7 @@
   let element = $state();
 
   type InputProps = {
-    onChange?: (value: string | undefined) => void;
+    onChange?: (value: string) => void;
     value?: string;
     key: string;
     label: string;

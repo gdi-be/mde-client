@@ -46,6 +46,7 @@
   import TechnicalDescription_60 from "./Field/TechnicalDescription_60.svelte";
   import Lineage_32 from "./Field/Lineage_32.svelte";
   import AdditionalInformation_39 from "./Field/AdditionalInformation_39.svelte";
+  import ServicesSection from "./service/ServicesSection.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -72,11 +73,8 @@
     section: 'additional',
     label: 'Weitere Angaben'
   }, {
-    section: 'display_services',
-    label: 'Darstellungsdienste'
-  }, {
-    section: 'download_services',
-    label: 'Downloaddienste'
+    section: 'services',
+    label: 'Dienste'
   }];
 
   initializeFormContext();
@@ -197,12 +195,9 @@
           <AdditionalInformation_39 />
         </section>
       {/if}
-      {#if activeSection === "display_services"}
-        <section id="display_services" transition:fade >
-        </section>
-      {/if}
-      {#if activeSection === "download_services"}
-        <section id="download_services" transition:fade >
+      {#if activeSection === "services"}
+        <section id="services" transition:fade >
+          <ServicesSection />
         </section>
       {/if}
     </form>
@@ -233,7 +228,8 @@
     nav.tabs {
       position: relative;
       display: flex;
-      padding-bottom: 0.25rem;
+      padding: 0 2em 0.25em 2em;
+      margin-bottom: 1em;
 
       button.section-button {
         display: flex;
@@ -267,7 +263,7 @@
       display: flex;
       overflow-y: scroll;
       flex: 1;
-      padding: 2em 0;
+      position: relative;
 
       form {
         flex: 2;
@@ -280,6 +276,7 @@
           top: 0;
           display: flex;
           flex-direction: column;
+          padding: 1em 0 2em 0;
           gap: 1em;
         }
       }
