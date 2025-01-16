@@ -6,6 +6,7 @@
   import ServiceForm from "./ServiceForm.svelte";
   import { invalidateAll } from "$app/navigation";
   import Checkmark from "../Checkmark.svelte";
+  import Scrollable from "../../Scrollable.svelte";
 
   type Tab = {
     title: string;
@@ -48,9 +49,12 @@
   }
 
   function addService() {
-    const serviceIdentification = `new_service_${services.length + 1}`;
+    // first for characters
+    const randomId = Date.now().toString(36);
+    const serviceIdentification = `new_service_${randomId}`;
     services = [...services, {
-      serviceIdentification: serviceIdentification
+      serviceIdentification: serviceIdentification,
+      title: 'Neuer Dienst' + services.length,
     }];
     activeTab = serviceIdentification;
   }
@@ -72,37 +76,54 @@
     persistServices(id);
   }
 
+  $effect(() => {
+    const el = document.getElementById(activeTab);
+    if (el) {
+      el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  });
+
 </script>
 
 <nav class="tabs">
-  {#each tabs as tab}
-    <div
-      class="tab-container"
-      class:active={activeTab === tab.id}
-    >
-      <button
-        class="tab"
-        onclick={() => (activeTab = tab.id)}
-      >
-        {tab.title}
-      </button>
-      {#if visibleCheckmarks[tab.id]}
-        <Checkmark
-          bind:running={visibleCheckmarks[tab.id]}
-        />
-      {/if}
-      {#if services.length > 1 && !visibleCheckmarks[tab.id]}
-        <IconButton
-          class="material-icons"
-          onclick={() => removeService(tab.id)}
-          size="button"
-          title="Dienst entfernen"
+  <Scrollable >
+    <div class="scrollable-content">
+      {#each tabs as tab}
+        <div
+          class="tab-container"
+          class:active={activeTab === tab.id}
         >
-          delete
-        </IconButton>
-      {/if}
+          <button
+            id={tab.id}
+            class="tab"
+            title={tab.title}
+            onclick={() => (activeTab = tab.id)}
+          >
+            {tab.title}
+          </button>
+          {#if visibleCheckmarks[tab.id]}
+            <Checkmark
+              bind:running={visibleCheckmarks[tab.id]}
+            />
+          {/if}
+          {#if services.length > 1 && !visibleCheckmarks[tab.id]}
+            <IconButton
+              class="material-icons"
+              onclick={() => removeService(tab.id)}
+              size="button"
+              title="Dienst entfernen"
+            >
+              delete
+            </IconButton>
+          {/if}
+        </div>
+      {/each}
     </div>
-  {/each}
+  </Scrollable>
   <IconButton
     class="material-icons"
     onclick={() => addService()}
@@ -126,11 +147,15 @@
 </div>
 
 <style lang="scss">
-  .tabs {
+  nav.tabs {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
+    gap: 1em;
+
+    .scrollable-content {
+      display: flex;
+      gap: 0.5rem;
+    }
   }
 
   .tab-container {
@@ -164,5 +189,9 @@
     font-size: 1rem;
     border-radius: 5px;
     transition: background-color 0.3s;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    overflow: hidden;
   }
 </style>
