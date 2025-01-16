@@ -35,6 +35,7 @@
 
 <div class="service-form">
   <Paper>
+    <!-- serviceType [57] -->
     <SelectInput
       label="Typ"
       key="type"
@@ -56,6 +57,7 @@
     />
   </Paper>
   <Paper>
+    <!-- title [58] -->
     <TextInput
       label="Titel"
       key="title"
@@ -64,6 +66,7 @@
       onchange={(e: Event) => setByEvent("title", e)}
     />
   </Paper>
+  <!-- shortDescription [59] -->
   <TextAreaInput
     label="Kurzbeschreibung"
     key="shortDescription"
@@ -72,6 +75,7 @@
     onchange={(e: Event) => setByEvent("shortDescription", e)}
   />
   {#if isDisplayService}
+    <!-- legendImage [53] -->
     <fieldset class="legend-fieldset">
       <legend>Gesamtlegende</legend>
       <div class="legend-text-fields">
