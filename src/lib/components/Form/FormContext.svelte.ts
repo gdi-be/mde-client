@@ -190,7 +190,7 @@ const formValidators: FormValidators = {
       validator: (val) => val !== undefined && val !== null && val !== ''
     }, {
       key: 'isoMetadata.extent',
-      validator: (val) => !!val.maxX && !!val.maxY && !!val.minX && !!val.minY
+      validator: (val) => val && !!val.maxX && !!val.maxY && !!val.minX && !!val.minY
     }, {
       key: 'isoMetadata.resolution',
       validator: (val) => val !== undefined && val !== null && val !== ''
