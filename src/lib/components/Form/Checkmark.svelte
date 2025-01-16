@@ -33,7 +33,7 @@
   <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
 </svg>
 
-<style lang="less">
+<style lang="scss">
   .checkmark {
     --check-color: white;
     --background: var(--mdc-theme-primary, green);
