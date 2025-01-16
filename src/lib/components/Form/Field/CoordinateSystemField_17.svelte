@@ -10,7 +10,7 @@
   const LABEL = 'Koordinatensystem';
 
   let initialValue = getValue<string>(KEY);
-  let value = $state(initialValue);
+  let value = $state(initialValue || '');
   let showCheckmark = $state(false);
 
   const onBlur = async () => {

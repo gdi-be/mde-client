@@ -97,11 +97,11 @@ type FormValidators = {
   [key in Section]: {
     required: {
       key: FieldKey;
-      validator: (val: any) => boolean;
+      validator: (val?: any) => boolean;
     }[];
     optional: {
       key: FieldKey;
-      validator: (val: any) => boolean;
+      validator: (val?: any) => boolean;
     }[];
   };
 };
@@ -190,7 +190,7 @@ const formValidators: FormValidators = {
       validator: (val) => val !== undefined && val !== null && val !== ''
     }, {
       key: 'isoMetadata.extent',
-      validator: (val) => !!val.maxX && !!val.maxY && !!val.minX && !!val.minY
+      validator: (val) => !!val?.maxx && !!val?.maxy && !!val?.minx && !!val?.miny
     }, {
       key: 'isoMetadata.resolution',
       validator: (val) => val !== undefined && val !== null && val !== ''

@@ -107,7 +107,7 @@
     class="material-icons"
     onclick={() => addService()}
     size="button"
-    title="Kontakt hinzufügen"
+    title="Dienst hinzufügen"
   >
     add
   </IconButton>
