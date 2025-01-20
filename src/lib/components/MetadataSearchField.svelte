@@ -3,6 +3,8 @@
   import { Text } from "@smui/list";
   import type { IsoMetadata } from "$lib/models/metadata";
   import { type Option } from "$lib/models/form";
+  import Icon from "@smui/textfield/icon";
+  import Textfield from "@smui/textfield";
 
   export type MetadataSearchFieldProps = {
     value: Option | undefined;
@@ -76,6 +78,12 @@
       {/each}
     </Text>
   {/snippet}
+
+  <Textfield {label} bind:value={text}>
+    {#snippet trailingIcon()}
+      <Icon class="material-icons">search</Icon>
+    {/snippet}
+  </Textfield>
 
 </Autocomplete>
 
