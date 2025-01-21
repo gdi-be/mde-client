@@ -1,5 +1,4 @@
 <script>
-  import * as m from '$lib/paraglide/messages';
   import LoginButton from './LoginButton.svelte';
 
   const { token } = $props();
@@ -15,9 +14,9 @@
     </p>
     <LoginButton />
   {:else}
-    <h1>{m.title({ name: token?.given_name || token?.preferred_username})}</h1>
+    <h1>{`Hallo ${token?.given_name || token?.preferred_username}`}</h1>
     <p>
-      {m.welcome()}
+      Willkommen beim Metadateneditor
     </p>
     <p>
       <a href="/metadata">Zur Metadaten Übersicht</a>

@@ -34,17 +34,6 @@ If typing gets messed up in your IDE you can regenerate them with:
 bun run check
 ```
 
-### paraglide i18n
-
-:warning: currently the vite plugin for paraglide is not compatible with the podman setup! You
-may need to restart the server to use translations as expected.
-
-Translations can be added to the `messages/de.json`.
-To use translations just `import * as m from '$lib/paraglide/messages'` and
-use it via function call. e.g: `m.title()`
-
-Settings for paraglide can be adjusted in the `project.inlang/settings.json`.
-
 ## Testing
 
 To run the test execute.

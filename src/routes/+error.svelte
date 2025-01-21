@@ -1,9 +1,8 @@
-<script>
-  import * as m from '$lib/paraglide/messages';
+<script lang="ts">
 </script>
 
 <div>
-  <p>{ m.pageNotFound() }</p>
+  <p>Seite nicht gefunden</p>
 </div>
 
 <style lang="scss">

@@ -1,9 +1,13 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import * as m from '$lib/paraglide/messages';
 
   type TranslatedParts = {
     metadata: string;
+  };
+
+  const m = {
+    metadata: 'Metadaten',
+    create: 'Neuerfassung'
   };
 
   const breadcrumbs = $derived.by(() => {
@@ -16,7 +20,7 @@
     });
   });
 
-  const getUrlPartName = (part: keyof TranslatedParts) => m[part] ? m[part]() : part;
+  const getUrlPartName = (part: keyof TranslatedParts) => m[part] ? m[part] : part;
 </script>
 
 <nav>
