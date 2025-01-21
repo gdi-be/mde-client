@@ -1,7 +1,8 @@
 <script>
+  import { getContext } from 'svelte';
   import LoginButton from './LoginButton.svelte';
 
-  const { token } = $props();
+  const token = getContext('user_token');
 </script>
 
 <div class="welcome">

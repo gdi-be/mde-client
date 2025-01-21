@@ -1,8 +1,9 @@
 <script lang="ts">
   import Header from '$lib/components/Header.svelte';
-  // import Footer from '$lib/components/Footer.svelte';
+  import { setContext } from 'svelte';
   let { children, data } = $props();
 
+  setContext('user_token', data.token);
 </script>
 
 <svelte:head>
@@ -10,7 +11,7 @@
 </svelte:head>
 
 <div class="container">
-  <Header token={data.token}/>
+  <Header />
   <main>
     {#if children}
       {@render children()}

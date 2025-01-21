@@ -20,7 +20,6 @@
 
   import TitleField_01 from "./Field/TitleField_01.svelte";
   import DescriptionField_02 from "./Field/DescriptionField_02.svelte";
-  import InternalCommentField_03 from "./Field/InternalCommentField_03.svelte";
   import KeywordsField_15 from "./Field/KeywordsField_15.svelte";
   import PreviewField_29 from "./Field/PreviewField_29.svelte";
   import ContactsField_19 from "./Field/ContactsField_19.svelte";
@@ -47,6 +46,7 @@
   import Lineage_32 from "./Field/Lineage_32.svelte";
   import AdditionalInformation_39 from "./Field/AdditionalInformation_39.svelte";
   import ServicesSection from "./service/ServicesSection.svelte";
+  import FormFooter from "./FormFooter.svelte";
 
   type FormProps = {
     metadata?: Record<string, unknown>;
@@ -125,8 +125,6 @@
     updateBorder();
   });
 
-  $inspect(metadata);
-
 </script>
 
 <div class="metadata-form">
@@ -155,7 +153,6 @@
         <section id="basedata" transition:fade >
           <TitleField_01 />
           <DescriptionField_02 />
-          <InternalCommentField_03 />
           <KeywordsField_15 />
           <PreviewField_29 />
           <ContactsField_19 />
@@ -201,7 +198,6 @@
         </section>
       {/if}
     </form>
-      <!-- TODO: i18n -->
     <div class="help-section">
       {#if helpMarkdown}
         {#await parse(helpMarkdown)}
@@ -214,6 +210,7 @@
       {/if}
     </div>
   </div>
+  <FormFooter {metadata} />
 </div>
 
 <style lang="scss">
