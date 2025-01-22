@@ -9,7 +9,7 @@
   import { fly, scale } from "svelte/transition";
   import { backIn } from "svelte/easing";
 
-  const KEY = 'isoMetadata.contacts';
+  const KEY = 'isoMetadata.pointsOfContact';
   const LABEL = 'Kontaktangaben';
 
   let initialContacts = getValue<Contacts>(KEY);
