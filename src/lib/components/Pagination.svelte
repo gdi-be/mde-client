@@ -25,6 +25,9 @@
     if (!currentUrl.searchParams.get("size")) {
       newUrl.searchParams.set("size", "10");
     }
+    if (!currentUrl.searchParams.get("sort")) {
+      newUrl.searchParams.set("sort", "title,asc");
+    }
     goto(newUrl);
   };
 

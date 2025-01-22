@@ -47,9 +47,10 @@
   import AdditionalInformation_39 from "./Field/AdditionalInformation_39.svelte";
   import ServicesSection from "./service/ServicesSection.svelte";
   import FormFooter from "./FormFooter.svelte";
+  import type { MetadataJson } from "$lib/models/metadata";
 
   type FormProps = {
-    metadata?: Record<string, unknown>;
+    metadata?: MetadataJson;
     activeSection?: string;
     help: FormHelp;
   }
@@ -60,21 +61,32 @@
     help
   }: FormProps = $props();
 
-  const SECTIONS: { section: Section, label: string }[] = [{
+  type SectionConfig = {
+    section: Section,
+    label: string,
+    disabledCheck: (metadata?: MetadataJson) => boolean
+  };
+
+  const SECTIONS: SectionConfig[] = [{
     section: 'basedata',
-    label: 'Basisangaben'
+    label: '1. Basisangaben',
+    disabledCheck: () => false
   }, {
     section: 'classification',
-    label: 'Einordnung'
+    label: '2. Einordnung',
+    disabledCheck: () => false
   }, {
     section: 'temp_and_spatial',
-    label: 'Zeitliche und Räumliche Angaben'
+    label: '3. Zeitliche und Räumliche Angaben',
+    disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
   }, {
     section: 'additional',
-    label: 'Weitere Angaben'
+    label: '4. Weitere Angaben',
+    disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
   }, {
     section: 'services',
-    label: 'Dienste'
+    label: '5. Dienste',
+    disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
   }];
 
   initializeFormContext();
@@ -129,11 +141,12 @@
 
 <div class="metadata-form">
   <nav class="tabs" bind:this={tabs}>
-    {#each SECTIONS as { section, label }}
+    {#each SECTIONS as { section, label, disabledCheck }}
       <button
         class="section-button"
         class:active={activeSection === section}
         onclick={() => onSectionClick(section)}
+        disabled={disabledCheck(metadata)}
       >
         <Label>{label}</Label>
         <Progress {...(getProgress(section, metadata))} />

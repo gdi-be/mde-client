@@ -52,6 +52,7 @@
   search={searchItems}
   bind:value
   bind:text
+  selectOnExactMatch={false}
   getOptionLabel={(option: Option) => {
     if (!option) return '';
     return option.label as string || '';

@@ -5,7 +5,11 @@ import type { PageableProps, PageableResponse } from "./api";
 
 const defaultPage: PageableProps = {
   page: 0,
-  size: 10
+  size: 10,
+  sort: [{
+    field: 'title',
+    direction: 'asc'
+  }]
 };
 
 /**
@@ -75,7 +79,7 @@ export const getMetadataCollectionByMetadataId = async (metadataId: string, toke
   return await response.json();
 }
 
-export const searchForMetadata = async (token: string, searchTerm: string, pagingOpts = defaultPage): Promise<SearchResponse<IsoMetadata>> => {
+export const searchForMetadata = async (token: string, searchTerm: string, pagingOpts = defaultPage): Promise<IsoMetadata[]> => {
   if (!token) {
     log.error("No token provided.");
     return Promise.reject(new Error("No token provided."));
@@ -165,7 +169,6 @@ export type CreateProps = {
 export const createMetadataCollection = async ({
   token,
   title,
-  metadataProfile,
   cloneMetadataId
 }: CreateProps): Promise<MetadataCollection> => {
   if (!token) {
@@ -182,7 +185,6 @@ export const createMetadataCollection = async ({
     method: 'POST',
     headers,
     body: JSON.stringify({
-      metadataProfile,
       title,
       cloneMetadataId
     })
