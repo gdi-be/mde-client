@@ -1,29 +1,25 @@
 <script lang="ts">
-  import { i18n } from '$lib/i18n';
-  import { ParaglideJS } from '@inlang/paraglide-sveltekit';
   import Header from '$lib/components/Header.svelte';
-  import Footer from '$lib/components/Footer.svelte';
+  import { setContext } from 'svelte';
   let { children, data } = $props();
 
+  setContext('user_token', data.token);
 </script>
 
 <svelte:head>
   <title>GDI Berlin - Metadateneditor</title>
 </svelte:head>
 
-<ParaglideJS {i18n}>
-  <div class="container">
-    <Header token={data.token}/>
-    <main>
-      {#if children}
-        {@render children()}
-      {:else}
-        <p>fallback content</p>
-      {/if}
-    </main>
-    <Footer />
-  </div>
-</ParaglideJS>
+<div class="container">
+  <Header />
+  <main>
+    {#if children}
+      {@render children()}
+    {:else}
+      <p>fallback content</p>
+    {/if}
+  </main>
+</div>
 
 <style lang="scss">
   :global(html, body) {

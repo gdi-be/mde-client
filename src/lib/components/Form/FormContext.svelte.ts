@@ -249,3 +249,11 @@ export function getProgress(section: Section, metadata?: Record<string, unknown>
     optional
   }
 }
+
+export function allFieldsValid(metadata?: Record<string, unknown>): boolean {
+  if (!metadata) return false;
+  const sections = Object.keys(formValidators) as Section[];
+  return sections.every((section: Section) => {
+    return getProgress(section, metadata).required === 0;
+  });
+}

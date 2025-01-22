@@ -3,7 +3,7 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
-  let { children, data } = $props();
+  let { children } = $props();
 
   $effect(() => {
     const reload = $page.url.searchParams.get('reload');
@@ -21,5 +21,5 @@
 {#if children}
   {@render children()}
 {:else}
-  <Welcome token={data.token}/>
+  <Welcome/>
 {/if}

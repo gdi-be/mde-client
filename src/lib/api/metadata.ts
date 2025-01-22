@@ -5,7 +5,11 @@ import type { PageableProps, PageableResponse } from "./api";
 
 const defaultPage: PageableProps = {
   page: 0,
-  size: 10
+  size: 10,
+  sort: [{
+    field: 'title',
+    direction: 'asc'
+  }]
 };
 
 /**
@@ -75,7 +79,7 @@ export const getMetadataCollectionByMetadataId = async (metadataId: string, toke
   return await response.json();
 }
 
-export const searchForMetadata = async (token: string, searchTerm: string, pagingOpts = defaultPage): Promise<SearchResponse<IsoMetadata>> => {
+export const searchForMetadata = async (token: string, searchTerm: string, pagingOpts = defaultPage): Promise<IsoMetadata[]> => {
   if (!token) {
     log.error("No token provided.");
     return Promise.reject(new Error("No token provided."));
@@ -165,7 +169,6 @@ export type CreateProps = {
 export const createMetadataCollection = async ({
   token,
   title,
-  metadataProfile,
   cloneMetadataId
 }: CreateProps): Promise<MetadataCollection> => {
   if (!token) {
@@ -182,10 +185,87 @@ export const createMetadataCollection = async ({
     method: 'POST',
     headers,
     body: JSON.stringify({
-      metadataProfile,
       title,
       cloneMetadataId
     })
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+export type AddCommentProps = {
+  token: string;
+  metadataid: string;
+  text: string;
+}
+
+export const addComment = async ({
+  token,
+  metadataid,
+  text
+}: AddCommentProps): Promise<MetadataCollection> => {
+  if (!token) {
+    log.error("No token provided.");
+    return Promise.reject(new Error("No token provided."));
+  }
+
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  const response = await fetch(`${env.BACKEND_URL}/metadata/client/comment/${metadataid}`, {
+    method: 'POST',
+    headers,
+    body: text
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+export type DeleteCommentProps = {
+  token: string;
+  metadataid: string;
+  commentId: string;
+}
+
+export const deleteComment = async ({
+  token,
+  metadataid,
+  commentId
+}: DeleteCommentProps): Promise<void> => {
+  if (!token) {
+    log.error("No token provided.");
+    return Promise.reject(new Error("No token provided."));
+  }
+
+  if (!metadataid) {
+    log.error("No metadataid provided.");
+    return Promise.reject(new Error("No metadataid provided."));
+  }
+
+  if (!commentId) {
+    log.error("No commentId provided.");
+    return Promise.reject(new Error("No commentId provided."));
+  }
+
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  console.log(`${env.BACKEND_URL}/metadata/client/comment/${metadataid}`, commentId);
+
+  const response = await fetch(`${env.BACKEND_URL}/metadata/client/comment/${metadataid}`, {
+    method: 'DELETE',
+    headers,
+    body: commentId
   });
 
   if (!response.ok) {

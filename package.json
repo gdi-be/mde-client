@@ -13,12 +13,10 @@
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
     "test": "bun test",
-    "prepare": "npm run smui-theme-light && npm run smui-theme-dark",
-    "smui-theme-light": "smui-theme compile static/smui.css -i src/theme",
-    "smui-theme-dark": "smui-theme compile static/smui-dark.css -i src/theme/dark"
+    "prepare": "npm run smui-theme-light",
+    "smui-theme-light": "smui-theme compile static/smui.css -i src/theme"
   },
   "devDependencies": {
-    "@inlang/paraglide-sveltekit": "^0.12.1",
     "@sveltejs/adapter-auto": "^3.3.1",
     "@sveltejs/kit": "^2.9.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
@@ -31,7 +29,6 @@
     "mdsvex": "^0.12.3",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.8",
-    "smui-theme": "^8.0.0-beta.2",
     "svelte": "^5.16.5",
     "svelte-adapter-bun": "^0.5.2",
     "svelte-check": "^4.1.1",
@@ -40,6 +37,7 @@
     "vite": "^5.4.11"
   },
   "dependencies": {
+    "smui-theme": "^8.0.0-beta.3",
     "@smui-extra/autocomplete": "^8.0.0-beta.3",
     "@smui-extra/chip-input": "^8.0.0-beta.3",
     "@smui/button": "^8.0.0-beta.3",

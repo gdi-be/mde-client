@@ -2,6 +2,14 @@ export type JsonClientMetadata = Record<string, unknown>;
 export type JsonIsoMetadata = Record<string, unknown>;
 export type JsonTechnialMetadata = Record<string, unknown>;
 
+export type Comment = {
+  id: string;
+  text: string;
+  date: string;
+  userId: string;
+  userName: string;
+}
+
 export type ServiceType = 'WFS' | 'WMS' | 'ATOM' | 'WMTS';
 
 export type ColumnType = 'BigDecimal' | 'Date' | 'Double' | 'Float' | 'Geometry' | 'Integer' | 'Link' | 'Long' | 'Text' | 'Short' | 'Timestamp';
@@ -151,4 +159,10 @@ export type MetadataCollection = {
   clientMetadata: ClientMedata;
   isoMetadata: IsoMetadata;
   technicalMetadata: TechnicalMetadata;
+}
+
+export type MetadataJson = {
+  clientMetadata: JsonClientMetadata;
+  isoMetadata: JsonIsoMetadata;
+  technicalMetadata: JsonTechnialMetadata;
 }

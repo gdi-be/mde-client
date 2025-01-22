@@ -10,7 +10,7 @@ export async function POST({ cookies, request }) {
 
   const data = await request.json();
 
-  if (!data.title || !data.metadataProfile) {
+  if (!data.title) {
     return error(400, 'Bad Request');
   }
 

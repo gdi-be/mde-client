@@ -16,7 +16,6 @@
 
 @use '@material/theme/color-palette';
 
-// Svelte Colors!
 @use '@material/theme/index' as theme with (
   $primary: #75b1d8,
   $secondary: #676778,
@@ -26,6 +25,16 @@
 );
 
 @use '@material/theme/styles';
+
+:root {
+  --primary-color: #75b1d8;
+  --secondary-color: #676778;
+  --surface-color: #fff;
+  --background-color: #fff;
+  --error-color: #b71c1c;
+  --chat-other-color: #ffd3d3;
+  --chat-self-color: #cdffdd;
+}
 
 html,
 body {

@@ -5,7 +5,6 @@
     type MetadataProfile
   } from "$lib/models/metadata";
   import Button from "@smui/button";
-  import Select, { Option as SelectOption } from "@smui/select";
   import Textfield from "@smui/textfield";
   import log from "loggisch";
   import MetadataSearchField from "$lib/components/MetadataSearchField.svelte";
@@ -62,18 +61,9 @@
         label="Titel"
         required
       />
-      <Select
-        bind:value={metadataProfile}
-        label="Vorlage"
-        required
-      >
-          <SelectOption value="ISO">ISO</SelectOption>
-          <SelectOption value="INSPIRE_HARMONISED">Inspire (harmonisiert)</SelectOption>
-          <SelectOption value="INSPIRE_IDENTIFIED">Inspire (identified)</SelectOption>
-      </Select>
       <MetadataSearchField
         bind:value={cloneMetadataId}
-        label="Metadaten kopieren"
+        label="Bestehende Metadaten als Vorlage verwenden"
       />
       <Button
         variant="raised"

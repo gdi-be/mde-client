@@ -1,12 +1,14 @@
 <script>
+  import { getContext } from "svelte";
   import Breadcrumbs from "./Breadcrumbs.svelte";
   import LoginButton from "./LoginButton.svelte";
   import LogoutButton from "./LogoutButton.svelte";
 
   let {
-    text = 'Header',
-    token
+    text = 'Header'
   } = $props();
+
+  const token = getContext('user_token');
 
 </script>
 

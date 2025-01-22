@@ -20,7 +20,6 @@
 
   import TitleField_01 from "./Field/TitleField_01.svelte";
   import DescriptionField_02 from "./Field/DescriptionField_02.svelte";
-  import InternalCommentField_03 from "./Field/InternalCommentField_03.svelte";
   import KeywordsField_15 from "./Field/KeywordsField_15.svelte";
   import PreviewField_29 from "./Field/PreviewField_29.svelte";
   import ContactsField_19 from "./Field/ContactsField_19.svelte";
@@ -47,9 +46,11 @@
   import Lineage_32 from "./Field/Lineage_32.svelte";
   import AdditionalInformation_39 from "./Field/AdditionalInformation_39.svelte";
   import ServicesSection from "./service/ServicesSection.svelte";
+  import FormFooter from "./FormFooter.svelte";
+  import type { MetadataJson } from "$lib/models/metadata";
 
   type FormProps = {
-    metadata?: Record<string, unknown>;
+    metadata?: MetadataJson;
     activeSection?: string;
     help: FormHelp;
   }
@@ -60,21 +61,32 @@
     help
   }: FormProps = $props();
 
-  const SECTIONS: { section: Section, label: string }[] = [{
+  type SectionConfig = {
+    section: Section,
+    label: string,
+    disabledCheck: (metadata?: MetadataJson) => boolean
+  };
+
+  const SECTIONS: SectionConfig[] = [{
     section: 'basedata',
-    label: 'Basisangaben'
+    label: '1. Basisangaben',
+    disabledCheck: () => false
   }, {
     section: 'classification',
-    label: 'Einordnung'
+    label: '2. Einordnung',
+    disabledCheck: () => false
   }, {
     section: 'temp_and_spatial',
-    label: 'Zeitliche und Räumliche Angaben'
+    label: '3. Zeitliche und Räumliche Angaben',
+    disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
   }, {
     section: 'additional',
-    label: 'Weitere Angaben'
+    label: '4. Weitere Angaben',
+    disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
   }, {
     section: 'services',
-    label: 'Dienste'
+    label: '5. Dienste',
+    disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
   }];
 
   initializeFormContext();
@@ -125,17 +137,16 @@
     updateBorder();
   });
 
-  $inspect(metadata);
-
 </script>
 
 <div class="metadata-form">
   <nav class="tabs" bind:this={tabs}>
-    {#each SECTIONS as { section, label }}
+    {#each SECTIONS as { section, label, disabledCheck }}
       <button
         class="section-button"
         class:active={activeSection === section}
         onclick={() => onSectionClick(section)}
+        disabled={disabledCheck(metadata)}
       >
         <Label>{label}</Label>
         <Progress {...(getProgress(section, metadata))} />
@@ -155,7 +166,6 @@
         <section id="basedata" transition:fade >
           <TitleField_01 />
           <DescriptionField_02 />
-          <InternalCommentField_03 />
           <KeywordsField_15 />
           <PreviewField_29 />
           <ContactsField_19 />
@@ -201,7 +211,6 @@
         </section>
       {/if}
     </form>
-      <!-- TODO: i18n -->
     <div class="help-section">
       {#if helpMarkdown}
         {#await parse(helpMarkdown)}
@@ -214,6 +223,7 @@
       {/if}
     </div>
   </div>
+  <FormFooter {metadata} />
 </div>
 
 <style lang="scss">
