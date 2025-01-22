@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import type { PageableResponse } from "../api/api";
   import type { Metadata } from "../models/metadata";
   import IconButton from "@smui/icon-button";
@@ -11,7 +11,7 @@
 
   let { pagingInfo }: PaginationProps = $props();
 
-  const currentUrl = $derived($page.url);
+  const currentUrl = $derived(page.url);
   const maxPage = $derived(pagingInfo.totalPages - 1);
   const currentPage = $derived(pagingInfo.pageable.pageNumber + 1);
   const hasPrevious = $derived(currentPage > 1);

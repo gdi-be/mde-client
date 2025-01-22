@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 
   type TranslatedParts = {
     metadata: string;
@@ -11,7 +11,7 @@
   };
 
   const breadcrumbs = $derived.by(() => {
-    const parts = $page.url.pathname.split('/').filter(a => a !== '');
+    const parts = page.url.pathname.split('/').filter(a => a !== '');
     return parts.map((part, i) => {
       return {
         name: part,
@@ -30,7 +30,7 @@
     </li>
     {#each breadcrumbs as {name, url}}
       <li>
-        {#if url === $page.url.pathname}
+        {#if url === page.url.pathname}
           <i>/</i>{getUrlPartName(name as keyof TranslatedParts)}
         {:else}
           <i>/</i><a href={url}>{getUrlPartName(name as keyof TranslatedParts)}</a>

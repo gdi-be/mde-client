@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
@@ -15,7 +15,7 @@
 
   const onBlur = async () => {
     // TODO check if value has changed
-    const response = await fetch($page.url, {
+    const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'

@@ -1,6 +1,6 @@
 <script lang=ts>
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import {
     type MetadataProfile
   } from "$lib/models/metadata";
@@ -20,7 +20,7 @@
   });
 
   const onCreateClick = async () => {
-    const response = await fetch($page.url, {
+    const response = await fetch(page.url, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'

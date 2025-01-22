@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import IconButton from "@smui/icon-button";
   import { getValue } from "../FormContext.svelte";
   import type { Service } from "$lib/models/metadata";
@@ -31,7 +31,7 @@
 
   const persistServices = async (id: string) => {
     // TODO: fix setting of service type
-    const response = await fetch($page.url, {
+    const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'

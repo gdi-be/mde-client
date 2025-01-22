@@ -1,6 +1,6 @@
 <script lang="ts">
   import { invalidateAll } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import FieldTools from "../FieldTools.svelte";
   import { getValue } from "../FormContext.svelte";
   import TextAreaInput from "../Inputs/TextAreaInput.svelte";
@@ -14,7 +14,7 @@
 
   const onBlur = async () => {
     // TODO: check if value has changed
-    const response = await fetch($page.url, {
+    const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'
