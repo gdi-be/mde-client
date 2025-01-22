@@ -1,19 +1,39 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
+  import SelectInput from "../Inputs/SelectInput.svelte";
 
   const KEY = 'isoMetadata.crs';
   const LABEL = 'Koordinatensystem';
+
+  const OPTIONS = [{
+    key: 'http://www.opengis.net/def/crs/EPSG/0/25833',
+    label: 'EPSG:25833'
+  }, {
+    key: 'http://www.opengis.net/def/crs/EPSG/0/3857',
+    label: 'EPSG:3857'
+  }, {
+    key: 'http://www.opengis.net/def/crs/EPSG/0/4258',
+    label: 'EPSG:4258'
+  }, {
+    key: 'http://www.opengis.net/def/crs/EPSG/0/25832',
+    label: 'EPSG:25832'
+  }, {
+    key: 'http://www.opengis.net/def/crs/EPSG/0/4326',
+    label: 'EPSG:4326'
+  }, {
+    key: 'http://www.opengis.net/def/crs/EPSG/0/3035',
+    label: 'EPSG:3035'
+  }];
 
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue || '');
   let showCheckmark = $state(false);
 
-  const onBlur = async () => {
+  const onSelectionChange = async () => {
     // TODO check if value has changed
     const response = await fetch(page.url, {
       method: 'PATCH',
@@ -35,13 +55,12 @@
 
 <div class="title-field">
   <Paper>
-    <TextInput
-      bind:value
+    <SelectInput
+      {value}
       key={KEY}
       label={LABEL}
-      maxlength={100}
-      onblur={onBlur}
-      required
+      options={OPTIONS}
+      onChange={onSelectionChange}
     />
   </Paper>
   <FieldTools
