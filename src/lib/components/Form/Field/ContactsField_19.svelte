@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import type { Contacts } from "$lib/models/metadata";
   import IconButton from "@smui/icon-button";
   import { getValue } from "../FormContext.svelte";
@@ -9,7 +9,7 @@
   import { fly, scale } from "svelte/transition";
   import { backIn } from "svelte/easing";
 
-  const KEY = 'isoMetadata.contacts';
+  const KEY = 'isoMetadata.pointsOfContact';
   const LABEL = 'Kontaktangaben';
 
   let initialContacts = getValue<Contacts>(KEY);
@@ -29,7 +29,7 @@
 
   const persistContacts = async () => {
     // TODO add equals check to prevent unnecessary requests
-    const response = await fetch($page.url, {
+    const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'

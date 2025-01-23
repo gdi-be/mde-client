@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
@@ -14,7 +14,7 @@
   let showCheckmark = $state(false);
 
   const onChange = async (newValue?: string) => {
-    const response = await fetch($page.url, {
+    const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'

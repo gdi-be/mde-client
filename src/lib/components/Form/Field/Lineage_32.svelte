@@ -1,5 +1,5 @@
 <script lang="ts">
-  // import { page } from "$app/stores";
+  // import { page } from "$app/state";
   import type { Lineage } from "$lib/models/metadata";
   import IconButton from "@smui/icon-button";
   import { getValue } from "../FormContext.svelte";

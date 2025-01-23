@@ -10,6 +10,8 @@ export type Comment = {
   userName: string;
 }
 
+export type CRS = "EPSG:4326" | "EPSG:3857" | "EPSG:25833" | "EPSG:25832" | "EPSG:4258" | "EPSG:3035";
+
 export type ServiceType = 'WFS' | 'WMS' | 'ATOM' | 'WMTS';
 
 export type ColumnType = 'BigDecimal' | 'Date' | 'Double' | 'Float' | 'Geometry' | 'Integer' | 'Link' | 'Long' | 'Text' | 'Short' | 'Timestamp';

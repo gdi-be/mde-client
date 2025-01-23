@@ -20,11 +20,11 @@
 </script>
 
 <Textfield
+  input$step={type === 'float' ? '0.1' : undefined}
+  input$name={key}
   {...restProps}
   type="number"
   {label}
-  input$step={type === 'float' ? '0.1' : undefined}
-  input$name={key}
   bind:value
 >
 </Textfield>

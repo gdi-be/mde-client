@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import type { KeyWords } from "$lib/models/metadata";
   import type { Option } from "$lib/models/form";
   import { getValue } from "../FormContext.svelte";
@@ -43,7 +43,7 @@
         .filter((entry) => entry?.key)
         .map((entry) => ({ keyword: entry.key as string }))
     };
-    const response = await fetch($page.url, {
+    const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'

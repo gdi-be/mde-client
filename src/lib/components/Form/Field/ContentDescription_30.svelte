@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import IconButton from "@smui/icon-button";
   import { getValue } from "../FormContext.svelte";
   import TextInput from "../Inputs/TextInput.svelte";
@@ -27,7 +27,7 @@
 
   const persist = async () => {
     // TODO check if value has changed
-    const response = await fetch($page.url, {
+    const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json'

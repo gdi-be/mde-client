@@ -1,12 +1,12 @@
 <script>
   import Welcome from '$lib/components/Welcome.svelte';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { goto } from '$app/navigation';
 
   let { children } = $props();
 
   $effect(() => {
-    const reload = $page.url.searchParams.get('reload');
+    const reload = page.url.searchParams.get('reload');
     if (reload === 'force') {
       goto('/', {
         replaceState: true,
