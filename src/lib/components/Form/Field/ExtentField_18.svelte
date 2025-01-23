@@ -209,11 +209,6 @@
       border-radius: 4px;
       justify-content: space-between;
 
-      >legend {
-        display: flex;
-        align-items: center;
-      }
-
       .tools {
         display: flex;
         flex-direction: column;

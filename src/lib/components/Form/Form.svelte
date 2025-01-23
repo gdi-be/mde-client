@@ -38,7 +38,6 @@
   import DeliveredCoordinateSystemField_16 from "./Field/DeliveredCoordinateSystemField_16.svelte";
   import CoordinateSystemField_17 from "./Field/CoordinateSystemField_17.svelte";
   import ExtentField_18 from "./Field/ExtentField_18.svelte";
-  import RepresentiveFractionField_27 from "./Field/RepresentiveFractionField_27.svelte";
   import ResolutionField_28 from "./Field/ResolutionField_28.svelte";
   import ContentDescriptionTextarea_31 from "./Field/ContentDescriptionTextarea_31.svelte";
   import ContentDescription_30 from "./Field/ContentDescription_30.svelte";
@@ -192,7 +191,6 @@
           <DeliveredCoordinateSystemField_16 />
           <CoordinateSystemField_17 />
           <ExtentField_18 />
-          <RepresentiveFractionField_27 />
           <ResolutionField_28 />
         </section>
       {/if}
