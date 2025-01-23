@@ -117,6 +117,19 @@ export type UpdateProps = {
   value: unknown;
   token: string;
 }
+
+/**
+ * This function updates a metadata value by sending a PATCH request to the backend.
+ *
+ * To delete a value from the metadata, set the value to `null`.
+ *
+ * @param metadataId
+ * @param key
+ * @param value
+ * @param token
+ *
+ * @returns
+ */
 export const updateDataValue = async ({
   metadataId,
   key,
