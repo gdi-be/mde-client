@@ -2,23 +2,50 @@
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
-  import SelectInput from "../Inputs/SelectInput.svelte";
   import IconButton from "@smui/icon-button";
   import Button, { Icon, Label } from "@smui/button";
   import Dialog, { Actions, Content, Title } from "@smui/dialog";
   import Textfield from "@smui/textfield";
+  import type { Option } from "$lib/models/form";
+  import SelectInput from "../Inputs/SelectInput.svelte";
 
   const KEY = 'isoMetadata.resourceConstraints';
   const LABEL = 'Nutzungsbedingungen*';
+  const title = getValue<string>('isoMetadata.title') || '[Datensatztitel]';
 
   // TODO: Options are extendable and so need to be fetched from the server/db
-  const OPTIONS: {
-    key: string;
-    label: string;
-  }[] = $state([{
-    key: 'Deutschland - Namensnennung - Version 2.0',
-    label: 'Deutschland - Namensnennung - Version 2.0'
-  }]);
+  const OPTIONS: Option[] = $state([
+    {
+      key: 'default',
+      label: 'Standard',
+      description: `Für die Nutzung der Daten ist die Datenlizenz Deutschland - Namensnennung - Version 2.0 anzuwenden. Die Lizenz ist über https://www.govdata.de/dl-de/by-2-0 abrufbar. Der Quellenvermerk gemäß (2)  der Lizenz lautet "Geoportal Berlin / ${title}".`
+    },
+    {
+      key: 'defaultNoBrandenburg',
+      label: 'Standard ohne Brandenburg',
+      description: `Für die Nutzung der Daten ist die Datenlizenz Deutschland - Namensnennung - Version 2.0 anzuwenden. Die Lizenz ist über https://www.govdata.de/dl-de/by-2-0 abrufbar. Der Quellenvermerk gemäß (2)  der Lizenz lautet "Geoportal Berlin / ${title}". Gilt nicht für Brandenburger Landesteile.`
+    },
+    {
+      key: 'environmentalAtlas',
+      label: 'Umweltatlas',
+      description: `Für die Nutzung der Daten ist die  Datenlizenz Deutschland - Namensnennung - Version 2.0 anzuwenden. Die Lizenz ist über https://www.govdata.de/dl-de/by-2-0 abrufbar. Der Quellenvermerk gemäß (2)  der Lizenz lautet "Umweltatlas Berlin / ${title}".`
+    },
+    {
+      key: 'statisticOffice',
+      label: 'Amt für Statistik',
+      description: `Der Datenbestand wird unter der Lizenz CC-BY-3.0-Namensnennung veröffentlicht (vgl. https://creativecommons.org/licenses/by/3.0/de/). Als Urheber ist dabei zu nennen: Amt für Statistik Berlin-Brandenburg.`
+    },
+    {
+      key: 'standardWitBrandenburg',
+      label: 'Standard mit Brandenburg',
+      description: `Nutzungsbedingungen: Für die Nutzung der Daten ist die  Datenlizenz Deutschland - Namensnennung - Version 2.0 anzuwenden. Die Lizenz ist über https://www.govdata.de/dl-de/by-2-0 abrufbar. Der Quellenvermerk gemäß (2)  der Lizenz lautet "Geoportal Berlin / ${title}". Werden auch Daten des Bundeslandes Brandenburg genutzt, ist der Quellenvermerk um den Hinweis "© GeoBasis-DE/LGB (2023), dl-de/by-2-0, Daten geändert" zu ergänzen.`
+    },
+    {
+      key: 'serviceUse',
+      label: 'Dienstgebrauch',
+      description: `Nur für den Dienstgebrauch gemäß GG0 I §45`
+    }
+  ]);
 
   let open = $state(false);
   let newConditionValue = $state('');
@@ -26,6 +53,7 @@
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
+  let selectedDescription = $derived(OPTIONS.find(o => o.key === value)?.description);
 
   const onChange = async (newValue?: string) => {
     // TODO: Implement
@@ -75,21 +103,26 @@
 
 <div class="terms-of-use-field">
   <Paper>
-    <SelectInput
-      key={KEY}
-      label={LABEL}
-      options={OPTIONS}
-      {value}
-      {onChange}
-    />
-
-    <IconButton
-      type="button"
-      size="button"
-      onclick={() => open = true}
-    >
-      <Icon class="material-icons">add</Icon>
-    </IconButton>
+    <div class="inline-fields">
+      <SelectInput
+        key={KEY}
+        label={LABEL}
+        options={OPTIONS}
+        bind:value
+        {onChange}
+      />
+      <IconButton
+        type="button"
+        size="button"
+        onclick={() => open = true}
+        disabled
+      >
+        <Icon class="material-icons">add</Icon>
+      </IconButton>
+    </div>
+    {#if selectedDescription}
+      <p class="description">{selectedDescription}</p>
+    {/if}
   </Paper>
   <FieldTools
     key={KEY}
@@ -109,8 +142,17 @@
 
     :global(.smui-paper) {
       flex: 1;
+    }
+
+    .inline-fields {
+      flex: 1;
       display: flex;
       align-items: center;
+    }
+
+    .description {
+      font-size: 0.75em;
+      color: var(--mdc-theme-secondary);
     }
 
     :global(.mdc-select) {
