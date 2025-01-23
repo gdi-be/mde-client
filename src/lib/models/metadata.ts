@@ -2,6 +2,21 @@ export type JsonClientMetadata = Record<string, unknown>;
 export type JsonIsoMetadata = Record<string, unknown>;
 export type JsonTechnialMetadata = Record<string, unknown>;
 
+export type TermsOfUse = {
+  id: number;
+  shortname: string;
+  active: boolean;
+  description: string;
+  openData: boolean;
+  json: {
+    id: string;
+    name: string;
+    url: string;
+    source: string;
+  },
+  note: string;
+}
+
 export type Comment = {
   id: string;
   text: string;

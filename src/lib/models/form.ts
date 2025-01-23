@@ -10,7 +10,7 @@ export type FieldKey = `${string}.${string}`;
  * An option for Select fields. For this application it always has a key and a label.
  */
 export type Option = {
-  [key: string]: unknown;
+  disabled?: boolean;
   key: string;
   label: string;
 };
