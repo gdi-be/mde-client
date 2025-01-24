@@ -1,95 +1,80 @@
 <script lang="ts">
+  import { page } from "$app/state";
   import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import SelectInput from "../Inputs/SelectInput.svelte";
-  import IconButton from "@smui/icon-button";
-  import Button, { Icon, Label } from "@smui/button";
-  import Dialog, { Actions, Content, Title } from "@smui/dialog";
-  import Textfield from "@smui/textfield";
+  import type { TermsOfUse } from "$lib/models/metadata";
+  import type { Option } from "$lib/models/form";
+  import { invalidateAll } from "$app/navigation";
 
-  const KEY = 'isoMetadata.resourceConstraints';
+  const KEY = 'isoMetadata.termsOfUseId';
   const LABEL = 'Nutzungsbedingungen*';
 
-  // TODO: Options are extendable and so need to be fetched from the server/db
-  const OPTIONS: {
-    key: string;
-    label: string;
-  }[] = $state([{
-    key: 'Deutschland - Namensnennung - Version 2.0',
-    label: 'Deutschland - Namensnennung - Version 2.0'
-  }]);
-
-  let open = $state(false);
-  let newConditionValue = $state('');
-
-  let initialValue = getValue<string>(KEY);
-  let value = $state(initialValue);
+  let initialValue = getValue<number>(KEY);
+  let value = $state(initialValue?.toString());
   let showCheckmark = $state(false);
+  let termsOfUseList: TermsOfUse[] = $state([]);
+  const selectedDescription = $derived.by(() => {
+    const description = termsOfUseList.find(item => item.id === Number(value))?.description;
+    if (!description) return '';
+    return description.replace(/{{(.*?)}}/g, (match, p1) => getValue(p1.trim()) || match);
+  });
 
-  const onChange = async (newValue?: string) => {
-    // TODO: Implement
-    console.log(newValue);
+  const fetchOptions = async () => {
+    const response = await fetch('/data/terms_of_use');
+    const data: TermsOfUse[] = await response.json();
+    data.sort((a, b) => {
+      if (a.active === b.active) {
+        return a.shortname.localeCompare(b.shortname)
+      }
+      return a.active ? -1 : 1;
+    });
+    termsOfUseList = data;
+    return data;
   };
 
-  const onAddClick = () => {
-    // TODO: Implement
-    OPTIONS.push({
-      key: newConditionValue,
-      label: newConditionValue
+  const onChange = async (newValue: string) => {
+    const response = await fetch(page.url, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        key: KEY,
+        value: Number(newValue)
+      })
     });
+    if (response.ok) {
+      showCheckmark = true;
+      invalidateAll();
+    }
   };
 
 </script>
 
-<Dialog
-  class="terms-of-use-dialog"
-  bind:open
-  aria-labelledby="simple-title"
-  aria-describedby="simple-content"
->
-  <Title id="simple-title">Nutzungsbedingung hinzufügen</Title>
-  <Content id="simple-content">
-    <Textfield
-      label="Neue Nutzungsbedingung"
-      bind:value={newConditionValue}
-    />
-  </Content>
-  <Actions>
-    <Button
-      variant="outlined"
-      type="button"
-      onclick={() => open = false}
-    >
-      <Label>Abbrechen</Label>
-    </Button>
-    <Button
-      variant="raised"
-      type="button"
-      onclick={onAddClick}
-    >
-      <Label>Hinzufügen</Label>
-    </Button>
-  </Actions>
-</Dialog>
-
 <div class="terms-of-use-field">
   <Paper>
-    <SelectInput
-      key={KEY}
-      label={LABEL}
-      options={OPTIONS}
-      {value}
-      {onChange}
-    />
-
-    <IconButton
-      type="button"
-      size="button"
-      onclick={() => open = true}
-    >
-      <Icon class="material-icons">add</Icon>
-    </IconButton>
+    {#await fetchOptions()}
+      <p>Lade Nutzungsbedingungen</p>
+    {:then OPTIONS}
+      <SelectInput
+        key={KEY}
+        label={LABEL}
+        options={
+          OPTIONS.map((item: TermsOfUse): Option => ({
+            key: item.id.toString(),
+            label: item.shortname,
+            disabled: !item.active
+          }))
+        }
+        bind:value
+        {onChange}
+      />
+      {#if selectedDescription}
+        <p class="description">{selectedDescription}</p>
+      {/if}
+    {/await}
   </Paper>
   <FieldTools
     key={KEY}
@@ -109,8 +94,11 @@
 
     :global(.smui-paper) {
       flex: 1;
-      display: flex;
-      align-items: center;
+    }
+
+    .description {
+      font-size: 0.75em;
+      color: var(--mdc-theme-secondary);
     }
 
     :global(.mdc-select) {

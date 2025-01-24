@@ -40,8 +40,12 @@
 >
   {#each options as option}
     <SelectOption
-      onSMUIAction={() => onSelect(option.key)}
+      onSMUIAction={() => {
+        if (option.disabled) return;
+        onSelect(option.key);
+      }}
       value={option.key}
+      disabled={option.disabled}
     >
       {option.label}
     </SelectOption>
@@ -53,5 +57,11 @@
     top: 56px !important;
     // calc(items * item height + top margin)
     max-height: calc(5 * 48px + 8px);
+
+    :global([aria-disabled="true"]) {
+      opacity: 0.5;
+      pointer-events: none;
+    }
   }
+
 </style>
