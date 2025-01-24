@@ -20,7 +20,7 @@ COPY --from=builder /app/static ./static
 COPY --from=builder /app/node_modules ./node_modules
 
 COPY .env.example .env
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 
 EXPOSE 3000
 
