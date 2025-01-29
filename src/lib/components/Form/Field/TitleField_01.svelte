@@ -34,7 +34,7 @@
 </script>
 
 <div class="title-field">
-  <Paper>
+  <Paper class="input-wrapper">
     <TextInput
       bind:value
       key={KEY}
@@ -54,9 +54,9 @@
   .title-field {
     position: relative;
     display: flex;
-    gap: 1em;
+    gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.input-wrapper) {
       flex: 1;
     }
 

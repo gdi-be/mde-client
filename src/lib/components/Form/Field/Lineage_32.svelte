@@ -114,7 +114,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    gap: 1em;
+    gap: 0.25em;
 
     fieldset {
       flex: 1;

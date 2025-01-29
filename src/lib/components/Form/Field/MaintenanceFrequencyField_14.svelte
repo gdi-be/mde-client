@@ -71,7 +71,7 @@
   .metadata-type-field {
     position: relative;
     display: flex;
-    gap: 1em;
+    gap: 0.25em;
 
     :global(.smui-paper) {
       flex: 1;
