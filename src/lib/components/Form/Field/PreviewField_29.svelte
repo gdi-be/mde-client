@@ -106,7 +106,7 @@
 <style lang="scss">
   .preview-field {
     display: flex;
-    gap: 1em;
+    gap: 0.25em;
 
     .text-inputs {
       flex: 1;

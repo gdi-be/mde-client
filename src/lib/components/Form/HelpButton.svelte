@@ -19,12 +19,13 @@
 
 {#if visible}
   <IconButton
+    title="Hilfe zum Feld anzeigen"
     type="button"
     toggle
     size="button"
     pressed={pressed}
     onclick={() => toggleActiveHelp(key)}
-    >
+  >
     <Icon class="material-icons">info</Icon>
     <Icon class="material-icons-filled" on>info</Icon>
   </IconButton>

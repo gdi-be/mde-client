@@ -106,7 +106,7 @@
   .high-value-dataset-check-field {
     display: flex;
     position: relative;
-    gap: 1em;
+    gap: 0.25em;
 
     :global(.smui-paper) {
       flex: 1;

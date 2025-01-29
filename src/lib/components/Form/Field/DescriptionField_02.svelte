@@ -51,7 +51,7 @@
   .description-field {
     position: relative;
     display: flex;
-    gap: 1em;
+    gap: 0.25em;
 
     :global(.text-area-input) {
       flex: 1;
