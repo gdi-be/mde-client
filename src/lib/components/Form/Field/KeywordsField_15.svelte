@@ -43,6 +43,17 @@
         .filter((entry) => entry?.key)
         .map((entry) => ({ keyword: entry.key as string }))
     };
+    persistKeywords(keywords);
+  };
+
+  const onAutoFill = (keywords: KeyWords) => {
+    value = keywords.default?.map(
+      (entry) => ({ key: entry.keyword, label: entry.keyword })
+    );
+    persistKeywords(keywords);
+  };
+
+  const persistKeywords = async (keywords: KeyWords) => {
     const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
@@ -57,7 +68,7 @@
       showCheckmark = true;
       invalidateAll();
     }
-  };
+  }
 
 </script>
 
@@ -72,6 +83,7 @@
   </Paper>
   <FieldTools
     key={KEY}
+    onAutoFill={onAutoFill}
     bind:running={showCheckmark}
   />
 </div>

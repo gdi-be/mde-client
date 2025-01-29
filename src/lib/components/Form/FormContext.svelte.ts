@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getContext, setContext } from "svelte";
-import type { FieldKey, FormHelp } from "../../models/form";
+import type { FieldKey, FormHelp } from "$lib/models/form";
+import type { KeyWords, MetadataProfile } from "$lib/models/metadata";
 
 export type FormState = {
   data: Record<string, unknown>;
@@ -34,6 +35,32 @@ export function getValue<T>(key: string, metadata?: Record<string, unknown>): T 
     }, data as Record<string, any>);
 
   return value as T
+}
+
+const autoFillFunctions: Record<FieldKey, () => void> = {
+  'isoMetadata.keywords': () => {
+    const keywords = getValue<KeyWords>('isoMetadata.keywords');
+    const metadataProfile = getValue<MetadataProfile>('isoMetadata.metadataProfile');
+
+    const uniqueKeywords = new Set(keywords?.default.map(({keyword}: any) => keyword));
+    uniqueKeywords.add('Diensttyp');
+    uniqueKeywords.add('Berlin');
+    uniqueKeywords.add('INSPIRE Dienst-Codeliste');
+
+    if (metadataProfile === 'INSPIRE_IDENTIFIED') {
+      uniqueKeywords.add('inspireidentifiziert');
+    }
+
+    return {
+      default: Array.from(uniqueKeywords, keyword => ({ keyword }))
+    };
+  }
+};
+
+export function getAutoFillValues(key: FieldKey) {
+  if (autoFillFunctions[key]) {
+    return autoFillFunctions[key]();
+  }
 }
 
 export function setFormData(data: Record<string, unknown>) {
