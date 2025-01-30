@@ -47,6 +47,7 @@
   autocomplete$getOptionLabel={(option: Option) => option?.label as string || ''}
   autocomplete$search={search}
   autocomplete$selectOnExactMatch={false}
+  autocomplete$showMenuWithNoInput={true}
   key={(option: Option) => option?.key as string}
   getChipLabel={(option: Option) => option?.label as string || ''}
   getChipText={(option: Option) => option?.label as string || ''}

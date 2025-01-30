@@ -128,7 +128,7 @@
     :global(.mdc-chip:not(:has(.mdc-deprecated-chip-trailing-action))) {
       pointer-events: auto;
       cursor: default;
-      border: 1px dashed var(--primary-color);
+      outline: 1px dashed var(--primary-color);
       opacity: 0.7;
     }
 
