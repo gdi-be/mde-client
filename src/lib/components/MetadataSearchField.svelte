@@ -57,15 +57,14 @@
     if (!option) return '';
     return option.label as string || '';
   }}
-  showMenuWithNoInput={false}
   {label}
 >
   {#snippet loading()}
-    <Text>Loading...</Text>
+    <Text>Lädt...</Text>
   {/snippet}
 
   {#snippet noMatches()}
-    <Text>No results found</Text>
+    <Text>Bitte Suchbegriff anpassen ...</Text>
   {/snippet}
 
   {#snippet match(item)}
