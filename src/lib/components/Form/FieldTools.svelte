@@ -5,6 +5,7 @@
 
   let {
     key,
+    children = undefined,
     running = $bindable<boolean>(false)
   } = $props();
 
@@ -13,6 +14,7 @@
 <div class="field-tools">
   <HelpButton {key} />
   <CopyButton {key} />
+  {@render children?.()}
   <Checkmark bind:running={running} />
 </div>
 
