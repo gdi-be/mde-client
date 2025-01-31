@@ -5,7 +5,6 @@
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { fly, scale } from "svelte/transition";
-  import { backIn } from "svelte/easing";
   import type { ContentDescription } from "../../../models/metadata";
   import { invalidateAll } from "$app/navigation";
 

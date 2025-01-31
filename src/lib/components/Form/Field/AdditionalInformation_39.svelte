@@ -4,7 +4,6 @@
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { fly, scale } from "svelte/transition";
-  import { backIn } from "svelte/easing";
 
   const KEY = 'isoMetadata.UNKNOWN';
   const LABEL = 'Weitere Informationen';

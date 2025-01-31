@@ -7,10 +7,9 @@
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
-  import { backIn } from "svelte/easing";
 
   const KEY = 'isoMetadata.pointsOfContact';
-  const LABEL = 'Kontaktangaben';
+  const LABEL = 'Kontakt';
 
   let initialContacts = getValue<Contacts>(KEY);
   let initialValue = initialContacts?.map(contact => {
