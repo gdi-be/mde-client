@@ -2,14 +2,19 @@
   import Checkmark from "./Checkmark.svelte";
   import HelpButton from "./HelpButton.svelte";
   import CopyButton from "./CopyButton.svelte";
-  import AutoFillButton from "./AutoFillButton.svelte";
+  import type { Snippet } from "svelte";
+
+  export type FieldToolsProps = {
+    key: string;
+    children: Snippet;
+    running?: boolean;
+  }
 
   let {
     key,
-    children = undefined,
-    onAutoFill,
+    children,
     running = $bindable<boolean>(false)
-  } = $props();
+  }: FieldToolsProps = $props();
 
 </script>
 
@@ -17,7 +22,6 @@
   <HelpButton {key} />
   <CopyButton {key} />
   {@render children?.()}
-  <AutoFillButton {key} {onAutoFill} />
   <Checkmark bind:running={running} />
 </div>
 

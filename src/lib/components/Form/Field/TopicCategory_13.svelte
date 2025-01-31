@@ -5,13 +5,24 @@
   import FieldTools from "../FieldTools.svelte";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { invalidateAll } from "$app/navigation";
+  import AutoFillButton from "../AutoFillButton.svelte";
+
+  const {
+    metadata
+  } = $props();
 
   const KEY = 'isoMetadata.topicCategory';
   const LABEL = 'Themenkategorie (ISO)';
 
-  let initialValue = getValue<string>(KEY);
+  let initialValue = getValue<string>(KEY, metadata);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
+
+  const onAutoFill = async (autoFillTopic: unknown) => {
+    if (!autoFillTopic) return;
+    value = autoFillTopic as string;
+    onChange(value);
+  };
 
   const onChange = async (newValue?: string) => {
     const response = await fetch(page.url, {
@@ -31,16 +42,12 @@
   };
 
   const fetchOptions = async () => {
-    const response = await fetch('/data/annex_themes');
+    const response = await fetch('/data/iso_themes');
     const data = await response.json();
 
-    if (!data.register) {
-      return [];
-    };
-
-    return data.register.containeditems.map((entry) => ({
-      key: entry.theme.id,
-      label: entry.theme.label.text
+    return data.map((entry) => ({
+      key: entry.isoName as string,
+      label: entry.isoName as string
     }));
   };
 
@@ -63,7 +70,13 @@
   <FieldTools
     key={KEY}
     bind:running={showCheckmark}
-  />
+  >
+    <AutoFillButton
+      key={KEY}
+      {metadata}
+      {onAutoFill}
+    />
+  </FieldTools>
 </div>
 
 <style lang="scss">

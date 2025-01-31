@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getContext, setContext } from "svelte";
 import type { FieldKey, FormHelp } from "$lib/models/form";
-import type { KeyWords, MetadataProfile } from "$lib/models/metadata";
+import type { IsoTheme, KeyWords, MetadataJson, MetadataProfile } from "$lib/models/metadata";
 
 export type FormState = {
   data: Record<string, unknown>;
@@ -37,29 +37,23 @@ export function getValue<T>(key: string, metadata?: Record<string, unknown>): T 
   return value as T
 }
 
-const autoFillFunctions: Record<FieldKey, () => void> = {
-  'isoMetadata.keywords': () => {
-    const keywords = getValue<KeyWords>('isoMetadata.keywords');
-    const metadataProfile = getValue<MetadataProfile>('isoMetadata.metadataProfile');
-
-    const uniqueKeywords = new Set(keywords?.default.map(({keyword}: any) => keyword));
-    uniqueKeywords.add('Diensttyp');
-    uniqueKeywords.add('Berlin');
-    uniqueKeywords.add('INSPIRE Dienst-Codeliste');
-
-    if (metadataProfile === 'INSPIRE_IDENTIFIED') {
-      uniqueKeywords.add('inspireidentifiziert');
-    }
-
-    return {
-      default: Array.from(uniqueKeywords, keyword => ({ keyword }))
-    };
+const autoFillFunctions: Record<FieldKey, (metadata?: MetadataJson) => Promise<unknown>> = {
+  'isoMetadata.topicCategory': async (metadata) => {
+    const inspireTheme = getValue<string>('isoMetadata.inspireTheme', metadata);
+    if (!inspireTheme) return '';
+    const response = await fetch(`/data/iso_themes`);
+    const data = await response.json();
+    const match = data.find((entry: IsoTheme) => entry.inspireID === inspireTheme);
+    if (!match) return '';
+    return match.isoName;
   }
 };
 
-export function getAutoFillValues(key: FieldKey) {
+export async function getAutoFillValues(key: FieldKey, metadata?: MetadataJson) {
   if (autoFillFunctions[key]) {
-    return autoFillFunctions[key]();
+    return await autoFillFunctions[key](metadata);
+  } else {
+    console.error(`No autofill function for key ${key}`);
   }
 }
 

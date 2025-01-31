@@ -5,11 +5,12 @@
 
   let {
     key,
+    metadata,
     onAutoFill,
   } = $props();
 
   const autoFillValue = async () => {
-    const autoFillValue = getAutoFillValues(key);
+    const autoFillValue = await getAutoFillValues(key, metadata);
     onAutoFill(autoFillValue);
   };
 

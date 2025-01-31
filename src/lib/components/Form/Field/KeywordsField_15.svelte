@@ -80,13 +80,6 @@
     persistKeywords(keywords);
   };
 
-  const onAutoFill = (keywords: KeyWords) => {
-    value = keywords.default?.map(
-      (entry) => ({ key: entry.keyword, label: entry.keyword })
-    );
-    persistKeywords(keywords);
-  };
-
   const persistKeywords = async (keywords: KeyWords) => {
     const response = await fetch(page.url, {
       method: 'PATCH',
@@ -184,7 +177,6 @@
   </fieldset>
   <FieldTools
     key={KEY}
-    onAutoFill={onAutoFill}
     bind:running={showCheckmark}
   >
   </FieldTools>

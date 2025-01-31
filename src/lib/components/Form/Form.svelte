@@ -178,7 +178,7 @@
           <AnnexThemeField_07 {metadata} />
           <QualityReportCheckField_37 {metadata} />
           <HighValueDatasetField_06 />
-          <TopicCategory_13 />
+          <TopicCategory_13 {metadata}/>
         </section>
       {/if}
       {#if activeSection === "temp_and_spatial"}
