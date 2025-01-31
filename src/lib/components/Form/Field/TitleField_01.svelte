@@ -39,7 +39,6 @@
       bind:value
       key={KEY}
       label={LABEL}
-      maxlength={100}
       onblur={onBlur}
       required
     />
