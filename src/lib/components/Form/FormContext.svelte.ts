@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getContext, setContext } from "svelte";
-import type { FieldKey, FormHelp } from "../../models/form";
+import type { FieldKey, FormHelp } from "$lib/models/form";
+import type { KeyWords, MetadataProfile } from "$lib/models/metadata";
 
 export type FormState = {
   data: Record<string, unknown>;
@@ -34,6 +35,26 @@ export function getValue<T>(key: string, metadata?: Record<string, unknown>): T 
     }, data as Record<string, any>);
 
   return value as T
+}
+
+const autoFillFunctions: Record<FieldKey, () => Promise<unknown>> = {
+  'isoMetadata.topicCategory': async () => {
+    const inspireTheme = getValue<string>('isoMetadata.inspireTheme');
+    if (!inspireTheme) return '';
+    const response = await fetch(`/data/iso_themes`);
+    const data = await response.json();
+    const match = data.find(entry => entry.inspireID === inspireTheme);
+    if (!match) return '';
+    return match.isoName;
+  }
+};
+
+export async function getAutoFillValues(key: FieldKey) {
+  if (autoFillFunctions[key]) {
+    return await autoFillFunctions[key]();
+  } else {
+    console.error(`No autofill function for key ${key}`);
+  }
 }
 
 export function setFormData(data: Record<string, unknown>) {

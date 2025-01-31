@@ -13,6 +13,14 @@
   let value = $state(initialValue);
   let showCheckmark = $state(false);
 
+  const onAutoFill = async (value: Promise<string>) => {
+    const autoFillTopic = await value;
+    if (!autoFillTopic) return;
+    debugger;
+    value = autoFillTopic;
+    onChange(autoFillTopic);
+  };
+
   const onChange = async (newValue?: string) => {
     const response = await fetch(page.url, {
       method: 'PATCH',
@@ -31,16 +39,12 @@
   };
 
   const fetchOptions = async () => {
-    const response = await fetch('/data/annex_themes');
+    const response = await fetch('/data/iso_themes');
     const data = await response.json();
 
-    if (!data.register) {
-      return [];
-    };
-
-    return data.register.containeditems.map((entry) => ({
-      key: entry.theme.id,
-      label: entry.theme.label.text
+    return data.map((entry) => ({
+      key: entry.isoName as string,
+      label: entry.isoName as string
     }));
   };
 
@@ -63,6 +67,7 @@
   <FieldTools
     key={KEY}
     bind:running={showCheckmark}
+    onAutoFill={onAutoFill}
   />
 </div>
 

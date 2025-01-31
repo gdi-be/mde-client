@@ -31,7 +31,7 @@
   };
 
   const fetchOptions = async () => {
-    const response = await fetch('/data/annex_themes');
+    const response = await fetch('/data/inspire_themes');
     const data = await response.json();
 
     if (!data.register) {
@@ -39,7 +39,7 @@
     };
 
     return data.register.containeditems.map((entry) => ({
-      key: entry.theme.id.split('/').at(-1).toUpperCase(),
+      key: entry.theme.id.split('/').at(-1).toUpperCase().replace(/-/g, '_'),
       label: entry.theme.label.text
     }));
   };

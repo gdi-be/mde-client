@@ -2,23 +2,32 @@
   import Checkmark from "./Checkmark.svelte";
   import HelpButton from "./HelpButton.svelte";
   import CopyButton from "./CopyButton.svelte";
+  import AutoFillButton from "./AutoFillButton.svelte";
+
+  export type FieldToolsProps = {
+    key: string;
+    onAutoFill?: () => void;
+    running?: boolean;
+  }
 
   let {
     key,
+    onAutoFill,
     running = $bindable<boolean>(false)
-  } = $props();
+  }: FieldToolsProps = $props();
 
 </script>
 
 <div class="field-tools">
   <HelpButton {key} />
   <CopyButton {key} />
+  <AutoFillButton {key} {onAutoFill} />
   <Checkmark bind:running={running} />
 </div>
 
 <style lang="scss">
   .field-tools {
-    padding-bottom: 0.5em;
+    padding: 0.25em 0;
     width: 36px;
     display: flex;
     flex-direction: column;
@@ -26,5 +35,9 @@
     background-color: #f8f9fa;
     outline: 1px solid #e9ecef;
     border-radius: var(--mdc-shape-medium, 4px);
+
+    :global(.checkmark) {
+      margin: 10px 0;
+    }
   }
 </style>
