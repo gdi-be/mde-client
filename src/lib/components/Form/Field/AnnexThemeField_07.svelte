@@ -10,7 +10,11 @@
   const KEY = 'isoMetadata.inspireTheme';
   const LABEL = 'Annex-Thema';
 
-  let metadataProfile = getValue<string>(PROFILE_KEY);
+  const {
+    metadata
+  } = $props();
+
+  let metadataProfile = $derived(getValue<string>(PROFILE_KEY, metadata));
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue);
   let showCheckmark = $state(false);

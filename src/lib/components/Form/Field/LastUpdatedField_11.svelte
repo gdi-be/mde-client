@@ -6,17 +6,20 @@
   import { invalidateAll } from "$app/navigation";
   import DateInput from "../Inputs/DateInput.svelte";
   import type { MaintenanceFrequency } from "$lib/models/metadata";
-  import { getLastUpdateValue } from "../../../util";
+  import { getLastUpdateValue } from "$lib/util";
 
   const KEY = 'isoMetadata.modified';
   const LABEL = 'letzte Aktualisierung';
 
-  const initialValue = getValue<string>(KEY);
-  let publishedValue = getValue<string>('isoMetadata.published');
-  let maintenanceFrequencyValue = getValue<MaintenanceFrequency>('isoMetadata.maintenanceFrequency');
+  const {
+    metadata
+  } = $props();
+
+  const initialValue = getValue<string>(KEY, metadata);
+  let publishedValue = $derived(getValue<string>('isoMetadata.published', metadata));
+  let maintenanceFrequencyValue = $derived(getValue<MaintenanceFrequency>('isoMetadata.maintenanceFrequency', metadata));
   let value = $state(initialValue || '');
 
-  // TODO: check why this is not updated in real time
   $effect(() => {
     if (initialValue) {
       value = new Date(initialValue).toISOString().split('T')[0];
