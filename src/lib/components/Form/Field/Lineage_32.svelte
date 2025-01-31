@@ -65,7 +65,7 @@
       </IconButton>
     </legend>
     {#each lineages as lineage (lineage.listId)}
-      <fieldset class="lineage" in:fly={{ y: -100 }} out:scale={{ easing: backIn }}>
+      <fieldset class="lineage" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
         <legend>
           <IconButton
           class="material-icons"

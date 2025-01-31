@@ -80,7 +80,7 @@
       </IconButton>
     </legend>
     {#each values as contentDescription (contentDescription.listId)}
-      <fieldset class="contentDescription" in:fly={{ y: -100 }} out:scale={{ easing: backIn }}>
+      <fieldset class="contentDescription" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
         <legend>
           <IconButton
           class="material-icons"
