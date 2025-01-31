@@ -9,7 +9,7 @@
   } = $props();
 
   const autoFillValue = async () => {
-    const autoFillValue = getAutoFillValues(key);
+    const autoFillValue = await getAutoFillValues(key);
     onAutoFill(autoFillValue);
   };
 

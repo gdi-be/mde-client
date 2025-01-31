@@ -4,11 +4,17 @@
   import CopyButton from "./CopyButton.svelte";
   import AutoFillButton from "./AutoFillButton.svelte";
 
+  export type FieldToolsProps = {
+    key: string;
+    onAutoFill?: () => void;
+    running?: boolean;
+  }
+
   let {
     key,
     onAutoFill,
     running = $bindable<boolean>(false)
-  } = $props();
+  }: FieldToolsProps = $props();
 
 </script>
 
