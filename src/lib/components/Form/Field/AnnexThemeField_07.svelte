@@ -6,9 +6,11 @@
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { invalidateAll } from "$app/navigation";
 
+  const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireTheme';
   const LABEL = 'Annex-Thema';
 
+  let metadataProfile = getValue<string>(PROFILE_KEY);
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
@@ -46,25 +48,27 @@
 
 </script>
 
-<div class="annex-theme-field">
-  <Paper>
-    {#await fetchOptions()}
-      <p>Lade Annex Themen</p>
-    {:then OPTIONS}
-      <SelectInput
-        key={KEY}
-        label={LABEL}
-        options={OPTIONS}
-        {value}
-        {onChange}
-      />
-    {/await}
-  </Paper>
-  <FieldTools
-    key={KEY}
-    bind:running={showCheckmark}
-  />
-</div>
+{#if metadataProfile !== 'ISO'}
+  <div class="annex-theme-field">
+    <Paper>
+      {#await fetchOptions()}
+        <p>Lade Annex Themen</p>
+      {:then OPTIONS}
+        <SelectInput
+          key={KEY}
+          label={LABEL}
+          options={OPTIONS}
+          {value}
+          {onChange}
+        />
+      {/await}
+    </Paper>
+    <FieldTools
+      key={KEY}
+      bind:running={showCheckmark}
+    />
+  </div>
+{/if}
 
 <style lang="scss">
   .annex-theme-field {
