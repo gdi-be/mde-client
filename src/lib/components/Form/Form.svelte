@@ -175,7 +175,7 @@
           <MetadataType_05 />
           <DataProtectionField_04 />
           <TermsOfUseField_24 />
-          <AnnexThemeField_07 />
+          <AnnexThemeField_07 {metadata} />
           <QualityReportCheckField_37 {metadata} />
           <HighValueDatasetField_06 />
           <TopicCategory_13 />
@@ -186,7 +186,7 @@
           <CreatedField_09 />
           <PublishedField_10 />
           <MaintenanceFrequencyField_14 />
-          <LastUpdatedField_11 />
+          <LastUpdatedField_11 {metadata} />
           <ValidityRangeField_12 />
           <DeliveredCoordinateSystemField_16 />
           <CoordinateSystemField_17 />

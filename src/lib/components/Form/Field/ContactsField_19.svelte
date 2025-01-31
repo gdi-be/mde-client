@@ -7,10 +7,9 @@
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
-  import { backIn } from "svelte/easing";
 
   const KEY = 'isoMetadata.pointsOfContact';
-  const LABEL = 'Kontaktangaben';
+  const LABEL = 'Kontakt';
 
   let initialContacts = getValue<Contacts>(KEY);
   let initialValue = initialContacts?.map(contact => {
@@ -85,7 +84,7 @@
       </IconButton>
     </legend>
     {#each contacts as contact (contact.listId)}
-      <fieldset class="contact" in:fly={{ y: -100 }} out:scale={{ easing: backIn }}>
+      <fieldset class="contact" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
         <legend>
           <IconButton
           class="material-icons"

@@ -10,6 +10,9 @@
     key: string;
     label: string;
   }[] = [{
+    key: 'none',
+    label: 'Nicht Datenschutz relevant'
+  }, {
     key: 'internal-only',
     label: 'Schutz von Daten juristischer Personen und deren Interessen - Nutzungsbestimmung "Nur für den Dienstgebrauch"'
   }, {
@@ -18,9 +21,6 @@
   }, {
     key: 'critical-infrastructures',
     label: 'Schutz von Daten, die als Kritische Infrastruktur eingestuft werden'
-  }, {
-    key: 'none',
-    label: 'Nicht Datenschutz relevant'
   }];
 
   let initialValue = getValue<string[]>(KEY);

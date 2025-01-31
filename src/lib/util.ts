@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import proj4 from "proj4";
-import type { CRS, Extent } from "./models/metadata";
+import type { CRS, Extent, MaintenanceFrequency } from "./models/metadata";
 import { log } from "loggisch";
 
 /**
@@ -65,4 +65,96 @@ export function transformCoordinate(coordinate: [number, number], fromEPSG: CRS,
   const transformedCoordinate = proj4(fromEPSG, toEPSG, [coordinate[0], coordinate[1]]);
   const decimalPlaces = proj4.defs(toEPSG).units === 'm' ? 0 : 5;
   return transformedCoordinate.map((value: number) => parseFloat(value.toFixed(decimalPlaces)));
+};
+
+
+/**
+ * Function to determine the last Update Date based on the published date and the maintenance frequency
+ *
+ * @param published
+ * @param maintenanceFrequency
+ * @returns
+ */
+export function getLastUpdateValue(published: string, maintenanceFrequency: MaintenanceFrequency) {
+  const publishedDate = new Date(published);
+  const todayDate = new Date();
+  let updateDate = new Date(published);
+
+  function dayInYearIsGreater(dateA: Date, dateB: Date): boolean {
+    const todayYearDay = dateB.getMonth() * 31 + dateB.getDate();
+    const publishedYearDay = dateA.getMonth() * 31 + dateA.getDate();
+    return todayYearDay > publishedYearDay;
+  }
+
+  function getLastUpdateDateMonthly(publishedDate: Date, cycleMonths: number) {
+    const today = new Date();
+    const diffInMonths = (today.getFullYear() - publishedDate.getFullYear()) * 12 + (today.getMonth() - publishedDate.getMonth());
+    const cycles = Math.floor(diffInMonths / cycleMonths);
+
+    const lastUpdate = new Date(publishedDate);
+    lastUpdate.setMonth(lastUpdate.getMonth() + cycles * cycleMonths);
+    return lastUpdate;
+  }
+
+  function getLastUpdateDateDaily(publishedDate: Date, days: number = 14) {
+    const today = new Date();
+    const diffInTime = today.getTime() - publishedDate.getTime();
+    const diffInDays = Math.floor(diffInTime / (1000 * 60 * 60 * 24));
+    const cycles = Math.floor(diffInDays / days);
+
+    const lastUpdate = new Date(publishedDate);
+    lastUpdate.setDate(lastUpdate.getDate() + cycles * days);
+    return lastUpdate;
+  }
+
+  switch (maintenanceFrequency) {
+  case 'continual':
+    updateDate = todayDate;
+    break;
+  case 'daily':
+    updateDate = todayDate;
+    updateDate.setDate(updateDate.getDate() - 1);
+    break;
+  case 'weekly':
+    updateDate = todayDate;
+    if (todayDate.getDay() > publishedDate.getDay()) {
+      updateDate.setDate(todayDate.getDate() - (todayDate.getDay() - publishedDate.getDay()));
+    } else {
+      updateDate.setDate(todayDate.getDate() - (7 - (publishedDate.getDay() - todayDate.getDay())));
+    }
+    break;
+  case 'fortnightly':
+    updateDate = getLastUpdateDateDaily(publishedDate, 14);
+    break;
+  case 'monthly':
+    updateDate = todayDate;
+    if (todayDate.getDate() > publishedDate.getDate()) {
+      updateDate.setDate(publishedDate.getDate());
+    } else {
+      updateDate.setMonth(updateDate.getMonth() - 1);
+      updateDate.setDate(publishedDate.getDate());
+    }
+    break;
+  case 'quarterly':
+    updateDate = getLastUpdateDateMonthly(publishedDate, 3);
+    break;
+  case 'biannually':
+    updateDate = getLastUpdateDateMonthly(publishedDate, 6);
+    break;
+  case 'annually':
+    updateDate = publishedDate;
+    if (dayInYearIsGreater(publishedDate, todayDate)) {
+      updateDate.setFullYear(todayDate.getFullYear());
+    } else {
+      updateDate.setFullYear(todayDate.getFullYear() - 1);
+    }
+    break;
+  case 'asNeeded':
+  case 'irregular':
+  case 'notPlanned':
+  case 'unknown':
+  default:
+    return undefined;
+  }
+  return updateDate;
 };

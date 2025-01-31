@@ -113,6 +113,10 @@
       display: flex;
       flex-direction: column;
       gap: 1em;
+
+      :global(.mdc-text-field) {
+        width: 100%;
+      }
     }
 
     .inline-fields {
@@ -127,6 +131,15 @@
       flex: 1;
       gap: 2em;
       border-radius: 4px;
+
+      .extent-fieldset {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 1em;
+        border-radius: 4px;
+        justify-content: space-between;
+      }
 
       >legend {
         display: flex;

@@ -7,7 +7,6 @@
   import FieldTools from "../FieldTools.svelte";
   // import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
-  import { backIn } from "svelte/easing";
   import DateInput from "../Inputs/DateInput.svelte";
 
   const KEY = 'isoMetadata.UNKNOWN';
@@ -65,7 +64,7 @@
       </IconButton>
     </legend>
     {#each lineages as lineage (lineage.listId)}
-      <fieldset class="lineage" in:fly={{ y: -100 }} out:scale={{ easing: backIn }}>
+      <fieldset class="lineage" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
         <legend>
           <IconButton
           class="material-icons"

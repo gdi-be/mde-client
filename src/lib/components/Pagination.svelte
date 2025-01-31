@@ -16,6 +16,7 @@
   const currentPage = $derived(pagingInfo.pageable.pageNumber + 1);
   const hasPrevious = $derived(currentPage > 1);
   const hasNext = $derived(maxPage > currentPage);
+  const pageSize = $derived(pagingInfo.pageable.pageSize.toString() || "10");
 
   const updatePage = (page: number) => {
     const newUrl = new URL(currentUrl);
@@ -79,7 +80,7 @@
     <select
       id="page-size"
       class="page-size"
-      value={pagingInfo.size.toString() || "10"}
+      value={pageSize}
       onchange={(e) => updatePageSize(Number((e.target as HTMLSelectElement).value))}
     >
       <option value="10">10</option>
