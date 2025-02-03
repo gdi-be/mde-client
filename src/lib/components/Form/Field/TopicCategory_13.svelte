@@ -6,6 +6,7 @@
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { invalidateAll } from "$app/navigation";
   import AutoFillButton from "../AutoFillButton.svelte";
+  import type { IsoTheme } from "../../../models/metadata";
 
   const {
     metadata
@@ -17,12 +18,6 @@
   let initialValue = getValue<string>(KEY, metadata);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
-
-  const onAutoFill = async (autoFillTopic: unknown) => {
-    if (!autoFillTopic) return;
-    value = autoFillTopic as string;
-    onChange(value);
-  };
 
   const onChange = async (newValue?: string) => {
     const response = await fetch(page.url, {
@@ -51,6 +46,17 @@
     }));
   };
 
+  const getAutoFillValues = async () => {
+    const inspireTheme = getValue<string>('isoMetadata.inspireTheme', metadata);
+    if (!inspireTheme) return;
+    const response = await fetch(`/data/iso_themes`);
+    const data = await response.json();
+    const match = data.find((entry: IsoTheme) => entry.inspireID === inspireTheme);
+    if (!match) return;
+    value = match.isoName;
+    onChange(value);
+  }
+
 </script>
 
 <div class="topic-category-field">
@@ -72,9 +78,7 @@
     bind:running={showCheckmark}
   >
     <AutoFillButton
-      key={KEY}
-      {metadata}
-      {onAutoFill}
+      onclick={getAutoFillValues}
     />
   </FieldTools>
 </div>

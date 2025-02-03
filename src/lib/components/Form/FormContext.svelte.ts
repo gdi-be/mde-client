@@ -37,26 +37,6 @@ export function getValue<T>(key: string, metadata?: Record<string, unknown>): T 
   return value as T
 }
 
-const autoFillFunctions: Record<FieldKey, (metadata?: MetadataJson) => Promise<unknown>> = {
-  'isoMetadata.topicCategory': async (metadata) => {
-    const inspireTheme = getValue<string>('isoMetadata.inspireTheme', metadata);
-    if (!inspireTheme) return '';
-    const response = await fetch(`/data/iso_themes`);
-    const data = await response.json();
-    const match = data.find((entry: IsoTheme) => entry.inspireID === inspireTheme);
-    if (!match) return '';
-    return match.isoName;
-  }
-};
-
-export async function getAutoFillValues(key: FieldKey, metadata?: MetadataJson) {
-  if (autoFillFunctions[key]) {
-    return await autoFillFunctions[key](metadata);
-  } else {
-    console.error(`No autofill function for key ${key}`);
-  }
-}
-
 export function setFormData(data: Record<string, unknown>) {
   formState.data = data;
 }
