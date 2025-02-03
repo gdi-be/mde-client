@@ -74,6 +74,7 @@
 
       :global(.create-card) {
         height: 288px;
+        min-width: 240px;
         position: relative;
       }
 
