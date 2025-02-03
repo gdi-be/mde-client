@@ -5,7 +5,6 @@
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { fly, scale } from "svelte/transition";
-  import { backIn } from "svelte/easing";
   import type { ContentDescription } from "../../../models/metadata";
   import { invalidateAll } from "$app/navigation";
 
@@ -80,7 +79,7 @@
       </IconButton>
     </legend>
     {#each values as contentDescription (contentDescription.listId)}
-      <fieldset class="contentDescription" in:fly={{ y: -100 }} out:scale={{ easing: backIn }}>
+      <fieldset class="contentDescription" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
         <legend>
           <IconButton
           class="material-icons"

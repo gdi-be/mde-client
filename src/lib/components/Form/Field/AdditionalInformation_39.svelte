@@ -4,7 +4,6 @@
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { fly, scale } from "svelte/transition";
-  import { backIn } from "svelte/easing";
 
   const KEY = 'isoMetadata.UNKNOWN';
   const LABEL = 'Weitere Informationen';
@@ -57,7 +56,7 @@
       </IconButton>
     </legend>
     {#each values as contact (contact.listId)}
-      <fieldset class="contact" in:fly={{ y: -100 }} out:scale={{ easing: backIn }}>
+      <fieldset class="contact" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
         <legend>
           <IconButton
           class="material-icons"
