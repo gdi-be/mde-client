@@ -2,9 +2,9 @@
   /* eslint-disable svelte/no-at-html-tags */
   import { parse } from "marked";
   import { goto } from "$app/navigation";
-  import { onMount, tick } from "svelte";
+  import { tick } from "svelte";
   import { fade } from "svelte/transition";
-  import { Label } from "@smui/button";
+  import LinearProgress from "@smui/linear-progress";
   import {
     setFormData,
     initializeFormContext,
@@ -16,7 +16,6 @@
     type Section
   } from "./FormContext.svelte";
   import type { FormHelp } from "$lib/models/form";
-  import Progress from "./Progress.svelte";
 
   import TitleField_01 from "./Field/TitleField_01.svelte";
   import DescriptionField_02 from "./Field/DescriptionField_02.svelte";
@@ -47,6 +46,7 @@
   import ServicesSection from "./service/ServicesSection.svelte";
   import FormFooter from "./FormFooter.svelte";
   import type { MetadataJson } from "$lib/models/metadata";
+  import { Label } from "@smui/button";
 
   type FormProps = {
     metadata?: MetadataJson;
@@ -102,24 +102,6 @@
   const helpMarkdown = $derived(getHelpMarkdown(activeHelpKey));
 
   let tabs = $state<HTMLElement | null>(null);
-  let borderStyles = $state<{ width: string; left: string }>({
-    width: "0",
-    left: "0"
-  });
-
-  const updateBorder = () => {
-    if (!tabs) return;
-    const buttonEl = tabs.querySelector(`button.section-button.active`);
-
-    if (activeSection && buttonEl) {
-      const { left: tabsLeft } = tabs.getBoundingClientRect();
-      const { left: buttonLeft, width: buttonWidth } = buttonEl.getBoundingClientRect();
-      borderStyles = {
-        width: `${buttonWidth}px`,
-        left: `${buttonLeft - tabsLeft}px`
-      };
-    }
-  };
 
   const onSectionClick = async (section: string) => {
     activeSection = section;
@@ -129,35 +111,30 @@
       replaceState: true
     });
     await tick();
-    updateBorder();
   };
-
-  onMount(() => {
-    updateBorder();
-  });
 
 </script>
 
 <div class="metadata-form">
   <nav class="tabs" bind:this={tabs}>
-    {#each SECTIONS as { section, label, disabledCheck }}
-      <button
-        class="section-button"
+    {#each SECTIONS as { section, label, disabledCheck }, i}
+      <div
+        class="tab-container"
         class:active={activeSection === section}
-        onclick={() => onSectionClick(section)}
-        disabled={disabledCheck(metadata)}
       >
-        <Label>{label}</Label>
-        <Progress {...(getProgress(section, metadata))} />
-      </button>
+        <button
+          class="tab"
+          onclick={() => onSectionClick(section)}
+          disabled={disabledCheck(metadata)}
+          >
+          <Label>{label}</Label>
+        </button>
+        <LinearProgress progress={(getProgress(section, metadata))} />
+      </div>
+      {#if i + 1 < SECTIONS.length}
+        <i class="material-icons">arrow_right_alt</i>
+      {/if}
     {/each}
-    <div
-      class="active-border"
-      style="
-        --border-width: {borderStyles.width};
-        --border-left: {borderStyles.left};
-      ">
-    </div>
   </nav>
   <div class="form-wrapper">
     <form>
@@ -234,37 +211,40 @@
     align-self: stretch;
 
     nav.tabs {
-      position: relative;
       display: flex;
-      padding: 0 2em 0.25em 2em;
-      margin-bottom: 1em;
+      justify-content: center;
+      align-items: center;
+      gap: 1em;
+    }
 
-      button.section-button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.25em;
-        cursor: pointer;
-        flex: 1;
-        background-color: transparent;
-        border: none;
-        font-family: 'Roboto', sans-serif;
-        font-size: 1.25em;
+    .tab-container {
+      background-color: #f0f0f0;
+      border-bottom: 3px solid transparent;
+      border-radius: var(--mdc-shape-medium, 4px) var(--mdc-shape-medium, 4px) 0 0;
 
-        :global(.progress-chart) {
-          flex: 0 0 auto;
-        }
+      :global(svg) {
+        margin: 10px;
       }
 
-      .active-border {
-        position: absolute;
-        bottom: 0;
-        height: 3px;
-        background: linear-gradient(to right, transparent, var(--mdc-theme-primary) 5% 95%, transparent);
-        transition: width 0.3s ease, left 0.3s ease;
-        width: var(--border-width, 0px);
-        left: var(--border-left, 0px);
+      &:hover {
+        background-color: #f0f0f0;
+        border-color: var(--mdc-theme-primary);
       }
+
+      &.active {
+        font-weight: bold;
+        border-color: #0078d7;
+      }
+    }
+
+    .tab {
+      padding: 0.5rem 1rem;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.25rem;
+      border-radius: 5px;
+      transition: background-color 0.3s;
     }
 
     .form-wrapper {
