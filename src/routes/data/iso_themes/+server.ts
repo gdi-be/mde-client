@@ -6,10 +6,10 @@ import { parse } from 'yaml';
 export async function GET({ cookies }) {
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
-  const terms_of_use = Bun.file('/data/codelists/terms_of_use.yaml');
 
-  const terms = await terms_of_use.text();
-  const parsed = parse(terms);
+  const file = Bun.file('/data/codelists/iso_themes.yaml');
+  const themes = await file.text();
+  const parsed = parse(themes);
 
   return json(parsed);
 }

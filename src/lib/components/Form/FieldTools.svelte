@@ -2,12 +2,19 @@
   import Checkmark from "./Checkmark.svelte";
   import HelpButton from "./HelpButton.svelte";
   import CopyButton from "./CopyButton.svelte";
+  import type { Snippet } from "svelte";
+
+  export type FieldToolsProps = {
+    key: string;
+    children: Snippet;
+    running?: boolean;
+  }
 
   let {
     key,
-    children = undefined,
+    children,
     running = $bindable<boolean>(false)
-  } = $props();
+  }: FieldToolsProps = $props();
 
 </script>
 
@@ -20,7 +27,7 @@
 
 <style lang="scss">
   .field-tools {
-    padding-bottom: 0.5em;
+    padding: 0.25em 0;
     width: 36px;
     display: flex;
     flex-direction: column;
@@ -28,5 +35,9 @@
     background-color: #f8f9fa;
     outline: 1px solid #e9ecef;
     border-radius: var(--mdc-shape-medium, 4px);
+
+    :global(.checkmark) {
+      margin: 10px 0;
+    }
   }
 </style>

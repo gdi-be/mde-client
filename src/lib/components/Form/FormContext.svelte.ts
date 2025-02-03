@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getContext, setContext } from "svelte";
-import type { FieldKey, FormHelp } from "../../models/form";
+import type { FieldKey, FormHelp } from "$lib/models/form";
+import type { IsoTheme, KeyWords, MetadataJson, MetadataProfile } from "$lib/models/metadata";
 
 export type FormState = {
   data: Record<string, unknown>;

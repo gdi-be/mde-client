@@ -5,11 +5,17 @@
   import FieldTools from "../FieldTools.svelte";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { invalidateAll } from "$app/navigation";
+  import AutoFillButton from "../AutoFillButton.svelte";
+  import type { IsoTheme } from "../../../models/metadata";
+
+  const {
+    metadata
+  } = $props();
 
   const KEY = 'isoMetadata.topicCategory';
   const LABEL = 'Themenkategorie (ISO)';
 
-  let initialValue = getValue<string>(KEY);
+  let initialValue = getValue<string>(KEY, metadata);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
 
@@ -31,18 +37,25 @@
   };
 
   const fetchOptions = async () => {
-    const response = await fetch('/data/annex_themes');
+    const response = await fetch('/data/iso_themes');
     const data = await response.json();
 
-    if (!data.register) {
-      return [];
-    };
-
-    return data.register.containeditems.map((entry) => ({
-      key: entry.theme.id,
-      label: entry.theme.label.text
+    return data.map((entry) => ({
+      key: entry.isoName as string,
+      label: entry.isoName as string
     }));
   };
+
+  const getAutoFillValues = async () => {
+    const inspireTheme = getValue<string>('isoMetadata.inspireTheme', metadata);
+    if (!inspireTheme) return;
+    const response = await fetch(`/data/iso_themes`);
+    const data = await response.json();
+    const match = data.find((entry: IsoTheme) => entry.inspireID === inspireTheme);
+    if (!match) return;
+    value = match.isoName;
+    onChange(value);
+  }
 
 </script>
 
@@ -63,7 +76,11 @@
   <FieldTools
     key={KEY}
     bind:running={showCheckmark}
-  />
+  >
+    <AutoFillButton
+      onclick={getAutoFillValues}
+    />
+  </FieldTools>
 </div>
 
 <style lang="scss">

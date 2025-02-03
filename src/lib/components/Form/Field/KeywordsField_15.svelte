@@ -77,6 +77,10 @@
     const keywords: KeyWords = {
       default: value.map((entry) => ({ keyword: entry }))
     };
+    persistKeywords(keywords);
+  };
+
+  const persistKeywords = async (keywords: KeyWords) => {
     const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
@@ -91,7 +95,7 @@
       showCheckmark = true;
       invalidateAll();
     }
-  };
+  }
 
   onMount(() => {
     getAutoKeywords();

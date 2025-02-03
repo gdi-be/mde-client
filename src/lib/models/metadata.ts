@@ -2,6 +2,12 @@ export type JsonClientMetadata = Record<string, unknown>;
 export type JsonIsoMetadata = Record<string, unknown>;
 export type JsonTechnialMetadata = Record<string, unknown>;
 
+export type IsoTheme = {
+  inspireID: string;
+  isoName: string;
+  inspireName: string;
+}
+
 export type TermsOfUse = {
   id: number;
   shortname: string;
