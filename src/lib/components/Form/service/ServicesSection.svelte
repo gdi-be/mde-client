@@ -6,7 +6,6 @@
   import ServiceForm from "./ServiceForm.svelte";
   import { invalidateAll } from "$app/navigation";
   import Checkmark from "../Checkmark.svelte";
-  import Scrollable from "../../Scrollable.svelte";
 
   type Tab = {
     title: string;
@@ -90,40 +89,36 @@
 </script>
 
 <nav class="tabs">
-  <Scrollable >
-    <div class="scrollable-content">
-      {#each tabs as tab}
-        <div
-          class="tab-container"
-          class:active={activeTab === tab.id}
+  {#each tabs as tab}
+    <div
+      class="tab-container"
+      class:active={activeTab === tab.id}
+    >
+      <button
+        id={tab.id}
+        class="tab"
+        title={tab.title}
+        onclick={() => (activeTab = tab.id)}
+      >
+        {tab.title}
+      </button>
+      {#if visibleCheckmarks[tab.id]}
+        <Checkmark
+          bind:running={visibleCheckmarks[tab.id]}
+        />
+      {/if}
+      {#if services.length > 1 && !visibleCheckmarks[tab.id]}
+        <IconButton
+          class="material-icons"
+          onclick={() => removeService(tab.id)}
+          size="button"
+          title="Dienst entfernen"
         >
-          <button
-            id={tab.id}
-            class="tab"
-            title={tab.title}
-            onclick={() => (activeTab = tab.id)}
-          >
-            {tab.title}
-          </button>
-          {#if visibleCheckmarks[tab.id]}
-            <Checkmark
-              bind:running={visibleCheckmarks[tab.id]}
-            />
-          {/if}
-          {#if services.length > 1 && !visibleCheckmarks[tab.id]}
-            <IconButton
-              class="material-icons"
-              onclick={() => removeService(tab.id)}
-              size="button"
-              title="Dienst entfernen"
-            >
-              delete
-            </IconButton>
-          {/if}
-        </div>
-      {/each}
+          delete
+        </IconButton>
+      {/if}
     </div>
-  </Scrollable>
+  {/each}
   <IconButton
     class="material-icons"
     onclick={() => addService()}
@@ -149,13 +144,9 @@
 <style lang="scss">
   nav.tabs {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 1em;
-
-    .scrollable-content {
-      display: flex;
-      gap: 0.5rem;
-    }
+    gap: 0.25em;
   }
 
   .tab-container {

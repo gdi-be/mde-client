@@ -5,7 +5,7 @@
   import LogoutButton from "./LogoutButton.svelte";
 
   let {
-    text = 'Header'
+    text = 'Metadaten Editor',
   } = $props();
 
   const token = getContext('user_token');
