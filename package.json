@@ -46,6 +46,7 @@
     "@smui/dialog": "^8.0.0-beta.3",
     "@smui/form-field": "^8.0.0-beta.3",
     "@smui/icon-button": "^8.0.0-beta.3",
+    "@smui/linear-progress": "^8.0.0-beta.3",
     "@smui/paper": "^8.0.0-beta.3",
     "@smui/radio": "^8.0.0-beta.3",
     "@smui/select": "^8.0.0-beta.3",

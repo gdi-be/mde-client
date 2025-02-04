@@ -5,6 +5,8 @@
   import FieldTools from "../FieldTools.svelte";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { invalidateAll } from "$app/navigation";
+  import type { InspireRegister } from "$lib/models/inspire";
+  import type { Option } from "$lib/models/form";
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireTheme';
@@ -38,16 +40,20 @@
 
   const fetchOptions = async () => {
     const response = await fetch('/data/inspire_themes');
-    const data = await response.json();
+    const data: InspireRegister = await response.json();
 
     if (!data.register) {
       return [];
     };
 
-    return data.register.containeditems.map((entry) => ({
-      key: entry.theme.id.split('/').at(-1).toUpperCase().replace(/-/g, '_'),
-      label: entry.theme.label.text
-    }));
+
+    return data.register.containeditems
+      .map((entry) => ({
+        key: entry.theme.id.split('/').at(-1)!.toUpperCase(),
+        label: entry.theme.label.text
+      }))
+      .filter((entry: Option) => entry.key !== 'AC-MF')
+      .sort((a: Option, b: Option) => a.label.localeCompare(b.label));
   };
 
 </script>
