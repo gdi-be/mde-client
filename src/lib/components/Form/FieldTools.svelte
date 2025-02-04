@@ -6,7 +6,7 @@
 
   export type FieldToolsProps = {
     key: string;
-    children: Snippet;
+    children?: Snippet;
     running?: boolean;
   }
 
