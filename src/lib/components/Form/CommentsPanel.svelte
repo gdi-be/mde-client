@@ -23,6 +23,7 @@
   let value = $state('');
   let comments = $derived<Comment[]>(metadata?.clientMetadata?.comments as Comment[]);
   let myUserId = $derived(token.sub)
+  let inputRows =$derived(Math.min(value.split('\n').length, 4));
 
   async function sendComment() {
     const response = await fetch(page.url.pathname + '/comment', {
@@ -112,7 +113,7 @@
           textarea
           variant="outlined"
           input$maxlength={500}
-          input$rows={1}
+          input$rows={inputRows}
           bind:value
           label="Neuer Kommentar"
         >
