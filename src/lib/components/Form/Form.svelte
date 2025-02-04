@@ -46,7 +46,8 @@
   import ServicesSection from "./service/ServicesSection.svelte";
   import FormFooter from "./FormFooter.svelte";
   import type { MetadataJson } from "$lib/models/metadata";
-  import { Label } from "@smui/button";
+  import Button, { Icon, Label } from "@smui/button";
+  import ScrollToTopButton from "./ScrollToTopButton.svelte";
 
   type FormProps = {
     metadata?: MetadataJson;
@@ -101,7 +102,8 @@
   const activeHelpKey = $derived(getFormContext().activeHelpKey);
   const helpMarkdown = $derived(getHelpMarkdown(activeHelpKey));
 
-  let tabs = $state<HTMLElement | null>(null);
+  let tabs = $state<HTMLElement>();
+  let formWrapper = $state<HTMLDivElement>();
 
   const onSectionClick = async (section: string) => {
     activeSection = section;
@@ -112,7 +114,6 @@
     });
     await tick();
   };
-
 </script>
 
 <div class="metadata-form">
@@ -136,7 +137,7 @@
       {/if}
     {/each}
   </nav>
-  <div class="form-wrapper">
+  <div class="form-wrapper" bind:this={formWrapper}>
     <form>
       {#if activeSection === "basedata"}
         <section id="basedata" transition:fade >
@@ -145,6 +146,7 @@
           <KeywordsField_15 />
           <PreviewField_29 />
           <ContactsField_19 />
+          <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
       {#if activeSection === "classification"}
@@ -156,6 +158,7 @@
           <QualityReportCheckField_37 {metadata} />
           <HighValueDatasetField_06 />
           <TopicCategory_13 {metadata}/>
+          <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
       {#if activeSection === "temp_and_spatial"}
@@ -169,6 +172,7 @@
           <CoordinateSystemField_17 />
           <ExtentField_18 />
           <ResolutionField_28 />
+          <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
       {#if activeSection === "additional"}
@@ -178,6 +182,7 @@
           <TechnicalDescription_60 />
           <Lineage_32 />
           <AdditionalInformation_39 />
+          <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
       {#if activeSection === "services"}
@@ -198,7 +203,26 @@
       {/if}
     </div>
   </div>
-  <FormFooter {metadata} />
+  <FormFooter {metadata}>
+    <Button
+      class="previous-button"
+      title="Zurück"
+      disabled={activeSection === "basedata"}
+      onclick={() => onSectionClick(SECTIONS[SECTIONS.findIndex(s => s.section === activeSection) - 1].section)}
+    >
+      <Icon class="material-icons">chevron_left</Icon>
+      <Label>Zurück</Label>
+    </Button>
+    <Button
+      class="next-button"
+      title="Weiter"
+      disabled={activeSection === "services"}
+      onclick={() => onSectionClick(SECTIONS[SECTIONS.findIndex(s => s.section === activeSection) + 1].section)}
+    >
+      <Label>Weiter</Label>
+      <Icon class="material-icons">chevron_right</Icon>
+    </Button>
+  </FormFooter>
 </div>
 
 <style lang="scss">

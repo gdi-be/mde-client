@@ -3,15 +3,17 @@
   import CommentsPanel from "./CommentsPanel.svelte";
   import Button, { Icon, Label } from "@smui/button";
   import type { MetadataJson } from "$lib/models/metadata";
+  import type { Snippet } from "svelte";
 
   type FormFooterProps = {
     metadata?: MetadataJson;
     text?: string;
+    children?: Snippet;
   }
 
   let {
     metadata,
-    text = 'FormFooter'
+    children
   }: FormFooterProps = $props();
 
   let commentsPanelVisible = $state(false);
@@ -33,7 +35,7 @@
     {/if}
   </div>
   <div class="container center-container">
-    {text}
+    {@render children?.()}
   </div>
   <div class="container right-container">
     <Button

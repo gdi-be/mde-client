@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getContext, setContext } from "svelte";
 import type { FieldKey, FormHelp } from "$lib/models/form";
-import type { IsoTheme, KeyWords, MetadataJson, MetadataProfile } from "$lib/models/metadata";
 
 export type FormState = {
   data: Record<string, unknown>;
@@ -87,12 +86,6 @@ export function toggleActiveHelp(key: FieldKey) {
 }
 
 export type Section = 'basedata' | 'classification' | 'temp_and_spatial' | 'additional' | 'services';
-
-type Progress = {
-  total: number;
-  required: number;
-  optional: number;
-};
 
 type FormValidators = {
   [key in Section]: {
@@ -233,7 +226,7 @@ const formValidators: FormValidators = {
 };
 
 export function getProgress(section: Section, metadata?: Record<string, unknown>): number {
-  const total = formValidators[section].required.length + formValidators[section].optional.length;
+  const totalRequired = formValidators[section].required.length;
   if (!metadata) return 1;
 
   const invalidFilter = ({key, validator}: { key: FieldKey, validator: (val: unknown) => boolean }) => {
@@ -241,8 +234,9 @@ export function getProgress(section: Section, metadata?: Record<string, unknown>
     const valid = validator(val);
     return !valid;
   };
-  const required = formValidators[section].required.filter(invalidFilter).length;
-  return required / total;
+
+  const filledRequired = formValidators[section].required.filter(invalidFilter).length;
+  return filledRequired / totalRequired;
 }
 
 export function allFieldsValid(metadata?: Record<string, unknown>): boolean {
