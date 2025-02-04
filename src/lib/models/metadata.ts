@@ -145,7 +145,7 @@ export type Previews = {
   content: string;
 }[];
 
-export type Contacts = {
+export type Contact = {
   name?: string;
   code?: string;
   email?: string;
@@ -153,7 +153,9 @@ export type Contacts = {
   phone?: string;
   roleCode?: string;
   url?: string;
-}[]
+};
+
+export type Contacts = Contact[];
 
 export type ClientMedata = {
   id: number;

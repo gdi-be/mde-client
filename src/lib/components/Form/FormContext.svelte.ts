@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getContext, setContext } from "svelte";
 import type { FieldKey, FormHelp } from "$lib/models/form";
+import { FieldConfigs, type FieldConfig } from "./FieldsConfig";
 
 export type FormState = {
   data: Record<string, unknown>;
@@ -35,6 +36,10 @@ export function getValue<T>(key: string, metadata?: Record<string, unknown>): T 
 
   return value as T
 }
+
+export function getFieldConfig<T>(key: FieldKey): FieldConfig<T> | undefined {
+  return FieldConfigs.find(({key: k}) => k === key);
+};
 
 export function setFormData(data: Record<string, unknown>) {
   formState.data = data;
@@ -87,161 +92,24 @@ export function toggleActiveHelp(key: FieldKey) {
 
 export type Section = 'basedata' | 'classification' | 'temp_and_spatial' | 'additional' | 'services';
 
-type FormValidators = {
-  [key in Section]: {
-    required: {
-      key: FieldKey;
-      validator: (val?: any) => boolean;
-    }[];
-    optional: {
-      key: FieldKey;
-      validator: (val?: any) => boolean;
-    }[];
-  };
-};
-
-const formValidators: FormValidators = {
-  basedata: {
-    required: [
-      {
-        key: 'isoMetadata.title',
-        validator: (val) => val !== undefined && val !== null && val !== ''
-      },
-      {
-        key: 'isoMetadata.description',
-        validator: (val) => val !== undefined && val !== null && val !== ''
-      },
-      {
-        key: 'isoMetadata.keywords',
-        validator: (val) => val?.default?.length > 0 && val.default.every(({keyword}: any) => keyword !== '')
-      },
-      {
-        key: 'isoMetadata.previews',
-        validator: (val) => val?.length > 0 && val?.every(({content}: any) => content !== '')
-      },
-      {
-        key: 'isoMetadata.contacts',
-        validator: (val) => val?.length > 0 && val?.every(({name, email, organisation, phone}: any) =>
-          name !== undefined && name !== null && name !== '' &&
-          email !== undefined && email !== null && email !== '' &&
-          organisation !== undefined && organisation !== null && organisation !== '' &&
-          phone !== undefined && phone !== null && phone !== ''
-        )
-      }
-    ],
-    optional: [
-      {
-        key: 'isoMetadata.internal_comment',
-        validator: (val) => val !== undefined && val !== null && val !== ''
-      }
-    ]
-  },
-  classification: {
-    required: [{
-      // Metadaten-Typ
-      key: 'isoMetadata.metadataProfile',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      // Datenschutz
-      // TODO: check this
-      key: 'isoMetadata.resourceConstraints',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      // Nutzungsbedingung
-      // TODO: check this
-      key: 'isoMetadata.resourceConstraints',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.inspireTheme',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.qualityReportCheck',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'clientMetadata.highValueDataset',
-      validator: (val) => val !== undefined && val !== null
-    }, {
-      key: 'isoMetadata.topicCategory',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }],
-    optional: []
-  },
-  temp_and_spatial: {
-    required: [{
-      key: 'isoMetadata.published',
-      validator: (val) => val?.length > 0
-    }, {
-      key: 'isoMetadata.maintenanceFrequency',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.maintained',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.deliveredCrs',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.crs',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.extent',
-      validator: (val) => !!val?.maxx && !!val?.maxy && !!val?.minx && !!val?.miny
-    }, {
-      key: 'isoMetadata.resolution',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.representiveFraction',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }],
-    optional: [{
-      key: 'isoMetadata.dateTime',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.validityRange',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }]
-  },
-  additional: {
-    required: [],
-    optional: [{
-      key: 'isoMetadata.contentDescription',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.contentDescriptionTextarea',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    },{
-      key: 'isoMetadata.technicalDescription',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }, {
-      key: 'isoMetadata.lineage',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    },{
-      key: 'isoMetadata.additionalInformation',
-      validator: (val) => val !== undefined && val !== null && val !== ''
-    }]
-  },
-  services: {
-    required: [],
-    optional: []
-  }
-};
-
 export function getProgress(section: Section, metadata?: Record<string, unknown>): number {
-  const totalRequired = formValidators[section].required.length;
+  // const totalRequired = formValidators[section].required.length;
+  const totalRequired = FieldConfigs.filter(({section: s, required}) => s === section && required);
+
   if (!metadata) return 1;
 
-  const invalidFilter = ({key, validator}: { key: FieldKey, validator: (val: unknown) => boolean }) => {
-    const val = getValue(key, metadata);
-    const valid = validator(val);
-    return !valid;
+  const isValidFilter = ({key, validator}: FieldConfig) => {
+    return validator(getValue(key, metadata));
   };
 
-  const filledRequired = formValidators[section].required.filter(invalidFilter).length;
-  return filledRequired / totalRequired;
+  const filledRequired = totalRequired.filter(isValidFilter);
+
+  return filledRequired.length / totalRequired.length;
 }
 
 export function allFieldsValid(metadata?: Record<string, unknown>): boolean {
   if (!metadata) return false;
-  const sections = Object.keys(formValidators) as Section[];
+  const sections = Array.from(new Set(FieldConfigs.map(({section}) => section)));
   return sections.every((section: Section) => {
     return getProgress(section, metadata) === 1;
   });

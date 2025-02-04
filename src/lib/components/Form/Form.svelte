@@ -259,6 +259,10 @@
         font-weight: bold;
         border-color: #0078d7;
       }
+
+      :global(.mdc-linear-progress) {
+        margin-bottom: 4px;
+      }
     }
 
     .tab {

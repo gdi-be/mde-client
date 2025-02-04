@@ -2,16 +2,19 @@
   import { page } from "$app/state";
   import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.title';
   const LABEL = 'Titel Datenbestand';
 
   let initialValue = getValue<string>(KEY);
+  const fieldConfig = getFieldConfig<string>(KEY);
   let value = $state(initialValue || '');
   let showCheckmark = $state(false);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {
     // TODO check if value has changed
@@ -38,9 +41,10 @@
     <TextInput
       bind:value
       key={KEY}
+      isValid={validationResult?.valid}
+      helpText={validationResult?.helpText}
       label={LABEL}
       onblur={onBlur}
-      required
     />
   </Paper>
   <FieldTools
