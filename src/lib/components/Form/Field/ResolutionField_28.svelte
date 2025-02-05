@@ -1,11 +1,12 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
   import { invalidateAll } from "$app/navigation";
   import FormField from "@smui/form-field";
   import Radio from "@smui/radio";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const RESOLUTION_KEY = 'isoMetadata.resolutions';
   const RESOLUTION_LABEL = 'Bodenauflösung'
@@ -19,6 +20,10 @@
   let scaleValue = $state(initialScaleValue  || null);
   let selected = $state(initialResolutionValue ? RESOLUTION_KEY : SCALE_KEY);
   let showCheckmark = $state(false);
+  const resolutionFieldConfig = getFieldConfig<number>(RESOLUTION_KEY);
+  let resolutionValidationResult = $derived(resolutionFieldConfig?.validator(resolutionValue || undefined)) as ValidationResult;
+  const scaleFieldConfig = getFieldConfig<number>(SCALE_KEY);
+  let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined)) as ValidationResult;
 
   const onBlur = async () => {
     if (selected === RESOLUTION_KEY) {
@@ -106,6 +111,7 @@
         label={RESOLUTION_LABEL}
         type="float"
         onblur={onBlur}
+        validationResult={resolutionValidationResult}
       />
     {:else}
       <NumberInput
@@ -114,6 +120,7 @@
         label={SCALE_LABEL}
         onblur={onBlur}
         prefix="1:"
+        validationResult={scaleValidationResult}
       />
     {/if}
   </fieldset>
