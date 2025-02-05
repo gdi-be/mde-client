@@ -42,8 +42,8 @@
     const response = await fetch('/data/iso_themes');
     const data = await response.json();
     return data.map((entry: IsoTheme) => ({
-      key: entry.isoName as string,
-      label: entry.isoName as string
+      key: entry.isoID,
+      label: entry.isoName
     }));
   };
 
@@ -54,7 +54,7 @@
     const data = await response.json();
     const match = data.find((entry: IsoTheme) => entry.inspireID === inspireTheme);
     if (!match) return;
-    value = match.isoName;
+    value = match.isoID;
     onChange(value);
   }
 

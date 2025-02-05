@@ -48,7 +48,6 @@
       return [];
     };
 
-
     return data.register.containeditems
       .map((entry) => ({
         key: entry.theme.id.split('/').at(-1)!.toUpperCase(),

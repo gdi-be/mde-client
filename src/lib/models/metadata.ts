@@ -4,8 +4,9 @@ export type JsonTechnialMetadata = Record<string, unknown>;
 
 export type IsoTheme = {
   inspireID: string;
-  isoName: string;
   inspireName: string;
+  isoID: string;
+  isoName: string;
 }
 
 export type TermsOfUse = {
