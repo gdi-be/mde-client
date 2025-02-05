@@ -8,6 +8,7 @@
   import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
   import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.pointsOfContact';
   const LABEL = 'Kontakt';
@@ -73,13 +74,9 @@
     persistContacts();
   };
 
-  const getFieldValidation = (i: number, k: string) => {
-    if (!Array.isArray(validationResult)) return {};
-    const matchingValidation =  validationResult.find(({index, subKey}) => index === i && subKey === k);
-    return {
-      isValid: matchingValidation?.valid,
-      helpText: matchingValidation?.helpText
-    }
+  const getFieldValidation = (i: number, k: string): ValidationResult | undefined => {
+    if (!Array.isArray(validationResult)) return;
+    return validationResult.find(({index, subKey}) => index === i && subKey === k);
   };
 
 </script>
@@ -113,28 +110,28 @@
           key={KEY}
           label="Name"
           onblur={persistContacts}
-          {...getFieldValidation(index, 'name')}
+          validationResult={getFieldValidation(index, 'name')}
         />
         <TextInput
           bind:value={contact.organisation}
           key={KEY}
           label="Organisation"
           onblur={persistContacts}
-          {...getFieldValidation(index, 'organisation')}
+          validationResult={getFieldValidation(index, 'organisation')}
         />
         <TextInput
           bind:value={contact.phone}
           key={KEY}
           label="Telefon"
           onblur={persistContacts}
-          {...getFieldValidation(index, 'phone')}
+          validationResult={getFieldValidation(index, 'phone')}
         />
         <TextInput
           bind:value={contact.email}
           key={KEY}
           label="E-Mail"
           onblur={persistContacts}
-          {...getFieldValidation(index, 'email')}
+          validationResult={getFieldValidation(index, 'email')}
         />
       </fieldset>
       {/each}
