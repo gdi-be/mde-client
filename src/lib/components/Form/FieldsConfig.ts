@@ -105,9 +105,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
   },
   {
     key: 'isoMetadata.pointsOfContact',
-    validator: (contacts: Contacts): ValidationResultList => {
+    validator: (contacts?: Contacts): ValidationResultList => {
       const validationResult: ValidationResultList = [];
-      if (contacts?.length < 1) return [{
+      if (!contacts || contacts.length < 1) return [{
         valid: false,
         helpText: 'Bitte geben Sie mindestens einen Kontakt an.',
       }];
