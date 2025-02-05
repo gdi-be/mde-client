@@ -93,13 +93,18 @@ export function toggleActiveHelp(key: FieldKey) {
 export type Section = 'basedata' | 'classification' | 'temp_and_spatial' | 'additional' | 'services';
 
 export function getProgress(section: Section, metadata?: Record<string, unknown>): number {
-  // const totalRequired = formValidators[section].required.length;
   const totalRequired = FieldConfigs.filter(({section: s, required}) => s === section && required);
 
   if (!metadata) return 1;
 
-  const isValidFilter = ({key, validator}: FieldConfig) => {
-    return validator(getValue(key, metadata));
+  const isValidFilter = ({key, validator}: FieldConfig<any>) => {
+    const value = getValue(key, metadata);
+    const validationResult = validator(value);
+    if (Array.isArray(validationResult)) {
+      return validationResult.every(result => result.valid);
+    } else {
+      return validationResult.valid;
+    }
   };
 
   const filledRequired = totalRequired.filter(isValidFilter);

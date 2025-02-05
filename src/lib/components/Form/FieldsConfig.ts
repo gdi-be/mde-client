@@ -5,14 +5,17 @@ import type { Section } from "./FormContext.svelte";
 
 export type ValidationResult = {
   valid: boolean;
-  index?: number;
-  subKey?: string;
   helpText?: string;
 };
 
+export type ValidationResultList = (ValidationResult & {
+  index?: number;
+  subKey?: string;
+})[];
+
 export type FieldConfig<T> = {
   key: FieldKey;
-  validator: (val: T) => ValidationResult | ValidationResult[];
+  validator: (val: T) => T extends any[] ? ValidationResultList : ValidationResult;
   section: Section;
   required?: boolean;
 };
@@ -102,7 +105,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
         valid: false,
         helpText: 'Bitte geben Sie mindestens einen Kontakt an.',
       };
-      const validationResult: ValidationResult[] = [];
+      const validationResult: ValidationResultList = [];
 
       for (const [index, contact] of contacts.entries()) {
         if (!isDefined(contact.name)) {
