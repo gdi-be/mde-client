@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
@@ -45,10 +44,10 @@
   let initialValue = getValue<Extent>(KEY);
   let initialCRSKey = getValue<CRS>(CRS_KEY);
   let value4326 = $state(initialValue || {
-    minx: NaN,
-    maxx: NaN,
-    miny: NaN,
-    maxy: NaN
+    minx: 0,
+    maxx: 0,
+    miny: 0,
+    maxy: 0
   });
   let crsKey = $state(initialCRSKey || CRS_OPTIONS[1].key);
   let crs = $derived(CRS_OPTIONS.find(option => option.key === crsKey) || CRS_OPTIONS[1]);
