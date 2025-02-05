@@ -1,12 +1,13 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import type { TermsOfUse } from "$lib/models/metadata";
   import type { Option } from "$lib/models/form";
   import { invalidateAll } from "$app/navigation";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.termsOfUseId';
   const LABEL = 'Nutzungsbedingungen';
@@ -20,6 +21,8 @@
     if (!description) return '';
     return description.replace(/{{(.*?)}}/g, (match, p1) => getValue(p1.trim()) || match);
   });
+  const fieldConfig = getFieldConfig<string>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const fetchOptions = async () => {
     const response = await fetch('/data/terms_of_use');
@@ -50,7 +53,6 @@
       invalidateAll();
     }
   };
-
 </script>
 
 <div class="terms-of-use-field">
@@ -70,6 +72,7 @@
         }
         bind:value
         {onChange}
+        {validationResult}
       />
       {#if selectedDescription}
         <p class="description">{selectedDescription}</p>
