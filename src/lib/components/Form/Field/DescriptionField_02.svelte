@@ -39,7 +39,6 @@
     label={LABEL}
     maxlength={500}
     onblur={onBlur}
-    required
   />
   <FieldTools
     key={KEY}

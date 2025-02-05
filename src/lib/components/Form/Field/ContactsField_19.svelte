@@ -7,7 +7,6 @@
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
-  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.pointsOfContact';
   const LABEL = 'Kontakt';
@@ -27,7 +26,7 @@
 
   let contacts = $state(initialValue || []);
   let showCheckmark = $state(false);
-  let validationResult = $derived(fieldConfig?.validator(contacts)) as ValidationResult[];
+  let validationResult = $derived(fieldConfig?.validator(contacts));
 
   const persistContacts = async () => {
     // TODO add equals check to prevent unnecessary requests
@@ -85,7 +84,7 @@
 
 <div class="contacts-field">
   <fieldset>
-    <legend>{LABEL + '*'}
+    <legend>{LABEL}
       <IconButton
         class="material-icons"
         onclick={() => addItem()}

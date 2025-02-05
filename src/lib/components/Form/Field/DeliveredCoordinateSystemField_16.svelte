@@ -41,7 +41,6 @@
       label={LABEL}
       maxlength={100}
       onblur={onBlur}
-      required
     />
   </Paper>
   <FieldTools

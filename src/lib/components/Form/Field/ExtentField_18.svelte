@@ -142,7 +142,6 @@
               onChange(Number(target.value), 'minx');
             }}
             input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-            required
           />
           <NumberInput
             value={transformedValue.maxx}
@@ -153,7 +152,6 @@
               onChange(Number(target.value), 'maxx');
             }}
             input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-            required
           />
         </div>
         <div class="inline-fields">
@@ -166,7 +164,6 @@
               onChange(Number(target.value), 'miny');
             }}
             input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-            required
           />
           <NumberInput
             value={transformedValue.maxy}
@@ -177,7 +174,6 @@
               onChange(Number(target.value), 'maxy');
             }}
             input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-            required
           />
         </div>
       </div>

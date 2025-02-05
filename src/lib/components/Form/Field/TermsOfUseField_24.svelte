@@ -9,7 +9,7 @@
   import { invalidateAll } from "$app/navigation";
 
   const KEY = 'isoMetadata.termsOfUseId';
-  const LABEL = 'Nutzungsbedingungen*';
+  const LABEL = 'Nutzungsbedingungen';
 
   let initialValue = getValue<number>(KEY);
   let value = $state(initialValue?.toString());

@@ -108,7 +108,6 @@
           label={RESOLUTION_LABEL}
           type="float"
           onblur={onBlur}
-          required
         />
       {:else}
         <NumberInput
@@ -117,7 +116,6 @@
           label={SCALE_LABEL}
           onblur={onBlur}
           prefix="1:"
-          required
         />
       {/if}
     </fieldset>

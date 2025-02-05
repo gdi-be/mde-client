@@ -43,7 +43,6 @@
       key={KEY}
       label={LABEL}
       onblur={onBlur}
-      required
     />
   </Paper>
   <FieldTools

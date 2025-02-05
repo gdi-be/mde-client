@@ -8,7 +8,7 @@
   import type { MaintenanceFrequency } from '$lib/models/metadata';
 
   const KEY = 'isoMetadata.maintenanceFrequency';
-  const LABEL = 'Pflegeintervall*';
+  const LABEL = 'Pflegeintervall';
   const OPTIONS: {
     key: MaintenanceFrequency;
     label: string;
