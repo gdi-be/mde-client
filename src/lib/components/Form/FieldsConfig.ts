@@ -329,12 +329,12 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    key: 'isoMetadata.deliveredCrs',
+    key: 'technicalMetadata.deliveredCrs',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie das gelieferte CRS an.',
+          helpText: 'Bitte geben Sie das gelieferte Koordinatensystem an.',
         }
       }
       return { valid: true };
@@ -348,7 +348,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie das CRS an.',
+          helpText: 'Bitte geben Sie das Koordinatensystem an.',
         }
       }
       return { valid: true };
