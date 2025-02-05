@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from "$lib/models/form";
-import type { Contacts } from "$lib/models/metadata";
+import type { Contacts, MetadataJson } from "$lib/models/metadata";
 import type { Section } from "./FormContext.svelte";
 
 export type ValidationResult = {
@@ -15,7 +15,7 @@ export type ValidationResultList = (ValidationResult & {
 
 export type FieldConfig<T> = {
   key: FieldKey;
-  validator: (val: T) => T extends any[] ? ValidationResultList : ValidationResult;
+  validator: (val: T, metadata?: MetadataJson) => T extends any[] ? ValidationResultList : ValidationResult;
   section: Section;
   required?: boolean;
 };
@@ -100,12 +100,12 @@ export const FieldConfigs: FieldConfig<any>[] = [
   },
   {
     key: 'isoMetadata.pointsOfContact',
-    validator: (contacts: Contacts) => {
-      if (contacts?.length < 1) return {
+    validator: (contacts: Contacts): ValidationResultList => {
+      const validationResult: ValidationResultList = [];
+      if (contacts?.length < 1) return [{
         valid: false,
         helpText: 'Bitte geben Sie mindestens einen Kontakt an.',
-      };
-      const validationResult: ValidationResultList = [];
+      }];
 
       for (const [index, contact] of contacts.entries()) {
         if (!isDefined(contact.name)) {

@@ -7,6 +7,7 @@
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
+  import HelperText from "@smui/textfield/helper-text";
 
   const KEY = 'isoMetadata.pointsOfContact';
   const LABEL = 'Kontakt';
@@ -27,6 +28,7 @@
   let contacts = $state(initialValue || []);
   let showCheckmark = $state(false);
   let validationResult = $derived(fieldConfig?.validator(contacts));
+  let generalValidationResult = $derived(validationResult?.find(({index}) => index === undefined));
 
   const persistContacts = async () => {
     // TODO add equals check to prevent unnecessary requests
@@ -71,7 +73,7 @@
     persistContacts();
   };
 
-  const getValidation = (i: number, k: string) => {
+  const getFieldValidation = (i: number, k: string) => {
     if (!Array.isArray(validationResult)) return {};
     const matchingValidation =  validationResult.find(({index, subKey}) => index === i && subKey === k);
     return {
@@ -111,32 +113,37 @@
           key={KEY}
           label="Name"
           onblur={persistContacts}
-          {...getValidation(index, 'name')}
+          {...getFieldValidation(index, 'name')}
         />
         <TextInput
           bind:value={contact.organisation}
           key={KEY}
           label="Organisation"
           onblur={persistContacts}
-          {...getValidation(index, 'organisation')}
+          {...getFieldValidation(index, 'organisation')}
         />
         <TextInput
           bind:value={contact.phone}
           key={KEY}
           label="Telefon"
           onblur={persistContacts}
-          {...getValidation(index, 'phone')}
+          {...getFieldValidation(index, 'phone')}
         />
         <TextInput
           bind:value={contact.email}
           key={KEY}
           label="E-Mail"
           onblur={persistContacts}
-          {...getValidation(index, 'email')}
+          {...getFieldValidation(index, 'email')}
         />
       </fieldset>
-    {/each}
-  </fieldset>
+      {/each}
+      {#if generalValidationResult?.valid === false}
+        <span class="validation-error mdc-text-field-helper-text mdc-text-field-helper-text--persistent">
+          {generalValidationResult?.helpText}
+        </span>
+      {/if}
+    </fieldset>
   <FieldTools
     key={KEY}
     bind:running={showCheckmark}
@@ -157,6 +164,11 @@
         display: flex;
         align-items: center;
         font-size: 0.75em;
+      }
+
+      .validation-error {
+        color: var(--mdc-theme-error);
+        font-size: var(--mdc-typography-caption-font-size, 0.75rem);
       }
     }
 
