@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from "$lib/models/form";
-import type { Contacts } from "$lib/models/metadata";
+import type { Contacts, Extent } from "$lib/models/metadata";
 import type { Section } from "./FormContext.svelte";
 
 export type ValidationResult = {
@@ -358,14 +358,44 @@ export const FieldConfigs: FieldConfig<any>[] = [
   },
   {
     key: 'isoMetadata.extent',
-    validator: (val: any) => {
-      if (!val?.maxx || !val?.maxy || !val?.minx || !val?.miny) {
-        return {
+    validator: (val?: Extent) => {
+      const validationResult: ValidationResultList = [];
+      if (!val) {
+        return [{
           valid: false,
           helpText: 'Bitte geben Sie die Ausdehnung an.',
+        }]
+      } else {
+        if(!val.minx || val.minx < 1) {
+          validationResult.push({
+            valid: false,
+            helpText: 'Bitte geben Sie den minimalen x-Wert an.',
+            subKey: 'minx'
+          });
+        }
+        if(!val.miny || val.miny < 1) {
+          validationResult.push({
+            valid: false,
+            helpText: 'Bitte geben Sie den minimalen y-Wert an.',
+            subKey: 'miny'
+          });
+        }
+        if(!val.maxx || val.maxx < 1) {
+          validationResult.push({
+            valid: false,
+            helpText: 'Bitte geben Sie den maximalen x-Wert an.',
+            subKey: 'maxx'
+          });
+        }
+        if(!val.maxy || val.maxy < 1) {
+          validationResult.push({
+            valid: false,
+            helpText: 'Bitte geben Sie den maximalen y-Wert an.',
+            subKey: 'maxy'
+          });
         }
       }
-      return { valid: true };
+      return validationResult;
     },
     section: 'temp_and_spatial',
     required: true

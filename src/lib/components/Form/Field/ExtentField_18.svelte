@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
   import type { CRS, Extent } from "$lib/models/metadata";
@@ -8,6 +8,8 @@
   import Button, { Icon, Label } from "@smui/button";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { transformExtent } from "$lib/util";
+  import type { ValidationResult, ValidationResultList } from "../FieldsConfig";
+  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
 
   const KEY = 'isoMetadata.extent'
   const CRS_KEY = 'isoMetadata.crs';
@@ -56,12 +58,16 @@
   let isBerlin = $derived(value4326.minx === 13.0790 && value4326.maxx === 13.7701 && value4326.miny === 52.3284 && value4326.maxy === 52.6877);
   let isBrandenburg = $derived(value4326.minx === 11.1343 && value4326.maxx === 15 && value4326.miny === 51.2075 && value4326.maxy === 53.6987);
 
+  const fieldConfig = getFieldConfig<Extent>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value4326)) as ValidationResultList;
+  let generalValidationResult = $derived(validationResult?.find(({subKey}) => subKey === undefined));
+
   const onChange = (newValue: number, key: keyof Extent) => {
-    const newTansformedValue = {
+    const newTransformedValue = {
       ...transformedValue,
       [key]: newValue
     };
-    value4326 = transformExtent(newTansformedValue, crs.label, 'EPSG:4326');
+    value4326 = transformExtent(newTransformedValue, crs.label, 'EPSG:4326');
   };
 
   const sendValue = async () => {
@@ -80,6 +86,11 @@
       showCheckmark = true;
       invalidateAll();
     }
+  };
+
+  const getFieldValidation = (k: string): ValidationResult | undefined => {
+    if (!Array.isArray(validationResult)) return;
+    return validationResult.find(({ subKey}) => subKey === k);
   };
 
 </script>
@@ -140,6 +151,7 @@
             onChange(Number(target.value), 'minx');
           }}
           input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          validationResult={getFieldValidation('minx')}
         />
         <NumberInput
           value={transformedValue.maxx}
@@ -150,6 +162,7 @@
             onChange(Number(target.value), 'maxx');
           }}
           input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          validationResult={getFieldValidation('maxx')}
         />
       </div>
       <div class="inline-fields">
@@ -162,6 +175,7 @@
             onChange(Number(target.value), 'miny');
           }}
           input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          validationResult={getFieldValidation('miny')}
         />
         <NumberInput
           value={transformedValue.maxy}
@@ -172,8 +186,10 @@
             onChange(Number(target.value), 'maxy');
           }}
           input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          validationResult={getFieldValidation('maxy')}
         />
       </div>
+      <ValidationFeedbackText validationResult={generalValidationResult} />
     </div>
   </fieldset>
   <FieldTools
