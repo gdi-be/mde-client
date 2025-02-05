@@ -2,16 +2,19 @@
   import { page } from "$app/state";
   import type { Contacts } from "$lib/models/metadata";
   import IconButton from "@smui/icon-button";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
+  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
+  import type { ValidationResult, ValidationResultList } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.pointsOfContact';
   const LABEL = 'Kontakt';
 
   let initialContacts = getValue<Contacts>(KEY);
+  const fieldConfig = getFieldConfig<Contacts>(KEY);
   let initialValue = initialContacts?.map(contact => {
     const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
     return {
@@ -25,6 +28,8 @@
 
   let contacts = $state(initialValue || []);
   let showCheckmark = $state(false);
+  let validationResult = $derived(fieldConfig?.validator(contacts)) as ValidationResultList;
+  let generalValidationResult = $derived(validationResult?.find(({index}) => index === undefined));
 
   const persistContacts = async () => {
     // TODO add equals check to prevent unnecessary requests
@@ -69,11 +74,16 @@
     persistContacts();
   };
 
+  const getFieldValidation = (i: number, k: string): ValidationResult | undefined => {
+    if (!Array.isArray(validationResult)) return;
+    return validationResult.find(({index, subKey}) => index === i && subKey === k);
+  };
+
 </script>
 
 <div class="contacts-field">
   <fieldset>
-    <legend>{LABEL + '*'}
+    <legend>{LABEL}
       <IconButton
         class="material-icons"
         onclick={() => addItem()}
@@ -83,7 +93,7 @@
         add
       </IconButton>
     </legend>
-    {#each contacts as contact (contact.listId)}
+    {#each contacts as contact, index (contact.listId)}
       <fieldset class="contact" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
         <legend>
           <IconButton
@@ -100,32 +110,33 @@
           key={KEY}
           label="Name"
           onblur={persistContacts}
-          required
+          validationResult={getFieldValidation(index, 'name')}
         />
         <TextInput
           bind:value={contact.organisation}
           key={KEY}
           label="Organisation"
           onblur={persistContacts}
-          required
+          validationResult={getFieldValidation(index, 'organisation')}
         />
         <TextInput
           bind:value={contact.phone}
           key={KEY}
           label="Telefon"
           onblur={persistContacts}
-          required
+          validationResult={getFieldValidation(index, 'phone')}
         />
         <TextInput
           bind:value={contact.email}
           key={KEY}
           label="E-Mail"
           onblur={persistContacts}
-          required
+          validationResult={getFieldValidation(index, 'email')}
         />
       </fieldset>
-    {/each}
-  </fieldset>
+      {/each}
+      <ValidationFeedbackText validationResult={generalValidationResult} />
+    </fieldset>
   <FieldTools
     key={KEY}
     bind:running={showCheckmark}
@@ -145,6 +156,7 @@
       >legend {
         display: flex;
         align-items: center;
+        font-size: 0.75em;
       }
     }
 

@@ -15,12 +15,10 @@
 
 </script>
 
-<Paper>
-  <TextAreaInput
-    label="Kurzbeschreibung"
-    key="shortDescription"
-    {value}
-    maxlength={500}
-    onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
-  />
-</Paper>
+<TextAreaInput
+  label="Kurzbeschreibung"
+  key="shortDescription"
+  {value}
+  maxlength={500}
+  onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+/>

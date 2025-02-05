@@ -1,10 +1,11 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import DateInput from "../Inputs/DateInput.svelte";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.created';
   const LABEL = 'Erstellungsdatum';
@@ -15,6 +16,8 @@
   }
   let value = $state(initialValue || '');
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<string>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {
     // TODO check if value has changed
@@ -33,7 +36,6 @@
       invalidateAll();
     }
   };
-
 </script>
 
 <div class="date-time-field">
@@ -43,6 +45,7 @@
       key={KEY}
       label={LABEL}
       onblur={onBlur}
+      {validationResult}
     />
   </Paper>
   <FieldTools

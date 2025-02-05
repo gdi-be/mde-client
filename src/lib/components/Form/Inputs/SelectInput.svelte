@@ -1,6 +1,8 @@
 <script lang="ts">
   import Select, { Option as SelectOption } from "@smui/select";
   import type { Option } from "$lib/models/form";
+  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
+  import type { ValidationResult } from "../FieldsConfig.ts";
 
   let element = $state();
 
@@ -10,6 +12,7 @@
     key: string;
     label: string;
     options: Option[];
+    validationResult?: ValidationResult;
   }
 
   let {
@@ -17,7 +20,8 @@
     value = $bindable<string | undefined>(undefined),
     key,
     label,
-    options
+    options,
+    validationResult
   }: InputProps = $props();
 
   // Remove duplicates
@@ -51,6 +55,7 @@
     </SelectOption>
   {/each}
 </Select>
+<ValidationFeedbackText {validationResult} />
 
 <style lang="scss">
   :global(.select-input .mdc-menu) {
@@ -63,5 +68,4 @@
       pointer-events: none;
     }
   }
-
 </style>

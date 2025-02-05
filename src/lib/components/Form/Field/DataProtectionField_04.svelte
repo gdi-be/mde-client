@@ -4,8 +4,9 @@
   import FieldTools from "../FieldTools.svelte";
   import CheckboxInput from "../Inputs/CheckboxInput.svelte";
 
+  // TODO
   const KEY = 'isoMetadata.UNKNOWN';
-  const LABEL = 'Datenschutz*';
+  const LABEL = 'Datenschutz';
   const OPTIONS: {
     key: string;
     label: string;

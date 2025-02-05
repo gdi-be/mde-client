@@ -1,12 +1,13 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { invalidateAll } from "$app/navigation";
   import type { InspireRegister } from "$lib/models/inspire";
   import type { Option } from "$lib/models/form";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireTheme';
@@ -20,6 +21,8 @@
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<string>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue?: string) => {
     const response = await fetch(page.url, {
@@ -46,7 +49,6 @@
       return [];
     };
 
-
     return data.register.containeditems
       .map((entry) => ({
         key: entry.theme.id.split('/').at(-1)!.toUpperCase(),
@@ -70,6 +72,7 @@
           options={OPTIONS}
           {value}
           {onChange}
+          {validationResult}
         />
       {/await}
     </Paper>

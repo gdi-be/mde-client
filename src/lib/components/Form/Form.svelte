@@ -22,7 +22,7 @@
   import KeywordsField_15 from "./Field/KeywordsField_15.svelte";
   import PreviewField_29 from "./Field/PreviewField_29.svelte";
   import ContactsField_19 from "./Field/ContactsField_19.svelte";
-  import MetadataType_05 from "./Field/MetadataType_05.svelte";
+  import MetadataProfile_05 from "./Field/MetadataProfile_05.svelte";
   import DataProtectionField_04 from "./Field/DataProtectionField_04.svelte";
   import TermsOfUseField_24 from "./Field/TermsOfUseField_24.svelte";
   import AnnexThemeField_07 from "./Field/AnnexThemeField_07.svelte";
@@ -151,7 +151,7 @@
       {/if}
       {#if activeSection === "classification"}
         <section id="classification" transition:fade >
-          <MetadataType_05 />
+          <MetadataProfile_05 />
           <DataProtectionField_04 />
           <TermsOfUseField_24 />
           <AnnexThemeField_07 {metadata} />
@@ -258,6 +258,10 @@
       &.active {
         font-weight: bold;
         border-color: #0078d7;
+      }
+
+      :global(.mdc-linear-progress) {
+        margin-bottom: 4px;
       }
     }
 

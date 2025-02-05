@@ -1,12 +1,13 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import DateInput from "../Inputs/DateInput.svelte";
   import type { MaintenanceFrequency } from "$lib/models/metadata";
   import { getLastUpdateValue } from "$lib/util";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.modified';
   const LABEL = 'letzte Aktualisierung';
@@ -19,6 +20,8 @@
   let publishedValue = $derived(getValue<string>('isoMetadata.published', metadata));
   let maintenanceFrequencyValue = $derived(getValue<MaintenanceFrequency>('isoMetadata.maintenanceFrequency', metadata));
   let value = $state(initialValue || '');
+  const fieldConfig = getFieldConfig<string>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   $effect(() => {
     if (initialValue) {
@@ -69,6 +72,7 @@
       label={LABEL}
       onblur={onBlur}
       disabled={readOnly}
+      {validationResult}
     />
   </Paper>
   <FieldTools

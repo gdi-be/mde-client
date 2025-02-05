@@ -1,12 +1,12 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
   import { invalidateAll } from "$app/navigation";
   import FormField from "@smui/form-field";
   import Radio from "@smui/radio";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const RESOLUTION_KEY = 'isoMetadata.resolutions';
   const RESOLUTION_LABEL = 'Bodenauflösung'
@@ -20,6 +20,10 @@
   let scaleValue = $state(initialScaleValue  || null);
   let selected = $state(initialResolutionValue ? RESOLUTION_KEY : SCALE_KEY);
   let showCheckmark = $state(false);
+  const resolutionFieldConfig = getFieldConfig<number>(RESOLUTION_KEY);
+  let resolutionValidationResult = $derived(resolutionFieldConfig?.validator(resolutionValue || undefined)) as ValidationResult;
+  const scaleFieldConfig = getFieldConfig<number>(SCALE_KEY);
+  let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined)) as ValidationResult;
 
   const onBlur = async () => {
     if (selected === RESOLUTION_KEY) {
@@ -80,48 +84,46 @@
 </script>
 
 <div class="title-field">
-  <Paper>
-    <fieldset>
-      <legend>Räumliche Auflösung</legend>
-      <FormField>
-        <Radio
-          bind:group={selected}
-          value={RESOLUTION_KEY}
-        />
-        {#snippet label()}
-          {RESOLUTION_LABEL}
-        {/snippet}
-      </FormField>
-      <FormField>
-        <Radio
-          bind:group={selected}
-          value={SCALE_KEY}
-        />
-        {#snippet label()}
-          {SCALE_LABEL}
-        {/snippet}
-      </FormField>
-      {#if selected === RESOLUTION_KEY}
-        <NumberInput
-          bind:value={resolutionValue as number}
-          key={RESOLUTION_KEY}
-          label={RESOLUTION_LABEL}
-          type="float"
-          onblur={onBlur}
-          required
-        />
-      {:else}
-        <NumberInput
-          bind:value={scaleValue as number}
-          key={SCALE_KEY}
-          label={SCALE_LABEL}
-          onblur={onBlur}
-          prefix="1:"
-          required
-        />
-      {/if}
-    </fieldset>
-  </Paper>
+  <fieldset>
+    <legend>Räumliche Auflösung</legend>
+    <FormField>
+      <Radio
+        bind:group={selected}
+        value={RESOLUTION_KEY}
+      />
+      {#snippet label()}
+        {RESOLUTION_LABEL}
+      {/snippet}
+    </FormField>
+    <FormField>
+      <Radio
+        bind:group={selected}
+        value={SCALE_KEY}
+      />
+      {#snippet label()}
+        {SCALE_LABEL}
+      {/snippet}
+    </FormField>
+    {#if selected === RESOLUTION_KEY}
+      <NumberInput
+        bind:value={resolutionValue as number}
+        key={RESOLUTION_KEY}
+        label={RESOLUTION_LABEL}
+        type="float"
+        onblur={onBlur}
+        validationResult={resolutionValidationResult}
+      />
+    {:else}
+      <NumberInput
+        bind:value={scaleValue as number}
+        key={SCALE_KEY}
+        label={SCALE_LABEL}
+        onblur={onBlur}
+        prefix="1:"
+        validationResult={scaleValidationResult}
+      />
+    {/if}
+  </fieldset>
   <FieldTools
     key={RESOLUTION_KEY}
     bind:running={showCheckmark}
@@ -135,7 +137,12 @@
     gap: 0.25em;
 
     fieldset {
+      flex: 1;
       border-radius: 4px;
+
+      >legend {
+        font-size: 0.75em;
+      }
     }
 
     :global(.smui-paper) {
