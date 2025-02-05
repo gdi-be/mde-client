@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import Paper from "@smui/paper";
   import { getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
@@ -80,46 +79,44 @@
 </script>
 
 <div class="title-field">
-  <Paper>
-    <fieldset>
-      <legend>Räumliche Auflösung</legend>
-      <FormField>
-        <Radio
-          bind:group={selected}
-          value={RESOLUTION_KEY}
-        />
-        {#snippet label()}
-          {RESOLUTION_LABEL}
-        {/snippet}
-      </FormField>
-      <FormField>
-        <Radio
-          bind:group={selected}
-          value={SCALE_KEY}
-        />
-        {#snippet label()}
-          {SCALE_LABEL}
-        {/snippet}
-      </FormField>
-      {#if selected === RESOLUTION_KEY}
-        <NumberInput
-          bind:value={resolutionValue as number}
-          key={RESOLUTION_KEY}
-          label={RESOLUTION_LABEL}
-          type="float"
-          onblur={onBlur}
-        />
-      {:else}
-        <NumberInput
-          bind:value={scaleValue as number}
-          key={SCALE_KEY}
-          label={SCALE_LABEL}
-          onblur={onBlur}
-          prefix="1:"
-        />
-      {/if}
-    </fieldset>
-  </Paper>
+  <fieldset>
+    <legend>Räumliche Auflösung</legend>
+    <FormField>
+      <Radio
+        bind:group={selected}
+        value={RESOLUTION_KEY}
+      />
+      {#snippet label()}
+        {RESOLUTION_LABEL}
+      {/snippet}
+    </FormField>
+    <FormField>
+      <Radio
+        bind:group={selected}
+        value={SCALE_KEY}
+      />
+      {#snippet label()}
+        {SCALE_LABEL}
+      {/snippet}
+    </FormField>
+    {#if selected === RESOLUTION_KEY}
+      <NumberInput
+        bind:value={resolutionValue as number}
+        key={RESOLUTION_KEY}
+        label={RESOLUTION_LABEL}
+        type="float"
+        onblur={onBlur}
+      />
+    {:else}
+      <NumberInput
+        bind:value={scaleValue as number}
+        key={SCALE_KEY}
+        label={SCALE_LABEL}
+        onblur={onBlur}
+        prefix="1:"
+      />
+    {/if}
+  </fieldset>
   <FieldTools
     key={RESOLUTION_KEY}
     bind:running={showCheckmark}
@@ -133,7 +130,12 @@
     gap: 0.25em;
 
     fieldset {
+      flex: 1;
       border-radius: 4px;
+
+      >legend {
+        font-size: 0.75em;
+      }
     }
 
     :global(.smui-paper) {

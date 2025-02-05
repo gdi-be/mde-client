@@ -86,99 +86,97 @@
 </script>
 
 <div class="extent-field">
-  <Paper>
-    <fieldset>
-      <legend>{LABEL}</legend>
-      <div class="tools">
-        <SelectInput
-          bind:value={crsKey}
-          key={KEY}
-          label={CRS_LABEL}
-          options={CRS_OPTIONS}
-        />
-        <Button
-          type="button"
-          variant={isBerlin ? 'raised' : 'text'}
-          title="Räumliche Ausdehnung auf Berlin setzen"
-          onclick={() => {
-            value4326 = {
-              minx: 13.0790,
-              maxx: 13.7701,
-              miny: 52.3284,
-              maxy: 52.6877
-            };
-            sendValue();
-          }}
-        >
-        <Label>Berlin</Label>
+  <fieldset>
+    <legend>{LABEL}</legend>
+    <div class="tools">
+      <SelectInput
+        bind:value={crsKey}
+        key={KEY}
+        label={CRS_LABEL}
+        options={CRS_OPTIONS}
+      />
+      <Button
+        type="button"
+        variant={isBerlin ? 'raised' : 'text'}
+        title="Räumliche Ausdehnung auf Berlin setzen"
+        onclick={() => {
+          value4326 = {
+            minx: 13.0790,
+            maxx: 13.7701,
+            miny: 52.3284,
+            maxy: 52.6877
+          };
+          sendValue();
+        }}
+      >
+      <Label>Berlin</Label>
+      <Icon class="material-icons">pageless</Icon>
+      </Button>
+      <Button
+        type="button"
+        variant={isBrandenburg ? 'raised' : 'text'}
+        title="Räumliche Ausdehnung auf Brandenburg setzen"
+        onclick={() => {
+          value4326 = {
+            minx: 11.1343,
+            maxx: 15,
+            miny: 51.2075,
+            maxy: 53.6987
+          }
+          sendValue();
+        }}
+      >
+        <Label>Brandenburg</Label>
         <Icon class="material-icons">pageless</Icon>
-        </Button>
-        <Button
-          type="button"
-          variant={isBrandenburg ? 'raised' : 'text'}
-          title="Räumliche Ausdehnung auf Brandenburg setzen"
-          onclick={() => {
-            value4326 = {
-              minx: 11.1343,
-              maxx: 15,
-              miny: 51.2075,
-              maxy: 53.6987
-            }
-            sendValue();
+      </Button>
+    </div>
+    <div class="extent-fields">
+      <div class="inline-fields">
+        <NumberInput
+          value={transformedValue.minx}
+          label={LABEL_MIN_X}
+          onblur={sendValue}
+          onchange={(evt) => {
+            const target = evt?.target as HTMLInputElement;
+            onChange(Number(target.value), 'minx');
           }}
-        >
-          <Label>Brandenburg</Label>
-          <Icon class="material-icons">pageless</Icon>
-        </Button>
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+        />
+        <NumberInput
+          value={transformedValue.maxx}
+          label={LABEL_MAX_X}
+          onblur={sendValue}
+          onchange={(evt) => {
+            const target = evt?.target as HTMLInputElement;
+            onChange(Number(target.value), 'maxx');
+          }}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+        />
       </div>
-      <div class="extent-fields">
-        <div class="inline-fields">
-          <NumberInput
-            value={transformedValue.minx}
-            label={LABEL_MIN_X}
-            onblur={sendValue}
-            onchange={(evt) => {
-              const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'minx');
-            }}
-            input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-          />
-          <NumberInput
-            value={transformedValue.maxx}
-            label={LABEL_MAX_X}
-            onblur={sendValue}
-            onchange={(evt) => {
-              const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'maxx');
-            }}
-            input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-          />
-        </div>
-        <div class="inline-fields">
-          <NumberInput
-            value={transformedValue.miny}
-            label={LABEL_MIN_Y}
-            onblur={sendValue}
-            onchange={(evt) => {
-              const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'miny');
-            }}
-            input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-          />
-          <NumberInput
-            value={transformedValue.maxy}
-            label={LABEL_MAX_Y}
-            onblur={sendValue}
-            onchange={(evt) => {
-              const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'maxy');
-            }}
-            input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-          />
-        </div>
+      <div class="inline-fields">
+        <NumberInput
+          value={transformedValue.miny}
+          label={LABEL_MIN_Y}
+          onblur={sendValue}
+          onchange={(evt) => {
+            const target = evt?.target as HTMLInputElement;
+            onChange(Number(target.value), 'miny');
+          }}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+        />
+        <NumberInput
+          value={transformedValue.maxy}
+          label={LABEL_MAX_Y}
+          onblur={sendValue}
+          onchange={(evt) => {
+            const target = evt?.target as HTMLInputElement;
+            onChange(Number(target.value), 'maxy');
+          }}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+        />
       </div>
-    </fieldset>
-  </Paper>
+    </div>
+  </fieldset>
   <FieldTools
     key={KEY}
     bind:running={showCheckmark}
@@ -191,10 +189,6 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
-      flex: 1;
-    }
-
     :global(.mdc-text-field) {
       display: flex;
     }
@@ -205,9 +199,17 @@
       border-radius: 4px;
       justify-content: space-between;
 
+      >legend {
+        font-size: 0.75em;
+      }
+
       .tools {
         display: flex;
         flex-direction: column;
+
+        :global(.select-input .mdc-line-ripple::before) {
+          border-bottom: 0;
+        }
       }
 
       .extent-fields {

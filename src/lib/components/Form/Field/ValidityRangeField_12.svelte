@@ -46,21 +46,19 @@
 </script>
 
 <div class="validity-range-field">
-  <Paper>
-    <fieldset>
-      <legend>{LABEL}</legend>
-      <DateInput
-        bind:value={startValue}
-        label={START_LABEL}
-        onblur={() => onBlur(FROM_KEY)}
-      />
-      <DateInput
-        bind:value={endValue}
-        label={END_LABEL}
-        onblur={() => onBlur(TO_KEY)}
-      />
-    </fieldset>
-  </Paper>
+  <fieldset>
+    <legend>{LABEL}</legend>
+    <DateInput
+      bind:value={startValue}
+      label={START_LABEL}
+      onblur={() => onBlur(FROM_KEY)}
+    />
+    <DateInput
+      bind:value={endValue}
+      label={END_LABEL}
+      onblur={() => onBlur(TO_KEY)}
+    />
+  </fieldset>
   <FieldTools
     key={FROM_KEY}
     bind:running={showCheckmark}
@@ -88,6 +86,7 @@
       >legend {
         display: flex;
         align-items: center;
+        font-size: 0.75em;
       }
     }
   }

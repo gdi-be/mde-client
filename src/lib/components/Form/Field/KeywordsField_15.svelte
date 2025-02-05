@@ -220,6 +220,14 @@
     display: flex;
     gap: 0.25em;
 
+    fieldset {
+      border-radius: 4px;
+
+      >legend {
+        font-size: 0.75em;
+      }
+    }
+
     :global(.keywords-chipset) {
       padding: 0.25em 0;
       gap: 0.5em;
