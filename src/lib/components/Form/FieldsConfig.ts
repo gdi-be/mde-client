@@ -20,7 +20,7 @@ export type ValidatorOptions = {
 
 export type FieldConfig<T> = {
   key: FieldKey;
-  validator: (val?: T, options?: ValidatorOptions) => T extends any[] ? ValidationResultList : ValidationResult;
+  validator: (val?: T, options?: ValidatorOptions) => ValidationResultList | ValidationResult;
   section: Section;
   required?: boolean;
 };
@@ -72,7 +72,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
   {
     key: 'isoMetadata.keywords',
     validator: (val: any) => {
-      if (!val?.default?.length || !val.default.every(({ keyword }: any) => keyword !== '')) {
+      if (val?.length < 1) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie mindestens ein Schlagwort an.',

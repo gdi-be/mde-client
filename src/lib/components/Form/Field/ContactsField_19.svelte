@@ -8,7 +8,7 @@
   import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
   import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
-  import type { ValidationResult } from "../FieldsConfig";
+  import type { ValidationResult, ValidationResultList } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.pointsOfContact';
   const LABEL = 'Kontakt';
@@ -28,7 +28,7 @@
 
   let contacts = $state(initialValue || []);
   let showCheckmark = $state(false);
-  let validationResult = $derived(fieldConfig?.validator(contacts));
+  let validationResult = $derived(fieldConfig?.validator(contacts)) as ValidationResultList;
   let generalValidationResult = $derived(validationResult?.find(({index}) => index === undefined));
 
   const persistContacts = async () => {

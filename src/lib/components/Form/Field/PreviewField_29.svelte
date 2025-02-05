@@ -5,15 +5,16 @@
   import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.preview';
   const LABEL = 'Vorschau';
 
   let initialValue = getValue<string>(KEY);
-  const fieldConfig = getFieldConfig<string>(KEY);
   let value = $state(initialValue || '');
   let showCheckmark = $state(false);
-  let validationResult = $derived(fieldConfig?.validator(value));
+  const fieldConfig = getFieldConfig<string>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {
     // TODO check if value has changed
@@ -41,9 +42,8 @@
       bind:value
       key={KEY}
       label={LABEL}
-      isValid={validationResult?.valid}
-      helpText={validationResult?.helpText}
       onblur={onBlur}
+      {validationResult}
     />
   </Paper>
   <FieldTools

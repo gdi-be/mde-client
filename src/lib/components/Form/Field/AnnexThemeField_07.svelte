@@ -7,6 +7,7 @@
   import { invalidateAll } from "$app/navigation";
   import type { InspireRegister } from "$lib/models/inspire";
   import type { Option } from "$lib/models/form";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireTheme';
@@ -21,7 +22,7 @@
   let value = $state(initialValue);
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<string>(KEY);
-  let validationResult = $derived(fieldConfig?.validator(value));
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue?: string) => {
     const response = await fetch(page.url, {

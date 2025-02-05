@@ -5,6 +5,7 @@
   import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.title';
   const LABEL = 'Titel Datenbestand';
@@ -13,7 +14,7 @@
   let value = $state(initialValue || '');
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<string>(KEY);
-  let validationResult = $derived(fieldConfig?.validator(value));
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {
     // TODO check if value has changed

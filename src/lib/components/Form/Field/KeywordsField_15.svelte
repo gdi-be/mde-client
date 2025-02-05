@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import type { KeyWords } from "$lib/models/metadata";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import { onMount } from "svelte";
@@ -10,6 +10,8 @@
   import Dialog, { Actions, Content, Title } from "@smui/dialog";
   import Textfield from "@smui/textfield";
   import Button, { Label } from "@smui/button";
+  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.keywords';
   const LABEL = 'Schlagwörter';
@@ -23,6 +25,8 @@
   let autoKeywords = $state<string[]>([]);
   let uniqueKeywords = $derived(Array.from(new Set([...autoKeywords, ...value])));
   let searchValue = $state('');
+  const fieldConfig = getFieldConfig<string[]>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   let dialogOpen = $state(false);
   let newKeyword = $state('');
@@ -117,7 +121,6 @@
       });
     }
   });
-
 </script>
 
 <div
@@ -152,7 +155,7 @@
     <Autocomplete
       class="keyword-search-input"
       search={searchItems}
-      bind:value={searchValue}
+      value={searchValue}
       label="UMTHES Schlagwortsuche ..."
       noMatchesActionDisabled={false}
       showMenuWithNoInput={true}
@@ -174,6 +177,7 @@
         <Text>Eigene Schlagwörter hinzufügen</Text>
       {/snippet}
     </Autocomplete>
+    <ValidationFeedbackText {validationResult} />
   </fieldset>
   <FieldTools
     key={KEY}
@@ -221,6 +225,7 @@
     gap: 0.25em;
 
     fieldset {
+      flex: 1;
       border-radius: 4px;
 
       >legend {

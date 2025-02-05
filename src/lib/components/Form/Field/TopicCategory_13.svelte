@@ -7,6 +7,7 @@
   import { invalidateAll } from "$app/navigation";
   import AutoFillButton from "../AutoFillButton.svelte";
   import type { IsoTheme } from "../../../models/metadata";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const {
     metadata
@@ -19,7 +20,7 @@
   let value = $state(initialValue);
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<string>(KEY);
-  let validationResult = $derived(fieldConfig?.validator(value));
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue?: string) => {
     const response = await fetch(page.url, {
