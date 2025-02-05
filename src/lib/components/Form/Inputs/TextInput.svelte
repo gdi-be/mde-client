@@ -3,15 +3,15 @@
   import CharacterCounter from "@smui/textfield/character-counter";
   import HelperText from "@smui/textfield/helper-text";
   import type { ComponentProps } from "svelte";
+  import type { ValidationResult } from "../FieldsConfig";
 
   type InputProps = {
     key?: string;
     label: string;
     maxlength?: number;
     value?: string;
-    helpText?: string;
     wrapperClass?: string;
-    isValid?: boolean;
+    validationResult?: ValidationResult;
   } & ComponentProps<typeof Textfield>;
 
   let {
@@ -19,12 +19,13 @@
     label,
     maxlength,
     value = $bindable(""),
-    helpText,
     wrapperClass,
-    isValid = true,
+    validationResult,
     ...restProps
   }: InputProps = $props();
 
+  let isValid = $derived(validationResult?.valid !== false);
+  let helpText = $derived(validationResult?.helpText);
 </script>
 
 <div class={['text-input', wrapperClass]} >

@@ -13,9 +13,14 @@ export type ValidationResultList = (ValidationResult & {
   subKey?: string;
 })[];
 
+export type ValidatorOptions = {
+  metadata?: MetadataJson,
+  allowedValues?: string[]
+};
+
 export type FieldConfig<T> = {
   key: FieldKey;
-  validator: (val: T, metadata?: MetadataJson) => T extends any[] ? ValidationResultList : ValidationResult;
+  validator: (val?: T, options?: ValidatorOptions) => T extends any[] ? ValidationResultList : ValidationResult;
   section: Section;
   required?: boolean;
 };
@@ -161,20 +166,6 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    key: 'isoMetadata.internal_comment',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen internen Kommentar an.',
-        }
-      }
-      return { valid: true };
-    },
-    section: 'basedata',
-    required: false
-  },
-  {
     key: 'isoMetadata.metadataProfile',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -189,12 +180,27 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    key: 'isoMetadata.resourceConstraints',
+    // TODO: Datenschutz
+    key: 'isoMetadata.UNKNOWN',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie Datenschutz und Nutzungsbedingung an.',
+        }
+      }
+      return { valid: true };
+    },
+    section: 'classification',
+    required: true
+  },
+  {
+    key: 'isoMetadata.termsOfUseId',
+    validator: (val: any) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte wählen sie die passenden Nutzungsbedingungen.',
         }
       }
       return { valid: true };

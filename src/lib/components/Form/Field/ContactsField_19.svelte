@@ -7,7 +7,7 @@
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
-  import HelperText from "@smui/textfield/helper-text";
+  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
 
   const KEY = 'isoMetadata.pointsOfContact';
   const LABEL = 'Kontakt';
@@ -138,11 +138,7 @@
         />
       </fieldset>
       {/each}
-      {#if generalValidationResult?.valid === false}
-        <span class="validation-error mdc-text-field-helper-text mdc-text-field-helper-text--persistent">
-          {generalValidationResult?.helpText}
-        </span>
-      {/if}
+      <ValidationFeedbackText validationResult={generalValidationResult} />
     </fieldset>
   <FieldTools
     key={KEY}
@@ -164,11 +160,6 @@
         display: flex;
         align-items: center;
         font-size: 0.75em;
-      }
-
-      .validation-error {
-        color: var(--mdc-theme-error);
-        font-size: var(--mdc-typography-caption-font-size, 0.75rem);
       }
     }
 
