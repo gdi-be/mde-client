@@ -1,11 +1,12 @@
 <script lang='ts'>
   import { page } from '$app/state';
   import Paper from '@smui/paper';
-  import { getValue } from '../FormContext.svelte';
+  import { getFieldConfig, getValue } from '../FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { invalidateAll } from '$app/navigation';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { MaintenanceFrequency } from '$lib/models/metadata';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const KEY = 'isoMetadata.maintenanceFrequency';
   const LABEL = 'Pflegeintervall';
@@ -30,6 +31,8 @@
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<string>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue?: string) => {
     // TODO check if value has changed
@@ -59,6 +62,7 @@
       options={OPTIONS}
       {value}
       {onChange}
+      {validationResult}
     />
   </Paper>
   <FieldTools

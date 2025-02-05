@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from "$lib/models/form";
-import type { Contacts, MetadataJson } from "$lib/models/metadata";
+import type { Contacts } from "$lib/models/metadata";
 import type { Section } from "./FormContext.svelte";
 
 export type ValidationResult = {
@@ -13,14 +13,9 @@ export type ValidationResultList = (ValidationResult & {
   subKey?: string;
 })[];
 
-export type ValidatorOptions = {
-  metadata?: MetadataJson,
-  allowedValues?: string[]
-};
-
 export type FieldConfig<T> = {
   key: FieldKey;
-  validator: (val?: T, options?: ValidatorOptions) => ValidationResultList | ValidationResult;
+  validator: (val: T | undefined, extra?: Record<string, any>) => ValidationResultList | ValidationResult;
   section: Section;
   required?: boolean;
 };
@@ -265,6 +260,15 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    key: 'isoMetadata.created',
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: true
+  },
+  {
     key: 'isoMetadata.published',
     validator: (val: any) => {
       if (!isDefined(val) || val.length === 0) {
@@ -280,11 +284,29 @@ export const FieldConfigs: FieldConfig<any>[] = [
   },
   {
     key: 'isoMetadata.maintenanceFrequency',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: true
+  },
+  {
+    key: 'isoMetadata.modified',
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: true
+  },
+  {
+    key: 'isoMetadata.validFrom',
+    validator: (startValue: string, extra: any) => {
+      if (startValue && extra?.endValue && new Date(startValue) > new Date(extra?.endValue)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie eine Wartungsfrequenz an.',
+          helpText: 'Das Startdatum muss vor dem Enddatum liegen.',
         }
       }
       return { valid: true };
@@ -293,12 +315,12 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    key: 'isoMetadata.maintained',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
+    key: 'isoMetadata.validTo',
+    validator: (endValue: string, extra: any) => {
+      if (endValue && extra?.startValue && new Date(extra?.startValue) > new Date(endValue)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie an, ob die Daten gewartet werden.',
+          helpText: 'Das Startdatum muss vor dem Enddatum liegen.',
         }
       }
       return { valid: true };
@@ -349,7 +371,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    key: 'isoMetadata.resolution',
+    key: 'isoMetadata.resolutions',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -363,7 +385,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    key: 'isoMetadata.representiveFraction',
+    key: 'isoMetadata.scale',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
