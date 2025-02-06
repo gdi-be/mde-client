@@ -1,6 +1,4 @@
 <script lang="ts">
-  /* eslint-disable svelte/no-at-html-tags */
-  import { parse } from "marked";
   import { goto } from "$app/navigation";
   import { tick } from "svelte";
   import { fade } from "svelte/transition";
@@ -8,15 +6,10 @@
   import {
     setFormData,
     initializeFormContext,
-    getFormContext,
-    clearActiveHelp,
-    setHelp,
-    getHelpMarkdown,
     getProgress,
-    type Section
+    type Section,
+    clearActiveHelp
   } from "./FormContext.svelte";
-  import type { FormHelp } from "$lib/models/form";
-
   import TitleField_01 from "./Field/TitleField_01.svelte";
   import DescriptionField_02 from "./Field/DescriptionField_02.svelte";
   import KeywordsField_15 from "./Field/KeywordsField_15.svelte";
@@ -48,17 +41,16 @@
   import type { MetadataJson } from "$lib/models/metadata";
   import Button, { Icon, Label } from "@smui/button";
   import ScrollToTopButton from "./ScrollToTopButton.svelte";
+  import HelpPanel from "./HelpPanel.svelte";
 
   type FormProps = {
     metadata?: MetadataJson;
     activeSection?: string;
-    help: FormHelp;
   }
 
   let {
     activeSection,
-    metadata,
-    help
+    metadata
   }: FormProps = $props();
 
   type SectionConfig = {
@@ -95,13 +87,6 @@
     setFormData(metadata);
   }
 
-  if (help) {
-    setHelp(help);
-  }
-
-  const activeHelpKey = $derived(getFormContext().activeHelpKey);
-  const helpMarkdown = $derived(getHelpMarkdown(activeHelpKey));
-
   let tabs = $state<HTMLElement>();
   let formWrapper = $state<HTMLDivElement>();
 
@@ -114,6 +99,7 @@
     });
     await tick();
   };
+  $inspect(metadata);
 </script>
 
 <div class="metadata-form">
@@ -191,17 +177,7 @@
         </section>
       {/if}
     </form>
-    <div class="help-section">
-      {#if helpMarkdown}
-        {#await parse(helpMarkdown)}
-          <p>Loading...</p>
-        {:then parsed}
-          {@html parsed}
-        {:catch error}
-          <p>Error: {error.message}</p>
-        {/await}
-      {/if}
-    </div>
+    <HelpPanel />
   </div>
   <FormFooter {metadata}>
     <Button
@@ -295,12 +271,6 @@
           padding: 1em 0 2em 0;
           gap: 1em;
         }
-      }
-
-      .help-section {
-        overflow: auto;
-        flex: 1;
-        padding: 0 3rem;
       }
     }
 

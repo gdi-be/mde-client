@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getContext, setContext } from "svelte";
-import type { FieldKey, FormHelp } from "$lib/models/form";
+import type { FieldKey } from "$lib/models/form";
 import { FieldConfigs, type FieldConfig } from "./FieldsConfig";
 
 export type FormState = {
   data: Record<string, unknown>;
-  help: FormHelp;
   activeHelpKey?: FieldKey;
 };
 
 const formState = $state<FormState>({
   data: {},
-  help: {},
   activeHelpKey: undefined
 });
 
@@ -45,10 +43,6 @@ export function setFormData(data: Record<string, unknown>) {
   formState.data = data;
 }
 
-export function setHelp(help: FormHelp) {
-  formState.help = help;
-}
-
 export function setValue<T>(key: string, value: T) {
   if (!formState || !formState.data) return;
 
@@ -62,20 +56,6 @@ export function setValue<T>(key: string, value: T) {
   if (lastKey) {
     obj[lastKey] = value;
   }
-}
-
-export function hasHelpMarkdown(key?: FieldKey) {
-  if (!key) {
-    return false;
-  }
-  return !!formState.help[key];
-}
-
-export function getHelpMarkdown(key?: FieldKey) {
-  if (!key) {
-    return '';
-  }
-  return formState.help[key];
 }
 
 export function clearActiveHelp() {
