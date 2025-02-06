@@ -1,10 +1,11 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import SelectInput from "../Inputs/SelectInput.svelte";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.crs';
   const LABEL = 'Koordinatensystem';
@@ -32,6 +33,8 @@
   let initialValue = getValue<string>(KEY);
   let value = $state(initialValue || '');
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<string>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onSelectionChange = async () => {
     // TODO check if value has changed
@@ -61,6 +64,7 @@
       label={LABEL}
       options={OPTIONS}
       onChange={onSelectionChange}
+      {validationResult}
     />
   </Paper>
   <FieldTools
@@ -79,7 +83,7 @@
       flex: 1;
     }
 
-    :global(.mdc-text-field) {
+    :global(.mdc-select) {
       display: flex;
     }
   }

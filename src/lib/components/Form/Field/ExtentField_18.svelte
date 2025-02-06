@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
   import type { CRS, Extent } from "$lib/models/metadata";
@@ -9,6 +8,8 @@
   import Button, { Icon, Label } from "@smui/button";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { transformExtent } from "$lib/util";
+  import type { ValidationResult, ValidationResultList } from "../FieldsConfig";
+  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
 
   const KEY = 'isoMetadata.extent'
   const CRS_KEY = 'isoMetadata.crs';
@@ -45,10 +46,10 @@
   let initialValue = getValue<Extent>(KEY);
   let initialCRSKey = getValue<CRS>(CRS_KEY);
   let value4326 = $state(initialValue || {
-    minx: NaN,
-    maxx: NaN,
-    miny: NaN,
-    maxy: NaN
+    minx: 0,
+    maxx: 0,
+    miny: 0,
+    maxy: 0
   });
   let crsKey = $state(initialCRSKey || CRS_OPTIONS[1].key);
   let crs = $derived(CRS_OPTIONS.find(option => option.key === crsKey) || CRS_OPTIONS[1]);
@@ -57,12 +58,16 @@
   let isBerlin = $derived(value4326.minx === 13.0790 && value4326.maxx === 13.7701 && value4326.miny === 52.3284 && value4326.maxy === 52.6877);
   let isBrandenburg = $derived(value4326.minx === 11.1343 && value4326.maxx === 15 && value4326.miny === 51.2075 && value4326.maxy === 53.6987);
 
+  const fieldConfig = getFieldConfig<Extent>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value4326)) as ValidationResultList;
+  let generalValidationResult = $derived(validationResult?.find(({subKey}) => subKey === undefined));
+
   const onChange = (newValue: number, key: keyof Extent) => {
-    const newTansformedValue = {
+    const newTransformedValue = {
       ...transformedValue,
       [key]: newValue
     };
-    value4326 = transformExtent(newTansformedValue, crs.label, 'EPSG:4326');
+    value4326 = transformExtent(newTransformedValue, crs.label, 'EPSG:4326');
   };
 
   const sendValue = async () => {
@@ -83,106 +88,110 @@
     }
   };
 
+  const getFieldValidation = (k: string): ValidationResult | undefined => {
+    if (!Array.isArray(validationResult)) return;
+    return validationResult.find(({ subKey}) => subKey === k);
+  };
+
 </script>
 
 <div class="extent-field">
-  <Paper>
-    <fieldset>
-      <legend>{LABEL}</legend>
-      <div class="tools">
-        <SelectInput
-          bind:value={crsKey}
-          key={KEY}
-          label={CRS_LABEL}
-          options={CRS_OPTIONS}
-        />
-        <Button
-          type="button"
-          variant={isBerlin ? 'raised' : 'text'}
-          title="Räumliche Ausdehnung auf Berlin setzen"
-          onclick={() => {
-            value4326 = {
-              minx: 13.0790,
-              maxx: 13.7701,
-              miny: 52.3284,
-              maxy: 52.6877
-            };
-            sendValue();
-          }}
-        >
-        <Label>Berlin</Label>
+  <fieldset>
+    <legend>{LABEL}</legend>
+    <div class="tools">
+      <SelectInput
+        bind:value={crsKey}
+        key={KEY}
+        label={CRS_LABEL}
+        options={CRS_OPTIONS}
+      />
+      <Button
+        type="button"
+        variant={isBerlin ? 'raised' : 'text'}
+        title="Räumliche Ausdehnung auf Berlin setzen"
+        onclick={() => {
+          value4326 = {
+            minx: 13.0790,
+            maxx: 13.7701,
+            miny: 52.3284,
+            maxy: 52.6877
+          };
+          sendValue();
+        }}
+      >
+      <Label>Berlin</Label>
+      <Icon class="material-icons">pageless</Icon>
+      </Button>
+      <Button
+        type="button"
+        variant={isBrandenburg ? 'raised' : 'text'}
+        title="Räumliche Ausdehnung auf Brandenburg setzen"
+        onclick={() => {
+          value4326 = {
+            minx: 11.1343,
+            maxx: 15,
+            miny: 51.2075,
+            maxy: 53.6987
+          }
+          sendValue();
+        }}
+      >
+        <Label>Brandenburg</Label>
         <Icon class="material-icons">pageless</Icon>
-        </Button>
-        <Button
-          type="button"
-          variant={isBrandenburg ? 'raised' : 'text'}
-          title="Räumliche Ausdehnung auf Brandenburg setzen"
-          onclick={() => {
-            value4326 = {
-              minx: 11.1343,
-              maxx: 15,
-              miny: 51.2075,
-              maxy: 53.6987
-            }
-            sendValue();
+      </Button>
+    </div>
+    <div class="extent-fields">
+      <div class="inline-fields">
+        <NumberInput
+          value={transformedValue.minx}
+          label={LABEL_MIN_X}
+          onblur={sendValue}
+          onchange={(evt) => {
+            const target = evt?.target as HTMLInputElement;
+            onChange(Number(target.value), 'minx');
           }}
-        >
-          <Label>Brandenburg</Label>
-          <Icon class="material-icons">pageless</Icon>
-        </Button>
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          validationResult={getFieldValidation('minx')}
+        />
+        <NumberInput
+          value={transformedValue.maxx}
+          label={LABEL_MAX_X}
+          onblur={sendValue}
+          onchange={(evt) => {
+            const target = evt?.target as HTMLInputElement;
+            onChange(Number(target.value), 'maxx');
+          }}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          validationResult={getFieldValidation('maxx')}
+        />
       </div>
-      <div class="extent-fields">
-        <div class="inline-fields">
-          <NumberInput
-            value={transformedValue.minx}
-            label={LABEL_MIN_X}
-            onblur={sendValue}
-            onchange={(evt) => {
-              const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'minx');
-            }}
-            input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-            required
-          />
-          <NumberInput
-            value={transformedValue.maxx}
-            label={LABEL_MAX_X}
-            onblur={sendValue}
-            onchange={(evt) => {
-              const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'maxx');
-            }}
-            input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-            required
-          />
-        </div>
-        <div class="inline-fields">
-          <NumberInput
-            value={transformedValue.miny}
-            label={LABEL_MIN_Y}
-            onblur={sendValue}
-            onchange={(evt) => {
-              const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'miny');
-            }}
-            input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-            required
-          />
-          <NumberInput
-            value={transformedValue.maxy}
-            label={LABEL_MAX_Y}
-            onblur={sendValue}
-            onchange={(evt) => {
-              const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'maxy');
-            }}
-            input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
-            required
-          />
-        </div>
+      <div class="inline-fields">
+        <NumberInput
+          value={transformedValue.miny}
+          label={LABEL_MIN_Y}
+          onblur={sendValue}
+          onchange={(evt) => {
+            const target = evt?.target as HTMLInputElement;
+            onChange(Number(target.value), 'miny');
+          }}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          validationResult={getFieldValidation('miny')}
+        />
+        <NumberInput
+          value={transformedValue.maxy}
+          label={LABEL_MAX_Y}
+          onblur={sendValue}
+          onchange={(evt) => {
+            const target = evt?.target as HTMLInputElement;
+            onChange(Number(target.value), 'maxy');
+          }}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          validationResult={getFieldValidation('maxy')}
+        />
       </div>
-    </fieldset>
-  </Paper>
+      <ValidationFeedbackText validationResult={generalValidationResult} />
+    </div>
+  </fieldset>
   <FieldTools
     key={KEY}
     bind:running={showCheckmark}
@@ -195,10 +204,6 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
-      flex: 1;
-    }
-
     :global(.mdc-text-field) {
       display: flex;
     }
@@ -209,9 +214,17 @@
       border-radius: 4px;
       justify-content: space-between;
 
+      >legend {
+        font-size: 0.75em;
+      }
+
       .tools {
         display: flex;
         flex-direction: column;
+
+        :global(.select-input .mdc-line-ripple::before) {
+          border-bottom: 0;
+        }
       }
 
       .extent-fields {

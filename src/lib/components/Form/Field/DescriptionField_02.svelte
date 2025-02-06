@@ -1,8 +1,9 @@
 <script lang="ts">
   import { invalidateAll } from "$app/navigation";
   import { page } from "$app/state";
+  import type { ValidationResult } from "../FieldsConfig";
   import FieldTools from "../FieldTools.svelte";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import TextAreaInput from "../Inputs/TextAreaInput.svelte";
 
   const KEY = 'isoMetadata.description';
@@ -11,6 +12,8 @@
   let initialValue = getValue<string>(KEY) || '';
   let value = $state(initialValue);
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<string>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {
     // TODO: check if value has changed
@@ -39,7 +42,7 @@
     label={LABEL}
     maxlength={500}
     onblur={onBlur}
-    required
+    {validationResult}
   />
   <FieldTools
     key={KEY}

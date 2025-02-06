@@ -26,7 +26,7 @@
     pressed={pressed}
     onclick={() => toggleActiveHelp(key)}
   >
-    <Icon class="material-icons">info</Icon>
-    <Icon class="material-icons-filled" on>info</Icon>
+    <Icon class="material-icons">help</Icon>
+    <Icon class="material-icons-filled" on>help</Icon>
   </IconButton>
 {/if}

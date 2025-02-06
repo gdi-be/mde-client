@@ -1,12 +1,13 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { invalidateAll } from "$app/navigation";
   import AutoFillButton from "../AutoFillButton.svelte";
   import type { IsoTheme } from "../../../models/metadata";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const {
     metadata
@@ -18,6 +19,8 @@
   let initialValue = getValue<string>(KEY, metadata);
   let value = $state(initialValue);
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<string>(KEY);
+  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue?: string) => {
     const response = await fetch(page.url, {
@@ -39,10 +42,9 @@
   const fetchOptions = async () => {
     const response = await fetch('/data/iso_themes');
     const data = await response.json();
-
-    return data.map((entry) => ({
-      key: entry.isoName as string,
-      label: entry.isoName as string
+    return data.map((entry: IsoTheme) => ({
+      key: entry.isoID,
+      label: entry.isoName
     }));
   };
 
@@ -53,7 +55,7 @@
     const data = await response.json();
     const match = data.find((entry: IsoTheme) => entry.inspireID === inspireTheme);
     if (!match) return;
-    value = match.isoName;
+    value = match.isoID;
     onChange(value);
   }
 
@@ -70,6 +72,7 @@
         options={OPTIONS}
         {value}
         {onChange}
+        {validationResult}
       />
     {/await}
   </Paper>

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "../FormContext.svelte";
   import FieldTools from "../FieldTools.svelte";
   import DateInput from "../Inputs/DateInput.svelte";
   import { invalidateAll } from "$app/navigation";
+  import type { ValidationResult } from "../FieldsConfig";
 
   const FROM_KEY = 'isoMetadata.validFrom';
   const TO_KEY = 'isoMetadata.validTo';
@@ -23,6 +23,10 @@
   let startValue = $state(initialStartValue || '');
   let endValue = $state(initialEndValue || '');
   let showCheckmark = $state(false);
+  const fromFieldConfig = getFieldConfig<string>(FROM_KEY);
+  let fromValidationResult = $derived(fromFieldConfig?.validator(startValue, {endValue})) as ValidationResult;
+  const toFieldConfig = getFieldConfig<string>(TO_KEY);
+  let toValidationResult = $derived(toFieldConfig?.validator(endValue, {startValue})) as ValidationResult;
 
   const onBlur = async (key: string) => {
     // TODO check if value has changed
@@ -46,21 +50,21 @@
 </script>
 
 <div class="validity-range-field">
-  <Paper>
-    <fieldset>
-      <legend>{LABEL}</legend>
-      <DateInput
-        bind:value={startValue}
-        label={START_LABEL}
-        onblur={() => onBlur(FROM_KEY)}
-      />
-      <DateInput
-        bind:value={endValue}
-        label={END_LABEL}
-        onblur={() => onBlur(TO_KEY)}
-      />
-    </fieldset>
-  </Paper>
+  <fieldset>
+    <legend>{LABEL}</legend>
+    <DateInput
+      bind:value={startValue}
+      label={START_LABEL}
+      onblur={() => onBlur(FROM_KEY)}
+      validationResult={fromValidationResult}
+    />
+    <DateInput
+      bind:value={endValue}
+      label={END_LABEL}
+      onblur={() => onBlur(TO_KEY)}
+      validationResult={toValidationResult}
+    />
+  </fieldset>
   <FieldTools
     key={FROM_KEY}
     bind:running={showCheckmark}
@@ -88,6 +92,7 @@
       >legend {
         display: flex;
         align-items: center;
+        font-size: 0.75em;
       }
     }
   }
