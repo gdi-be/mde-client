@@ -1,6 +1,6 @@
 <script lang="ts">
   import FieldTools from "../FieldTools.svelte";
-  import { getValue } from "../FormContext.svelte";
+  import { getValue } from "$lib/context/FormContext.svelte";;
   import TextAreaInput from "../Inputs/TextAreaInput.svelte";
 
   const KEY = 'isoMetadata.UNKNOWN';

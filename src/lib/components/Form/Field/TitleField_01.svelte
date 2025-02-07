@@ -2,7 +2,7 @@
   import { page } from "$app/state";
   import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
-  import { getFieldConfig, getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import type { ValidationResult } from "../FieldsConfig";

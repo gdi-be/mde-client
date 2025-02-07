@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import FormField from "@smui/form-field";

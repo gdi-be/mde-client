@@ -1,7 +1,7 @@
 <script lang="ts">
   import IconButton from "@smui/icon-button";
   import { Icon } from "@smui/button";
-  import { getValue } from "./FormContext.svelte";
+  import { getValue } from "$lib/context/FormContext.svelte";;
 
   let {
     key,

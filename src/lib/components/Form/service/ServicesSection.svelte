@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import IconButton from "@smui/icon-button";
-  import { getValue } from "../FormContext.svelte";
+  import { getValue } from "$lib/context/FormContext.svelte";;
   import type { Service } from "$lib/models/metadata";
   import ServiceForm from "./ServiceForm.svelte";
   import { invalidateAll } from "$app/navigation";
