@@ -1,14 +1,20 @@
 <script lang="ts">
   import Header from '$lib/components/Header.svelte';
   import { setContext } from 'svelte';
+  import PopConfirm from '$lib/components/Popconfirm.svelte';
+  import { initializePopconfimContext } from '$lib/context/PopConfirmContex.svelte.js';
   let { children, data } = $props();
 
   setContext('user_token', data.token);
+  initializePopconfimContext();
+
 </script>
 
 <svelte:head>
   <title>GDI Berlin - Metadateneditor</title>
 </svelte:head>
+
+<PopConfirm />
 
 <div class="container">
   <Header />

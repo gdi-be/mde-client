@@ -1,6 +1,6 @@
 <script lang="ts">
   import Paper from "@smui/paper";
-  import { getValue } from "../FormContext.svelte";
+  import { getValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
   import CheckboxInput from "../Inputs/CheckboxInput.svelte";
 

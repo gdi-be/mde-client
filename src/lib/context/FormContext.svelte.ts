@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getContext, setContext } from "svelte";
 import type { FieldKey } from "$lib/models/form";
-import { FieldConfigs, type FieldConfig } from "./FieldsConfig";
+import { FieldConfigs, type FieldConfig } from "$lib/components/Form/FieldsConfig";
 
 export type FormState = {
   data: Record<string, unknown>;

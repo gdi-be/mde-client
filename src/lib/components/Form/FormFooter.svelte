@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { allFieldsValid } from "./FormContext.svelte";
+  import { allFieldsValid } from "$lib/context/FormContext.svelte";;
   import CommentsPanel from "./CommentsPanel.svelte";
   import Button, { Icon, Label } from "@smui/button";
   import type { MetadataJson } from "$lib/models/metadata";

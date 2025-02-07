@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { getFieldConfig, getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
   import { invalidateAll } from "$app/navigation";

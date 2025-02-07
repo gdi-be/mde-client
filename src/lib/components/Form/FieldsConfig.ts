@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from "$lib/models/form";
 import type { Contacts, Extent } from "$lib/models/metadata";
-import type { Section } from "./FormContext.svelte";
+import type { Section } from "$lib/context/FormContext.svelte";;
 
 export type ValidationResult = {
   valid: boolean;

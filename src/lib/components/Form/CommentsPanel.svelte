@@ -9,6 +9,7 @@
   import { getContext } from "svelte";
   import type { Token } from "$lib/models/keycloak";
   import { fly } from "svelte/transition";
+  import { popconfirm } from "$lib/context/PopConfirmContex.svelte";
 
   type CommentsPanelProps = {
     metadata?: MetadataJson;
@@ -42,20 +43,26 @@
     }
   }
 
-  async function deleteIcon(id: string) {
-    const response = await fetch(page.url.pathname + '/comment', {
-      method: 'DELETE',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        id
-      })
-    });
+  async function onDelete(id: string, evt: MouseEvent) {
+    const targetEl = evt.currentTarget as HTMLElement;
+    popconfirm(targetEl, async () => {
+      const response = await fetch(page.url.pathname + '/comment', {
+        method: 'DELETE',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          id
+        })
+      });
 
-    if (response.ok) {
-      invalidateAll();
-    }
+      if (response.ok) {
+        invalidateAll();
+      }
+    }, {
+      text: 'Möchten Sie diesen Kommentar wirklich löschen?',
+      confirmButtonText: 'Löschen'
+    });
   }
 
   function isDeletable(comment: Comment, index: number) {
@@ -86,7 +93,7 @@
             {#if isDeletable(comment, index)}
               <Icon
                 class="material-icons delete-icon"
-                onclick={() => deleteIcon(comment.id)}
+                onclick={(evt) => onDelete(comment.id, evt)}
               >
                 delete
               </Icon>

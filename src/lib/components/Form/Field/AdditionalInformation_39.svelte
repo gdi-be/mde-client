@@ -1,6 +1,6 @@
 <script lang="ts">
   import IconButton from "@smui/icon-button";
-  import { getValue } from "../FormContext.svelte";
+  import { getValue } from "$lib/context/FormContext.svelte";;
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { fly, scale } from "svelte/transition";
