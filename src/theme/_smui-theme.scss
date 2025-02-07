@@ -20,8 +20,11 @@
   $primary: #75b1d8,
   $secondary: #676778,
   $surface: #fff,
+  $on-primary: #000,
+  $on-secondary: #fff,
+  $on-surface: #000,
   $background: #fff,
-  $error: color-palette.$red-900
+  $error: #b71c1c
 );
 
 @use '@material/theme/styles';
