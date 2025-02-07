@@ -48,8 +48,6 @@ export async function GET({ cookies, params }) {
     };
   }
 
-  console.log(helpFileConfigs, userRoles, helpFilePath);
-
   if (!helpFilePath) return error(404, 'Not Found');
 
   const helpFile = Bun.file(helpFilePath);

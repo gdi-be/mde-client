@@ -1,14 +1,10 @@
 <script>
-  import { getContext } from "svelte";
   import Breadcrumbs from "./Breadcrumbs.svelte";
-  import LoginButton from "./LoginButton.svelte";
-  import LogoutButton from "./LogoutButton.svelte";
+  import UserMenu from "./UserMenu.svelte";
 
   let {
     text = 'Metadaten Editor',
   } = $props();
-
-  const token = getContext('user_token');
 
 </script>
 
@@ -20,15 +16,7 @@
     {text}
   </div>
   <div class="right-items">
-    {#if token}
-      <div>
-        <LogoutButton />
-      </div>
-    {:else}
-      <div>
-        <LoginButton />
-      </div>
-    {/if}
+    <UserMenu />
   </div>
 </header>
 

@@ -1,6 +1,6 @@
 <script>
+  import Button, { Label } from '@smui/button';
   import { getContext } from 'svelte';
-  import LoginButton from './LoginButton.svelte';
 
   const token = getContext('user_token');
 </script>
@@ -13,7 +13,9 @@
     <p>
       Anmelden, um Metadaten zu bearbeiten.
     </p>
-    <LoginButton />
+    <Button variant="outlined" href="/login">
+      <Label>Login</Label>
+    </Button>
   {:else}
     <h1>{`Hallo ${token?.given_name || token?.preferred_username}`}</h1>
     <p>

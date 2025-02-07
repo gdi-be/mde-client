@@ -273,8 +273,6 @@ export const deleteComment = async ({
     Authorization: `Bearer ${token}`
   });
 
-  console.log(`${env.BACKEND_URL}/metadata/client/comment/${metadataid}`, commentId);
-
   const response = await fetch(`${env.BACKEND_URL}/metadata/client/comment/${metadataid}`, {
     method: 'DELETE',
     headers,
