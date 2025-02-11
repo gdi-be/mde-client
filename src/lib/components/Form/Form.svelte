@@ -16,7 +16,7 @@
   import PreviewField_29 from "./Field/PreviewField_29.svelte";
   import ContactsField_19 from "./Field/ContactsField_19.svelte";
   import MetadataProfile_05 from "./Field/MetadataProfile_05.svelte";
-  import DataProtectionField_04 from "./Field/DataProtectionField_04.svelte";
+  import PrivacyField_04 from "./Field/PrivacyField_04.svelte";
   import TermsOfUseField_24 from "./Field/TermsOfUseField_24.svelte";
   import AnnexThemeField_07 from "./Field/AnnexThemeField_07.svelte";
   import QualityReportCheckField_37 from "./Field/QualityReportCheckField_37.svelte";
@@ -138,7 +138,7 @@
       {#if activeSection === "classification"}
         <section id="classification" transition:fade >
           <MetadataProfile_05 />
-          <DataProtectionField_04 />
+          <PrivacyField_04 />
           <TermsOfUseField_24 />
           <AnnexThemeField_07 {metadata} />
           <QualityReportCheckField_37 {metadata} />

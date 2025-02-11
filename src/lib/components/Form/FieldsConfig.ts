@@ -175,13 +175,12 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    // TODO: Datenschutz
-    key: 'isoMetadata.UNKNOWN',
+    key: 'clientMetadata.privacy',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie Datenschutz und Nutzungsbedingung an.',
+          helpText: 'Bitte wählen sie die passende Datenschutzoption aus.',
         }
       }
       return { valid: true };
