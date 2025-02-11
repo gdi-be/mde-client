@@ -3,7 +3,7 @@
   import { page } from "$app/state";
   import type { ValidationResult } from "../FieldsConfig";
   import FieldTools from "../FieldTools.svelte";
-  import { getFieldConfig, getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
   import TextAreaInput from "../Inputs/TextAreaInput.svelte";
 
   const KEY = 'isoMetadata.description';

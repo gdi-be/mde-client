@@ -2,13 +2,14 @@
   import { page } from "$app/state";
   import type { Contacts } from "$lib/models/metadata";
   import IconButton from "@smui/icon-button";
-  import { getFieldConfig, getValue } from "../FormContext.svelte";
+  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
   import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
   import type { ValidationResult, ValidationResultList } from "../FieldsConfig";
+  import { popconfirm } from "$lib/context/PopConfirmContex.svelte";
 
   const KEY = 'isoMetadata.pointsOfContact';
   const LABEL = 'Kontakt';
@@ -68,10 +69,15 @@
     ];
   };
 
-  const removeItem = (listId: string) => {
-    // TODO: add popconfirm
-    contacts = contacts.filter(contact => contact.listId !== listId);
-    persistContacts();
+  const removeItem = (listId: string, evt: MouseEvent) => {
+    const targetEl = evt.currentTarget as HTMLElement;
+    popconfirm(targetEl, async () => {
+      contacts = contacts.filter(contact => contact.listId !== listId);
+      persistContacts();
+    }, {
+      text: 'Möchten Sie diesen Kontakt wirklich löschen?',
+      confirmButtonText: 'Löschen'
+    })
   };
 
   const getFieldValidation = (i: number, k: string): ValidationResult | undefined => {
@@ -98,7 +104,7 @@
         <legend>
           <IconButton
           class="material-icons"
-          onclick={() => removeItem(contact.listId)}
+          onclick={(evt) => removeItem(contact.listId, evt)}
           size="button"
           title="Kontakt entfernen"
         >
