@@ -7,7 +7,7 @@
 
   type InputProps = {
     key?: string;
-    label: string;
+    label?: string;
     maxlength?: number;
     value?: string;
     wrapperClass?: string;

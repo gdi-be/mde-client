@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { page } from "$app/state";
   import IconButton from "@smui/icon-button";
-  import { getValue } from "$lib/context/FormContext.svelte";;
+  import { getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import type { Service } from "$lib/models/metadata";
   import ServiceForm from "./ServiceForm.svelte";
-  import { invalidateAll } from "$app/navigation";
   import Checkmark from "../Checkmark.svelte";
 
   type Tab = {
@@ -30,20 +28,9 @@
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
   const persistServices = async (id: string) => {
-    // TODO: fix setting of service type
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value: services
-      })
-    });
+    const response = await persistValue(KEY, services);
     if (response.ok) {
       visibleCheckmarks[id] = true;
-      invalidateAll();
     }
   }
 

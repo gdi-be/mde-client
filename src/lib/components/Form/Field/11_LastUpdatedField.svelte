@@ -1,16 +1,13 @@
 <script lang="ts">
-  import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
-  import { invalidateAll } from "$app/navigation";
   import DateInput from "../Inputs/DateInput.svelte";
   import type { MaintenanceFrequency } from "$lib/models/metadata";
   import { getLastUpdateValue } from "$lib/util";
   import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.modified';
-  const LABEL = 'letzte Aktualisierung';
 
   const {
     metadata
@@ -46,20 +43,9 @@
   let readOnly = $derived(!!publishedValue && isAutomatedValue);
 
   const onBlur = async () => {
-    // TODO check if value has changed
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value: (new Date(value!)).toISOString()
-      })
-    });
+    const response = await persistValue(KEY, (new Date(value!)).toISOString());
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 </script>
@@ -69,7 +55,7 @@
     <DateInput
       bind:value
       key={KEY}
-      label={LABEL}
+      label={fieldConfig?.label}
       onblur={onBlur}
       disabled={readOnly}
       {validationResult}
@@ -77,7 +63,7 @@
   </Paper>
   <FieldTools
     key={KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

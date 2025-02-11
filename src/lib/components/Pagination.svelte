@@ -1,8 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
-  import type { PageableResponse } from "../api/api";
-  import type { Metadata } from "../models/metadata";
+  import type { PageableResponse } from "$lib/models/api";
+  import type { Metadata } from "$lib/models/metadata";
   import IconButton from "@smui/icon-button";
 
   type PaginationProps = {

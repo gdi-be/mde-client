@@ -1,48 +1,42 @@
 <script lang="ts">
-  import { page } from "$app/state";
   import IconButton from "@smui/icon-button";
-  import { getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { fly, scale } from "svelte/transition";
-  import type { ContentDescription } from "../../../models/metadata";
-  import { invalidateAll } from "$app/navigation";
+  import type { ContentDescription } from "$lib/models/metadata";
 
-  const KEY = 'isoMetadata.contentDescriptions';
-  const LABEL = 'Inhaltliche Beschreibung';
+  type ContentDescriptionListEntry = ContentDescription & { listId: string };
 
-  let initialDescriptions = getValue<ContentDescription[]>(KEY);
-  let initialValue = initialDescriptions?.map(description => {
-    const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
-    return {
-      listId,
-      url: description.url || '',
-      description: description.description || ''
+  const KEY = 'isoMetadata.UNKNOWN';
+
+  const valueFromData = $derived(getValue<ContentDescription[]>(KEY));
+  let values = $state<ContentDescriptionListEntry[]>([]);
+  $effect(() => {
+    if (valueFromData) {
+      values = valueFromData?.map(description => {
+        const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
+        return {
+          listId,
+          url: description.url || '',
+          description: description.description || '',
+          code: 'information'
+        };
+      });
     };
   });
 
-  let values = $state(initialValue || []);
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<ContentDescription[]>(KEY);
 
   const persist = async () => {
-    // TODO check if value has changed
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value: values.map(contentDescription => ({
-          description: contentDescription.description,
-          url: contentDescription.url,
-          code: 'information'
-        } satisfies ContentDescription))
-      })
-    });
+    const response = await persistValue(KEY, values.map(contentDescription => ({
+      description: contentDescription.description,
+      url: contentDescription.url,
+      code: 'information'
+    } satisfies ContentDescription)));
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
@@ -52,7 +46,8 @@
       {
         listId,
         url: '',
-        description: ''
+        description: '',
+        code: 'information'
       },
       ...values
     ];
@@ -68,7 +63,7 @@
 
 <div class="content-description-field">
   <fieldset>
-    <legend>{LABEL}
+    <legend>{fieldConfig?.label || 'TODO: Inhaltliche Beschreibung'}
       <IconButton
         class="material-icons"
         onclick={() => addItem()}
@@ -107,7 +102,7 @@
   </fieldset>
   <FieldTools
     key={KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

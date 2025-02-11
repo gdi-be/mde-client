@@ -8,7 +8,7 @@
   type InputProps = {
     onChange?: (value: string) => void;
     key: string;
-    label: string;
+    label?: string;
     value?: string;
     options: Option[];
     validationResult?: ValidationResult;

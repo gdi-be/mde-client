@@ -31,9 +31,8 @@
   import F17_CoordinateSystemField from "./Field/17_CoordinateSystemField.svelte";
   import F18_ExtentField from "./Field/18_ExtentField.svelte";
   import F28_ResolutionField from "./Field/28_ResolutionField.svelte";
-  import F31_ContentDescriptionTextarea from "./Field/31_ContentDescriptionTextarea.svelte";
   import F30_ContentDescription from "./Field/30_ContentDescription.svelte";
-  import F60_TechnicalDescription from "./Field/60_TechnicalDescription.svelte";
+  import F31_TechnicalDescription from "./Field/31_TechnicalDescription.svelte";
   import F32_Lineage from "./Field/32_Lineage.svelte";
   import F39_AdditionalInformation from "./Field/39_AdditionalInformation.svelte";
   import ServicesSection from "./service/ServicesSection.svelte";
@@ -163,9 +162,8 @@
       {/if}
       {#if activeSection === "additional"}
         <section id="additional" transition:fade >
-          <F31_ContentDescriptionTextarea />
           <F30_ContentDescription />
-          <F60_TechnicalDescription />
+          <F31_TechnicalDescription />
           <F32_Lineage />
           <F39_AdditionalInformation />
           <ScrollToTopButton target={formWrapper} />

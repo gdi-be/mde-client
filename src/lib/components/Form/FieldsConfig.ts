@@ -14,7 +14,9 @@ export type ValidationResultList = (ValidationResult & {
 })[];
 
 export type FieldConfig<T> = {
+  profile_id: number;
   key: FieldKey;
+  label: string;
   validator: (val: T | undefined, extra?: Record<string, any>) => ValidationResultList | ValidationResult;
   section: Section;
   required?: boolean;
@@ -34,7 +36,9 @@ const isValidEmail = (val: string) => {
 
 export const FieldConfigs: FieldConfig<any>[] = [
   {
+    profile_id: 1,
     key: 'isoMetadata.title',
+    label: 'Titel',
     validator: (val) => {
       if (!isDefined(val)) {
         return {
@@ -51,7 +55,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 2,
     key: 'isoMetadata.description',
+    label: 'Kurzbeschreibung des Datenbestandes',
     validator: (val) => {
       if (!isDefined(val)) {
         return {
@@ -65,6 +71,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 15,
+    label: 'Schlagwörter',
     key: 'isoMetadata.keywords',
     validator: (val: any) => {
       if (val?.length < 1) {
@@ -79,6 +87,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 29,
+    label: 'Vorschaubild',
     key: 'isoMetadata.preview',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -99,6 +109,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 19,
+    label: 'Kontaktangaben',
     key: 'isoMetadata.pointsOfContact',
     validator: (contacts?: Contacts): ValidationResultList => {
       const validationResult: ValidationResultList = [];
@@ -161,6 +173,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 5,
+    label: 'INSPIRE Relevanz',
     key: 'isoMetadata.metadataProfile',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -175,12 +189,14 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 4,
+    label: 'Datenschutz-Einstellungen',
     key: 'clientMetadata.privacy',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte wählen sie die passende Datenschutzoption aus.',
+          helpText: 'Bitte wählen sie die passende Datenschutz-Einstellung aus.',
         }
       }
       return { valid: true };
@@ -189,12 +205,14 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 24,
+    label: 'Nutzungsbestimmungen',
     key: 'isoMetadata.termsOfUseId',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte wählen sie die passenden Nutzungsbedingungen.',
+          helpText: 'Bitte wählen sie die passenden Nutzungsbestimmungen.',
         }
       }
       return { valid: true };
@@ -203,6 +221,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 7,
+    label: 'INSPIRE Annex Thema',
     key: 'isoMetadata.inspireTheme',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -217,26 +237,22 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    key: 'isoMetadata.qualityReportCheck',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine Qualitätsprüfung an.',
-        }
-      }
-      return { valid: true };
-    },
+    profile_id: 37,
+    label: 'Überprüfung des Qualitätsberichts',
+    key: 'isoMetadata.valid',
+    validator: () => ({ valid: true }),
     section: 'classification',
     required: true
   },
   {
+    profile_id: 6,
+    label: 'High Value Datensatz',
     key: 'clientMetadata.highValueDataset',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie an, ob es sich um ein hochwertiges Datenset handelt.',
+          helpText: 'Bitte geben Sie an, ob es sich um einen High Value Datensatz handelt.',
         }
       }
       return { valid: true };
@@ -245,6 +261,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 13,
+    label: 'Themenkategorie',
     key: 'isoMetadata.topicCategory',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -259,6 +277,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 9,
+    label: 'Erstellungsdatum',
     key: 'isoMetadata.created',
     validator: () => {
       // Optional
@@ -268,6 +288,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 10,
+    label: 'Veröffentlichungsdatum',
     key: 'isoMetadata.published',
     validator: (val: any) => {
       if (!isDefined(val) || val.length === 0) {
@@ -282,6 +304,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 14,
+    label: 'Pflegeintervall',
     key: 'isoMetadata.maintenanceFrequency',
     validator: () => {
       // Optional
@@ -291,6 +315,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 11,
+    label: 'letzte Aktualisierung',
     key: 'isoMetadata.modified',
     validator: () => {
       // Optional
@@ -300,6 +326,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 12,
+    label: 'gültig ab',
     key: 'isoMetadata.validFrom',
     validator: (startValue: string, extra: any) => {
       if (startValue && extra?.endValue && new Date(startValue) > new Date(extra?.endValue)) {
@@ -314,6 +342,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 12,
+    label: 'gültig bis',
     key: 'isoMetadata.validTo',
     validator: (endValue: string, extra: any) => {
       if (endValue && extra?.startValue && new Date(extra?.startValue) > new Date(endValue)) {
@@ -328,6 +358,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 16,
+    label: 'geliefertes Koordinatensystem',
     key: 'technicalMetadata.deliveredCrs',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -342,12 +374,14 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 17,
+    label: 'abzugebendes Koordinatensystem',
     key: 'isoMetadata.crs',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie das Koordinatensystem an.',
+          helpText: 'Bitte geben Sie das abzugebende Koordinatensystem an.',
         }
       }
       return { valid: true };
@@ -356,6 +390,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 18,
+    label: 'Räumliche Ausdehnung',
     key: 'isoMetadata.extent',
     validator: (val?: Extent) => {
       const validationResult: ValidationResultList = [];
@@ -400,12 +436,14 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 28,
+    label: 'Bodenauflösung',
     key: 'isoMetadata.resolutions',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie die Auflösung an.',
+          helpText: 'Bitte geben Sie die Bodenauflösung an.',
         }
       }
       return { valid: true };
@@ -414,12 +452,14 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 27,
+    label: 'Vergleichsmaßstab',
     key: 'isoMetadata.scale',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie den Maßstab an.',
+          helpText: 'Bitte geben Sie den Vergleichsmaßstab an.',
         }
       }
       return { valid: true };
@@ -428,40 +468,14 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    key: 'isoMetadata.dateTime',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie ein Datum an.',
-        }
-      }
-      return { valid: true };
-    },
-    section: 'temp_and_spatial',
-    required: false
-  },
-  {
-    key: 'isoMetadata.validityRange',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Gültigkeitsbereich an.',
-        }
-      }
-      return { valid: true };
-    },
-    section: 'temp_and_spatial',
-    required: false
-  },
-  {
+    profile_id: 30,
+    label: 'Inhaltliche Beschreibung',
     key: 'isoMetadata.contentDescription',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie eine Inhaltsbeschreibung an.',
+          helpText: 'Bitte geben Sie eine inhaltliche Beschreibung an.',
         }
       }
       return { valid: true };
@@ -470,21 +484,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: false
   },
   {
-    key: 'isoMetadata.contentDescriptionTextarea',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine Inhaltsbeschreibung an.',
-        }
-      }
-      return { valid: true };
-    },
-    section: 'additional',
-    required: false
-  },
-  {
-    key: 'isoMetadata.technicalDescription',
+    profile_id: 31,
+    label: 'Technische Beschreibung',
+    key: 'technicalMetadata.descriptions',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -498,6 +500,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: false
   },
   {
+    profile_id: 32,
+    label: 'Herkunft der Daten',
     key: 'isoMetadata.lineage',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -512,6 +516,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: false
   },
   {
+    profile_id: 39,
+    label: 'Weitere Informationen',
     key: 'isoMetadata.additionalInformation',
     validator: (val: any) => {
       if (!isDefined(val)) {

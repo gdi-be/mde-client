@@ -1,19 +1,20 @@
 <script lang="ts">
-  import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import type { TermsOfUse } from "$lib/models/metadata";
   import type { Option } from "$lib/models/form";
-  import { invalidateAll } from "$app/navigation";
   import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.termsOfUseId';
-  const LABEL = 'Nutzungsbedingungen';
 
-  let initialValue = getValue<number>(KEY);
-  let value = $state(initialValue?.toString());
+  const valueFromData = $derived(getValue<string>(KEY));
+  let value = $state('');
+  $effect(() => {
+    value = valueFromData || '';
+  });
+
   let showCheckmark = $state(false);
   let termsOfUseList: TermsOfUse[] = $state([]);
   const selectedDescription = $derived.by(() => {
@@ -38,19 +39,9 @@
   };
 
   const onChange = async (newValue: string) => {
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value: Number(newValue)
-      })
-    });
+    const response = await persistValue(KEY, Number(newValue));
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 </script>
@@ -62,7 +53,7 @@
     {:then OPTIONS}
       <SelectInput
         key={KEY}
-        label={LABEL}
+        label={fieldConfig?.label}
         options={
           OPTIONS.map((item: TermsOfUse): Option => ({
             key: item.id.toString(),
@@ -81,7 +72,7 @@
   </Paper>
   <FieldTools
     key={KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

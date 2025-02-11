@@ -1,33 +1,47 @@
 <script lang="ts">
-  // import { page } from "$app/state";
   import type { Lineage } from "$lib/models/metadata";
   import IconButton from "@smui/icon-button";
-  import { getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
-  // import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
   import DateInput from "../Inputs/DateInput.svelte";
+  import { popconfirm } from "$lib/context/PopConfirmContex.svelte";
+
+  type LineageListEntry = Lineage & { listId: string };
 
   const KEY = 'isoMetadata.UNKNOWN';
-  const LABEL = 'Datengrundlage';
 
-  let initialLineages = getValue<Lineage[]>(KEY);
-  let initialValue = initialLineages?.map(lineage => {
-    const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
-    return {
-      listId,
-      title: lineage.title || '',
-      source: lineage.source || '',
-      publishDate: lineage.publishDate || ''
-    };
+  const valueFromData = $derived(getValue<Lineage[]>(KEY));
+  let lineages = $state<LineageListEntry[]>([]);
+
+  $effect(() => {
+    if (valueFromData) {
+      lineages = valueFromData?.map(lineage => {
+        const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
+        return {
+          listId,
+          title: lineage.title || '',
+          source: lineage.source || '',
+          publishDate: lineage.publishDate || ''
+        };
+      });
+    }
   });
 
-  let lineages = $state(initialValue || []);
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<Lineage[]>(KEY);
 
   const persistLineages = async () => {
-    // TODO implement
+    const value = lineages.map(lineage => ({
+      title: lineage.title,
+      source: lineage.source,
+      publishDate: lineage.publishDate
+    }))
+    const response = await persistValue(KEY, value);
+    if (response.ok) {
+      showCheckmark = true;
+    }
   };
 
   const addItem = () => {
@@ -43,17 +57,22 @@
     ];
   };
 
-  const removeItem = (listId: string) => {
-    // TODO: add popconfirm
-    lineages = lineages.filter(lineage => lineage.listId !== listId);
-    persistLineages();
+  const removeItem = (listId: string, evt: MouseEvent) => {
+    const targetEl = evt.currentTarget as HTMLElement;
+    popconfirm(targetEl, async () => {
+      lineages = lineages.filter(lineage => lineage.listId !== listId);
+      persistLineages();
+    }, {
+      text: 'Möchten Sie diese Datengrundlage wirklich löschen?',
+      confirmButtonText: 'Löschen'
+    })
   };
 
 </script>
 
 <div class="lineages-field">
   <fieldset>
-    <legend>{LABEL}
+    <legend>{fieldConfig?.label || 'TODO: Herkunft der Daten'}
       <IconButton
         class="material-icons"
         onclick={() => addItem()}
@@ -67,13 +86,13 @@
       <fieldset class="lineage" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
         <legend>
           <IconButton
-          class="material-icons"
-          onclick={() => removeItem(lineage.listId)}
-          size="button"
-          title="Kontakt entfernen"
-        >
-          delete
-        </IconButton>
+            class="material-icons"
+            onclick={(evt) => removeItem(lineage.listId, evt)}
+            size="button"
+            title="Kontakt entfernen"
+          >
+            delete
+          </IconButton>
         </legend>
         <TextInput
           bind:value={lineage.title}
@@ -104,7 +123,7 @@
   </fieldset>
   <FieldTools
     key={KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

@@ -1,27 +1,39 @@
 <script lang="ts">
   import IconButton from "@smui/icon-button";
-  import { getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
   import { fly, scale } from "svelte/transition";
 
-  const KEY = 'isoMetadata.UNKNOWN';
-  const LABEL = 'Weitere Informationen';
+  type AdditionalInformationListEntry = {
+    listId: string;
+    value: string;
+  };
 
-  let initialDescriptions = getValue<string[]>(KEY);
-  let initialValue = initialDescriptions?.map(value => {
-    const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
-    return {
-      listId,
-      value
-    };
+  const KEY = 'isoMetadata.UNKNOWN';
+
+  const valueFromData = $derived(getValue<string[]>(KEY));
+  let values = $state<AdditionalInformationListEntry[]>([]);
+  $effect(() => {
+    if (valueFromData) {
+      values = valueFromData?.map(value => {
+        const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
+        return {
+          listId,
+          value
+        };
+      })
+    }
   });
 
-  let values = $state(initialValue || []);
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<string[]>(KEY);
 
   const persist = async () => {
-    // TODO implement
+    const response = await persistValue(KEY, values);
+    if (response.ok) {
+      showCheckmark = true;
+    }
   };
 
   const addItem = () => {
@@ -45,7 +57,7 @@
 
 <div class="content-description-field">
   <fieldset>
-    <legend>{LABEL}
+    <legend>{fieldConfig?.label || 'TODO: Weitere Informationen'}
       <IconButton
         class="material-icons"
         onclick={() => addItem()}
@@ -78,7 +90,7 @@
   </fieldset>
   <FieldTools
     key={KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

@@ -1,36 +1,26 @@
 <script lang="ts">
-  import { page } from "$app/state";
   import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import Paper from "@smui/paper";
-  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
-  import { invalidateAll } from "$app/navigation";
   import type { ValidationResult } from "../FieldsConfig";
 
   const KEY = 'isoMetadata.title';
-  const LABEL = 'Titel Datenbestand';
 
-  const initialValue = getValue<string>(KEY);
-  let value = $state(initialValue || '');
+  const valueFromData = $derived(getValue<string>(KEY));
+  let value = $state('');
+  $effect(() => {
+    value = valueFromData || '';
+  });
+
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<string>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {
-    // TODO check if value has changed
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value
-      })
-    });
+    const response = await persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
@@ -41,14 +31,14 @@
     <TextInput
       bind:value
       key={KEY}
-      label={LABEL}
+      label={fieldConfig?.label}
       onblur={onBlur}
       {validationResult}
     />
   </Paper>
   <FieldTools
     key={KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

@@ -10,7 +10,7 @@
     onChange?: (value: string) => void;
     value?: string;
     key: string;
-    label: string;
+    label?: string;
     options: Option[];
     validationResult?: ValidationResult;
   }

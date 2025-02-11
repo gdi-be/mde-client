@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
-  import { invalidateAll } from "$app/navigation";
   import FormField from "@smui/form-field";
   import Switch from "@smui/switch";
 
@@ -12,28 +10,22 @@
   } = $props();
 
   const KEY = 'isoMetadata.valid';
-  const LABEL = 'Überprüft durch INSPIRE Qualitätssicherung';
 
   const metadataProfile = $derived(getValue<string>('isoMetadata.metadataProfile', metadata));
 
-  let initialValue = getValue<boolean>(KEY);
-  let value = $state(initialValue);
+  const valueFromData = $derived(getValue<boolean>(KEY));
+  let value = $state<boolean>(false);
+  $effect(() => {
+    value = !!valueFromData;
+  });
+
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<boolean>(KEY);
 
   const onCheckChange = async (event: CustomEvent<{ selected: boolean}>) => {
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value: event.detail.selected
-      })
-    });
+    const response = await persistValue(KEY, event.detail.selected);
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
@@ -44,7 +36,7 @@
     <Paper>
       <FormField align="end">
         {#snippet label()}
-          {LABEL}
+          {fieldConfig?.label}
         {/snippet}
         <Switch
           bind:checked={value}
@@ -54,7 +46,7 @@
     </Paper>
     <FieldTools
       key={KEY}
-      bind:running={showCheckmark}
+      bind:checkMarkAnmiationRunning={showCheckmark}
     />
   </div>
 {/if}

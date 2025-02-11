@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getContext, setContext } from "svelte";
+import { page } from "$app/state";
 import type { FieldKey } from "$lib/models/form";
 import { FieldConfigs, type FieldConfig } from "$lib/components/Form/FieldsConfig";
+import { invalidateAll } from "$app/navigation";
 
 export type FormState = {
   data: Record<string, unknown>;
@@ -13,14 +15,14 @@ const formState = $state<FormState>({
   activeHelpKey: undefined
 });
 
-const formStateKey = Symbol('formState');
+export const FORMSTATE_CONTEXT = Symbol('formState');
 
 export function initializeFormContext() {
-  setContext(formStateKey, formState);
+  setContext(FORMSTATE_CONTEXT, formState);
 }
 
 export function getFormContext() {
-  return getContext<FormState>(formStateKey);
+  return getContext<FormState>(FORMSTATE_CONTEXT);
 }
 
 export function getValue<T>(key: string, metadata?: Record<string, unknown>): T | undefined {
@@ -98,4 +100,21 @@ export function allFieldsValid(metadata?: Record<string, unknown>): boolean {
   return sections.every((section: Section) => {
     return getProgress(section, metadata) === 1;
   });
+}
+
+export async function persistValue(key: string, value: unknown) {
+  const response = await fetch(page.url, {
+    method: 'PATCH',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      key,
+      value
+    })
+  });
+  if (response.ok) {
+    invalidateAll();
+  }
+  return response;
 }

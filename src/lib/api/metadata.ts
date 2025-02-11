@@ -1,7 +1,7 @@
 import { env } from "$env/dynamic/private";
 import log from "loggisch";
-import type { IsoMetadata, MetadataProfile, MetadataCollection, MetadataId, MetadataType } from "../models/metadata";
-import type { PageableProps, PageableResponse } from "./api";
+import type { IsoMetadata, MetadataProfile, MetadataCollection, MetadataId, MetadataType } from "$lib/models/metadata";
+import type { PageableProps, PageableResponse } from "$lib/models/api";
 
 const defaultPage: PageableProps = {
   page: 0,

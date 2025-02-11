@@ -7,13 +7,13 @@
   export type FieldToolsProps = {
     key: string;
     children?: Snippet;
-    running?: boolean;
+    checkMarkAnmiationRunning?: boolean;
   }
 
   let {
     key,
     children,
-    running = $bindable<boolean>(false)
+    checkMarkAnmiationRunning: running = $bindable<boolean>(false)
   }: FieldToolsProps = $props();
 
 </script>
