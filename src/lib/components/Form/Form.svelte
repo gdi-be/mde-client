@@ -10,32 +10,32 @@
     type Section,
     clearActiveHelp
   } from "$lib/context/FormContext.svelte";;
-  import TitleField_01 from "./Field/TitleField_01.svelte";
-  import DescriptionField_02 from "./Field/DescriptionField_02.svelte";
-  import KeywordsField_15 from "./Field/KeywordsField_15.svelte";
-  import PreviewField_29 from "./Field/PreviewField_29.svelte";
-  import ContactsField_19 from "./Field/ContactsField_19.svelte";
-  import MetadataProfile_05 from "./Field/MetadataProfile_05.svelte";
-  import PrivacyField_04 from "./Field/PrivacyField_04.svelte";
-  import TermsOfUseField_24 from "./Field/TermsOfUseField_24.svelte";
-  import AnnexThemeField_07 from "./Field/AnnexThemeField_07.svelte";
-  import QualityReportCheckField_37 from "./Field/QualityReportCheckField_37.svelte";
-  import HighValueDatasetField_06 from "./Field/HighValueDatasetField_06.svelte";
-  import TopicCategory_13 from "./Field/TopicCategory_13.svelte";
-  import CreatedField_09 from "./Field/CreatedField_09.svelte";
-  import PublishedField_10 from "./Field/PublishedField_10.svelte";
-  import MaintenanceFrequencyField_14 from "./Field/MaintenanceFrequencyField_14.svelte";
-  import LastUpdatedField_11 from "./Field/LastUpdatedField_11.svelte";
-  import ValidityRangeField_12 from "./Field/ValidityRangeField_12.svelte";
-  import DeliveredCoordinateSystemField_16 from "./Field/DeliveredCoordinateSystemField_16.svelte";
-  import CoordinateSystemField_17 from "./Field/CoordinateSystemField_17.svelte";
-  import ExtentField_18 from "./Field/ExtentField_18.svelte";
-  import ResolutionField_28 from "./Field/ResolutionField_28.svelte";
-  import ContentDescriptionTextarea_31 from "./Field/ContentDescriptionTextarea_31.svelte";
-  import ContentDescription_30 from "./Field/ContentDescription_30.svelte";
-  import TechnicalDescription_60 from "./Field/TechnicalDescription_60.svelte";
-  import Lineage_32 from "./Field/Lineage_32.svelte";
-  import AdditionalInformation_39 from "./Field/AdditionalInformation_39.svelte";
+  import F01_TitleField from "./Field/01_TitleField.svelte";
+  import F02_DescriptionField from "./Field/02_DescriptionField.svelte";
+  import F15_KeywordsField from "./Field/15_KeywordsField.svelte";
+  import F29_PreviewField from "./Field/29_PreviewField.svelte";
+  import F19_ContactsField from "./Field/19_ContactsField.svelte";
+  import F05_MetadataProfile from "./Field/05_MetadataProfile.svelte";
+  import F04_PrivacyField from "./Field/04_PrivacyField.svelte";
+  import F24_TermsOfUseField from "./Field/24_TermsOfUseField.svelte";
+  import F07_AnnexThemeField from "./Field/07_AnnexThemeField.svelte";
+  import F37_QualityReportCheckField from "./Field/37_QualityReportCheckField.svelte";
+  import F06_HighValueDatasetField from "./Field/06_HighValueDatasetField.svelte";
+  import F13_TopicCategory from "./Field/13_TopicCategory.svelte";
+  import F09_CreatedField from "./Field/09_CreatedField.svelte";
+  import F10_PublishedField from "./Field/10_PublishedField.svelte";
+  import F14_MaintenanceFrequencyField from "./Field/14_MaintenanceFrequencyField.svelte";
+  import F11_LastUpdatedField from "./Field/11_LastUpdatedField.svelte";
+  import F12_ValidityRangeField from "./Field/12_ValidityRangeField.svelte";
+  import F16_DeliveredCoordinateSystemField from "./Field/16_DeliveredCoordinateSystemField.svelte";
+  import F17_CoordinateSystemField from "./Field/17_CoordinateSystemField.svelte";
+  import F18_ExtentField from "./Field/18_ExtentField.svelte";
+  import F28_ResolutionField from "./Field/28_ResolutionField.svelte";
+  import F31_ContentDescriptionTextarea from "./Field/31_ContentDescriptionTextarea.svelte";
+  import F30_ContentDescription from "./Field/30_ContentDescription.svelte";
+  import F60_TechnicalDescription from "./Field/60_TechnicalDescription.svelte";
+  import F32_Lineage from "./Field/32_Lineage.svelte";
+  import F39_AdditionalInformation from "./Field/39_AdditionalInformation.svelte";
   import ServicesSection from "./service/ServicesSection.svelte";
   import FormFooter from "./FormFooter.svelte";
   import type { MetadataJson } from "$lib/models/metadata";
@@ -127,47 +127,47 @@
     <form>
       {#if activeSection === "basedata"}
         <section id="basedata" transition:fade >
-          <TitleField_01 />
-          <DescriptionField_02 />
-          <KeywordsField_15 />
-          <PreviewField_29 />
-          <ContactsField_19 />
+          <F01_TitleField />
+          <F02_DescriptionField />
+          <F15_KeywordsField />
+          <F29_PreviewField />
+          <F19_ContactsField />
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
       {#if activeSection === "classification"}
         <section id="classification" transition:fade >
-          <MetadataProfile_05 />
-          <PrivacyField_04 />
-          <TermsOfUseField_24 />
-          <AnnexThemeField_07 {metadata} />
-          <QualityReportCheckField_37 {metadata} />
-          <HighValueDatasetField_06 />
-          <TopicCategory_13 {metadata}/>
+          <F05_MetadataProfile />
+          <F04_PrivacyField />
+          <F24_TermsOfUseField />
+          <F07_AnnexThemeField {metadata} />
+          <F37_QualityReportCheckField {metadata} />
+          <F06_HighValueDatasetField />
+          <F13_TopicCategory {metadata}/>
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
       {#if activeSection === "temp_and_spatial"}
         <section id="temp_and_spatial" transition:fade >
-          <CreatedField_09 />
-          <PublishedField_10 />
-          <MaintenanceFrequencyField_14 />
-          <LastUpdatedField_11 {metadata} />
-          <ValidityRangeField_12 />
-          <DeliveredCoordinateSystemField_16 />
-          <CoordinateSystemField_17 />
-          <ExtentField_18 />
-          <ResolutionField_28 />
+          <F09_CreatedField />
+          <F10_PublishedField />
+          <F14_MaintenanceFrequencyField />
+          <F11_LastUpdatedField {metadata} />
+          <F12_ValidityRangeField />
+          <F16_DeliveredCoordinateSystemField />
+          <F17_CoordinateSystemField />
+          <F18_ExtentField />
+          <F28_ResolutionField />
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
       {#if activeSection === "additional"}
         <section id="additional" transition:fade >
-          <ContentDescriptionTextarea_31 />
-          <ContentDescription_30 />
-          <TechnicalDescription_60 />
-          <Lineage_32 />
-          <AdditionalInformation_39 />
+          <F31_ContentDescriptionTextarea />
+          <F30_ContentDescription />
+          <F60_TechnicalDescription />
+          <F32_Lineage />
+          <F39_AdditionalInformation />
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
