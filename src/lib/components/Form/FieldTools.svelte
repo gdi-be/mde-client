@@ -27,6 +27,7 @@
 
 <style lang="scss">
   .field-tools {
+    position: relative;
     padding: 0.25em 0;
     width: 36px;
     display: flex;
