@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from "$lib/models/form";
-import type { Contacts, Extent } from "$lib/models/metadata";
+import type { Contacts, Extent, Role } from "$lib/models/metadata";
 import type { Section } from "$lib/context/FormContext.svelte";;
 
 export type ValidationResult = {
@@ -20,6 +20,7 @@ export type FieldConfig<T> = {
   validator: (val: T | undefined, extra?: Record<string, any>) => ValidationResultList | ValidationResult;
   section: Section;
   required?: boolean;
+  roles?: Role[];
 };
 
 const isDefined = (val: any) => val !== undefined && val !== null && val !== '';
@@ -51,6 +52,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
         helpText: 'Es wird eine maximale Titel-Länge von 100 Zeichen empfohlen.',
       };
     },
+    roles: ['DataOwner', 'Editor'],
     section: 'basedata',
     required: true
   },
@@ -58,6 +60,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 2,
     key: 'isoMetadata.description',
     label: 'Kurzbeschreibung des Datenbestandes',
+    roles: ['DataOwner', 'Editor'],
     validator: (val) => {
       if (!isDefined(val)) {
         return {
@@ -74,6 +77,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 15,
     label: 'Schlagwörter',
     key: 'isoMetadata.keywords',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (val?.length < 1) {
         return {
@@ -90,6 +94,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 29,
     label: 'Vorschaubild',
     key: 'isoMetadata.preview',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -112,6 +117,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 19,
     label: 'Kontaktangaben',
     key: 'isoMetadata.pointsOfContact',
+    roles: ['DataOwner', 'Editor'],
     validator: (contacts?: Contacts): ValidationResultList => {
       const validationResult: ValidationResultList = [];
       if (!contacts || contacts.length < 1) return [{
@@ -176,6 +182,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 5,
     label: 'INSPIRE Relevanz',
     key: 'isoMetadata.metadataProfile',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -192,6 +199,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 4,
     label: 'Datenschutz-Einstellungen',
     key: 'clientMetadata.privacy',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -208,6 +216,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 24,
     label: 'Nutzungsbestimmungen',
     key: 'isoMetadata.termsOfUseId',
+    roles: ['DataOwner'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -224,6 +233,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 7,
     label: 'INSPIRE Annex Thema',
     key: 'isoMetadata.inspireTheme',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -240,6 +250,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 37,
     label: 'Überprüfung des Qualitätsberichts',
     key: 'isoMetadata.valid',
+    roles: ['QualityAssurance'],
     validator: () => ({ valid: true }),
     section: 'classification',
     required: true
@@ -248,6 +259,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 6,
     label: 'High Value Datensatz',
     key: 'clientMetadata.highValueDataset',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -264,6 +276,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 13,
     label: 'Themenkategorie',
     key: 'isoMetadata.topicCategory',
+    roles: ['Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -280,6 +293,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 9,
     label: 'Erstellungsdatum',
     key: 'isoMetadata.created',
+    roles: ['DataOwner', 'Editor'],
     validator: () => {
       // Optional
       return { valid: true };
@@ -291,6 +305,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 10,
     label: 'Veröffentlichungsdatum',
     key: 'isoMetadata.published',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val) || val.length === 0) {
         return {
@@ -307,6 +322,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 14,
     label: 'Pflegeintervall',
     key: 'isoMetadata.maintenanceFrequency',
+    roles: ['DataOwner', 'Editor'],
     validator: () => {
       // Optional
       return { valid: true };
@@ -318,6 +334,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 11,
     label: 'letzte Aktualisierung',
     key: 'isoMetadata.modified',
+    roles: ['DataOwner', 'Editor'],
     validator: () => {
       // Optional
       return { valid: true };
@@ -329,6 +346,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 12,
     label: 'gültig ab',
     key: 'isoMetadata.validFrom',
+    roles: ['DataOwner', 'Editor'],
     validator: (startValue: string, extra: any) => {
       if (startValue && extra?.endValue && new Date(startValue) > new Date(extra?.endValue)) {
         return {
@@ -345,6 +363,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 12,
     label: 'gültig bis',
     key: 'isoMetadata.validTo',
+    roles: ['DataOwner', 'Editor'],
     validator: (endValue: string, extra: any) => {
       if (endValue && extra?.startValue && new Date(extra?.startValue) > new Date(endValue)) {
         return {
@@ -361,6 +380,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 16,
     label: 'geliefertes Koordinatensystem',
     key: 'technicalMetadata.deliveredCrs',
+    roles: ['DataOwner'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -377,6 +397,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 17,
     label: 'abzugebendes Koordinatensystem',
     key: 'isoMetadata.crs',
+    roles: ['Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -393,6 +414,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 18,
     label: 'Räumliche Ausdehnung',
     key: 'isoMetadata.extent',
+    roles: ['Editor'],
     validator: (val?: Extent) => {
       const validationResult: ValidationResultList = [];
       if (!val) {
@@ -439,6 +461,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 28,
     label: 'Bodenauflösung',
     key: 'isoMetadata.resolutions',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -455,6 +478,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 27,
     label: 'Vergleichsmaßstab',
     key: 'isoMetadata.scale',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -471,6 +495,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 30,
     label: 'Inhaltliche Beschreibung',
     key: 'isoMetadata.contentDescription',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -487,6 +512,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 31,
     label: 'Technische Beschreibung',
     key: 'technicalMetadata.descriptions',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -503,6 +529,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 32,
     label: 'Herkunft der Daten',
     key: 'isoMetadata.lineage',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -519,6 +546,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 39,
     label: 'Weitere Informationen',
     key: 'isoMetadata.additionalInformation',
+    roles: ['DataOwner', 'Editor'],
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
