@@ -1,9 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import type { KeyWords } from "$lib/models/metadata";
-  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
-  import { invalidateAll } from "$app/navigation";
   import { onMount } from "svelte";
   import Chip, { Set as ChipSet, Text, TrailingIcon } from "@smui/chips";
   import Autocomplete from "@smui-extra/autocomplete";
@@ -12,15 +10,19 @@
   import Button, { Label } from "@smui/button";
   import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
   import type { ValidationResult } from "../FieldsConfig";
+  import type { Keywords } from "$lib/models/metadata";
 
   const KEY = 'isoMetadata.keywords';
-  const LABEL = 'Schlagwörter';
 
   let containerElement = $state<HTMLDivElement>();
-  let initialKeyWords = getValue<KeyWords>(KEY);
   let { metadataid } = page.params;
-  let initialValue = initialKeyWords?.default?.map(entry => entry.keyword) || [];
-  let value = $state<string[]>(initialValue);
+
+  let value = $state<string[]>([]);
+  const valueFromData = $derived(getValue<Keywords>(KEY));
+  $effect(() => {
+    value = valueFromData?.default?.map(entry => entry.keyword) || [];
+  });
+
   let showCheckmark = $state(false);
   let autoKeywords = $state<string[]>([]);
   let uniqueKeywords = $derived(Array.from(new Set([...autoKeywords, ...value])));
@@ -57,13 +59,13 @@
 
   const removeKeyword = (keyword: string) => {
     value = value.filter(kw => kw !== keyword);
-    persistValues();
+    persistKeywords();
   };
 
   const addSelectedKeyword = ({ detail }: CustomEvent) => {
     value = Array.from(new Set([...value, detail]));
     searchValue = '';
-    persistValues();
+    persistKeywords();
   };
 
   const addCustomKeywords = () => {
@@ -73,31 +75,14 @@
       // ensure unique values
       value = Array.from(new Set([...value, ...splitValues]));
       dialogOpen = false;
-      persistValues();
+      persistKeywords();
     }
   };
 
-  const persistValues = async () => {
-    const keywords: KeyWords = {
-      default: value.map((entry) => ({ keyword: entry }))
-    };
-    persistKeywords(keywords);
-  };
-
-  const persistKeywords = async (keywords: KeyWords) => {
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value: keywords
-      })
-    });
+  const persistKeywords = async () => {
+    const response = await persistValue(KEY, value.map((entry) => ({ keyword: entry })));
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   }
 
@@ -128,7 +113,7 @@
   bind:this={containerElement}
 >
   <fieldset>
-    <legend>{LABEL}</legend>
+    <legend>{fieldConfig?.label}</legend>
     <ChipSet
       class="keywords-chipset"
       chips={uniqueKeywords}
@@ -181,7 +166,7 @@
   </fieldset>
   <FieldTools
     key={KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   >
   </FieldTools>
 </div>

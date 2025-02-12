@@ -132,7 +132,7 @@ export type Lineage = {
   publishDate: string
 };
 
-export type KeyWords = {
+export type Keywords = {
   "Spatial scope"?: {
     keyword: string;
     namespace: string;

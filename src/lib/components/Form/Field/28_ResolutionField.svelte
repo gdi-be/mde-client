@@ -1,24 +1,35 @@
 <script lang="ts">
-  import { page } from "$app/state";
-  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
-  import { invalidateAll } from "$app/navigation";
   import FormField from "@smui/form-field";
   import Radio from "@smui/radio";
   import type { ValidationResult } from "../FieldsConfig";
 
   const RESOLUTION_KEY = 'isoMetadata.resolutions';
-  const RESOLUTION_LABEL = 'Bodenauflösung'
   const SCALE_KEY = 'isoMetadata.scale';
-  const SCALE_LABEL = 'Vergleichsmaßstab'
+
+  let selected = $state<typeof RESOLUTION_KEY | typeof SCALE_KEY>();
 
   // TODO: check why this is a List
-  let initialResolutionValue = getValue<number[]>(RESOLUTION_KEY)?.[0];
-  let resolutionValue = $state(initialResolutionValue || null);
-  let initialScaleValue = getValue<number>(SCALE_KEY);
-  let scaleValue = $state(initialScaleValue  || null);
-  let selected = $state(initialResolutionValue ? RESOLUTION_KEY : SCALE_KEY);
+  const resolutionValueFromData = $derived(getValue<number>(RESOLUTION_KEY?.[0]));
+  let resolutionValue = $state<number | null>(null);
+  $effect(() => {
+    if (resolutionValueFromData) {
+      resolutionValue = resolutionValueFromData;
+      selected = RESOLUTION_KEY;
+    }
+  });
+
+  const scaleValueFromData = $derived(getValue<number>(SCALE_KEY));
+  let scaleValue = $state<number | null>(null);
+  $effect(() => {
+    if (scaleValueFromData) {
+      scaleValue = scaleValueFromData;
+      selected = SCALE_KEY;
+    }
+  });
+
   let showCheckmark = $state(false);
   const resolutionFieldConfig = getFieldConfig<number>(RESOLUTION_KEY);
   let resolutionValidationResult = $derived(resolutionFieldConfig?.validator(resolutionValue || undefined)) as ValidationResult;
@@ -33,51 +44,23 @@
       }
     } else {
       if (Number.isFinite(scaleValue)) {
-        await updateScale(scaleValue);
+        await updateScale(scaleValue as number);
         updateResolution(null);
       }
     }
   };
 
   const updateResolution = async (newValue: [number] | null) => {
-    // TODO check if value has changed
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: RESOLUTION_KEY,
-        value: newValue
-      })
-    });
+    const response = await persistValue(RESOLUTION_KEY, newValue);
     if (response.ok) {
-      if (newValue === null) {
-        resolutionValue = null;
-      }
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
   const updateScale = async (newValue: number | null) => {
-    // TODO check if value has changed
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: SCALE_KEY,
-        value: newValue
-      })
-    });
+    const response = await persistValue(SCALE_KEY, newValue);
     if (response.ok) {
-      if (newValue === null) {
-        scaleValue = null;
-      }
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
@@ -92,7 +75,7 @@
         value={RESOLUTION_KEY}
       />
       {#snippet label()}
-        {RESOLUTION_LABEL}
+        {resolutionFieldConfig?.label}
       {/snippet}
     </FormField>
     <FormField>
@@ -101,14 +84,14 @@
         value={SCALE_KEY}
       />
       {#snippet label()}
-        {SCALE_LABEL}
+        {scaleFieldConfig?.label}
       {/snippet}
     </FormField>
     {#if selected === RESOLUTION_KEY}
       <NumberInput
         bind:value={resolutionValue as number}
         key={RESOLUTION_KEY}
-        label={RESOLUTION_LABEL}
+        label={resolutionFieldConfig?.label}
         type="float"
         onblur={onBlur}
         validationResult={resolutionValidationResult}
@@ -117,7 +100,7 @@
       <NumberInput
         bind:value={scaleValue as number}
         key={SCALE_KEY}
-        label={SCALE_LABEL}
+        label={scaleFieldConfig?.label}
         onblur={onBlur}
         prefix="1:"
         validationResult={scaleValidationResult}
@@ -126,7 +109,7 @@
   </fieldset>
   <FieldTools
     key={RESOLUTION_KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

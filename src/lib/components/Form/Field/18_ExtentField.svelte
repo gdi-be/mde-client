@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { page } from "$app/state";
-  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
   import NumberInput from "../Inputs/NumberInput.svelte";
   import type { CRS, Extent } from "$lib/models/metadata";
-  import { invalidateAll } from "$app/navigation";
   import Button, { Icon, Label } from "@smui/button";
   import SelectInput from "../Inputs/SelectInput.svelte";
   import { transformExtent } from "$lib/util";
@@ -13,7 +11,6 @@
 
   const KEY = 'isoMetadata.extent'
   const CRS_KEY = 'isoMetadata.crs';
-  const LABEL = 'Räumliche Ausdehnung';
   const CRS_LABEL = 'Koordinatensystem';
   const LABEL_MAX_X = 'Maximaler X-Wert';
   const LABEL_MIN_X = 'Minimaler X-Wert';
@@ -43,14 +40,20 @@
     label: 'EPSG:3035'
   }];
 
-  let initialValue = getValue<Extent>(KEY);
   let initialCRSKey = getValue<CRS>(CRS_KEY);
-  let value4326 = $state(initialValue || {
+  const valueFromData = $derived(getValue<Extent>(KEY));
+  let value4326 = $state({
     minx: 0,
     maxx: 0,
     miny: 0,
     maxy: 0
   });
+  $effect(() => {
+    if (valueFromData) {
+      value4326 = valueFromData;
+    }
+  });
+
   let crsKey = $state(initialCRSKey || CRS_OPTIONS[1].key);
   let crs = $derived(CRS_OPTIONS.find(option => option.key === crsKey) || CRS_OPTIONS[1]);
   let showCheckmark = $state(false);
@@ -71,20 +74,9 @@
   };
 
   const sendValue = async () => {
-    // TODO check if value has changed
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value: value4326
-      })
-    });
+    const response = await persistValue(KEY, value4326);
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
@@ -97,7 +89,7 @@
 
 <div class="extent-field">
   <fieldset>
-    <legend>{LABEL}</legend>
+    <legend>{fieldConfig?.label}</legend>
     <div class="tools">
       <SelectInput
         bind:value={crsKey}
@@ -194,7 +186,7 @@
   </fieldset>
   <FieldTools
     key={KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

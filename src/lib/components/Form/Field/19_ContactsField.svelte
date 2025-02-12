@@ -1,57 +1,50 @@
 <script lang="ts">
-  import { page } from "$app/state";
-  import type { Contacts } from "$lib/models/metadata";
+  import type { Contact, Contacts } from "$lib/models/metadata";
   import IconButton from "@smui/icon-button";
-  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
-  import { invalidateAll } from "$app/navigation";
   import { fly, scale } from "svelte/transition";
   import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
   import type { ValidationResult, ValidationResultList } from "../FieldsConfig";
   import { popconfirm } from "$lib/context/PopConfirmContex.svelte";
 
   const KEY = 'isoMetadata.pointsOfContact';
-  const LABEL = 'Kontakt';
 
-  let initialContacts = getValue<Contacts>(KEY);
-  const fieldConfig = getFieldConfig<Contacts>(KEY);
-  let initialValue = initialContacts?.map(contact => {
-    const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
-    return {
-      listId,
-      name: contact.name || '',
-      organisation: contact.organisation || '',
-      phone: contact.phone || '',
-      email: contact.email || ''
-    };
+  type ContactListEntry = Contact & { listId: string };
+
+  let contacts = $state<ContactListEntry[]>([]);
+  const valueFromData = $derived(getValue<Contacts>(KEY));
+  $effect(() => {
+    if (valueFromData) {
+      contacts = valueFromData?.map(contact => {
+        const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
+        return {
+          listId,
+          name: contact.name || '',
+          organisation: contact.organisation || '',
+          phone: contact.phone || '',
+          email: contact.email || ''
+        };
+      }) || [];
+    }
   });
 
-  let contacts = $state(initialValue || []);
   let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<Contacts>(KEY);
   let validationResult = $derived(fieldConfig?.validator(contacts)) as ValidationResultList;
   let generalValidationResult = $derived(validationResult?.find(({index}) => index === undefined));
 
   const persistContacts = async () => {
-    // TODO add equals check to prevent unnecessary requests
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: KEY,
-        value: contacts.map(contact => ({
-          name: contact.name,
-          organisation: contact.organisation,
-          phone: contact.phone,
-          email: contact.email
-        }))
-      })
-    });
+    const value = contacts.map(contact => ({
+      name: contact.name,
+      organisation: contact.organisation,
+      phone: contact.phone,
+      email: contact.email
+    }))
+    const response = await persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
@@ -89,7 +82,7 @@
 
 <div class="contacts-field">
   <fieldset>
-    <legend>{LABEL}
+    <legend>{fieldConfig?.label}
       <IconButton
         class="material-icons"
         onclick={() => addItem()}
@@ -145,7 +138,7 @@
     </fieldset>
   <FieldTools
     key={KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

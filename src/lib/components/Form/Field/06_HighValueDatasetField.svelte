@@ -1,17 +1,16 @@
 <script lang="ts">
-  import { page } from "$app/state";
   import Paper from "@smui/paper";
-  import { getValue } from "$lib/context/FormContext.svelte";;
+  import { getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
   import Switch from "@smui/switch";
   import FormField from "@smui/form-field";
   import SelectInput from "../Inputs/SelectInput.svelte";
-  import { invalidateAll } from "$app/navigation";
 
   const CHECKED_KEY = 'clientMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
   const CHECK_LABEL = 'High Value Data Set';
   const LABEL = 'High Value Data Kategorie';
+
   const OPTIONS = [{
     key: 'geospatial',
     label: 'Geodaten (Geospatial)'
@@ -32,44 +31,31 @@
     label: 'Mobilitätsdaten (Mobility)'
   }];
 
-  let initialCheckedValue = getValue<boolean>(CHECKED_KEY) || false;
-  let checkedValue = $state(initialCheckedValue);
-  let initialSelectionValue = getValue<string>(CATEGORY_KEY);
-  let selectionValue = $state(initialSelectionValue);
+  const checkedValueFromData = $derived(getValue<boolean>(CHECKED_KEY));
+  let checkedValue = $state(false);
+  $effect(() => {
+    checkedValue = checkedValueFromData || false;
+  });
+  const selectionValueFromData = $derived(getValue<string>(CATEGORY_KEY));
+  let selectionValue = $state('');
+  $effect(() => {
+    selectionValue = selectionValueFromData || '';
+  });
 
   let showCheckmark = $state(false);
 
   const onCheckChange = async (event: CustomEvent<{ selected: boolean}>) => {
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: CHECKED_KEY,
-        value: event.detail.selected
-      })
-    });
+    const value = event.detail.selected;
+    const response = await persistValue(CHECKED_KEY, value);
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
   const onSelectionChange = async (newSelection?: string) => {
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: CATEGORY_KEY,
-        value: newSelection
-      })
-    });
+    const response = await persistValue(CATEGORY_KEY, newSelection);
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
@@ -98,7 +84,7 @@
   </Paper>
   <FieldTools
     key={CATEGORY_KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 

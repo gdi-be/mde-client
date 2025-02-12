@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Service } from "$lib/models/metadata";
-  import Paper from "@smui/paper";
   import TextAreaInput from "../../Inputs/TextAreaInput.svelte";
 
   export type ServiceTypeProps = {

@@ -1,27 +1,29 @@
 <script lang="ts">
-  import { page } from "$app/state";
-  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import FieldTools from "../FieldTools.svelte";
   import DateInput from "../Inputs/DateInput.svelte";
-  import { invalidateAll } from "$app/navigation";
   import type { ValidationResult } from "../FieldsConfig";
 
   const FROM_KEY = 'isoMetadata.validFrom';
   const TO_KEY = 'isoMetadata.validTo';
   const LABEL = 'Gültigkeitszeitraum';
-  const START_LABEL = 'Anfangsdatum';
-  const END_LABEL = 'Enddatum';
 
-  let initialStartValue = getValue<string>(FROM_KEY);
-  let initialEndValue = getValue<string>(TO_KEY);
-  if (initialStartValue) {
-    initialStartValue = new Date(initialStartValue).toISOString().split('T')[0];
-  }
-  if (initialEndValue) {
-    initialEndValue = new Date(initialEndValue).toISOString().split('T')[0];
-  }
-  let startValue = $state(initialStartValue || '');
-  let endValue = $state(initialEndValue || '');
+  const startValueFromData = $derived(getValue<string>(FROM_KEY));
+  let startValue = $state('');
+  $effect(() => {
+    if (startValueFromData) {
+      startValue = new Date(startValueFromData).toISOString().split('T')[0];
+    }
+  });
+
+  const endValueFromData = $derived(getValue<string>(TO_KEY));
+  let endValue = $state('');
+  $effect(() => {
+    if (endValueFromData) {
+      endValue = new Date(endValueFromData).toISOString().split('T')[0];
+    }
+  });
+
   let showCheckmark = $state(false);
   const fromFieldConfig = getFieldConfig<string>(FROM_KEY);
   let fromValidationResult = $derived(fromFieldConfig?.validator(startValue, {endValue})) as ValidationResult;
@@ -29,21 +31,10 @@
   let toValidationResult = $derived(toFieldConfig?.validator(endValue, {startValue})) as ValidationResult;
 
   const onBlur = async (key: string) => {
-    // TODO check if value has changed
     const value = key === FROM_KEY ? startValue : endValue!;
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key,
-        value: (new Date(value)).toISOString()
-      })
-    });
+    const response = await persistValue(key, (new Date(value!)).toISOString());
     if (response.ok) {
       showCheckmark = true;
-      invalidateAll();
     }
   };
 
@@ -54,20 +45,20 @@
     <legend>{LABEL}</legend>
     <DateInput
       bind:value={startValue}
-      label={START_LABEL}
+      label={fromFieldConfig?.label}
       onblur={() => onBlur(FROM_KEY)}
       validationResult={fromValidationResult}
     />
     <DateInput
       bind:value={endValue}
-      label={END_LABEL}
+      label={toFieldConfig?.label}
       onblur={() => onBlur(TO_KEY)}
       validationResult={toValidationResult}
     />
   </fieldset>
   <FieldTools
     key={FROM_KEY}
-    bind:running={showCheckmark}
+    bind:checkMarkAnmiationRunning={showCheckmark}
   />
 </div>
 
