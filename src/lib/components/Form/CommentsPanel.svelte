@@ -8,7 +8,6 @@
   import { invalidateAll } from "$app/navigation";
   import { getContext } from "svelte";
   import type { Token } from "$lib/models/keycloak";
-  import { fly } from "svelte/transition";
   import { popconfirm } from "$lib/context/PopConfirmContex.svelte";
 
   type CommentsPanelProps = {
@@ -45,6 +44,7 @@
 
   async function onDelete(id: string, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
+    evt.preventDefault();
     popconfirm(targetEl, async () => {
       const response = await fetch(page.url.pathname + '/comment', {
         method: 'DELETE',
@@ -77,8 +77,6 @@
 
 <div
   class="comments-panel-container"
-  in:fly={{ y: 500, x: -200, duration: 150 }}
-  out:fly={{ y: 500, x: -200, duration: 150 }}
 >
 <Paper
   elevation={6}
