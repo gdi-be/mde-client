@@ -12,7 +12,9 @@
   } = $props();
 
   const KEY = 'isoMetadata.topicCategory';
+  const ANNEX_THEME_KEY = 'isoMetadata.inspireTheme';
 
+  const inspireTheme = $derived(getValue<string>(ANNEX_THEME_KEY, metadata));
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   $effect(() => {
@@ -42,7 +44,6 @@
   };
 
   const getAutoFillValues = async () => {
-    const inspireTheme = getValue<string>('isoMetadata.inspireTheme', metadata);
     if (!inspireTheme) return;
     const response = await fetch(`/data/iso_themes`);
     const data = await response.json();
@@ -73,9 +74,11 @@
     key={KEY}
     bind:checkMarkAnmiationRunning={showCheckmark}
   >
-    <AutoFillButton
-      onclick={getAutoFillValues}
-    />
+    {#if inspireTheme}
+      <AutoFillButton
+        onclick={getAutoFillValues}
+      />
+    {/if}
   </FieldTools>
 </div>
 
