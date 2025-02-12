@@ -2,6 +2,8 @@ export type JsonClientMetadata = Record<string, unknown>;
 export type JsonIsoMetadata = Record<string, unknown>;
 export type JsonTechnialMetadata = Record<string, unknown>;
 
+export type Role = 'DataOwner' | 'Editor' | 'QualityAssurance' | 'Administrator';
+
 export type IsoTheme = {
   inspireID: string;
   inspireName: string;
