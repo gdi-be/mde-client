@@ -4,7 +4,6 @@
   import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
-  import { fly, scale } from "svelte/transition";
   import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
   import type { ValidationResult, ValidationResultList } from "../FieldsConfig";
   import { popconfirm } from "$lib/context/PopConfirmContex.svelte";
@@ -48,7 +47,8 @@
     }
   };
 
-  const addItem = () => {
+  const addItem = (evt: MouseEvent) => {
+    evt.preventDefault();
     const listId = Date.now().toString(36);
     contacts = [
       {
@@ -64,6 +64,7 @@
 
   const removeItem = (listId: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
+    evt.preventDefault();
     popconfirm(targetEl, async () => {
       contacts = contacts.filter(contact => contact.listId !== listId);
       persistContacts();
@@ -85,7 +86,7 @@
     <legend>{fieldConfig?.label}
       <IconButton
         class="material-icons"
-        onclick={() => addItem()}
+        onclick={(evt) => addItem(evt)}
         size="button"
         title="Kontakt hinzufügen"
       >
@@ -93,7 +94,7 @@
       </IconButton>
     </legend>
     {#each contacts as contact, index (contact.listId)}
-      <fieldset class="contact" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
+      <fieldset class="contact">
         <legend>
           <IconButton
           class="material-icons"

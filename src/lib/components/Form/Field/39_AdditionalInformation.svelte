@@ -3,7 +3,6 @@
   import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
-  import { fly, scale } from "svelte/transition";
 
   type AdditionalInformationListEntry = {
     listId: string;
@@ -68,7 +67,7 @@
       </IconButton>
     </legend>
     {#each values as contact (contact.listId)}
-      <fieldset class="contact" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
+      <fieldset class="contact">
         <legend>
           <IconButton
           class="material-icons"

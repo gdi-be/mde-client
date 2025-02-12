@@ -3,7 +3,6 @@
   import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
   import TextInput from "../Inputs/TextInput.svelte";
   import FieldTools from "../FieldTools.svelte";
-  import { fly, scale } from "svelte/transition";
   import type { ContentDescription } from "$lib/models/metadata";
 
   type ContentDescriptionListEntry = ContentDescription & { listId: string };
@@ -74,7 +73,7 @@
       </IconButton>
     </legend>
     {#each values as contentDescription (contentDescription.listId)}
-      <fieldset class="contentDescription" in:fly={{ y: -100 }} out:scale={{ duration: 200 }}>
+      <fieldset class="contentDescription">
         <legend>
           <IconButton
           class="material-icons"
