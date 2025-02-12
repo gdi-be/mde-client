@@ -1,7 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
-import { getAccessToken } from '$lib/auth/cookies.js';
-import { getAll } from '$lib/api/metadata.js';
-import type { PageableProps } from '$lib/api/api.js';
+import { getAccessToken } from '$lib/auth/cookies';
+import { getAll } from '$lib/api/metadata';
+import type { PageableProps } from '$lib/models/api';
 
 export async function load({ cookies, url }) {
   const page = url.searchParams.get('page');

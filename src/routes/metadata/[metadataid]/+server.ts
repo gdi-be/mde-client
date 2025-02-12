@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
-import { updateDataValue } from '$lib/api/metadata.js';
+import { updateDataValue, updateTitle } from '$lib/api/metadata.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function PATCH({ cookies, request, params }) {
@@ -20,7 +20,15 @@ export async function PATCH({ cookies, request, params }) {
     key: data.key,
     value: data.value,
     token
-  })
+  });
+
+  if (data.key === 'isoMetadata.title') {
+    await updateTitle(
+      params.metadataid,
+      data.value,
+      token
+    );
+  }
 
   return json(updateResponse);
 }
