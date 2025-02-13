@@ -4,7 +4,6 @@ export type JsonTechnialMetadata = Record<string, unknown>;
 
 export type IsoTheme = {
   inspireID: string;
-  inspireName: string;
   isoID: string;
   isoName: string;
 }
@@ -160,7 +159,6 @@ export type Contacts = Contact[];
 
 export type ClientMedata = {
   id: number;
-  title: string;
   metadataId: string;
   data: JsonClientMetadata;
 };
@@ -174,7 +172,6 @@ export type IsoMetadata = {
 
 export type TechnicalMetadata = {
   id: number;
-  title: string;
   metadataId: string;
   data: JsonTechnialMetadata;
 };

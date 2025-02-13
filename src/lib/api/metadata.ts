@@ -172,25 +172,6 @@ export const updateDataValue = async ({
   return await response.json();
 }
 
-export const updateTitle = async (metadataId: string, title: string, token: string): Promise<void> => {
-  const headers = new Headers({
-    'content-type': 'application/json',
-    Authorization: `Bearer ${token}`
-  });
-
-  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataId}/updateTitle`, {
-    method: 'POST',
-    headers,
-    body: title
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error status: ${response.status}`);
-  }
-
-  return await response.json();
-};
-
 export type CreateProps = {
   token: string;
   title: string;

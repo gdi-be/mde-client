@@ -98,7 +98,6 @@
     });
     await tick();
   };
-  $inspect(metadata);
 </script>
 
 <div class="metadata-form">

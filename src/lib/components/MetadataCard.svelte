@@ -1,11 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import Card, { ActionIcons, PrimaryAction } from "@smui/card";
-  import type { Metadata } from "../models/metadata";
+  import type { IsoMetadata } from "$lib/models/metadata";
   import IconButton, { Icon } from "@smui/icon-button";
 
   export type MetadataCardProps = {
-    metadata: Metadata;
+    metadata: IsoMetadata;
   }
   let { metadata }: MetadataCardProps = $props();
 
