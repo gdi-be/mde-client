@@ -27,3 +27,5 @@ export type Token = {
   family_name: string;
   email: string;
 };
+
+export type Role = 'DataOwner' | 'Editor' | 'QualityAssurance' | 'Administrator';

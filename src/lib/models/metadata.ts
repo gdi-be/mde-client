@@ -160,6 +160,8 @@ export type Contacts = Contact[];
 export type ClientMedata = {
   id: number;
   metadataId: string;
+  responsibleUserId: string;
+  responsibleRole: string;
   data: JsonClientMetadata;
 };
 
@@ -167,12 +169,16 @@ export type IsoMetadata = {
   id: number;
   title: string;
   metadataId: string;
+  responsibleUserId: string;
+  responsibleRole: string;
   data: JsonIsoMetadata;
 };
 
 export type TechnicalMetadata = {
   id: number;
   metadataId: string;
+  responsibleUserId: string;
+  responsibleRole: string;
   data: JsonTechnialMetadata;
 };
 
