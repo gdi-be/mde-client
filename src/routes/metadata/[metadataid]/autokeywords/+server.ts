@@ -12,7 +12,7 @@ export async function GET({ cookies, fetch, params }) {
     Authorization: `Bearer ${token}`
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${params.metadataid}/autokeywords`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${params.metadataid}/autokeywords`, {
     headers
   });
 

@@ -37,13 +37,13 @@
   import F39_AdditionalInformation from "./Field/39_AdditionalInformation.svelte";
   import ServicesSection from "./service/ServicesSection.svelte";
   import FormFooter from "./FormFooter.svelte";
-  import type { MetadataJson } from "$lib/models/metadata";
+  import type { MetadataCollection } from "$lib/models/metadata";
   import Button, { Icon, Label } from "@smui/button";
   import ScrollToTopButton from "./ScrollToTopButton.svelte";
   import HelpPanel from "./HelpPanel.svelte";
 
   type FormProps = {
-    metadata?: MetadataJson;
+    metadata?: MetadataCollection;
     activeSection?: string;
   }
 
@@ -55,7 +55,7 @@
   type SectionConfig = {
     section: Section,
     label: string,
-    disabledCheck: (metadata?: MetadataJson) => boolean
+    disabledCheck: (metadata?: MetadataCollection) => boolean
   };
 
   const SECTIONS: SectionConfig[] = [{

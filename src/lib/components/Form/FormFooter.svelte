@@ -1,12 +1,12 @@
 <script lang="ts">
   import { allFieldsValid } from "$lib/context/FormContext.svelte";;
+  import type { MetadataCollection } from "$lib/models/metadata";
   import CommentsPanel from "./CommentsPanel.svelte";
   import Button, { Icon, Label } from "@smui/button";
-  import type { MetadataJson } from "$lib/models/metadata";
   import type { Snippet } from "svelte";
 
   type FormFooterProps = {
-    metadata?: MetadataJson;
+    metadata?: MetadataCollection;
     text?: string;
     children?: Snippet;
   }
