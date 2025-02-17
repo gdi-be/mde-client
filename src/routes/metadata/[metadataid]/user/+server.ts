@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
-import { assignUser } from '$lib/api/metadata.js';
+import { assignUser, unassignUser } from '$lib/api/metadata.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ cookies, request, params }) {
@@ -21,4 +21,16 @@ export async function POST({ cookies, request, params }) {
   });
 
   return json(createResponse);
+}
+
+export async function DELETE({ cookies, params }) {
+  const token = await getAccessToken(cookies);
+  if (!token) return error(401, 'Unauthorized');
+
+  const deleteResponse = await unassignUser({
+    metadataid: params.metadataid,
+    token
+  });
+
+  return json(deleteResponse);
 }

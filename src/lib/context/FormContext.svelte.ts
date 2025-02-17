@@ -4,14 +4,16 @@ import { page } from "$app/state";
 import type { FieldKey } from "$lib/models/form";
 import { FieldConfigs, type FieldConfig } from "$lib/components/Form/FieldsConfig";
 import { invalidateAll } from "$app/navigation";
+import type { MetadataJson } from "../models/metadata";
 
 export type FormState = {
-  data: Record<string, unknown>;
+  metadata?: MetadataJson;
   activeHelpKey?: FieldKey;
+  assignedUser?: string;
+  assignedRole?: string;
 };
 
 const formState = $state<FormState>({
-  data: {},
   activeHelpKey: undefined
 });
 
@@ -25,8 +27,8 @@ export function getFormContext() {
   return getContext<FormState>(FORMSTATE_CONTEXT);
 }
 
-export function getValue<T>(key: string, metadata?: Record<string, unknown>): T | undefined {
-  const data = metadata || formState.data;
+export function getValue<T>(key: string, metadata?: MetadataJson): T | undefined {
+  const data = metadata || formState.metadata;
   if (!data) return undefined;
   const value = key
     .split('.')
@@ -41,16 +43,16 @@ export function getFieldConfig<T>(key: FieldKey): FieldConfig<T> | undefined {
   return FieldConfigs.find(({key: k}) => k === key);
 };
 
-export function setFormData(data: Record<string, unknown>) {
-  formState.data = data;
+export function setFormData(metadata: MetadataJson) {
+  formState.metadata = metadata;
 }
 
 export function setValue<T>(key: string, value: T) {
-  if (!formState || !formState.data) return;
+  if (!formState || !formState.metadata) return;
 
   const keys = key.split('.');
   const lastKey = keys.pop();
-  let obj = formState.data as Record<string, any>;
+  let obj = formState.metadata as Record<string, any>;
   keys.forEach(k => {
     if (!obj[k]) obj[k] = {};
     obj = obj[k];
@@ -74,7 +76,7 @@ export function toggleActiveHelp(key: FieldKey) {
 
 export type Section = 'basedata' | 'classification' | 'temp_and_spatial' | 'additional' | 'services';
 
-export function getProgress(section: Section, metadata?: Record<string, unknown>): number {
+export function getProgress(section: Section, metadata?: MetadataJson): number {
   const totalRequired = FieldConfigs.filter(({section: s, required}) => s === section && required);
 
   if (!metadata) return 1;
@@ -94,7 +96,7 @@ export function getProgress(section: Section, metadata?: Record<string, unknown>
   return filledRequired.length / totalRequired.length;
 }
 
-export function allFieldsValid(metadata?: Record<string, unknown>): boolean {
+export function allFieldsValid(metadata?: MetadataJson): boolean {
   if (!metadata) return false;
   const sections = Array.from(new Set(FieldConfigs.map(({section}) => section)));
   return sections.every((section: Section) => {

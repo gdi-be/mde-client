@@ -5,6 +5,7 @@
   import IconButton, { Icon } from "@smui/icon-button";
   import { getContext } from "svelte";
   import type { Token } from "$lib/models/keycloak";
+  import RoleTag from "./RoleTag.svelte";
 
   const FALLBACK_IMAGE = "https://www.berlin.de/css/berlin_de/foxtrot/images/logo_berlin_m_srgb.svg";
 
@@ -32,17 +33,16 @@
   };
 
   const removeAssignment = async () => {
-    // TODO: Implement remove assignment
-    // await fetch(`/metadata/${metadata.metadataId}/user`, {
-    //   method: "DELETE",
-    //   headers: {
-    //     'content-type': 'application/json'
-    //   },
-    //   body: JSON.stringify({ userId })
-    // });
+    await fetch(`/metadata/${metadata.metadataId}/user`, {
+      method: "DELETE",
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({ userId })
+    });
   }
 
-  $inspect(metadata.data.preview);
+  $inspect(metadata);
 </script>
 
 <Card class="metadata-card">
@@ -65,29 +65,19 @@
     </Media>
   </PrimaryAction>
   <ActionIcons class="metadata-card-actions" >
+    {#if metadata.responsibleRole}
+      <RoleTag role={metadata.responsibleRole} />
+      <div style="flex: 1;"></div>
+    {/if}
     <IconButton
       toggle
-      aria-label={assignedToMe ? "Zuweisung entfernen" : "Mir zuweisen"}
-      title={assignedToMe ? "Zuweisung entfernen" : "Mir zuweisen"}
+      aria-label={assignedToMe ? "Mir zugewiesen.\nKlicken um Zuordnung zu entfernen." : "Mir zuweisen"}
+      title={assignedToMe ? "Mir zugewiesen.\nKlicken um Zuordnung zu entfernen." : "Mir zuweisen"}
       onclick={assignedToMe ? removeAssignment : assignToMe}
       pressed={assignedToMe}
     >
       <Icon class="material-icons-filled assigned-to-me" on>assignment_ind</Icon>
       <Icon class="material-icons">assignment_add</Icon>
-    </IconButton>
-    <IconButton
-      class="material-icons"
-      aria-label="Neuer Jahresstand"
-      title="Neuer Jahresstand"
-    >
-      <Icon class="material-icons">event_repeat</Icon>
-    </IconButton>
-    <IconButton
-      class="material-icons"
-      aria-label="Datum aktualisiern"
-      title="Datum aktualisiern"
-    >
-      <Icon class="material-icons">event</Icon>
     </IconButton>
   </ActionIcons>
 </Card>

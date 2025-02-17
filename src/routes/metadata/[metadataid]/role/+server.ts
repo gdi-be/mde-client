@@ -10,7 +10,7 @@ export async function POST({ cookies, request, params }) {
 
   const data = await request.json();
 
-  if (!data.userId) {
+  if (!data.role) {
     return error(400, 'Bad Request');
   }
 

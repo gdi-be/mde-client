@@ -320,6 +320,36 @@ export const assignUser = async ({
   return await response.json();
 }
 
+type UnassignUserProps = {
+  token: string;
+  metadataid: string;
+}
+
+export const unassignUser = async ({
+  token,
+  metadataid
+}: UnassignUserProps): Promise<MetadataCollection> => {
+  if (!token) {
+    log.error("No token provided.");
+    return Promise.reject(new Error("No token provided."));
+  }
+
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataid}/unassignUser`, {
+    method: 'DELETE',
+    headers
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
 type AssignRoleProps = {
   token: string;
   metadataid: string;
@@ -343,6 +373,36 @@ export const assignRole = async ({
     method: 'POST',
     headers,
     body: role
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+type UnassignRoleProps = {
+  token: string;
+  metadataid: string;
+}
+
+export const unassignRole = async ({
+  token,
+  metadataid
+}: UnassignRoleProps): Promise<MetadataCollection> => {
+  if (!token) {
+    log.error("No token provided.");
+    return Promise.reject(new Error("No token provided."));
+  }
+
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataid}/unassignRole`, {
+    method: 'DELETE',
+    headers
   });
 
   if (!response.ok) {
