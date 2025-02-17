@@ -1,3 +1,5 @@
+import type { Role } from "./keycloak";
+
 export type JsonClientMetadata = Record<string, unknown>;
 export type JsonIsoMetadata = Record<string, unknown>;
 export type JsonTechnialMetadata = Record<string, unknown>;
@@ -160,6 +162,8 @@ export type Contacts = Contact[];
 export type ClientMedata = {
   id: number;
   metadataId: string;
+  responsibleUserId: string;
+  responsibleRole: Role;
   data: JsonClientMetadata;
 };
 
@@ -167,12 +171,16 @@ export type IsoMetadata = {
   id: number;
   title: string;
   metadataId: string;
+  responsibleUserId: string;
+  responsibleRole: Role;
   data: JsonIsoMetadata;
 };
 
 export type TechnicalMetadata = {
   id: number;
   metadataId: string;
+  responsibleUserId: string;
+  responsibleRole: Role;
   data: JsonTechnialMetadata;
 };
 
