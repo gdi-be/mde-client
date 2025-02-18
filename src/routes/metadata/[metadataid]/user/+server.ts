@@ -23,13 +23,20 @@ export async function POST({ cookies, request, params }) {
   return json(createResponse);
 }
 
-export async function DELETE({ cookies, params }) {
+export async function DELETE({ cookies, request, params }) {
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 
+  const { userId } = await request.json();
+
+  if (!userId) {
+    return error(400, 'Bad Request');
+  }
+
   const deleteResponse = await unassignUser({
     metadataid: params.metadataid,
-    token
+    token,
+    userId
   });
 
   return json(deleteResponse);

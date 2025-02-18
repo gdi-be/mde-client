@@ -159,40 +159,12 @@ export type Contact = {
 
 export type Contacts = Contact[];
 
-export type ClientMedata = {
-  id: number;
-  metadataId: string;
-  responsibleUserId: string;
-  responsibleRole: Role;
-  data: JsonClientMetadata;
-};
-
-export type IsoMetadata = {
-  id: number;
-  title: string;
-  metadataId: string;
-  responsibleUserId: string;
-  responsibleRole: Role;
-  data: JsonIsoMetadata;
-};
-
-export type TechnicalMetadata = {
-  id: number;
-  metadataId: string;
-  responsibleUserId: string;
-  responsibleRole: Role;
-  data: JsonTechnialMetadata;
-};
-
-export type Metadata = ClientMedata | IsoMetadata | TechnicalMetadata;
-
 export type MetadataCollection = {
-  clientMetadata: ClientMedata;
-  isoMetadata: IsoMetadata;
-  technicalMetadata: TechnicalMetadata;
-}
-
-export type MetadataJson = {
+  id?: string;
+  metadataId?: MetadataId;
+  responsibleUserIds?: string[];
+  responsibleRole?: Role;
+  title?: string;
   clientMetadata: JsonClientMetadata;
   isoMetadata: JsonIsoMetadata;
   technicalMetadata: JsonTechnialMetadata;

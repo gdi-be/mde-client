@@ -1,10 +1,10 @@
 <script lang="ts">
   import Autocomplete from "@smui-extra/autocomplete";
   import { Text } from "@smui/list";
-  import type { IsoMetadata } from "$lib/models/metadata";
   import { type Option } from "$lib/models/form";
   import Icon from "@smui/textfield/icon";
   import Textfield from "@smui/textfield";
+  import type { MetadataCollection } from "$lib/models/metadata";
 
   export type MetadataSearchFieldProps = {
     value: Option | undefined;
@@ -30,9 +30,9 @@
 
     if (response.ok) {
       const data = await response.json();
-      return data.map((isoMetadata: IsoMetadata) => ({
-        key: isoMetadata.metadataId,
-        label: isoMetadata.title
+      return data.map((metadataCollection: MetadataCollection) => ({
+        key: metadataCollection.metadataId,
+        label: metadataCollection.title
       }));
     }
 

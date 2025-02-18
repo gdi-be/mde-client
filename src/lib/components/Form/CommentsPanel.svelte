@@ -1,6 +1,6 @@
 <script lang="ts">
   import Textfield from "@smui/textfield";
-  import type { Comment, MetadataJson } from "$lib/models/metadata";
+  import type { Comment, MetadataCollection } from "$lib/models/metadata";
   import Paper from "@smui/paper";
   import CharacterCounter from "@smui/textfield/character-counter";
   import IconButton, { Icon } from "@smui/icon-button";
@@ -11,7 +11,7 @@
   import { popconfirm } from "$lib/context/PopConfirmContex.svelte";
 
   type CommentsPanelProps = {
-    metadata?: MetadataJson;
+    metadata?: MetadataCollection;
   }
 
   let {

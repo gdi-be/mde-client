@@ -1,7 +1,7 @@
 <script lang="ts">
-  import TextInput from "../../Inputs/TextInput.svelte";
+  import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import type { Service } from "$lib/models/metadata";
-  import NumberInput from "../../Inputs/NumberInput.svelte";
+  import NumberInput from "$lib/components/Form/Inputs/NumberInput.svelte";
 
   export type ServiceTypeProps = {
     value: Service["legendImage"]

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Service } from "$lib/models/metadata";
-  import TextAreaInput from "../../Inputs/TextAreaInput.svelte";
+  import TextAreaInput from "$lib/components/Form/Inputs/TextAreaInput.svelte";
 
   export type ServiceTypeProps = {
     value: Service["shortDescription"],

@@ -1,6 +1,6 @@
 import { env } from "$env/dynamic/private";
 import log from "loggisch";
-import type { IsoMetadata, MetadataProfile, MetadataCollection, MetadataId, MetadataType } from "$lib/models/metadata";
+import type { MetadataProfile, MetadataCollection, MetadataId, MetadataType } from "$lib/models/metadata";
 import type { PageableProps, PageableResponse } from "$lib/models/api";
 import type { Role } from "$lib/models/keycloak";
 
@@ -19,7 +19,7 @@ const defaultPage: PageableProps = {
  * @param {string} [token] - Optional authorization token for the request.
  * @returns {Promise<PageAbleResponse<Metadata>>} - A promise that resolves to the fetched metadata.
  */
-export const getAll = async (token: string, pagingOpts = defaultPage): Promise<PageableResponse<IsoMetadata>> => {
+export const getAll = async (token: string, pagingOpts = defaultPage): Promise<PageableResponse<MetadataCollection>> => {
   if (!token) {
     log.error("No token provided.");
     return Promise.reject(new Error("No token provided."));
@@ -29,7 +29,7 @@ export const getAll = async (token: string, pagingOpts = defaultPage): Promise<P
     Authorization: `Bearer ${token}`
   });
 
-  const url: URL = new URL(`${env.BACKEND_URL}/metadata/iso`);
+  const url: URL = new URL(`${env.BACKEND_URL}/metadata`);
 
   if (pagingOpts) {
     url.searchParams.append('page', pagingOpts.page.toString());
@@ -69,7 +69,7 @@ export const getMetadataCollectionByMetadataId = async (metadataId: string, toke
     Authorization: `Bearer ${token}`
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataId}`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataId}`, {
     headers
   });
 
@@ -80,13 +80,13 @@ export const getMetadataCollectionByMetadataId = async (metadataId: string, toke
   return await response.json();
 }
 
-export const searchForMetadata = async (token: string, searchTerm: string, pagingOpts = defaultPage): Promise<IsoMetadata[]> => {
+export const searchForMetadata = async (token: string, searchTerm: string, pagingOpts = defaultPage): Promise<MetadataCollection[]> => {
   if (!token) {
     log.error("No token provided.");
     return Promise.reject(new Error("No token provided."));
   }
 
-  const url: URL = new URL(`${env.BACKEND_URL}/metadata/iso/search`);
+  const url: URL = new URL(`${env.BACKEND_URL}/metadata/search`);
   url.searchParams.append('searchTerm', searchTerm);
 
   if (pagingOpts) {
@@ -156,7 +156,7 @@ export const updateDataValue = async ({
   const [type, restKey] = key.split('.');
   const metadataType = metadataTypeMap.get(type);
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataId}`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataId}`, {
     method: 'PATCH',
     headers,
     body: JSON.stringify({
@@ -195,7 +195,7 @@ export const createMetadataCollection = async ({
     'content-type': 'application/json'
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -231,7 +231,7 @@ export const addComment = async ({
     Authorization: `Bearer ${token}`
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/client/comment/${metadataid}`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/comment`, {
     method: 'POST',
     headers,
     body: text
@@ -307,7 +307,7 @@ export const assignUser = async ({
     Authorization: `Bearer ${token}`
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataid}/assignUser`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/assignUser`, {
     method: 'POST',
     headers,
     body: userId
@@ -323,11 +323,13 @@ export const assignUser = async ({
 type UnassignUserProps = {
   token: string;
   metadataid: string;
+  userId: string;
 }
 
 export const unassignUser = async ({
   token,
-  metadataid
+  metadataid,
+  userId
 }: UnassignUserProps): Promise<MetadataCollection> => {
   if (!token) {
     log.error("No token provided.");
@@ -338,9 +340,10 @@ export const unassignUser = async ({
     Authorization: `Bearer ${token}`
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataid}/unassignUser`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/unassignUser`, {
     method: 'DELETE',
-    headers
+    headers,
+    body: userId
   });
 
   if (!response.ok) {
@@ -369,7 +372,7 @@ export const assignRole = async ({
     Authorization: `Bearer ${token}`
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataid}/assignRole`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/assignRole`, {
     method: 'POST',
     headers,
     body: role
@@ -400,7 +403,7 @@ export const unassignRole = async ({
     Authorization: `Bearer ${token}`
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/collection/${metadataid}/unassignRole`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/unassignRole`, {
     method: 'DELETE',
     headers
   });

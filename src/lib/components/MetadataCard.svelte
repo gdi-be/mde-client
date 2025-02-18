@@ -1,22 +1,24 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import Card, { ActionIcons, Media, MediaContent, PrimaryAction } from "@smui/card";
-  import type { IsoMetadata } from "$lib/models/metadata";
   import IconButton, { Icon } from "@smui/icon-button";
   import { getContext } from "svelte";
   import type { Token } from "$lib/models/keycloak";
   import RoleTag from "./RoleTag.svelte";
+  import type { MetadataCollection } from "$lib/models/metadata";
 
   const FALLBACK_IMAGE = "https://www.berlin.de/css/berlin_de/foxtrot/images/logo_berlin_m_srgb.svg";
 
   export type MetadataCardProps = {
-    metadata: IsoMetadata;
+    metadata: MetadataCollection;
   }
-  let { metadata }: MetadataCardProps = $props();
+  let {
+    metadata
+  }: MetadataCardProps = $props();
 
   const { sub: userId } = getContext<Token>('user_token');
-  const assignedToMe = $derived(metadata.responsibleUserId === userId);
-  let previewNotAvailable = $state(!metadata.data.preview);
+  const assignedToMe = $derived(metadata.responsibleUserIds?.includes(userId));
+  let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
 
   const onclick = () => {
     goto(`/metadata/${metadata.metadataId}`);
@@ -41,8 +43,6 @@
       body: JSON.stringify({ userId })
     });
   }
-
-  $inspect(metadata);
 </script>
 
 <Card class="metadata-card">
@@ -57,7 +57,7 @@
       <MediaContent>
         <img
           class={["preview-image", previewNotAvailable && "not-available"]}
-          src={previewNotAvailable ? FALLBACK_IMAGE : metadata.data.preview as string}
+          src={previewNotAvailable ? FALLBACK_IMAGE : metadata.isoMetadata.preview as string}
           onerror={() => previewNotAvailable = true}
           alt="Vorschau nicht erreichbar"
         />

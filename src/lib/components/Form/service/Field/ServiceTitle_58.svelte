@@ -1,6 +1,6 @@
 <script lang="ts">
   import Paper from "@smui/paper";
-  import TextInput from "../../Inputs/TextInput.svelte";
+  import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
   import type { Service } from "$lib/models/metadata";
 
   export type ServiceTypeProps = {

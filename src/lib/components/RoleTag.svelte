@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Role } from "../models/keycloak";
+  import type { Role } from "$lib/models/keycloak";
 
   type RoleTagProps = {
     role: Role;
