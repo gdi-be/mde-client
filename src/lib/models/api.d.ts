@@ -5,6 +5,10 @@ type PageableProps = {
     field: string;
     direction: string;
   }[];
+  filter?: {
+    responsibleRole?: string;
+    responsibleUserIds?: string | string[];
+  }
 }
 
 export type PageableResponse<T> = {

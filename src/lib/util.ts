@@ -3,6 +3,7 @@
 import proj4 from "proj4";
 import type { CRS, Extent, MaintenanceFrequency } from "./models/metadata";
 import { log } from "loggisch";
+import type { Role, Token } from "./models/keycloak";
 
 /**
  * Get a nested value from an object using a dot-separated path. This is similiar
@@ -158,3 +159,21 @@ export function getLastUpdateValue(published: string, maintenanceFrequency: Main
   }
   return updateDate;
 };
+
+export const getRoleName = (role: Role): string => {
+  const roleMapLong: Record<Role, string> = {
+    DataOwner: 'Datenhaltende Stelle',
+    Editor: 'Redakteur',
+    QualityAssurance: 'Qualitätsmanagment',
+    Administrator: 'Administrator'
+  }
+  return roleMapLong[role];
+};
+
+export const getHighestRole = (token: Token): Role => {
+  if (token.realm_access.roles.includes("Administrator")) return "Administrator";
+  if (token.realm_access.roles.includes("QualityAssurance")) return "QualityAssurance";
+  if (token.realm_access.roles.includes("Editor")) return "Editor";
+  if (token.realm_access.roles.includes("DataOwner")) return "DataOwner";
+  throw Error("User has no role");
+}

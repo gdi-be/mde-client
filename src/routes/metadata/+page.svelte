@@ -6,13 +6,14 @@
   import { Icon } from "@smui/button";
   import Card, { PrimaryAction } from '@smui/card';
   import type { Option } from "$lib/models/form.js";
+  import MetadataFilter from "$lib/components/MetadataFilter.svelte";
 
   let { data } = $props();
 
   const metadata = $derived(data.metadata.content);
   const pageable = $derived(data.metadata);
 
-  let searchValue = $state<Option>()
+  let searchValue = $state<Option>();
 
   $effect(() => {
     if (searchValue) {
@@ -25,6 +26,7 @@
 <div class="metadata-overview">
   <div class="metadata-toolbar">
     <MetadataSearchField bind:value={searchValue}/>
+    <MetadataFilter />
   </div>
   <div class="metadata-list">
     <Card class="create-card">
@@ -59,6 +61,8 @@
     }
 
     .metadata-toolbar {
+      display: flex;
+      flex-direction: column;
       :global(.metadata-search-field .mdc-text-field) {
         width: 600px;
       }

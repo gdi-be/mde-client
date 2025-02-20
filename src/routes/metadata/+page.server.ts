@@ -7,6 +7,16 @@ export async function load({ cookies, url }) {
   const page = url.searchParams.get('page');
   const size = url.searchParams.get('size');
   const sort = url.searchParams.get('sort');
+  const filterParam = url.searchParams.get('filter');
+  const filter: PageableProps['filter'] = {};
+  filterParam?.split(';').forEach((f) => {
+    const [key, value] = f.split('=') as ['responsibleRole' | 'responsibleUserIds', string];
+    if (key === 'responsibleUserIds' && value.includes(',')) {
+      filter[key] = value.split(',');
+      return;
+    }
+    filter[key] = value;
+  });
 
   const token = await getAccessToken(cookies);
   if (!token) return redirect(302, '/login');
@@ -16,7 +26,8 @@ export async function load({ cookies, url }) {
     pagingOptions = {
       page: Number(page) - 1,
       size: Math.min(Number(size), 100),
-      sort: sort ? [{ field: sort.split(',')[0], direction: sort.split(',')[1] }] : undefined
+      sort: sort ? [{ field: sort.split(',')[0], direction: sort.split(',')[1] }] : undefined,
+      filter: filter
     };
   }
 

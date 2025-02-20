@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Role } from "$lib/models/keycloak";
+  import { getRoleName } from "../util";
 
   type RoleTagProps = {
     role: Role;
@@ -9,20 +10,15 @@
     role
   }: RoleTagProps = $props();
 
-  const roleMapLong: Record<Role, string> = {
-    DataOwner: 'Datenhaltende Stelle',
-    Editor: 'Redakteur',
-    QualityAssurance: 'Qualitätsmanagment',
-    Administrator: 'Administrator'
-  }
+  const roleName = $derived(getRoleName(role));
 </script>
 
 
 <div
   class={["role-tag", `${role.toLowerCase()}-tag`]}
-  title={roleMapLong[role]}
+  title={roleName}
 >
-  {roleMapLong[role]}
+  {roleName}
 </div>
 
 <style lang="scss">

@@ -39,6 +39,7 @@ export const getAll = async (token: string, pagingOpts = defaultPage): Promise<P
         url.searchParams.append('sort', `${sort.field},${sort.direction}`);
       });
     }
+    url.searchParams.append('filter', JSON.stringify(pagingOpts.filter));
   }
 
   const response = await fetch(url, {
