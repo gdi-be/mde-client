@@ -1,17 +1,14 @@
 <script lang="ts">
-  import Paper from "@smui/paper";
-  import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
-  import type { Service } from "$lib/models/metadata";
+  import Paper from '@smui/paper';
+  import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
+  import type { Service } from '$lib/models/metadata';
 
   export type ServiceTypeProps = {
-    value: Service["title"]
-    onChange: (newValue: string) => void
+    value: Service['title'];
+    onChange: (newValue: string) => void;
   };
 
-  let {
-    value,
-    onChange
-  }: ServiceTypeProps = $props();
+  let { value, onChange }: ServiceTypeProps = $props();
 </script>
 
 <Paper>

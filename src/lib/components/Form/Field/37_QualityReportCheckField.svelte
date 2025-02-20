@@ -1,13 +1,11 @@
 <script lang="ts">
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import FormField from "@smui/form-field";
-  import Switch from "@smui/switch";
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import FormField from '@smui/form-field';
+  import Switch from '@smui/switch';
 
-  const {
-    metadata
-  } = $props();
+  const { metadata } = $props();
 
   const KEY = 'isoMetadata.valid';
 
@@ -22,13 +20,12 @@
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<boolean>(KEY);
 
-  const onCheckChange = async (event: CustomEvent<{ selected: boolean}>) => {
+  const onCheckChange = async (event: CustomEvent<{ selected: boolean }>) => {
     const response = await persistValue(KEY, event.detail.selected);
     if (response.ok) {
       showCheckmark = true;
     }
   };
-
 </script>
 
 {#if metadataProfile === 'INSPIRE_HARMONISED'}
@@ -38,16 +35,10 @@
         {#snippet label()}
           {fieldConfig?.label}
         {/snippet}
-        <Switch
-          bind:checked={value}
-          onSMUISwitchChange={onCheckChange}
-        />
+        <Switch bind:checked={value} onSMUISwitchChange={onCheckChange} />
       </FormField>
     </Paper>
-    <FieldTools
-      key={KEY}
-      bind:checkMarkAnmiationRunning={showCheckmark}
-    />
+    <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 

@@ -1,15 +1,13 @@
 <script lang="ts">
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import SelectInput from "../Inputs/SelectInput.svelte";
-  import AutoFillButton from "../AutoFillButton.svelte";
-  import type { IsoTheme } from "$lib/models/metadata";
-  import type { ValidationResult } from "../FieldsConfig";
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import SelectInput from '../Inputs/SelectInput.svelte';
+  import AutoFillButton from '../AutoFillButton.svelte';
+  import type { IsoTheme } from '$lib/models/metadata';
+  import type { ValidationResult } from '../FieldsConfig';
 
-  const {
-    metadata
-  } = $props();
+  const { metadata } = $props();
 
   const KEY = 'isoMetadata.topicCategory';
   const ANNEX_THEME_KEY = 'isoMetadata.inspireTheme';
@@ -51,8 +49,7 @@
     if (!match) return;
     value = match.isoID;
     onChange(value);
-  }
-
+  };
 </script>
 
 <div class="topic-category-field">
@@ -70,14 +67,9 @@
       />
     {/await}
   </Paper>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  >
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
     {#if inspireTheme}
-      <AutoFillButton
-        onclick={getAutoFillValues}
-      />
+      <AutoFillButton onclick={getAutoFillValues} />
     {/if}
   </FieldTools>
 </div>

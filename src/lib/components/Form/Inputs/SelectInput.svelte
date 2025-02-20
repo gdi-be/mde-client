@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Select, { Option as SelectOption } from "@smui/select";
-  import type { Option } from "$lib/models/form";
-  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
-  import type { ValidationResult } from "../FieldsConfig.ts";
+  import Select, { Option as SelectOption } from '@smui/select';
+  import type { Option } from '$lib/models/form';
+  import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
+  import type { ValidationResult } from '../FieldsConfig.ts';
 
   let element = $state();
 
@@ -13,7 +13,7 @@
     label?: string;
     options: Option[];
     validationResult?: ValidationResult;
-  }
+  };
 
   let {
     onChange,
@@ -25,12 +25,11 @@
   }: InputProps = $props();
 
   // Remove duplicates
-  options = Array.from(new Map(options.map(item => [item.key, item])).values());
+  options = Array.from(new Map(options.map((item) => [item.key, item])).values());
 
   const onSelect = (newValue: string) => {
     onChange?.(newValue);
   };
-
 </script>
 
 <Select
@@ -63,7 +62,7 @@
     // calc(items * item height + top margin)
     max-height: calc(5 * 48px + 8px);
 
-    :global([aria-disabled="true"]) {
+    :global([aria-disabled='true']) {
       opacity: 0.5;
       pointer-events: none;
     }

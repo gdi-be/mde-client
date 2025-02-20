@@ -1,18 +1,16 @@
 <script lang="ts">
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import SelectInput from "../Inputs/SelectInput.svelte";
-  import type { InspireRegister } from "$lib/models/inspire";
-  import type { Option } from "$lib/models/form";
-  import type { ValidationResult } from "../FieldsConfig";
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import SelectInput from '../Inputs/SelectInput.svelte';
+  import type { InspireRegister } from '$lib/models/inspire';
+  import type { Option } from '$lib/models/form';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireTheme';
 
-  const {
-    metadata
-  } = $props();
+  const { metadata } = $props();
 
   let metadataProfile = $derived(getValue<string>(PROFILE_KEY, metadata));
 
@@ -39,7 +37,7 @@
 
     if (!data.register) {
       return [];
-    };
+    }
 
     return data.register.containeditems
       .map((entry) => ({
@@ -49,7 +47,6 @@
       .filter((entry: Option) => entry.key !== 'AC-MF')
       .sort((a: Option, b: Option) => a.label.localeCompare(b.label));
   };
-
 </script>
 
 {#if metadataProfile !== 'ISO'}
@@ -68,10 +65,7 @@
         />
       {/await}
     </Paper>
-    <FieldTools
-      key={KEY}
-      bind:checkMarkAnmiationRunning={showCheckmark}
-    />
+    <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 

@@ -1,16 +1,15 @@
 <script lang="ts">
   /* eslint-disable svelte/no-at-html-tags */
-  import { getFormContext } from "$lib/context/FormContext.svelte";;
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   const activeHelpKey = $derived(getFormContext().activeHelpKey);
 
   const getHelpMarkdown = async (key: string) => {
     const response = await fetch(`/help/${key}`);
     if (!response.ok) {
-      throw new Error("Failed to fetch help text");
+      throw new Error('Failed to fetch help text');
     }
     return response.text();
   };
-
 </script>
 
 <div class="help-section">

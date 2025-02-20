@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Contact, Contacts } from "$lib/models/metadata";
-  import IconButton from "@smui/icon-button";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import TextInput from "../Inputs/TextInput.svelte";
-  import FieldTools from "../FieldTools.svelte";
-  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
-  import type { ValidationResult, ValidationResultList } from "../FieldsConfig";
-  import { popconfirm } from "$lib/context/PopConfirmContex.svelte";
+  import type { Contact, Contacts } from '$lib/models/metadata';
+  import IconButton from '@smui/icon-button';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import TextInput from '../Inputs/TextInput.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
+  import type { ValidationResult, ValidationResultList } from '../FieldsConfig';
+  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
 
   const KEY = 'isoMetadata.pointsOfContact';
 
@@ -16,31 +16,34 @@
   const valueFromData = $derived(getValue<Contacts>(KEY));
   $effect(() => {
     if (valueFromData) {
-      contacts = valueFromData?.map(contact => {
-        const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
-        return {
-          listId,
-          name: contact.name || '',
-          organisation: contact.organisation || '',
-          phone: contact.phone || '',
-          email: contact.email || ''
-        };
-      }) || [];
+      contacts =
+        valueFromData?.map((contact) => {
+          const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
+          return {
+            listId,
+            name: contact.name || '',
+            organisation: contact.organisation || '',
+            phone: contact.phone || '',
+            email: contact.email || ''
+          };
+        }) || [];
     }
   });
 
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<Contacts>(KEY);
   let validationResult = $derived(fieldConfig?.validator(contacts)) as ValidationResultList;
-  let generalValidationResult = $derived(validationResult?.find(({index}) => index === undefined));
+  let generalValidationResult = $derived(
+    validationResult?.find(({ index }) => index === undefined)
+  );
 
   const persistContacts = async () => {
-    const value = contacts.map(contact => ({
+    const value = contacts.map((contact) => ({
       name: contact.name,
       organisation: contact.organisation,
       phone: contact.phone,
       email: contact.email
-    }))
+    }));
     const response = await persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
@@ -65,25 +68,29 @@
   const removeItem = (listId: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(targetEl, async () => {
-      contacts = contacts.filter(contact => contact.listId !== listId);
-      persistContacts();
-    }, {
-      text: 'Möchten Sie diesen Kontakt wirklich löschen?',
-      confirmButtonText: 'Löschen'
-    })
+    popconfirm(
+      targetEl,
+      async () => {
+        contacts = contacts.filter((contact) => contact.listId !== listId);
+        persistContacts();
+      },
+      {
+        text: 'Möchten Sie diesen Kontakt wirklich löschen?',
+        confirmButtonText: 'Löschen'
+      }
+    );
   };
 
   const getFieldValidation = (i: number, k: string): ValidationResult | undefined => {
     if (!Array.isArray(validationResult)) return;
-    return validationResult.find(({index, subKey}) => index === i && subKey === k);
+    return validationResult.find(({ index, subKey }) => index === i && subKey === k);
   };
-
 </script>
 
 <div class="contacts-field">
   <fieldset>
-    <legend>{fieldConfig?.label}
+    <legend
+      >{fieldConfig?.label}
       <IconButton
         class="material-icons"
         onclick={(evt) => addItem(evt)}
@@ -97,13 +104,13 @@
       <fieldset class="contact">
         <legend>
           <IconButton
-          class="material-icons"
-          onclick={(evt) => removeItem(contact.listId, evt)}
-          size="button"
-          title="Kontakt entfernen"
-        >
-          delete
-        </IconButton>
+            class="material-icons"
+            onclick={(evt) => removeItem(contact.listId, evt)}
+            size="button"
+            title="Kontakt entfernen"
+          >
+            delete
+          </IconButton>
         </legend>
         <TextInput
           bind:value={contact.name}
@@ -134,13 +141,10 @@
           validationResult={getFieldValidation(index, 'email')}
         />
       </fieldset>
-      {/each}
-      <ValidationFeedbackText validationResult={generalValidationResult} />
-    </fieldset>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+    {/each}
+    <ValidationFeedbackText validationResult={generalValidationResult} />
+  </fieldset>
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">
@@ -153,7 +157,7 @@
       flex: 1;
       border-radius: 4px;
 
-      >legend {
+      > legend {
         display: flex;
         align-items: center;
         font-size: 0.75em;

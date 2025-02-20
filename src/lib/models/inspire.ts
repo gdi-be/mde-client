@@ -13,7 +13,7 @@ export type InspireRegister = {
 
 export type InspireThemeItem = {
   theme: {
-    "governance level": {
+    'governance level': {
       label: {
         text: string;
         lang: string;
@@ -21,7 +21,7 @@ export type InspireThemeItem = {
       id: string;
     };
     created: string;
-    "governance-level": {
+    'governance-level': {
       label: {
         text: string;
         lang: string;

@@ -2,7 +2,6 @@ import { env } from '$env/dynamic/private';
 import { redirect } from '@sveltejs/kit';
 
 export async function GET({ cookies }) {
-
   const refreshToken = cookies.get('refresh_token');
 
   if (refreshToken) {
@@ -18,7 +17,7 @@ export async function GET({ cookies }) {
     const response = await fetch(logoutUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: params
     });

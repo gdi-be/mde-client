@@ -7,9 +7,9 @@ import log from 'loggisch';
 export const verifyToken = async (token: string) => {
   const publicKey = await fetchPublicKey();
   return jwt.verify(token, publicKey, { algorithms: ['RS256'] });
-}
+};
 
-export const fetchPublicKey = async() => {
+export const fetchPublicKey = async () => {
   const certsUrl = `${env.AUTH_KEYCLOAK_URL}/realms/${env.AUTH_KEYCLOAK_REALM}/protocol/openid-connect/certs`;
 
   const response = await fetch(certsUrl);
@@ -17,7 +17,7 @@ export const fetchPublicKey = async() => {
     throw new Error('Failed to fetch Keycloak public keys');
   }
 
-  const { keys } = (await response.json());
+  const { keys } = await response.json();
   if (!keys || keys.length === 0) {
     throw new Error('No public keys available');
   }
@@ -29,7 +29,7 @@ export const fetchPublicKey = async() => {
 
   const pemKey = `-----BEGIN PUBLIC KEY-----\n${modulus}\n${exponent}\n-----END PUBLIC KEY-----`;
   return pemKey;
-}
+};
 
 export const updateTokens = async (cookies: Cookies): Promise<boolean> => {
   const refreshToken = getRefreshToken(cookies);
@@ -44,13 +44,16 @@ export const updateTokens = async (cookies: Cookies): Promise<boolean> => {
     body.append('client_id', env.AUTH_KEYCLOAK_CLIENT_ID);
     body.append('client_secret', env.AUTH_KEYCLOAK_CLIENT_SECRET);
     body.append('refresh_token', refreshToken);
-    const response = await fetch(`${env.AUTH_KEYCLOAK_URL}/realms/${env.AUTH_KEYCLOAK_REALM}/protocol/openid-connect/token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: body.toString(),
-    });
+    const response = await fetch(
+      `${env.AUTH_KEYCLOAK_URL}/realms/${env.AUTH_KEYCLOAK_REALM}/protocol/openid-connect/token`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body.toString()
+      }
+    );
 
     if (!response.ok) {
       log.warning('Could not refresh tokens: ' + response.status);

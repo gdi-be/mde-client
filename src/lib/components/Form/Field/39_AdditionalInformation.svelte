@@ -1,8 +1,8 @@
 <script lang="ts">
-  import IconButton from "@smui/icon-button";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import TextInput from "../Inputs/TextInput.svelte";
-  import FieldTools from "../FieldTools.svelte";
+  import IconButton from '@smui/icon-button';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import TextInput from '../Inputs/TextInput.svelte';
+  import FieldTools from '../FieldTools.svelte';
 
   type AdditionalInformationListEntry = {
     listId: string;
@@ -15,13 +15,13 @@
   let values = $state<AdditionalInformationListEntry[]>([]);
   $effect(() => {
     if (valueFromData) {
-      values = valueFromData?.map(value => {
+      values = valueFromData?.map((value) => {
         const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
         return {
           listId,
           value
         };
-      })
+      });
     }
   });
 
@@ -48,15 +48,15 @@
 
   const removeItem = (listId: string) => {
     // TODO: add popconfirm
-    values = values.filter(contact => contact.listId !== listId);
+    values = values.filter((contact) => contact.listId !== listId);
     persist();
   };
-
 </script>
 
 <div class="content-description-field">
   <fieldset>
-    <legend>{fieldConfig?.label || 'TODO: Weitere Informationen'}
+    <legend
+      >{fieldConfig?.label || 'TODO: Weitere Informationen'}
       <IconButton
         class="material-icons"
         onclick={() => addItem()}
@@ -70,13 +70,13 @@
       <fieldset class="contact">
         <legend>
           <IconButton
-          class="material-icons"
-          onclick={() => removeItem(contact.listId)}
-          size="button"
-          title="Quelle entfernen"
-        >
-          delete
-        </IconButton>
+            class="material-icons"
+            onclick={() => removeItem(contact.listId)}
+            size="button"
+            title="Quelle entfernen"
+          >
+            delete
+          </IconButton>
         </legend>
         <TextInput
           bind:value={contact.value}
@@ -87,10 +87,7 @@
       </fieldset>
     {/each}
   </fieldset>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">
@@ -104,7 +101,7 @@
       flex: 1;
       border-radius: 4px;
 
-      >legend {
+      > legend {
         display: flex;
         align-items: center;
         font-size: 0.75em;

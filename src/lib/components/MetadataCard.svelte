@@ -1,20 +1,19 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import Card, { ActionIcons, Media, MediaContent, PrimaryAction } from "@smui/card";
-  import IconButton, { Icon } from "@smui/icon-button";
-  import { getContext } from "svelte";
-  import type { Token } from "$lib/models/keycloak";
-  import RoleTag from "./RoleTag.svelte";
-  import type { MetadataCollection } from "$lib/models/metadata";
+  import { goto } from '$app/navigation';
+  import Card, { ActionIcons, Media, MediaContent, PrimaryAction } from '@smui/card';
+  import IconButton, { Icon } from '@smui/icon-button';
+  import { getContext } from 'svelte';
+  import type { Token } from '$lib/models/keycloak';
+  import RoleTag from './RoleTag.svelte';
+  import type { MetadataCollection } from '$lib/models/metadata';
 
-  const FALLBACK_IMAGE = "https://www.berlin.de/css/berlin_de/foxtrot/images/logo_berlin_m_srgb.svg";
+  const FALLBACK_IMAGE =
+    'https://www.berlin.de/css/berlin_de/foxtrot/images/logo_berlin_m_srgb.svg';
 
   export type MetadataCardProps = {
     metadata: MetadataCollection;
-  }
-  let {
-    metadata
-  }: MetadataCardProps = $props();
+  };
+  let { metadata }: MetadataCardProps = $props();
 
   const { sub: userId } = getContext<Token>('user_token');
   const assignedToMe = $derived(metadata.responsibleUserIds?.includes(userId));
@@ -26,7 +25,7 @@
 
   const assignToMe = async () => {
     await fetch(`/metadata/${metadata.metadataId}/user`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
@@ -36,43 +35,40 @@
 
   const removeAssignment = async () => {
     await fetch(`/metadata/${metadata.metadataId}/user`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         'content-type': 'application/json'
       },
       body: JSON.stringify({ userId })
     });
-  }
+  };
 </script>
 
 <Card class="metadata-card">
-  <PrimaryAction
-    class="metadata-card-content"
-    onclick={onclick}
-    padded
-    title={metadata.title}
-  >
+  <PrimaryAction class="metadata-card-content" {onclick} padded title={metadata.title}>
     <span class="title">{metadata.title}</span>
     <Media aspectRatio="square">
       <MediaContent>
         <img
-          class={["preview-image", previewNotAvailable && "not-available"]}
-          src={previewNotAvailable ? FALLBACK_IMAGE : metadata.isoMetadata.preview as string}
-          onerror={() => previewNotAvailable = true}
+          class={['preview-image', previewNotAvailable && 'not-available']}
+          src={previewNotAvailable ? FALLBACK_IMAGE : (metadata.isoMetadata.preview as string)}
+          onerror={() => (previewNotAvailable = true)}
           alt="Vorschau nicht erreichbar"
         />
       </MediaContent>
     </Media>
   </PrimaryAction>
-  <ActionIcons class="metadata-card-actions" >
+  <ActionIcons class="metadata-card-actions">
     {#if metadata.responsibleRole}
       <RoleTag role={metadata.responsibleRole} />
       <div style="flex: 1;"></div>
     {/if}
     <IconButton
       toggle
-      aria-label={assignedToMe ? "Mir zugewiesen.\nKlicken um Zuordnung zu entfernen." : "Mir zuweisen"}
-      title={assignedToMe ? "Mir zugewiesen.\nKlicken um Zuordnung zu entfernen." : "Mir zuweisen"}
+      aria-label={assignedToMe
+        ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.'
+        : 'Mir zuweisen'}
+      title={assignedToMe ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.' : 'Mir zuweisen'}
       onclick={assignedToMe ? removeAssignment : assignToMe}
       pressed={assignedToMe}
     >

@@ -5,7 +5,7 @@ type PageableProps = {
     field: string;
     direction: string;
   }[];
-}
+};
 
 export type PageableResponse<T> = {
   content: T[];

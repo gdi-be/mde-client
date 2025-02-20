@@ -1,11 +1,8 @@
 <script>
-  import Breadcrumbs from "./Breadcrumbs.svelte";
-  import UserMenu from "./UserMenu.svelte";
+  import Breadcrumbs from './Breadcrumbs.svelte';
+  import UserMenu from './UserMenu.svelte';
 
-  let {
-    text = 'Metadaten Editor',
-  } = $props();
-
+  let { text = 'Metadaten Editor' } = $props();
 </script>
 
 <header>

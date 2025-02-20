@@ -1,16 +1,23 @@
-import { env } from "$env/dynamic/private";
-import log from "loggisch";
-import type { MetadataProfile, MetadataCollection, MetadataId, MetadataType } from "$lib/models/metadata";
-import type { PageableProps, PageableResponse } from "$lib/models/api";
-import type { Role } from "$lib/models/keycloak";
+import { env } from '$env/dynamic/private';
+import log from 'loggisch';
+import type {
+  MetadataProfile,
+  MetadataCollection,
+  MetadataId,
+  MetadataType
+} from '$lib/models/metadata';
+import type { PageableProps, PageableResponse } from '$lib/models/api';
+import type { Role } from '$lib/models/keycloak';
 
 const defaultPage: PageableProps = {
   page: 0,
   size: 10,
-  sort: [{
-    field: 'title',
-    direction: 'asc'
-  }]
+  sort: [
+    {
+      field: 'title',
+      direction: 'asc'
+    }
+  ]
 };
 
 /**
@@ -19,10 +26,13 @@ const defaultPage: PageableProps = {
  * @param {string} [token] - Optional authorization token for the request.
  * @returns {Promise<PageAbleResponse<Metadata>>} - A promise that resolves to the fetched metadata.
  */
-export const getAll = async (token: string, pagingOpts = defaultPage): Promise<PageableResponse<MetadataCollection>> => {
+export const getAll = async (
+  token: string,
+  pagingOpts = defaultPage
+): Promise<PageableResponse<MetadataCollection>> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const headers = new Headers({
@@ -50,7 +60,7 @@ export const getAll = async (token: string, pagingOpts = defaultPage): Promise<P
   }
 
   return await response.json();
-}
+};
 
 /**
  * Fetches metadata by metadataId from the backend.
@@ -59,10 +69,13 @@ export const getAll = async (token: string, pagingOpts = defaultPage): Promise<P
  * @param token - Optional authorization token for the request.
  * @returns A promise that resolves to the fetched metadata.
  */
-export const getMetadataCollectionByMetadataId = async (metadataId: string, token: string): Promise<MetadataCollection> => {
+export const getMetadataCollectionByMetadataId = async (
+  metadataId: string,
+  token: string
+): Promise<MetadataCollection> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const headers = new Headers({
@@ -78,12 +91,16 @@ export const getMetadataCollectionByMetadataId = async (metadataId: string, toke
   }
 
   return await response.json();
-}
+};
 
-export const searchForMetadata = async (token: string, searchTerm: string, pagingOpts = defaultPage): Promise<MetadataCollection[]> => {
+export const searchForMetadata = async (
+  token: string,
+  searchTerm: string,
+  pagingOpts = defaultPage
+): Promise<MetadataCollection[]> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const url: URL = new URL(`${env.BACKEND_URL}/metadata/search`);
@@ -99,7 +116,7 @@ export const searchForMetadata = async (token: string, searchTerm: string, pagin
   const response = await fetch(url, {
     headers: new Headers({
       Authorization: `Bearer ${token}`,
-      'accept': 'application/json'
+      accept: 'application/json'
     })
   });
 
@@ -110,14 +127,14 @@ export const searchForMetadata = async (token: string, searchTerm: string, pagin
   const data = await response.json();
 
   return data;
-}
+};
 
 export type UpdateProps = {
   metadataId: string;
   key: string;
   value: unknown;
   token: string;
-}
+};
 
 /**
  * This function updates a metadata value by sending a PATCH request to the backend.
@@ -137,10 +154,9 @@ export const updateDataValue = async ({
   value,
   token
 }: UpdateProps): Promise<unknown> => {
-
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const headers = new Headers({
@@ -171,14 +187,14 @@ export const updateDataValue = async ({
   }
 
   return await response.json();
-}
+};
 
 export type CreateProps = {
   token: string;
   title: string;
   metadataProfile: MetadataProfile;
   cloneMetadataId?: MetadataId;
-}
+};
 
 export const createMetadataCollection = async ({
   token,
@@ -186,8 +202,8 @@ export const createMetadataCollection = async ({
   cloneMetadataId
 }: CreateProps): Promise<MetadataCollection> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const headers = new Headers({
@@ -209,13 +225,13 @@ export const createMetadataCollection = async ({
   }
 
   return await response.json();
-}
+};
 
 export type AddCommentProps = {
   token: string;
   metadataid: string;
   text: string;
-}
+};
 
 export const addComment = async ({
   token,
@@ -223,8 +239,8 @@ export const addComment = async ({
   text
 }: AddCommentProps): Promise<MetadataCollection> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const headers = new Headers({
@@ -242,13 +258,13 @@ export const addComment = async ({
   }
 
   return await response.json();
-}
+};
 
 export type DeleteCommentProps = {
   token: string;
   metadataid: string;
   commentId: string;
-}
+};
 
 export const deleteComment = async ({
   token,
@@ -256,18 +272,18 @@ export const deleteComment = async ({
   commentId
 }: DeleteCommentProps): Promise<void> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   if (!metadataid) {
-    log.error("No metadataid provided.");
-    return Promise.reject(new Error("No metadataid provided."));
+    log.error('No metadataid provided.');
+    return Promise.reject(new Error('No metadataid provided.'));
   }
 
   if (!commentId) {
-    log.error("No commentId provided.");
-    return Promise.reject(new Error("No commentId provided."));
+    log.error('No commentId provided.');
+    return Promise.reject(new Error('No commentId provided.'));
   }
 
   const headers = new Headers({
@@ -285,13 +301,13 @@ export const deleteComment = async ({
   }
 
   return await response.json();
-}
+};
 
 type AssignUserProps = {
   token: string;
   metadataid: string;
   userId: string;
-}
+};
 
 export const assignUser = async ({
   token,
@@ -299,8 +315,8 @@ export const assignUser = async ({
   userId
 }: AssignUserProps): Promise<MetadataCollection> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const headers = new Headers({
@@ -318,13 +334,13 @@ export const assignUser = async ({
   }
 
   return await response.json();
-}
+};
 
 type UnassignUserProps = {
   token: string;
   metadataid: string;
   userId: string;
-}
+};
 
 export const unassignUser = async ({
   token,
@@ -332,8 +348,8 @@ export const unassignUser = async ({
   userId
 }: UnassignUserProps): Promise<MetadataCollection> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const headers = new Headers({
@@ -351,21 +367,21 @@ export const unassignUser = async ({
   }
 
   return await response.json();
-}
+};
 
 type AssignRoleProps = {
   token: string;
   metadataid: string;
   role: Role;
-}
+};
 export const assignRole = async ({
   token,
   metadataid,
   role
 }: AssignRoleProps): Promise<MetadataCollection> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const headers = new Headers({
@@ -383,20 +399,20 @@ export const assignRole = async ({
   }
 
   return await response.json();
-}
+};
 
 type UnassignRoleProps = {
   token: string;
   metadataid: string;
-}
+};
 
 export const unassignRole = async ({
   token,
   metadataid
 }: UnassignRoleProps): Promise<MetadataCollection> => {
   if (!token) {
-    log.error("No token provided.");
-    return Promise.reject(new Error("No token provided."));
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
   }
 
   const headers = new Headers({
@@ -413,4 +429,4 @@ export const unassignRole = async ({
   }
 
   return await response.json();
-}
+};

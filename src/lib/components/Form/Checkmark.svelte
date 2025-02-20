@@ -4,10 +4,7 @@
     running: boolean;
   };
 
-  let {
-    hideMs = 2000,
-    running = $bindable<boolean>(false)
-  }: CheckmarkProps = $props();
+  let { hideMs = 2000, running = $bindable<boolean>(false) }: CheckmarkProps = $props();
 
   function onAnimationStart() {
     running = true;
@@ -18,12 +15,11 @@
       running = false;
     }, hideMs);
   }
-
 </script>
 
 <svg
   class="checkmark"
-  class:running={running}
+  class:running
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 52 52"
   onanimationstart={onAnimationStart}
@@ -48,19 +44,19 @@
     border-radius: 50%;
 
     .checkmark__circle {
-        stroke-dasharray: 166;
-        stroke-dashoffset: 166;
-        stroke-width: 2;
-        stroke-miterlimit: 10;
-        stroke: var(--background);
-        fill: none;
-      }
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 2;
+      stroke-miterlimit: 10;
+      stroke: var(--background);
+      fill: none;
+    }
 
-      .checkmark__check {
-        transform-origin: 50% 50%;
-        stroke-dasharray: 48;
-        stroke-dashoffset: 48;
-      }
+    .checkmark__check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+    }
 
     &.running {
       display: unset;

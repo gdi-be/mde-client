@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Textfield from "@smui/textfield";
-  import HelperText from "@smui/textfield/helper-text";
-  import Icon from "@smui/textfield/icon";
-  import type { ComponentProps } from "svelte";
-  import type { ValidationResult } from "../FieldsConfig";
+  import Textfield from '@smui/textfield';
+  import HelperText from '@smui/textfield/helper-text';
+  import Icon from '@smui/textfield/icon';
+  import type { ComponentProps } from 'svelte';
+  import type { ValidationResult } from '../FieldsConfig';
 
   type InputProps = {
     value?: string;
@@ -12,40 +12,22 @@
     validationResult?: ValidationResult;
   } & ComponentProps<typeof Textfield>;
 
-  let {
-    key,
-    label,
-    value = $bindable(''),
-    validationResult,
-    ...restProps
-  }: InputProps = $props();
+  let { key, label, value = $bindable(''), validationResult, ...restProps }: InputProps = $props();
 
   let isValid = $derived(validationResult?.valid !== false);
   let helpText = $derived(validationResult?.helpText);
 </script>
 
 <div class="date-input">
-  <Textfield
-    type="date"
-    {label}
-    id={key}
-    input$name={key}
-    bind:value
-    {...restProps}
-  >
+  <Textfield type="date" {label} id={key} input$name={key} bind:value {...restProps}>
     {#snippet leadingIcon()}
-      <Icon class="material-icons">
-        calendar_month
-      </Icon>
+      <Icon class="material-icons">calendar_month</Icon>
     {/snippet}
     {#snippet helper()}
-      <HelperText
-        persistent={!isValid}
-        class={isValid ? 'valid' : 'invalid'}
-      >
+      <HelperText persistent={!isValid} class={isValid ? 'valid' : 'invalid'}>
         {helpText}
       </HelperText>
-  {/snippet}
+    {/snippet}
   </Textfield>
 </div>
 

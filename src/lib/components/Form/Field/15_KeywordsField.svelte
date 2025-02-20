@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { page } from "$app/state";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import { onMount } from "svelte";
-  import Chip, { Set as ChipSet, Text, TrailingIcon } from "@smui/chips";
-  import Autocomplete from "@smui-extra/autocomplete";
-  import Dialog, { Actions, Content, Title } from "@smui/dialog";
-  import Textfield from "@smui/textfield";
-  import Button, { Label } from "@smui/button";
-  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
-  import type { ValidationResult } from "../FieldsConfig";
-  import type { Keywords } from "$lib/models/metadata";
+  import { page } from '$app/state';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import { onMount } from 'svelte';
+  import Chip, { Set as ChipSet, Text, TrailingIcon } from '@smui/chips';
+  import Autocomplete from '@smui-extra/autocomplete';
+  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import Textfield from '@smui/textfield';
+  import Button, { Label } from '@smui/button';
+  import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
+  import type { ValidationResult } from '../FieldsConfig';
+  import type { Keywords } from '$lib/models/metadata';
 
   const KEY = 'isoMetadata.keywords';
 
@@ -20,7 +20,7 @@
   let value = $state<string[]>([]);
   const valueFromData = $derived(getValue<Keywords>(KEY));
   $effect(() => {
-    value = valueFromData?.default?.map(entry => entry.keyword) || [];
+    value = valueFromData?.default?.map((entry) => entry.keyword) || [];
   });
 
   let showCheckmark = $state(false);
@@ -34,9 +34,9 @@
   let newKeyword = $state('');
 
   const getAutoKeywords = async () => {
-    const response = await fetch(`/metadata/${metadataid}/autokeywords`)
+    const response = await fetch(`/metadata/${metadataid}/autokeywords`);
     if (response.ok) {
-      autoKeywords = await response.json() || [];
+      autoKeywords = (await response.json()) || [];
     } else {
       autoKeywords = [];
     }
@@ -47,7 +47,7 @@
       return [];
     }
 
-    const options = await fetch(`/data/keywords?terms=${input}`)
+    const options = await fetch(`/data/keywords?terms=${input}`);
     const data = await options.json();
 
     if (data.total_results === 0) {
@@ -58,7 +58,7 @@
   };
 
   const removeKeyword = (keyword: string) => {
-    value = value.filter(kw => kw !== keyword);
+    value = value.filter((kw) => kw !== keyword);
     persistKeywords();
   };
 
@@ -71,7 +71,7 @@
   const addCustomKeywords = () => {
     if (newKeyword) {
       // split by comma and remove leading/trailing whitespaces
-      const splitValues = newKeyword.split(',').map(kw => kw.trim());
+      const splitValues = newKeyword.split(',').map((kw) => kw.trim());
       // ensure unique values
       value = Array.from(new Set([...value, ...splitValues]));
       dialogOpen = false;
@@ -80,11 +80,14 @@
   };
 
   const persistKeywords = async () => {
-    const response = await persistValue(KEY, value.map((entry) => ({ keyword: entry })));
+    const response = await persistValue(
+      KEY,
+      value.map((entry) => ({ keyword: entry }))
+    );
     if (response.ok) {
       showCheckmark = true;
     }
-  }
+  };
 
   onMount(() => {
     getAutoKeywords();
@@ -94,10 +97,10 @@
   // does not provide a way to do this
   $effect(() => {
     if (autoKeywords && containerElement) {
-      containerElement.querySelectorAll(".mdc-chip").forEach(chip => {
-        const textElement = chip.querySelector(".mdc-chip__text");
+      containerElement.querySelectorAll('.mdc-chip').forEach((chip) => {
+        const textElement = chip.querySelector('.mdc-chip__text');
         if (textElement?.textContent && autoKeywords.includes(textElement?.textContent?.trim())) {
-          const removeButton = chip.querySelector(".mdc-deprecated-chip-trailing-action");
+          const removeButton = chip.querySelector('.mdc-deprecated-chip-trailing-action');
           if (removeButton) {
             removeButton.remove();
           }
@@ -108,22 +111,12 @@
   });
 </script>
 
-<div
-  class="keywords-field"
-  bind:this={containerElement}
->
+<div class="keywords-field" bind:this={containerElement}>
   <fieldset>
     <legend>{fieldConfig?.label}</legend>
-    <ChipSet
-      class="keywords-chipset"
-      chips={uniqueKeywords}
-      nonInteractive
-    >
+    <ChipSet class="keywords-chipset" chips={uniqueKeywords} nonInteractive>
       {#snippet chip(chip)}
-        <Chip
-          class={autoKeywords.includes(chip) ? 'auto-keyword' : ''}
-          {chip}
-        >
+        <Chip class={autoKeywords.includes(chip) ? 'auto-keyword' : ''} {chip}>
           <Text tabindex={0}>{chip}</Text>
           {#if !autoKeywords.includes(chip)}
             <TrailingIcon
@@ -152,9 +145,7 @@
       onSMUIAutocompleteSelected={addSelectedKeyword}
     >
       {#snippet loading()}
-        <Text
-          style="display: flex; width: 100%; justify-content: center; align-items: center;"
-        >
+        <Text style="display: flex; width: 100%; justify-content: center; align-items: center;">
           Lädt
         </Text>
       {/snippet}
@@ -164,11 +155,7 @@
     </Autocomplete>
     <ValidationFeedbackText {validationResult} />
   </fieldset>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  >
-  </FieldTools>
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}></FieldTools>
 </div>
 
 <Dialog
@@ -180,8 +167,8 @@
   <Title>Neue Schlagwörter</Title>
   <Content class="custom-keywords-content">
     <p>
-      Es wird empfohlen die UMTHES Schlagwortsuche zu verwenden.
-      Alternative können Sie hier kommasepariert mehrere eigene Schlagwörter hinzufügen.
+      Es wird empfohlen die UMTHES Schlagwortsuche zu verwenden. Alternative können Sie hier
+      kommasepariert mehrere eigene Schlagwörter hinzufügen.
     </p>
     <Textfield
       class="custom-keywords-input"
@@ -194,10 +181,7 @@
     <Button>
       <Label>Abbrechen</Label>
     </Button>
-    <Button
-      variant="raised"
-      onclick={addCustomKeywords}
-    >
+    <Button variant="raised" onclick={addCustomKeywords}>
       <Label>Hinzufügen</Label>
     </Button>
   </Actions>
@@ -213,7 +197,7 @@
       flex: 1;
       border-radius: 4px;
 
-      >legend {
+      > legend {
         font-size: 0.75em;
       }
     }

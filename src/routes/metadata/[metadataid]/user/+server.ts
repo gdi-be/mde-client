@@ -4,7 +4,6 @@ import { assignUser, unassignUser } from '$lib/api/metadata.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ cookies, request, params }) {
-
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 

@@ -3,13 +3,11 @@
 </script>
 
 <footer>
-  <div>
-  </div>
+  <div></div>
   <div>
     {text}
   </div>
-  <div>
-  </div>
+  <div></div>
 </footer>
 
 <style>

@@ -1,18 +1,13 @@
 <script lang="ts">
-  import IconButton from "@smui/icon-button";
-  import { Icon } from "@smui/button";
-  import { getFormContext, toggleActiveHelp } from "$lib/context/FormContext.svelte";;
+  import IconButton from '@smui/icon-button';
+  import { Icon } from '@smui/button';
+  import { getFormContext, toggleActiveHelp } from '$lib/context/FormContext.svelte';
 
-  let {
-    key
-  } = $props();
+  let { key } = $props();
 
-  const {
-    activeHelpKey
-  } = $derived(getFormContext());
+  const { activeHelpKey } = $derived(getFormContext());
 
   const pressed = $derived(key === activeHelpKey);
-
 </script>
 
 <IconButton
@@ -20,7 +15,7 @@
   type="button"
   toggle
   size="button"
-  pressed={pressed}
+  {pressed}
   onclick={() => toggleActiveHelp(key)}
 >
   <Icon class="material-icons">help</Icon>

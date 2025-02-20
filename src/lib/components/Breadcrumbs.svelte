@@ -11,7 +11,7 @@
   };
 
   const breadcrumbs = $derived.by(() => {
-    const parts = page.url.pathname.split('/').filter(a => a !== '');
+    const parts = page.url.pathname.split('/').filter((a) => a !== '');
     return parts.map((part, i) => {
       return {
         name: part,
@@ -20,7 +20,7 @@
     });
   });
 
-  const getUrlPartName = (part: keyof TranslatedParts) => m[part] ? m[part] : part;
+  const getUrlPartName = (part: keyof TranslatedParts) => (m[part] ? m[part] : part);
 </script>
 
 <nav>
@@ -28,7 +28,7 @@
     <li>
       <a href="/">🏠</a>
     </li>
-    {#each breadcrumbs as {name, url}}
+    {#each breadcrumbs as { name, url }}
       <li>
         {#if url === page.url.pathname}
           <i>/</i>{getUrlPartName(name as keyof TranslatedParts)}
@@ -51,5 +51,4 @@
       margin: 0 0.25em;
     }
   }
-
 </style>

@@ -1,25 +1,29 @@
 <script lang="ts">
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import SelectInput from "../Inputs/SelectInput.svelte";
-  import type { MetadataProfile } from "$lib/models/metadata";
-  import type { ValidationResult } from "../FieldsConfig";
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import SelectInput from '../Inputs/SelectInput.svelte';
+  import type { MetadataProfile } from '$lib/models/metadata';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const KEY = 'isoMetadata.metadataProfile';
   const OPTIONS: {
     key: MetadataProfile;
     label: string;
-  }[] = [{
-    key: 'ISO',
-    label: 'ISO'
-  }, {
-    key: 'INSPIRE_HARMONISED',
-    label: 'INSPIRE harmonisiert'
-  }, {
-    key: 'INSPIRE_IDENTIFIED',
-    label: 'INSPIRE identifiziert'
-  }];
+  }[] = [
+    {
+      key: 'ISO',
+      label: 'ISO'
+    },
+    {
+      key: 'INSPIRE_HARMONISED',
+      label: 'INSPIRE harmonisiert'
+    },
+    {
+      key: 'INSPIRE_IDENTIFIED',
+      label: 'INSPIRE identifiziert'
+    }
+  ];
 
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
@@ -37,7 +41,6 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
 <div class="metadata-type-field">
@@ -51,10 +54,7 @@
       {validationResult}
     />
   </Paper>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

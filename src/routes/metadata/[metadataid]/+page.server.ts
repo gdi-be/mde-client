@@ -4,7 +4,6 @@ import { getAccessToken } from '$lib/auth/cookies.js';
 import { redirect } from '@sveltejs/kit';
 
 export async function load({ params, cookies }) {
-
   const token = await getAccessToken(cookies);
   if (!token) return redirect(302, '/login');
 
@@ -13,5 +12,5 @@ export async function load({ params, cookies }) {
 
   return {
     metadata
-  }
+  };
 }

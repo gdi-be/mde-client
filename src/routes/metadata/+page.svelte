@@ -1,30 +1,29 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import MetadataCard from "$lib/components/MetadataCard.svelte";
-  import MetadataSearchField from "$lib/components/MetadataSearchField.svelte";
-  import Pagination from "$lib/components/Pagination.svelte";
-  import { Icon } from "@smui/button";
+  import { goto } from '$app/navigation';
+  import MetadataCard from '$lib/components/MetadataCard.svelte';
+  import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
+  import Pagination from '$lib/components/Pagination.svelte';
+  import { Icon } from '@smui/button';
   import Card, { PrimaryAction } from '@smui/card';
-  import type { Option } from "$lib/models/form.js";
+  import type { Option } from '$lib/models/form.js';
 
   let { data } = $props();
 
   const metadata = $derived(data.metadata.content);
   const pageable = $derived(data.metadata);
 
-  let searchValue = $state<Option>()
+  let searchValue = $state<Option>();
 
   $effect(() => {
     if (searchValue) {
       goto(`/metadata/${searchValue.key}`);
     }
   });
-
 </script>
 
 <div class="metadata-overview">
   <div class="metadata-toolbar">
-    <MetadataSearchField bind:value={searchValue}/>
+    <MetadataSearchField bind:value={searchValue} />
   </div>
   <div class="metadata-list">
     <Card class="create-card">

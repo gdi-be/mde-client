@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Autocomplete from "@smui-extra/autocomplete";
-  import type { Option } from "$lib/models/form";
-  import type { ComponentProps } from "svelte";
+  import Autocomplete from '@smui-extra/autocomplete';
+  import type { Option } from '$lib/models/form';
+  import type { ComponentProps } from 'svelte';
 
   type InputProps = {
     key: string;
@@ -12,16 +12,15 @@
 
   let {
     value = $bindable<Option>({
-      key: "",
-      label: ""
+      key: '',
+      label: ''
     }),
     ...restProps
   }: InputProps = $props();
-
 </script>
 
 <Autocomplete
   bind:value
-  getOptionLabel={(option: Option) => option?.label as string || ''}
+  getOptionLabel={(option: Option) => (option?.label as string) || ''}
   {...restProps}
 />

@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import SelectInput from "../Inputs/SelectInput.svelte";
-  import type { TermsOfUse } from "$lib/models/metadata";
-  import type { Option } from "$lib/models/form";
-  import type { ValidationResult } from "../FieldsConfig";
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import SelectInput from '../Inputs/SelectInput.svelte';
+  import type { TermsOfUse } from '$lib/models/metadata';
+  import type { Option } from '$lib/models/form';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const KEY = 'isoMetadata.termsOfUseId';
 
@@ -18,7 +18,7 @@
   let showCheckmark = $state(false);
   let termsOfUseList: TermsOfUse[] = $state([]);
   const selectedDescription = $derived.by(() => {
-    const description = termsOfUseList.find(item => item.id === Number(value))?.description;
+    const description = termsOfUseList.find((item) => item.id === Number(value))?.description;
     if (!description) return '';
     return description.replace(/{{(.*?)}}/g, (match, p1) => getValue(p1.trim()) || match);
   });
@@ -30,7 +30,7 @@
     const data: TermsOfUse[] = await response.json();
     data.sort((a, b) => {
       if (a.active === b.active) {
-        return a.shortname.localeCompare(b.shortname)
+        return a.shortname.localeCompare(b.shortname);
       }
       return a.active ? -1 : 1;
     });
@@ -54,13 +54,13 @@
       <SelectInput
         key={KEY}
         label={fieldConfig?.label}
-        options={
-          OPTIONS.map((item: TermsOfUse): Option => ({
+        options={OPTIONS.map(
+          (item: TermsOfUse): Option => ({
             key: item.id.toString(),
             label: item.shortname,
             disabled: !item.active
-          }))
-        }
+          })
+        )}
         bind:value
         {onChange}
         {validationResult}
@@ -70,10 +70,7 @@
       {/if}
     {/await}
   </Paper>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

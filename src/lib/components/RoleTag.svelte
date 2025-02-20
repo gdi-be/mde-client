@@ -1,27 +1,21 @@
 <script lang="ts">
-  import type { Role } from "$lib/models/keycloak";
+  import type { Role } from '$lib/models/keycloak';
 
   type RoleTagProps = {
     role: Role;
-  }
+  };
 
-  const {
-    role
-  }: RoleTagProps = $props();
+  const { role }: RoleTagProps = $props();
 
   const roleMapLong: Record<Role, string> = {
     DataOwner: 'Datenhaltende Stelle',
     Editor: 'Redakteur',
     QualityAssurance: 'Qualitätsmanagment',
     Administrator: 'Administrator'
-  }
+  };
 </script>
 
-
-<div
-  class={["role-tag", `${role.toLowerCase()}-tag`]}
-  title={roleMapLong[role]}
->
+<div class={['role-tag', `${role.toLowerCase()}-tag`]} title={roleMapLong[role]}>
   {roleMapLong[role]}
 </div>
 

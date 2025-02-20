@@ -4,7 +4,6 @@ import { updateDataValue } from '$lib/api/metadata.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function PATCH({ cookies, request, params }) {
-
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
   if (!params.metadataid) return error(404, 'Not Found');

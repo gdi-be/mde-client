@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Option } from "$lib/models/form";
-  import FormField from "@smui/form-field";
-  import Checkbox from "@smui/checkbox";
+  import type { Option } from '$lib/models/form';
+  import FormField from '@smui/form-field';
+  import Checkbox from '@smui/checkbox';
 
   type InputProps = {
     onChange?: (value: string[] | undefined) => void;
@@ -9,7 +9,7 @@
     label: string;
     value?: string[];
     options: Option[];
-  }
+  };
 
   let {
     onChange,
@@ -31,12 +31,7 @@
   <div id={`${key}-checkbox-group`} class="checkbox-group">
     {#each options as option}
       <FormField>
-        <Checkbox
-          id={option.key}
-          onchange={onSelect}
-          bind:group={value}
-          value={option.key}
-        />
+        <Checkbox id={option.key} onchange={onSelect} bind:group={value} value={option.key} />
         {#snippet label()}
           <label for={option.key}>{option.label}</label>
         {/snippet}

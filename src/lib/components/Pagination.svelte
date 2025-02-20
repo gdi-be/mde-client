@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import { page } from "$app/state";
-  import type { PageableResponse } from "$lib/models/api";
-  import type { MetadataCollection } from "$lib/models/metadata";
-  import IconButton from "@smui/icon-button";
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
+  import type { PageableResponse } from '$lib/models/api';
+  import type { MetadataCollection } from '$lib/models/metadata';
+  import IconButton from '@smui/icon-button';
 
   type PaginationProps = {
     pagingInfo: PageableResponse<MetadataCollection>;
-  }
+  };
 
   let { pagingInfo }: PaginationProps = $props();
 
@@ -16,26 +16,26 @@
   const currentPage = $derived(pagingInfo.pageable.pageNumber + 1);
   const hasPrevious = $derived(currentPage > 1);
   const hasNext = $derived(maxPage > currentPage);
-  const pageSize = $derived(pagingInfo.pageable.pageSize.toString() || "10");
+  const pageSize = $derived(pagingInfo.pageable.pageSize.toString() || '10');
 
   const updatePage = (page: number) => {
     const newUrl = new URL(currentUrl);
     if (page < 0) page = 0;
     if (page >= maxPage) page = maxPage;
-    newUrl.searchParams.set("page", page.toString());
-    if (!currentUrl.searchParams.get("size")) {
-      newUrl.searchParams.set("size", "10");
+    newUrl.searchParams.set('page', page.toString());
+    if (!currentUrl.searchParams.get('size')) {
+      newUrl.searchParams.set('size', '10');
     }
-    if (!currentUrl.searchParams.get("sort")) {
-      newUrl.searchParams.set("sort", "title,asc");
+    if (!currentUrl.searchParams.get('sort')) {
+      newUrl.searchParams.set('sort', 'title,asc');
     }
     goto(newUrl);
   };
 
   const updatePageSize = (size: number) => {
     const newUrl = new URL(currentUrl);
-    newUrl.searchParams.set("size", size.toString());
-    newUrl.searchParams.set("page", "0");
+    newUrl.searchParams.set('size', size.toString());
+    newUrl.searchParams.set('page', '0');
     goto(newUrl);
   };
 
@@ -43,7 +43,6 @@
     const target = e.target as HTMLInputElement;
     updatePage(Number(target.value) - 1);
   };
-
 </script>
 
 <div class="pagination">
@@ -118,5 +117,4 @@
       font-size: 1.1em;
     }
   }
-
 </style>

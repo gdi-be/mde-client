@@ -1,20 +1,17 @@
 <script lang="ts">
-  import type { Service } from "$lib/models/metadata";
-  import { setNestedValue } from "../../../util";
-  import ServiceType_57 from "./Field/ServiceType_57.svelte";
-  import ServiceTitle_58 from "./Field/ServiceTitle_58.svelte";
-  import ServiceShortDescription_59 from "./Field/ServiceShortDescription_59.svelte";
-  import ServiceLegendImage_53 from "./Field/ServiceLegendImage_53.svelte";
+  import type { Service } from '$lib/models/metadata';
+  import { setNestedValue } from '../../../util';
+  import ServiceType_57 from './Field/ServiceType_57.svelte';
+  import ServiceTitle_58 from './Field/ServiceTitle_58.svelte';
+  import ServiceShortDescription_59 from './Field/ServiceShortDescription_59.svelte';
+  import ServiceLegendImage_53 from './Field/ServiceLegendImage_53.svelte';
 
   export type ServiceFormProps = {
     service: Service;
     onChange?: (service: Service) => void;
   };
 
-  let {
-    service,
-    onChange = () => {}
-  }: ServiceFormProps = $props();
+  let { service, onChange = () => {} }: ServiceFormProps = $props();
 
   // let isDownloadService = $derived(service.serviceType === 'WFS' || service.serviceType === 'ATOM');
   let isDisplayService = $derived(service.serviceType === 'WMS' || service.serviceType === 'WMTS');
@@ -23,26 +20,22 @@
     service = setNestedValue(service, key, value);
     onChange(service);
   }
-
 </script>
 
 <div class="service-form">
   <ServiceType_57
     value={service.serviceType}
-    onChange={(serviceType) => set("serviceType", serviceType)}
+    onChange={(serviceType) => set('serviceType', serviceType)}
   />
-  <ServiceTitle_58
-    value={service.title}
-    onChange={(title) => set("title", title)}
-  />
+  <ServiceTitle_58 value={service.title} onChange={(title) => set('title', title)} />
   <ServiceShortDescription_59
     value={service.shortDescription}
-    onChange={(shortDescription) => set("shortDescription", shortDescription)}
+    onChange={(shortDescription) => set('shortDescription', shortDescription)}
   />
   {#if isDisplayService}
     <ServiceLegendImage_53
       value={service.legendImage}
-      onChange={(legendImage) => set("legendImage", legendImage)}
+      onChange={(legendImage) => set('legendImage', legendImage)}
     />
   {/if}
 </div>
@@ -58,5 +51,4 @@
       width: 100%;
     }
   }
-
 </style>

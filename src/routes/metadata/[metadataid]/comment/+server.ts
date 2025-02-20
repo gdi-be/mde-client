@@ -4,7 +4,6 @@ import { addComment, deleteComment } from '$lib/api/metadata.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ cookies, request, params }) {
-
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 
@@ -25,7 +24,6 @@ export async function POST({ cookies, request, params }) {
 
 /** @type {import('./$types').RequestHandler} */
 export async function DELETE({ cookies, request, params }) {
-
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 

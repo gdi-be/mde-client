@@ -1,14 +1,11 @@
 <script lang="ts">
-  import type { ValidationResult } from "./FieldsConfig.ts";
+  import type { ValidationResult } from './FieldsConfig.ts';
 
   type ValidtionFeedbackTextProps = {
     validationResult?: ValidationResult;
-  }
+  };
 
-  const {
-    validationResult
-  }: ValidtionFeedbackTextProps = $props();
-
+  const { validationResult }: ValidtionFeedbackTextProps = $props();
 </script>
 
 {#if validationResult?.valid === false}

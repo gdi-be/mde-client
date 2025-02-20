@@ -1,30 +1,26 @@
 <script lang="ts">
-  import { allFieldsValid } from "$lib/context/FormContext.svelte";;
-  import type { MetadataCollection } from "$lib/models/metadata";
-  import CommentsPanel from "./CommentsPanel.svelte";
-  import Button, { Icon, Label } from "@smui/button";
-  import type { Snippet } from "svelte";
+  import { allFieldsValid } from '$lib/context/FormContext.svelte';
+  import type { MetadataCollection } from '$lib/models/metadata';
+  import CommentsPanel from './CommentsPanel.svelte';
+  import Button, { Icon, Label } from '@smui/button';
+  import type { Snippet } from 'svelte';
 
   type FormFooterProps = {
     metadata?: MetadataCollection;
     text?: string;
     children?: Snippet;
-  }
+  };
 
-  let {
-    metadata,
-    children
-  }: FormFooterProps = $props();
+  let { metadata, children }: FormFooterProps = $props();
 
   let commentsPanelVisible = $state(false);
   let submitEnabled = $derived(allFieldsValid(metadata));
 
   const closeCommentsPanel = (event: MouseEvent | KeyboardEvent) => {
-    if (event.target instanceof Element && !event.target.closest(".comments-panel")) {
+    if (event.target instanceof Element && !event.target.closest('.comments-panel')) {
       commentsPanelVisible = false;
     }
   };
-
 </script>
 
 <footer class="form-footer">
@@ -33,7 +29,7 @@
       <Button
         variant="raised"
         class="comments-panel-toggle-button"
-        onclick={() => commentsPanelVisible = true}
+        onclick={() => (commentsPanelVisible = true)}
       >
         <Icon class="material-icons">chat</Icon>
         <Label>Kommentare</Label>
@@ -46,7 +42,7 @@
   <div class="container right-container">
     <Button
       class="submit-button"
-      title={submitEnabled ? "Speichern" : "Es sind noch nicht alle Felder korrekt ausgefüllt"}
+      title={submitEnabled ? 'Speichern' : 'Es sind noch nicht alle Felder korrekt ausgefüllt'}
       disabled={true}
     >
       <Icon class="material-icons">verified</Icon>
@@ -59,11 +55,8 @@
         onkeydown={closeCommentsPanel}
         role="button"
         tabindex="0"
-      >
-      </div>
-      <CommentsPanel
-        metadata={metadata}
-      />
+      ></div>
+      <CommentsPanel {metadata} />
     {/if}
   </div>
 </footer>

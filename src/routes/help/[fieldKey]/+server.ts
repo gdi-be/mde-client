@@ -8,9 +8,7 @@ export async function GET({ cookies, params }) {
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 
-  const {
-    fieldKey
-  } = params;
+  const { fieldKey } = params;
 
   if (!fieldKey) return error(404, 'Not Found');
 
@@ -33,19 +31,19 @@ export async function GET({ cookies, params }) {
     if (role === 'Administrator' && userRoles.includes('Administrator')) {
       helpFilePath = `/data/codelists/help/${path}`;
       break;
-    };
+    }
     if (role === 'Editor' && userRoles.includes('Editor')) {
       helpFilePath = `/data/codelists/help/${path}`;
       break;
-    };
+    }
     if (role === 'QualityAssurance' && userRoles.includes('QualityAssurance')) {
       helpFilePath = `/data/codelists/help/${path}`;
       break;
-    };
+    }
     if (role === 'DataOwner' && userRoles.includes('DataOwner')) {
       helpFilePath = `/data/codelists/help/${path}`;
       break;
-    };
+    }
   }
 
   if (!helpFilePath) return error(404, 'Not Found');

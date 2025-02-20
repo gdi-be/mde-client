@@ -7,7 +7,6 @@
 
   setContext('user_token', data.token);
   initializePopconfimContext();
-
 </script>
 
 <svelte:head>
@@ -56,7 +55,7 @@
       overflow: auto;
       position: relative;
 
-      :global(>*) {
+      :global(> *) {
         max-height: 100%;
         height: 100%;
       }

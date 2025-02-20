@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Option } from "$lib/models/form";
-  import FormField from "@smui/form-field";
-  import Radio from "@smui/radio";
-  import ValidationFeedbackText from "../ValidationFeedbackText.svelte";
-  import type { ValidationResult } from "../FieldsConfig";
+  import type { Option } from '$lib/models/form';
+  import FormField from '@smui/form-field';
+  import Radio from '@smui/radio';
+  import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
+  import type { ValidationResult } from '../FieldsConfig';
 
   type InputProps = {
     onChange?: (value: string) => void;
@@ -12,7 +12,7 @@
     value?: string;
     options: Option[];
     validationResult?: ValidationResult;
-  }
+  };
 
   let {
     onChange,
@@ -35,12 +35,7 @@
   <div id={`${key}-radio-group`} class="radio-group">
     {#each options as option}
       <FormField>
-        <Radio
-          id={option.key}
-          onchange={onSelect}
-          bind:group={value}
-          value={option.key}
-        />
+        <Radio id={option.key} onchange={onSelect} bind:group={value} value={option.key} />
         {#snippet label()}
           <label for={option.key}>{option.label}</label>
         {/snippet}
