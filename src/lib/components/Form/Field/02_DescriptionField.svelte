@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { ValidationResult } from "../FieldsConfig";
-  import FieldTools from "../FieldTools.svelte";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import TextAreaInput from "../Inputs/TextAreaInput.svelte";
+  import type { ValidationResult } from '../FieldsConfig';
+  import FieldTools from '../FieldTools.svelte';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import TextAreaInput from '../Inputs/TextAreaInput.svelte';
 
   const KEY = 'isoMetadata.description';
 
@@ -22,7 +22,6 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
 <div class="description-field">
@@ -34,10 +33,7 @@
     onblur={onBlur}
     {validationResult}
   />
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

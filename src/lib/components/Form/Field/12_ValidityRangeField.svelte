@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import DateInput from "../Inputs/DateInput.svelte";
-  import type { ValidationResult } from "../FieldsConfig";
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import DateInput from '../Inputs/DateInput.svelte';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const FROM_KEY = 'isoMetadata.validFrom';
   const TO_KEY = 'isoMetadata.validTo';
@@ -26,18 +26,21 @@
 
   let showCheckmark = $state(false);
   const fromFieldConfig = getFieldConfig<string>(FROM_KEY);
-  let fromValidationResult = $derived(fromFieldConfig?.validator(startValue, {endValue})) as ValidationResult;
+  let fromValidationResult = $derived(
+    fromFieldConfig?.validator(startValue, { endValue })
+  ) as ValidationResult;
   const toFieldConfig = getFieldConfig<string>(TO_KEY);
-  let toValidationResult = $derived(toFieldConfig?.validator(endValue, {startValue})) as ValidationResult;
+  let toValidationResult = $derived(
+    toFieldConfig?.validator(endValue, { startValue })
+  ) as ValidationResult;
 
   const onBlur = async (key: string) => {
     const value = key === FROM_KEY ? startValue : endValue!;
-    const response = await persistValue(key, (new Date(value!)).toISOString());
+    const response = await persistValue(key, new Date(value!).toISOString());
     if (response.ok) {
       showCheckmark = true;
     }
   };
-
 </script>
 
 <div class="validity-range-field">
@@ -56,10 +59,7 @@
       validationResult={toValidationResult}
     />
   </fieldset>
-  <FieldTools
-    key={FROM_KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={FROM_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">
@@ -80,7 +80,7 @@
       flex: 1;
       border-radius: 4px;
 
-      >legend {
+      > legend {
         display: flex;
         align-items: center;
         font-size: 0.75em;

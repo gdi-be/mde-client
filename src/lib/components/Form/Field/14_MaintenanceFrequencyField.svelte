@@ -1,6 +1,6 @@
-<script lang='ts'>
+<script lang="ts">
   import Paper from '@smui/paper';
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { MaintenanceFrequency } from '$lib/models/metadata';
@@ -41,10 +41,9 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
-<div class='metadata-type-field'>
+<div class="metadata-type-field">
   <Paper>
     <SelectInput
       key={KEY}
@@ -55,13 +54,10 @@
       {validationResult}
     />
   </Paper>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
-<style lang='scss'>
+<style lang="scss">
   .metadata-type-field {
     position: relative;
     display: flex;

@@ -5,4 +5,4 @@ import { setLogLevel, type LogLevel } from 'loggisch';
 
 export const handle: Handle = handleAuth;
 
-setLogLevel(env.CLIENT_LOG_LEVEL as LogLevel || 'info');
+setLogLevel((env.CLIENT_LOG_LEVEL as LogLevel) || 'info');

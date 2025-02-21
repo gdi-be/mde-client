@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Textfield from "@smui/textfield";
-  import CharacterCounter from "@smui/textfield/character-counter";
-  import type { ComponentProps } from "svelte";
-  import type { ValidationResult } from "../FieldsConfig";
-  import HelperText from "@smui/textfield/helper-text";
+  import Textfield from '@smui/textfield';
+  import CharacterCounter from '@smui/textfield/character-counter';
+  import type { ComponentProps } from 'svelte';
+  import type { ValidationResult } from '../FieldsConfig';
+  import HelperText from '@smui/textfield/helper-text';
 
   type InputProps = {
     key: string;
@@ -17,14 +17,13 @@
     key,
     label,
     maxlength,
-    value = $bindable(""),
+    value = $bindable(''),
     validationResult,
     ...restProps
   }: InputProps = $props();
 
   let isValid = $derived(validationResult?.valid !== false);
   let helpText = $derived(validationResult?.helpText);
-
 </script>
 
 <div class="text-area-input">
@@ -37,10 +36,7 @@
     {...restProps}
   >
     {#snippet helper()}
-      <HelperText
-        persistent={!isValid}
-        class={isValid ? 'valid' : 'invalid'}
-      >
+      <HelperText persistent={!isValid} class={isValid ? 'valid' : 'invalid'}>
         {helpText}
       </HelperText>
       {#if maxlength}

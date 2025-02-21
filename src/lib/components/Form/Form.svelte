@@ -1,84 +1,87 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import { tick } from "svelte";
-  import { fade } from "svelte/transition";
-  import LinearProgress from "@smui/linear-progress";
+  import { goto } from '$app/navigation';
+  import { tick } from 'svelte';
+  import { fade } from 'svelte/transition';
+  import LinearProgress from '@smui/linear-progress';
   import {
     setFormData,
     initializeFormContext,
     getProgress,
     type Section,
     clearActiveHelp
-  } from "$lib/context/FormContext.svelte";;
-  import F01_TitleField from "./Field/01_TitleField.svelte";
-  import F02_DescriptionField from "./Field/02_DescriptionField.svelte";
-  import F15_KeywordsField from "./Field/15_KeywordsField.svelte";
-  import F29_PreviewField from "./Field/29_PreviewField.svelte";
-  import F19_ContactsField from "./Field/19_ContactsField.svelte";
-  import F05_MetadataProfile from "./Field/05_MetadataProfile.svelte";
-  import F04_PrivacyField from "./Field/04_PrivacyField.svelte";
-  import F24_TermsOfUseField from "./Field/24_TermsOfUseField.svelte";
-  import F07_AnnexThemeField from "./Field/07_AnnexThemeField.svelte";
-  import F37_QualityReportCheckField from "./Field/37_QualityReportCheckField.svelte";
-  import F06_HighValueDatasetField from "./Field/06_HighValueDatasetField.svelte";
-  import F13_TopicCategory from "./Field/13_TopicCategory.svelte";
-  import F09_CreatedField from "./Field/09_CreatedField.svelte";
-  import F10_PublishedField from "./Field/10_PublishedField.svelte";
-  import F14_MaintenanceFrequencyField from "./Field/14_MaintenanceFrequencyField.svelte";
-  import F11_LastUpdatedField from "./Field/11_LastUpdatedField.svelte";
-  import F12_ValidityRangeField from "./Field/12_ValidityRangeField.svelte";
-  import F16_DeliveredCoordinateSystemField from "./Field/16_DeliveredCoordinateSystemField.svelte";
-  import F17_CoordinateSystemField from "./Field/17_CoordinateSystemField.svelte";
-  import F18_ExtentField from "./Field/18_ExtentField.svelte";
-  import F28_ResolutionField from "./Field/28_ResolutionField.svelte";
-  import F30_ContentDescription from "./Field/30_ContentDescription.svelte";
-  import F31_TechnicalDescription from "./Field/31_TechnicalDescription.svelte";
-  import F32_Lineage from "./Field/32_Lineage.svelte";
-  import F39_AdditionalInformation from "./Field/39_AdditionalInformation.svelte";
-  import ServicesSection from "./service/ServicesSection.svelte";
-  import FormFooter from "./FormFooter.svelte";
-  import type { MetadataCollection } from "$lib/models/metadata";
-  import Button, { Icon, Label } from "@smui/button";
-  import ScrollToTopButton from "./ScrollToTopButton.svelte";
-  import HelpPanel from "./HelpPanel.svelte";
+  } from '$lib/context/FormContext.svelte';
+  import F01_TitleField from './Field/01_TitleField.svelte';
+  import F02_DescriptionField from './Field/02_DescriptionField.svelte';
+  import F15_KeywordsField from './Field/15_KeywordsField.svelte';
+  import F29_PreviewField from './Field/29_PreviewField.svelte';
+  import F19_ContactsField from './Field/19_ContactsField.svelte';
+  import F05_MetadataProfile from './Field/05_MetadataProfile.svelte';
+  import F04_PrivacyField from './Field/04_PrivacyField.svelte';
+  import F24_TermsOfUseField from './Field/24_TermsOfUseField.svelte';
+  import F07_AnnexThemeField from './Field/07_AnnexThemeField.svelte';
+  import F37_QualityReportCheckField from './Field/37_QualityReportCheckField.svelte';
+  import F06_HighValueDatasetField from './Field/06_HighValueDatasetField.svelte';
+  import F13_TopicCategory from './Field/13_TopicCategory.svelte';
+  import F09_CreatedField from './Field/09_CreatedField.svelte';
+  import F10_PublishedField from './Field/10_PublishedField.svelte';
+  import F14_MaintenanceFrequencyField from './Field/14_MaintenanceFrequencyField.svelte';
+  import F11_LastUpdatedField from './Field/11_LastUpdatedField.svelte';
+  import F12_ValidityRangeField from './Field/12_ValidityRangeField.svelte';
+  import F16_DeliveredCoordinateSystemField from './Field/16_DeliveredCoordinateSystemField.svelte';
+  import F17_CoordinateSystemField from './Field/17_CoordinateSystemField.svelte';
+  import F18_ExtentField from './Field/18_ExtentField.svelte';
+  import F28_ResolutionField from './Field/28_ResolutionField.svelte';
+  import F30_ContentDescription from './Field/30_ContentDescription.svelte';
+  import F31_TechnicalDescription from './Field/31_TechnicalDescription.svelte';
+  import F32_Lineage from './Field/32_Lineage.svelte';
+  import F39_AdditionalInformation from './Field/39_AdditionalInformation.svelte';
+  import ServicesSection from './service/ServicesSection.svelte';
+  import FormFooter from './FormFooter.svelte';
+  import type { MetadataCollection } from '$lib/models/metadata';
+  import Button, { Icon, Label } from '@smui/button';
+  import ScrollToTopButton from './ScrollToTopButton.svelte';
+  import HelpPanel from './HelpPanel.svelte';
 
   type FormProps = {
     metadata?: MetadataCollection;
     activeSection?: string;
-  }
-
-  let {
-    activeSection,
-    metadata
-  }: FormProps = $props();
-
-  type SectionConfig = {
-    section: Section,
-    label: string,
-    disabledCheck: (metadata?: MetadataCollection) => boolean
   };
 
-  const SECTIONS: SectionConfig[] = [{
-    section: 'basedata',
-    label: '1. Basisangaben',
-    disabledCheck: () => false
-  }, {
-    section: 'classification',
-    label: '2. Einordnung',
-    disabledCheck: () => false
-  }, {
-    section: 'temp_and_spatial',
-    label: '3. Zeitliche und Räumliche Angaben',
-    disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
-  }, {
-    section: 'additional',
-    label: '4. Weitere Angaben',
-    disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
-  }, {
-    section: 'services',
-    label: '5. Dienste',
-    disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
-  }];
+  let { activeSection, metadata }: FormProps = $props();
+
+  type SectionConfig = {
+    section: Section;
+    label: string;
+    disabledCheck: (metadata?: MetadataCollection) => boolean;
+  };
+
+  const SECTIONS: SectionConfig[] = [
+    {
+      section: 'basedata',
+      label: '1. Basisangaben',
+      disabledCheck: () => false
+    },
+    {
+      section: 'classification',
+      label: '2. Einordnung',
+      disabledCheck: () => false
+    },
+    {
+      section: 'temp_and_spatial',
+      label: '3. Zeitliche und Räumliche Angaben',
+      disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
+    },
+    {
+      section: 'additional',
+      label: '4. Weitere Angaben',
+      disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
+    },
+    {
+      section: 'services',
+      label: '5. Dienste',
+      disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
+    }
+  ];
 
   initializeFormContext();
 
@@ -103,18 +106,15 @@
 <div class="metadata-form">
   <nav class="tabs" bind:this={tabs}>
     {#each SECTIONS as { section, label, disabledCheck }, i}
-      <div
-        class="tab-container"
-        class:active={activeSection === section}
-      >
+      <div class="tab-container" class:active={activeSection === section}>
         <button
           class="tab"
           onclick={() => onSectionClick(section)}
           disabled={disabledCheck(metadata)}
-          >
+        >
           <Label>{label}</Label>
         </button>
-        <LinearProgress progress={(getProgress(section, metadata))} />
+        <LinearProgress progress={getProgress(section, metadata)} />
       </div>
       {#if i + 1 < SECTIONS.length}
         <i class="material-icons">arrow_right_alt</i>
@@ -123,8 +123,8 @@
   </nav>
   <div class="form-wrapper" bind:this={formWrapper}>
     <form>
-      {#if activeSection === "basedata"}
-        <section id="basedata" transition:fade >
+      {#if activeSection === 'basedata'}
+        <section id="basedata" transition:fade>
           <F01_TitleField />
           <F02_DescriptionField />
           <F15_KeywordsField />
@@ -133,20 +133,20 @@
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
-      {#if activeSection === "classification"}
-        <section id="classification" transition:fade >
+      {#if activeSection === 'classification'}
+        <section id="classification" transition:fade>
           <F05_MetadataProfile />
           <F04_PrivacyField />
           <F24_TermsOfUseField />
           <F07_AnnexThemeField {metadata} />
           <F37_QualityReportCheckField {metadata} />
           <F06_HighValueDatasetField />
-          <F13_TopicCategory {metadata}/>
+          <F13_TopicCategory {metadata} />
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
-      {#if activeSection === "temp_and_spatial"}
-        <section id="temp_and_spatial" transition:fade >
+      {#if activeSection === 'temp_and_spatial'}
+        <section id="temp_and_spatial" transition:fade>
           <F09_CreatedField />
           <F10_PublishedField />
           <F14_MaintenanceFrequencyField />
@@ -159,8 +159,8 @@
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
-      {#if activeSection === "additional"}
-        <section id="additional" transition:fade >
+      {#if activeSection === 'additional'}
+        <section id="additional" transition:fade>
           <F30_ContentDescription />
           <F31_TechnicalDescription />
           <F32_Lineage />
@@ -168,8 +168,8 @@
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
-      {#if activeSection === "services"}
-        <section id="services" transition:fade >
+      {#if activeSection === 'services'}
+        <section id="services" transition:fade>
           <ServicesSection />
         </section>
       {/if}
@@ -180,8 +180,11 @@
     <Button
       class="previous-button"
       title="Zurück"
-      disabled={activeSection === "basedata"}
-      onclick={() => onSectionClick(SECTIONS[SECTIONS.findIndex(s => s.section === activeSection) - 1].section)}
+      disabled={activeSection === 'basedata'}
+      onclick={() =>
+        onSectionClick(
+          SECTIONS[SECTIONS.findIndex((s) => s.section === activeSection) - 1].section
+        )}
     >
       <Icon class="material-icons">chevron_left</Icon>
       <Label>Zurück</Label>
@@ -189,8 +192,11 @@
     <Button
       class="next-button"
       title="Weiter"
-      disabled={activeSection === "services"}
-      onclick={() => onSectionClick(SECTIONS[SECTIONS.findIndex(s => s.section === activeSection) + 1].section)}
+      disabled={activeSection === 'services'}
+      onclick={() =>
+        onSectionClick(
+          SECTIONS[SECTIONS.findIndex((s) => s.section === activeSection) + 1].section
+        )}
     >
       <Label>Weiter</Label>
       <Icon class="material-icons">chevron_right</Icon>
@@ -270,7 +276,5 @@
         }
       }
     }
-
   }
-
 </style>

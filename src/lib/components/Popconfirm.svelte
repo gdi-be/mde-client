@@ -2,14 +2,8 @@
   import { closePopconfirm, getPopconfirmState } from '$lib/context/PopConfirmContex.svelte';
   import Button from '@smui/button';
 
-  const {
-    anchorElement,
-    confirmButtonText,
-    open,
-    onConfirm,
-    onCancel,
-    text,
-  } = $derived(getPopconfirmState());
+  const { anchorElement, confirmButtonText, open, onConfirm, onCancel, text } =
+    $derived(getPopconfirmState());
 
   let dialog = $state<HTMLDialogElement>();
 
@@ -19,7 +13,6 @@
     onConfirm();
     closePopconfirm();
   };
-
 </script>
 
 <dialog
@@ -35,24 +28,14 @@
     {text}
   </span>
   <div class="actions">
-    <Button
-      variant="unelevated"
-      onclick={confirmButtonHandler}
-    >
+    <Button variant="unelevated" onclick={confirmButtonHandler}>
       {confirmButtonText}
     </Button>
   </div>
 </dialog>
 
 {#if open}
-  <div
-    class="mask"
-    onclick={onCancel}
-    onkeydown={onCancel}
-    role="button"
-    tabindex="0"
-  >
-  </div>
+  <div class="mask" onclick={onCancel} onkeydown={onCancel} role="button" tabindex="0"></div>
 {/if}
 
 <style lang="scss">
@@ -80,12 +63,12 @@
   }
 
   .mask {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.1);
-      z-index: 1;
-    }
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
 </style>

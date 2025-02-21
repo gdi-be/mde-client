@@ -1,15 +1,13 @@
-<script lang=ts>
-  import { goto } from "$app/navigation";
-  import { page } from "$app/state";
-  import {
-    type MetadataProfile
-  } from "$lib/models/metadata";
-  import Button from "@smui/button";
-  import Textfield from "@smui/textfield";
-  import log from "loggisch";
-  import MetadataSearchField from "$lib/components/MetadataSearchField.svelte";
-  import type { Option } from "$lib/models/form";
-  import Card, { Content } from "@smui/card";
+<script lang="ts">
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
+  import { type MetadataProfile } from '$lib/models/metadata';
+  import Button from '@smui/button';
+  import Textfield from '@smui/textfield';
+  import log from 'loggisch';
+  import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
+  import type { Option } from '$lib/models/form';
+  import Card, { Content } from '@smui/card';
 
   let title = $state<string>('');
   let metadataProfile = $state<MetadataProfile>('ISO');
@@ -42,7 +40,6 @@
       }
     }
   };
-
 </script>
 
 <div class="create-metadata">
@@ -50,26 +47,18 @@
     <Content>
       <h1>Neuerfassung</h1>
       <p>
-        Hier können Sie neue Metadaten anlegen.
-        Wählen sie dazu einen Titel und eine Vorlage aus.
-      </p><p>
-        Optional können sie die Daten auch von bestehenden Metadaten ableiten.
-        Durchsuchen sie dazu unten die Metadaten und wählen sie den gewünschten Datensatz aus.
+        Hier können Sie neue Metadaten anlegen. Wählen sie dazu einen Titel und eine Vorlage aus.
       </p>
-      <Textfield
-        bind:value={title}
-        label="Titel"
-        required
-      />
+      <p>
+        Optional können sie die Daten auch von bestehenden Metadaten ableiten. Durchsuchen sie dazu
+        unten die Metadaten und wählen sie den gewünschten Datensatz aus.
+      </p>
+      <Textfield bind:value={title} label="Titel" required />
       <MetadataSearchField
         bind:value={cloneMetadataId}
         label="Bestehende Metadaten als Vorlage verwenden"
       />
-      <Button
-        variant="raised"
-        onclick={onCreateClick}
-        disabled={!allFieldsValid}
-      >
+      <Button variant="raised" onclick={onCreateClick} disabled={!allFieldsValid}>
         Metadaten anlegen
       </Button>
     </Content>

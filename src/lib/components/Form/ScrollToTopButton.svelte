@@ -1,14 +1,12 @@
 <script lang="ts">
-  import Button, { Icon, Label } from "@smui/button";
-  import { onDestroy, onMount } from "svelte";
+  import Button, { Icon, Label } from '@smui/button';
+  import { onDestroy, onMount } from 'svelte';
 
   type ScrollToTopButtonProps = {
     target?: HTMLElement;
   };
 
-  const {
-    target
-  }: ScrollToTopButtonProps = $props();
+  const { target }: ScrollToTopButtonProps = $props();
 
   const scrollToTop = () => {
     target?.scrollTo({
@@ -46,7 +44,6 @@
       resizeObserver.disconnect();
     });
   });
-
 </script>
 
 {#if visible}

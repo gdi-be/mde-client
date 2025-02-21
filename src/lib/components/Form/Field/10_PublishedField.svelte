@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import DateInput from "../Inputs/DateInput.svelte";
-  import type { ValidationResult } from "../FieldsConfig";
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import DateInput from '../Inputs/DateInput.svelte';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const KEY = 'isoMetadata.published';
 
@@ -19,28 +19,18 @@
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {
-    const response = await persistValue(KEY, (new Date(value!)).toISOString());
+    const response = await persistValue(KEY, new Date(value!).toISOString());
     if (response.ok) {
       showCheckmark = true;
     }
   };
-
 </script>
 
 <div class="date-time-field">
   <Paper>
-    <DateInput
-      bind:value
-      key={KEY}
-      label={fieldConfig?.label}
-      onblur={onBlur}
-      {validationResult}
-    />
+    <DateInput bind:value key={KEY} label={fieldConfig?.label} onblur={onBlur} {validationResult} />
   </Paper>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

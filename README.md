@@ -1,14 +1,16 @@
 # Webclient for the GDI-Berlin Metadateneditor
 
-
 ---
+
 This documentation uses `bun` as a JavaScript runtime. In most cases this can be
 replaced with `npm` if `bun` does not work as expected.
+
 ---
 
 ## Requirements
 
 Install the required packages.
+
 ```bash
 bun install
 ```

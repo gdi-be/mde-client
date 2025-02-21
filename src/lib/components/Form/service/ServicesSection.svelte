@@ -1,9 +1,9 @@
 <script lang="ts">
-  import IconButton from "@smui/icon-button";
-  import { getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import type { Service } from "$lib/models/metadata";
-  import ServiceForm from "./ServiceForm.svelte";
-  import Checkmark from "../Checkmark.svelte";
+  import IconButton from '@smui/icon-button';
+  import { getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import type { Service } from '$lib/models/metadata';
+  import ServiceForm from './ServiceForm.svelte';
+  import Checkmark from '../Checkmark.svelte';
 
   type Tab = {
     title: string;
@@ -15,15 +15,20 @@
   let initialServices = getValue<Service[]>(KEY);
 
   let services = $state(initialServices || []);
-  let tabs = $derived<Tab[]>(services.map((service) => {
-    const titlePrefix = service.serviceType === 'WMS' || service.serviceType === 'WMTS' ? '🗺️ ' : '🗃️ ';
-    return {
-      title: titlePrefix + (service.title || service.serviceIdentification)!,
-      id: service.serviceIdentification!
-    };
-  }));
+  let tabs = $derived<Tab[]>(
+    services.map((service) => {
+      const titlePrefix =
+        service.serviceType === 'WMS' || service.serviceType === 'WMTS' ? '🗺️ ' : '🗃️ ';
+      return {
+        title: titlePrefix + (service.title || service.serviceIdentification)!,
+        id: service.serviceIdentification!
+      };
+    })
+  );
   let activeTab: string = $state(initialServices?.[0].serviceIdentification || '');
-  let activeService = $derived(services.find(service => service.serviceIdentification === activeTab));
+  let activeService = $derived(
+    services.find((service) => service.serviceIdentification === activeTab)
+  );
 
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
@@ -32,28 +37,31 @@
     if (response.ok) {
       visibleCheckmarks[id] = true;
     }
-  }
+  };
 
   function addService() {
     // first for characters
     const randomId = Date.now().toString(36);
     const serviceIdentification = `new_service_${randomId}`;
-    services = [...services, {
-      serviceIdentification: serviceIdentification,
-      title: 'Neuer Dienst' + services.length,
-    }];
+    services = [
+      ...services,
+      {
+        serviceIdentification: serviceIdentification,
+        title: 'Neuer Dienst' + services.length
+      }
+    ];
     activeTab = serviceIdentification;
   }
 
   function removeService(id: string) {
-    services = services.filter(service => service.serviceIdentification !== id);
+    services = services.filter((service) => service.serviceIdentification !== id);
     if (activeTab === id) {
       activeTab = services[0].serviceIdentification || '';
     }
   }
 
   function updateService(id: string, newService: Service) {
-    services = services.map(service => {
+    services = services.map((service) => {
       if (service.serviceIdentification === id) {
         return newService;
       }
@@ -68,31 +76,20 @@
       el.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',
-        inline: 'center',
+        inline: 'center'
       });
     }
   });
-
 </script>
 
 <nav class="tabs">
   {#each tabs as tab}
-    <div
-      class="tab-container"
-      class:active={activeTab === tab.id}
-    >
-      <button
-        id={tab.id}
-        class="tab"
-        title={tab.title}
-        onclick={() => (activeTab = tab.id)}
-      >
+    <div class="tab-container" class:active={activeTab === tab.id}>
+      <button id={tab.id} class="tab" title={tab.title} onclick={() => (activeTab = tab.id)}>
         {tab.title}
       </button>
       {#if visibleCheckmarks[tab.id]}
-        <Checkmark
-          bind:running={visibleCheckmarks[tab.id]}
-        />
+        <Checkmark bind:running={visibleCheckmarks[tab.id]} />
       {/if}
       {#if services.length > 1 && !visibleCheckmarks[tab.id]}
         <IconButton

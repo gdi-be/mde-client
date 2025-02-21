@@ -1,19 +1,13 @@
 <script lang="ts">
-  import type { Token } from "$lib/models/keycloak";
+  import type { Token } from '$lib/models/keycloak';
 
   type UserProfilePanelProps = {
     token: Token;
   };
 
-  let {
-    token
-  }: UserProfilePanelProps = $props();
+  let { token }: UserProfilePanelProps = $props();
 
-  const hiddenRoles = [
-    'offline_access',
-    'uma_authorization',
-    'default-roles-metadata-editor'
-  ];
+  const hiddenRoles = ['offline_access', 'uma_authorization', 'default-roles-metadata-editor'];
 
   const roleFilter = (role: string) => hiddenRoles.indexOf(role) === -1;
   const roleMap = (role: string) => {
@@ -30,12 +24,7 @@
       : token?.preferred_username
   );
   const email = $derived(token?.email);
-  const roles = $derived(token?.realm_access?.roles
-    .filter(roleFilter)
-    .map(roleMap)
-    .join(', ')
-  );
-
+  const roles = $derived(token?.realm_access?.roles.filter(roleFilter).map(roleMap).join(', '));
 </script>
 
 <div class="user-profile-panel">
@@ -56,7 +45,8 @@
     flex-direction: column;
     width: 15em;
 
-    .username, .email {
+    .username,
+    .email {
       text-align: left;
     }
 

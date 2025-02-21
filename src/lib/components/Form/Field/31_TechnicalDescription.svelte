@@ -1,8 +1,8 @@
 <script lang="ts">
-  import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
+  import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
 
   const KEY = 'isoMetadata.UNKNOWN';
 
@@ -23,7 +23,6 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
 <div class="technical-description-field">
@@ -34,10 +33,7 @@
       onblur={onBlur}
     />
   </Paper>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

@@ -1,17 +1,14 @@
 <script lang="ts">
-  import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
-  import type { Service } from "$lib/models/metadata";
-  import NumberInput from "$lib/components/Form/Inputs/NumberInput.svelte";
+  import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
+  import type { Service } from '$lib/models/metadata';
+  import NumberInput from '$lib/components/Form/Inputs/NumberInput.svelte';
 
   export type ServiceTypeProps = {
-    value: Service["legendImage"]
-    onChange: (newValue: Service["legendImage"]) => void
+    value: Service['legendImage'];
+    onChange: (newValue: Service['legendImage']) => void;
   };
 
-  let {
-    value,
-    onChange
-  }: ServiceTypeProps = $props();
+  let { value, onChange }: ServiceTypeProps = $props();
 
   const update = (key: string, val: string) => {
     onChange({
@@ -19,9 +16,7 @@
       [key]: val
     });
   };
-
 </script>
-
 
 <fieldset class="legend-fieldset">
   <legend>Gesamtlegende</legend>
@@ -30,25 +25,25 @@
       label="Format"
       value={value?.format}
       maxlength={100}
-      onchange={(e: Event) => update("format", (e.target as HTMLInputElement).value)}
+      onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
     />
     <TextInput
       label="Url"
       value={value?.url}
       maxlength={100}
-      onchange={(e: Event) => update("url", (e.target as HTMLInputElement).value)}
+      onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
     />
   </div>
   <fieldset>
     <NumberInput
       label="Breite"
       value={value?.width}
-      onchange={(e: Event) => update("width", (e.target as HTMLInputElement).value)}
+      onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
     />
     <NumberInput
       label="Höhe"
       value={value?.height}
-      onchange={(e: Event) => update("height", (e.target as HTMLInputElement).value)}
+      onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
     />
   </fieldset>
 </fieldset>
@@ -62,5 +57,4 @@
       flex: 1;
     }
   }
-
 </style>

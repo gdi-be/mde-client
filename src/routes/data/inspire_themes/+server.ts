@@ -3,7 +3,6 @@ import { getAccessToken } from '$lib/auth/cookies.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ cookies, fetch }) {
-
   // TODO: add caching/fallback? Maybe via hooks?
 
   const token = await getAccessToken(cookies);

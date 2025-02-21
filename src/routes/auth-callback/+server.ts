@@ -26,13 +26,13 @@ async function exchangeCodeForTokens(code: string) {
     code,
     client_id: env.AUTH_KEYCLOAK_CLIENT_ID,
     redirect_uri: env.AUTH_REDIRECT_URI,
-    client_secret: env.AUTH_KEYCLOAK_CLIENT_SECRET,
+    client_secret: env.AUTH_KEYCLOAK_CLIENT_SECRET
   });
 
   const response = await fetch(tokenUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params,
+    body: params
   });
 
   if (!response.ok) {

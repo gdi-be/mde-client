@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FieldKey } from "$lib/models/form";
-import type { Contacts, Extent } from "$lib/models/metadata";
-import type { Section } from "$lib/context/FormContext.svelte";;
+import type { FieldKey } from '$lib/models/form';
+import type { Contacts, Extent } from '$lib/models/metadata';
+import type { Section } from '$lib/context/FormContext.svelte';
 
 export type ValidationResult = {
   valid: boolean;
@@ -17,7 +17,10 @@ export type FieldConfig<T> = {
   profile_id: number;
   key: FieldKey;
   label: string;
-  validator: (val: T | undefined, extra?: Record<string, any>) => ValidationResultList | ValidationResult;
+  validator: (
+    val: T | undefined,
+    extra?: Record<string, any>
+  ) => ValidationResultList | ValidationResult;
   section: Section;
   required?: boolean;
 };
@@ -32,7 +35,7 @@ const isValidNumber = (val: string) => {
 const isValidEmail = (val: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(val);
-}
+};
 
 export const FieldConfigs: FieldConfig<any>[] = [
   {
@@ -43,12 +46,12 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie einen Titel an.',
-        }
+          helpText: 'Bitte geben Sie einen Titel an.'
+        };
       }
       return {
         valid: true,
-        helpText: 'Es wird eine maximale Titel-Länge von 100 Zeichen empfohlen.',
+        helpText: 'Es wird eine maximale Titel-Länge von 100 Zeichen empfohlen.'
       };
     },
     section: 'basedata',
@@ -62,9 +65,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie eine Beschreibung an.',
-        }
-      };
+          helpText: 'Bitte geben Sie eine Beschreibung an.'
+        };
+      }
       return { valid: true };
     },
     section: 'basedata',
@@ -78,8 +81,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (val?.length < 1) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie mindestens ein Schlagwort an.',
-        }
+          helpText: 'Bitte geben Sie mindestens ein Schlagwort an.'
+        };
       }
       return { valid: true };
     },
@@ -94,14 +97,14 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie ein Vorschaubild an.',
-        }
+          helpText: 'Bitte geben Sie ein Vorschaubild an.'
+        };
       }
       if (!val.endsWith('.png')) {
         return {
           valid: false,
-          helpText: 'Das Vorschaubild muss im PNG-Format sein.',
-        }
+          helpText: 'Das Vorschaubild muss im PNG-Format sein.'
+        };
       }
       return { valid: true };
     },
@@ -114,10 +117,13 @@ export const FieldConfigs: FieldConfig<any>[] = [
     key: 'isoMetadata.pointsOfContact',
     validator: (contacts?: Contacts): ValidationResultList => {
       const validationResult: ValidationResultList = [];
-      if (!contacts || contacts.length < 1) return [{
-        valid: false,
-        helpText: 'Bitte geben Sie mindestens einen Kontakt an.',
-      }];
+      if (!contacts || contacts.length < 1)
+        return [
+          {
+            valid: false,
+            helpText: 'Bitte geben Sie mindestens einen Kontakt an.'
+          }
+        ];
 
       for (const [index, contact] of contacts.entries()) {
         if (!isDefined(contact.name)) {
@@ -180,8 +186,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie einen Metadaten-Typ an.',
-        }
+          helpText: 'Bitte geben Sie einen Metadaten-Typ an.'
+        };
       }
       return { valid: true };
     },
@@ -196,8 +202,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte wählen sie die passende Datenschutz-Einstellung aus.',
-        }
+          helpText: 'Bitte wählen sie die passende Datenschutz-Einstellung aus.'
+        };
       }
       return { valid: true };
     },
@@ -212,8 +218,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte wählen sie die passenden Nutzungsbestimmungen.',
-        }
+          helpText: 'Bitte wählen sie die passenden Nutzungsbestimmungen.'
+        };
       }
       return { valid: true };
     },
@@ -228,8 +234,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie ein INSPIRE-Thema an.',
-        }
+          helpText: 'Bitte geben Sie ein INSPIRE-Thema an.'
+        };
       }
       return { valid: true };
     },
@@ -252,8 +258,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie an, ob es sich um einen High Value Datensatz handelt.',
-        }
+          helpText: 'Bitte geben Sie an, ob es sich um einen High Value Datensatz handelt.'
+        };
       }
       return { valid: true };
     },
@@ -268,8 +274,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie eine Themenkategorie an.',
-        }
+          helpText: 'Bitte geben Sie eine Themenkategorie an.'
+        };
       }
       return { valid: true };
     },
@@ -295,8 +301,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val) || val.length === 0) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie ein Veröffentlichungsdatum an.',
-        }
+          helpText: 'Bitte geben Sie ein Veröffentlichungsdatum an.'
+        };
       }
       return { valid: true };
     },
@@ -333,8 +339,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (startValue && extra?.endValue && new Date(startValue) > new Date(extra?.endValue)) {
         return {
           valid: false,
-          helpText: 'Das Startdatum muss vor dem Enddatum liegen.',
-        }
+          helpText: 'Das Startdatum muss vor dem Enddatum liegen.'
+        };
       }
       return { valid: true };
     },
@@ -349,8 +355,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (endValue && extra?.startValue && new Date(extra?.startValue) > new Date(endValue)) {
         return {
           valid: false,
-          helpText: 'Das Startdatum muss vor dem Enddatum liegen.',
-        }
+          helpText: 'Das Startdatum muss vor dem Enddatum liegen.'
+        };
       }
       return { valid: true };
     },
@@ -365,8 +371,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie das gelieferte Koordinatensystem an.',
-        }
+          helpText: 'Bitte geben Sie das gelieferte Koordinatensystem an.'
+        };
       }
       return { valid: true };
     },
@@ -381,8 +387,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie das abzugebende Koordinatensystem an.',
-        }
+          helpText: 'Bitte geben Sie das abzugebende Koordinatensystem an.'
+        };
       }
       return { valid: true };
     },
@@ -396,33 +402,35 @@ export const FieldConfigs: FieldConfig<any>[] = [
     validator: (val?: Extent) => {
       const validationResult: ValidationResultList = [];
       if (!val) {
-        return [{
-          valid: false,
-          helpText: 'Bitte geben Sie die Ausdehnung an.',
-        }]
+        return [
+          {
+            valid: false,
+            helpText: 'Bitte geben Sie die Ausdehnung an.'
+          }
+        ];
       } else {
-        if(!val.minx || val.minx < 1) {
+        if (!val.minx || val.minx < 1) {
           validationResult.push({
             valid: false,
             helpText: 'Bitte geben Sie den minimalen x-Wert an.',
             subKey: 'minx'
           });
         }
-        if(!val.miny || val.miny < 1) {
+        if (!val.miny || val.miny < 1) {
           validationResult.push({
             valid: false,
             helpText: 'Bitte geben Sie den minimalen y-Wert an.',
             subKey: 'miny'
           });
         }
-        if(!val.maxx || val.maxx < 1) {
+        if (!val.maxx || val.maxx < 1) {
           validationResult.push({
             valid: false,
             helpText: 'Bitte geben Sie den maximalen x-Wert an.',
             subKey: 'maxx'
           });
         }
-        if(!val.maxy || val.maxy < 1) {
+        if (!val.maxy || val.maxy < 1) {
           validationResult.push({
             valid: false,
             helpText: 'Bitte geben Sie den maximalen y-Wert an.',
@@ -443,8 +451,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie die Bodenauflösung an.',
-        }
+          helpText: 'Bitte geben Sie die Bodenauflösung an.'
+        };
       }
       return { valid: true };
     },
@@ -459,8 +467,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie den Vergleichsmaßstab an.',
-        }
+          helpText: 'Bitte geben Sie den Vergleichsmaßstab an.'
+        };
       }
       return { valid: true };
     },
@@ -475,8 +483,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie eine inhaltliche Beschreibung an.',
-        }
+          helpText: 'Bitte geben Sie eine inhaltliche Beschreibung an.'
+        };
       }
       return { valid: true };
     },
@@ -491,8 +499,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie eine technische Beschreibung an.',
-        }
+          helpText: 'Bitte geben Sie eine technische Beschreibung an.'
+        };
       }
       return { valid: true };
     },
@@ -507,8 +515,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie eine Herkunft an.',
-        }
+          helpText: 'Bitte geben Sie eine Herkunft an.'
+        };
       }
       return { valid: true };
     },
@@ -523,8 +531,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie zusätzliche Informationen an.',
-        }
+          helpText: 'Bitte geben Sie zusätzliche Informationen an.'
+        };
       }
       return { valid: true };
     },

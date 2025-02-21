@@ -7,6 +7,6 @@ const authHandle: Handle = async ({ event, resolve }) => {
     event.locals.token = parseToken(token);
   }
   return resolve(event);
-}
+};
 
 export default authHandle;

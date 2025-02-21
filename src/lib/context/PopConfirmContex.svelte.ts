@@ -1,4 +1,4 @@
-import { getContext, setContext } from "svelte";
+import { getContext, setContext } from 'svelte';
 
 export const POPCONFIRM_CONTEXT = Symbol('popconfirm');
 
@@ -18,28 +18,32 @@ const defaultState = {
   text: 'Sind sie sicher?',
   confirmButtonText: 'Bestätigen',
   onConfirm: closePopconfirm,
-  onCancel: closePopconfirm,
+  onCancel: closePopconfirm
 };
 
-const popConfirmState = $state<{ state: PopconfirmState }>({ state: defaultState});
+const popConfirmState = $state<{ state: PopconfirmState }>({ state: defaultState });
 
 export function initializePopconfimContext() {
   setContext(POPCONFIRM_CONTEXT, popConfirmState);
-};
+}
 
-export function popconfirm(anchorElement: HTMLElement, onConfirm: () => void, options?: ConfirmOptions) {
+export function popconfirm(
+  anchorElement: HTMLElement,
+  onConfirm: () => void,
+  options?: ConfirmOptions
+) {
   popConfirmState.state = {
     ...defaultState,
     ...options,
     anchorElement,
     open: true,
-    onConfirm,
+    onConfirm
   };
-};
+}
 
 export function closePopconfirm() {
   popConfirmState.state.open = false;
-};
+}
 
 export function getPopconfirmState() {
   return getContext<{ state: PopconfirmState }>(POPCONFIRM_CONTEXT).state;

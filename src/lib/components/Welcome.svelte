@@ -7,20 +7,14 @@
 
 <div class="welcome">
   {#if !token}
-    <h2>
-      Metadateneditor der GDI-Berlin
-    </h2>
-    <p>
-      Anmelden, um Metadaten zu bearbeiten.
-    </p>
+    <h2>Metadateneditor der GDI-Berlin</h2>
+    <p>Anmelden, um Metadaten zu bearbeiten.</p>
     <Button variant="outlined" href="/login">
       <Label>Login</Label>
     </Button>
   {:else}
     <h1>{`Hallo ${token?.given_name || token?.preferred_username}`}</h1>
-    <p>
-      Willkommen beim Metadateneditor
-    </p>
+    <p>Willkommen beim Metadateneditor</p>
     <p>
       <a href="/metadata">Zur Metadaten Übersicht</a>
     </p>

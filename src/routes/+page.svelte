@@ -12,14 +12,13 @@
         replaceState: true,
         noScroll: true,
         invalidateAll: true
-      })
+      });
     }
   });
-
 </script>
 
 {#if children}
   {@render children()}
 {:else}
-  <Welcome/>
+  <Welcome />
 {/if}

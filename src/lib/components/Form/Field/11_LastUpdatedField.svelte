@@ -1,21 +1,21 @@
 <script lang="ts">
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import DateInput from "../Inputs/DateInput.svelte";
-  import type { MaintenanceFrequency } from "$lib/models/metadata";
-  import { getLastUpdateValue } from "$lib/util";
-  import type { ValidationResult } from "../FieldsConfig";
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import DateInput from '../Inputs/DateInput.svelte';
+  import type { MaintenanceFrequency } from '$lib/models/metadata';
+  import { getLastUpdateValue } from '$lib/util';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const KEY = 'isoMetadata.modified';
 
-  const {
-    metadata
-  } = $props();
+  const { metadata } = $props();
 
   const initialValue = getValue<string>(KEY, metadata);
   let publishedValue = $derived(getValue<string>('isoMetadata.published', metadata));
-  let maintenanceFrequencyValue = $derived(getValue<MaintenanceFrequency>('isoMetadata.maintenanceFrequency', metadata));
+  let maintenanceFrequencyValue = $derived(
+    getValue<MaintenanceFrequency>('isoMetadata.maintenanceFrequency', metadata)
+  );
   let value = $state(initialValue || '');
   const fieldConfig = getFieldConfig<string>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
@@ -30,20 +30,22 @@
   });
 
   let showCheckmark = $state(false);
-  let isAutomatedValue = $derived([
-    'continual',
-    'daily',
-    'weekly',
-    'fortnightly',
-    'monthly',
-    'quarterly',
-    'biannually',
-    'annually'
-  ].includes(maintenanceFrequencyValue!));
+  let isAutomatedValue = $derived(
+    [
+      'continual',
+      'daily',
+      'weekly',
+      'fortnightly',
+      'monthly',
+      'quarterly',
+      'biannually',
+      'annually'
+    ].includes(maintenanceFrequencyValue!)
+  );
   let readOnly = $derived(!!publishedValue && isAutomatedValue);
 
   const onBlur = async () => {
-    const response = await persistValue(KEY, (new Date(value!)).toISOString());
+    const response = await persistValue(KEY, new Date(value!).toISOString());
     if (response.ok) {
       showCheckmark = true;
     }
@@ -61,10 +63,7 @@
       {validationResult}
     />
   </Paper>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

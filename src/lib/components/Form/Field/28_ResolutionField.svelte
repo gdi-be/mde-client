@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import NumberInput from "../Inputs/NumberInput.svelte";
-  import FormField from "@smui/form-field";
-  import Radio from "@smui/radio";
-  import type { ValidationResult } from "../FieldsConfig";
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import NumberInput from '../Inputs/NumberInput.svelte';
+  import FormField from '@smui/form-field';
+  import Radio from '@smui/radio';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const RESOLUTION_KEY = 'isoMetadata.resolutions';
   const SCALE_KEY = 'isoMetadata.scale';
@@ -32,9 +32,13 @@
 
   let showCheckmark = $state(false);
   const resolutionFieldConfig = getFieldConfig<number>(RESOLUTION_KEY);
-  let resolutionValidationResult = $derived(resolutionFieldConfig?.validator(resolutionValue || undefined)) as ValidationResult;
+  let resolutionValidationResult = $derived(
+    resolutionFieldConfig?.validator(resolutionValue || undefined)
+  ) as ValidationResult;
   const scaleFieldConfig = getFieldConfig<number>(SCALE_KEY);
-  let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined)) as ValidationResult;
+  let scaleValidationResult = $derived(
+    scaleFieldConfig?.validator(scaleValue || undefined)
+  ) as ValidationResult;
 
   const onBlur = async () => {
     if (selected === RESOLUTION_KEY) {
@@ -63,26 +67,19 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
 <div class="title-field">
   <fieldset>
     <legend>Räumliche Auflösung</legend>
     <FormField>
-      <Radio
-        bind:group={selected}
-        value={RESOLUTION_KEY}
-      />
+      <Radio bind:group={selected} value={RESOLUTION_KEY} />
       {#snippet label()}
         {resolutionFieldConfig?.label}
       {/snippet}
     </FormField>
     <FormField>
-      <Radio
-        bind:group={selected}
-        value={SCALE_KEY}
-      />
+      <Radio bind:group={selected} value={SCALE_KEY} />
       {#snippet label()}
         {scaleFieldConfig?.label}
       {/snippet}
@@ -107,10 +104,7 @@
       />
     {/if}
   </fieldset>
-  <FieldTools
-    key={RESOLUTION_KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={RESOLUTION_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">
@@ -123,7 +117,7 @@
       flex: 1;
       border-radius: 4px;
 
-      >legend {
+      > legend {
         font-size: 0.75em;
       }
     }

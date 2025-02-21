@@ -1,31 +1,38 @@
 <script lang="ts">
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import SelectInput from "../Inputs/SelectInput.svelte";
-  import type { ValidationResult } from "../FieldsConfig";
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import SelectInput from '../Inputs/SelectInput.svelte';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const KEY = 'isoMetadata.crs';
 
-  const OPTIONS = [{
-    key: 'http://www.opengis.net/def/crs/EPSG/0/25833',
-    label: 'EPSG:25833'
-  }, {
-    key: 'http://www.opengis.net/def/crs/EPSG/0/3857',
-    label: 'EPSG:3857'
-  }, {
-    key: 'http://www.opengis.net/def/crs/EPSG/0/4258',
-    label: 'EPSG:4258'
-  }, {
-    key: 'http://www.opengis.net/def/crs/EPSG/0/25832',
-    label: 'EPSG:25832'
-  }, {
-    key: 'http://www.opengis.net/def/crs/EPSG/0/4326',
-    label: 'EPSG:4326'
-  }, {
-    key: 'http://www.opengis.net/def/crs/EPSG/0/3035',
-    label: 'EPSG:3035'
-  }];
+  const OPTIONS = [
+    {
+      key: 'http://www.opengis.net/def/crs/EPSG/0/25833',
+      label: 'EPSG:25833'
+    },
+    {
+      key: 'http://www.opengis.net/def/crs/EPSG/0/3857',
+      label: 'EPSG:3857'
+    },
+    {
+      key: 'http://www.opengis.net/def/crs/EPSG/0/4258',
+      label: 'EPSG:4258'
+    },
+    {
+      key: 'http://www.opengis.net/def/crs/EPSG/0/25832',
+      label: 'EPSG:25832'
+    },
+    {
+      key: 'http://www.opengis.net/def/crs/EPSG/0/4326',
+      label: 'EPSG:4326'
+    },
+    {
+      key: 'http://www.opengis.net/def/crs/EPSG/0/3035',
+      label: 'EPSG:3035'
+    }
+  ];
 
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
@@ -43,7 +50,6 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
 <div class="title-field">
@@ -57,10 +63,7 @@
       {validationResult}
     />
   </Paper>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

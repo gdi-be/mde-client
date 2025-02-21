@@ -1,17 +1,13 @@
 <script lang="ts">
-  import type { Service } from "$lib/models/metadata";
-  import TextAreaInput from "$lib/components/Form/Inputs/TextAreaInput.svelte";
+  import type { Service } from '$lib/models/metadata';
+  import TextAreaInput from '$lib/components/Form/Inputs/TextAreaInput.svelte';
 
   export type ServiceTypeProps = {
-    value: Service["shortDescription"],
-    onChange: (newValue: string) => void
+    value: Service['shortDescription'];
+    onChange: (newValue: string) => void;
   };
 
-  let {
-    value,
-    onChange
-  }: ServiceTypeProps = $props();
-
+  let { value, onChange }: ServiceTypeProps = $props();
 </script>
 
 <TextAreaInput

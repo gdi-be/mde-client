@@ -1,20 +1,17 @@
 <script lang="ts">
-  import Autocomplete from "@smui-extra/autocomplete";
-  import { Text } from "@smui/list";
-  import { type Option } from "$lib/models/form";
-  import Icon from "@smui/textfield/icon";
-  import Textfield from "@smui/textfield";
-  import type { MetadataCollection } from "$lib/models/metadata";
+  import Autocomplete from '@smui-extra/autocomplete';
+  import { Text } from '@smui/list';
+  import { type Option } from '$lib/models/form';
+  import Icon from '@smui/textfield/icon';
+  import Textfield from '@smui/textfield';
+  import type { MetadataCollection } from '$lib/models/metadata';
 
   export type MetadataSearchFieldProps = {
     value: Option | undefined;
     label?: string;
   };
 
-  let {
-    value = $bindable(),
-    label = 'Suche nach Metadaten'
-  }: MetadataSearchFieldProps = $props();
+  let { value = $bindable(), label = 'Suche nach Metadaten' }: MetadataSearchFieldProps = $props();
 
   let text = $state('');
 
@@ -44,7 +41,6 @@
     const parts = l.split(regex);
     return parts;
   };
-
 </script>
 
 <Autocomplete
@@ -55,7 +51,7 @@
   selectOnExactMatch={false}
   getOptionLabel={(option: Option) => {
     if (!option) return '';
-    return option.label as string || '';
+    return (option.label as string) || '';
   }}
   {label}
 >
@@ -84,7 +80,6 @@
       <Icon class="material-icons">search</Icon>
     {/snippet}
   </Textfield>
-
 </Autocomplete>
 
 <style lang="scss">

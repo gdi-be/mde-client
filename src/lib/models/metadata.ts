@@ -1,4 +1,4 @@
-import type { Role } from "./keycloak";
+import type { Role } from './keycloak';
 
 export type JsonClientMetadata = Record<string, unknown>;
 export type JsonIsoMetadata = Record<string, unknown>;
@@ -8,7 +8,7 @@ export type IsoTheme = {
   inspireID: string;
   isoID: string;
   isoName: string;
-}
+};
 
 export type TermsOfUse = {
   id: number;
@@ -21,9 +21,9 @@ export type TermsOfUse = {
     name: string;
     url: string;
     source: string;
-  },
+  };
   note: string;
-}
+};
 
 export type Comment = {
   id: string;
@@ -31,15 +31,37 @@ export type Comment = {
   date: string;
   userId: string;
   userName: string;
-}
+};
 
-export type CRS = "EPSG:4326" | "EPSG:3857" | "EPSG:25833" | "EPSG:25832" | "EPSG:4258" | "EPSG:3035";
+export type CRS =
+  | 'EPSG:4326'
+  | 'EPSG:3857'
+  | 'EPSG:25833'
+  | 'EPSG:25832'
+  | 'EPSG:4258'
+  | 'EPSG:3035';
 
 export type ServiceType = 'WFS' | 'WMS' | 'ATOM' | 'WMTS';
 
-export type ColumnType = 'BigDecimal' | 'Date' | 'Double' | 'Float' | 'Geometry' | 'Integer' | 'Link' | 'Long' | 'Text' | 'Short' | 'Timestamp';
+export type ColumnType =
+  | 'BigDecimal'
+  | 'Date'
+  | 'Double'
+  | 'Float'
+  | 'Geometry'
+  | 'Integer'
+  | 'Link'
+  | 'Long'
+  | 'Text'
+  | 'Short'
+  | 'Timestamp';
 
-export type FilterType = 'SelectBox' | 'CatalogBox' | 'DoubleEditOrderField' | 'EditField' | 'EditOrderField';
+export type FilterType =
+  | 'SelectBox'
+  | 'CatalogBox'
+  | 'DoubleEditOrderField'
+  | 'EditField'
+  | 'EditOrderField';
 
 export type ColumnInfo = {
   name?: string;
@@ -56,24 +78,24 @@ export type ColumnInfo = {
   maxFilterValue?: string;
   minOrderValue?: string;
   maxOrderValue?: string;
-}
+};
 
 export type Source = {
   type?: string;
   content?: string;
-}
+};
 
 export type LegendImage = {
   format?: string;
   url?: string;
   width?: number;
   height?: number;
-}
+};
 
 export type ServiceDescription = {
   type?: string;
   url?: string;
-}
+};
 
 export type Service = {
   title?: string;
@@ -97,13 +119,30 @@ export type Service = {
 
 export type MetadataProfile = 'ISO' | 'INSPIRE_HARMONISED' | 'INSPIRE_IDENTIFIED';
 
-export type MaintenanceFrequency = 'continual' | 'daily' | 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'biannually' | 'annually' | 'asNeeded' | 'irregular' | 'notPlanned' | 'unknown';
+export type MaintenanceFrequency =
+  | 'continual'
+  | 'daily'
+  | 'weekly'
+  | 'fortnightly'
+  | 'monthly'
+  | 'quarterly'
+  | 'biannually'
+  | 'annually'
+  | 'asNeeded'
+  | 'irregular'
+  | 'notPlanned'
+  | 'unknown';
 
 export type MetadataType = 'CLIENT' | 'ISO' | 'TECHNICAL';
 
 export type MetadataId = `${string}-${string}-${string}-${string}-${string}`;
 
-export type CI_OnLineFunctionCode = 'download' | 'information' | 'offlineAccess' | 'order' | 'search';
+export type CI_OnLineFunctionCode =
+  | 'download'
+  | 'information'
+  | 'offlineAccess'
+  | 'order'
+  | 'search';
 
 export type PreviewMap = {
   crs: string;
@@ -112,36 +151,36 @@ export type PreviewMap = {
   maxx: number;
   maxy: number;
   url: string;
-}
+};
 
 export type ContentDescription = {
   url: string;
   description: string;
   code: CI_OnLineFunctionCode;
-}
+};
 
 export type Extent = {
   maxx: number;
   maxy: number;
   minx: number;
   miny: number;
-}
+};
 
 export type Lineage = {
   title: string;
   source: string;
-  publishDate: string
+  publishDate: string;
 };
 
 export type Keywords = {
-  "Spatial scope"?: {
+  'Spatial scope'?: {
     keyword: string;
     namespace: string;
-  }[],
+  }[];
   default: {
     keyword: string;
-  }[]
-}
+  }[];
+};
 
 export type Previews = {
   content: string;
@@ -168,4 +207,4 @@ export type MetadataCollection = {
   clientMetadata: JsonClientMetadata;
   isoMetadata: JsonIsoMetadata;
   technicalMetadata: JsonTechnialMetadata;
-}
+};

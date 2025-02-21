@@ -12,7 +12,7 @@ export const setAccessToken = (cookies: Cookies, accessToken: string): void => {
     path: '/',
     sameSite: 'strict',
     // fallback 24 hours
-    maxAge: Number.isFinite(maxAge) ? maxAge : (60 * 60 * 24),
+    maxAge: Number.isFinite(maxAge) ? maxAge : 60 * 60 * 24
   });
 };
 
@@ -26,7 +26,7 @@ export const setRefreshToken = (cookies: Cookies, refreshToken: string): void =>
     path: '/',
     sameSite: 'strict',
     // fallback 30 days
-    maxAge: Number.isFinite(maxAge) ? maxAge : (30 * 24 * 60 * 60),
+    maxAge: Number.isFinite(maxAge) ? maxAge : 30 * 24 * 60 * 60
   });
 };
 
@@ -36,7 +36,7 @@ export const getAccessToken = async (cookies: Cookies): Promise<string | undefin
 
   if (!token && !refreshToken) {
     return undefined;
-  };
+  }
 
   if (token) {
     return token;
@@ -53,7 +53,7 @@ export const getAccessToken = async (cookies: Cookies): Promise<string | undefin
 
 export const getRefreshToken = (cookies: Cookies) => {
   return cookies.get('refresh_token');
-}
+};
 
 export const parseToken = (token: string) => {
   try {
@@ -69,4 +69,4 @@ export const isTokenExpired = (token?: string) => {
   if (!token) return false;
   const parsedToken = parseToken(token);
   return Date.now() >= parsedToken.exp * 1000;
-}
+};

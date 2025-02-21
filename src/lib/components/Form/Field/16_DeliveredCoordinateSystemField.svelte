@@ -1,9 +1,9 @@
 <script lang="ts">
-  import TextInput from "$lib/components/Form/Inputs/TextInput.svelte";
-  import Paper from "@smui/paper";
-  import { getFieldConfig, getValue, persistValue } from "$lib/context/FormContext.svelte";;
-  import FieldTools from "../FieldTools.svelte";
-  import type { ValidationResult } from "../FieldsConfig";
+  import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
+  import Paper from '@smui/paper';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldTools from '../FieldTools.svelte';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const KEY = 'technicalMetadata.deliveredCrs';
 
@@ -23,7 +23,6 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
 <div class="title-field">
@@ -37,10 +36,7 @@
       {validationResult}
     />
   </Paper>
-  <FieldTools
-    key={KEY}
-    bind:checkMarkAnmiationRunning={showCheckmark}
-  />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">
