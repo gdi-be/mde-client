@@ -27,7 +27,7 @@ export type FieldConfig<T> = {
 
 const isDefined = (val: any) => val !== undefined && val !== null && val !== '';
 
-const isValidNumber = (val: string) => {
+const isValidPhoneNumber = (val: string) => {
   const numberRegex = /^[+]?[0-9\s]+$/;
   return numberRegex.test(val);
 };
@@ -100,12 +100,6 @@ export const FieldConfigs: FieldConfig<any>[] = [
           helpText: 'Bitte geben Sie ein Vorschaubild an.'
         };
       }
-      if (!val.endsWith('.png')) {
-        return {
-          valid: false,
-          helpText: 'Das Vorschaubild muss im PNG-Format sein.'
-        };
-      }
       return { valid: true };
     },
     section: 'basedata',
@@ -164,10 +158,10 @@ export const FieldConfigs: FieldConfig<any>[] = [
             index,
             subKey: 'phone'
           });
-        } else if (!isValidNumber(contact.phone!)) {
+        } else if (!isValidPhoneNumber(contact.phone!)) {
           validationResult.push({
             valid: false,
-            helpText: 'Bitte geben Sie eine gültige Telefonnummer an. (z.B. +49 123 456789)',
+            helpText: 'Bitte geben Sie eine gültige Telefonnummer an.',
             index,
             subKey: 'phone'
           });

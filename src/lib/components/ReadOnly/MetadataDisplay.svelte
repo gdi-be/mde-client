@@ -14,8 +14,6 @@
   if (metadata) {
     setFormData(metadata);
   }
-
-  $inspect(metadata);
 </script>
 
 <div class="metadata-display">

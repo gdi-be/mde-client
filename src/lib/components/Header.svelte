@@ -5,7 +5,7 @@
   let { text = 'Metadaten Editor' } = $props();
 </script>
 
-<header>
+<header class="application-header">
   <div class="left-items">
     <Breadcrumbs />
   </div>
@@ -18,7 +18,7 @@
 </header>
 
 <style>
-  header {
+  header.application-header {
     background-color: #f8f9fa;
     height: 3em;
     text-align: center;
