@@ -1,6 +1,5 @@
 <script lang="ts">
   import Textfield from '@smui/textfield';
-  import CharacterCounter from '@smui/textfield/character-counter';
   import type { ComponentProps } from 'svelte';
   import type { ValidationResult } from '../FieldsConfig';
   import HelperText from '@smui/textfield/helper-text';
@@ -40,7 +39,9 @@
         {helpText}
       </HelperText>
       {#if maxlength}
-        <CharacterCounter />
+        <div class="mdc-text-field-character-counter">
+          {value.length} / {maxlength}
+        </div>
       {/if}
     {/snippet}
   </Textfield>
@@ -48,6 +49,11 @@
 
 <style lang="scss">
   .text-area-input {
+    :global(.mdc-floating-label) {
+      background-color: white;
+      color: var(--title-color);
+    }
+
     :global(.mdc-text-field-helper-text.valid) {
       color: var(--mdc-theme-text-primary-on-background);
     }

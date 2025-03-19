@@ -1,6 +1,7 @@
 <script lang="ts">
   import { allFieldsValid } from '$lib/context/FormContext.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
+  import ApprovalPanel from './ApprovalPanel.svelte';
   import CommentsPanel from './CommentsPanel.svelte';
   import Button, { Icon, Label } from '@smui/button';
   import type { Snippet } from 'svelte';
@@ -9,16 +10,35 @@
     metadata?: MetadataCollection;
     text?: string;
     children?: Snippet;
+    commentsPanelVisible?: boolean;
+    approvalPanelVisible?: boolean;
   };
 
-  let { metadata, children }: FormFooterProps = $props();
+  let {
+    metadata,
+    children,
+    commentsPanelVisible: commentsPanelVisibleProp,
+    approvalPanelVisible: approvalPanelVisibleProp,
+  }: FormFooterProps = $props();
 
   let commentsPanelVisible = $state(false);
+  let approvalPanelVisible = $state(false);
   let submitEnabled = $derived(allFieldsValid(metadata));
 
-  const closeCommentsPanel = (event: MouseEvent | KeyboardEvent) => {
+  $effect(() => {
+    commentsPanelVisible = commentsPanelVisibleProp ?? false;
+  });
+
+  $effect(() => {
+    approvalPanelVisible = approvalPanelVisibleProp ?? false;
+  });
+
+  const closePanels = (event: MouseEvent | KeyboardEvent) => {
     if (event.target instanceof Element && !event.target.closest('.comments-panel')) {
       commentsPanelVisible = false;
+    }
+    if (event.target instanceof Element && !event.target.closest('.approval-panel')) {
+      approvalPanelVisible = false;
     }
   };
 </script>
@@ -48,18 +68,26 @@
       <Icon class="material-icons">verified</Icon>
       <Label>Freigabe</Label>
     </Button>
-    {#if commentsPanelVisible}
-      <div
-        class="mask"
-        onclick={closeCommentsPanel}
-        onkeydown={closeCommentsPanel}
-        role="button"
-        tabindex="0"
-      ></div>
-      <CommentsPanel {metadata} />
-    {/if}
   </div>
 </footer>
+
+{#if commentsPanelVisible || approvalPanelVisible}
+  <div
+    class="mask"
+    onclick={closePanels}
+    onkeydown={closePanels}
+    role="button"
+    tabindex="0"
+  ></div>
+{/if}
+
+{#if commentsPanelVisible}
+  <CommentsPanel {metadata} />
+{/if}
+
+{#if approvalPanelVisible}
+  <ApprovalPanel {metadata} />
+{/if}
 
 <style lang="scss">
   footer.form-footer {
@@ -81,19 +109,19 @@
       }
     }
 
-    .mask {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.25); /* Halbtransparent */
-      z-index: 1; /* Damit es über allem anderen liegt */
-    }
-
     .container {
       display: flex;
       padding: 0 1em;
     }
+  }
+
+  .mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 1;
   }
 </style>

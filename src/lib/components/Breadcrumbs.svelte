@@ -45,6 +45,7 @@
     display: flex;
     list-style: none;
     padding: 0;
+    margin: 0;
 
     i {
       color: gray;

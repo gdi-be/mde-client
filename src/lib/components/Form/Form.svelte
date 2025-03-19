@@ -41,6 +41,7 @@
   import Button, { Icon, Label } from '@smui/button';
   import ScrollToTopButton from './ScrollToTopButton.svelte';
   import HelpPanel from './HelpPanel.svelte';
+  import { page } from '$app/state';
 
   type FormProps = {
     metadata?: MetadataCollection;
@@ -54,6 +55,9 @@
     label: string;
     disabledCheck: (metadata?: MetadataCollection) => boolean;
   };
+
+  let commentsPanelVisible = $state(false);
+  let approvalPanelVisible = $state(false);
 
   const SECTIONS: SectionConfig[] = [
     {
@@ -101,6 +105,23 @@
     });
     await tick();
   };
+
+  $effect(() => {
+    const action = page.url.searchParams.get('action');
+
+    if (action?.includes('print')) {
+      print();
+    }
+
+    if(action?.includes('comments')) {
+      commentsPanelVisible = true;
+    }
+
+    if(action?.includes('approval')) {
+      approvalPanelVisible = true;
+    }
+
+  });
 </script>
 
 <div class="metadata-form">
@@ -176,7 +197,7 @@
     </form>
     <HelpPanel />
   </div>
-  <FormFooter {metadata}>
+  <FormFooter {metadata} {commentsPanelVisible} {approvalPanelVisible}>
     <Button
       class="previous-button"
       title="Zurück"
