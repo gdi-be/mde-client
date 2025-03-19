@@ -6,6 +6,7 @@
   import type { Token } from '$lib/models/keycloak';
   import RoleTag from './RoleTag.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
+  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
 
   const FALLBACK_IMAGE =
     'https://www.berlin.de/css/berlin_de/foxtrot/images/logo_berlin_m_srgb.svg';
@@ -42,6 +43,21 @@
       body: JSON.stringify({ userId })
     });
   };
+
+  async function onDelete(evt: MouseEvent) {
+    const targetEl = evt.currentTarget as HTMLElement;
+    evt.preventDefault();
+    popconfirm(
+      targetEl,
+      async () => {
+        // TODO:
+      },
+      {
+        text: 'Löschen ist noch nicht implementiert',
+        confirmButtonText: 'Ok'
+      }
+    );
+  }
 </script>
 
 <Card class="metadata-card">
@@ -65,6 +81,30 @@
     {/if}
     <IconButton
       toggle
+      aria-label={'Metadatensatz Löschen'}
+      title={'Metadatensatz Löschen'}
+      onclick={onDelete}
+    >
+      <Icon class="material-icons">delete</Icon>
+    </IconButton>
+    <IconButton
+      toggle
+      aria-label={'Kommentare anzeigen'}
+      title={'Kommentare anzeigen'}
+      onclick={() => goto(`/metadata/${metadata.metadataId}/?action=comments`)}
+    >
+      <Icon class="material-icons">chat</Icon>
+    </IconButton>
+    <IconButton
+      toggle
+      aria-label={'Drucken'}
+      title={'Drucken'}
+      onclick={() => goto(`/metadata/${metadata.metadataId}/readonly?action=print`)}
+    >
+      <Icon class="material-icons">print</Icon>
+    </IconButton>
+    <IconButton
+      toggle
       aria-label={assignedToMe
         ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.'
         : 'Mir zuweisen'}
@@ -72,8 +112,8 @@
       onclick={assignedToMe ? removeAssignment : assignToMe}
       pressed={assignedToMe}
     >
-      <Icon class="material-icons-filled assigned-to-me" on>assignment_ind</Icon>
-      <Icon class="material-icons">assignment_add</Icon>
+      <Icon class="material-icons-filled assigned-to-me" on>person_edit</Icon>
+      <Icon class="material-icons">person_edit</Icon>
     </IconButton>
   </ActionIcons>
 </Card>
@@ -102,6 +142,10 @@
     :global(.metadata-card-content) {
       height: 15rem;
       text-align: center;
+    }
+
+    :global(.metadata-card-actions) {
+      justify-content: space-around;
     }
 
     :global(.assigned-to-me) {

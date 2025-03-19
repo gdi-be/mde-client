@@ -41,8 +41,6 @@
       approvalPanelVisible = false;
     }
   };
-
-  $inspect(commentsPanelVisible);
 </script>
 
 <footer class="form-footer">
