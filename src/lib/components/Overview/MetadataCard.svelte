@@ -4,12 +4,11 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
-  import RoleTag from './RoleTag.svelte';
+  import RoleTag from '../RoleTag.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
 
-  const FALLBACK_IMAGE =
-    'https://www.berlin.de/css/berlin_de/foxtrot/images/logo_berlin_m_srgb.svg';
+  const FALLBACK_IMAGE = '/logo_berlin_m_srgb.svg';
 
   export type MetadataCardProps = {
     metadata: MetadataCollection;
@@ -100,12 +99,20 @@
     >
       <Icon class="material-icons">print</Icon>
     </IconButton>
+
+    <IconButton
+      aria-label={'Leseansicht'}
+      title={'Leseansicht'}
+      onclick={() => goto(`/metadata/${metadata.metadataId}/readonly`)}
+    >
+      <Icon class="material-icons">preview</Icon>
+    </IconButton>
     <IconButton
       toggle
       aria-label={assignedToMe
         ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.'
         : 'Mir zuweisen'}
-      title={assignedToMe ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.' : 'Mir zuweisen'}
+      title={assignedToMe ? 'Mir zugeordnet.\nKlicken um Zuordnung zu entfernen.' : 'Mir zuordnen'}
       onclick={assignedToMe ? removeAssignment : assignToMe}
       pressed={assignedToMe}
     >
@@ -117,11 +124,12 @@
 
 <style lang="scss">
   :global(.metadata-card) {
-    width: 15rem;
-    max-height: 288px;
+    max-width: 300px;
+    max-height: 400px;
 
     .title {
       min-height: 2.5em;
+      text-align: center;
     }
 
     .preview-image {
@@ -134,11 +142,6 @@
         opacity: 0.25;
         scale: 0.6;
       }
-    }
-
-    :global(.metadata-card-content) {
-      height: 15rem;
-      text-align: center;
     }
 
     :global(.metadata-card-actions) {

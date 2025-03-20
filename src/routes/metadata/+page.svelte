@@ -1,15 +1,18 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import MetadataCard from '$lib/components/MetadataCard.svelte';
-  import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
-  import { Icon } from '@smui/button';
-  import Card, { PrimaryAction } from '@smui/card';
+  import MetadataCard from '$lib/components/Overview/MetadataCard.svelte';
+  import Pagination from '$lib/components/Overview/Pagination.svelte';
   import type { Option } from '$lib/models/form.js';
+  import MetadataToolbar from '$lib/components/Overview/MetadataToolbar.svelte';
+  import type { PageableResponse } from '$lib/models/api.js';
+  import type { MetadataCollection } from '$lib/models/metadata.js';
 
   let { data } = $props();
 
-  const metadata = $derived(data.metadata.content);
+  // TODO: fix the handling of searching/filtering data in the backend maybe we can merge this into one smart and fast
+  // function
+  const isPageable = $derived(!Array.isArray(data.metadata));
+  const metadata = $derived(Array.isArray(data.metadata) ? data.metadata : data.metadata.content);
   const pageable = $derived(data.metadata);
 
   let searchValue = $state<Option>();
@@ -22,69 +25,35 @@
 </script>
 
 <div class="metadata-overview">
-  <div class="metadata-toolbar">
-    <MetadataSearchField bind:value={searchValue} />
-  </div>
+  <MetadataToolbar />
   <div class="metadata-list">
-    <Card class="create-card">
-      <PrimaryAction
-        title="Neuerfassung"
-        class="create-card-content"
-        onclick={() => goto('/metadata/create')}
-      >
-        <Icon class="material-icons">add</Icon>
-      </PrimaryAction>
-    </Card>
     {#each metadata as metadataEntry}
       <MetadataCard metadata={metadataEntry} />
     {/each}
   </div>
-  <div class="pagination">
-    <Pagination pagingInfo={pageable} />
-  </div>
+  {#if isPageable}
+    <Pagination pagingInfo={pageable as PageableResponse<MetadataCollection>} />
+  {/if}
 </div>
 
 <style lang="scss">
   .metadata-overview {
     height: 100%;
+    width: min(100%, 1200px);
+    justify-self: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     overflow: hidden;
-
-    .metadata-toolbar,
-    .pagination {
-      flex: 0 0 auto;
-    }
-
-    .metadata-toolbar {
-      :global(.metadata-search-field .mdc-text-field) {
-        width: 600px;
-      }
-    }
 
     .metadata-list {
       flex: 1;
       padding: 1em;
-      display: inline-grid;
-      grid-template-columns: repeat(4, 1fr);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      justify-content: space-evenly;
       gap: 1em;
       overflow-y: auto;
-
-      :global(.create-card) {
-        height: 288px;
-        min-width: 240px;
-        position: relative;
-      }
-
-      :global(.create-card .create-card-content) {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3em;
-      }
+      overflow-x: hidden;
     }
   }
 </style>
