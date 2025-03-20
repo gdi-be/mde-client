@@ -80,7 +80,6 @@
       <div style="flex: 1;"></div>
     {/if}
     <IconButton
-      toggle
       aria-label={'Metadatensatz Löschen'}
       title={'Metadatensatz Löschen'}
       onclick={onDelete}
@@ -88,7 +87,6 @@
       <Icon class="material-icons">delete</Icon>
     </IconButton>
     <IconButton
-      toggle
       aria-label={'Kommentare anzeigen'}
       title={'Kommentare anzeigen'}
       onclick={() => goto(`/metadata/${metadata.metadataId}/?action=comments`)}
@@ -96,7 +94,6 @@
       <Icon class="material-icons">chat</Icon>
     </IconButton>
     <IconButton
-      toggle
       aria-label={'Drucken'}
       title={'Drucken'}
       onclick={() => goto(`/metadata/${metadata.metadataId}/readonly?action=print`)}
