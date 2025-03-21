@@ -30,10 +30,19 @@
     margin: 1rem;
     border: 1px solid #e9ecef;
     border-radius: var(--mdc-shape-medium, 4px);
+    gap: 2rem;
+
+    .search-container {
+      flex: 1;
+    }
+
+    .tagfield-container {
+      flex: 2;
+    }
 
     :global(.text-filter-field),
     :global(.status-filter-field) {
-      width: 400px;
+      width: 100%;
     }
   }
 

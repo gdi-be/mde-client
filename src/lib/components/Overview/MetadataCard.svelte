@@ -7,6 +7,8 @@
   import RoleTag from '../RoleTag.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { Set } from '@smui/chips';
+  import StatusChip from '$lib/components/StatusChip.svelte';
 
   const FALLBACK_IMAGE = '/logo_berlin_m_srgb.svg';
 
@@ -18,6 +20,24 @@
   const { sub: userId } = getContext<Token>('user_token');
   const assignedToMe = $derived(metadata.responsibleUserIds?.includes(userId));
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
+
+  const statuses = $derived.by(() => {
+    const chips = [];
+    if (assignedToMe) {
+      chips.push('ASSIGNED_TO_ME');
+    }
+    // TODO
+    // if (assignedToMe) {
+    //   chips.push('ASSIGNED_TO_TEAM');
+    // }
+    if (metadata.responsibleRole) {
+      chips.push('ROLE_' + metadata.responsibleRole);
+    }
+    if (metadata.isoMetadata.valid) {
+      chips.push('READY_FOR_RELEASE');
+    }
+    return chips;
+  });
 
   const onclick = () => {
     goto(`/metadata/${metadata.metadataId}`);
@@ -62,7 +82,7 @@
 <Card class="metadata-card">
   <PrimaryAction class="metadata-card-content" {onclick} padded title={metadata.title}>
     <span class="title">{metadata.title}</span>
-    <Media aspectRatio="square">
+    <Media aspectRatio="16x9">
       <MediaContent>
         <img
           class={['preview-image', previewNotAvailable && 'not-available']}
@@ -73,6 +93,11 @@
       </MediaContent>
     </Media>
   </PrimaryAction>
+  <Set class="status-chipset" chips={statuses} nonInteractive>
+    {#snippet chip(chip)}
+      <StatusChip chip={chip} colored={true} mini/>
+    {/snippet}
+  </Set>
   <ActionIcons class="metadata-card-actions">
     {#if metadata.responsibleRole}
       <RoleTag role={metadata.responsibleRole} />
@@ -125,7 +150,7 @@
 <style lang="scss">
   :global(.metadata-card) {
     max-width: 300px;
-    max-height: 400px;
+    max-height: 300px;
 
     .title {
       min-height: 2.5em;
@@ -144,7 +169,12 @@
       }
     }
 
+    :global(.status-chipset) {
+      flex: 1 1 auto;
+    }
+
     :global(.metadata-card-actions) {
+      flex-grow: 0;
       justify-content: space-around;
     }
 

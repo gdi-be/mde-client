@@ -47,6 +47,13 @@
   --primary-90: hsl(204, 56%, 90%);
 
   --title-color: var(--primary-10);
+
+  --assigned-to-me-color: hsl(45, 100%, 70%);
+  --assigned-to-team-color: hsl(45, 100%, 80%);
+  --data-owner-color: hsl(10, 50%, 80%);
+  --editor-color: hsl(300, 40%, 70%);
+  --quality-assurance-color: hsl(200, 40%, 70%);
+  --ready-for-release-color: hsl(100, 40%, 70%);
 }
 
 html,
