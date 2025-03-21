@@ -3,16 +3,26 @@
   import { getContext } from "svelte";
   import type { Token } from "$lib/models/keycloak";
   import FormField from "@smui/form-field";
-  import { Icon } from "@smui/button";
-  import { getAvailableStatuses, getStatusesState } from "$lib/context/StatusesContest.svelte";
+  import { getAvailableStatuses } from "$lib/context/StatusesContest.svelte";
   import StatusChip from "../StatusChip.svelte";
+  import { page } from "$app/state";
+  import { goto } from "$app/navigation";
 
   const token = getContext<Token>('user_token');
-
-  // TODO: instead of binding to context the selecte statuses should be peristed in the URL (searchParams)
-  let statusesState = $derived(getStatusesState().state);
-
   const availableStatuses = $derived(getAvailableStatuses(token));
+  let selected = $state(page.url.searchParams.get('statusfilter')?.split(',') || []);
+
+  let onSMUIChipInteraction = () => {
+    const url = new URL(page.url);
+    if (selected.length > 0) {
+      url.searchParams.set('statusfilter', selected.join(','));
+    } else {
+      url.searchParams.delete('statusfilter');
+    }
+    goto(url, {
+      keepFocus: true
+    });
+  }
 </script>
 
 <div class="status-filter-field">
@@ -21,23 +31,18 @@
       class="status-chipset"
       chips={availableStatuses.map(status => status.key)}
       filter
-      bind:selected={statusesState.selectedStatuses}
+      onSMUIChipInteraction={onSMUIChipInteraction}
+      bind:selected
     >
       {#snippet chip(chip)}
         <StatusChip
           chip={chip}
-          colored={statusesState.selectedStatuses.includes(chip)}
+          colored={selected.includes(chip)}
         />
       {/snippet}
     </Set>
     {#snippet label()}
-      <div
-        class="label"
-        title="Erlaubt die Filterung der Metadaten nach ihrem Status. Klicken Sie auf einen Status, um die Metadaten nach diesem Status zu filtern."
-      >
-        Statusfilter
-        <Icon class="material-icons">help</Icon>
-      </div>
+      <div class="label">Statusfilter:</div>
     {/snippet}
   </FormField>
 </div>

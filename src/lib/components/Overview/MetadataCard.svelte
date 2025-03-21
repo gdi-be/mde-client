@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import Card, { ActionIcons, Media, MediaContent, PrimaryAction } from '@smui/card';
   import IconButton, { Icon } from '@smui/icon-button';
   import { getContext } from 'svelte';
@@ -51,6 +51,7 @@
       },
       body: JSON.stringify({ userId })
     });
+    invalidateAll();
   };
 
   const removeAssignment = async () => {
@@ -61,6 +62,7 @@
       },
       body: JSON.stringify({ userId })
     });
+    invalidateAll();
   };
 
   async function onDelete(evt: MouseEvent) {
@@ -134,6 +136,7 @@
     </IconButton>
     <IconButton
       toggle
+      class="assign-button"
       aria-label={assignedToMe
         ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.'
         : 'Mir zuweisen'}
@@ -141,8 +144,8 @@
       onclick={assignedToMe ? removeAssignment : assignToMe}
       pressed={assignedToMe}
     >
-      <Icon class="material-icons-filled assigned-to-me" on>person_edit</Icon>
-      <Icon class="material-icons">person_edit</Icon>
+      <Icon class="material-icons-filled assigned-to-me" on>person_remove</Icon>
+      <Icon class="material-icons-filled">person_check</Icon>
     </IconButton>
   </ActionIcons>
 </Card>
@@ -179,7 +182,7 @@
     }
 
     :global(.assigned-to-me) {
-      color: var(--mdc-theme-primary);
+      color: var(--error-color);
     }
   }
 </style>

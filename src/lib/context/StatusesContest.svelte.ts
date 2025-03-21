@@ -7,7 +7,6 @@ export const STATUSES_CONTEXT = Symbol('statuses');
 
 export type StatusesState = {
   statuses: Option[];
-  selectedStatuses: string[];
 };
 
 const defaultState = {
@@ -29,8 +28,7 @@ const defaultState = {
   },{
     key: 'ROLE_QualityAssurance',
     label: 'Qualitätssicherung'
-  }],
-  selectedStatuses: []
+  }]
 };
 
 const statutesState = $state<{ state: StatusesState }>({ state: defaultState });

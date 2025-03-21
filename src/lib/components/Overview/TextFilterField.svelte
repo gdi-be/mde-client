@@ -7,8 +7,13 @@
   let value = $state(page.url.searchParams.get('query') || '');
 
   let onchange = (e: Event) => {
+    const url = new URL(page.url);
     const value = (e.target as HTMLInputElement).value;
-    const url = value.length > 2 ? `/metadata?query=${value}` : '/metadata';
+    if (value.length > 2) {
+      url.searchParams.set('query', value);
+    } else {
+      url.searchParams.delete('query');
+    }
     goto(url, {
       keepFocus: true
     });
