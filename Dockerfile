@@ -16,7 +16,6 @@ FROM oven/bun:1.1.36-alpine
 WORKDIR /app
 
 COPY --from=builder /app/build ./build
-COPY --from=builder /app/static ./static
 COPY --from=builder /app/node_modules ./node_modules
 
 COPY .env.example .env
