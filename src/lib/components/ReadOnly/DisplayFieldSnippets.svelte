@@ -194,7 +194,7 @@
   {value.join(', ')}
 {/snippet}
 
-<style lang="less">
+<style lang="scss">
   .contacts {
     display: flex;
     flex-direction: column;
