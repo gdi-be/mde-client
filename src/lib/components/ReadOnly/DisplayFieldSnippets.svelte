@@ -63,7 +63,7 @@
 {/snippet}
 
 {#snippet isoMetadataKeywords(value: Keywords)}
-  {value.default.map(({keyword}) => keyword).join(', ')}
+  {value?.default?.map(({keyword}) => keyword)?.join(', ')}
 {/snippet}
 
 {#snippet isoMetadataPreview(value: string)}

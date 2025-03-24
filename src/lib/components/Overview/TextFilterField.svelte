@@ -28,7 +28,7 @@
   onkeyup={onchange}
 >
   {#snippet helper()}
-    <HelperText>Titel und Beschreibung durchsuchen</HelperText>
+    <HelperText>Titel durchsuchen</HelperText>
   {/snippet}
 </Textfield>
 

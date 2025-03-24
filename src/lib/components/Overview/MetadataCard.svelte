@@ -4,7 +4,6 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
-  import RoleTag from '../RoleTag.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { Set } from '@smui/chips';
@@ -19,6 +18,7 @@
 
   const { sub: userId } = getContext<Token>('user_token');
   const assignedToMe = $derived(metadata.assignedUserId === userId);
+  const assignedToSomeoneElse = $derived((metadata.assignedUserId && metadata.assignedUserId !== userId) || false);
   const isTeamMember = $derived(metadata.teamMemberIds?.includes(userId));
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
 
@@ -129,19 +129,22 @@
     >
       <Icon class="material-icons">preview</Icon>
     </IconButton>
-    <IconButton
-      toggle
-      class="assign-button"
-      aria-label={assignedToMe
-        ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.'
-        : 'Mir zuweisen'}
-      title={assignedToMe ? 'Mir zugeordnet.\nKlicken um Zuordnung zu entfernen.' : 'Mir zuordnen'}
-      onclick={assignedToMe ? removeAssignment : assignToMe}
-      pressed={assignedToMe}
-    >
-      <Icon class="material-icons-filled assigned-to-me" on>person_remove</Icon>
-      <Icon class="material-icons-filled">person_check</Icon>
-    </IconButton>
+    {#if !assignedToSomeoneElse}
+      <IconButton
+        toggle
+        class="assign-button"
+        disabled={assignedToSomeoneElse}
+        aria-label={assignedToMe
+          ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.'
+          : 'Mir zuweisen'}
+        title={assignedToMe ? 'Mir zugeordnet.\nKlicken um Zuordnung zu entfernen.' : 'Mir zuordnen'}
+        onclick={assignedToMe ? removeAssignment : assignToMe}
+        pressed={assignedToMe}
+      >
+        <Icon class="material-icons-filled assigned-to-me" on>person_remove</Icon>
+        <Icon class="material-icons-filled">person_check</Icon>
+      </IconButton>
+    {/if}
   </ActionIcons>
 </Card>
 
