@@ -18,7 +18,8 @@
   let { metadata }: MetadataCardProps = $props();
 
   const { sub: userId } = getContext<Token>('user_token');
-  const assignedToMe = $derived(metadata.responsibleUserIds?.includes(userId));
+  const assignedToMe = $derived(metadata.assignedUserId === userId);
+  const isTeamMember = $derived(metadata.teamMemberIds?.includes(userId));
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
 
   const statuses = $derived.by(() => {
@@ -26,10 +27,9 @@
     if (assignedToMe) {
       chips.push('ASSIGNED_TO_ME');
     }
-    // TODO
-    // if (assignedToMe) {
-    //   chips.push('ASSIGNED_TO_TEAM');
-    // }
+    if (isTeamMember) {
+      chips.push('TEAM_MEMBER');
+    }
     if (metadata.responsibleRole) {
       chips.push('ROLE_' + metadata.responsibleRole);
     }
@@ -101,10 +101,6 @@
     {/snippet}
   </Set>
   <ActionIcons class="metadata-card-actions">
-    {#if metadata.responsibleRole}
-      <RoleTag role={metadata.responsibleRole} />
-      <div style="flex: 1;"></div>
-    {/if}
     <IconButton
       aria-label={'Metadatensatz Löschen'}
       title={'Metadatensatz Löschen'}
@@ -126,7 +122,6 @@
     >
       <Icon class="material-icons">print</Icon>
     </IconButton>
-
     <IconButton
       aria-label={'Leseansicht'}
       title={'Leseansicht'}

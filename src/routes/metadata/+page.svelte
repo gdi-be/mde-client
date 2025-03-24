@@ -1,19 +1,17 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import MetadataCard from '$lib/components/Overview/MetadataCard.svelte';
-  import Pagination from '$lib/components/Overview/Pagination.svelte';
   import type { Option } from '$lib/models/form.js';
   import MetadataToolbar from '$lib/components/Overview/MetadataToolbar.svelte';
-  import type { PageableResponse } from '$lib/models/api.js';
+  import type { SearchResponse } from '$lib/models/api.js';
   import type { MetadataCollection } from '$lib/models/metadata.js';
+  import SearchResultPagination from '$lib/components/Overview/SearchPagination.svelte';
 
   let { data } = $props();
 
-  // TODO: fix the handling of searching/filtering data in the backend maybe we can merge this into one smart and fast
-  // function
-  const isPageable = $derived(!Array.isArray(data.metadata));
-  const metadata = $derived(Array.isArray(data.metadata) ? data.metadata : data.metadata.content);
-  const pageable = $derived(data.metadata);
+  const searchResponse = $derived<SearchResponse<MetadataCollection>>(data.searchResponse);
+  const metadata = $derived<MetadataCollection[]>(searchResponse.results);
+  const totalHitCount = $derived<number>(searchResponse.totalHitCount);
 
   let searchValue = $state<Option>();
 
@@ -26,13 +24,19 @@
 
 <div class="metadata-overview">
   <MetadataToolbar />
-  <div class="metadata-list">
-    {#each metadata as metadataEntry}
-      <MetadataCard metadata={metadataEntry} />
-    {/each}
-  </div>
-  {#if isPageable}
-    <Pagination pagingInfo={pageable as PageableResponse<MetadataCollection>} />
+  {#if metadata.length === 0}
+    <div class="no-data">
+      <p>
+        Keine Metadaten gefunden. Bitte Filter anpassen.
+      </p>
+    </div>
+  {:else}
+    <div class="metadata-list">
+      {#each metadata as metadataEntry}
+        <MetadataCard metadata={metadataEntry} />
+      {/each}
+    </div>
+    <SearchResultPagination totalHitCount={totalHitCount} />
   {/if}
 </div>
 
@@ -45,12 +49,18 @@
     flex-direction: column;
     overflow: hidden;
 
+    .no-data {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     .metadata-list {
       flex: 1;
       padding: 1em;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      justify-content: space-evenly;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 1em;
       overflow-y: auto;
       overflow-x: hidden;

@@ -1,3 +1,18 @@
+type SearchConfig = {
+  searchTerm: string;
+  isAssignedToMe?: boolean;
+  isTeamMember?: boolean;
+  isValid?: boolean;
+  assignedRoles?: Role[];
+  offset?: number;
+  limit?: number;
+}
+
+type SearchResponse<T> = {
+  results: T[];
+  totalHitCount: number;
+}
+
 type PageableProps = {
   page: number;
   size: number;

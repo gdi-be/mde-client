@@ -38,7 +38,7 @@
   :global(.status-chip.colored.assigned_to_me) {
     background-color: var(--assigned-to-me-color);
   }
-  :global(.status-chip.colored.assigned_to_team) {
+  :global(.status-chip.colored.team_member) {
     background-color: var(--assigned-to-team-color);
   }
   :global(.status-chip.colored.ready_for_release) {

@@ -14,7 +14,7 @@ const defaultState = {
     key: 'ASSIGNED_TO_ME',
     label: 'Mir zugewiesen'
   }, {
-    key: 'ASSIGNED_TO_TEAM',
+    key: 'TEAM_MEMBER',
     label: 'Ich bin im Team'
   }, {
     key: 'READY_FOR_RELEASE',

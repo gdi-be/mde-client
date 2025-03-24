@@ -6,7 +6,7 @@ import type {
   MetadataId,
   MetadataType
 } from '$lib/models/metadata';
-import type { PageableProps, PageableResponse } from '$lib/models/api';
+import type { PageableProps, PageableResponse, SearchConfig, SearchResponse } from '$lib/models/api';
 import type { Role } from '$lib/models/keycloak';
 
 const defaultPage: PageableProps = {
@@ -95,29 +95,22 @@ export const getMetadataCollectionByMetadataId = async (
 
 export const searchForMetadata = async (
   token: string,
-  searchTerm: string,
-  pagingOpts = defaultPage
-): Promise<MetadataCollection[]> => {
+  searchConfig: SearchConfig
+): Promise<SearchResponse<MetadataCollection>> => {
   if (!token) {
     log.error('No token provided.');
     return Promise.reject(new Error('No token provided.'));
   }
 
   const url: URL = new URL(`${env.BACKEND_URL}/metadata/search`);
-  url.searchParams.append('searchTerm', searchTerm);
-
-  if (pagingOpts) {
-    const offset = pagingOpts.page * pagingOpts.size;
-    const limit = pagingOpts.size;
-    url.searchParams.append('offset', offset.toString());
-    url.searchParams.append('limit', limit.toString());
-  }
 
   const response = await fetch(url, {
+    method: 'POST',
     headers: new Headers({
       Authorization: `Bearer ${token}`,
-      accept: 'application/json'
-    })
+      'content-type': 'application/json'
+    }),
+    body: JSON.stringify(searchConfig)
   });
 
   if (!response.ok) {
