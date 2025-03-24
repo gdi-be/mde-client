@@ -201,7 +201,8 @@ export type Contacts = Contact[];
 export type MetadataCollection = {
   id?: string;
   metadataId?: MetadataId;
-  responsibleUserIds?: string[];
+  teamMemberIds?: string[];
+  assignedUserId?: string;
   responsibleRole?: Role;
   title?: string;
   clientMetadata: JsonClientMetadata;

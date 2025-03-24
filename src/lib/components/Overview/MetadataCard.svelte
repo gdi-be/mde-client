@@ -1,15 +1,16 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import Card, { ActionIcons, Media, MediaContent, PrimaryAction } from '@smui/card';
   import IconButton, { Icon } from '@smui/icon-button';
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
-  import RoleTag from './RoleTag.svelte';
+  import RoleTag from '../RoleTag.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { Set } from '@smui/chips';
+  import StatusChip from '$lib/components/StatusChip.svelte';
 
-  const FALLBACK_IMAGE =
-    'https://www.berlin.de/css/berlin_de/foxtrot/images/logo_berlin_m_srgb.svg';
+  const FALLBACK_IMAGE = '/logo_berlin_m_srgb.svg';
 
   export type MetadataCardProps = {
     metadata: MetadataCollection;
@@ -17,8 +18,26 @@
   let { metadata }: MetadataCardProps = $props();
 
   const { sub: userId } = getContext<Token>('user_token');
-  const assignedToMe = $derived(metadata.responsibleUserIds?.includes(userId));
+  const assignedToMe = $derived(metadata.assignedUserId === userId);
+  const isTeamMember = $derived(metadata.teamMemberIds?.includes(userId));
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
+
+  const statuses = $derived.by(() => {
+    const chips = [];
+    if (assignedToMe) {
+      chips.push('ASSIGNED_TO_ME');
+    }
+    if (isTeamMember) {
+      chips.push('TEAM_MEMBER');
+    }
+    if (metadata.responsibleRole) {
+      chips.push('ROLE_' + metadata.responsibleRole);
+    }
+    if (metadata.isoMetadata.valid) {
+      chips.push('READY_FOR_RELEASE');
+    }
+    return chips;
+  });
 
   const onclick = () => {
     goto(`/metadata/${metadata.metadataId}`);
@@ -32,6 +51,7 @@
       },
       body: JSON.stringify({ userId })
     });
+    invalidateAll();
   };
 
   const removeAssignment = async () => {
@@ -42,6 +62,7 @@
       },
       body: JSON.stringify({ userId })
     });
+    invalidateAll();
   };
 
   async function onDelete(evt: MouseEvent) {
@@ -63,7 +84,7 @@
 <Card class="metadata-card">
   <PrimaryAction class="metadata-card-content" {onclick} padded title={metadata.title}>
     <span class="title">{metadata.title}</span>
-    <Media aspectRatio="square">
+    <Media aspectRatio="16x9">
       <MediaContent>
         <img
           class={['preview-image', previewNotAvailable && 'not-available']}
@@ -74,13 +95,13 @@
       </MediaContent>
     </Media>
   </PrimaryAction>
+  <Set class="status-chipset" chips={statuses} nonInteractive>
+    {#snippet chip(chip)}
+      <StatusChip chip={chip} colored={true} mini/>
+    {/snippet}
+  </Set>
   <ActionIcons class="metadata-card-actions">
-    {#if metadata.responsibleRole}
-      <RoleTag role={metadata.responsibleRole} />
-      <div style="flex: 1;"></div>
-    {/if}
     <IconButton
-      toggle
       aria-label={'Metadatensatz Löschen'}
       title={'Metadatensatz Löschen'}
       onclick={onDelete}
@@ -88,7 +109,6 @@
       <Icon class="material-icons">delete</Icon>
     </IconButton>
     <IconButton
-      toggle
       aria-label={'Kommentare anzeigen'}
       title={'Kommentare anzeigen'}
       onclick={() => goto(`/metadata/${metadata.metadataId}/?action=comments`)}
@@ -96,7 +116,6 @@
       <Icon class="material-icons">chat</Icon>
     </IconButton>
     <IconButton
-      toggle
       aria-label={'Drucken'}
       title={'Drucken'}
       onclick={() => goto(`/metadata/${metadata.metadataId}/readonly?action=print`)}
@@ -104,27 +123,36 @@
       <Icon class="material-icons">print</Icon>
     </IconButton>
     <IconButton
+      aria-label={'Leseansicht'}
+      title={'Leseansicht'}
+      onclick={() => goto(`/metadata/${metadata.metadataId}/readonly`)}
+    >
+      <Icon class="material-icons">preview</Icon>
+    </IconButton>
+    <IconButton
       toggle
+      class="assign-button"
       aria-label={assignedToMe
         ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.'
         : 'Mir zuweisen'}
-      title={assignedToMe ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.' : 'Mir zuweisen'}
+      title={assignedToMe ? 'Mir zugeordnet.\nKlicken um Zuordnung zu entfernen.' : 'Mir zuordnen'}
       onclick={assignedToMe ? removeAssignment : assignToMe}
       pressed={assignedToMe}
     >
-      <Icon class="material-icons-filled assigned-to-me" on>person_edit</Icon>
-      <Icon class="material-icons">person_edit</Icon>
+      <Icon class="material-icons-filled assigned-to-me" on>person_remove</Icon>
+      <Icon class="material-icons-filled">person_check</Icon>
     </IconButton>
   </ActionIcons>
 </Card>
 
 <style lang="scss">
   :global(.metadata-card) {
-    width: 15rem;
-    max-height: 288px;
+    max-width: 300px;
+    max-height: 300px;
 
     .title {
       min-height: 2.5em;
+      text-align: center;
     }
 
     .preview-image {
@@ -139,17 +167,17 @@
       }
     }
 
-    :global(.metadata-card-content) {
-      height: 15rem;
-      text-align: center;
+    :global(.status-chipset) {
+      flex: 1 1 auto;
     }
 
     :global(.metadata-card-actions) {
+      flex-grow: 0;
       justify-content: space-around;
     }
 
     :global(.assigned-to-me) {
-      color: var(--mdc-theme-primary);
+      color: var(--error-color);
     }
   }
 </style>

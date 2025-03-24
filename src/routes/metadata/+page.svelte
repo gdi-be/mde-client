@@ -1,16 +1,17 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import MetadataCard from '$lib/components/MetadataCard.svelte';
-  import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
-  import Pagination from '$lib/components/Pagination.svelte';
-  import { Icon } from '@smui/button';
-  import Card, { PrimaryAction } from '@smui/card';
+  import MetadataCard from '$lib/components/Overview/MetadataCard.svelte';
   import type { Option } from '$lib/models/form.js';
+  import MetadataToolbar from '$lib/components/Overview/MetadataToolbar.svelte';
+  import type { SearchResponse } from '$lib/models/api.js';
+  import type { MetadataCollection } from '$lib/models/metadata.js';
+  import SearchResultPagination from '$lib/components/Overview/SearchPagination.svelte';
 
   let { data } = $props();
 
-  const metadata = $derived(data.metadata.content);
-  const pageable = $derived(data.metadata);
+  const searchResponse = $derived<SearchResponse<MetadataCollection>>(data.searchResponse);
+  const metadata = $derived<MetadataCollection[]>(searchResponse.results);
+  const totalHitCount = $derived<number>(searchResponse.totalHitCount);
 
   let searchValue = $state<Option>();
 
@@ -22,69 +23,47 @@
 </script>
 
 <div class="metadata-overview">
-  <div class="metadata-toolbar">
-    <MetadataSearchField bind:value={searchValue} />
-  </div>
-  <div class="metadata-list">
-    <Card class="create-card">
-      <PrimaryAction
-        title="Neuerfassung"
-        class="create-card-content"
-        onclick={() => goto('/metadata/create')}
-      >
-        <Icon class="material-icons">add</Icon>
-      </PrimaryAction>
-    </Card>
-    {#each metadata as metadataEntry}
-      <MetadataCard metadata={metadataEntry} />
-    {/each}
-  </div>
-  <div class="pagination">
-    <Pagination pagingInfo={pageable} />
-  </div>
+  <MetadataToolbar />
+  {#if metadata.length === 0}
+    <div class="no-data">
+      <p>
+        Keine Metadaten gefunden. Bitte Filter anpassen.
+      </p>
+    </div>
+  {:else}
+    <div class="metadata-list">
+      {#each metadata as metadataEntry}
+        <MetadataCard metadata={metadataEntry} />
+      {/each}
+    </div>
+    <SearchResultPagination totalHitCount={totalHitCount} />
+  {/if}
 </div>
 
 <style lang="scss">
   .metadata-overview {
     height: 100%;
+    width: min(100%, 1200px);
+    justify-self: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     overflow: hidden;
 
-    .metadata-toolbar,
-    .pagination {
-      flex: 0 0 auto;
-    }
-
-    .metadata-toolbar {
-      :global(.metadata-search-field .mdc-text-field) {
-        width: 600px;
-      }
+    .no-data {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .metadata-list {
       flex: 1;
       padding: 1em;
-      display: inline-grid;
-      grid-template-columns: repeat(4, 1fr);
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 1em;
       overflow-y: auto;
-
-      :global(.create-card) {
-        height: 288px;
-        min-width: 240px;
-        position: relative;
-      }
-
-      :global(.create-card .create-card-content) {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3em;
-      }
+      overflow-x: hidden;
     }
   }
 </style>

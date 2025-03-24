@@ -176,6 +176,7 @@ export function getLastUpdateValue(published: string, maintenanceFrequency: Main
     default:
       return undefined;
   }
+
   return updateDate;
 }
 

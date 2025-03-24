@@ -5,9 +5,9 @@
   import Button from '@smui/button';
   import Textfield from '@smui/textfield';
   import log from 'loggisch';
-  import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
   import type { Option } from '$lib/models/form';
   import Card, { Content } from '@smui/card';
+  import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
 
   let title = $state<string>('');
   let metadataProfile = $state<MetadataProfile>('ISO');
