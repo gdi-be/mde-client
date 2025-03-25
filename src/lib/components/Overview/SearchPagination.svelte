@@ -12,7 +12,7 @@
   const currentUrl = $derived(page.url);
 
   const maxPage = $derived(Math.ceil(totalHitCount / 10));
-  const currentPage = $derived(Number(currentUrl.searchParams.get('page') || 0));
+  const currentPage = $derived(Number(currentUrl.searchParams.get('page') || 1));
   const hasPrevious = $derived(currentPage > 1);
   const hasNext = $derived(maxPage > currentPage);
   const pageSize = $derived(currentUrl.searchParams.get('size')?.toString() || '10');
