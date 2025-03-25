@@ -3,15 +3,12 @@
   import MetadataCard from '$lib/components/Overview/MetadataCard.svelte';
   import type { Option } from '$lib/models/form.js';
   import MetadataToolbar from '$lib/components/Overview/MetadataToolbar.svelte';
-  import type { SearchResponse } from '$lib/models/api.js';
-  import type { MetadataCollection } from '$lib/models/metadata.js';
-  import SearchResultPagination from '$lib/components/Overview/SearchPagination.svelte';
+  import Pagination from '$lib/components/Overview/Pagination.svelte';
 
   let { data } = $props();
 
-  const searchResponse = $derived<SearchResponse<MetadataCollection>>(data.searchResponse);
-  const metadata = $derived<MetadataCollection[]>(searchResponse.results);
-  const totalHitCount = $derived<number>(searchResponse.totalHitCount);
+  const metadata = $derived(data.queryResponse.content);
+  const pageable = $derived(data.queryResponse);
 
   let searchValue = $state<Option>();
 
@@ -32,11 +29,11 @@
     </div>
   {:else}
     <div class="metadata-list">
-      {#each metadata as metadataEntry}
+      {#each metadata as metadataEntry (metadataEntry.id)}
         <MetadataCard metadata={metadataEntry} />
       {/each}
     </div>
-    <SearchResultPagination totalHitCount={totalHitCount} />
+    <Pagination pagingInfo={pageable} />
   {/if}
 </div>
 

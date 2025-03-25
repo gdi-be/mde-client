@@ -1,25 +1,14 @@
-type SearchConfig = {
+type QueryConfig = {
   searchTerm: string;
   isAssignedToMe?: boolean;
   isTeamMember?: boolean;
   isValid?: boolean;
   assignedRoles?: Role[];
-  offset?: number;
-  limit?: number;
-}
-
-type SearchResponse<T> = {
-  results: T[];
-  totalHitCount: number;
 }
 
 type PageableProps = {
   page: number;
   size: number;
-  sort?: {
-    field: string;
-    direction: string;
-  }[];
 };
 
 export type PageableResponse<T> = {

@@ -6,18 +6,13 @@ import type {
   MetadataId,
   MetadataType
 } from '$lib/models/metadata';
-import type { PageableProps, PageableResponse, SearchConfig, SearchResponse } from '$lib/models/api';
+
+import type { PageableProps, PageableResponse, QueryConfig } from '$lib/models/api';
 import type { Role } from '$lib/models/keycloak';
 
 const defaultPage: PageableProps = {
   page: 0,
-  size: 10,
-  sort: [
-    {
-      field: 'title',
-      direction: 'asc'
-    }
-  ]
+  size: 10
 };
 
 /**
@@ -44,11 +39,6 @@ export const getAll = async (
   if (pagingOpts) {
     url.searchParams.append('page', pagingOpts.page.toString());
     url.searchParams.append('size', pagingOpts.size.toString());
-    if (pagingOpts.sort) {
-      pagingOpts.sort.forEach((sort) => {
-        url.searchParams.append('sort', `${sort.field},${sort.direction}`);
-      });
-    }
   }
 
   const response = await fetch(url, {
@@ -95,14 +85,54 @@ export const getMetadataCollectionByMetadataId = async (
 
 export const searchForMetadata = async (
   token: string,
-  searchConfig: SearchConfig
-): Promise<SearchResponse<MetadataCollection>> => {
+  searchTerm: string,
+  pagingOpts = defaultPage
+): Promise<MetadataCollection[]> => {
   if (!token) {
     log.error('No token provided.');
     return Promise.reject(new Error('No token provided.'));
   }
 
   const url: URL = new URL(`${env.BACKEND_URL}/metadata/search`);
+  url.searchParams.append('searchTerm', searchTerm);
+
+  if (pagingOpts) {
+    const offset = pagingOpts.page * pagingOpts.size;
+    const limit = pagingOpts.size;
+    url.searchParams.append('offset', offset.toString());
+    url.searchParams.append('limit', limit.toString());
+  }
+
+  const response = await fetch(url, {
+    headers: new Headers({
+      Authorization: `Bearer ${token}`,
+      accept: 'application/json'
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const queryMetadata = async (
+  token: string,
+  queryConfig: QueryConfig,
+  pagingOpts = defaultPage
+): Promise<PageableResponse<MetadataCollection>> => {
+  if (!token) {
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
+  }
+
+  const url: URL = new URL(`${env.BACKEND_URL}/metadata/query`);
+
+  if (pagingOpts) {
+    url.searchParams.append('page', pagingOpts.page.toString());
+    url.searchParams.append('size', pagingOpts.size.toString());
+  }
 
   const response = await fetch(url, {
     method: 'POST',
@@ -110,15 +140,13 @@ export const searchForMetadata = async (
       Authorization: `Bearer ${token}`,
       'content-type': 'application/json'
     }),
-    body: JSON.stringify(searchConfig)
+    body: JSON.stringify(queryConfig)
   });
 
   if (!response.ok) {
     throw new Error(`HTTP error status: ${response.status}`);
   }
-
   const data = await response.json();
-
   return data;
 };
 
