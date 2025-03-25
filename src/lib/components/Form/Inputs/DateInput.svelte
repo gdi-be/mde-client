@@ -1,8 +1,6 @@
 <script lang="ts">
-  import Textfield from '@smui/textfield';
+  import type { HTMLInputAttributes } from 'svelte/elements';
   import HelperText from '@smui/textfield/helper-text';
-  import Icon from '@smui/textfield/icon';
-  import type { ComponentProps } from 'svelte';
   import type { ValidationResult } from '../FieldsConfig';
 
   type InputProps = {
@@ -10,29 +8,52 @@
     key?: string;
     label?: string;
     validationResult?: ValidationResult;
-  } & ComponentProps<typeof Textfield>;
+  } & HTMLInputAttributes;
 
-  let { key, label, value = $bindable(''), validationResult, ...restProps }: InputProps = $props();
+  let {
+    key,
+    label,
+    value = $bindable(''),
+    validationResult,
+    ...restProps
+  }: InputProps = $props();
 
   let isValid = $derived(validationResult?.valid !== false);
   let helpText = $derived(validationResult?.helpText);
 </script>
 
 <div class="date-input">
-  <Textfield type="date" {label} id={key} input$name={key} bind:value {...restProps}>
-    {#snippet leadingIcon()}
-      <Icon class="material-icons">calendar_month</Icon>
-    {/snippet}
-    {#snippet helper()}
-      <HelperText persistent={!isValid} class={isValid ? 'valid' : 'invalid'}>
-        {helpText}
-      </HelperText>
-    {/snippet}
-  </Textfield>
+  <label for={key}>{label}</label>
+  <input
+    type="date"
+    id={key}
+    name={key}
+    bind:value
+    {...restProps}
+  />
+  {#if helpText}
+    <HelperText persistent={!isValid} class={isValid ? 'valid' : 'invalid'}>
+      {helpText}
+    </HelperText>
+  {/if}
 </div>
 
 <style lang="scss">
   .date-input {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+
+    input {
+      font-family: 'Roboto';
+      font-size: 1em;
+      border-radius: 0.25em;
+      border: 1px solid grey;
+      padding: 0.25em;
+      outline-width: 0;
+    }
+
     :global(.mdc-text-field-helper-text.valid) {
       color: var(--mdc-theme-text-primary-on-background);
     }
