@@ -41,7 +41,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
   {
     profile_id: 1,
     key: 'isoMetadata.title',
-    label: 'Titel',
+    label: 'Titel des Datenbestandes',
     validator: (val) => {
       if (!isDefined(val)) {
         return {
