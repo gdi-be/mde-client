@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
   import MetadataCard from '$lib/components/Overview/MetadataCard.svelte';
-  import type { Option } from '$lib/models/form.js';
   import MetadataToolbar from '$lib/components/Overview/MetadataToolbar.svelte';
   import Pagination from '$lib/components/Overview/Pagination.svelte';
 
@@ -9,14 +7,6 @@
 
   const metadata = $derived(data.queryResponse.content);
   const pageable = $derived(data.queryResponse);
-
-  let searchValue = $state<Option>();
-
-  $effect(() => {
-    if (searchValue) {
-      goto(`/metadata/${searchValue.key}`);
-    }
-  });
 </script>
 
 <div class="metadata-overview">
