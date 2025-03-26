@@ -28,7 +28,7 @@
   <Paper>
     <TextInput
       bind:value
-      label={fieldConfig?.label || 'TODO: Technische Beschreibung'}
+      label={fieldConfig?.label}
       onblur={onBlur}
     />
   </Paper>

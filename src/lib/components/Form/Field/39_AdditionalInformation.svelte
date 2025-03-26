@@ -85,7 +85,7 @@
 <div class="contentDescriptions-field">
   <fieldset>
     <legend
-      >{fieldConfig?.label || 'TODO: Herkunft der Daten'}
+      >{fieldConfig?.label}
       <IconButton
         class="material-icons"
         onclick={(evt) => addItem(evt)}
