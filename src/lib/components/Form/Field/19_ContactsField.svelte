@@ -15,7 +15,7 @@
   let contacts = $state<ContactListEntry[]>([]);
   const valueFromData = $derived(getValue<Contacts>(KEY));
   $effect(() => {
-    if (valueFromData) {
+    if (valueFromData && valueFromData.length > 0) {
       contacts =
         valueFromData?.map((contact) => {
           const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
@@ -27,6 +27,16 @@
             email: contact.email || ''
           };
         }) || [];
+    } else {
+      contacts = [
+        {
+          listId: Date.now().toString(36),
+          name: '',
+          organisation: '',
+          phone: '',
+          email: ''
+        }
+      ];
     }
   });
 
