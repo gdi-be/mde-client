@@ -499,7 +499,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
   {
     profile_id: 31,
     label: 'Technische Beschreibung',
-    key: 'technicalMetadata.descriptions',
+    key: 'isoMetadata.technicalDescription',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -531,14 +531,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
   {
     profile_id: 39,
     label: 'Weitere Informationen',
-    key: 'isoMetadata.additionalInformation',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie zusätzliche Informationen an.'
-        };
-      }
+    key: 'isoMetadata.contentDescriptions',
+    validator: () => {
+      // Optional
       return { valid: true };
     },
     section: 'additional',

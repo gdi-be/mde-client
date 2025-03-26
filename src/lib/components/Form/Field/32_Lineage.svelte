@@ -9,22 +9,31 @@
 
   type LineageListEntry = Lineage & { listId: string };
 
-  const KEY = 'isoMetadata.UNKNOWN';
+  const KEY = 'isoMetadata.lineage';
 
   const valueFromData = $derived(getValue<Lineage[]>(KEY));
   let lineages = $state<LineageListEntry[]>([]);
 
   $effect(() => {
-    if (valueFromData) {
+    if (valueFromData && valueFromData.length > 0) {
       lineages = valueFromData?.map((lineage) => {
-        const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
+        const listId = Date.now().toString(36);
         return {
           listId,
           title: lineage.title || '',
-          source: lineage.source || '',
-          publishDate: lineage.publishDate || ''
+          identifier: lineage.identifier || '',
+          date: lineage.date ? new Date(lineage.date).toISOString().split('T')[0] : ''
         };
       });
+    } else {
+      lineages = [
+        {
+          listId: Date.now().toString(36),
+          title: '',
+          identifier: '',
+          date: new Date().toISOString().split('T')[0]
+        }
+      ];
     }
   });
 
@@ -34,8 +43,8 @@
   const persistLineages = async () => {
     const value = lineages.map((lineage) => ({
       title: lineage.title,
-      source: lineage.source,
-      publishDate: lineage.publishDate
+      identifier: lineage.identifier,
+      date: lineage.date ? new Date(lineage.date).toISOString() : ''
     }));
     const response = await persistValue(KEY, value);
     if (response.ok) {
@@ -50,8 +59,8 @@
       {
         listId,
         title: '',
-        source: '',
-        publishDate: ''
+        identifier: '',
+        date: ''
       },
       ...lineages
     ];
@@ -109,14 +118,14 @@
         <div class="inline-fields">
           <DateInput
             class="publish-date-field"
-            bind:value={lineage.publishDate}
+            bind:value={lineage.date}
             key={KEY}
             label="Veröffentlichungsdatum"
             onblur={persistLineages}
           />
           <TextInput
             class="lineage-source-field"
-            bind:value={lineage.source}
+            bind:value={lineage.identifier}
             key={KEY}
             label="Identifier"
             onblur={persistLineages}
@@ -133,7 +142,6 @@
   .lineages-field {
     position: relative;
     display: flex;
-    align-items: center;
     gap: 0.25em;
 
     fieldset {

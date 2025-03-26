@@ -4,10 +4,9 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
 
-  const KEY = 'isoMetadata.UNKNOWN';
+  const KEY = 'isoMetadata.technicalDescription';
 
-  // TODO: check why this is a List on the server
-  const valueFromData = $derived(getValue<string>(KEY)?.[0]);
+  const valueFromData = $derived(getValue<string>(KEY));
   let value = $state<string>('');
   $effect(() => {
     if (valueFromData) {
