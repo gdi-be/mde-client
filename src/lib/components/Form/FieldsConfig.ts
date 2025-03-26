@@ -237,6 +237,17 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 38,
+    label: 'Schema-Version des INSPIRE Themas',
+    key: 'isoMetadata.inspireAnnexVersion',
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'classification',
+    required: true
+  },
+  {
     profile_id: 37,
     label: 'Überprüfung des Qualitätsberichts',
     key: 'isoMetadata.valid',

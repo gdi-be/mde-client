@@ -13,10 +13,10 @@
 
   const currentUrl = $derived(page.url);
   const maxPage = $derived(pagingInfo.totalPages - 1);
-  const currentPage = $derived(pagingInfo.pageable.pageNumber + 1);
+  const currentPage = $derived(Number(currentUrl.searchParams.get('page') || 1));
   const hasPrevious = $derived(currentPage > 1);
   const hasNext = $derived(maxPage > currentPage);
-  const pageSize = $derived(pagingInfo.pageable.pageSize.toString() || '10');
+  const pageSize = $derived(currentUrl.searchParams.get('size')?.toString() || '10');
 
   const updatePage = (page: number) => {
     const newUrl = new URL(currentUrl);
@@ -26,19 +26,21 @@
     if (!currentUrl.searchParams.get('size')) {
       newUrl.searchParams.set('size', '10');
     }
-    goto(newUrl);
+    goto(newUrl, {
+      keepFocus: true,
+    });
   };
 
   const updatePageSize = (size: number) => {
     const newUrl = new URL(currentUrl);
     newUrl.searchParams.set('size', size.toString());
-    newUrl.searchParams.set('page', '0');
+    newUrl.searchParams.set('page', '1');
     goto(newUrl);
   };
 
   const onPageInputChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    updatePage(Number(target.value) - 1);
+    updatePage(Number(target.value));
   };
 </script>
 
