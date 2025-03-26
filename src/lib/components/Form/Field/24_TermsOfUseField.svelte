@@ -61,7 +61,7 @@
             disabled: !item.active
           })
         )}
-        bind:value
+        value={value.toString()}
         {onChange}
         {validationResult}
       />
