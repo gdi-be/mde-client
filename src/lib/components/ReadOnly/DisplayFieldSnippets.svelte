@@ -178,8 +178,79 @@
   {value}
 {/snippet}
 
-{#snippet isoMetadataServices(value: Service[])}
-  {JSON.stringify(value)}
+{#snippet isoMetadataServices(services: Service[])}
+  <div class="services">
+    {#each services as service}
+      <fieldset class="service">
+        <div>
+          <strong>Titel</strong>
+          <span>{service.title}</span>
+        </div>
+        <div>
+          <strong>Typ</strong>
+          <span>{service.serviceType}</span>
+        </div>
+        <div>
+          <strong>Kurzbeschreibung</strong>
+          <span>{service.shortDescription}</span>
+        </div>
+        <div>
+          <strong>Service Identifier</strong>
+          <span>{service.serviceIdentification}</span>
+        </div>
+        <div>
+          <strong>File Identifier</strong>
+          <span>{service.fileIdentifier}</span>
+        </div>
+        {#if service?.columns}
+          <div class="subheader">Attribute</div>
+          <div class="columns">
+            {#each service?.columns || [] as columnInfo}
+              <fieldset class="service-column">
+                <div>
+                  <strong>Attribut-Name</strong>
+                  <span>{columnInfo.name}</span>
+                </div>
+                <div>
+                  <strong>Attribut-Alias</strong>
+                  <span>{columnInfo.title}</span>
+                </div>
+                <div>
+                  <strong>Attribut-Typ</strong>
+                  <span>{columnInfo.type}</span>
+                </div>
+              </fieldset>
+            {/each}
+          </div>
+        {/if}
+        {#if service?.downloads}
+          <div class="subheader">Downloads</div>
+          <div class="downloads">
+            {#each service?.downloads || [] as downloadInfo}
+              <fieldset class="service-download">
+                <div>
+                  <strong>Download-Titel</strong>
+                  <span>{downloadInfo.title}</span>
+                </div>
+                <div>
+                  <strong>Download-Typ</strong>
+                  <span>{downloadInfo.type}</span>
+                </div>
+                <div>
+                  <strong>Download-URL</strong>
+                  <span>{downloadInfo.href}</span>
+                </div>
+                <div>
+                  <strong>Download-Dateigröße</strong>
+                  <span>{downloadInfo.fileSize}</span>
+                </div>
+              </fieldset>
+            {/each}
+          </div>
+        {/if}
+      </fieldset>
+    {/each}
+  </div>
 {/snippet}
 
 {#snippet clientMetadataPrivacy(value: string)}
@@ -195,6 +266,15 @@
 {/snippet}
 
 <style lang="scss">
+  fieldset {
+    border-radius: 0.5em;
+  }
+
+  .subheader {
+    margin-top: 2em;
+    font-weight: bold;
+  }
+
   .contacts {
     display: flex;
     flex-direction: column;
@@ -215,6 +295,40 @@
         }
       }
     }
+  }
 
+  .services {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+
+    .service {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+
+      div {
+        display: flex;
+        gap: 2em;
+
+        strong {
+          flex: 1;
+          text-align: right;
+        }
+
+        span {
+          flex: 5;
+        }
+      }
+
+      .columns,
+      .downloads {
+        margin-left: 2em;
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+      }
+
+    }
   }
 </style>
