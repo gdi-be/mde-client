@@ -35,7 +35,6 @@
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue?: string) => {
-    // TODO check if value has changed
     const response = await persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;

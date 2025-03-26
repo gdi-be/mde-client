@@ -3,7 +3,6 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
-  import AutoFillButton from '../AutoFillButton.svelte';
   import type { IsoTheme } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
 
@@ -19,6 +18,10 @@
     if (valueFromData) {
       value = valueFromData;
     }
+  });
+
+  $effect(() => {
+    getAutoFillValues(inspireTheme);
   });
 
   let showCheckmark = $state(false);
@@ -41,11 +44,11 @@
     }));
   };
 
-  const getAutoFillValues = async () => {
-    if (!inspireTheme) return;
+  const getAutoFillValues = async (inspireID?: string) => {
+    if (!inspireID) return;
     const response = await fetch(`/data/iso_themes`);
     const data = await response.json();
-    const match = data.find((entry: IsoTheme) => entry.inspireID === inspireTheme);
+    const match = data.find((entry: IsoTheme) => entry.inspireID === inspireID);
     if (!match) return;
     value = match.isoID;
     onChange(value);
@@ -61,17 +64,14 @@
         key={KEY}
         label={fieldConfig?.label}
         options={OPTIONS}
+        disabled={!!inspireTheme}
         {value}
         {onChange}
         {validationResult}
       />
     {/await}
   </Paper>
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
-    {#if inspireTheme}
-      <AutoFillButton onclick={getAutoFillValues} />
-    {/if}
-  </FieldTools>
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

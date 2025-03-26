@@ -35,6 +35,7 @@
   import F31_TechnicalDescription from './Field/31_TechnicalDescription.svelte';
   import F32_Lineage from './Field/32_Lineage.svelte';
   import F39_AdditionalInformation from './Field/39_AdditionalInformation.svelte';
+  import F38_InspireAnnexVersionField from './Field/38_InspireAnnexVersionField.svelte';
   import ServicesSection from './service/ServicesSection.svelte';
   import FormFooter from './FormFooter.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
@@ -160,6 +161,7 @@
           <F04_PrivacyField />
           <F24_TermsOfUseField />
           <F07_AnnexThemeField {metadata} />
+          <F38_InspireAnnexVersionField {metadata} />
           <F37_QualityReportCheckField {metadata} />
           <F06_HighValueDatasetField />
           <F13_TopicCategory {metadata} />

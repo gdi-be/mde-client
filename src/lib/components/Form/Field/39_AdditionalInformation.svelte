@@ -3,86 +3,123 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import type { ContentDescription } from '../../../models/metadata';
 
-  type AdditionalInformationListEntry = {
-    listId: string;
-    value: string;
-  };
+  type ContentDescriptionListEntry = ContentDescription & { listId: string };
 
-  const KEY = 'isoMetadata.UNKNOWN';
+  const KEY = 'isoMetadata.contentDescriptions';
 
-  const valueFromData = $derived(getValue<string[]>(KEY));
-  let values = $state<AdditionalInformationListEntry[]>([]);
+  const valueFromData = $derived(getValue<ContentDescription[]>(KEY));
+  let contentDescriptions = $state<ContentDescriptionListEntry[]>([]);
+
   $effect(() => {
-    if (valueFromData) {
-      values = valueFromData?.map((value) => {
-        const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
+    if (valueFromData && valueFromData.length > 0) {
+      contentDescriptions = valueFromData?.map((contentDescription) => {
+        const listId = contentDescription.url + contentDescription.description + Date.now().toString(36);
         return {
           listId,
-          value
+          code: 'information',
+          description: contentDescription.description || '',
+          url: contentDescription.url || ''
         };
       });
+    } else {
+      contentDescriptions = [
+        {
+          listId: Date.now().toString(36),
+          code: 'information',
+          description: '',
+          url: ''
+        }
+      ];
     }
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string[]>(KEY);
+  const fieldConfig = getFieldConfig<ContentDescription[]>(KEY);
 
-  const persist = async () => {
-    const response = await persistValue(KEY, values);
+  const persistContentDescriptions = async () => {
+    const value = contentDescriptions.map((contentDescription) => ({
+      description: contentDescription.description,
+      url: contentDescription.url,
+      code: 'information'
+    }));
+    const response = await persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
     }
   };
 
-  const addItem = () => {
+  const addItem = (evt: MouseEvent) => {
+    evt.preventDefault();
     const listId = Date.now().toString(36);
-    values = [
+    contentDescriptions = [
       {
         listId,
-        value: ''
+        code: 'information',
+        description: '',
+        url: ''
       },
-      ...values
+      ...contentDescriptions
     ];
   };
 
-  const removeItem = (listId: string) => {
-    // TODO: add popconfirm
-    values = values.filter((contact) => contact.listId !== listId);
-    persist();
+  const removeItem = (listId: string, evt: MouseEvent) => {
+    const targetEl = evt.currentTarget as HTMLElement;
+    evt.preventDefault();
+    popconfirm(
+      targetEl,
+      async () => {
+        contentDescriptions = contentDescriptions.filter((contentDescription) => contentDescription.listId !== listId);
+        persistContentDescriptions();
+      },
+      {
+        text: 'Möchten Sie diese Datengrundlage wirklich löschen?',
+        confirmButtonText: 'Löschen'
+      }
+    );
   };
 </script>
 
-<div class="content-description-field">
+<div class="contentDescriptions-field">
   <fieldset>
     <legend
-      >{fieldConfig?.label || 'TODO: Weitere Informationen'}
+      >{fieldConfig?.label}
       <IconButton
         class="material-icons"
-        onclick={() => addItem()}
+        onclick={(evt) => addItem(evt)}
         size="button"
-        title="Quelle hinzufügen"
+        title="Kontakt hinzufügen"
       >
         add
       </IconButton>
     </legend>
-    {#each values as contact (contact.listId)}
-      <fieldset class="contact">
+    {#each contentDescriptions as contentDescription (contentDescription.listId)}
+      <fieldset class="contentDescription">
         <legend>
           <IconButton
             class="material-icons"
-            onclick={() => removeItem(contact.listId)}
+            onclick={(evt) => removeItem(contentDescription.listId, evt)}
             size="button"
-            title="Quelle entfernen"
+            title="Kontakt entfernen"
           >
             delete
           </IconButton>
         </legend>
         <TextInput
-          bind:value={contact.value}
+          bind:value={contentDescription.description}
           key={KEY}
-          label="URL (Dokument oder Website)"
-          onblur={persist}
+          label="Titel"
+          onblur={persistContentDescriptions}
+          required
+        />
+        <TextInput
+          bind:value={contentDescription.url}
+          key={KEY}
+          label="Url"
+          onblur={persistContentDescriptions}
+          required
         />
       </fieldset>
     {/each}
@@ -91,10 +128,9 @@
 </div>
 
 <style lang="scss">
-  .content-description-field {
+  .contentDescriptions-field {
     position: relative;
     display: flex;
-    align-items: center;
     gap: 0.25em;
 
     fieldset {
@@ -108,7 +144,7 @@
       }
     }
 
-    .contact {
+    .contentDescription {
       legend {
         text-align: right;
       }

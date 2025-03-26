@@ -13,6 +13,7 @@
     label?: string;
     options: Option[];
     validationResult?: ValidationResult;
+    disabled?: boolean;
   };
 
   let {
@@ -21,6 +22,7 @@
     key,
     label,
     options,
+    disabled = false,
     validationResult
   }: InputProps = $props();
 
@@ -36,6 +38,7 @@
   bind:this={element}
   class="select-input"
   {label}
+  {disabled}
   hiddenInput
   input$name={key}
   menu$anchorElement={document.body}

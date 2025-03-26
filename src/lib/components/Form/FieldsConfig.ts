@@ -237,6 +237,17 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 38,
+    label: 'Schema-Version des INSPIRE Themas',
+    key: 'isoMetadata.inspireAnnexVersion',
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'classification',
+    required: true
+  },
+  {
     profile_id: 37,
     label: 'Überprüfung des Qualitätsberichts',
     key: 'isoMetadata.valid',
@@ -488,7 +499,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
   {
     profile_id: 31,
     label: 'Technische Beschreibung',
-    key: 'technicalMetadata.descriptions',
+    key: 'isoMetadata.technicalDescription',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -520,14 +531,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
   {
     profile_id: 39,
     label: 'Weitere Informationen',
-    key: 'isoMetadata.additionalInformation',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie zusätzliche Informationen an.'
-        };
-      }
+    key: 'isoMetadata.contentDescriptions',
+    validator: () => {
+      // Optional
       return { valid: true };
     },
     section: 'additional',

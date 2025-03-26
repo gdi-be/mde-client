@@ -168,8 +168,8 @@ export type Extent = {
 
 export type Lineage = {
   title: string;
-  source: string;
-  publishDate: string;
+  identifier: string;
+  date: string;
 };
 
 export type Keywords = {
