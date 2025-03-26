@@ -34,7 +34,7 @@
     toFieldConfig?.validator(endValue, { startValue })
   ) as ValidationResult;
 
-  const onBlur = async (key: string) => {
+  const onChange = async (key: string) => {
     const value = key === FROM_KEY ? startValue : endValue!;
     const response = await persistValue(key, new Date(value!).toISOString());
     if (response.ok) {
@@ -49,13 +49,13 @@
     <DateInput
       bind:value={startValue}
       label={fromFieldConfig?.label}
-      onblur={() => onBlur(FROM_KEY)}
+      onchange={() => onChange(FROM_KEY)}
       validationResult={fromValidationResult}
     />
     <DateInput
       bind:value={endValue}
       label={toFieldConfig?.label}
-      onblur={() => onBlur(TO_KEY)}
+      onchange={() => onChange(TO_KEY)}
       validationResult={toValidationResult}
     />
   </fieldset>

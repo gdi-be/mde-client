@@ -44,7 +44,7 @@
   );
   let readOnly = $derived(!!publishedValue && isAutomatedValue);
 
-  const onBlur = async () => {
+  const onChange = async () => {
     const response = await persistValue(KEY, new Date(value!).toISOString());
     if (response.ok) {
       showCheckmark = true;
@@ -58,7 +58,7 @@
       bind:value
       key={KEY}
       label={fieldConfig?.label}
-      onblur={onBlur}
+      onchange={onChange}
       disabled={readOnly}
       {validationResult}
     />

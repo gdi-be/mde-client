@@ -18,7 +18,7 @@
   const fieldConfig = getFieldConfig<string>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  const onBlur = async () => {
+  const onChange = async () => {
     const response = await persistValue(KEY, new Date(value!).toISOString());
     if (response.ok) {
       showCheckmark = true;
@@ -28,7 +28,13 @@
 
 <div class="date-time-field">
   <Paper>
-    <DateInput bind:value key={KEY} label={fieldConfig?.label} onblur={onBlur} {validationResult} />
+    <DateInput
+      bind:value
+      key={KEY}
+      label={fieldConfig?.label}
+      onchange={onChange}
+      {validationResult}
+    />
   </Paper>
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
