@@ -1,7 +1,10 @@
 name: Publish Docker image
 
 on:
-  workflow_dispatch:
+  push:
+    branches: ['main']
+  release:
+    types: [published]
 
 env:
   REGISTRY: ghcr.io
@@ -26,18 +29,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run Semantic Release
-        id: semantic-release
-        uses: cycjimmy/semantic-release-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          extra_plugins: |
-            @semantic-release/changelog
-            @semantic-release/git
-            @semantic-release/commit-analyzer
-            @semantic-release/release-notes-generator
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
