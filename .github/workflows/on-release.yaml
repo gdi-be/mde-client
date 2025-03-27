@@ -29,16 +29,16 @@ jobs:
 
       - name: Run Semantic Release
         id: semantic-release
-        uses: cycjimmy/semantic-release-action@v3
+        uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_DEBUG: "semantic-release"
-        with:
-          extra_plugins: |
-            @semantic-release/changelog
-            @semantic-release/git
-            @semantic-release/commit-analyzer
-            @semantic-release/release-notes-generator
+        # with:
+        #   extra_plugins: |
+        #     @semantic-release/changelog
+        #     @semantic-release/git
+        #     @semantic-release/commit-analyzer
+        #     @semantic-release/release-notes-generator
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
