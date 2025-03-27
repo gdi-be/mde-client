@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from '$lib/models/form';
 import type { Contacts, Extent } from '$lib/models/metadata';
-import type { Section } from '$lib/context/FormContext.svelte';
+import { getValue, type Section } from '$lib/context/FormContext.svelte';
 
 export type ValidationResult = {
   valid: boolean;
@@ -248,12 +248,13 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    // TODO: this should not be a form field but a display field
     profile_id: 37,
     label: 'Überprüfung des Qualitätsberichts',
     key: 'isoMetadata.valid',
     validator: () => ({ valid: true }),
     section: 'classification',
-    required: true
+    required: false
   },
   {
     profile_id: 6,
@@ -296,7 +297,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'temp_and_spatial',
-    required: true
+    required: false
   },
   {
     profile_id: 10,
@@ -350,7 +351,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'temp_and_spatial',
-    required: true
+    required: false
   },
   {
     profile_id: 12,
@@ -366,7 +367,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'temp_and_spatial',
-    required: true
+    required: false
   },
   {
     profile_id: 16,
@@ -453,7 +454,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'Bodenauflösung',
     key: 'isoMetadata.resolutions',
     validator: (val: any) => {
-      if (!isDefined(val)) {
+      const scale = getValue('isoMetadata.scale');
+      if (!isDefined(val) && !isDefined(scale)) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie die Bodenauflösung an.'
@@ -469,7 +471,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'Vergleichsmaßstab',
     key: 'isoMetadata.scale',
     validator: (val: any) => {
-      if (!isDefined(val)) {
+      const resolution = getValue('isoMetadata.resolutions');
+      if (!isDefined(val) && !isDefined(resolution)) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie den Vergleichsmaßstab an.'

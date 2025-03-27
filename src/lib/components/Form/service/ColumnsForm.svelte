@@ -64,8 +64,6 @@
     onChange(columns);
   }
 
-  $inspect(columns);
-
 </script>
 
 

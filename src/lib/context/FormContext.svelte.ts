@@ -87,7 +87,7 @@ export function getProgress(section: Section, metadata?: MetadataCollection): nu
     ({ section: s, required }) => s === section && required
   );
 
-  if (!metadata) return 1;
+  if (!metadata || totalRequired.length === 0) return 1;
 
   const isValidFilter = ({ key, validator }: FieldConfig<any>) => {
     const value = getValue(key, metadata);
