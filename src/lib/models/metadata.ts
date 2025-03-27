@@ -64,8 +64,8 @@ export type FilterType =
   | 'EditOrderField';
 
 export type ColumnInfo = {
-  name?: string;
-  title?: string;
+  name: string;
+  title: string;
   description?: string;
   type?: ColumnType;
   listView?: boolean;
@@ -78,6 +78,16 @@ export type ColumnInfo = {
   maxFilterValue?: string;
   minOrderValue?: string;
   maxOrderValue?: string;
+};
+
+// TODO: this should probably be an enum
+export type DownloadType = string;
+
+export type DownloadInfo = {
+  title?: string;
+  type?: DownloadType;
+  href?: string;
+  fileSize?: number;
 };
 
 export type Source = {
@@ -115,6 +125,7 @@ export type Service = {
   published?: string;
   previews?: Source[];
   columns?: ColumnInfo[];
+  downloads?: DownloadInfo[];
 };
 
 export type MetadataProfile = 'ISO' | 'INSPIRE_HARMONISED' | 'INSPIRE_IDENTIFIED';

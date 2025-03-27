@@ -47,13 +47,14 @@
     <Content>
       <h1>Neuerfassung</h1>
       <p>
-        Hier können Sie neue Metadaten anlegen. Wählen sie dazu einen Titel und eine Vorlage aus.
-      </p>
-      <p>
-        Optional können sie die Daten auch von bestehenden Metadaten ableiten. Durchsuchen sie dazu
-        unten die Metadaten und wählen sie den gewünschten Datensatz aus.
+        Hier erfassen Sie zu Ihrem Datensatz neue Metadaten.
+        Tragen Sie einen Titel ein.
       </p>
       <Textfield bind:value={title} label="Titel" required />
+      <p>
+        Zusätzlich können Sie einen existierenden Metadatensatz auswählen,
+        den Sie als Vorlage nutzen möchten, bspw. wenn es ein neuer Jahresstand ist.
+      </p>
       <MetadataSearchField
         bind:value={cloneMetadataId}
         label="Bestehende Metadaten als Vorlage verwenden"
@@ -74,6 +75,12 @@
     height: 100%;
     text-align: center;
     gap: 1em;
+
+    p {
+      width: 80%;
+      text-align: start;
+      line-height: 1.5;
+    }
 
     :global(.smui-card__content) {
       width: 30em;

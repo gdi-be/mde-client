@@ -5,6 +5,8 @@
   import ServiceTitle_58 from './Field/ServiceTitle_58.svelte';
   import ServiceShortDescription_59 from './Field/ServiceShortDescription_59.svelte';
   import ServiceLegendImage_53 from './Field/ServiceLegendImage_53.svelte';
+  import ColumnsForm from './ColumnsForm.svelte';
+  import DownloadForm from './DownloadForm.svelte';
 
   export type ServiceFormProps = {
     service: Service;
@@ -13,7 +15,8 @@
 
   let { service, onChange = () => {} }: ServiceFormProps = $props();
 
-  // let isDownloadService = $derived(service.serviceType === 'WFS' || service.serviceType === 'ATOM');
+  let isWFSService = $derived(service.serviceType === 'WFS');
+  let isAtomService = $derived(service.serviceType === 'ATOM');
   let isDisplayService = $derived(service.serviceType === 'WMS' || service.serviceType === 'WMTS');
 
   function set(key: string, value: Service[keyof Service]) {
@@ -38,6 +41,19 @@
       onChange={(legendImage) => set('legendImage', legendImage)}
     />
   {/if}
+  {#if isWFSService}
+    <ColumnsForm
+      value={service.columns}
+      onChange={(columns) => set('columns', columns)}
+    />
+  {/if}
+  {#if isAtomService}
+    <DownloadForm
+      value={service.downloads}
+      onChange={(downloads) => set('downloads', downloads)}
+    />
+  {/if}
+
 </div>
 
 <style lang="scss">
