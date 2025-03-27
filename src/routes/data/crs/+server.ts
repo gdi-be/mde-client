@@ -7,7 +7,7 @@ export async function GET({ cookies }) {
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 
-  const file = Bun.file('/data/codelists/inspire_themes.yaml');
+  const file = Bun.file('/data/codelists/crs.yaml');
   const themes = await file.text();
   const parsed = parse(themes);
 

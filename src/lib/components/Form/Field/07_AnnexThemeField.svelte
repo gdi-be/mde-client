@@ -3,7 +3,6 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
-  import type { InspireRegister } from '$lib/models/inspire';
   import type { Option } from '$lib/models/form';
   import type { ValidationResult } from '../FieldsConfig';
 
@@ -33,19 +32,8 @@
 
   const fetchOptions = async () => {
     const response = await fetch('/data/inspire_themes');
-    const data: InspireRegister = await response.json();
-
-    if (!data.register) {
-      return [];
-    }
-
-    return data.register.containeditems
-      .map((entry) => ({
-        key: entry.theme.id.split('/').at(-1)!.toUpperCase(),
-        label: entry.theme.label.text
-      }))
-      .filter((entry: Option) => entry.key !== 'AC-MF')
-      .sort((a: Option, b: Option) => a.label.localeCompare(b.label));
+    const data: Option[] = await response.json();
+    return data;
   };
 </script>
 

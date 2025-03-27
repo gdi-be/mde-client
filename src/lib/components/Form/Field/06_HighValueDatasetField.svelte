@@ -5,38 +5,12 @@
   import Switch from '@smui/switch';
   import FormField from '@smui/form-field';
   import SelectInput from '../Inputs/SelectInput.svelte';
+  import type { Option } from '$lib/models/form';
 
   const CHECKED_KEY = 'clientMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
   const CHECK_LABEL = 'High Value Data Set';
   const LABEL = 'High Value Data Kategorie';
-
-  const OPTIONS = [
-    {
-      key: 'geospatial',
-      label: 'Geodaten (Geospatial)'
-    },
-    {
-      key: 'earth_observation_and_environment',
-      label: 'Erdbeobachtung und Umwelt (Earth Observation and Environment)'
-    },
-    {
-      key: 'meteorological',
-      label: 'Meteorologische Daten (Meteorological)'
-    },
-    {
-      key: 'statistics',
-      label: 'Statistische Daten (Statistics)'
-    },
-    {
-      key: 'companies_and_company_ownership',
-      label: 'Unternehmens- und Eigentümerdaten (Companies and Company Ownership)'
-    },
-    {
-      key: 'mobility',
-      label: 'Mobilitätsdaten (Mobility)'
-    }
-  ];
 
   const checkedValueFromData = $derived(getValue<boolean>(CHECKED_KEY));
   let checkedValue = $state(false);
@@ -65,6 +39,12 @@
       showCheckmark = true;
     }
   };
+
+  const fetchOptions = async () => {
+    const response = await fetch('/data/hvd_categories');
+    const data: Option[] = await response.json();
+    return data;
+  };
 </script>
 
 <div class="high-value-dataset-check-field">
@@ -76,13 +56,17 @@
       <Switch bind:checked={checkedValue} onSMUISwitchChange={onCheckChange} />
     </FormField>
     {#if checkedValue}
-      <SelectInput
-        key={CATEGORY_KEY}
-        label={LABEL}
-        options={OPTIONS}
-        value={selectionValue}
-        onChange={onSelectionChange}
-      />
+      {#await fetchOptions()}
+        <p>Lade HVD Kategorien</p>
+      {:then OPTIONS}
+        <SelectInput
+          key={CATEGORY_KEY}
+          label={LABEL}
+          options={OPTIONS}
+          value={selectionValue}
+          onChange={onSelectionChange}
+        />
+      {/await}
     {/if}
   </Paper>
   <FieldTools key={CATEGORY_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
