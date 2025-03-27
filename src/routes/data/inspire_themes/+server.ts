@@ -1,22 +1,15 @@
 import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
+import { parse } from 'yaml';
 
 /** @type {import('./$types').RequestHandler} */
-export async function GET({ cookies, fetch }) {
-  // TODO: add caching/fallback? Maybe via hooks?
-
+export async function GET({ cookies }) {
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 
-  const response = await fetch('https://inspire.ec.europa.eu/theme/theme.de.json', {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    }
-  });
+  const file = Bun.file('/data/codelists/inspire_themes.yaml');
+  const themes = await file.text();
+  const parsed = parse(themes);
 
-  const keywords = await response.json();
-
-  return json(keywords);
+  return json(parsed);
 }
