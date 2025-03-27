@@ -8,6 +8,8 @@
   import { transformExtent } from '$lib/util';
   import type { ValidationResult, ValidationResultList } from '../FieldsConfig';
   import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
+  import type { Option } from '$lib/models/form';
+  import { onMount } from 'svelte';
 
   const KEY = 'isoMetadata.extent';
   const CRS_KEY = 'isoMetadata.crs';
@@ -16,36 +18,6 @@
   const LABEL_MIN_X = 'Minimaler X-Wert';
   const LABEL_MAX_Y = 'Maximaler Y-Wert';
   const LABEL_MIN_Y = 'Minimaler Y-Wert';
-
-  const CRS_OPTIONS: {
-    key: string;
-    label: CRS;
-  }[] = [
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/25833',
-      label: 'EPSG:25833'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/4326',
-      label: 'EPSG:4326'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/3857',
-      label: 'EPSG:3857'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/4258',
-      label: 'EPSG:4258'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/25832',
-      label: 'EPSG:25832'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/3035',
-      label: 'EPSG:3035'
-    }
-  ];
 
   let initialCRSKey = getValue<CRS>(CRS_KEY);
   const valueFromData = $derived(getValue<Extent>(KEY));
@@ -61,11 +33,12 @@
     }
   });
 
-  let crsKey = $state(initialCRSKey || CRS_OPTIONS[1].key);
-  let crs = $derived(CRS_OPTIONS.find((option) => option.key === crsKey) || CRS_OPTIONS[1]);
+  let crsOptions = $state<Option[]>([]);
+  let crsKey = $state(initialCRSKey);
+  let crs = $derived(crsOptions.find((option) => option.key === crsKey));
   let showCheckmark = $state(false);
   let transformedValue = $derived(
-    crs ? transformExtent(value4326, 'EPSG:4326', crs.label) : value4326
+    crs ? transformExtent(value4326, 'EPSG:4326', crs.label as CRS) : value4326
   );
   let isBerlin = $derived(
     value4326.minx === 13.079 &&
@@ -91,7 +64,7 @@
       ...transformedValue,
       [key]: newValue
     };
-    value4326 = transformExtent(newTransformedValue, crs.label, 'EPSG:4326');
+    value4326 = transformExtent(newTransformedValue, crs?.label as CRS, 'EPSG:4326');
   };
 
   const sendValue = async () => {
@@ -105,13 +78,22 @@
     if (!Array.isArray(validationResult)) return;
     return validationResult.find(({ subKey }) => subKey === k);
   };
+
+  onMount(async () => {
+    const response = await fetch('/data/crs');
+    crsOptions = await response.json();
+
+    if (!crsKey && crsOptions[0].key) {
+      crsKey = crsOptions[0].key as CRS;
+    }
+  });
 </script>
 
 <div class="extent-field">
   <fieldset>
     <legend>{fieldConfig?.label}</legend>
     <div class="tools">
-      <SelectInput bind:value={crsKey} key={KEY} label={CRS_LABEL} options={CRS_OPTIONS} />
+      <SelectInput bind:value={crsKey} key={KEY} label={CRS_LABEL} options={crsOptions} />
       <Button
         type="button"
         variant={isBerlin ? 'raised' : 'text'}
@@ -157,7 +139,7 @@
             const target = evt?.target as HTMLInputElement;
             onChange(Number(target.value), 'minx');
           }}
-          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
           validationResult={getFieldValidation('minx')}
         />
         <NumberInput
@@ -168,7 +150,7 @@
             const target = evt?.target as HTMLInputElement;
             onChange(Number(target.value), 'maxx');
           }}
-          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
           validationResult={getFieldValidation('maxx')}
         />
       </div>
@@ -181,7 +163,7 @@
             const target = evt?.target as HTMLInputElement;
             onChange(Number(target.value), 'miny');
           }}
-          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
           validationResult={getFieldValidation('miny')}
         />
         <NumberInput
@@ -192,7 +174,7 @@
             const target = evt?.target as HTMLInputElement;
             onChange(Number(target.value), 'maxy');
           }}
-          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs.label) ? '0.0001' : undefined}
+          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
           validationResult={getFieldValidation('maxy')}
         />
       </div>

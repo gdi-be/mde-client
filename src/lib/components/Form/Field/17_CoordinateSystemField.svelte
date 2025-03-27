@@ -4,35 +4,9 @@
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
+  import type { Option } from '$lib/models/form';
 
   const KEY = 'isoMetadata.crs';
-
-  const OPTIONS = [
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/25833',
-      label: 'EPSG:25833'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/3857',
-      label: 'EPSG:3857'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/4258',
-      label: 'EPSG:4258'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/25832',
-      label: 'EPSG:25832'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/4326',
-      label: 'EPSG:4326'
-    },
-    {
-      key: 'http://www.opengis.net/def/crs/EPSG/0/3035',
-      label: 'EPSG:3035'
-    }
-  ];
 
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
@@ -44,24 +18,34 @@
   const fieldConfig = getFieldConfig<string>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  const onSelectionChange = async () => {
-    const response = await persistValue(KEY, value);
+  const onSelectionChange = async (newValue?: string) => {
+    const response = await persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }
+  };
+
+  const fetchOptions = async () => {
+    const response = await fetch('/data/crs');
+    const data: Option[] = await response.json();
+    return data;
   };
 </script>
 
 <div class="title-field">
   <Paper>
-    <SelectInput
-      {value}
-      key={KEY}
-      label={fieldConfig?.label}
-      options={OPTIONS}
-      onChange={onSelectionChange}
-      {validationResult}
-    />
+    {#await fetchOptions()}
+      <p>Lade CRS Optionen</p>
+    {:then OPTIONS}
+      <SelectInput
+        {value}
+        key={KEY}
+        label={fieldConfig?.label}
+        options={OPTIONS}
+        onChange={onSelectionChange}
+        {validationResult}
+      />
+    {/await}
   </Paper>
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>

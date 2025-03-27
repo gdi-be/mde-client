@@ -33,11 +33,7 @@
   const fetchOptions = async () => {
     const response = await fetch('/data/inspire_themes');
     const data: Option[] = await response.json();
-
-    console.log(data);
-
     return data;
-
   };
 </script>
 
