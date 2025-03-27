@@ -11,6 +11,11 @@
   import type { Option } from '$lib/models/form';
   import { onMount } from 'svelte';
 
+  type ExtentOption = {
+    title: string;
+    value: Extent;
+  }
+
   const KEY = 'isoMetadata.extent';
   const CRS_KEY = 'isoMetadata.crs';
   const CRS_LABEL = 'Koordinatensystem';
@@ -33,6 +38,7 @@
     }
   });
 
+  let extentOptions = $state<ExtentOption[]>([]);
   let crsOptions = $state<Option[]>([]);
   let crsKey = $state(initialCRSKey);
   let crs = $derived(crsOptions.find((option) => option.key === crsKey));
@@ -40,17 +46,15 @@
   let transformedValue = $derived(
     crs ? transformExtent(value4326, 'EPSG:4326', crs.label as CRS) : value4326
   );
-  let isBerlin = $derived(
-    value4326.minx === 13.079 &&
-      value4326.maxx === 13.7701 &&
-      value4326.miny === 52.3284 &&
-      value4326.maxy === 52.6877
-  );
-  let isBrandenburg = $derived(
-    value4326.minx === 11.1343 &&
-      value4326.maxx === 15 &&
-      value4326.miny === 51.2075 &&
-      value4326.maxy === 53.6987
+  let matchingOption = $derived(
+    extentOptions.find((option) => {
+      return (
+        option.value.minx === value4326.minx &&
+        option.value.maxx === value4326.maxx &&
+        option.value.miny === value4326.miny &&
+        option.value.maxy === value4326.maxy
+      );
+    })
   );
 
   const fieldConfig = getFieldConfig<Extent>(KEY);
@@ -80,12 +84,16 @@
   };
 
   onMount(async () => {
-    const response = await fetch('/data/crs');
-    crsOptions = await response.json();
+    const crsResponse = await fetch('/data/crs');
+    crsOptions = await crsResponse.json();
 
     if (!crsKey && crsOptions[0].key) {
       crsKey = crsOptions[0].key as CRS;
     }
+
+    const extentResponse = await fetch('/data/extents');
+    extentOptions = await extentResponse.json();
+
   });
 </script>
 
@@ -94,40 +102,20 @@
     <legend>{fieldConfig?.label}</legend>
     <div class="tools">
       <SelectInput bind:value={crsKey} key={KEY} label={CRS_LABEL} options={crsOptions} />
-      <Button
-        type="button"
-        variant={isBerlin ? 'raised' : 'text'}
-        title="Räumliche Ausdehnung auf Berlin setzen"
-        onclick={() => {
-          value4326 = {
-            minx: 13.079,
-            maxx: 13.7701,
-            miny: 52.3284,
-            maxy: 52.6877
-          };
-          sendValue();
-        }}
-      >
-        <Label>Berlin</Label>
-        <Icon class="material-icons">pageless</Icon>
-      </Button>
-      <Button
-        type="button"
-        variant={isBrandenburg ? 'raised' : 'text'}
-        title="Räumliche Ausdehnung auf Brandenburg setzen"
-        onclick={() => {
-          value4326 = {
-            minx: 11.1343,
-            maxx: 15,
-            miny: 51.2075,
-            maxy: 53.6987
-          };
-          sendValue();
-        }}
-      >
-        <Label>Brandenburg</Label>
-        <Icon class="material-icons">pageless</Icon>
-      </Button>
+      {#each extentOptions as option}
+        <Button
+          type="button"
+          variant={matchingOption?.title === option.title ? 'raised' : 'text'}
+          title={option.title}
+          onclick={() => {
+            value4326 = option.value;
+            sendValue();
+          }}
+        >
+          <Label>{option.title}</Label>
+          <Icon class="material-icons">pageless</Icon>
+        </Button>
+      {/each}
     </div>
     <div class="extent-fields">
       <div class="inline-fields">
