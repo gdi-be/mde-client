@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "type": "module",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gdi-be/mde-client.git"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
