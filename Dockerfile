@@ -4,8 +4,8 @@ FROM node:22 AS builder
 WORKDIR /app
 
 COPY . .
-COPY ./.env.example .env
-COPY ./.npmrc .npmrc
+COPY .env.example .env
+COPY .npmrc .npmrc
 RUN npm i -g bun
 RUN bun install --frozen-lockfile
 RUN bun run build
