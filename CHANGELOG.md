@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/gdi-be/mde-client/compare/v1.1.0...v1.1.1) (2025-03-28)
+
+
+### Bug Fixes
+
+* fix release workflow ([a6cc83b](https://github.com/gdi-be/mde-client/commit/a6cc83bae164055a69da684e03f517a6bb5c1af4))
+
 # [1.1.0](https://github.com/gdi-be/mde-client/compare/v1.0.0...v1.1.0) (2025-03-28)
 
 
