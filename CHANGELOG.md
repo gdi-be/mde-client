@@ -1,3 +1,19 @@
+# [1.1.0](https://github.com/gdi-be/mde-client/compare/v1.0.0...v1.1.0) (2025-03-28)
+
+
+### Bug Fixes
+
+* fix release workflow ([efc8c6c](https://github.com/gdi-be/mde-client/commit/efc8c6c218a56ecf85ad7177f146fa1b7d551cfe))
+
+
+### Features
+
+* use mounted codelist for crs ([29683b9](https://github.com/gdi-be/mde-client/commit/29683b915d6a0abe60ad9695e95c57159fe3ba27))
+* use mounted codelist for extents ([44813f7](https://github.com/gdi-be/mde-client/commit/44813f75b646807bff154df023f49b32df05ec01))
+* use mounted codelist for HVD categories ([f9715ca](https://github.com/gdi-be/mde-client/commit/f9715ca8009724705f0ea910f53137c51c1c84f0))
+* use mounted codelist for inspire themes ([353c177](https://github.com/gdi-be/mde-client/commit/353c17723260abcb4107f97098cd9cb269776162))
+* use mounted codelist for privacy ([0f7e5c7](https://github.com/gdi-be/mde-client/commit/0f7e5c7611988944635465d23601bdc306d6f82b))
+
 # 1.0.0 (2025-03-27)
 
 
