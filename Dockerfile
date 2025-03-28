@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY . .
 COPY .env.example .env
-RUN ls -la
+RUN cat .npmrc
 COPY .npmrc .npmrc
 RUN npm i -g bun
 RUN bun install --frozen-lockfile
