@@ -64,8 +64,6 @@
     onChange(downloads);
   }
 
-  $inspect(downloads);
-
 </script>
 
 
