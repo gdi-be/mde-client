@@ -1,3 +1,11 @@
+## [1.1.10](https://github.com/gdi-be/mde-client/compare/v1.1.9...v1.1.10) (2025-04-01)
+
+
+### Bug Fixes
+
+* adjust required fields in form ([6edfc80](https://github.com/gdi-be/mde-client/commit/6edfc80ecedfc6c47ae14e6cbeadf07a232ca591))
+* fix release workflow ([c06ccc0](https://github.com/gdi-be/mde-client/commit/c06ccc000735260424eea2b8e8290cebcc2dfee9))
+
 ## [1.1.9](https://github.com/gdi-be/mde-client/compare/v1.1.8...v1.1.9) (2025-04-01)
 
 
