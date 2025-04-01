@@ -6,7 +6,7 @@ import { log } from 'loggisch';
 import type { Role, Token } from '$lib/models/keycloak';
 
 /**
- * Get a nested value from an object using a dot-separated path. This is similiar
+ * Set a nested value in an object using a dot-separated path. This is similiar
  * to the implementation of lodash.set.
  *
  * @param obj The object to get the value from.
@@ -35,6 +35,29 @@ export function setNestedValue(obj: any, path: string | string[], value: any) {
   });
 
   return obj;
+}
+
+/**
+ * Get a nested value from an object using a dot-separated path. This is similiar
+ * to the implementation of lodash.get.
+ *
+ * @param obj The object to get the value from.
+ * @param path The path to the value.
+ *
+ * @returns The value at the path, or undefined if it doesn't exist.
+ *
+ */
+export function getNestedValue(obj: any, path: string | string[]) {
+  if (typeof path === 'string') {
+    path = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  }
+
+  return path.reduce((acc, key) => {
+    if (acc && acc[key] !== undefined) {
+      return acc[key];
+    }
+    return undefined;
+  }, obj);
 }
 
 proj4.defs('EPSG:4326', '+proj=longlat +datum=WGS84 +no_defs +type=crs');

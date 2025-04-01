@@ -541,5 +541,27 @@ export const FieldConfigs: FieldConfig<any>[] = [
     },
     section: 'additional',
     required: false
+  },
+  {
+    profile_id: 43,
+    label: 'Titel des Kartendienstes',
+    key: 'isoMetadata.services.title',
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    profile_id: 44,
+    label: 'Kurzbeschreibung des Kartendienstes',
+    key: 'isoMetadata.services.shortDescription',
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
   }
 ];

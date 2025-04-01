@@ -3,25 +3,59 @@
   import HelpButton from './HelpButton.svelte';
   import CopyButton from './CopyButton.svelte';
   import type { Snippet } from 'svelte';
+  import { Icon } from '@smui/button';
 
   export type FieldToolsProps = {
     key: string;
     children?: Snippet;
     checkMarkAnmiationRunning?: boolean;
+    noCheckmark?: boolean;
+    noHelpButton?: boolean;
+    noCopyButton?: boolean;
   };
 
   let {
     key,
     children,
-    checkMarkAnmiationRunning: running = $bindable<boolean>(false)
+    checkMarkAnmiationRunning: running = $bindable<boolean>(false),
+    noCheckmark = false,
+    noHelpButton = false,
+    noCopyButton = false
   }: FieldToolsProps = $props();
+
+  const checkIfHasHelp = async () => {
+    const response = await fetch(`/help/${key}`);
+    if (!response.ok || response.status === 204) return false;
+    return true;
+  };
 </script>
 
 <div class="field-tools">
-  <HelpButton {key} />
-  <CopyButton {key} />
+  {#await checkIfHasHelp()}
+    <Icon
+      class="material-icons spinner"
+      title="Es wird geprüft ob eine Hilfe konfiguriert wurde.">
+      progress_activity
+    </Icon>
+  {:then hasHelp}
+    {#if !noHelpButton && hasHelp}
+      <HelpButton {key} />
+    {/if}
+  {:catch}
+    <Icon
+      class="material-icons"
+      title="Fehler beim Prüfen der Hilfe."
+    >
+      warning
+    </Icon>
+  {/await}
+  {#if !noCopyButton}
+    <CopyButton {key} />
+  {/if}
   {@render children?.()}
-  <Checkmark bind:running />
+  {#if !noCheckmark}
+    <Checkmark bind:running />
+  {/if}
 </div>
 
 <style lang="scss">
@@ -35,6 +69,20 @@
     background-color: #f8f9fa;
     outline: 1px solid #e9ecef;
     border-radius: var(--mdc-shape-medium, 4px);
+
+    @keyframes spinning {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    :global(.spinner) {
+      padding: 10px;
+      animation: spinning 1s linear infinite;
+    }
 
     :global(.checkmark) {
       margin: 10px 0;

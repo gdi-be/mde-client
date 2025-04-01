@@ -1,7 +1,11 @@
 <script lang="ts">
   import Paper from '@smui/paper';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import type { Service } from '$lib/models/metadata';
+  import type { MetadataCollection, Service } from '$lib/models/metadata';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
+  import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
+  import { getContext } from 'svelte';
 
   export type ServiceTypeProps = {
     value: Service['title'];
@@ -9,14 +13,53 @@
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
+
+  const KEY = 'isoMetadata.services.title';
+
+  const METADATA_TITLE_KEY = 'isoMetadata.title';
+  const fieldConfig = getFieldConfig<string>(KEY);
+
+  const metadata = getContext<MetadataCollection>('metadata');
+  const metadataTitle = $derived(getValue<string>(METADATA_TITLE_KEY, metadata));
+
+  const getAutoFillValues = async () => {
+    if (!metadataTitle) return;
+    onChange(metadataTitle);
+  };
 </script>
 
-<Paper>
-  <TextInput
-    label="Titel"
-    key="title"
-    {value}
-    maxlength={100}
-    onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
-  />
-</Paper>
+<div class="service-title-field">
+  <Paper class="input-wrapper">
+    <TextInput
+      label={fieldConfig?.label}
+      key={KEY}
+      {value}
+      maxlength={100}
+      onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+    />
+  </Paper>
+  <FieldTools key={KEY} noCheckmark >
+    {#if metadataTitle}
+      <AutoFillButton
+        title="Titel des Metadatensatzes übernehmen"
+        onclick={getAutoFillValues}
+      />
+    {/if}
+  </FieldTools>
+</div>
+
+<style lang="scss">
+  .service-title-field {
+    position: relative;
+    display: flex;
+    gap: 0.25em;
+
+    :global(.input-wrapper) {
+      flex: 1;
+    }
+
+    :global(.mdc-text-field) {
+      display: flex;
+    }
+  }
+</style>

@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import { getAccessToken, parseToken } from '$lib/auth/cookies.js';
 import { parse as parseYaml } from 'yaml';
 import { parse } from 'marked';
+import { getNestedValue } from '$lib/util.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ cookies, params }) {
@@ -16,12 +17,11 @@ export async function GET({ cookies, params }) {
   const helpConfig = await helpConfigFile.text();
   const config = parseYaml(helpConfig);
 
-  if (!config) return error(404, 'Not Found');
+  if (!config) return new Response(null, { status: 204 });
 
-  const [topic, field] = fieldKey.split('.');
-  const fieldConfig = config[topic]?.[field];
+  const fieldConfig = getNestedValue(config, fieldKey);
 
-  if (!fieldConfig) return error(404, 'Not Found');
+  if (!fieldConfig) return new Response(null, { status: 204 });
 
   const helpFileConfigs = Object.entries(fieldConfig);
   const userRoles = parseToken(token).realm_access.roles;
