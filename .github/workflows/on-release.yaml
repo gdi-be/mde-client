@@ -39,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:{{ steps.semantic-release.outputs.new_release_version }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
