@@ -46,15 +46,22 @@ export async function GET({ cookies, params }) {
     }
   }
 
-  if (!helpFilePath) return error(404, 'Not Found');
+  if (!helpFilePath) return new Response(null, { status: 204 });
 
-  const helpFile = Bun.file(helpFilePath);
-  const helpMarkdown = await helpFile.text();
-  const help = await parse(helpMarkdown);
-
-  return new Response(help, {
-    headers: {
-      'Content-Type': 'text/html'
+  try {
+    const helpFile = Bun.file(helpFilePath);
+    const helpMarkdown = await helpFile.text();
+    const help = await parse(helpMarkdown);
+    return new Response(help, {
+      headers: {
+        'Content-Type': 'text/html'
+      }
+    });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    if (e.code === 'ENOENT') {
+      return error(404, `Configured help file not found: ${helpFilePath}`);
     }
-  });
+  }
+
 }
