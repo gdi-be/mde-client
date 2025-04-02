@@ -16,43 +16,6 @@ const defaultPage: PageableProps = {
 };
 
 /**
- * Fetches all iso metadata from the backend.
- *
- * @param {string} [token] - Optional authorization token for the request.
- * @returns {Promise<PageAbleResponse<Metadata>>} - A promise that resolves to the fetched metadata.
- */
-export const getAll = async (
-  token: string,
-  pagingOpts = defaultPage
-): Promise<PageableResponse<MetadataCollection>> => {
-  if (!token) {
-    log.error('No token provided.');
-    return Promise.reject(new Error('No token provided.'));
-  }
-
-  const headers = new Headers({
-    Authorization: `Bearer ${token}`
-  });
-
-  const url: URL = new URL(`${env.BACKEND_URL}/metadata`);
-
-  if (pagingOpts) {
-    url.searchParams.append('page', pagingOpts.page.toString());
-    url.searchParams.append('size', pagingOpts.size.toString());
-  }
-
-  const response = await fetch(url, {
-    headers
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error status: ${response.status}`);
-  }
-
-  return await response.json();
-};
-
-/**
  * Fetches metadata by metadataId from the backend.
  *
  * @param metadataId - The metadataId to fetch.
