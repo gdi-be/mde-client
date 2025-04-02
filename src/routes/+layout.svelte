@@ -15,7 +15,7 @@
 
 <PopConfirm />
 
-<div class="container">
+<div class="main-container">
   <Header />
   <main>
     {#if children}
@@ -38,7 +38,7 @@
     text-decoration: none;
   }
 
-  .container {
+  .main-container {
     height: 100dvh;
     max-height: 100dvh;
     display: flex;
