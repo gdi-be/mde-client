@@ -356,11 +356,13 @@ export const unassignUser = async ({
 type AssignRoleProps = {
   token: string;
   metadataid: string;
+  assignUser?: boolean
   role: Role;
 };
 export const assignRole = async ({
   token,
   metadataid,
+  assignUser = false,
   role
 }: AssignRoleProps): Promise<MetadataCollection> => {
   if (!token) {
@@ -369,14 +371,20 @@ export const assignRole = async ({
   }
 
   const headers = new Headers({
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${token}`,
+    'content-type': 'application/json'
   });
 
   const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/assignRole`, {
     method: 'POST',
     headers,
-    body: role
+    body: JSON.stringify({
+      role,
+      assignUser
+    })
   });
+
+  console.log(JSON.stringify(response));
 
   if (!response.ok) {
     throw new Error(`HTTP error status: ${response.status}`);

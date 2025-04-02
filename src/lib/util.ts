@@ -215,8 +215,8 @@ export const getRoleName = (role: Role): string => {
 
 export const getHighestRole = (token: Token): Role => {
   if (token.realm_access.roles.includes('Administrator')) return 'Administrator';
-  if (token.realm_access.roles.includes('QualityAssurance')) return 'QualityAssurance';
   if (token.realm_access.roles.includes('Editor')) return 'Editor';
+  if (token.realm_access.roles.includes('QualityAssurance')) return 'QualityAssurance';
   if (token.realm_access.roles.includes('DataOwner')) return 'DataOwner';
   throw Error('User has no role');
 };

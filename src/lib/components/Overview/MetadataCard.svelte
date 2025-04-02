@@ -8,6 +8,7 @@
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { Set } from '@smui/chips';
   import StatusChip from '$lib/components/StatusChip.svelte';
+  import { getHighestRole } from '../../util';
 
   const FALLBACK_IMAGE = '/logo_berlin_m_srgb.svg';
 
@@ -16,11 +17,31 @@
   };
   let { metadata }: MetadataCardProps = $props();
 
-  const { sub: userId } = getContext<Token>('user_token');
+  const token = getContext<Token>('user_token');
+  const userId = $derived(token?.sub);
+  const highestRole = $derived(getHighestRole(token));
   const assignedToMe = $derived(metadata.assignedUserId === userId);
   const assignedToSomeoneElse = $derived((metadata.assignedUserId && metadata.assignedUserId !== userId) || false);
   const isTeamMember = $derived(metadata.teamMemberIds?.includes(userId));
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
+
+  const showDeleteAction = $derived(
+    highestRole === 'Administrator' ||
+    metadata.assignedUserId === userId
+  );
+  const showCommentsAction = $derived(true);
+  const showPrintAction = $derived(true);
+  const showEditAction = $derived(
+    highestRole === 'Administrator' ||
+    metadata.assignedUserId === userId
+  );
+  const showAssignAction = $derived(
+    highestRole === 'Administrator' ||
+    (
+      !assignedToSomeoneElse &&
+      ['Administrator', 'Editor'].includes(highestRole)
+    )
+  );
 
   const statuses = $derived.by(() => {
     const chips = [];
@@ -39,8 +60,12 @@
     return chips;
   });
 
-  const onclick = () => {
+  const onEdit = () => {
     goto(`/metadata/${metadata.metadataId}`);
+  };
+
+  const onRead = () => {
+    goto(`/metadata/${metadata.metadataId}/readonly`)
   };
 
   const assignToMe = async () => {
@@ -82,7 +107,7 @@
 </script>
 
 <Card class="metadata-card">
-  <PrimaryAction class="metadata-card-content" {onclick} padded title={metadata.title}>
+  <PrimaryAction class="metadata-card-content" onclick={onRead} padded title={metadata.title}>
     <span class="title">{metadata.title}</span>
     <Media aspectRatio="16x9">
       <MediaContent>
@@ -101,6 +126,7 @@
     {/snippet}
   </Set>
   <ActionIcons class="metadata-card-actions">
+    {#if showDeleteAction}
     <IconButton
       aria-label={'Metadatensatz Löschen'}
       title={'Metadatensatz Löschen'}
@@ -108,6 +134,8 @@
     >
       <Icon class="material-icons">delete</Icon>
     </IconButton>
+    {/if}
+    {#if showCommentsAction}
     <IconButton
       aria-label={'Kommentare anzeigen'}
       title={'Kommentare anzeigen'}
@@ -115,6 +143,8 @@
     >
       <Icon class="material-icons">chat</Icon>
     </IconButton>
+    {/if}
+    {#if showPrintAction}
     <IconButton
       aria-label={'Drucken'}
       title={'Drucken'}
@@ -122,18 +152,20 @@
     >
       <Icon class="material-icons">print</Icon>
     </IconButton>
+    {/if}
+    {#if showEditAction}
     <IconButton
-      aria-label={'Leseansicht'}
-      title={'Leseansicht'}
-      onclick={() => goto(`/metadata/${metadata.metadataId}/readonly`)}
+      aria-label={'Bearbeiten'}
+      title={'Bearbeiten'}
+      onclick={onEdit}
     >
-      <Icon class="material-icons">preview</Icon>
+      <Icon class="material-icons">edit</Icon>
     </IconButton>
-    {#if !assignedToSomeoneElse}
+    {/if}
+    {#if showAssignAction}
       <IconButton
         toggle
         class="assign-button"
-        disabled={assignedToSomeoneElse}
         aria-label={assignedToMe
           ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.'
           : 'Mir zuweisen'}
