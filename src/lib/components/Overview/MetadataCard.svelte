@@ -39,7 +39,7 @@
     highestRole === 'Administrator' ||
     (
       !assignedToSomeoneElse &&
-      ['Administrator', 'Editor'].includes(highestRole)
+      highestRole === metadata.responsibleRole
     )
   );
 
