@@ -36,13 +36,6 @@
     (responsibleRole === 'Editor' && highestRole === 'Editor')
   );
 
-  $inspect({
-    canAssignToQualityAssurance,
-    highestRole,
-    assignedToMe,
-    responsibleRole
-  });
-
   const assignToRole = async (role: Role) => {
     if (!metadata) return;
 

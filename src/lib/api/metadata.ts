@@ -384,8 +384,6 @@ export const assignRole = async ({
     })
   });
 
-  console.log(JSON.stringify(response));
-
   if (!response.ok) {
     throw new Error(`HTTP error status: ${response.status}`);
   }
@@ -442,8 +440,6 @@ export const getTeam = async ({
     log.error('No token provided.');
     return Promise.reject(new Error('No token provided.'));
   }
-
-  console.log('wefewfwfwewefwef3');
 
   const headers = new Headers({
     Authorization: `Bearer ${token}`
