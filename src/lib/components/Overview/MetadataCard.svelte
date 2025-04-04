@@ -24,7 +24,6 @@
   const assignedToSomeoneElse = $derived((metadata.assignedUserId && metadata.assignedUserId !== userId) || false);
   const isTeamMember = $derived(metadata.teamMemberIds?.includes(userId));
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
-
   const showDeleteAction = $derived(
     highestRole === 'Administrator' ||
     metadata.assignedUserId === userId
@@ -60,12 +59,40 @@
     return chips;
   });
 
+  const assignButtonLabeL = $derived.by(() => {
+    if (highestRole === 'Administrator') {
+      return 'Zuweisung verwalten.';
+    } else if (assignedToMe) {
+      return 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.';
+    } else if (isTeamMember) {
+      return 'Mir zuweisen';
+    }
+  });
+
+  const onAssign = () => {
+    if (highestRole === 'Administrator') {
+      goto(`/metadata/${metadata.metadataId}/readonly?action=print`);
+    } else if (assignedToMe) {
+      removeAssignment();
+    } else {
+      assignToMe();
+    }
+  };
+
+  const onComments = () => {
+    goto(`/metadata/${metadata.metadataId}/?action=comments`);
+  };
+
+  const onPrint = () => {
+    goto(`/metadata/${metadata.metadataId}/?action=print`);
+  };
+
   const onEdit = () => {
     goto(`/metadata/${metadata.metadataId}`);
   };
 
   const onRead = () => {
-    goto(`/metadata/${metadata.metadataId}/readonly`)
+    goto(`/metadata/${metadata.metadataId}/readonly`);
   };
 
   const assignToMe = async () => {
@@ -139,7 +166,7 @@
     <IconButton
       aria-label={'Kommentare anzeigen'}
       title={'Kommentare anzeigen'}
-      onclick={() => goto(`/metadata/${metadata.metadataId}/?action=comments`)}
+      onclick={onComments}
     >
       <Icon class="material-icons">chat</Icon>
     </IconButton>
@@ -148,7 +175,7 @@
     <IconButton
       aria-label={'Drucken'}
       title={'Drucken'}
-      onclick={() => goto(`/metadata/${metadata.metadataId}/readonly?action=print`)}
+      onclick={onPrint}
     >
       <Icon class="material-icons">print</Icon>
     </IconButton>
@@ -166,15 +193,15 @@
       <IconButton
         toggle
         class="assign-button"
-        aria-label={assignedToMe
-          ? 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.'
-          : 'Mir zuweisen'}
-        title={assignedToMe ? 'Mir zugeordnet.\nKlicken um Zuordnung zu entfernen.' : 'Mir zuordnen'}
-        onclick={assignedToMe ? removeAssignment : assignToMe}
-        pressed={assignedToMe}
+        aria-label={assignButtonLabeL}
+        title={assignButtonLabeL}
+        onclick={onAssign}
+        pressed={assignedToMe && highestRole !== 'Administrator'}
       >
         <Icon class="material-icons-filled assigned-to-me" on>person_remove</Icon>
-        <Icon class="material-icons-filled">person_check</Icon>
+        <Icon class="material-icons-filled">
+          {highestRole === 'Administrator' ? 'manage_accounts' : 'person_check'}
+        </Icon>
       </IconButton>
     {/if}
   </ActionIcons>

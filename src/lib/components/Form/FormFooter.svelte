@@ -1,16 +1,14 @@
 <script lang="ts">
   import { allFieldsValid } from '$lib/context/FormContext.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
-  import type { Role, Token } from '$lib/models/keycloak';
+  import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
   import ApprovalPanel from './ApprovalPanel.svelte';
   import CommentsPanel from './CommentsPanel.svelte';
   import Button, { Icon, Label } from '@smui/button';
   import { getContext, type Snippet } from 'svelte';
-  import Menu from '@smui/menu';
-  import List, { Item, Text } from '@smui/list';
   import ValidationPanel from './ValidationPanel.svelte';
-  import { goto, invalidateAll } from '$app/navigation';
+  import AssignmentDialog from './AssignmentDialog.svelte';
 
   type FormFooterProps = {
     metadata?: MetadataCollection;
@@ -18,6 +16,7 @@
     children?: Snippet;
     commentsPanelVisible?: boolean;
     approvalPanelVisible?: boolean;
+    assignmentPanelVisible?: boolean;
   };
 
   let {
@@ -25,18 +24,20 @@
     children,
     commentsPanelVisible: commentsPanelVisibleProp,
     approvalPanelVisible: approvalPanelVisibleProp,
+    assignmentPanelVisible: assignmentPanelVisibleProp
   }: FormFooterProps = $props();
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
   const userId = $derived(token?.sub);
-  const responsibleRole = $derived(metadata?.responsibleRole || '');
   const assignedToMe = $derived(metadata?.assignedUserId === userId);
-
-  let menu: Menu;
   let commentsPanelVisible = $state(false);
   let approvalPanelVisible = $state(false);
+  let assignmentPanelVisible = $state(false);
   let validationPanelVisible = $state(false);
+  let showMask = $derived(
+    commentsPanelVisible || approvalPanelVisible || validationPanelVisible || assignmentPanelVisible
+  );
 
   let showPublishButton = $derived(
     highestRole === 'Administrator' ||
@@ -46,7 +47,6 @@
       metadata?.isoMetadata.valid === true
     )
   );
-
   let showValidateButton = $derived(
     highestRole === 'Administrator' ||
     (
@@ -54,29 +54,10 @@
       metadata?.isoMetadata.valid === true
     )
   );
-
-  let showMoveToDataButton = $derived(
+  let showAssignmentButton = $derived(
     highestRole === 'Administrator' ||
-    (
-      assignedToMe &&
-      responsibleRole === 'Editor' && highestRole === 'Editor'
-    )
-  );
-
-  let showMoveToEditorButton = $derived(
-    highestRole === 'Administrator' ||
-    (
-      assignedToMe &&
-      ['DataOwner', 'QualitAssurance'].includes(responsibleRole)
-    )
-  );
-
-  let showMoveToQualityAssuranceButton = $derived(
-    highestRole === 'Administrator' ||
-    (
-      assignedToMe &&
-      responsibleRole === 'Editor' && highestRole === 'Editor'
-    )
+    assignedToMe ||
+    highestRole === metadata?.responsibleRole
   );
 
   $effect(() => {
@@ -87,34 +68,15 @@
     approvalPanelVisible = approvalPanelVisibleProp ?? false;
   });
 
-  const closePanels = (event: MouseEvent | KeyboardEvent) => {
-    if (event.target instanceof Element && !event.target.closest('.comments-panel')) {
-      commentsPanelVisible = false;
-    }
-    if (event.target instanceof Element && !event.target.closest('.approval-panel')) {
-      approvalPanelVisible = false;
-    }
-    if (event.target instanceof Element && !event.target.closest('.validation-panel')) {
-      validationPanelVisible = false;
-    }
-  };
+  $effect(() => {
+    assignmentPanelVisible = assignmentPanelVisibleProp ?? false;
+  });
 
-  const assignToRole = async (role: Role) => {
-    if (!metadata) return;
-
-    await fetch(`/metadata/${metadata.metadataId}/role`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        role,
-        assignUser: true
-      })
-    });
-
-    invalidateAll();
-    goto('/metadata');
+  const closePanels = () => {
+    commentsPanelVisible = false;
+    approvalPanelVisible = false;
+    validationPanelVisible = false;
+    assignmentPanelVisible = false;
   };
 
 </script>
@@ -147,34 +109,17 @@
         <Icon class="material-icons">assignment_turned_in</Icon>
       </Button>
     {/if}
-    <div>
+    {#if showAssignmentButton}
       <Button
-        onclick={() => menu.setOpen(true)}
+        class="submit-button"
+        title="Zuweisen"
         variant="raised"
+        onclick={() => (assignmentPanelVisible = !assignmentPanelVisible)}
       >
-        <Label>Übergeben</Label>
+        <Label>Zuweisen</Label>
         <Icon class="material-icons">partner_exchange</Icon>
       </Button>
-      <Menu bind:this={menu} anchorCorner="BOTTOM_LEFT">
-        <List>
-          {#if showMoveToEditorButton}
-            <Item onSMUIAction={() => assignToRole('Editor')}>
-              <Text>An Redakteur</Text>
-            </Item>
-          {/if}
-          {#if showMoveToDataButton}
-            <Item onSMUIAction={() => assignToRole('DataOwner')}>
-              <Text>An Datenverwalter</Text>
-            </Item>
-          {/if}
-          {#if showMoveToQualityAssuranceButton}
-            <Item onSMUIAction={() => assignToRole('QualityAssurance')}>
-              <Text>An Qualitätssicherung</Text>
-            </Item>
-          {/if}
-        </List>
-      </Menu>
-    </div>
+    {/if}
     {#if showPublishButton}
       <Button
         class="submit-button"
@@ -189,7 +134,7 @@
   </div>
 </footer>
 
-{#if commentsPanelVisible || approvalPanelVisible || validationPanelVisible}
+{#if showMask}
   <div
     class="mask"
     onclick={closePanels}
@@ -210,6 +155,8 @@
 {#if validationPanelVisible}
   <ValidationPanel {metadata} />
 {/if}
+
+<AssignmentDialog {metadata} bind:open={assignmentPanelVisible}/>
 
 <style lang="scss">
   footer.form-footer {

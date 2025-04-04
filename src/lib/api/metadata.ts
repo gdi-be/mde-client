@@ -422,3 +422,42 @@ export const unassignRole = async ({
 
   return await response.json();
 };
+
+type GetTeamProps = {
+  token: string;
+  metadataid: string;
+};
+
+type UserData = {
+  role: string;
+  keycloakId: string;
+  displayName: string;
+}
+
+export const getTeam = async ({
+  token,
+  metadataid
+}: GetTeamProps): Promise<UserData[]> => {
+  if (!token) {
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
+  }
+
+  console.log('wefewfwfwewefwef3');
+
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/team`, {
+    method: 'GET',
+    headers
+  });
+
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  return await response.json();
+}

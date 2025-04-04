@@ -1,7 +1,6 @@
 import { error, json } from '@sveltejs/kit';
-import { getAccessToken, parseToken } from '$lib/auth/cookies.js';
-import { assignRole, assignUser, unassignUser } from '$lib/api/metadata.js';
-import { getHighestRole } from '$lib/util.js';
+import { getAccessToken } from '$lib/auth/cookies.js';
+import { assignUser, unassignUser } from '$lib/api/metadata.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ cookies, request, params }) {
@@ -16,12 +15,6 @@ export async function POST({ cookies, request, params }) {
 
   await assignUser({
     userId: userId,
-    metadataid: params.metadataid,
-    token
-  });
-
-  await assignRole({
-    role: getHighestRole(parseToken(token)),
     metadataid: params.metadataid,
     token
   });
