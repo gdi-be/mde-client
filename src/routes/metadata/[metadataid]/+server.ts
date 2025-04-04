@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
-import { updateDataValue } from '$lib/api/metadata.js';
+import { deleteMetadataCollection, updateDataValue } from '$lib/api/metadata.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function PATCH({ cookies, request, params }) {
@@ -22,4 +22,16 @@ export async function PATCH({ cookies, request, params }) {
   });
 
   return json(updateResponse);
+}
+
+export async function DELETE({ cookies, params }) {
+  const token = await getAccessToken(cookies);
+  if (!token) return error(401, 'Unauthorized');
+
+  const deleteResponse = await deleteMetadataCollection({
+    id: params.metadataid,
+    token
+  });
+
+  return json(deleteResponse);
 }
