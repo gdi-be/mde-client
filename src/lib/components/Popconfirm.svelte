@@ -1,17 +1,24 @@
 <script lang="ts">
   import { closePopconfirm, getPopconfirmState } from '$lib/context/PopConfirmContex.svelte';
   import Button from '@smui/button';
+  import Spinner from './Spinner.svelte';
 
   const { anchorElement, confirmButtonText, open, onConfirm, onCancel, text } =
     $derived(getPopconfirmState());
 
   let dialog = $state<HTMLDialogElement>();
+  let loading = $state(false);
 
   const anchorRect = $derived(anchorElement?.getBoundingClientRect());
 
-  const confirmButtonHandler = () => {
-    onConfirm();
-    closePopconfirm();
+  const confirmButtonHandler = async () => {
+    loading = true;
+    try {
+      await onConfirm();
+    } finally {
+      loading = false;
+      closePopconfirm();
+    }
   };
 </script>
 
@@ -28,14 +35,27 @@
     {text}
   </span>
   <div class="actions">
-    <Button variant="unelevated" onclick={confirmButtonHandler}>
+    <Button
+      variant="unelevated"
+      onclick={confirmButtonHandler}
+      disabled={loading}
+    >
       {confirmButtonText}
+      {#if loading}
+        <Spinner />
+      {/if}
     </Button>
   </div>
 </dialog>
 
 {#if open}
-  <div class="mask" onclick={onCancel} onkeydown={onCancel} role="button" tabindex="0"></div>
+  <div
+    class="mask"
+    onclick={!loading ? onCancel : undefined}
+    onkeydown={!loading ? onCancel : undefined}
+    role="button"
+    tabindex="0"
+  ></div>
 {/if}
 
 <style lang="scss">
@@ -59,6 +79,10 @@
     .actions {
       display: flex;
       justify-content: center;
+
+      :global(.spinner) {
+        margin-left: 0.5em;
+      }
     }
   }
 
