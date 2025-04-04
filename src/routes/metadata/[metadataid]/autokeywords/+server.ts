@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/private';
-import { error } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
 
 /** @type {import('./$types').RequestHandler} */
@@ -15,5 +15,6 @@ export async function GET({ cookies, fetch, params }) {
     headers
   });
 
-  return response;
+  // we cant return response directly because it is a stream
+  return json(await response.json());
 }

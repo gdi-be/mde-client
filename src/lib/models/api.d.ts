@@ -6,6 +6,12 @@ type QueryConfig = {
   assignedRoles?: Role[];
 }
 
+type UserData = {
+  keycloakId: string;
+  displayName: string;
+  role: Role;
+};
+
 type PageableProps = {
   page: number;
   size: number;

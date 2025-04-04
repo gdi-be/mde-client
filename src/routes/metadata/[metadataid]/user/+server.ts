@@ -13,13 +13,13 @@ export async function POST({ cookies, request, params }) {
     return error(400, 'Bad Request');
   }
 
-  const createResponse = await assignUser({
+  await assignUser({
     userId: userId,
     metadataid: params.metadataid,
     token
   });
 
-  return json(createResponse);
+  return new Response(null, { status: 204});
 }
 
 export async function DELETE({ cookies, request, params }) {

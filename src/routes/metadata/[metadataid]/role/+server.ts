@@ -4,6 +4,7 @@ import { assignRole } from '$lib/api/metadata.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ cookies, request, params }) {
+
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 
@@ -16,7 +17,8 @@ export async function POST({ cookies, request, params }) {
   const createResponse = await assignRole({
     role: data.role,
     metadataid: params.metadataid,
-    token
+    token,
+    assignUser: data.assignUser
   });
 
   return json(createResponse);

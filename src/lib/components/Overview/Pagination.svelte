@@ -16,7 +16,7 @@
   const currentPage = $derived(Number(currentUrl.searchParams.get('page') || 1));
   const hasPrevious = $derived(currentPage > 1);
   const hasNext = $derived(maxPage > currentPage);
-  const pageSize = $derived(currentUrl.searchParams.get('size')?.toString() || '10');
+  const pageSize = $derived(currentUrl.searchParams.get('size')?.toString() || '20');
 
   const updatePage = (page: number) => {
     const newUrl = new URL(currentUrl);
@@ -24,7 +24,7 @@
     if (page >= maxPage) page = maxPage;
     newUrl.searchParams.set('page', page.toString());
     if (!currentUrl.searchParams.get('size')) {
-      newUrl.searchParams.set('size', '10');
+      newUrl.searchParams.set('size', '20');
     }
     goto(newUrl, {
       keepFocus: true,

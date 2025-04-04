@@ -1,6 +1,6 @@
 <script lang="ts">
   import Paper from '@smui/paper';
-  import { getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import Switch from '@smui/switch';
   import FormField from '@smui/form-field';
@@ -9,8 +9,7 @@
 
   const CHECKED_KEY = 'clientMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
-  const CHECK_LABEL = 'High Value Data Set';
-  const LABEL = 'High Value Data Kategorie';
+  const LABEL = 'HVD Kategorie';
 
   const checkedValueFromData = $derived(getValue<boolean>(CHECKED_KEY));
   let checkedValue = $state(false);
@@ -22,6 +21,8 @@
   $effect(() => {
     selectionValue = selectionValueFromData || '';
   });
+
+  const fieldConfig = getFieldConfig<string>(CHECKED_KEY);
 
   let showCheckmark = $state(false);
 
@@ -51,7 +52,7 @@
   <Paper>
     <FormField align="end">
       {#snippet label()}
-        {CHECK_LABEL}
+        {fieldConfig?.label}
       {/snippet}
       <Switch bind:checked={checkedValue} onSMUISwitchChange={onCheckChange} />
     </FormField>

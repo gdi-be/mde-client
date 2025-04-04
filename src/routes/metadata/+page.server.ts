@@ -5,7 +5,7 @@ import type { PageableProps, QueryConfig } from '$lib/models/api.js';
 
 export async function load({ cookies, url }) {
   const page = Number(url.searchParams.get('page') || 1);
-  const size = Number(url.searchParams.get('size') || 10);
+  const size = Number(url.searchParams.get('size') || 20);
   const query = url.searchParams.get('query') || undefined;
   const statusfilter = url.searchParams.get('statusfilter') || undefined;
 
