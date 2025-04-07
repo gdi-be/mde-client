@@ -1,3 +1,24 @@
+# [1.3.0](https://github.com/gdi-be/mde-client/compare/v1.2.0...v1.3.0) (2025-04-07)
+
+
+### Bug Fixes
+
+* allow assignment only to own role ([ed462ca](https://github.com/gdi-be/mde-client/commit/ed462ca2ade1c86d672c610ea55524f2a2588cb9))
+* fix bugs with keywords ([f882c62](https://github.com/gdi-be/mde-client/commit/f882c62c937b88eaf1a54312675dd504456615ba))
+* prevent errors when fetching help ([b847e4d](https://github.com/gdi-be/mde-client/commit/b847e4dd94e182988228d19bde6aee1a99e5d367))
+* remove console.log commands ([55718bc](https://github.com/gdi-be/mde-client/commit/55718bc4dc9d1b2c1697ed47eb4723379efb9dcd))
+* remove unused getAll method ([e108935](https://github.com/gdi-be/mde-client/commit/e1089352c6cb5d8f3ae20a2c086b3e54a3b35ba6))
+* replace less with scss in AssignmentDialog ([1ef399a](https://github.com/gdi-be/mde-client/commit/1ef399a156d2083f92aee1235f4787af8f94ec2e))
+* set default page size to 20 ([4f6713e](https://github.com/gdi-be/mde-client/commit/4f6713edf5a6b87c397c2cd2d962b57a4850716d))
+* update hvd label ([1c7711d](https://github.com/gdi-be/mde-client/commit/1c7711d311554e626ff72fa0c9a6e97dbe674f6b))
+* update inspire theme validation ([3f40dcf](https://github.com/gdi-be/mde-client/commit/3f40dcf56fdd3f1b592956274c053d10d8e11dc4))
+
+
+### Features
+
+* add AssignmentDialog and team interface ([df7deeb](https://github.com/gdi-be/mde-client/commit/df7deeb1843e21b91bc607cb96df0e600c415b46))
+* add more role specific handling ([1bc5088](https://github.com/gdi-be/mde-client/commit/1bc5088538d4d91e28f3e81571d172a5af899dbb))
+
 # [1.2.0](https://github.com/gdi-be/mde-client/compare/v1.1.10...v1.2.0) (2025-04-01)
 
 
