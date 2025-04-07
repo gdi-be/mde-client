@@ -17,8 +17,7 @@ export async function POST({ cookies, request, params }) {
   const createResponse = await assignRole({
     role: data.role,
     metadataid: params.metadataid,
-    token,
-    assignUser: data.assignUser
+    token
   });
 
   return json(createResponse);

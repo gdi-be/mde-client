@@ -45,8 +45,7 @@
         'content-type': 'application/json'
       },
       body: JSON.stringify({
-        role,
-        assignUser: true
+        role
       })
     });
 

@@ -356,13 +356,11 @@ export const unassignUser = async ({
 type AssignRoleProps = {
   token: string;
   metadataid: string;
-  assignUser?: boolean
   role: Role;
 };
 export const assignRole = async ({
   token,
   metadataid,
-  assignUser = false,
   role
 }: AssignRoleProps): Promise<MetadataCollection> => {
   if (!token) {
@@ -379,8 +377,7 @@ export const assignRole = async ({
     method: 'POST',
     headers,
     body: JSON.stringify({
-      role,
-      assignUser
+      role
     })
   });
 
