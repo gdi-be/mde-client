@@ -178,12 +178,13 @@ export type Lineage = {
 };
 
 export type Keywords = {
-  'Spatial scope'?: {
+  [key: string]: {
     keyword: string;
-    namespace: string;
+    namespace?: string;
   }[];
   default: {
     keyword: string;
+    namespace?: string;
   }[];
 };
 

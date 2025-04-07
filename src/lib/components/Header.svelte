@@ -6,13 +6,13 @@
 </script>
 
 <header class="application-header">
-  <div class="left-items">
+  <div class="container left-container">
     <Breadcrumbs />
   </div>
-  <div class="center-items">
+  <div class="container center-container">
     {text}
   </div>
-  <div class="right-items">
+  <div class="container right-container">
     <UserMenu />
   </div>
 </header>
@@ -28,23 +28,23 @@
     align-items: center;
     justify-content: space-between;
 
-    > div {
-      display: flex;
+    .container {
       flex: 1;
-    }
+      display: flex;
+      padding: 0 1em;
+      gap: 1em;
 
-    .left-items {
-      justify-content: left;
-      padding-left: 1em;
-    }
+      &.left-container {
+        justify-content: left;
+      }
 
-    .center-items {
-      justify-content: center;
-    }
+      &.center-container {
+        justify-content: center;
+      }
 
-    .right-items {
-      justify-content: right;
-      padding-right: 1em;
+      &.right-container {
+        justify-content: right;
+      }
     }
   }
 </style>

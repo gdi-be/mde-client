@@ -25,6 +25,7 @@
 
   let showCheckmark = $state(false);
   let autoKeywords = $state<string[]>([]);
+
   let uniqueKeywords = $derived(Array.from(new Set([...autoKeywords, ...value])));
   let searchValue = $state('');
   const fieldConfig = getFieldConfig<string[]>(KEY);
@@ -80,9 +81,14 @@
   };
 
   const persistKeywords = async () => {
+    const keywords: Keywords = valueFromData || {
+      default: [],
+    };
+    keywords.default = value.map((entry) => ({ keyword: entry }));
+
     const response = await persistValue(
       KEY,
-      value.map((entry) => ({ keyword: entry }))
+      keywords
     );
     if (response.ok) {
       showCheckmark = true;

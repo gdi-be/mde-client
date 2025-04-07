@@ -225,6 +225,10 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'INSPIRE Annex Thema',
     key: 'isoMetadata.inspireTheme',
     validator: (val: any) => {
+      const isIso = getValue('isoMetadata.metadataProfile') === 'ISO';
+      if (isIso) {
+        return { valid: true };
+      }
       if (!isDefined(val)) {
         return {
           valid: false,

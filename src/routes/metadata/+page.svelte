@@ -29,12 +29,11 @@
 
 <style lang="scss">
   .metadata-overview {
-    height: 100%;
     width: min(100%, 1200px);
-    justify-self: center;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin: auto;
 
     .no-data {
       flex: 1;
