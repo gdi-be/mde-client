@@ -197,7 +197,7 @@
   </Content>
 </Dialog>
 
-<style lang="less">
+<style lang="scss">
   .assignment-panel {
     color: black;
     display: flex;
