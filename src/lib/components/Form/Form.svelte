@@ -245,7 +245,6 @@
 
     .tab-container {
       background-color: #f0f0f0;
-      border-bottom: 3px solid transparent;
       border-radius: var(--mdc-shape-medium, 4px) var(--mdc-shape-medium, 4px) 0 0;
 
       :global(svg) {
@@ -259,11 +258,7 @@
 
       &.active {
         font-weight: bold;
-        border-color: #0078d7;
-      }
-
-      :global(.mdc-linear-progress) {
-        margin-bottom: 4px;
+        background-color: var(--primary-90);
       }
     }
 
