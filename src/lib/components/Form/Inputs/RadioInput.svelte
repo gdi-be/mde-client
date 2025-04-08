@@ -2,7 +2,6 @@
   import type { Option } from '$lib/models/form';
   import FormField from '@smui/form-field';
   import Radio from '@smui/radio';
-  import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
   import type { ValidationResult } from '../FieldsConfig';
 
   type InputProps = {
@@ -23,15 +22,18 @@
     validationResult
   }: InputProps = $props();
 
+  let isValid = $derived(validationResult?.valid !== false);
+  let focused = $state(false);
+  let showHelpText = $derived(focused || !isValid);
+  let helpText = $derived(validationResult?.helpText);
+
   const onSelect = () => {
     onChange?.(value);
   };
 </script>
 
-<div class="radio-input">
-  <label class="radio-group-label" for={`${key}-radio-group`}>
-    {label}
-  </label>
+<fieldset class="radio-input">
+  <legend>{label}</legend>
   <div id={`${key}-radio-group`} class="radio-group">
     {#each options as option}
       <FormField>
@@ -42,19 +44,41 @@
       </FormField>
     {/each}
   </div>
-  <ValidationFeedbackText {validationResult} />
-</div>
+  <div class="field-footer">
+    <div class={['help-text', isValid ? 'valid' : 'invalid']}>
+      {#if showHelpText}
+        {helpText}
+      {/if}
+    </div>
+  </div>
+</fieldset>
 
 <style lang="scss">
   .radio-input {
+    border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5em;
+    justify-content: center;
 
-    .radio-group-label {
-      color: rgba(0, 0, 0, 0.6);
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.75em;
+    legend {
+      font-size: 1.5em;
+    }
+
+    .field-footer {
+      margin-top: 0.2em;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .help-text {
+        color: var(--mdc-theme-text-primary-on-background);
+        font-size: 0.75em;
+
+        &.invalid {
+          color: var(--mdc-theme-error);
+        }
+
+      }
     }
 
     .radio-group {

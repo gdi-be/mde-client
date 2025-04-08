@@ -1,6 +1,4 @@
 <script lang="ts">
-  // TODO: this field should not be part of the form but be an extra button for Quality
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FormField from '@smui/form-field';
@@ -31,14 +29,13 @@
 
 {#if metadataProfile === 'INSPIRE_HARMONISED'}
   <div class="quality-report-check-field">
-    <Paper>
+    <fieldset>
+      <legend>{fieldConfig?.label}</legend>
       <FormField align="end">
-        {#snippet label()}
-          {fieldConfig?.label}
-        {/snippet}
+        {#snippet label()}Überprüft{/snippet}
         <Switch bind:checked={value} onSMUISwitchChange={onCheckChange} />
       </FormField>
-    </Paper>
+    </fieldset>
     <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
@@ -49,8 +46,13 @@
     position: relative;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    fieldset {
       flex: 1;
+      border-radius: 0.25em;
+
+      legend {
+        font-size: 1.5em;
+      }
     }
   }
 </style>

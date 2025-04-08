@@ -27,15 +27,13 @@
 </script>
 
 <div class="date-time-field">
-  <Paper>
-    <DateInput
-      bind:value
-      key={KEY}
-      label={fieldConfig?.label}
-      onchange={onChange}
-      {validationResult}
-    />
-  </Paper>
+  <DateInput
+    bind:value
+    key={KEY}
+    label={fieldConfig?.label}
+    onchange={onChange}
+    {validationResult}
+  />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -45,12 +43,8 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.date-input) {
       flex: 1;
-    }
-
-    :global(.mdc-text-field) {
-      display: flex;
     }
   }
 </style>

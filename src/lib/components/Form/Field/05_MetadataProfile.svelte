@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
@@ -43,16 +42,14 @@
 </script>
 
 <div class="metadata-type-field">
-  <Paper>
-    <SelectInput
-      key={KEY}
-      label={fieldConfig?.label}
-      options={OPTIONS}
-      {value}
-      {onChange}
-      {validationResult}
-    />
-  </Paper>
+  <SelectInput
+    key={KEY}
+    label={fieldConfig?.label}
+    options={OPTIONS}
+    {value}
+    {onChange}
+    {validationResult}
+  />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -62,12 +59,8 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.select-input) {
       flex: 1;
-    }
-
-    :global(.mdc-select) {
-      display: flex;
     }
   }
 </style>

@@ -49,13 +49,11 @@
 </script>
 
 <div class="high-value-dataset-check-field">
-  <Paper>
-    <FormField align="end">
-      {#snippet label()}
-        {fieldConfig?.label}
-      {/snippet}
+  <fieldset>
+    <legend>
+      {fieldConfig?.label}
       <Switch bind:checked={checkedValue} onSMUISwitchChange={onCheckChange} />
-    </FormField>
+    </legend>
     {#if checkedValue}
       {#await fetchOptions()}
         <p>Lade HVD Kategorien</p>
@@ -69,7 +67,7 @@
         />
       {/await}
     {/if}
-  </Paper>
+  </fieldset>
   <FieldTools key={CATEGORY_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -79,15 +77,25 @@
     position: relative;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    fieldset {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
+      border-radius: 0.25rem;
 
-    :global(.smui-paper .mdc-select) {
-      width: 100%;
+      legend {
+        font-size: 1.5em;
+      }
+
+      :global(.select-input) {
+        border: none;
+        background-color: rgba(244, 244, 244, 0.7);
+      }
+
+      :global(.select-input legend) {
+        font-size: 1.2em;
+        background-color: white;
+        border-radius: 0.25em;
+        padding: 0 0.25em;
+      }
     }
   }
 </style>

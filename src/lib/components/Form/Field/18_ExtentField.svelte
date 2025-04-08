@@ -127,7 +127,7 @@
             const target = evt?.target as HTMLInputElement;
             onChange(Number(target.value), 'minx');
           }}
-          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
+          step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
           validationResult={getFieldValidation('minx')}
         />
         <NumberInput
@@ -138,7 +138,7 @@
             const target = evt?.target as HTMLInputElement;
             onChange(Number(target.value), 'maxx');
           }}
-          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
+          step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
           validationResult={getFieldValidation('maxx')}
         />
       </div>
@@ -151,7 +151,7 @@
             const target = evt?.target as HTMLInputElement;
             onChange(Number(target.value), 'miny');
           }}
-          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
+          step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
           validationResult={getFieldValidation('miny')}
         />
         <NumberInput
@@ -162,7 +162,7 @@
             const target = evt?.target as HTMLInputElement;
             onChange(Number(target.value), 'maxy');
           }}
-          input$step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
+          step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
           validationResult={getFieldValidation('maxy')}
         />
       </div>
@@ -185,20 +185,30 @@
     fieldset {
       display: flex;
       flex: 1;
-      border-radius: 4px;
+      border-radius: 0.25em;
       justify-content: space-between;
 
+      :global(.select-input),
+      :global(.number-input) {
+        border: none;
+        background-color: rgba(244, 244, 244, 0.7);
+      }
+
+      :global(.select-input > legend),
+      :global(.number-input > legend) {
+        font-size: 1.2em;
+        background-color: white;
+        border-radius: 0.25em;
+        padding: 0 0.25em;
+      }
+
       > legend {
-        font-size: 0.75em;
+        font-size: 1.5em;
       }
 
       .tools {
         display: flex;
         flex-direction: column;
-
-        :global(.select-input .mdc-line-ripple::before) {
-          border-bottom: 0;
-        }
       }
 
       .extent-fields {

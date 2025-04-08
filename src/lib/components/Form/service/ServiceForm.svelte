@@ -61,10 +61,5 @@
     display: flex;
     flex-direction: column;
     gap: 1em;
-
-    :global(label.mdc-text-field),
-    :global(.select-input) {
-      width: 100%;
-    }
   }
 </style>

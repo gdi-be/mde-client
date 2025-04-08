@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Paper from '@smui/paper';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { MetadataCollection, Service } from '$lib/models/metadata';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
@@ -29,15 +28,13 @@
 </script>
 
 <div class="service-title-field">
-  <Paper class="input-wrapper">
-    <TextInput
-      label={fieldConfig?.label}
-      key={KEY}
-      {value}
-      maxlength={100}
-      onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
-    />
-  </Paper>
+  <TextInput
+    label={fieldConfig?.label}
+    key={KEY}
+    {value}
+    maxlength={100}
+    onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+  />
   <FieldTools key={KEY} noCheckmark >
     {#if metadataTitle}
       <AutoFillButton
@@ -54,12 +51,8 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.input-wrapper) {
+    :global(.text-input) {
       flex: 1;
-    }
-
-    :global(.mdc-text-field) {
-      display: flex;
     }
   }
 </style>

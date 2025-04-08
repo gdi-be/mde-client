@@ -68,22 +68,26 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
-      flex: 1;
-    }
-
-    :global(.mdc-text-field) {
-      display: flex;
-    }
-
     fieldset {
       flex: 1;
-      border-radius: 4px;
+      border-radius: 0.25em;
+      display: flex;
 
       > legend {
-        display: flex;
-        align-items: center;
-        font-size: 0.75em;
+        font-size: 1.5em;
+      }
+
+      :global(.date-input) {
+        flex: 1;
+        border: none;
+        background-color: rgba(244, 244, 244, 0.7);
+      }
+
+      :global(.date-input > legend) {
+        font-size: 1.2em;
+        background-color: white;
+        border-radius: 0.25em;
+        padding: 0 0.25em;
       }
     }
   }

@@ -294,8 +294,8 @@
           top: 0;
           display: flex;
           flex-direction: column;
-          padding: 1em 0 2em 0;
-          gap: 1em;
+          padding: 2em 0;
+          gap: 4em;
         }
       }
     }

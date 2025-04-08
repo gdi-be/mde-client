@@ -1,6 +1,5 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
 
@@ -25,13 +24,11 @@
 </script>
 
 <div class="technical-description-field">
-  <Paper>
-    <TextInput
-      bind:value
-      label={fieldConfig?.label}
-      onblur={onBlur}
-    />
-  </Paper>
+  <TextInput
+    bind:value
+    label={fieldConfig?.label}
+    onblur={onBlur}
+  />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -41,12 +38,8 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.text-input) {
       flex: 1;
-    }
-
-    :global(.mdc-text-field) {
-      display: flex;
     }
   }
 </style>

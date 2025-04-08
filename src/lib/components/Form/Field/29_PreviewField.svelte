@@ -26,9 +26,7 @@
 </script>
 
 <div class="preview-field">
-  <Paper class="input-wrapper">
-    <TextInput bind:value key={KEY} label={fieldConfig?.label} onblur={onBlur} {validationResult} />
-  </Paper>
+  <TextInput bind:value key={KEY} label={fieldConfig?.label} onblur={onBlur} {validationResult} />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -38,7 +36,7 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.input-wrapper) {
+    :global(.text-input) {
       flex: 1;
     }
 

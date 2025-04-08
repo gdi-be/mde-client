@@ -118,7 +118,19 @@
       border-radius: 4px;
 
       > legend {
-        font-size: 0.75em;
+        font-size: 1.5em;
+      }
+
+      :global(.number-input) {
+        border: none;
+        background-color: rgba(244, 244, 244, 0.7);
+      }
+
+      :global(.number-input > legend) {
+        font-size: 1.2em;
+        background-color: white;
+        border-radius: 0.25em;
+        padding: 0 0.25em;
       }
     }
 

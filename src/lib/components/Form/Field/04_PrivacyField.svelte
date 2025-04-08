@@ -32,20 +32,18 @@
 </script>
 
 <div class="data-protection-field">
-  <Paper>
-    {#await fetchOptions()}
-      <p>Lade Datenschutz Optionen</p>
-    {:then OPTIONS}
-      <RadioInput
-        key={KEY}
-        label={fieldConfig?.label}
-        options={OPTIONS}
-        {validationResult}
-        {value}
-        {onChange}
-      />
-    {/await}
-  </Paper>
+  {#await fetchOptions()}
+    <p>Lade Datenschutz Optionen</p>
+  {:then OPTIONS}
+    <RadioInput
+      key={KEY}
+      label={fieldConfig?.label}
+      options={OPTIONS}
+      {validationResult}
+      {value}
+      {onChange}
+    />
+  {/await}
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 

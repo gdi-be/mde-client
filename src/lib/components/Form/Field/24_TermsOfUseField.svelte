@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
@@ -47,10 +46,10 @@
 </script>
 
 <div class="terms-of-use-field">
-  <Paper>
-    {#await fetchOptions()}
-      <p>Lade Nutzungsbedingungen</p>
-    {:then OPTIONS}
+  {#await fetchOptions()}
+    <p>Lade Nutzungsbedingungen</p>
+  {:then OPTIONS}
+    <div class="input-wrapper">
       <SelectInput
         key={KEY}
         label={fieldConfig?.label}
@@ -68,8 +67,8 @@
       {#if selectedDescription}
         <p class="description">{selectedDescription}</p>
       {/if}
-    {/await}
-  </Paper>
+    </div>
+  {/await}
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -83,18 +82,13 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.input-wrapper) {
       flex: 1;
     }
 
     .description {
       font-size: 0.75em;
       color: var(--mdc-theme-secondary);
-    }
-
-    :global(.mdc-select) {
-      flex: 1;
-      display: flex;
     }
   }
 </style>

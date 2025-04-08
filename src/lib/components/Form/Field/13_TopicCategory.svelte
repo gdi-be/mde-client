@@ -56,21 +56,19 @@
 </script>
 
 <div class="topic-category-field">
-  <Paper>
-    {#await fetchOptions()}
-      <p>Lade Themen Kategorien</p>
-    {:then OPTIONS}
-      <SelectInput
-        key={KEY}
-        label={fieldConfig?.label}
-        options={OPTIONS}
-        disabled={!!inspireTheme}
-        {value}
-        {onChange}
-        {validationResult}
-      />
-    {/await}
-  </Paper>
+  {#await fetchOptions()}
+    <p>Lade Themen Kategorien</p>
+  {:then OPTIONS}
+    <SelectInput
+      key={KEY}
+      label={fieldConfig?.label}
+      options={OPTIONS}
+      disabled={!!inspireTheme}
+      {value}
+      {onChange}
+      {validationResult}
+    />
+  {/await}
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -80,7 +78,7 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.select-input) {
       flex: 1;
     }
 
