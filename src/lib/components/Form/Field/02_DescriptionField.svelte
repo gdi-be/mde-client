@@ -31,6 +31,7 @@
     label={fieldConfig?.label}
     maxlength={500}
     onblur={onBlur}
+    placeholder={fieldConfig?.explanation}
     rows={5}
     {validationResult}
   />

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from '$lib/models/form';
 import type { Contacts, Extent } from '$lib/models/metadata';
-import { getValue, type Section } from '$lib/context/FormContext.svelte';
+import { getFieldConfig, getValue, type Section } from '$lib/context/FormContext.svelte';
 
 export type ValidationResult = {
   valid: boolean;
@@ -17,6 +17,8 @@ export type FieldConfig<T> = {
   profile_id: number;
   key: FieldKey;
   label: string;
+  explanation?: string;
+  hint?: string;
   validator: (
     val: T | undefined,
     extra?: Record<string, any>
@@ -51,7 +53,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
       }
       return {
         valid: true,
-        helpText: 'Es wird eine maximale Titel-Länge von 100 Zeichen empfohlen.'
+        helpText: getFieldConfig('isoMetadata.title')?.hint
       };
     },
     section: 'basedata',
@@ -252,7 +254,6 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    // TODO: this should not be a form field but a display field
     profile_id: 37,
     label: 'Überprüfung des Qualitätsberichts',
     key: 'isoMetadata.valid',

@@ -29,6 +29,7 @@
     bind:value
     key={KEY}
     label={fieldConfig?.label}
+    placeholder={fieldConfig?.explanation}
     onblur={onBlur}
     {validationResult}
   />

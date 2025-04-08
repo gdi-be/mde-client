@@ -45,6 +45,7 @@
 
 <style lang="scss">
   .date-input {
+    padding-top: 1.2em;
     border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
@@ -66,6 +67,7 @@
     }
 
     .field-footer {
+      height: 1em;
       margin-top: 0.2em;
       display: flex;
       justify-content: space-between;

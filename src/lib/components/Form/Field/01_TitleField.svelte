@@ -30,6 +30,7 @@
     key={KEY}
     label={fieldConfig?.label}
     onblur={onBlur}
+    placeholder={fieldConfig?.explanation}
     {validationResult}
   />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />

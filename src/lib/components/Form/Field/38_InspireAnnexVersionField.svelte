@@ -27,12 +27,18 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
 {#if metadataProfile === 'INSPIRE_HARMONISED'}
   <div class="inspire-annex-version-field">
-    <TextInput bind:value key={KEY} label={fieldConfig?.label} onblur={onBlur} {validationResult} />
+    <TextInput
+      bind:value
+      key={KEY}
+      label={fieldConfig?.label}
+      placeholder={fieldConfig?.explanation}
+      onblur={onBlur}
+      {validationResult}
+    />
     <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}

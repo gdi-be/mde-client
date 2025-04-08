@@ -55,6 +55,7 @@
 
 <style lang="scss">
   .radio-input {
+    padding-top: 1.2em;
     border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
@@ -66,6 +67,7 @@
 
     .field-footer {
       margin-top: 0.2em;
+      height: 1em;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;

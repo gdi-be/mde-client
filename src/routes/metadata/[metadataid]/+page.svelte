@@ -1,16 +1,17 @@
 <script lang="ts">
   import { page } from '$app/state';
   import Form from '$lib/components/Form/Form.svelte';
-  import { setFormData } from '$lib/context/FormContext.svelte';
+  import { initializeFormContext } from '$lib/context/FormContext.svelte';
 
   const activeSection = page.url.hash.slice(1) || 'basedata';
-
   let { data } = $props();
-  const metadata = $derived(data.metadata);
 
-  $effect(() => {
-    setFormData(metadata);
-  });
+  initializeFormContext(
+    data.metadata,
+    data.fieldLabels
+  )
+
+  const metadata = $derived(data.metadata);
 </script>
 
 <div class="metadata">
