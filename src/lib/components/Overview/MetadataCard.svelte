@@ -26,7 +26,8 @@
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
   const showDeleteAction = $derived(
     highestRole === 'Administrator' ||
-    metadata.assignedUserId === userId
+    metadata.assignedUserId === userId &&
+    highestRole === 'Editor'
   );
   const showCommentsAction = $derived(true);
   const showPrintAction = $derived(true);
@@ -38,7 +39,8 @@
     highestRole === 'Administrator' ||
     (
       !assignedToSomeoneElse &&
-      highestRole === metadata.responsibleRole
+      highestRole === metadata.responsibleRole &&
+      highestRole !== 'DataOwner'
     )
   );
 
@@ -84,7 +86,7 @@
   };
 
   const onPrint = () => {
-    goto(`/metadata/${metadata.metadataId}/?action=print`);
+    goto(`/metadata/${metadata.metadataId}/readonly?action=print`);
   };
 
   const onEdit = () => {
