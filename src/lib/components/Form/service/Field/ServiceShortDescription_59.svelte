@@ -11,7 +11,10 @@
     onChange: (newValue: string) => void;
   };
 
-  let { value, onChange }: ServiceTypeProps = $props();
+  let {
+    value = $bindable(),
+    onChange
+  }: ServiceTypeProps = $props();
 
   const KEY = 'isoMetadata.services.shortDescription';
 
