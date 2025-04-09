@@ -1,3 +1,17 @@
+# [2.0.0](https://github.com/gdi-be/mde-client/compare/v1.3.0...v2.0.0) (2025-04-09)
+
+
+### Features
+
+* load labels, explanation and hint from codelist ([b698c87](https://github.com/gdi-be/mde-client/commit/b698c875f0aaac9ffcc3cbfdf405a009ce042348))
+* update layout of all fields ([8a6f9b7](https://github.com/gdi-be/mde-client/commit/8a6f9b79e76782c513c08550dfb17c5fd38e6aa5))
+* update tab layout ([eca2a5a](https://github.com/gdi-be/mde-client/commit/eca2a5ad1278e84237ed77288df05adb060d3baf))
+
+
+### BREAKING CHANGES
+
+* requires a mounted field_labels.yaml file in your codelists folder
+
 # [1.3.0](https://github.com/gdi-be/mde-client/compare/v1.2.0...v1.3.0) (2025-04-07)
 
 
