@@ -1,3 +1,14 @@
+## [2.0.1](https://github.com/gdi-be/mde-client/compare/v2.0.0...v2.0.1) (2025-04-09)
+
+
+### Bug Fixes
+
+* comments from readonly ([f39a994](https://github.com/gdi-be/mde-client/commit/f39a994fe3f7d846dc2e1b621b58d4dbbc050995))
+* make value bindable in ServiceShortDescription ([315958b](https://github.com/gdi-be/mde-client/commit/315958bd73b01915620ee297eb3120a77a3ca909))
+* update actions in MetadataCard ([8f8de34](https://github.com/gdi-be/mde-client/commit/8f8de345ee9ef70358310ca83b80320d6dd6eb7a))
+* update binding of TextAreaInput ([2b902a5](https://github.com/gdi-be/mde-client/commit/2b902a50a51d0dafaf420c083bb7c14140bea98d))
+* update data initialization in readonly ([9d8e61b](https://github.com/gdi-be/mde-client/commit/9d8e61b33efdc4c2a4141c80ee238c8ddf7b9cf6))
+
 # [2.0.0](https://github.com/gdi-be/mde-client/compare/v1.3.0...v2.0.0) (2025-04-09)
 
 
