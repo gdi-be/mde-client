@@ -24,7 +24,9 @@
   let inputRows = $derived(Math.min(value.split('\n').length, 4));
 
   async function sendComment() {
-    const response = await fetch(page.url.pathname + '/comment', {
+    const metadataId = metadata?.metadataId;
+    const url = `${page.url.origin}/metadata/${metadataId}/comment`;
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
@@ -46,7 +48,9 @@
     popconfirm(
       targetEl,
       async () => {
-        const response = await fetch(page.url.pathname + '/comment', {
+        const metadataId = metadata?.metadataId;
+        const url = `${page.url.origin}/metadata/${metadataId}/comment`;
+        const response = await fetch(url, {
           method: 'DELETE',
           headers: {
             'content-type': 'application/json'

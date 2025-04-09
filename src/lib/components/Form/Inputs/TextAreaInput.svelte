@@ -15,7 +15,7 @@
     key,
     label,
     maxlength,
-    value = $bindable(''),
+    value = $bindable(),
     class: wrapperClass,
     validationResult,
     ...restProps
@@ -43,7 +43,7 @@
     </div>
     {#if maxlength}
       <div class="character-counter">
-        {value.length} / {maxlength}
+        {value ? value.length : 0} / {maxlength}
       </div>
     {/if}
   </div>

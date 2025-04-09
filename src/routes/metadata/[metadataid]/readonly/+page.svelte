@@ -3,13 +3,18 @@
   import { browser } from '$app/environment';
   import MetadataDisplay from '$lib/components/ReadOnly/MetadataDisplay.svelte';
   import { page } from '$app/state';
-  import FormFooter from '../../../../lib/components/Form/FormFooter.svelte';
+  import FormFooter from '$lib/components/Form/FormFooter.svelte';
+  import { initializeFormContext } from '$lib/context/FormContext.svelte';
 
   const { data } = $props();
   let commentsPanelVisible = $state(false);
   let approvalPanelVisible = $state(false);
 
   const metadata = $derived(data.metadata);
+
+  initializeFormContext(
+    data.metadata
+  )
 
   const print = () => {
     if (browser) {
@@ -47,7 +52,7 @@
     </Icon>
   </Fab>
   <h1>{metadata?.isoMetadata?.title}</h1>
-  <MetadataDisplay {metadata} />
+  <MetadataDisplay />
   <FormFooter
     {metadata}
     {commentsPanelVisible}
