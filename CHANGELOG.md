@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/gdi-be/mde-client/compare/v3.0.0...v3.0.1) (2025-04-09)
+
+
+### Bug Fixes
+
+* send json repsonse in replace_variable interface ([fe0eccf](https://github.com/gdi-be/mde-client/commit/fe0eccfe7d2dbd9a6bba5ae5bc82c1e1a11aef48))
+
 # [3.0.0](https://github.com/gdi-be/mde-client/compare/v2.0.1...v3.0.0) (2025-04-09)
 
 
