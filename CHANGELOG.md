@@ -1,3 +1,20 @@
+# [3.0.0](https://github.com/gdi-be/mde-client/compare/v2.0.1...v3.0.0) (2025-04-09)
+
+
+### Bug Fixes
+
+* fix build ([60abaa8](https://github.com/gdi-be/mde-client/commit/60abaa815dba145234186a645792b07204ebbe76))
+
+
+### Features
+
+* replace image source with variables ([ab6852f](https://github.com/gdi-be/mde-client/commit/ab6852f3c26a2d651505b7eedf2eea4beaaee078))
+
+
+### BREAKING CHANGES
+
+* requires mounted variables file at /data/variables.json
+
 ## [2.0.1](https://github.com/gdi-be/mde-client/compare/v2.0.0...v2.0.1) (2025-04-09)
 
 
