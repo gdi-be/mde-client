@@ -1,15 +1,13 @@
 <script lang="ts">
   import Select, { Option as SelectOption } from '@smui/select';
   import type { Option } from '$lib/models/form';
-  import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
   import type { ValidationResult } from '../FieldsConfig.ts';
-
-  let element = $state();
 
   type InputProps = {
     onChange?: (value: string) => void;
     value?: string;
     key: string;
+    class?: string;
     label?: string;
     options: Option[];
     validationResult?: ValidationResult;
@@ -21,10 +19,17 @@
     value = $bindable<string | undefined>(undefined),
     key,
     label,
+    class: wrapperClass,
     options,
     disabled = false,
     validationResult
   }: InputProps = $props();
+
+  let element = $state();
+  let isValid = $derived(validationResult?.valid !== false);
+  let focused = $state(false);
+  let showHelpText = $derived(focused || !isValid);
+  let helpText = $derived(validationResult?.helpText);
 
   // Remove duplicates
   options = Array.from(new Map(options.map((item) => [item.key, item])).values());
@@ -34,40 +39,78 @@
   };
 </script>
 
-<Select
-  bind:this={element}
-  class="select-input"
-  {label}
-  {disabled}
-  hiddenInput
-  input$name={key}
-  menu$anchorElement={document.body}
-  bind:value
->
-  {#each options as option}
-    <SelectOption
-      onSMUIAction={() => {
-        if (option.disabled) return;
-        onSelect(option.key);
-      }}
-      value={option.key}
-      disabled={option.disabled}
-    >
-      {option.label}
-    </SelectOption>
-  {/each}
-</Select>
-<ValidationFeedbackText {validationResult} />
+<fieldset class={['select-input', wrapperClass]}>
+  <legend>{label}</legend>
+  <Select
+    bind:this={element}
+    {disabled}
+    hiddenInput
+    input$name={key}
+    menu$anchorElement={document.body}
+    bind:value
+  >
+    {#each options as option}
+      <SelectOption
+        onSMUIAction={() => {
+          if (option.disabled) return;
+          onSelect(option.key);
+        }}
+        value={option.key}
+        disabled={option.disabled}
+      >
+        {option.label}
+      </SelectOption>
+    {/each}
+  </Select>
+  <div class="field-footer">
+    <div class={['help-text', isValid ? 'valid' : 'invalid']}>
+      {#if showHelpText}
+        {helpText}
+      {/if}
+    </div>
+  </div>
+</fieldset>
 
 <style lang="scss">
-  :global(.select-input .mdc-menu) {
-    top: 56px !important;
-    // calc(items * item height + top margin)
-    max-height: calc(5 * 48px + 8px);
+  .select-input {
+    padding-top: 1.2em;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-    :global([aria-disabled='true']) {
-      opacity: 0.5;
-      pointer-events: none;
+    legend {
+      font-size: 1.5em;
+    }
+
+    .field-footer {
+      margin-top: 0.2em;
+      height: 1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .help-text {
+        color: var(--mdc-theme-text-primary-on-background);
+        font-size: 0.75em;
+
+        &.invalid {
+          color: var(--mdc-theme-error);
+        }
+
+      }
+    }
+
+    :global(.mdc-menu) {
+      top: 56px !important;
+      // calc(items * item height + top margin)
+      max-height: calc(5 * 48px + 8px);
+
+      :global([aria-disabled='true']) {
+        opacity: 0.5;
+        pointer-events: none;
+      }
     }
   }
+
 </style>

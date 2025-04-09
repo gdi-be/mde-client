@@ -1,17 +1,19 @@
 <script lang="ts">
   import type { Service } from '$lib/models/metadata';
-  import Paper from '@smui/paper';
-  import SelectInput from '../../Inputs/SelectInput.svelte';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import SelectInput from '$lib/components/Form/Inputs/SelectInput.svelte';
 
   export type ServiceTypeProps = {
     value: Service['serviceType'];
     onChange: (newValue: string) => void;
   };
 
+  const KEY = 'isoMetadata.services.type';
+
   let { value, onChange }: ServiceTypeProps = $props();
 </script>
 
-<Paper>
+<div class="service-type-field">
   <SelectInput
     label="Typ"
     key="type"
@@ -36,4 +38,17 @@
     ]}
     {onChange}
   />
-</Paper>
+  <FieldTools key={KEY} noCheckmark />
+</div>
+
+<style lang="scss">
+  .service-type-field {
+    position: relative;
+    display: flex;
+    gap: 0.25em;
+
+    :global(.select-input) {
+      flex: 1;
+    }
+  }
+</style>

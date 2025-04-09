@@ -89,6 +89,7 @@
         bind:value={resolutionValue as number}
         key={RESOLUTION_KEY}
         label={resolutionFieldConfig?.label}
+        placeholder={resolutionFieldConfig?.explanation}
         type="float"
         onblur={onBlur}
         validationResult={resolutionValidationResult}
@@ -98,6 +99,7 @@
         bind:value={scaleValue as number}
         key={SCALE_KEY}
         label={scaleFieldConfig?.label}
+        placeholder={scaleFieldConfig?.explanation}
         onblur={onBlur}
         prefix="1:"
         validationResult={scaleValidationResult}
@@ -118,7 +120,19 @@
       border-radius: 4px;
 
       > legend {
-        font-size: 0.75em;
+        font-size: 1.5em;
+      }
+
+      :global(.number-input) {
+        border: none;
+        background-color: rgba(244, 244, 244, 0.7);
+      }
+
+      :global(.number-input > legend) {
+        font-size: 1.2em;
+        background-color: white;
+        border-radius: 0.25em;
+        padding: 0 0.25em;
       }
     }
 

@@ -99,8 +99,8 @@
 
 <div class="contacts-field">
   <fieldset>
-    <legend
-      >{fieldConfig?.label}
+    <legend>
+      <span>{fieldConfig?.label}</span>
       <IconButton
         class="material-icons"
         onclick={(evt) => addItem(evt)}
@@ -170,18 +170,30 @@
       > legend {
         display: flex;
         align-items: center;
-        font-size: 0.75em;
+        font-size: 1.5em;
       }
     }
 
     .contact {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+
       legend {
         text-align: right;
       }
-    }
 
-    :global(.mdc-text-field) {
-      display: flex;
+      :global(.text-input) {
+        border: none;
+        background-color: rgba(244, 244, 244, 0.7);
+      }
+
+      :global(.text-input > legend) {
+        font-size: 1.2em;
+        background-color: white;
+        border-radius: 0.25em;
+        padding: 0 0.25em;
+      }
     }
   }
 </style>

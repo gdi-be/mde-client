@@ -31,7 +31,8 @@
     label={fieldConfig?.label}
     maxlength={500}
     onblur={onBlur}
-    input$rows={5}
+    placeholder={fieldConfig?.explanation}
+    rows={5}
     {validationResult}
   />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />

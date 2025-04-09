@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
@@ -56,21 +55,19 @@
 </script>
 
 <div class="topic-category-field">
-  <Paper>
-    {#await fetchOptions()}
-      <p>Lade Themen Kategorien</p>
-    {:then OPTIONS}
-      <SelectInput
-        key={KEY}
-        label={fieldConfig?.label}
-        options={OPTIONS}
-        disabled={!!inspireTheme}
-        {value}
-        {onChange}
-        {validationResult}
-      />
-    {/await}
-  </Paper>
+  {#await fetchOptions()}
+    <p>Lade Themen Kategorien</p>
+  {:then OPTIONS}
+    <SelectInput
+      key={KEY}
+      label={fieldConfig?.label}
+      options={OPTIONS}
+      disabled={!!inspireTheme}
+      {value}
+      {onChange}
+      {validationResult}
+    />
+  {/await}
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -80,7 +77,7 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.select-input) {
       flex: 1;
     }
 

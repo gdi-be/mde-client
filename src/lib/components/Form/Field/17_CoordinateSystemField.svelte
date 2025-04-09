@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
@@ -33,20 +32,18 @@
 </script>
 
 <div class="title-field">
-  <Paper>
-    {#await fetchOptions()}
-      <p>Lade CRS Optionen</p>
-    {:then OPTIONS}
-      <SelectInput
-        {value}
-        key={KEY}
-        label={fieldConfig?.label}
-        options={OPTIONS}
-        onChange={onSelectionChange}
-        {validationResult}
-      />
-    {/await}
-  </Paper>
+  {#await fetchOptions()}
+    <p>Lade CRS Optionen</p>
+  {:then OPTIONS}
+    <SelectInput
+      {value}
+      key={KEY}
+      label={fieldConfig?.label}
+      options={OPTIONS}
+      onChange={onSelectionChange}
+      {validationResult}
+    />
+  {/await}
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -56,12 +53,8 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.select-input) {
       flex: 1;
-    }
-
-    :global(.mdc-select) {
-      display: flex;
     }
   }
 </style>

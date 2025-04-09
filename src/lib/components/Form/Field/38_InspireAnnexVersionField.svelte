@@ -1,6 +1,5 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { ValidationResult } from '../FieldsConfig';
@@ -28,14 +27,18 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
 {#if metadataProfile === 'INSPIRE_HARMONISED'}
   <div class="inspire-annex-version-field">
-    <Paper class="input-wrapper">
-      <TextInput bind:value key={KEY} label={fieldConfig?.label} onblur={onBlur} {validationResult} />
-    </Paper>
+    <TextInput
+      bind:value
+      key={KEY}
+      label={fieldConfig?.label}
+      placeholder={fieldConfig?.explanation}
+      onblur={onBlur}
+      {validationResult}
+    />
     <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
@@ -46,12 +49,8 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.input-wrapper) {
+    :global(.text-input) {
       flex: 1;
-    }
-
-    :global(.mdc-text-field) {
-      display: flex;
     }
   }
 </style>

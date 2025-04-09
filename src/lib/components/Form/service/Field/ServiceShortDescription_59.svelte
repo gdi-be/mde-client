@@ -32,7 +32,7 @@
     key={KEY}
     label={fieldConfig?.label}
     maxlength={500}
-    input$rows={5}
+    rows={5}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />
   <FieldTools key={KEY} noCheckmark >

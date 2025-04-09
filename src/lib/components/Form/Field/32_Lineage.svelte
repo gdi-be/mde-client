@@ -146,18 +146,36 @@
 
     fieldset {
       flex: 1;
-      border-radius: 4px;
+      border-radius: 0.25em;
 
       > legend {
         display: flex;
         align-items: center;
-        font-size: 0.75em;
+        font-size: 1.5em;
       }
     }
 
     .lineage {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+
       legend {
         text-align: right;
+      }
+
+      :global(.text-input),
+      :global(.date-input) {
+        border: none;
+        background-color: rgba(244, 244, 244, 0.7);
+      }
+
+      :global(.text-input > legend),
+      :global(.date-input > legend) {
+        font-size: 1.2em;
+        background-color: white;
+        border-radius: 0.25em;
+        padding: 0 0.25em;
       }
     }
 

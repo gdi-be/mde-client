@@ -1,12 +1,12 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from 'svelte/elements';
-  import HelperText from '@smui/textfield/helper-text';
   import type { ValidationResult } from '../FieldsConfig';
 
   type InputProps = {
     value?: string;
     key?: string;
     label?: string;
+    class?: string;
     validationResult?: ValidationResult;
   } & HTMLInputAttributes;
 
@@ -14,16 +14,19 @@
     key,
     label,
     value = $bindable(''),
+    class: wrapperClass,
     validationResult,
     ...restProps
   }: InputProps = $props();
 
   let isValid = $derived(validationResult?.valid !== false);
+  let focused = $state(false);
+  let showHelpText = $derived(focused || !isValid);
   let helpText = $derived(validationResult?.helpText);
 </script>
 
-<div class="date-input">
-  <label for={key}>{label}</label>
+<fieldset class={['date-input', wrapperClass]}>
+  <legend>{label}</legend>
   <input
     type="date"
     id={key}
@@ -31,19 +34,26 @@
     bind:value
     {...restProps}
   />
-  {#if helpText}
-    <HelperText persistent={!isValid} class={isValid ? 'valid' : 'invalid'}>
-      {helpText}
-    </HelperText>
-  {/if}
-</div>
+  <div class="field-footer">
+    <div class={['help-text', isValid ? 'valid' : 'invalid']}>
+      {#if showHelpText}
+        {helpText}
+      {/if}
+    </div>
+  </div>
+</fieldset>
 
 <style lang="scss">
   .date-input {
+    padding-top: 1.2em;
+    border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5em;
+    justify-content: center;
+
+    legend {
+      font-size: 1.5em;
+    }
 
     input {
       font-family: 'Roboto';
@@ -51,14 +61,27 @@
       border-radius: 0.25em;
       border: 1px solid grey;
       padding: 0.25em;
+      margin-top: 0.5em;
       outline-width: 0;
+      align-self: flex-start;
     }
 
-    :global(.mdc-text-field-helper-text.valid) {
-      color: var(--mdc-theme-text-primary-on-background);
-    }
-    :global(.mdc-text-field-helper-text.invalid) {
-      color: var(--mdc-theme-error);
+    .field-footer {
+      height: 1em;
+      margin-top: 0.2em;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .help-text {
+        color: var(--mdc-theme-text-primary-on-background);
+        font-size: 0.75em;
+
+        &.invalid {
+          color: var(--mdc-theme-error);
+        }
+
+      }
     }
   }
 </style>

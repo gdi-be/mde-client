@@ -1,14 +1,14 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { tick } from 'svelte';
+  import { getContext, tick } from 'svelte';
   import { fade } from 'svelte/transition';
   import LinearProgress from '@smui/linear-progress';
   import {
-    setFormData,
-    initializeFormContext,
     getProgress,
     type Section,
-    clearActiveHelp
+    clearActiveHelp,
+    type FormState,
+    FORMSTATE_CONTEXT
   } from '$lib/context/FormContext.svelte';
   import F01_TitleField from './Field/01_TitleField.svelte';
   import F02_DescriptionField from './Field/02_DescriptionField.svelte';
@@ -49,7 +49,10 @@
     activeSection?: string;
   };
 
-  let { activeSection, metadata }: FormProps = $props();
+  let { activeSection }: FormProps = $props();
+
+  const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formContext.metadata);
 
   type SectionConfig = {
     section: Section;
@@ -87,12 +90,6 @@
       disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
     }
   ];
-
-  initializeFormContext();
-
-  if (metadata) {
-    setFormData(metadata);
-  }
 
   let tabs = $state<HTMLElement>();
   let formWrapper = $state<HTMLDivElement>();
@@ -245,7 +242,6 @@
 
     .tab-container {
       background-color: #f0f0f0;
-      border-bottom: 3px solid transparent;
       border-radius: var(--mdc-shape-medium, 4px) var(--mdc-shape-medium, 4px) 0 0;
 
       :global(svg) {
@@ -259,11 +255,7 @@
 
       &.active {
         font-weight: bold;
-        border-color: #0078d7;
-      }
-
-      :global(.mdc-linear-progress) {
-        margin-bottom: 4px;
+        background-color: var(--primary-90);
       }
     }
 
@@ -294,8 +286,15 @@
           top: 0;
           display: flex;
           flex-direction: column;
-          padding: 1em 0 2em 0;
-          gap: 1em;
+          padding: 2em 0;
+
+          &:not(#services) {
+            gap: 4em;
+          }
+
+          &#services {
+            gap: 1em;
+          }
         }
       }
     }

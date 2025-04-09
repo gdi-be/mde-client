@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
@@ -39,20 +38,18 @@
 
 {#if metadataProfile !== 'ISO'}
   <div class="annex-theme-field">
-    <Paper>
-      {#await fetchOptions()}
-        <p>Lade Annex Themen</p>
-      {:then OPTIONS}
-        <SelectInput
-          key={KEY}
-          label={fieldConfig?.label}
-          options={OPTIONS}
-          {value}
-          {onChange}
-          {validationResult}
-        />
-      {/await}
-    </Paper>
+    {#await fetchOptions()}
+      <p>Lade Annex Themen</p>
+    {:then OPTIONS}
+      <SelectInput
+        key={KEY}
+        label={fieldConfig?.label}
+        options={OPTIONS}
+        {value}
+        {onChange}
+        {validationResult}
+      />
+    {/await}
     <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
@@ -63,12 +60,8 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.select-input) {
       flex: 1;
-    }
-
-    :global(.mdc-select) {
-      display: flex;
     }
   }
 </style>

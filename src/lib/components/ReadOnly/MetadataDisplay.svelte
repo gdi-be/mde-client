@@ -1,19 +1,5 @@
 <script lang="ts">
-  import { initializeFormContext, setFormData } from '$lib/context/FormContext.svelte';
-  import type { MetadataCollection } from '$lib/models/metadata';
   import DisplayField from './DisplayField.svelte';
-
-  type MetadataDisplayProps = {
-    metadata?: MetadataCollection;
-  };
-
-  const { metadata }: MetadataDisplayProps = $props();
-
-  initializeFormContext();
-
-  if (metadata) {
-    setFormData(metadata);
-  }
 </script>
 
 <div class="metadata-display">

@@ -11,6 +11,14 @@ export type FormState = {
   activeHelpKey?: FieldKey;
   assignedUser?: string;
   assignedRole?: string;
+  fieldConfigs?: any;
+};
+
+export type DynamicFieldConfig = {
+  key: FieldKey;
+  label: string;
+  placeholder?: string;
+  helpText?: string;
 };
 
 const formState = $state<FormState>({
@@ -19,7 +27,12 @@ const formState = $state<FormState>({
 
 export const FORMSTATE_CONTEXT = Symbol('formState');
 
-export function initializeFormContext() {
+export async function initializeFormContext(
+  metadata: MetadataCollection,
+  fieldConfigs?: FieldConfig<any>[]
+) {
+  formState.metadata = metadata;
+  formState.fieldConfigs = fieldConfigs;
   setContext(FORMSTATE_CONTEXT, formState);
 }
 
@@ -41,11 +54,13 @@ export function getValue<T>(key: string, metadata?: MetadataCollection): T | und
 }
 
 export function getFieldConfig<T>(key: FieldKey): FieldConfig<T> | undefined {
-  return FieldConfigs.find(({ key: k }) => k === key);
-}
-
-export function setFormData(metadata: MetadataCollection) {
-  formState.metadata = metadata;
+  const staticFieldConfig = FieldConfigs.find(({ key: k }) => k === key);
+  const configs: DynamicFieldConfig[] = formState.fieldConfigs || [];
+  const dynamicFieldConfig = configs.find(({ key: k }) => k === key);
+  return {
+    ...staticFieldConfig,
+    ...dynamicFieldConfig
+  } as FieldConfig<T>;
 }
 
 export function setValue<T>(key: string, value: T) {

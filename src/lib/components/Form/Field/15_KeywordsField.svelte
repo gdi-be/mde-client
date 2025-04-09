@@ -204,7 +204,7 @@
       border-radius: 4px;
 
       > legend {
-        font-size: 0.75em;
+        font-size: 1.5em;
       }
     }
 

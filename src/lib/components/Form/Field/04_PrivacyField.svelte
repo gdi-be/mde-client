@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import RadioInput from '../Inputs/RadioInput.svelte';
@@ -32,20 +31,18 @@
 </script>
 
 <div class="data-protection-field">
-  <Paper>
-    {#await fetchOptions()}
-      <p>Lade Datenschutz Optionen</p>
-    {:then OPTIONS}
-      <RadioInput
-        key={KEY}
-        label={fieldConfig?.label}
-        options={OPTIONS}
-        {validationResult}
-        {value}
-        {onChange}
-      />
-    {/await}
-  </Paper>
+  {#await fetchOptions()}
+    <p>Lade Datenschutz Optionen</p>
+  {:then OPTIONS}
+    <RadioInput
+      key={KEY}
+      label={fieldConfig?.label}
+      options={OPTIONS}
+      {validationResult}
+      {value}
+      {onChange}
+    />
+  {/await}
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 

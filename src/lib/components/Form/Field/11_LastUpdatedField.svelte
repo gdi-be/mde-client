@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Paper from '@smui/paper';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
@@ -53,16 +52,14 @@
 </script>
 
 <div class="date-time-field">
-  <Paper>
-    <DateInput
-      bind:value
-      key={KEY}
-      label={fieldConfig?.label}
-      onchange={onChange}
-      disabled={readOnly}
-      {validationResult}
-    />
-  </Paper>
+  <DateInput
+    bind:value
+    key={KEY}
+    label={fieldConfig?.label}
+    onchange={onChange}
+    disabled={readOnly}
+    {validationResult}
+  />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -72,12 +69,8 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.smui-paper) {
+    :global(.date-input) {
       flex: 1;
-    }
-
-    :global(.mdc-text-field) {
-      display: flex;
     }
   }
 </style>

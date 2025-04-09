@@ -30,14 +30,13 @@
   let activeColumn = $derived(activeTabIndex ? columns[activeTabIndex] : columns[0]);
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
-
   function addColumn() {
     const name = 'Neues Attribut' + columns.length;
     columns = [
       ...columns,
       {
         name,
-        title: name,
+        title: name
       }
     ];
     activeTabIndex = columns.length - 1;
@@ -63,9 +62,7 @@
     });
     onChange(columns);
   }
-
 </script>
-
 
 <fieldset class="columns-form">
   <legend>Attribute</legend>
@@ -99,75 +96,88 @@
   </nav>
   <div class="content">
     {#if activeTabIndex !== undefined}
-      <span>
-        <AttributeName_64
-          value={activeColumn?.name}
-          onChange={(name) => set('name', name)}
-        />
-        <AttributeAlias_65
-          value={activeColumn?.title}
-          onChange={(title) => set('title', title)}
-        />
-        <AttributeDatatype_66
-          value={activeColumn?.type}
-          onChange={(type) => set('type', type)}
-        />
-      </span>
+      <AttributeName_64 value={activeColumn?.name} onChange={(name) => set('name', name)} />
+      <AttributeAlias_65 value={activeColumn?.title} onChange={(title) => set('title', title)} />
+      <AttributeDatatype_66 value={activeColumn?.type} onChange={(type) => set('type', type)} />
     {/if}
   </div>
 </fieldset>
 
 <style lang="scss">
-fieldset.columns-form {
-  flex: 1;
-  border-radius: 4px;
+  fieldset.columns-form {
+    flex: 1;
+    border-radius: 0.25em;
 
-  > legend {
-    font-size: 0.75em;
-  }
-
-  nav {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.25em;
-  }
-
-  .tab-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-    background-color: #f0f0f0;
-    border-bottom: 3px solid transparent;
-    border-radius: var(--mdc-shape-medium, 4px) var(--mdc-shape-medium, 4px) 0 0;
-
-    :global(svg) {
-      margin: 10px;
+    > legend {
+      font-size: 1.5em;
     }
 
-    &:hover {
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.25em;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      padding-top: 1em;
+      gap: 1em;
+
+      :global(.text-input),
+      :global(.select-input) {
+        border: none;
+        background-color: rgba(244, 244, 244, 0.7);
+      }
+
+      :global(.select-input .mdc-select__anchor) {
+        background-color: white;
+      }
+
+      :global(.text-input > legend),
+      :global(.select-input > legend) {
+        font-size: 1.2em;
+        background-color: white;
+        border-radius: 0.25em;
+        padding: 0 0.25em;
+      }
+    }
+
+    .tab-container {
+      display: flex;
+      align-items: center;
+      position: relative;
       background-color: #f0f0f0;
-      border-color: var(--mdc-theme-primary);
+      border-radius: var(--mdc-shape-medium, 4px) var(--mdc-shape-medium, 4px) 0 0;
+
+      :global(svg) {
+        margin: 10px;
+      }
+
+      &:hover {
+        background-color: #f0f0f0;
+        border-color: var(--mdc-theme-primary);
+      }
+
+      &.active {
+        font-weight: bold;
+        background-color: var(--primary-90);
+      }
     }
 
-    &.active {
-      font-weight: bold;
-      border-color: #0078d7;
+    .tab {
+      padding: 0.5rem 1rem;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 200px;
+      overflow: hidden;
     }
   }
-
-  .tab {
-    padding: 0.5rem 1rem;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 200px;
-    overflow: hidden;
-  }
-}
 </style>
