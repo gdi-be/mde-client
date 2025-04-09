@@ -133,6 +133,34 @@
       }
     );
   }
+  // previewNotAvailable ? FALLBACK_IMAGE : (metadata.isoMetadata.preview as string)
+  async function getImageSource() {
+    if (metadata.isoMetadata?.preview) {
+      const response = await fetch('/replace_variable', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          value: metadata.isoMetadata?.preview
+        })
+      });
+
+      if (response.ok) {
+        const { value } = await response.json();
+        const success = true;
+        console.log('Image source:', value);
+        return { src: value, success };
+      } else {
+        const success = false;
+        return { src: FALLBACK_IMAGE, success };
+      }
+    } else {
+      const success = false;
+      return { src: FALLBACK_IMAGE, success };
+    }
+  }
+
 </script>
 
 <Card class="metadata-card">
@@ -140,12 +168,23 @@
     <span class="title">{metadata.title}</span>
     <Media aspectRatio="16x9">
       <MediaContent>
-        <img
-          class={['preview-image', previewNotAvailable && 'not-available']}
-          src={previewNotAvailable ? FALLBACK_IMAGE : (metadata.isoMetadata.preview as string)}
-          onerror={() => (previewNotAvailable = true)}
-          alt="Vorschau nicht erreichbar"
-        />
+        {#await getImageSource() }
+          <img
+            class={['preview-image not-available']}
+            src={FALLBACK_IMAGE}
+            alt="Vorschau nicht erreichbar"
+          />
+        {:then asyncSource }
+          <img
+            class={[
+              'preview-image',
+              (!asyncSource.success || previewNotAvailable) && 'not-available'
+            ]}
+            src={previewNotAvailable ? FALLBACK_IMAGE : asyncSource.src}
+            onerror={() => (previewNotAvailable = true)}
+            alt="Vorschau"
+          />
+        {/await}
       </MediaContent>
     </Media>
   </PrimaryAction>
