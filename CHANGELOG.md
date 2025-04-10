@@ -1,3 +1,18 @@
+# [3.1.0](https://github.com/gdi-be/mde-client/compare/v3.0.1...v3.1.0) (2025-04-10)
+
+
+### Bug Fixes
+
+* update Annex Version Field ([de504c1](https://github.com/gdi-be/mde-client/commit/de504c18633562c11fafa8d3ce594e7190bf3134))
+* use fieldConfig for DisplayField ([2e0ddbd](https://github.com/gdi-be/mde-client/commit/2e0ddbdddb8365260c58c69dfff188441f80cbc4))
+
+
+### Features
+
+* add download button ([ad750b8](https://github.com/gdi-be/mde-client/commit/ad750b828ac6c39ca570addb379de88f4646c0ff))
+* improve filename of download ([885ea75](https://github.com/gdi-be/mde-client/commit/885ea7596edcbc7bd8ddb85b5e579560a268f1bc))
+* replaces valid with approved ([484153d](https://github.com/gdi-be/mde-client/commit/484153d775916588e2b4fcae6a581ad5fff42eff))
+
 ## [3.0.1](https://github.com/gdi-be/mde-client/compare/v3.0.0...v3.0.1) (2025-04-09)
 
 
