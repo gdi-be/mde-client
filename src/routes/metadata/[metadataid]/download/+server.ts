@@ -11,7 +11,11 @@ export async function GET({ cookies, params }) {
     return error(400, 'Bad Request');
   }
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/${params.metadataid}/download`);
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${params.metadataid}/download`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
 
   if (!response.ok) {
     return error(response.status, response.statusText);

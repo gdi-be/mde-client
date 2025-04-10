@@ -3,12 +3,11 @@
   import type { MetadataCollection } from '$lib/models/metadata';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
-  import ApprovalPanel from './ApprovalPanel.svelte';
   import CommentsPanel from './CommentsPanel.svelte';
   import Button, { Icon, Label } from '@smui/button';
   import { getContext, type Snippet } from 'svelte';
   import ValidationPanel from './ValidationPanel.svelte';
-  import AssignmentDialog from './AssignmentDialog.svelte';
+  import AssignmentDialog from '$lib/components/AssignmentDialog.svelte';
   import { page } from '$app/state';
 
   type FormFooterProps = {
@@ -187,10 +186,6 @@
 
 {#if commentsPanelVisible}
   <CommentsPanel {metadata} />
-{/if}
-
-{#if approvalPanelVisible}
-  <ApprovalPanel {metadata} />
 {/if}
 
 {#if validationPanelVisible}

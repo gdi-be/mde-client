@@ -2,7 +2,7 @@ type QueryConfig = {
   searchTerm: string;
   isAssignedToMe?: boolean;
   isTeamMember?: boolean;
-  isValid?: boolean;
+  isApproved?: boolean;
   assignedRoles?: Role[];
 }
 
