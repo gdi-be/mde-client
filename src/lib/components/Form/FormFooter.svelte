@@ -9,6 +9,7 @@
   import { getContext, type Snippet } from 'svelte';
   import ValidationPanel from './ValidationPanel.svelte';
   import AssignmentDialog from './AssignmentDialog.svelte';
+  import { page } from '$app/state';
 
   type FormFooterProps = {
     metadata?: MetadataCollection;
@@ -79,6 +80,27 @@
     assignmentPanelVisible = false;
   };
 
+  const onDownloadClick = async () => {
+    const metadataId = metadata?.metadataId;
+    const url = `${page.url.origin}/metadata/${metadataId}/download`;
+    const response = await fetch(url, {
+      method: 'GET'
+    });
+
+    if (response.ok) {
+      // response is a zip file blob that will be downloaded
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${metadataId}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    }
+  };
+
 </script>
 
 <footer class="form-footer">
@@ -131,6 +153,15 @@
         <Icon class="material-icons">rocket_launch</Icon>
       </Button>
     {/if}
+    <Button
+      class="submit-button"
+      title="Download"
+      variant="raised"
+      onclick={onDownloadClick}
+    >
+      <Label>Download</Label>
+      <Icon class="material-icons">download</Icon>
+    </Button>
   </div>
 </footer>
 
