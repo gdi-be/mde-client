@@ -133,7 +133,7 @@
       }
     );
   }
-  // previewNotAvailable ? FALLBACK_IMAGE : (metadata.isoMetadata.preview as string)
+
   async function getImageSource() {
     if (metadata.isoMetadata?.preview) {
       const response = await fetch('/replace_variable', {

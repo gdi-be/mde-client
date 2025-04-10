@@ -9,6 +9,7 @@
   import { getContext, type Snippet } from 'svelte';
   import ValidationPanel from './ValidationPanel.svelte';
   import AssignmentDialog from './AssignmentDialog.svelte';
+  import { page } from '$app/state';
 
   type FormFooterProps = {
     metadata?: MetadataCollection;
@@ -79,6 +80,37 @@
     assignmentPanelVisible = false;
   };
 
+  const onDownloadClick = async () => {
+    const metadataId = metadata?.metadataId;
+    const url = `${page.url.origin}/metadata/${metadataId}/download`;
+    const response = await fetch(url, {
+      method: 'GET'
+    });
+
+    if (response.ok) {
+      let label = `${metadata?.isoMetadata.title || metadata}`;
+      label = label
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss')
+        .replace(/\s+/g, '_');
+      const date = new Date().toISOString().split('T')[0];
+      const fileName = `${label}_${date}`;
+
+      // response is a zip file blob that will be downloaded
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${fileName}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    }
+  };
+
 </script>
 
 <footer class="form-footer">
@@ -131,6 +163,15 @@
         <Icon class="material-icons">rocket_launch</Icon>
       </Button>
     {/if}
+    <Button
+      class="submit-button"
+      title="Download"
+      variant="raised"
+      onclick={onDownloadClick}
+    >
+      <Label>Download</Label>
+      <Icon class="material-icons">download</Icon>
+    </Button>
   </div>
 </footer>
 
