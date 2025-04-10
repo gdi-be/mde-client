@@ -122,13 +122,40 @@
   async function onDelete(evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
+
     popconfirm(
       targetEl,
       async () => {
-        // TODO:
+        try {
+          const response = await fetch(`/metadata/${metadata.metadataId}`, {
+            method: 'DELETE'
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to delete metadata');
+          }
+
+          const responseJson = await response.json();
+
+          const successResult = (metadata.isoMetadata.services as any[])?.filter(
+            service => responseJson.deletedCatalogRecords.includes(service.fileIdentifier)
+          );
+
+          const errorResult = (metadata.isoMetadata.services as any[])?.filter(
+            service => !responseJson.deletedCatalogRecords.includes(service.fileIdentifier)
+          );
+
+          // TODO Show results in UI?
+          // console.log(successResult);
+          // console.log(errorResult);
+
+          await invalidateAll();
+        } catch (e) {
+          console.error('Error deleting metadata:', e);
+        }
       },
       {
-        text: 'Löschen ist noch nicht implementiert',
+        text: 'Möchten Sie diesen Metadatensatz wirklich löschen?',
         confirmButtonText: 'Ok'
       }
     );

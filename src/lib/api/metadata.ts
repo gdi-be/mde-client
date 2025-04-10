@@ -211,6 +211,41 @@ export const createMetadataCollection = async ({
   return await response.json();
 };
 
+export type MetadataDeleteProps = {
+  token: string;
+  id: string;
+};
+
+export type MetadataDeletionResponse = {
+  deletedMetadataCollection: string;
+  deletedCatalogRecords: string[];
+};
+
+export const deleteMetadataCollection = async ({
+  token,
+  id
+}: MetadataDeleteProps): Promise<MetadataDeletionResponse> => {
+  if (!token) {
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
+  }
+
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${id}`, {
+    method: 'DELETE',
+    headers
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  return await response.json();
+};
+
 export type AddCommentProps = {
   token: string;
   metadataid: string;

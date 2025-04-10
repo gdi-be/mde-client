@@ -7,7 +7,7 @@ export type PopconfirmState = {
   text?: string;
   anchorElement?: HTMLElement;
   confirmButtonText?: string;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void>;
   onCancel?: () => void;
 };
 
@@ -17,7 +17,7 @@ const defaultState = {
   open: false,
   text: 'Sind sie sicher?',
   confirmButtonText: 'Bestätigen',
-  onConfirm: closePopconfirm,
+  onConfirm: async () => closePopconfirm(),
   onCancel: closePopconfirm
 };
 
@@ -29,7 +29,7 @@ export function initializePopconfimContext() {
 
 export function popconfirm(
   anchorElement: HTMLElement,
-  onConfirm: () => void,
+  onConfirm: () => Promise<void>,
   options?: ConfirmOptions
 ) {
   popConfirmState.state = {
