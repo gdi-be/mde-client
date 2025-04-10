@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/gdi-be/mde-client/compare/v3.1.0...v3.2.0) (2025-04-10)
+
+
+### Features
+
+* actually delete the selected metadata collection ([9fddc40](https://github.com/gdi-be/mde-client/commit/9fddc401c8ade7f0d9e3f199802df4b9b6e7c0cb))
+
 # [3.1.0](https://github.com/gdi-be/mde-client/compare/v3.0.1...v3.1.0) (2025-04-10)
 
 
