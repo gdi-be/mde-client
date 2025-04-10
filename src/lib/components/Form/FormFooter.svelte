@@ -88,12 +88,22 @@
     });
 
     if (response.ok) {
+      let label = `${metadata?.isoMetadata.title || metadata}`;
+      label = label
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss')
+        .replace(/\s+/g, '_');
+      const date = new Date().toISOString().split('T')[0];
+      const fileName = `${label}_${date}`;
+
       // response is a zip file blob that will be downloaded
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${metadataId}.zip`;
+      a.download = `${fileName}.zip`;
       document.body.appendChild(a);
       a.click();
       a.remove();
