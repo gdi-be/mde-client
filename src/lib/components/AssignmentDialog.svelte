@@ -6,6 +6,8 @@
   import Button, { Label } from '@smui/button';
   import Dialog, { Content, Header, Title } from '@smui/dialog';
   import type { UserData } from '$lib/models/api';
+  import Switch from '@smui/switch';
+  import FormField from '@smui/form-field';
 
   let { metadata, open = $bindable(false) } = $props();
 
@@ -18,23 +20,25 @@
   const canAssignToDataOwner = $derived(
     // Admin can do anything
     highestRole === 'Administrator' ||
-    // Editors are responsible and I'm an Editor
-    (responsibleRole === 'Editor' && highestRole === 'Editor')
+      // Editors are responsible and I'm an Editor
+      (responsibleRole === 'Editor' && highestRole === 'Editor')
   );
 
   const canAssignToEditor = $derived(
     // Admin can do anything
     highestRole === 'Administrator' ||
-    // Its assigned to me and I'm not an Editor already
-    (assignedToMe && responsibleRole !== 'Editor')
+      // Its assigned to me and I'm not an Editor already
+      (assignedToMe && responsibleRole !== 'Editor')
   );
 
   const canAssignToQualityAssurance = $derived(
     // Admin can do anything
     highestRole === 'Administrator' ||
-    // Editors are responsible and I'm an Editor
-    (responsibleRole === 'Editor' && highestRole === 'Editor')
+      // Editors are responsible and I'm an Editor
+      (responsibleRole === 'Editor' && highestRole === 'Editor')
   );
+
+  const canApproveMetadata = $derived(['Administrator', 'QualityAssurance'].includes(highestRole));
 
   const assignToRole = async (role: Role) => {
     if (!metadata) return;
@@ -50,11 +54,11 @@
     });
 
     goto('/metadata', {
-      invalidateAll: true,
+      invalidateAll: true
     });
 
     open = false;
-  }
+  };
 
   const assignToUser = async (keycloakId: string) => {
     if (!metadata) return;
@@ -68,7 +72,7 @@
     });
 
     goto('/metadata', {
-      invalidateAll: true,
+      invalidateAll: true
     });
 
     open = false;
@@ -99,7 +103,39 @@
       return groupedTeamMembers;
     }
   };
+
+  const onApprovalStateChange = async (approved: boolean) => {
+    const response = await fetch(`/metadata/${metadata.metadataId}/approved`, {
+      method: approved ? 'POST' : 'DELETE'
+    });
+    if (!response.ok) {
+      console.error('Failed to update approval state');
+    }
+  };
+
 </script>
+
+{#snippet approve()}
+  <fieldset class="approve">
+    <legend>Prüfung</legend>
+    <p>
+      Wählen sie den Überprüfungsstatus der Metadaten aus.
+      Wenn sie den Status ändern denken sie daran einen Kommentar zu hinterlassen.
+    </p>
+    <FormField align="end">
+      {#snippet label()}
+        <Label>Metadaten Prüfung erfolgreich?</Label>
+      {/snippet}
+      <Switch
+        checked={metadata?.approved}
+        onSMUISwitchChange={(event) => {
+          const approved = event.detail.selected;
+          onApprovalStateChange(Boolean(approved));
+        }}
+      />
+    </FormField>
+  </fieldset>
+{/snippet}
 
 {#snippet assignToEditor(users: UserData[] = [])}
   <div class="assign-section assign-editor">
@@ -155,11 +191,7 @@
   </div>
 {/snippet}
 
-<Dialog
-  bind:open
-  aria-labelledby="Zuweisung"
-  aria-describedby="Zuweisung"
->
+<Dialog bind:open aria-labelledby="Zuweisung" aria-describedby="Zuweisung">
   <Header>
     <Title>Zuweisung</Title>
   </Header>
@@ -168,6 +200,9 @@
       {#if !canAssignToEditor && !canAssignToDataOwner && !canAssignToQualityAssurance}
         <p>Sie haben keine Berechtigung um die Metadaten zuzuweisen.</p>
       {:else}
+        {#if canApproveMetadata}
+          {@render approve()}
+        {/if}
         <p>Wählen Sie eine Rolle oder einen User an die Sie die Metadaten übergeben wollen.</p>
         {#await fetchTeamAndGroupByRole()}
           <p>Lade Team</p>
@@ -204,6 +239,16 @@
     flex-direction: column;
     gap: 1em;
     padding: 1em;
+
+    fieldset.approve {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+      border-radius: 0.25em;
+
+      --mdc-switch-unselected-handle-color: var(--mdc-theme-error);
+      --mdc-switch-selected-handle-color: var(--ready-for-release-color);
+    }
 
     .assign-section {
       display: flex;

@@ -1,13 +1,19 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getContext } from 'svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { ValidationResult } from '../FieldsConfig';
+  import { getHighestRole } from '$lib/util';
+  import type { Token } from '$lib/models/keycloak';
 
   const KEY = 'isoMetadata.inspireAnnexVersion';
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
 
   const { metadata } = $props();
+
+  const token = getContext<Token>('user_token');
+  const highestRole = $derived(getHighestRole(token));
 
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
@@ -29,7 +35,7 @@
   };
 </script>
 
-{#if metadataProfile === 'INSPIRE_HARMONISED'}
+{#if metadataProfile === 'INSPIRE_HARMONISED' && highestRole !== 'DataOwner'}
   <div class="inspire-annex-version-field">
     <TextInput
       bind:value

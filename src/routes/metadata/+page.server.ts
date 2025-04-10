@@ -33,7 +33,7 @@ export async function load({ cookies, url }) {
   }
 
   if (statusfilter?.includes('READY_FOR_RELEASE')) {
-    queryConfig.isValid = true;
+    queryConfig.isApproved = true;
   }
 
   if (statusfilter?.includes('ROLE')) {

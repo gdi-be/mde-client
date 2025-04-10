@@ -55,7 +55,7 @@
     if (metadata.responsibleRole) {
       chips.push('ROLE_' + metadata.responsibleRole);
     }
-    if (metadata.isoMetadata.valid) {
+    if (metadata.approved) {
       chips.push('READY_FOR_RELEASE');
     }
     return chips;

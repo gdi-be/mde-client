@@ -210,6 +210,7 @@ export type MetadataCollection = {
   teamMemberIds?: string[];
   assignedUserId?: string;
   responsibleRole?: Role;
+  approved?: boolean;
   title?: string;
   clientMetadata: JsonClientMetadata;
   isoMetadata: JsonIsoMetadata;
