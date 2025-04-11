@@ -19,26 +19,26 @@
 
   const canAssignToDataOwner = $derived(
     // Admin can do anything
-    highestRole === 'Administrator' ||
+    highestRole === 'MdeAdministrator' ||
       // Editors are responsible and I'm an Editor
-      (responsibleRole === 'Editor' && highestRole === 'Editor')
+      (responsibleRole === 'MdeEditor' && highestRole === 'MdeEditor')
   );
 
   const canAssignToEditor = $derived(
     // Admin can do anything
-    highestRole === 'Administrator' ||
+    highestRole === 'MdeAdministrator' ||
       // Its assigned to me and I'm not an Editor already
-      (assignedToMe && responsibleRole !== 'Editor')
+      (assignedToMe && responsibleRole !== 'MdeEditor')
   );
 
   const canAssignToQualityAssurance = $derived(
     // Admin can do anything
-    highestRole === 'Administrator' ||
+    highestRole === 'MdeAdministrator' ||
       // Editors are responsible and I'm an Editor
-      (responsibleRole === 'Editor' && highestRole === 'Editor')
+      (responsibleRole === 'MdeEditor' && highestRole === 'MdeEditor')
   );
 
-  const canApproveMetadata = $derived(['Administrator', 'QualityAssurance'].includes(highestRole));
+  const canApproveMetadata = $derived(['MdeAdministrator', 'MdeQualityAssurance'].includes(highestRole));
 
   const assignToRole = async (role: Role) => {
     if (!metadata) return;
@@ -148,7 +148,7 @@
           </Button>
         {/each}
       {/if}
-      <Button variant="outlined" onclick={() => assignToRole('Editor')}>
+      <Button variant="outlined" onclick={() => assignToRole('MdeEditor')}>
         <Label>An Redaktion übergeben</Label>
       </Button>
     </div>
@@ -184,7 +184,7 @@
           </Button>
         {/each}
       {/if}
-      <Button variant="outlined" onclick={() => assignToRole('QualityAssurance')}>
+      <Button variant="outlined" onclick={() => assignToRole('MdeQualityAssurance')}>
         <Label>An Qualitätssicherung übergeben</Label>
       </Button>
     </div>
@@ -208,13 +208,13 @@
           <p>Lade Team</p>
         {:then groups}
           {#if canAssignToEditor}
-            {@render assignToEditor(groups['Editor'])}
+            {@render assignToEditor(groups['MdeEditor'])}
           {/if}
           {#if canAssignToDataOwner}
-            {@render assignToDataOwner(groups['DataOwner'])}
+            {@render assignToDataOwner(groups['MdeDataOwner'])}
           {/if}
           {#if canAssignToQualityAssurance}
-            {@render assignToQualityAssurance(groups['QualityAssurance'])}
+            {@render assignToQualityAssurance(groups['MdeQualityAssurance'])}
           {/if}
         {:catch}
           {#if canAssignToEditor}

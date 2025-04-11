@@ -10,7 +10,7 @@ export async function load({ params, cookies, url }) {
   if (!token) return redirect(302, '/login');
 
   const parsedToken = parseToken(token);
-  const readOnly = getHighestRole(parsedToken) === 'QualityAssurance';
+  const readOnly = getHighestRole(parsedToken) === 'MdeQualityAssurance';
 
   if (readOnly) {
     return redirect(302, url + '/readonly');

@@ -35,7 +35,7 @@
   };
 </script>
 
-{#if metadataProfile === 'INSPIRE_HARMONISED' && highestRole !== 'DataOwner'}
+{#if metadataProfile === 'INSPIRE_HARMONISED' && highestRole !== 'MdeDataOwner'}
   <div class="inspire-annex-version-field">
     <TextInput
       bind:value

@@ -205,18 +205,18 @@ export function getLastUpdateValue(published: string, maintenanceFrequency: Main
 
 export const getRoleName = (role: Role): string => {
   const roleMapLong: Record<Role, string> = {
-    DataOwner: 'Datenhaltende Stelle',
-    Editor: 'Redakteur',
-    QualityAssurance: 'Qualitätsmanagment',
-    Administrator: 'Administrator'
+    MdeDataOwner: 'Datenhaltende Stelle',
+    MdeEditor: 'Redakteur',
+    MdeQualityAssurance: 'Qualitätsmanagment',
+    MdeAdministrator: 'Administrator'
   };
   return roleMapLong[role];
 };
 
 export const getHighestRole = (token: Token): Role => {
-  if (token.realm_access.roles.includes('Administrator')) return 'Administrator';
-  if (token.realm_access.roles.includes('Editor')) return 'Editor';
-  if (token.realm_access.roles.includes('QualityAssurance')) return 'QualityAssurance';
-  if (token.realm_access.roles.includes('DataOwner')) return 'DataOwner';
+  if (token.realm_access.roles.includes('MdeAdministrator')) return 'MdeAdministrator';
+  if (token.realm_access.roles.includes('MdeEditor')) return 'MdeEditor';
+  if (token.realm_access.roles.includes('MdeQualityAssurance')) return 'MdeQualityAssurance';
+  if (token.realm_access.roles.includes('MdeDataOwner')) return 'MdeDataOwner';
   throw Error('User has no role');
 };
