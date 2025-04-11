@@ -20,13 +20,13 @@ const defaultState = {
     key: 'READY_FOR_RELEASE',
     label: 'Geprüft'
   }, {
-    key: 'ROLE_DataOwner',
+    key: 'ROLE_MdeDataOwner',
     label: 'Datenhaltende Stelle'
   }, {
-    key: 'ROLE_Editor',
+    key: 'ROLE_MdeEditor',
     label: 'Redakteur'
   },{
-    key: 'ROLE_QualityAssurance',
+    key: 'ROLE_MdeQualityAssurance',
     label: 'Qualitätssicherung'
   }]
 };
@@ -44,14 +44,14 @@ export function getStatusesState() {
 export function getAvailableStatuses(token: Token) {
   const highestRole = getHighestRole(token);
   return statutesState.state.statuses.filter(status => {
-    if (highestRole === 'Administrator') {
+    if (highestRole === 'MdeAdministrator') {
       return true;
-    } else if (highestRole === 'Editor') {
-      return !['ROLE_QualityAssurance', 'ROLE_DataOwner'].includes(status.key);
-    } else if (highestRole === 'QualityAssurance') {
-      return !['ROLE_Editor', 'ROLE_DataOwner'].includes(status.key);
-    } else if (highestRole === 'DataOwner') {
-      return !['ROLE_Editor', 'ROLE_QualityAssurance', 'READY_FOR_RELEASE'].includes(status.key);
+    } else if (highestRole === 'MdeEditor') {
+      return !['ROLE_MdeQualityAssurance', 'ROLE_MdeDataOwner'].includes(status.key);
+    } else if (highestRole === 'MdeQualityAssurance') {
+      return !['ROLE_MdeEditor', 'ROLE_MdeDataOwner'].includes(status.key);
+    } else if (highestRole === 'MdeDataOwner') {
+      return !['ROLE_MdeEditor', 'ROLE_MdeQualityAssurance', 'READY_FOR_RELEASE'].includes(status.key);
     }
   });
 }

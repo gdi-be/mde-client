@@ -25,22 +25,22 @@
   const isTeamMember = $derived(metadata.teamMemberIds?.includes(userId));
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
   const showDeleteAction = $derived(
-    highestRole === 'Administrator' ||
+    highestRole === 'MdeAdministrator' ||
     metadata.assignedUserId === userId &&
-    highestRole === 'Editor'
+    highestRole === 'MdeEditor'
   );
   const showCommentsAction = $derived(true);
   const showPrintAction = $derived(true);
   const showEditAction = $derived(
-    highestRole === 'Administrator' ||
+    highestRole === 'MdeAdministrator' ||
     metadata.assignedUserId === userId
   );
   const showAssignAction = $derived(
-    highestRole === 'Administrator' ||
+    highestRole === 'MdeAdministrator' ||
     (
       !assignedToSomeoneElse &&
       highestRole === metadata.responsibleRole &&
-      highestRole !== 'DataOwner'
+      highestRole !== 'MdeDataOwner'
     )
   );
 
@@ -62,7 +62,7 @@
   });
 
   const assignButtonLabeL = $derived.by(() => {
-    if (highestRole === 'Administrator') {
+    if (highestRole === 'MdeAdministrator') {
       return 'Zuweisung verwalten.';
     } else if (assignedToMe) {
       return 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.';
@@ -72,7 +72,7 @@
   });
 
   const onAssign = () => {
-    if (highestRole === 'Administrator') {
+    if (highestRole === 'MdeAdministrator') {
       goto(`/metadata/${metadata.metadataId}/readonly?action=print`);
     } else if (assignedToMe) {
       removeAssignment();
@@ -264,11 +264,11 @@
         aria-label={assignButtonLabeL}
         title={assignButtonLabeL}
         onclick={onAssign}
-        pressed={assignedToMe && highestRole !== 'Administrator'}
+        pressed={assignedToMe && highestRole !== 'MdeAdministrator'}
       >
         <Icon class="material-icons-filled assigned-to-me" on>person_remove</Icon>
         <Icon class="material-icons-filled">
-          {highestRole === 'Administrator' ? 'manage_accounts' : 'person_check'}
+          {highestRole === 'MdeAdministrator' ? 'manage_accounts' : 'person_check'}
         </Icon>
       </IconButton>
     {/if}

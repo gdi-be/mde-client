@@ -40,22 +40,22 @@
   );
 
   let showPublishButton = $derived(
-    highestRole === 'Administrator' ||
+    highestRole === 'MdeAdministrator' ||
     (
       assignedToMe &&
-      allFieldsValid(metadata) && highestRole === 'Editor' &&
+      allFieldsValid(metadata) && highestRole === 'MdeEditor' &&
       metadata?.isoMetadata.valid === true
     )
   );
   let showValidateButton = $derived(
-    highestRole === 'Administrator' ||
+    highestRole === 'MdeAdministrator' ||
     (
-      allFieldsValid(metadata) && highestRole === 'Editor' &&
+      allFieldsValid(metadata) && highestRole === 'MdeEditor' &&
       metadata?.isoMetadata.valid === true
     )
   );
   let showAssignmentButton = $derived(
-    highestRole === 'Administrator' ||
+    highestRole === 'MdeAdministrator' ||
     assignedToMe ||
     highestRole === metadata?.responsibleRole
   );

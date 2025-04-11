@@ -28,4 +28,4 @@ export type Token = {
   email: string;
 };
 
-export type Role = 'DataOwner' | 'Editor' | 'QualityAssurance' | 'Administrator';
+export type Role = 'MdeDataOwner' | 'MdeEditor' | 'MdeQualityAssurance' | 'MdeAdministrator';
