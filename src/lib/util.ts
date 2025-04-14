@@ -149,55 +149,55 @@ export function getLastUpdateValue(published: string, maintenanceFrequency: Main
   }
 
   switch (maintenanceFrequency) {
-    case 'continual':
-      updateDate = todayDate;
-      break;
-    case 'daily':
-      updateDate = todayDate;
-      updateDate.setDate(updateDate.getDate() - 1);
-      break;
-    case 'weekly':
-      updateDate = todayDate;
-      if (todayDate.getDay() > publishedDate.getDay()) {
-        updateDate.setDate(todayDate.getDate() - (todayDate.getDay() - publishedDate.getDay()));
-      } else {
-        updateDate.setDate(
-          todayDate.getDate() - (7 - (publishedDate.getDay() - todayDate.getDay()))
-        );
-      }
-      break;
-    case 'fortnightly':
-      updateDate = getLastUpdateDateDaily(publishedDate, 14);
-      break;
-    case 'monthly':
-      updateDate = todayDate;
-      if (todayDate.getDate() > publishedDate.getDate()) {
-        updateDate.setDate(publishedDate.getDate());
-      } else {
-        updateDate.setMonth(updateDate.getMonth() - 1);
-        updateDate.setDate(publishedDate.getDate());
-      }
-      break;
-    case 'quarterly':
-      updateDate = getLastUpdateDateMonthly(publishedDate, 3);
-      break;
-    case 'biannually':
-      updateDate = getLastUpdateDateMonthly(publishedDate, 6);
-      break;
-    case 'annually':
-      updateDate = publishedDate;
-      if (dayInYearIsGreater(publishedDate, todayDate)) {
-        updateDate.setFullYear(todayDate.getFullYear());
-      } else {
-        updateDate.setFullYear(todayDate.getFullYear() - 1);
-      }
-      break;
-    case 'asNeeded':
-    case 'irregular':
-    case 'notPlanned':
-    case 'unknown':
-    default:
-      return undefined;
+  case 'continual':
+    updateDate = todayDate;
+    break;
+  case 'daily':
+    updateDate = todayDate;
+    updateDate.setDate(updateDate.getDate() - 1);
+    break;
+  case 'weekly':
+    updateDate = todayDate;
+    if (todayDate.getDay() > publishedDate.getDay()) {
+      updateDate.setDate(todayDate.getDate() - (todayDate.getDay() - publishedDate.getDay()));
+    } else {
+      updateDate.setDate(
+        todayDate.getDate() - (7 - (publishedDate.getDay() - todayDate.getDay()))
+      );
+    }
+    break;
+  case 'fortnightly':
+    updateDate = getLastUpdateDateDaily(publishedDate, 14);
+    break;
+  case 'monthly':
+    updateDate = todayDate;
+    if (todayDate.getDate() > publishedDate.getDate()) {
+      updateDate.setDate(publishedDate.getDate());
+    } else {
+      updateDate.setMonth(updateDate.getMonth() - 1);
+      updateDate.setDate(publishedDate.getDate());
+    }
+    break;
+  case 'quarterly':
+    updateDate = getLastUpdateDateMonthly(publishedDate, 3);
+    break;
+  case 'biannually':
+    updateDate = getLastUpdateDateMonthly(publishedDate, 6);
+    break;
+  case 'annually':
+    updateDate = publishedDate;
+    if (dayInYearIsGreater(publishedDate, todayDate)) {
+      updateDate.setFullYear(todayDate.getFullYear());
+    } else {
+      updateDate.setFullYear(todayDate.getFullYear() - 1);
+    }
+    break;
+  case 'asNeeded':
+  case 'irregular':
+  case 'notPlanned':
+  case 'unknown':
+  default:
+    return undefined;
   }
 
   return updateDate;
