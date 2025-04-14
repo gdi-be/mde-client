@@ -9,6 +9,7 @@
   const { data } = $props();
   let commentsPanelVisible = $state(false);
   let approvalPanelVisible = $state(false);
+  let assignmentPanelVisible = $state(false);
 
   const metadata = $derived(data.metadata);
 
@@ -37,6 +38,10 @@
       approvalPanelVisible = true;
     }
 
+    if(action?.includes('assignment')) {
+      assignmentPanelVisible = true;
+    }
+
   });
 
 </script>
@@ -57,6 +62,7 @@
     {metadata}
     {commentsPanelVisible}
     {approvalPanelVisible}
+    {assignmentPanelVisible}
   />
 </div>
 
