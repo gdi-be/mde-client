@@ -1,58 +1,59 @@
 <script lang="ts">
-  import type { ColumnInfo } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import Checkmark from '../Checkmark.svelte';
-  import AttributeName_64 from './Field/AttributeName_64.svelte';
-  import AttributeAlias_65 from './Field/AttributeAlias_65.svelte';
-  import AttributeDatatype_66 from './Field/AttributeDatatype_66.svelte';
+  import ColumnsForm from './ColumnsForm.svelte';
+  import type { FeatureType } from '$lib/models/metadata';
+  import FeatureTypeTitle_61 from './Field/FeatureTypeTitle_61.svelte';
+  import FeatureTypeName_62 from './Field/FeatureTypeName_62.svelte';
 
   type Tab = {
     name: string;
   };
 
   export type ColumnsFormProps = {
-    value?: ColumnInfo[];
-    onChange?: (columns: ColumnInfo[]) => void;
+    value?: FeatureType[];
+    onChange?: (featureTypes: FeatureType[]) => void;
   };
 
   let { value: initialColumns, onChange = () => {} }: ColumnsFormProps = $props();
 
-  let columns = $state(initialColumns || []);
+  let featureTypes = $state(initialColumns || []);
   let tabs = $derived<Tab[]>(
-    columns.map((column) => {
+    featureTypes.map((column) => {
       return {
-        name: column.name || 'Unbekanntes Attribut'
+        name: column.name || 'Unbekannter Featuretype'
       };
     })
   );
 
   let activeTabIndex: number | undefined = $state(initialColumns?.length ? 0 : undefined);
-  let activeColumn = $derived(activeTabIndex ? columns[activeTabIndex] : columns[0]);
+  let activeFeatureType = $derived(activeTabIndex ? featureTypes[activeTabIndex] : featureTypes[0]);
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
-  function addColumn() {
-    const name = 'Neues Attribut' + columns.length;
-    columns = [
-      ...columns,
+  function addFeatureType() {
+    const name = 'Neuer Featuretype' + featureTypes.length;
+    featureTypes = [
+      ...featureTypes,
       {
         name,
-        alias: name
+        title: name,
+        columns: []
       }
     ];
-    activeTabIndex = columns.length - 1;
+    activeTabIndex = featureTypes.length - 1;
   }
 
   function removeColumn(index: number) {
-    columns = columns.filter((_, i) => i !== index);
+    featureTypes = featureTypes.filter((_, i) => i !== index);
     if (activeTabIndex === index) {
-      activeTabIndex = columns.length - 1;
+      activeTabIndex = featureTypes.length - 1;
     }
-    onChange(columns);
-    activeTabIndex = columns.length > 0 ? activeTabIndex : undefined;
+    onChange(featureTypes);
+    activeTabIndex = featureTypes.length > 0 ? activeTabIndex : undefined;
   }
 
-  function set(key: string, value: ColumnInfo[keyof ColumnInfo]) {
-    columns = columns.map((column, i) => {
+  function set(key: string, value: FeatureType[keyof FeatureType]) {
+    featureTypes = featureTypes.map((column, i) => {
       if (i === activeTabIndex) {
         return {
           ...column,
@@ -61,12 +62,12 @@
       }
       return column;
     });
-    onChange(columns);
+    onChange(featureTypes);
   }
 </script>
 
 <fieldset class="columns-form">
-  <legend>Attribute</legend>
+  <legend>Featuretypes</legend>
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
@@ -80,7 +81,7 @@
           class="material-icons"
           onclick={() => removeColumn(i)}
           size="button"
-          title="Attribut entfernen"
+          title="Featuretype entfernen"
         >
           delete
         </IconButton>
@@ -88,18 +89,21 @@
     {/each}
     <IconButton
       class="material-icons"
-      onclick={() => addColumn()}
+      onclick={() => addFeatureType()}
       size="button"
-      title="Attribut hinzufügen"
+      title="Featuretype hinzufügen"
     >
       add
     </IconButton>
   </nav>
   <div class="content">
     {#if activeTabIndex !== undefined}
-      <AttributeName_64 value={activeColumn?.name} onChange={(name) => set('name', name)} />
-      <AttributeAlias_65 value={activeColumn?.alias} onChange={(alias) => set('alias', alias)} />
-      <AttributeDatatype_66 value={activeColumn?.type} onChange={(type) => set('type', type)} />
+      <FeatureTypeName_62 value={activeFeatureType?.name} onChange={(name) => set('name', name)} />
+      <FeatureTypeTitle_61 value={activeFeatureType?.title} onChange={(title) => set('title', title)} />
+      <ColumnsForm
+        value={activeFeatureType.columns}
+        onChange={(columns) => set('columns', columns)}
+      />
     {/if}
   </div>
 </fieldset>

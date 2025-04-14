@@ -37,6 +37,12 @@ export type CRS = `EPSG:${number}`;
 
 export type ServiceType = 'WFS' | 'WMS' | 'ATOM' | 'WMTS';
 
+export type FeatureType = {
+  name: string;
+  title: string;
+  columns: ColumnInfo[];
+};
+
 export type ColumnType =
   | 'BigDecimal'
   | 'Date'
@@ -59,19 +65,9 @@ export type FilterType =
 
 export type ColumnInfo = {
   name: string;
-  title: string;
-  description?: string;
+  alias: string;
   type?: ColumnType;
-  listView?: boolean;
-  listViewEnabled?: boolean;
-  elementView?: boolean;
-  elementViewEnabled?: boolean;
-  statisticsView?: boolean;
   filterType?: FilterType;
-  minFilterValue?: string;
-  maxFilterValue?: string;
-  minOrderValue?: string;
-  maxOrderValue?: string;
 };
 
 // TODO: this should probably be an enum
@@ -107,7 +103,7 @@ export type Service = {
   contentDescription?: string;
   technicalDescription?: string;
   fileIdentifier?: string;
-  serviceIdentification?: string;
+  serviceIdentification: string;
   serviceType?: ServiceType;
   url?: string;
   serviceDescriptions?: ServiceDescription[];
@@ -118,7 +114,7 @@ export type Service = {
   updated?: string;
   published?: string;
   previews?: Source[];
-  columns?: ColumnInfo[];
+  featureTypes?: FeatureType[];
   downloads?: DownloadInfo[];
 };
 
