@@ -5,8 +5,8 @@
   import ServiceTitle_58 from './Field/ServiceTitle_58.svelte';
   import ServiceShortDescription_59 from './Field/ServiceShortDescription_59.svelte';
   import ServiceLegendImage_53 from './Field/ServiceLegendImage_53.svelte';
-  import ColumnsForm from './ColumnsForm.svelte';
   import DownloadForm from './DownloadForm.svelte';
+  import FeatureTypeForm from './FeatureTypeForm.svelte';
 
   export type ServiceFormProps = {
     service: Service;
@@ -17,7 +17,7 @@
 
   let isWFSService = $derived(service.serviceType === 'WFS');
   let isAtomService = $derived(service.serviceType === 'ATOM');
-  let isDisplayService = $derived(service.serviceType === 'WMS' || service.serviceType === 'WMTS');
+  let isMappingService = $derived(service.serviceType === 'WMS' || service.serviceType === 'WMTS');
 
   function set(key: string, value: Service[keyof Service]) {
     service = setNestedValue(service, key, value);
@@ -35,16 +35,16 @@
     value={service.shortDescription}
     onChange={(shortDescription) => set('shortDescription', shortDescription)}
   />
-  {#if isDisplayService}
+  {#if isMappingService}
     <ServiceLegendImage_53
       value={service.legendImage}
       onChange={(legendImage) => set('legendImage', legendImage)}
     />
   {/if}
   {#if isWFSService}
-    <ColumnsForm
-      value={service.columns}
-      onChange={(columns) => set('columns', columns)}
+    <FeatureTypeForm
+      value={service.featureTypes}
+      onChange={(featureTypes) => set('featureTypes', featureTypes)}
     />
   {/if}
   {#if isAtomService}

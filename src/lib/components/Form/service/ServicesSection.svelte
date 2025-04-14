@@ -15,17 +15,19 @@
   let initialServices = getValue<Service[]>(KEY);
 
   let services = $state(initialServices || []);
+
   let tabs = $derived<Tab[]>(
     services.map((service) => {
-      const titlePrefix =
-        service.serviceType === 'WMS' || service.serviceType === 'WMTS' ? '🗺️ ' : '🗃️ ';
+      const mappingService = (service.serviceType === 'WMS' || service.serviceType === 'WMTS');
+      const titlePrefix = mappingService ? '🗺️ ' : '🗃️ ';
+
       return {
-        title: titlePrefix + (service.title || service.serviceIdentification)!,
-        id: service.serviceIdentification!
+        title: titlePrefix + (service.title || service.serviceIdentification),
+        id: service.serviceIdentification
       };
     })
   );
-  let activeTab: string = $state(initialServices?.[0].serviceIdentification || '');
+  let activeTab: string = $state(initialServices?.[0]?.serviceIdentification || '');
   let activeService = $derived(
     services.find((service) => service.serviceIdentification === activeTab)
   );
@@ -40,9 +42,7 @@
   };
 
   function addService() {
-    // first for characters
-    const randomId = Date.now().toString(36);
-    const serviceIdentification = `new_service_${randomId}`;
+    const serviceIdentification = crypto.randomUUID();
     services = [
       ...services,
       {

@@ -73,7 +73,7 @@
 
   const onAssign = () => {
     if (highestRole === 'MdeAdministrator') {
-      goto(`/metadata/${metadata.metadataId}/readonly?action=print`);
+      goto(`/metadata/${metadata.metadataId}/readonly?action=assignment`);
     } else if (assignedToMe) {
       removeAssignment();
     } else {
