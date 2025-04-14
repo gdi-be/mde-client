@@ -44,13 +44,13 @@
   :global(.status-chip.colored.ready_for_release) {
     background-color: var(--ready-for-release-color);
   }
-  :global(.status-chip.colored.role_dataowner) {
+  :global(.status-chip.colored.role_mdedataowner) {
     background-color: var(--data-owner-color);
   }
-  :global(.status-chip.colored.role_editor) {
+  :global(.status-chip.colored.role_mdeeditor) {
     background-color: var(--editor-color);
   }
-  :global(.status-chip.colored.role_qualityassurance) {
+  :global(.status-chip.colored.role_mdequalityassurance) {
     background-color: var(--quality-assurance-color);
   }
 </style>

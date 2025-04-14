@@ -38,14 +38,14 @@ export async function load({ cookies, url }) {
 
   if (statusfilter?.includes('ROLE')) {
     const roleFilter = [];
-    if (statusfilter?.includes('ROLE_DataOwner')) {
-      roleFilter.push('DataOwner');
+    if (statusfilter?.includes('ROLE_MdeDataOwner')) {
+      roleFilter.push('MdeDataOwner');
     }
-    if (statusfilter?.includes('ROLE_Editor')) {
-      roleFilter.push('Editor');
+    if (statusfilter?.includes('ROLE_MdeEditor')) {
+      roleFilter.push('MdeEditor');
     }
-    if (statusfilter?.includes('ROLE_QualityAssurance')) {
-      roleFilter.push('QualityAssurance');
+    if (statusfilter?.includes('ROLE_MdeQualityAssurance')) {
+      roleFilter.push('MdeQualityAssurance');
     }
     queryConfig.assignedRoles = roleFilter;
   }

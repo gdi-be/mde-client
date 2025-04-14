@@ -12,10 +12,10 @@ export type StatusesState = {
 const defaultState = {
   statuses: [{
     key: 'ASSIGNED_TO_ME',
-    label: 'Mir zugewiesen'
+    label: 'zu bearbeiten'
   }, {
     key: 'TEAM_MEMBER',
-    label: 'Ich bin im Team'
+    label: 'Meine Metadaten'
   }, {
     key: 'READY_FOR_RELEASE',
     label: 'Geprüft'
@@ -24,7 +24,7 @@ const defaultState = {
     label: 'Datenhaltende Stelle'
   }, {
     key: 'ROLE_MdeEditor',
-    label: 'Redakteur'
+    label: 'Redaktion'
   },{
     key: 'ROLE_MdeQualityAssurance',
     label: 'Qualitätssicherung'

@@ -28,19 +28,19 @@ export async function GET({ cookies, params }) {
   let helpFilePath = `/data/codelists/help/${fieldConfig.default}`;
 
   for (const [role, path] of helpFileConfigs) {
-    if (role === 'Administrator' && userRoles.includes('Administrator')) {
+    if (role === 'MdeAdministrator' && userRoles.includes('MdeAdministrator')) {
       helpFilePath = `/data/codelists/help/${path}`;
       break;
     }
-    if (role === 'Editor' && userRoles.includes('Editor')) {
+    if (role === 'MdeEditor' && userRoles.includes('MdeEditor')) {
       helpFilePath = `/data/codelists/help/${path}`;
       break;
     }
-    if (role === 'QualityAssurance' && userRoles.includes('QualityAssurance')) {
+    if (role === 'MdeQualityAssurance' && userRoles.includes('MdeQualityAssurance')) {
       helpFilePath = `/data/codelists/help/${path}`;
       break;
     }
-    if (role === 'DataOwner' && userRoles.includes('DataOwner')) {
+    if (role === 'MdeDataOwner' && userRoles.includes('MdeDataOwner')) {
       helpFilePath = `/data/codelists/help/${path}`;
       break;
     }
