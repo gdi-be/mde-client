@@ -1,27 +1,80 @@
 <script lang="ts">
-  import type { Service } from '$lib/models/metadata';
-  import { setNestedValue } from '../../../util';
+  import type { Layer, Service } from '$lib/models/metadata';
+  import { setNestedValue } from '$lib/util';
   import ServiceType_57 from './Field/ServiceType_57.svelte';
   import ServiceTitle_58 from './Field/ServiceTitle_58.svelte';
   import ServiceShortDescription_59 from './Field/ServiceShortDescription_59.svelte';
   import ServiceLegendImage_53 from './Field/ServiceLegendImage_53.svelte';
   import DownloadForm from './DownloadForm.svelte';
   import FeatureTypeForm from './FeatureTypeForm.svelte';
+  import { getContext } from 'svelte';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
+  import LayersForm from './LayersForm.svelte';
+  import { page } from '$app/state';
 
   export type ServiceFormProps = {
     service: Service;
-    onChange?: (service: Service) => void;
+    onChange?: (service: Service) => Promise<Response>;
   };
 
-  let { service, onChange = () => {} }: ServiceFormProps = $props();
+  let {
+    service,
+    onChange,
+  }: ServiceFormProps = $props();
+
+  const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formContext.metadata);
+  let layerCheckmarkVisible = $state<boolean>(false);
+  let featureTypeCheckmarkVisible = $state<boolean>(false);
+  let downloadCheckmarkVisible = $state<boolean>(false);
+
+  const layers = $derived.by((): Layer[] => {
+    const layersMap = metadata?.clientMetadata?.layers;
+    const serviceIdentification = service?.serviceIdentification;
+    if (!layersMap || !serviceIdentification) {
+      return [];
+    }
+    return layersMap[serviceIdentification] || [];
+  });
 
   let isWFSService = $derived(service.serviceType === 'WFS');
   let isAtomService = $derived(service.serviceType === 'ATOM');
   let isMappingService = $derived(service.serviceType === 'WMS' || service.serviceType === 'WMTS');
 
-  function set(key: string, value: Service[keyof Service]) {
+  async function set(key: string, value: Service[keyof Service]) {
     service = setNestedValue(service, key, value);
-    onChange(service);
+
+    if (onChange) {
+      const response = await onChange(service);
+      if (response.ok) {
+        if (key === 'featureTypes') {
+          featureTypeCheckmarkVisible = true;
+        } else if (key === 'downloads') {
+          downloadCheckmarkVisible = true;
+        }
+      }
+    }
+  }
+
+  async function onLayersChange(layers: Layer[]) {
+    const serviceIdentification = service?.serviceIdentification;
+    if (!serviceIdentification) return;
+
+    const response = await fetch(`${page.url.origin}${page.url.pathname}/updateLayers/${serviceIdentification}`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        layers
+      })
+    });
+
+    if (!response.ok) {
+      console.error('Error persisting layers:', response);
+    }
+
+    layerCheckmarkVisible = response.ok;
   }
 </script>
 
@@ -40,20 +93,26 @@
       value={service.legendImage}
       onChange={(legendImage) => set('legendImage', legendImage)}
     />
+    <LayersForm
+      value={layers}
+      onChange={onLayersChange}
+      bind:checkmarkVisible={layerCheckmarkVisible}
+    />
   {/if}
   {#if isWFSService}
     <FeatureTypeForm
       value={service.featureTypes}
       onChange={(featureTypes) => set('featureTypes', featureTypes)}
+      bind:checkmarkVisible={featureTypeCheckmarkVisible}
     />
   {/if}
   {#if isAtomService}
     <DownloadForm
       value={service.downloads}
       onChange={(downloads) => set('downloads', downloads)}
+      bind:checkmarkVisible={downloadCheckmarkVisible}
     />
   {/if}
-
 </div>
 
 <style lang="scss">

@@ -1,63 +1,67 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
   import Checkmark from '../Checkmark.svelte';
-  import ColumnsForm from './ColumnsForm.svelte';
-  import type { FeatureType } from '$lib/models/metadata';
-  import FeatureTypeTitle_61 from './Field/FeatureTypeTitle_61.svelte';
-  import FeatureTypeName_62 from './Field/FeatureTypeName_62.svelte';
+  import type { Layer } from '$lib/models/metadata';
+  import LayerName_50 from './Field/LayerName_50.svelte';
+  import LayerTitle_49 from './Field/LayerTitle_49.svelte';
+  import LayerStyleName_51 from './Field/LayerStyleName_51.svelte';
+  import LayerStyleTitle_52 from './Field/LayerStyleTitle_52.svelte';
+  import LayerLegendImage_53 from './Field/LayerLegendImage_53.svelte';
+  import LayerDescription_54 from './Field/LayerDescription_54.svelte';
+  import LayerDatasource_55 from './Field/LayerDatasource_55.svelte';
+  import LayerSecondaryDatasource_56 from './Field/LayerSecondaryDatasource_56.svelte';
 
   type Tab = {
     name: string;
   };
 
-  export type FeatureTypeFormProps = {
-    value?: FeatureType[];
+  export type LayersFormProps = {
+    value?: Layer[];
     checkmarkVisible: boolean;
-    onChange?: (featureTypes: FeatureType[]) => void;
+    onChange?: (layers: Layer[]) => void;
   };
 
   let {
-    value: initialFeatureTypes,
+    value: initialLayers,
     checkmarkVisible = $bindable<boolean>(false),
-    onChange = () => {}
-  }: FeatureTypeFormProps = $props();
+    onChange = () => {},
+  }: LayersFormProps = $props();
 
-  let featureTypes = $state(initialFeatureTypes || []);
+  let layers = $state(initialLayers || []);
   let tabs = $derived<Tab[]>(
-    featureTypes.map((featureType) => {
+    layers.map((layer) => {
       return {
-        name: featureType.name || 'Unbekannter Featuretype'
+        name: layer.name || 'Unbekannter Layer'
       };
     })
   );
 
-  let activeTabIndex: number | undefined = $state(initialFeatureTypes?.length ? 0 : undefined);
-  let activeFeatureType = $derived(activeTabIndex ? featureTypes[activeTabIndex] : featureTypes[0]);
+  let activeTabIndex: number | undefined = $state(initialLayers?.length ? 0 : undefined);
+  let activeLayer = $derived(activeTabIndex ? layers[activeTabIndex] : layers[0]);
 
-  function addFeatureType() {
-    const name = 'Neuer Featuretype' + featureTypes.length;
-    featureTypes = [
-      ...featureTypes,
+  function addLayer() {
+    const name = 'Neuer Layer' + layers.length;
+    layers = [
+      ...layers,
       {
         name,
         title: name,
-        columns: []
       }
     ];
-    activeTabIndex = featureTypes.length - 1;
+    activeTabIndex = layers.length - 1;
   }
 
   function removeColumn(index: number) {
-    featureTypes = featureTypes.filter((_, i) => i !== index);
+    layers = layers.filter((_, i) => i !== index);
     if (activeTabIndex === index) {
-      activeTabIndex = featureTypes.length - 1;
+      activeTabIndex = layers.length - 1;
     }
-    onChange(featureTypes);
-    activeTabIndex = featureTypes.length > 0 ? activeTabIndex : undefined;
+    onChange(layers);
+    activeTabIndex = layers.length > 0 ? activeTabIndex : undefined;
   }
 
-  function set(key: string, value: FeatureType[keyof FeatureType]) {
-    featureTypes = featureTypes.map((column, i) => {
+  function set(key: string, value: Layer[keyof Layer]) {
+    layers = layers.map((column, i) => {
       if (i === activeTabIndex) {
         return {
           ...column,
@@ -66,13 +70,13 @@
       }
       return column;
     });
-    onChange(featureTypes);
+    onChange(layers);
   }
 </script>
 
 <fieldset class="columns-form">
   <legend>
-    Featuretypes
+    Layers
     <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
   <nav>
@@ -85,7 +89,7 @@
           class="material-icons"
           onclick={() => removeColumn(i)}
           size="button"
-          title="Featuretype entfernen"
+          title="Layer entfernen"
         >
           delete
         </IconButton>
@@ -93,23 +97,40 @@
     {/each}
     <IconButton
       class="material-icons"
-      onclick={() => addFeatureType()}
+      onclick={() => addLayer()}
       size="button"
-      title="Featuretype hinzufügen"
+      title="Layer hinzufügen"
     >
       add
     </IconButton>
   </nav>
   <div class="content">
     {#if activeTabIndex !== undefined}
-      <FeatureTypeName_62 value={activeFeatureType?.name} onChange={(name) => set('name', name)} />
-      <FeatureTypeTitle_61
-        value={activeFeatureType?.title}
-        onChange={(title) => set('title', title)}
+      <LayerName_50 value={activeLayer?.name} onChange={(name) => set('name', name)} />
+      <LayerTitle_49 value={activeLayer?.title} onChange={(title) => set('title', title)} />
+      <LayerStyleName_51
+        value={activeLayer?.styleName}
+        onChange={(styleName) => set('styleName', styleName)}
       />
-      <ColumnsForm
-        value={activeFeatureType.columns}
-        onChange={(columns) => set('columns', columns)}
+      <LayerStyleTitle_52
+        value={activeLayer?.styleTitle}
+        onChange={(styleTitle) => set('styleTitle', styleTitle)}
+      />
+      <LayerLegendImage_53
+        value={activeLayer?.legendImage}
+        onChange={(legendImage) => set('legendImage', legendImage)}
+      />
+      <LayerDescription_54
+        value={activeLayer?.shortDescription}
+        onChange={(shortDescription) => set('shortDescription', shortDescription)}
+      />
+      <LayerDatasource_55
+        value={activeLayer?.datasource}
+        onChange={(datasource) => set('datasource', datasource)}
+      />
+      <LayerSecondaryDatasource_56
+        value={activeLayer?.secondaryDatasource}
+        onChange={(secondaryDatasource) => set('secondaryDatasource', secondaryDatasource)}
       />
     {/if}
   </div>

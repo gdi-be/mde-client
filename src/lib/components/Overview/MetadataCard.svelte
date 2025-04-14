@@ -176,7 +176,6 @@
       if (response.ok) {
         const { value } = await response.json();
         const success = true;
-        console.log('Image source:', value);
         return { src: value, success };
       } else {
         const success = false;

@@ -39,6 +39,7 @@
     if (response.ok) {
       visibleCheckmarks[id] = true;
     }
+    return response;
   };
 
   function addService() {
@@ -60,14 +61,14 @@
     }
   }
 
-  function updateService(id: string, newService: Service) {
+  async function updateService(id: string, newService: Service) {
     services = services.map((service) => {
       if (service.serviceIdentification === id) {
         return newService;
       }
       return service;
     });
-    persistServices(id);
+    return persistServices(id);
   }
 
   $effect(() => {
@@ -118,7 +119,7 @@
       <ServiceForm
         service={activeService}
         onChange={(newService) => {
-          updateService(activeService.serviceIdentification!, newService);
+          return updateService(activeService.serviceIdentification!, newService);
         }}
       />
     </span>
