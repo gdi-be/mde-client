@@ -487,4 +487,28 @@ export const getTeam = async ({
   }
 
   return await response.json();
-}
+};
+
+type ValidateProps = {
+  token: string;
+  metadataid: string;
+};
+
+export const validate = async ({
+  token,
+  metadataid
+}: ValidateProps) => {
+  if (!token) {
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
+  }
+
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  return await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/validate`, {
+    method: 'GET',
+    headers
+  });
+};

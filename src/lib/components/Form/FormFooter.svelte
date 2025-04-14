@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { sseContext } from '$lib/context/ServerEventContext.svelte';
   import { allFieldsValid } from '$lib/context/FormContext.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
   import type { Token } from '$lib/models/keycloak';
@@ -9,6 +10,7 @@
   import ValidationPanel from './ValidationPanel.svelte';
   import AssignmentDialog from '$lib/components/AssignmentDialog.svelte';
   import { page } from '$app/state';
+  import Spinner from '../Spinner.svelte';
 
   type FormFooterProps = {
     metadata?: MetadataCollection;
@@ -35,9 +37,12 @@
   let approvalPanelVisible = $state(false);
   let assignmentPanelVisible = $state(false);
   let validationPanelVisible = $state(false);
+  let isValidationLoading = $state(false);
   let showMask = $derived(
     commentsPanelVisible || approvalPanelVisible || validationPanelVisible || assignmentPanelVisible
   );
+  const metadataId = $derived(metadata?.metadataId);
+  const { validation } = $derived(sseContext.getSseContext());
 
   let showPublishButton = $derived(
     highestRole === 'MdeAdministrator' ||
@@ -70,6 +75,15 @@
 
   $effect(() => {
     assignmentPanelVisible = assignmentPanelVisibleProp ?? false;
+  });
+
+  $effect(() => {
+    const lastItem = validation
+      ?.filter(validation => validation.metadataId === metadataId)
+      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+      .at(-1);
+
+    isValidationLoading = lastItem?.status === 'RUNNING' || false;
   });
 
   const closePanels = () => {
@@ -109,7 +123,6 @@
       window.URL.revokeObjectURL(url);
     }
   };
-
 </script>
 
 <footer class="form-footer">
@@ -132,12 +145,15 @@
     {#if showValidateButton}
       <Button
         class="submit-button"
-        title="Valdidieren"
+        title="Validieren"
         variant="raised"
         onclick={() => (validationPanelVisible = !validationPanelVisible)}
       >
-        <Label>Valdidieren</Label>
+        <Label>Validieren</Label>
         <Icon class="material-icons">assignment_turned_in</Icon>
+        {#if isValidationLoading}
+          <Spinner />
+        {/if}
       </Button>
     {/if}
     {#if showAssignmentButton}
@@ -230,7 +246,6 @@
         justify-content: flex-end;
       }
     }
-
   }
 
   .mask {
