@@ -4,19 +4,21 @@
 
 <div class="metadata-display">
   <div class="content">
+      <DisplayField key="isoMetadata.identifier" label="Identifier"/>
+      <DisplayField key="isoMetadata.fileIdentifier" label="File-Identifier"/>
     <section id="basedata">
       <h2>1. Basisangaben</h2>
       <DisplayField key="isoMetadata.title" />
       <DisplayField key="isoMetadata.description" />
       <DisplayField key="isoMetadata.keywords" />
       <DisplayField key="isoMetadata.preview" />
-      <DisplayField key="isoMetadata.contacts" />
+      <DisplayField key="isoMetadata.pointsOfContact" />
     </section>
     <section id="classification">
       <h2>2. Einordnung</h2>
       <DisplayField key="isoMetadata.metadataProfile" />
       <DisplayField key="clientMetadata.privacy" />
-      <DisplayField key="isoMetadata.termsOfUse" />
+      <DisplayField key="isoMetadata.termsOfUseId" />
       <DisplayField key="isoMetadata.annexTheme" />
       <DisplayField key="isoMetadata.qualityReportCheck" />
       <DisplayField key="clientMetadata.highValueDataset" />
@@ -27,19 +29,21 @@
       <DisplayField key="isoMetadata.created" />
       <DisplayField key="isoMetadata.published" />
       <DisplayField key="isoMetadata.maintenanceFrequency" />
-      <DisplayField key="isoMetadata.lastUpdated" />
-      <DisplayField key="isoMetadata.validityRange" />
-      <DisplayField key="isoMetadata.deliveredCoordinateSystem" />
-      <DisplayField key="isoMetadata.coordinateSystem" />
+      <DisplayField key="isoMetadata.modified" />
+      <DisplayField key="isoMetadata.validFrom" />
+      <DisplayField key="isoMetadata.validTo" />
+      <DisplayField key="technicalMetadata.deliveredCrs" />
+      <DisplayField key="isoMetadata.crs" />
       <DisplayField key="isoMetadata.extent" />
-      <DisplayField key="isoMetadata.resolution" />
+      <DisplayField key="isoMetadata.resolutions" />
+      <DisplayField key="isoMetadata.scale" />
     </section>
     <section id="additional">
       <h2>4. Weitere Angaben</h2>
       <DisplayField key="isoMetadata.contentDescription" />
       <DisplayField key="isoMetadata.technicalDescription" />
       <DisplayField key="isoMetadata.lineage" />
-      <DisplayField key="isoMetadata.additionalInformation" />
+      <DisplayField key="isoMetadata.contentDescriptions" />
     </section>
     <section id="services">
       <h2>5. Dienste</h2>

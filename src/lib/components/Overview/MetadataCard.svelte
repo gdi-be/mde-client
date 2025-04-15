@@ -33,7 +33,7 @@
   const showPrintAction = $derived(true);
   const showEditAction = $derived(
     highestRole === 'MdeAdministrator' ||
-    metadata.assignedUserId === userId
+    ['MdeEditor', 'MdeDataOwner'].includes(highestRole) && metadata.assignedUserId === userId
   );
   const showAssignAction = $derived(
     highestRole === 'MdeAdministrator' ||

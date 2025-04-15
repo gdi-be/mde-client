@@ -1,24 +1,43 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { FORMSTATE_CONTEXT, getFieldConfig, getValue, persistValue, type FormState } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
+  import type { MaintenanceFrequency } from '$lib/models/metadata';
+  import { getContext } from 'svelte';
+  import { getLastUpdateValue, isAutomatedValue } from '../../../util';
 
   const KEY = 'isoMetadata.published';
 
+  const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formContext.metadata);
+
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
+
   $effect(() => {
     if (valueFromData) {
       value = new Date(valueFromData).toISOString().split('T')[0];
     }
   });
+
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<string>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
+  let maintenanceFrequency = $derived(
+    getValue<MaintenanceFrequency>('isoMetadata.maintenanceFrequency', metadata)
+  );
 
   const onChange = async () => {
     const response = await persistValue(KEY, new Date(value!).toISOString());
+
+    if(isAutomatedValue(value, maintenanceFrequency) && maintenanceFrequency) {
+      const lastUpdatedValue = getLastUpdateValue(value, maintenanceFrequency);
+      if (lastUpdatedValue) {
+        await persistValue('isoMetadata.modified', lastUpdatedValue.toISOString());
+      }
+    }
+
     if (response.ok) {
       showCheckmark = true;
     }

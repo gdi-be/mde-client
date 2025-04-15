@@ -3,7 +3,7 @@
   import { getContext } from "svelte";
   import type { Token } from "$lib/models/keycloak";
   import FormField from "@smui/form-field";
-  import { getAvailableStatuses } from "$lib/context/StatusesContest.svelte";
+  import { getAvailableStatuses } from "$lib/context/StatusesContext.svelte";
   import StatusChip from "../StatusChip.svelte";
   import { page } from "$app/state";
   import { goto } from "$app/navigation";

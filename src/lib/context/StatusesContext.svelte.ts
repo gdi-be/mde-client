@@ -51,7 +51,12 @@ export function getAvailableStatuses(token: Token) {
     } else if (highestRole === 'MdeQualityAssurance') {
       return !['ROLE_MdeEditor', 'ROLE_MdeDataOwner'].includes(status.key);
     } else if (highestRole === 'MdeDataOwner') {
-      return !['ROLE_MdeEditor', 'ROLE_MdeQualityAssurance', 'READY_FOR_RELEASE'].includes(status.key);
+      return ![
+        'ROLE_MdeEditor',
+        'ROLE_MdeQualityAssurance',
+        'ROLE_MdeDataOwner',
+        'READY_FOR_RELEASE'
+      ].includes(status.key);
     }
   });
 }

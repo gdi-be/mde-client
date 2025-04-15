@@ -1,47 +1,34 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { FORMSTATE_CONTEXT, getFieldConfig, getValue, persistValue, type FormState } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import type { MaintenanceFrequency } from '$lib/models/metadata';
-  import { getLastUpdateValue } from '$lib/util';
-  import type { ValidationResult } from '../FieldsConfig';
+  import type { ValidationResult } from '$lib/components/Form/FieldsConfig';
+  import { isAutomatedValue } from '$lib/util';
+  import { getContext } from 'svelte';
 
   const KEY = 'isoMetadata.modified';
 
-  const { metadata } = $props();
+  const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formContext.metadata);
 
-  const initialValue = getValue<string>(KEY, metadata);
   let publishedValue = $derived(getValue<string>('isoMetadata.published', metadata));
   let maintenanceFrequencyValue = $derived(
     getValue<MaintenanceFrequency>('isoMetadata.maintenanceFrequency', metadata)
   );
-  let value = $state(initialValue || '');
+  const valueFromData = $derived(getValue<string>(KEY, metadata));
+  let value = $state('');
+
+  $effect(() => {
+    if (valueFromData) {
+      value = new Date(valueFromData).toISOString().split('T')[0];
+    }
+  });
   const fieldConfig = getFieldConfig<string>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  $effect(() => {
-    if (initialValue) {
-      value = new Date(initialValue).toISOString().split('T')[0];
-    } else if (publishedValue && maintenanceFrequencyValue) {
-      const lastUpdateDate = getLastUpdateValue(publishedValue, maintenanceFrequencyValue);
-      value = lastUpdateDate?.toISOString().split('T')[0] || '';
-    }
-  });
-
   let showCheckmark = $state(false);
-  let isAutomatedValue = $derived(
-    [
-      'continual',
-      'daily',
-      'weekly',
-      'fortnightly',
-      'monthly',
-      'quarterly',
-      'biannually',
-      'annually'
-    ].includes(maintenanceFrequencyValue!)
-  );
-  let readOnly = $derived(!!publishedValue && isAutomatedValue);
+  let automated = $derived(isAutomatedValue(publishedValue, maintenanceFrequencyValue));
 
   const onChange = async () => {
     const response = await persistValue(KEY, new Date(value!).toISOString());
@@ -57,7 +44,7 @@
     key={KEY}
     label={fieldConfig?.label}
     onchange={onChange}
-    disabled={readOnly}
+    disabled={automated}
     {validationResult}
   />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
