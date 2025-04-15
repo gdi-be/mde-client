@@ -1,8 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Role } from './keycloak';
 
-export type JsonClientMetadata = Record<string, unknown>;
-export type JsonIsoMetadata = Record<string, unknown>;
-export type JsonTechnialMetadata = Record<string, unknown>;
+// TODO: add typing for the metadata types
+export type JsonClientMetadata = Record<string, any>;
+export type JsonIsoMetadata = Record<string, any>;
+export type JsonTechnialMetadata = Record<string, any>;
+
+export type Layer = {
+  name: string;
+  title?: string;
+  styleName?: string;
+  styleTitle?: string;
+  shortDescription?: string;
+  legendImage?: string;
+  datasource?: string;
+  secondaryDatasource?: string;
+}
 
 export type IsoTheme = {
   inspireID: string;

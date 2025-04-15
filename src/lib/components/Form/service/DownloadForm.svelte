@@ -13,10 +13,15 @@
 
   export type DownloadFormProps = {
     value?: DownloadInfo[];
+    checkmarkVisible: boolean;
     onChange?: (downloads: DownloadInfo[]) => void;
   };
 
-  let { value: initialDownloads, onChange = () => {} }: DownloadFormProps = $props();
+  let {
+    value: initialDownloads,
+    checkmarkVisible = $bindable<boolean>(false),
+    onChange = () => {}
+  }: DownloadFormProps = $props();
 
   let downloads = $state(initialDownloads || []);
   let tabs = $derived<Tab[]>(
@@ -29,7 +34,6 @@
 
   let activeTabIndex: number | undefined = $state(initialDownloads?.length ? 0 : undefined);
   let activeDownload = $derived(activeTabIndex ? downloads[activeTabIndex] : downloads[0]);
-  let visibleCheckmarks = $state<Record<string, boolean>>({});
 
   function addDownload() {
     const title = 'Neuer Download' + downloads.length;
@@ -65,16 +69,16 @@
 </script>
 
 <fieldset class="downloads-form">
-  <legend>Downloads</legend>
+  <legend>
+    Downloads
+    <Checkmark bind:running={checkmarkVisible} displayNone />
+  </legend>
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
         <button id={tab.title} class="tab" title={tab.title} onclick={() => (activeTabIndex = i)}>
           {tab.title}
         </button>
-        {#if visibleCheckmarks[tab.title]}
-          <Checkmark bind:running={visibleCheckmarks[tab.title]} />
-        {/if}
         <IconButton
           class="material-icons"
           onclick={() => removeDownload(i)}
@@ -113,6 +117,9 @@
     border-radius: 0.25em;
 
     > legend {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
       font-size: 1.5em;
     }
 

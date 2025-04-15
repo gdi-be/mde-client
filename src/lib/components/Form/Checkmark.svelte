@@ -2,9 +2,14 @@
   type CheckmarkProps = {
     hideMs?: number;
     running: boolean;
+    displayNone?: boolean;
   };
 
-  let { hideMs = 2000, running = $bindable<boolean>(false) }: CheckmarkProps = $props();
+  let {
+    hideMs = 2000,
+    displayNone = false,
+    running = $bindable<boolean>(false)
+  }: CheckmarkProps = $props();
 
   function onAnimationStart() {
     running = true;
@@ -18,8 +23,11 @@
 </script>
 
 <svg
-  class="checkmark"
-  class:running
+  class={[
+    "checkmark",
+    running && "running"
+  ]}
+  style={(displayNone && !running) ? "display: none;" : ""}
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 52 52"
   onanimationstart={onAnimationStart}

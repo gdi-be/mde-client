@@ -5,6 +5,7 @@
   import AttributeName_64 from './Field/AttributeName_64.svelte';
   import AttributeAlias_65 from './Field/AttributeAlias_65.svelte';
   import AttributeDatatype_66 from './Field/AttributeDatatype_66.svelte';
+  import AttributeFilterType_67 from './Field/AttributeFilterType_67.svelte';
 
   type Tab = {
     name: string;
@@ -100,6 +101,10 @@
       <AttributeName_64 value={activeColumn?.name} onChange={(name) => set('name', name)} />
       <AttributeAlias_65 value={activeColumn?.alias} onChange={(alias) => set('alias', alias)} />
       <AttributeDatatype_66 value={activeColumn?.type} onChange={(type) => set('type', type)} />
+      <AttributeFilterType_67
+        value={activeColumn?.filterType}
+        onChange={(filterType) => set('filterType', filterType)}
+      />
     {/if}
   </div>
 </fieldset>

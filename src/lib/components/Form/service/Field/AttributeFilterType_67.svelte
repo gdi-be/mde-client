@@ -21,7 +21,7 @@
 
 <SelectInput
   key="filter-type"
-  label="Attribut-Datentyp"
+  label="Attribut-Filtertyp"
   {value}
   {options}
   {onChange}
