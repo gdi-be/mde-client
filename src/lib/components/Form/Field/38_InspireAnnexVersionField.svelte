@@ -1,6 +1,12 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getFieldConfig,
+    getValue,
+    persistValue,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { ValidationResult } from '../FieldsConfig';
@@ -10,7 +16,8 @@
   const KEY = 'isoMetadata.inspireAnnexVersion';
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
 
-  const { metadata } = $props();
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formState.metadata);
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));

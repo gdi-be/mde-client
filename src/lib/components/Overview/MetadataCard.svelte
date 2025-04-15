@@ -8,7 +8,7 @@
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { Set } from '@smui/chips';
   import StatusChip from '$lib/components/StatusChip.svelte';
-  import { getHighestRole } from '../../util';
+  import { getHighestRole } from '$lib/util';
 
   const FALLBACK_IMAGE = '/logo_berlin_m_srgb.svg';
 

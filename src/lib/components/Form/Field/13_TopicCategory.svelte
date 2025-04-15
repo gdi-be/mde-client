@@ -1,11 +1,19 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getFieldConfig,
+    getValue,
+    persistValue,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { IsoTheme } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
+  import { getContext } from 'svelte';
 
-  const { metadata } = $props();
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formState.metadata);
 
   const KEY = 'isoMetadata.topicCategory';
   const ANNEX_THEME_KEY = 'isoMetadata.inspireTheme';
