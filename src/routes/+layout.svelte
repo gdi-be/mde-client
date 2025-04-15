@@ -1,12 +1,25 @@
 <script lang="ts">
   import Header from '$lib/components/Header.svelte';
-  import { setContext } from 'svelte';
+  import { onMount, setContext } from 'svelte';
   import PopConfirm from '$lib/components/Popconfirm.svelte';
   import { initializePopconfimContext } from '$lib/context/PopConfirmContex.svelte.js';
+  import { sseContext } from '$lib/context/ServerEventContext.svelte.js';
+  import ValidationPopup from '$lib/components/ValidationPopup.svelte';
   let { children, data } = $props();
 
   setContext('user_token', data.token);
   initializePopconfimContext();
+
+  sseContext.setSseContext();
+
+  onMount(() => {
+    sseContext.connect('/events/subscribe');
+    sseContext.listenTo('validation');
+
+    return () => {
+      sseContext.disconnect();
+    };
+  });
 </script>
 
 <svelte:head>
@@ -14,6 +27,7 @@
 </svelte:head>
 
 <PopConfirm />
+<ValidationPopup />
 
 <div class="main-container">
   <Header />
