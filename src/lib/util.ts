@@ -108,6 +108,29 @@ export function transformCoordinate(
 }
 
 /**
+ * Function to check if `modified` should be set Automatically
+ *
+ * @param published
+ * @param maintenanceFrequency
+ * @returns
+ */
+export function isAutomatedValue(published?: string, maintenanceFrequency?: MaintenanceFrequency) {
+  if (!published || !maintenanceFrequency) {
+    return false;
+  }
+  return [
+    'continual',
+    'daily',
+    'weekly',
+    'fortnightly',
+    'monthly',
+    'quarterly',
+    'biannually',
+    'annually'
+  ].includes(maintenanceFrequency);
+}
+
+/**
  * Function to determine the last Update Date based on the published date and the maintenance frequency
  *
  * @param published

@@ -6,23 +6,26 @@
 
   type DisplayFieldProps = {
     key: FieldKey;
+    label?: string;
   };
 
   const {
-    key
+    key,
+    label
   }: DisplayFieldProps = $props();
 
   const config = $derived(getFieldConfig(key));
   const value = $derived(getValue(key));
 
-  const valueSnippet: Snippet<[unknown]> = $derived(
-    DisplayFieldSnippets[key as keyof typeof DisplayFieldSnippets] as Snippet
-  );
+  const valueSnippet: Snippet<[unknown]> = $derived.by(() => {
+    const renderer = DisplayFieldSnippets[key as keyof typeof DisplayFieldSnippets] as Snippet;
+    return renderer || DisplayFieldSnippets.defaultSnippet;
+  });
 
 </script>
 
 <div class="display-field">
-  <strong class="title">{config?.label}</strong>
+  <strong class="title">{label || config?.label || key}</strong>
   {#if value}
     <span class="value">
       {@render valueSnippet(value)}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Chip, { Text } from "@smui/chips";
-  import { getStatusName } from "../context/StatusesContest.svelte";
+  import { getStatusName } from "$lib/context/StatusesContext.svelte";
 
   const {
     chip,

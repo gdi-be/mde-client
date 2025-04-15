@@ -170,7 +170,7 @@
           <F09_CreatedField />
           <F10_PublishedField />
           <F14_MaintenanceFrequencyField />
-          <F11_LastUpdatedField {metadata} />
+          <F11_LastUpdatedField />
           <F12_ValidityRangeField />
           <F16_DeliveredCoordinateSystemField />
           <F17_CoordinateSystemField />

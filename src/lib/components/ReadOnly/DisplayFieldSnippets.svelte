@@ -1,31 +1,43 @@
 <script module lang="ts">
-  import type { Keywords, Contacts, Extent, Service, MetadataProfile, IsoTheme, MaintenanceFrequency } from '$lib/models/metadata';
+  import type {
+    Keywords,
+    Contacts,
+    Extent,
+    Service,
+    MetadataProfile,
+    IsoTheme,
+    MaintenanceFrequency,
+    TermsOfUse,
+    Lineage,
+    ContentDescription
+  } from '$lib/models/metadata';
+  import type { Option } from '$lib/models/form';
 
   export {
+    defaultSnippet,
     isoMetadataTitle as 'isoMetadata.title',
     isoMetadataDescription as 'isoMetadata.description',
     isoMetadataKeywords as 'isoMetadata.keywords',
     isoMetadataPreview as 'isoMetadata.preview',
-    isoMetadataContacts as 'isoMetadata.contacts',
+    isoMetadataContacts as 'isoMetadata.pointsOfContact',
     isoMetadataMetadataProfile as 'isoMetadata.metadataProfile',
-    isoMetadataPrivacy as 'isoMetadata.privacy',
-    isoMetadataTermsOfUse as 'isoMetadata.termsOfUse',
+    isoMetadataTermsOfUse as 'isoMetadata.termsOfUseId',
     isoMetadataAnnexTheme as 'isoMetadata.annexTheme',
     isoMetadataQualityReportCheck as 'isoMetadata.qualityReportCheck',
     isoMetadataTopicCategory as 'isoMetadata.topicCategory',
     isoMetadataCreated as 'isoMetadata.created',
     isoMetadataPublished as 'isoMetadata.published',
     isoMetadataMaintenanceFrequency as 'isoMetadata.maintenanceFrequency',
-    isoMetadataLastUpdated as 'isoMetadata.lastUpdated',
-    isoMetadataValidityRange as 'isoMetadata.validityRange',
-    isoMetadataDeliveredCoordinateSystem as 'isoMetadata.deliveredCoordinateSystem',
-    isoMetadataCoordinateSystem as 'isoMetadata.coordinateSystem',
+    isoMetadataModified as 'isoMetadata.modified',
+    isoMetadataValidFrom as 'isoMetadata.validFrom',
+    isoMetadataValidTo as 'isoMetadata.validTo',
+    technialMetadataDeliveredCrs as 'isoMetadata.deliveredCoordinateSystem',
+    isoMetadataCrs as 'isoMetadata.crs',
     isoMetadataExtent as 'isoMetadata.extent',
-    isoMetadataResolution as 'isoMetadata.resolution',
-    isoMetadataContentDescription as 'isoMetadata.contentDescription',
+    isoMetadataResolutions as 'isoMetadata.resolutions',
     isoMetadataTechnicalDescription as 'isoMetadata.technicalDescription',
     isoMetadataLineage as 'isoMetadata.lineage',
-    isoMetadataAdditionalInformation as 'isoMetadata.additionalInformation',
+    isoMetadataContentDescriptions as 'isoMetadata.contentDescriptions',
     isoMetadataServices as 'isoMetadata.services',
     clientMetadataPrivacy as 'clientMetadata.privacy',
     clientMetadataHighValueDataset as 'clientMetadata.highValueDataset',
@@ -49,10 +61,28 @@
     asNeeded: 'bei Bedarf',
     irregular: 'unregelmäßig',
     notPlanned: 'nicht geplant',
-    unknown: 'unbekannt',
+    unknown: 'unbekannt'
   };
 
+  const getTermsOfUse = async () => {
+    const response = await fetch('/data/terms_of_use');
+    return response.json();
+  };
+
+  const getPrivacy = async () => {
+    const response = await fetch('/data/privacy');
+    return response.json();
+  };
+
+  const getCrs = async () => {
+    const response = await fetch('/data/crs');
+    return response.json();
+  };
 </script>
+
+{#snippet defaultSnippet(value: string)}
+  {value}
+{/snippet}
 
 {#snippet isoMetadataTitle(value: string)}
   {value}
@@ -63,7 +93,7 @@
 {/snippet}
 
 {#snippet isoMetadataKeywords(value: Keywords)}
-  {value?.default?.map(({keyword}) => keyword)?.join(', ')}
+  {value?.default?.map(({ keyword }) => keyword)?.join(', ')}
 {/snippet}
 
 {#snippet isoMetadataPreview(value: string)}
@@ -71,28 +101,28 @@
 {/snippet}
 
 {#snippet isoMetadataContacts(value: Contacts)}
-  <div class="contacts">
+  <fieldset class="list">
     {#each value as contact}
-      <div class="contact">
+      <div class="list-item">
         <div>
-          <strong class="contact-label">Organisation</strong>
-          <span class="contact-value">{contact.organisation}</span>
+          <strong class="list-item-label">Name</strong>
+          <span class="list-item-value">{contact.name}</span>
         </div>
         <div>
-          <strong class="contact-label">Telefon</strong>
-          <span class="contact-value">{contact.phone}</span>
+          <strong class="list-item-label">Organisation</strong>
+          <span class="list-item-value">{contact.organisation}</span>
         </div>
         <div>
-          <strong class="contact-label">E-Mail</strong>
-          <span class="contact-value">{contact.email}</span>
+          <strong class="list-item-label">Telefon</strong>
+          <span class="list-item-value">{contact.phone}</span>
         </div>
         <div>
-          <strong class="contact-label">URL</strong>
-          <span class="contact-value">{contact.url}</span>
+          <strong class="list-item-label">E-Mail</strong>
+          <span class="list-item-value">{contact.email}</span>
         </div>
       </div>
     {/each}
-  </div>
+  </fieldset>
 {/snippet}
 
 {#snippet isoMetadataMetadataProfile(value: MetadataProfile)}
@@ -102,12 +132,20 @@
   {#if !value}Nicht angegeben{/if}
 {/snippet}
 
-{#snippet isoMetadataPrivacy(value: string)}
-  {JSON.stringify(value)}
+{#snippet clientMetadataPrivacy(value: string)}
+  {#await getPrivacy()}
+    Lädt ...
+  {:then data}
+    {(data as Option[]).find((option) => option.key === value)?.label || 'Nicht angegeben'}
+  {/await}
 {/snippet}
 
 {#snippet isoMetadataTermsOfUse(value: string)}
-  {JSON.stringify(value)}
+  {#await getTermsOfUse()}
+    Lädt ...
+  {:then data}
+    {(data as TermsOfUse[]).find((entry: TermsOfUse) => entry.id === Number(value))?.shortname}
+  {/await}
 {/snippet}
 
 {#snippet isoMetadataAnnexTheme(value: string)}
@@ -138,31 +176,35 @@
   {maintenanceFrequencyMap[value]}
 {/snippet}
 
-{#snippet isoMetadataLastUpdated(value: string)}
+{#snippet isoMetadataModified(value: string)}
   {new Date(value).toLocaleDateString()}
 {/snippet}
 
-{#snippet isoMetadataValidityRange(value: string)}
+{#snippet isoMetadataValidFrom(value: string)}
+  {new Date(value).toLocaleDateString()}
+{/snippet}
+
+{#snippet isoMetadataValidTo(value: string)}
+  {new Date(value).toLocaleDateString()}
+{/snippet}
+
+{#snippet technialMetadataDeliveredCrs(value: string)}
   {value}
 {/snippet}
 
-{#snippet isoMetadataDeliveredCoordinateSystem(value: string)}
-  {value}
-{/snippet}
-
-{#snippet isoMetadataCoordinateSystem(value: string)}
-  {value}
+{#snippet isoMetadataCrs(value: string)}
+  {#await getCrs()}
+    Lädt ...
+  {:then data}
+    {(data as Option[]).find((option) => option.key === value)?.label || 'Nicht angegeben'}
+  {/await}
 {/snippet}
 
 {#snippet isoMetadataExtent(value: Extent)}
   {`${value.minx}, ${value.miny}, ${value.maxx}, ${value.maxy}`}
 {/snippet}
 
-{#snippet isoMetadataResolution(value: string)}
-  {value}
-{/snippet}
-
-{#snippet isoMetadataContentDescription(value: string)}
+{#snippet isoMetadataResolutions(value: string)}
   {value}
 {/snippet}
 
@@ -170,12 +212,42 @@
   {value}
 {/snippet}
 
-{#snippet isoMetadataLineage(value: string)}
-  {value}
+{#snippet isoMetadataLineage(value: Lineage[])}
+  <fieldset class="list">
+    {#each value as lineage}
+      <div class="list-item">
+        <div>
+          <strong class="list-item-label">Title</strong>
+          <span class="list-item-value">{lineage.title}</span>
+        </div>
+        <div>
+          <strong class="list-item-label">Veröffentlichungsdatum</strong>
+          <span class="list-item-value">{lineage.date || 'Keine Angaben'}</span>
+        </div>
+        <div>
+          <strong class="list-item-label">Identifier</strong>
+          <span class="list-item-value">{lineage.identifier || 'Keine Angaben'}</span>
+        </div>
+      </div>
+    {/each}
+  </fieldset>
 {/snippet}
 
-{#snippet isoMetadataAdditionalInformation(value: string)}
-  {value}
+{#snippet isoMetadataContentDescriptions(value: ContentDescription[])}
+  <fieldset class="list">
+    {#each value as contentDescription}
+      <div class="list-item">
+        <div>
+          <strong class="list-item-label">Title</strong>
+          <span class="list-item-value">{contentDescription.description}</span>
+        </div>
+        <div>
+          <strong class="list-item-label">Url</strong>
+          <span class="list-item-value">{contentDescription.url || 'Keine Angaben'}</span>
+        </div>
+      </div>
+    {/each}
+  </fieldset>
 {/snippet}
 
 {#snippet isoMetadataServices(services: Service[])}
@@ -202,23 +274,40 @@
           <strong>File Identifier</strong>
           <span>{service.fileIdentifier}</span>
         </div>
-        {#if service?.columns}
-          <div class="subheader">Attribute</div>
-          <div class="columns">
-            {#each service?.columns || [] as columnInfo}
-              <fieldset class="service-column">
+        {#if service.featureTypes?.length}
+          <div class="subheader">Feature-Typen</div>
+          <div class="feature-types">
+            {#each service?.featureTypes || [] as featureType}
+              <fieldset class="service-feature-type">
                 <div>
-                  <strong>Attribut-Name</strong>
-                  <span>{columnInfo.name}</span>
+                  <strong>Feature-Typ</strong>
+                  <span>{featureType.name}</span>
                 </div>
                 <div>
-                  <strong>Attribut-Alias</strong>
-                  <span>{columnInfo.title}</span>
+                  <strong>Feature-Typ-Alias</strong>
+                  <span>{featureType.title}</span>
                 </div>
-                <div>
-                  <strong>Attribut-Typ</strong>
-                  <span>{columnInfo.type}</span>
-                </div>
+                {#if featureType?.columns}
+                  <div class="subheader">Attribute</div>
+                  <div class="columns">
+                    {#each featureType?.columns || [] as columnInfo}
+                      <fieldset class="service-column">
+                        <div>
+                          <strong>Attribut-Name</strong>
+                          <span>{columnInfo.name}</span>
+                        </div>
+                        <div>
+                          <strong>Attribut-Alias</strong>
+                          <span>{columnInfo.alias}</span>
+                        </div>
+                        <div>
+                          <strong>Attribut-Typ</strong>
+                          <span>{columnInfo.type}</span>
+                        </div>
+                      </fieldset>
+                    {/each}
+                  </div>
+                {/if}
               </fieldset>
             {/each}
           </div>
@@ -253,10 +342,6 @@
   </div>
 {/snippet}
 
-{#snippet clientMetadataPrivacy(value: string)}
-  {value}
-{/snippet}
-
 {#snippet clientMetadataHighValueDataset(value: boolean)}
   {value ? 'Ja' : 'Nein'}
 {/snippet}
@@ -275,12 +360,16 @@
     font-weight: bold;
   }
 
-  .contacts {
+  .list {
     display: flex;
     flex-direction: column;
     gap: 1.5em;
 
-    .contact {
+    .list-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+
       div {
         display: flex;
         gap: 1em;
@@ -305,7 +394,6 @@
     .service {
       display: flex;
       flex-direction: column;
-      gap: 1em;
 
       div {
         display: flex;
@@ -321,6 +409,7 @@
         }
       }
 
+      .feature-types,
       .columns,
       .downloads {
         margin-left: 2em;
@@ -328,7 +417,6 @@
         display: flex;
         flex-direction: column;
       }
-
     }
   }
 </style>
