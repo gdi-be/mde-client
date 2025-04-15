@@ -85,6 +85,7 @@
   };
 
   const fetchTeamAndGroupByRole = async () => {
+    if (!metadata) return;
     const response = await fetch(`/metadata/${metadata.metadataId}/team`);
     if (response.ok) {
       const teamMembers = await response.json();
@@ -111,6 +112,7 @@
   };
 
   const onApprovalStateChange = async (approved: boolean) => {
+    if (!metadata) return;
     const response = await fetch(`/metadata/${metadata.metadataId}/approved`, {
       method: approved ? 'POST' : 'DELETE'
     });

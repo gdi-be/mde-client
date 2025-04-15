@@ -12,7 +12,6 @@
   let assignmentPanelVisible = $state(false);
 
   const metadata = $derived(data.metadata);
-
   initializeFormContext(data.metadata);
 
   const print = () => {
@@ -48,7 +47,7 @@
   </Fab>
   <h1>{metadata?.isoMetadata?.title}</h1>
   <MetadataDisplay />
-  <FormFooter {metadata} {commentsPanelVisible} {approvalPanelVisible} {assignmentPanelVisible} />
+  <FormFooter {commentsPanelVisible} {approvalPanelVisible} {assignmentPanelVisible} />
 </div>
 
 <style lang="scss">
