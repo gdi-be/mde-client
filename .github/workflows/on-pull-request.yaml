@@ -1,0 +1,29 @@
+name: Test successful build
+
+on: pull_request
+
+jobs:
+  build:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run typecheck
+        run: bun run check
+
+      - name: Run lint
+        run: bun run lint
+
+      - name: Run tests
+        run: bun run test
+
+      - name: Build artifacts
+        run: bun run build
