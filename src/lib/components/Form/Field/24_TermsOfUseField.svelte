@@ -51,8 +51,8 @@
   {:then OPTIONS}
     <div class="input-wrapper">
       <SelectInput
-        key={KEY}
         label={fieldConfig?.label}
+        {fieldConfig}
         options={OPTIONS.map(
           (item: TermsOfUse): Option => ({
             key: item.id.toString(),

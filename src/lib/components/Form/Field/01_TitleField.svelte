@@ -27,11 +27,10 @@
 <div class="title-field">
   <TextInput
     bind:value
-    key={KEY}
-    label={fieldConfig?.label}
-    onblur={onBlur}
-    placeholder={fieldConfig?.explanation}
+    label={fieldConfig?.label || KEY}
+    {fieldConfig}
     {validationResult}
+    onblur={onBlur}
   />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>

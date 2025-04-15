@@ -27,7 +27,7 @@
   <TextInput
     bind:value
     label={fieldConfig?.label}
-    placeholder={fieldConfig?.explanation}
+    {fieldConfig}
     onblur={onBlur}
   />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />

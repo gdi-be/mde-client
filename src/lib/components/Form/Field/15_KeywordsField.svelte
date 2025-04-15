@@ -8,7 +8,7 @@
   import Dialog, { Actions, Content, Title } from '@smui/dialog';
   import Textfield from '@smui/textfield';
   import Button, { Label } from '@smui/button';
-  import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
+  import FieldHint from '../FieldHint.svelte';
   import type { ValidationResult } from '../FieldsConfig';
   import type { Keywords } from '$lib/models/metadata';
 
@@ -156,7 +156,7 @@
         <Text>Eigene Schlagwörter hinzufügen</Text>
       {/snippet}
     </Autocomplete>
-    <ValidationFeedbackText {validationResult} />
+    <FieldHint {validationResult} {fieldConfig} />
   </fieldset>
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}></FieldTools>
 </div>

@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { Lineage } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getSubFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import FieldHint from '../FieldHint.svelte';
 
   type LineageListEntry = Lineage & { listId: string };
 
@@ -85,17 +86,18 @@
 
 <div class="lineages-field">
   <fieldset>
-    <legend
-      >{fieldConfig?.label}
+    <legend>
+      {fieldConfig?.label}
       <IconButton
         class="material-icons"
         onclick={(evt) => addItem(evt)}
         size="button"
-        title="Kontakt hinzufügen"
+        title="Daten hinzufügen"
       >
         add
       </IconButton>
     </legend>
+    <FieldHint {fieldConfig} />
     {#each lineages as lineage (lineage.listId)}
       <fieldset class="lineage">
         <legend>
@@ -103,16 +105,16 @@
             class="material-icons"
             onclick={(evt) => removeItem(lineage.listId, evt)}
             size="button"
-            title="Kontakt entfernen"
+            title="Daten entfernen"
           >
             delete
           </IconButton>
         </legend>
         <TextInput
           bind:value={lineage.title}
-          key={KEY}
           label="Titel"
           onblur={persistLineages}
+          fieldConfig={getSubFieldConfig(KEY, 'title')}
           required
         />
         <div class="inline-fields">
@@ -122,13 +124,14 @@
             key={KEY}
             label="Veröffentlichungsdatum"
             onblur={persistLineages}
+            fieldConfig={getSubFieldConfig(KEY, 'date')}
           />
           <TextInput
             class="lineage-source-field"
             bind:value={lineage.identifier}
-            key={KEY}
             label="Identifier"
             onblur={persistLineages}
+            fieldConfig={getSubFieldConfig(KEY, 'identifier')}
             required
           />
         </div>

@@ -4,8 +4,14 @@
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
   import type { Option } from '$lib/models/form';
+  import { getContext } from 'svelte';
+  import type { Token } from '$lib/models/keycloak';
+  import { getHighestRole } from '$lib/util';
 
   const KEY = 'isoMetadata.crs';
+
+  const token = getContext<Token>('user_token');
+  const highestRole = $derived(getHighestRole(token));
 
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
@@ -31,21 +37,22 @@
   };
 </script>
 
-<div class="title-field">
-  {#await fetchOptions()}
-    <p>Lade CRS Optionen</p>
-  {:then OPTIONS}
-    <SelectInput
-      {value}
-      key={KEY}
-      label={fieldConfig?.label}
-      options={OPTIONS}
-      onChange={onSelectionChange}
-      {validationResult}
-    />
-  {/await}
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
-</div>
+{#if highestRole !== 'MdeDataOwner'}
+  <div class="title-field">
+    {#await fetchOptions()}
+      <p>Lade CRS Optionen</p>
+    {:then OPTIONS}
+      <SelectInput
+        {value}
+        label={fieldConfig?.label}
+        options={OPTIONS}
+        onChange={onSelectionChange}
+        {validationResult}
+      />
+    {/await}
+    <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  </div>
+{/if}
 
 <style lang="scss">
   .title-field {

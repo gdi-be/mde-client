@@ -40,15 +40,19 @@
       showCheckmark = true;
     }
   };
+
+  const fieldVisible = $derived(
+    metadataProfile === 'INSPIRE_HARMONISED'
+    && ['MdeEditor', 'MdeAdministrator'].includes(highestRole)
+  );
 </script>
 
-{#if metadataProfile === 'INSPIRE_HARMONISED' && highestRole !== 'MdeDataOwner'}
+{#if fieldVisible}
   <div class="inspire-annex-version-field">
     <TextInput
       bind:value
-      key={KEY}
       label={fieldConfig?.label}
-      placeholder={fieldConfig?.explanation}
+      {fieldConfig}
       onblur={onBlur}
       {validationResult}
     />

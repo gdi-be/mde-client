@@ -51,6 +51,7 @@
     label={fieldConfig?.label}
     onchange={onChange}
     disabled={automated}
+    {fieldConfig}
     {validationResult}
   />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />

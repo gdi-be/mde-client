@@ -4,6 +4,7 @@
   import Switch from '@smui/switch';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { Option } from '$lib/models/form';
+  import FieldHint from '../FieldHint.svelte';
 
   const CHECKED_KEY = 'clientMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
@@ -20,7 +21,8 @@
     selectionValue = selectionValueFromData || '';
   });
 
-  const fieldConfig = getFieldConfig<string>(CHECKED_KEY);
+  const checkedFieldConfig = getFieldConfig<string>(CHECKED_KEY);
+  const categoryFieldConfig = getFieldConfig<string>(CATEGORY_KEY);
 
   let showCheckmark = $state(false);
 
@@ -49,19 +51,20 @@
 <div class="high-value-dataset-check-field">
   <fieldset>
     <legend>
-      {fieldConfig?.label}
+      {checkedFieldConfig?.label}
       <Switch bind:checked={checkedValue} onSMUISwitchChange={onCheckChange} />
     </legend>
+    <FieldHint fieldConfig={checkedFieldConfig} />
     {#if checkedValue}
       {#await fetchOptions()}
         <p>Lade HVD Kategorien</p>
       {:then OPTIONS}
         <SelectInput
-          key={CATEGORY_KEY}
           label={LABEL}
           options={OPTIONS}
           value={selectionValue}
           onChange={onSelectionChange}
+          fieldConfig={categoryFieldConfig}
         />
       {/await}
     {/if}
@@ -84,6 +87,7 @@
       }
 
       :global(.select-input) {
+        margin-top: 1em;
         border: none;
         background-color: rgba(244, 244, 244, 0.7);
       }

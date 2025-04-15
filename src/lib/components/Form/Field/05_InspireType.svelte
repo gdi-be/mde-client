@@ -43,9 +43,9 @@
 
 <div class="metadata-type-field">
   <SelectInput
-    key={KEY}
     label={fieldConfig?.label}
     options={OPTIONS}
+    {fieldConfig}
     {value}
     {onChange}
     {validationResult}

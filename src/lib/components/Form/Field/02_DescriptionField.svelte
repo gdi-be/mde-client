@@ -27,12 +27,11 @@
 <div class="description-field">
   <TextAreaInput
     bind:value
-    key={KEY}
-    label={fieldConfig?.label}
     maxlength={500}
     onblur={onBlur}
-    placeholder={fieldConfig?.explanation}
+    label={fieldConfig?.label || KEY}
     rows={5}
+    {fieldConfig}
     {validationResult}
   />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
