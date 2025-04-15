@@ -13,7 +13,7 @@ export async function GET({ cookies, params }) {
 
   const response = await fetch(`${env.BACKEND_URL}/metadata/${params.metadataid}/download`, {
     headers: {
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -23,5 +23,4 @@ export async function GET({ cookies, params }) {
 
   const blob = await response.blob();
   return new Response(blob);
-
 }

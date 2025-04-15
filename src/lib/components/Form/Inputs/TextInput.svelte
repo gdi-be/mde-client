@@ -102,7 +102,6 @@
         &.invalid {
           color: var(--mdc-theme-error);
         }
-
       }
 
       .character-counter {
@@ -111,6 +110,5 @@
         font-size: 0.75em;
       }
     }
-
   }
 </style>

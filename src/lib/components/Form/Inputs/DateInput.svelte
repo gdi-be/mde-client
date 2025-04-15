@@ -27,13 +27,7 @@
 
 <fieldset class={['date-input', wrapperClass]}>
   <legend>{label}</legend>
-  <input
-    type="date"
-    id={key}
-    name={key}
-    bind:value
-    {...restProps}
-  />
+  <input type="date" id={key} name={key} bind:value {...restProps} />
   <div class="field-footer">
     <div class={['help-text', isValid ? 'valid' : 'invalid']}>
       {#if showHelpText}
@@ -80,7 +74,6 @@
         &.invalid {
           color: var(--mdc-theme-error);
         }
-
       }
     }
   }

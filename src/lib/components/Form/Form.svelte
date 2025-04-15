@@ -111,14 +111,13 @@
       print();
     }
 
-    if(action?.includes('comments')) {
+    if (action?.includes('comments')) {
       commentsPanelVisible = true;
     }
 
-    if(action?.includes('approval')) {
+    if (action?.includes('approval')) {
       approvalPanelVisible = true;
     }
-
   });
 </script>
 

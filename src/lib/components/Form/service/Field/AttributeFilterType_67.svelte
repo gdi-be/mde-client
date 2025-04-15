@@ -15,14 +15,8 @@
     { key: 'CatalogBox', label: 'CatalogBox' },
     { key: 'DoubleEditOrderField', label: 'DoubleEditOrderField' },
     { key: 'EditField', label: 'EditField' },
-    { key: 'EditOrderField', label: 'EditOrderField' },
+    { key: 'EditOrderField', label: 'EditOrderField' }
   ];
 </script>
 
-<SelectInput
-  key="filter-type"
-  label="Attribut-Filtertyp"
-  {value}
-  {options}
-  {onChange}
-/>
+<SelectInput key="filter-type" label="Attribut-Filtertyp" {value} {options} {onChange} />

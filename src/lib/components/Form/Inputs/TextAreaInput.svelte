@@ -29,12 +29,7 @@
 
 <fieldset class={['text-area-input', wrapperClass]}>
   <legend>{label}</legend>
-  <textarea
-    id={key}
-    {maxlength}
-    bind:value
-    {...restProps}
-  ></textarea>
+  <textarea id={key} {maxlength} bind:value {...restProps}></textarea>
   <div class="field-footer">
     <div class={['help-text', isValid ? 'valid' : 'invalid']}>
       {#if showHelpText}
@@ -98,6 +93,5 @@
         font-size: 0.75em;
       }
     }
-
   }
 </style>

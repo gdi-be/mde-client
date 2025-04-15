@@ -38,7 +38,9 @@
       (responsibleRole === 'MdeEditor' && highestRole === 'MdeEditor')
   );
 
-  const canApproveMetadata = $derived(['MdeAdministrator', 'MdeQualityAssurance'].includes(highestRole));
+  const canApproveMetadata = $derived(
+    ['MdeAdministrator', 'MdeQualityAssurance'].includes(highestRole)
+  );
 
   const assignToRole = async (role: Role) => {
     if (!metadata) return;
@@ -112,15 +114,14 @@
       console.error('Failed to update approval state');
     }
   };
-
 </script>
 
 {#snippet approve()}
   <fieldset class="approve">
     <legend>Prüfung</legend>
     <p>
-      Wählen sie den Überprüfungsstatus der Metadaten aus.
-      Wenn sie den Status ändern denken sie daran einen Kommentar zu hinterlassen.
+      Wählen sie den Überprüfungsstatus der Metadaten aus. Wenn sie den Status ändern denken sie
+      daran einen Kommentar zu hinterlassen.
     </p>
     <FormField align="end">
       {#snippet label()}

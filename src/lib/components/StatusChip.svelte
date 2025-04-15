@@ -1,12 +1,8 @@
 <script lang="ts">
-  import Chip, { Text } from "@smui/chips";
-  import { getStatusName } from "$lib/context/StatusesContext.svelte";
+  import Chip, { Text } from '@smui/chips';
+  import { getStatusName } from '$lib/context/StatusesContext.svelte';
 
-  const {
-    chip,
-    colored = false,
-    mini = false
-  } = $props();
+  const { chip, colored = false, mini = false } = $props();
 
   const getClass = (key: string) => {
     const classes = ['status-chip'];
@@ -18,14 +14,10 @@
     }
     classes.push(key.toLowerCase());
     return classes.join(' ');
-  }
-
+  };
 </script>
 
-<Chip
-  class={getClass(chip)}
-  {chip}
->
+<Chip class={getClass(chip)} {chip}>
   <Text tabindex={0}>{getStatusName(chip)}</Text>
 </Chip>
 

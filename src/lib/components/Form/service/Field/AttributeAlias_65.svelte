@@ -3,7 +3,7 @@
   import type { ColumnInfo } from '$lib/models/metadata';
 
   export type ServiceTypeProps = {
-    value?: ColumnInfo['title'];
+    value?: ColumnInfo['name'];
     onChange: (newValue: string) => void;
   };
 

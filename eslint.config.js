@@ -18,7 +18,6 @@ export default ts.config(
       }
     },
     rules: {
-      indent: ['warn', 2],
       'no-tabs': 'warn'
     }
   },

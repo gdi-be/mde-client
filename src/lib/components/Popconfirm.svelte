@@ -35,11 +35,7 @@
     {text}
   </span>
   <div class="actions">
-    <Button
-      variant="unelevated"
-      onclick={confirmButtonHandler}
-      disabled={loading}
-    >
+    <Button variant="unelevated" onclick={confirmButtonHandler} disabled={loading}>
       {confirmButtonText}
       {#if loading}
         <Spinner />

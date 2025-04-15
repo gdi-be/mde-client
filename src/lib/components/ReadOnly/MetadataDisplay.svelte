@@ -4,8 +4,8 @@
 
 <div class="metadata-display">
   <div class="content">
-      <DisplayField key="isoMetadata.identifier" label="Identifier"/>
-      <DisplayField key="isoMetadata.fileIdentifier" label="File-Identifier"/>
+    <DisplayField key="isoMetadata.identifier" label="Identifier" />
+    <DisplayField key="isoMetadata.fileIdentifier" label="File-Identifier" />
     <section id="basedata">
       <h2>1. Basisangaben</h2>
       <DisplayField key="isoMetadata.title" />

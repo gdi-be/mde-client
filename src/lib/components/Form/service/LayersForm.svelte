@@ -24,7 +24,7 @@
   let {
     value: initialLayers,
     checkmarkVisible = $bindable<boolean>(false),
-    onChange = () => {},
+    onChange = () => {}
   }: LayersFormProps = $props();
 
   let layers = $state(initialLayers || []);
@@ -45,7 +45,7 @@
       ...layers,
       {
         name,
-        title: name,
+        title: name
       }
     ];
     activeTabIndex = layers.length - 1;

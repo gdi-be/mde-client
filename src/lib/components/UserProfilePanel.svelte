@@ -24,7 +24,9 @@
       : token?.preferred_username
   );
   const email = $derived(token?.email);
-  const roles = $derived((token?.realm_access?.roles as Role[]).filter(roleFilter).map(roleMap).join(', '));
+  const roles = $derived(
+    (token?.realm_access?.roles as Role[]).filter(roleFilter).map(roleMap).join(', ')
+  );
 </script>
 
 <div class="user-profile-panel">

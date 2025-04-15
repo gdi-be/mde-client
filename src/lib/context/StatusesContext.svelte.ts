@@ -10,25 +10,32 @@ export type StatusesState = {
 };
 
 const defaultState = {
-  statuses: [{
-    key: 'ASSIGNED_TO_ME',
-    label: 'zu bearbeiten'
-  }, {
-    key: 'TEAM_MEMBER',
-    label: 'Meine Metadaten'
-  }, {
-    key: 'READY_FOR_RELEASE',
-    label: 'Geprüft'
-  }, {
-    key: 'ROLE_MdeDataOwner',
-    label: 'Datenhaltende Stelle'
-  }, {
-    key: 'ROLE_MdeEditor',
-    label: 'Redaktion'
-  },{
-    key: 'ROLE_MdeQualityAssurance',
-    label: 'Qualitätssicherung'
-  }]
+  statuses: [
+    {
+      key: 'ASSIGNED_TO_ME',
+      label: 'zu bearbeiten'
+    },
+    {
+      key: 'TEAM_MEMBER',
+      label: 'Meine Metadaten'
+    },
+    {
+      key: 'READY_FOR_RELEASE',
+      label: 'Geprüft'
+    },
+    {
+      key: 'ROLE_MdeDataOwner',
+      label: 'Datenhaltende Stelle'
+    },
+    {
+      key: 'ROLE_MdeEditor',
+      label: 'Redaktion'
+    },
+    {
+      key: 'ROLE_MdeQualityAssurance',
+      label: 'Qualitätssicherung'
+    }
+  ]
 };
 
 const statutesState = $state<{ state: StatusesState }>({ state: defaultState });
@@ -43,7 +50,7 @@ export function getStatusesState() {
 
 export function getAvailableStatuses(token: Token) {
   const highestRole = getHighestRole(token);
-  return statutesState.state.statuses.filter(status => {
+  return statutesState.state.statuses.filter((status) => {
     if (highestRole === 'MdeAdministrator') {
       return true;
     } else if (highestRole === 'MdeEditor') {
@@ -62,5 +69,5 @@ export function getAvailableStatuses(token: Token) {
 }
 
 export function getStatusName(key: string) {
-  return statutesState.state.statuses.find(status => status.key === key)?.label;
+  return statutesState.state.statuses.find((status) => status.key === key)?.label;
 }

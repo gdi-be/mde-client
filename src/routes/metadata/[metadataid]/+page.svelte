@@ -6,10 +6,7 @@
   const activeSection = page.url.hash.slice(1) || 'basedata';
   let { data } = $props();
 
-  initializeFormContext(
-    data.metadata,
-    data.fieldLabels
-  )
+  initializeFormContext(data.metadata, data.fieldLabels);
 
   const metadata = $derived(data.metadata);
 </script>

@@ -1,7 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
 
-
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ cookies, request }) {
   const token = await getAccessToken(cookies);

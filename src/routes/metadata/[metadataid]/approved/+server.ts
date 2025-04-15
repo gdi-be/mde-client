@@ -12,7 +12,7 @@ export async function POST({ cookies, params }) {
   const response = await fetch(`${env.BACKEND_URL}/metadata/${params.metadataid}/approved`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -20,7 +20,7 @@ export async function POST({ cookies, params }) {
     return error(response.status, response.statusText);
   }
 
-  return new Response(null, { status: 204 })
+  return new Response(null, { status: 204 });
 }
 
 export async function DELETE({ cookies, params }) {
@@ -32,7 +32,7 @@ export async function DELETE({ cookies, params }) {
   const response = await fetch(`${env.BACKEND_URL}/metadata/${params.metadataid}/approved`, {
     method: 'DELETE',
     headers: {
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   });
 
@@ -40,5 +40,5 @@ export async function DELETE({ cookies, params }) {
     return error(response.status, response.statusText);
   }
 
-  return new Response(null, { status: 204 })
+  return new Response(null, { status: 204 });
 }

@@ -13,9 +13,7 @@
 
   const metadata = $derived(data.metadata);
 
-  initializeFormContext(
-    data.metadata
-  )
+  initializeFormContext(data.metadata);
 
   const print = () => {
     if (browser) {
@@ -30,40 +28,27 @@
       print();
     }
 
-    if(action?.includes('comments')) {
+    if (action?.includes('comments')) {
       commentsPanelVisible = true;
     }
 
-    if(action?.includes('approval')) {
+    if (action?.includes('approval')) {
       approvalPanelVisible = true;
     }
 
-    if(action?.includes('assignment')) {
+    if (action?.includes('assignment')) {
       assignmentPanelVisible = true;
     }
-
   });
-
 </script>
 
 <div class="readonly-metadata">
-  <Fab
-    title="Drucken"
-    class="print-button"
-    onclick={print}
-  >
-    <Icon class="material-icons">
-      print
-    </Icon>
+  <Fab title="Drucken" class="print-button" onclick={print}>
+    <Icon class="material-icons">print</Icon>
   </Fab>
   <h1>{metadata?.isoMetadata?.title}</h1>
   <MetadataDisplay />
-  <FormFooter
-    {metadata}
-    {commentsPanelVisible}
-    {approvalPanelVisible}
-    {assignmentPanelVisible}
-  />
+  <FormFooter {metadata} {commentsPanelVisible} {approvalPanelVisible} {assignmentPanelVisible} />
 </div>
 
 <style lang="scss">
@@ -90,8 +75,7 @@
 
     :global(header.application-header),
     :global(footer.form-footer),
-    :global(.print-button)
-    {
+    :global(.print-button) {
       display: none !important;
     }
 
@@ -103,7 +87,6 @@
       width: 100% !important;
       overflow: visible !important;
     }
-
   }
 
   @page {

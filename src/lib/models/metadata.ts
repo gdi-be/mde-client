@@ -15,7 +15,7 @@ export type Layer = {
   legendImage?: string;
   datasource?: string;
   secondaryDatasource?: string;
-}
+};
 
 export type IsoTheme = {
   inspireID: string;

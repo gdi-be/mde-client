@@ -1,10 +1,10 @@
-name: Test successful build
+name: Pull Request
 
 on: pull_request
 
 jobs:
   build:
-    name: Push Docker image to Docker Hub
+    name: Run tests and build artifacts
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -15,6 +15,9 @@ jobs:
 
       - name: Install dependencies
         run: bun install
+
+      - name: Create .env file
+        run: cp .env.example .env
 
       - name: Run typecheck
         run: bun run check

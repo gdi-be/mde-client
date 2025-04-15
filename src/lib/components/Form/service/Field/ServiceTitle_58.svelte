@@ -35,12 +35,9 @@
     maxlength={100}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />
-  <FieldTools key={KEY} noCheckmark >
+  <FieldTools key={KEY} noCheckmark>
     {#if metadataTitle}
-      <AutoFillButton
-        title="Titel des Metadatensatzes übernehmen"
-        onclick={getAutoFillValues}
-      />
+      <AutoFillButton title="Titel des Metadatensatzes übernehmen" onclick={getAutoFillValues} />
     {/if}
   </FieldTools>
 </div>

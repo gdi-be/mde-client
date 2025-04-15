@@ -1,4 +1,5 @@
 <script lang="ts">
+  /* eslint-disable svelte/no-at-html-tags */
   import type { MetadataCollection } from '$lib/models/metadata';
   import Button, { Icon, Label } from '@smui/button';
   import Paper from '@smui/paper';
@@ -27,7 +28,7 @@
     }
 
     const lastItem = validation
-      ?.filter(validation => validation.metadataId === metadataId)
+      ?.filter((validation) => validation.metadataId === metadataId)
       .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
       .at(-1);
 
@@ -67,20 +68,15 @@
         <p>
           In diesem Schritt wird die Validierung der Metadaten durchgeführt. Bitte beachten Sie,
           dass dies einige Zeit in Anspruch nehmen kann, abhängig von der Größe und Komplexität der
-          Metadaten.
-          Sie können die Validierung über den Button <code>Validierung starten</code> beginnen. Die
-          Validierung wird im Hintergrund durchgeführt und Sie werden benachrichtigt, sobald sie
-          abgeschlossen ist.
+          Metadaten. Sie können die Validierung über den Button <code>Validierung starten</code>
+          beginnen. Die Validierung wird im Hintergrund durchgeführt und Sie werden benachrichtigt, sobald
+          sie abgeschlossen ist.
           <br />
           <br />
           Möchten Sie die Validierung jetzt starten?
         </p>
         <div class="validation-panel-actions">
-          <Button
-            variant="raised"
-            onclick={runValidation}
-            disabled={isLoading}
-          >
+          <Button variant="raised" onclick={runValidation} disabled={isLoading}>
             <Label>Validierung starten</Label>
             <Icon class="material-icons">assignment_turned_in</Icon>
             {#if isLoading}
@@ -90,34 +86,27 @@
         </div>
         <div class="validation-panel-results">
           {#if isLoading}
-            <p>
-              Die Validierung läuft. Bitte warten Sie…
-            </p>
+            <p>Die Validierung läuft. Bitte warten Sie…</p>
           {:else if validationResult}
-            <p>
-              Ergebnisse der Validierung:
-            </p>
+            <p>Ergebnisse der Validierung:</p>
             <div class="validation-results">
               {#if validationResult.split('|').length > 0}
-                {@const results = validationResult.split('|')
-                  .map(res => res.trim())
-                  .filter(res => {
-                    return !res.startsWith('Ergebnisse GDI-DE') &&
+                {@const results = validationResult
+                  .split('|')
+                  .map((res) => res.trim())
+                  .filter((res) => {
+                    return (
+                      !res.startsWith('Ergebnisse GDI-DE') &&
                       !res.startsWith('GDI-DE Konventionen') &&
                       !res.startsWith('Metadaten: GDI-DE')
+                    );
                   })}
                 {#if results.length === 0}
-                  <p
-                    class="success"
-                  >
-                    Keine Fehler oder Warnungen gefunden.
-                  </p>
+                  <p class="success">Keine Fehler oder Warnungen gefunden.</p>
                 {:else}
                   {#each results as result}
                     {#if result.startsWith('Fehler beim Validieren')}
-                      <p
-                        class="error"
-                      >
+                      <p class="error">
                         {@html result}
                       </p>
                     {:else if result.startsWith('Prüfung auf')}
@@ -125,33 +114,30 @@
                         {@html result}
                       </h4>
                     {:else}
-                    <ul>
-                      <li
-                        class={[
-                          result.toLowerCase().startsWith('fehler') && 'error',
-                          result.toLowerCase().startsWith('warnung') && 'warn'
-                        ]}
-                      >
-                        {@html result}
-                      </li>
-                    </ul>
+                      <ul>
+                        <li
+                          class={[
+                            result.toLowerCase().startsWith('fehler') && 'error',
+                            result.toLowerCase().startsWith('warnung') && 'warn'
+                          ]}
+                        >
+                          {@html result}
+                        </li>
+                      </ul>
                     {/if}
                   {/each}
                 {/if}
               {/if}
             </div>
           {:else if validationError}
-            <p>
-              Die Validierung konnte nicht erfolgreich durchgeführt werden.
-            </p>
+            <p>Die Validierung konnte nicht erfolgreich durchgeführt werden.</p>
           {:else if validationStartError}
-            <p>
-              Die Validierung konnte nicht gestartet werden.
-            </p>
+            <p>Die Validierung konnte nicht gestartet werden.</p>
           {/if}
         </div>
       </div>
-  </Paper>
+    </div></Paper
+  >
 </div>
 
 <style lang="scss">
@@ -212,6 +198,5 @@
         }
       }
     }
-
   }
 </style>

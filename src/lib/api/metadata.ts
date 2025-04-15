@@ -462,12 +462,9 @@ type UserData = {
   role: string;
   keycloakId: string;
   displayName: string;
-}
+};
 
-export const getTeam = async ({
-  token,
-  metadataid
-}: GetTeamProps): Promise<UserData[]> => {
+export const getTeam = async ({ token, metadataid }: GetTeamProps): Promise<UserData[]> => {
   if (!token) {
     log.error('No token provided.');
     return Promise.reject(new Error('No token provided.'));
@@ -494,10 +491,7 @@ type ValidateProps = {
   metadataid: string;
 };
 
-export const validate = async ({
-  token,
-  metadataid
-}: ValidateProps) => {
+export const validate = async ({ token, metadataid }: ValidateProps) => {
   if (!token) {
     log.error('No token provided.');
     return Promise.reject(new Error('No token provided.'));

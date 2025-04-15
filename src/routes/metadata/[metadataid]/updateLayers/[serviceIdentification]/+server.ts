@@ -20,20 +20,23 @@ export async function PATCH({ cookies, request, params }) {
   }
 
   try {
-    const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataId}/updateLayers/${serviceIdentification}`, {
-      method: 'PATCH',
-      headers: new Headers({
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }),
-      body: JSON.stringify(data.layers)
-    });
+    const response = await fetch(
+      `${env.BACKEND_URL}/metadata/${metadataId}/updateLayers/${serviceIdentification}`,
+      {
+        method: 'PATCH',
+        headers: new Headers({
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }),
+        body: JSON.stringify(data.layers)
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error status: ${response.status}`);
     }
 
-    return new Response("Updated", { status: 200 });
+    return new Response('Updated', { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
       console.error('Error updating layers:', e.message);

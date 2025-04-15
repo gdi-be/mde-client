@@ -23,11 +23,8 @@
 </script>
 
 <svg
-  class={[
-    "checkmark",
-    running && "running"
-  ]}
-  style={(displayNone && !running) ? "display: none;" : ""}
+  class={['checkmark', running && 'running']}
+  style={displayNone && !running ? 'display: none;' : ''}
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 52 52"
   onanimationstart={onAnimationStart}

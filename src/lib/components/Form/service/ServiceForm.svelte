@@ -17,10 +17,7 @@
     onChange?: (service: Service) => Promise<Response>;
   };
 
-  let {
-    service,
-    onChange,
-  }: ServiceFormProps = $props();
+  let { service, onChange }: ServiceFormProps = $props();
 
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
@@ -60,15 +57,18 @@
     const serviceIdentification = service?.serviceIdentification;
     if (!serviceIdentification) return;
 
-    const response = await fetch(`${page.url.origin}${page.url.pathname}/updateLayers/${serviceIdentification}`, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        layers
-      })
-    });
+    const response = await fetch(
+      `${page.url.origin}${page.url.pathname}/updateLayers/${serviceIdentification}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          layers
+        })
+      }
+    );
 
     if (!response.ok) {
       console.error('Error persisting layers:', response);

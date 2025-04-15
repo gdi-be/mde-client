@@ -27,7 +27,7 @@
       newUrl.searchParams.set('size', '20');
     }
     goto(newUrl, {
-      keepFocus: true,
+      keepFocus: true
     });
   };
 

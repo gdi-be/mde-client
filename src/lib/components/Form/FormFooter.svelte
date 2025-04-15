@@ -46,23 +46,19 @@
 
   let showPublishButton = $derived(
     highestRole === 'MdeAdministrator' ||
-    (
-      assignedToMe &&
-      allFieldsValid(metadata) && highestRole === 'MdeEditor' &&
-      metadata?.isoMetadata.valid === true
-    )
+      (assignedToMe &&
+        allFieldsValid(metadata) &&
+        highestRole === 'MdeEditor' &&
+        metadata?.isoMetadata.valid === true)
   );
   let showValidateButton = $derived(
     highestRole === 'MdeAdministrator' ||
-    (
-      allFieldsValid(metadata) && highestRole === 'MdeEditor' &&
-      metadata?.isoMetadata.valid === true
-    )
+      (allFieldsValid(metadata) &&
+        highestRole === 'MdeEditor' &&
+        metadata?.isoMetadata.valid === true)
   );
   let showAssignmentButton = $derived(
-    highestRole === 'MdeAdministrator' ||
-    assignedToMe ||
-    highestRole === metadata?.responsibleRole
+    highestRole === 'MdeAdministrator' || assignedToMe || highestRole === metadata?.responsibleRole
   );
 
   $effect(() => {
@@ -79,7 +75,7 @@
 
   $effect(() => {
     const lastItem = validation
-      ?.filter(validation => validation.metadataId === metadataId)
+      ?.filter((validation) => validation.metadataId === metadataId)
       .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
       .at(-1);
 
@@ -178,12 +174,7 @@
         <Icon class="material-icons">rocket_launch</Icon>
       </Button>
     {/if}
-    <Button
-      class="submit-button"
-      title="Download"
-      variant="raised"
-      onclick={onDownloadClick}
-    >
+    <Button class="submit-button" title="Download" variant="raised" onclick={onDownloadClick}>
       <Label>Download</Label>
       <Icon class="material-icons">download</Icon>
     </Button>
@@ -191,13 +182,7 @@
 </footer>
 
 {#if showMask}
-  <div
-    class="mask"
-    onclick={closePanels}
-    onkeydown={closePanels}
-    role="button"
-    tabindex="0"
-  ></div>
+  <div class="mask" onclick={closePanels} onkeydown={closePanels} role="button" tabindex="0"></div>
 {/if}
 
 {#if commentsPanelVisible}
@@ -208,7 +193,7 @@
   <ValidationPanel {metadata} />
 {/if}
 
-<AssignmentDialog {metadata} bind:open={assignmentPanelVisible}/>
+<AssignmentDialog {metadata} bind:open={assignmentPanelVisible} />
 
 <style lang="scss">
   footer.form-footer {

@@ -1,18 +1,15 @@
 <script lang="ts">
-  import { getFieldConfig, getValue } from "$lib/context/FormContext.svelte";
-  import type { FieldKey } from "$lib/models/form";
-  import type { Snippet } from "svelte";
-  import * as DisplayFieldSnippets from "./DisplayFieldSnippets.svelte";
+  import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
+  import type { FieldKey } from '$lib/models/form';
+  import type { Snippet } from 'svelte';
+  import * as DisplayFieldSnippets from './DisplayFieldSnippets.svelte';
 
   type DisplayFieldProps = {
     key: FieldKey;
     label?: string;
   };
 
-  const {
-    key,
-    label
-  }: DisplayFieldProps = $props();
+  const { key, label }: DisplayFieldProps = $props();
 
   const config = $derived(getFieldConfig(key));
   const value = $derived(getValue(key));
@@ -21,7 +18,6 @@
     const renderer = DisplayFieldSnippets[key as keyof typeof DisplayFieldSnippets] as Snippet;
     return renderer || DisplayFieldSnippets.defaultSnippet;
   });
-
 </script>
 
 <div class="display-field">

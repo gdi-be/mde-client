@@ -46,14 +46,11 @@
   <Card>
     <Content>
       <h1>Neuerfassung</h1>
-      <p>
-        Hier erfassen Sie zu Ihrem Datensatz neue Metadaten.
-        Tragen Sie einen Titel ein.
-      </p>
+      <p>Hier erfassen Sie zu Ihrem Datensatz neue Metadaten. Tragen Sie einen Titel ein.</p>
       <Textfield bind:value={title} label="Titel" required />
       <p>
-        Zusätzlich können Sie einen existierenden Metadatensatz auswählen,
-        den Sie als Vorlage nutzen möchten, bspw. wenn es ein neuer Jahresstand ist.
+        Zusätzlich können Sie einen existierenden Metadatensatz auswählen, den Sie als Vorlage
+        nutzen möchten, bspw. wenn es ein neuer Jahresstand ist.
       </p>
       <MetadataSearchField
         bind:value={cloneMetadataId}

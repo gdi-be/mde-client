@@ -13,9 +13,7 @@
   <MetadataToolbar />
   {#if metadata.length === 0}
     <div class="no-data">
-      <p>
-        Keine Metadaten gefunden. Bitte Filter anpassen.
-      </p>
+      <p>Keine Metadaten gefunden. Bitte Filter anpassen.</p>
     </div>
   {:else}
     <div class="metadata-list">
