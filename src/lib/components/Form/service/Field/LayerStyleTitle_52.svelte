@@ -11,7 +11,7 @@
 </script>
 
 <TextInput
-  label="Title des Styles"
+  label="Titel des Styles"
   {value}
   onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
 />
