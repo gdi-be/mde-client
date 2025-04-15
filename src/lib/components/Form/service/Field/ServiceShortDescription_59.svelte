@@ -11,10 +11,7 @@
     onChange: (newValue: string) => void;
   };
 
-  let {
-    value = $bindable(),
-    onChange
-  }: ServiceTypeProps = $props();
+  let { value = $bindable(), onChange }: ServiceTypeProps = $props();
 
   const KEY = 'isoMetadata.services.shortDescription';
 
@@ -38,7 +35,7 @@
     rows={5}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />
-  <FieldTools key={KEY} noCheckmark >
+  <FieldTools key={KEY} noCheckmark>
     {#if metadataDescription}
       <AutoFillButton
         title="Beschreibung des Metadatensatzes übernehmen"

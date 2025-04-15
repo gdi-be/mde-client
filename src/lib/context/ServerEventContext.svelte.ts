@@ -1,7 +1,4 @@
-import {
-  getContext,
-  setContext
-} from 'svelte';
+import { getContext, setContext } from 'svelte';
 
 const CONTEXT_KEY = Symbol('SSE');
 
@@ -27,15 +24,17 @@ export type EventState = {
   validation: MetadataValidationData[];
 };
 
-export type EventCallback<T = SseEvent> =
-  T extends 'validation'? (data: MetadataValidationData) => void :
-  T extends 'heartbeat' ? (data: HeartbeatData) => void :
-  (data: SseEventData) => void;
+export type EventCallback<T = SseEvent> = T extends 'validation'
+  ? (data: MetadataValidationData) => void
+  : T extends 'heartbeat'
+    ? (data: HeartbeatData) => void
+    : (data: SseEventData) => void;
 
-export type EventData<T = SseEvent> =
-  T extends 'validation' ? MetadataValidationData :
-  T extends 'heartbeat' ? HeartbeatData :
-  SseEventData;
+export type EventData<T = SseEvent> = T extends 'validation'
+  ? MetadataValidationData
+  : T extends 'heartbeat'
+    ? HeartbeatData
+    : SseEventData;
 
 export const eventState = $state<EventState>({
   generic: [],
@@ -70,7 +69,7 @@ const createSseListener = () => {
         console.log('[SSE] Connected');
       };
 
-      eventSource.onmessage = event => {
+      eventSource.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data) as SseEventData;
           eventState.generic.push(data);
@@ -87,37 +86,37 @@ const createSseListener = () => {
     };
 
     initConnection();
-  }
+  };
 
   const listenTo = (eventName: SseEvent) => {
     if (!eventSource) {
       return;
     }
 
-    eventSource.addEventListener(eventName, event => {
+    eventSource.addEventListener(eventName, (event) => {
       try {
         const data: EventData<typeof eventName> = JSON.parse(event.data);
         // TODO Add in backend?
         data.timestamp = new Date().toISOString();
 
         switch (eventName) {
-        case 'validation':
-          eventState.validation.push(data as MetadataValidationData);
-          break;
-        case 'heartbeat':
-          eventState.heartbeat.push(data as HeartbeatData);
-          break;
-        default:
-          eventState.heartbeat.push(data as SseEventData);
-          break;
+          case 'validation':
+            eventState.validation.push(data as MetadataValidationData);
+            break;
+          case 'heartbeat':
+            eventState.heartbeat.push(data as HeartbeatData);
+            break;
+          default:
+            eventState.heartbeat.push(data as SseEventData);
+            break;
         }
       } catch (e) {
         console.error(`[SSE] Invalid data for event type ${eventName}:`, e);
       }
     });
-  }
+  };
 
-  const disconnect = () =>{
+  const disconnect = () => {
     if (eventSource) {
       eventSource.close();
       eventSource = null;
@@ -127,7 +126,7 @@ const createSseListener = () => {
       eventState.heartbeat = [];
       eventState.validation = [];
     }
-  }
+  };
 
   return {
     setSseContext,
@@ -136,6 +135,6 @@ const createSseListener = () => {
     disconnect,
     listenTo
   };
-}
+};
 
 export const sseContext = createSseListener();

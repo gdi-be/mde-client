@@ -19,7 +19,7 @@ export async function POST({ cookies, request, params }) {
     token
   });
 
-  return new Response(null, { status: 204});
+  return new Response(null, { status: 204 });
 }
 
 export async function DELETE({ cookies, request, params }) {

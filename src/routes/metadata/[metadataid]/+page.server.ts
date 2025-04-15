@@ -30,5 +30,4 @@ export async function load({ params, cookies, url }) {
   } catch (e) {
     error(500, `Error loading field labels: ${e}`);
   }
-
 }

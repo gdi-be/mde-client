@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { FORMSTATE_CONTEXT, getFieldConfig, getValue, persistValue, type FormState } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getFieldConfig,
+    getValue,
+    persistValue,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { MaintenanceFrequency } from '$lib/models/metadata';
@@ -44,7 +50,7 @@
     const response = await persistValue(KEY, newValue);
     const maintenanceFrequency = newValue as MaintenanceFrequency;
 
-    if(isAutomatedValue(published, maintenanceFrequency) && published) {
+    if (isAutomatedValue(published, maintenanceFrequency) && published) {
       const lastUpdatedValue = getLastUpdateValue(published, maintenanceFrequency);
       if (lastUpdatedValue) {
         await persistValue('isoMetadata.modified', lastUpdatedValue.toISOString());

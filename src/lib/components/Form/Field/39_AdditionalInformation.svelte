@@ -16,7 +16,8 @@
   $effect(() => {
     if (valueFromData && valueFromData.length > 0) {
       contentDescriptions = valueFromData?.map((contentDescription) => {
-        const listId = contentDescription.url + contentDescription.description + Date.now().toString(36);
+        const listId =
+          contentDescription.url + contentDescription.description + Date.now().toString(36);
         return {
           listId,
           code: 'information',
@@ -71,7 +72,9 @@
     popconfirm(
       targetEl,
       async () => {
-        contentDescriptions = contentDescriptions.filter((contentDescription) => contentDescription.listId !== listId);
+        contentDescriptions = contentDescriptions.filter(
+          (contentDescription) => contentDescription.listId !== listId
+        );
         persistContentDescriptions();
       },
       {

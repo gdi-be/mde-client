@@ -21,15 +21,8 @@
     { key: 'Long', label: 'Long' },
     { key: 'Text', label: 'Text' },
     { key: 'Short', label: 'Short' },
-    { key: 'Timestamp', label: 'Timestamp' },
+    { key: 'Timestamp', label: 'Timestamp' }
   ];
-
 </script>
 
-<SelectInput
-  key="type"
-  label="Attribut-Datentyp"
-  {value}
-  {options}
-  {onChange}
-/>
+<SelectInput key="type" label="Attribut-Datentyp" {value} {options} {onChange} />

@@ -17,16 +17,10 @@
     goto(url, {
       keepFocus: true
     });
-  }
-
+  };
 </script>
 
-<Textfield
-  class="text-filter-field"
-  label="Suche"
-  bind:value
-  onkeyup={onchange}
->
+<Textfield class="text-filter-field" label="Suche" bind:value onkeyup={onchange}>
   {#snippet helper()}
     <HelperText>Titel durchsuchen</HelperText>
   {/snippet}

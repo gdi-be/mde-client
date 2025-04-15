@@ -79,7 +79,6 @@
         &.invalid {
           color: var(--mdc-theme-error);
         }
-
       }
     }
 

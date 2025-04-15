@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { FORMSTATE_CONTEXT, getFieldConfig, getValue, persistValue, type FormState } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getFieldConfig,
+    getValue,
+    persistValue,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
@@ -31,7 +37,7 @@
   const onChange = async () => {
     const response = await persistValue(KEY, new Date(value!).toISOString());
 
-    if(isAutomatedValue(value, maintenanceFrequency) && maintenanceFrequency) {
+    if (isAutomatedValue(value, maintenanceFrequency) && maintenanceFrequency) {
       const lastUpdatedValue = getLastUpdateValue(value, maintenanceFrequency);
       if (lastUpdatedValue) {
         await persistValue('isoMetadata.modified', lastUpdatedValue.toISOString());

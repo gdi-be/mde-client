@@ -21,27 +21,26 @@
   const userId = $derived(token?.sub);
   const highestRole = $derived(getHighestRole(token));
   const assignedToMe = $derived(metadata.assignedUserId === userId);
-  const assignedToSomeoneElse = $derived((metadata.assignedUserId && metadata.assignedUserId !== userId) || false);
+  const assignedToSomeoneElse = $derived(
+    (metadata.assignedUserId && metadata.assignedUserId !== userId) || false
+  );
   const isTeamMember = $derived(metadata.teamMemberIds?.includes(userId));
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
   const showDeleteAction = $derived(
     highestRole === 'MdeAdministrator' ||
-    metadata.assignedUserId === userId &&
-    highestRole === 'MdeEditor'
+      (metadata.assignedUserId === userId && highestRole === 'MdeEditor')
   );
   const showCommentsAction = $derived(true);
   const showPrintAction = $derived(true);
   const showEditAction = $derived(
     highestRole === 'MdeAdministrator' ||
-    ['MdeEditor', 'MdeDataOwner'].includes(highestRole) && metadata.assignedUserId === userId
+      (['MdeEditor', 'MdeDataOwner'].includes(highestRole) && metadata.assignedUserId === userId)
   );
   const showAssignAction = $derived(
     highestRole === 'MdeAdministrator' ||
-    (
-      !assignedToSomeoneElse &&
-      highestRole === metadata.responsibleRole &&
-      highestRole !== 'MdeDataOwner'
-    )
+      (!assignedToSomeoneElse &&
+        highestRole === metadata.responsibleRole &&
+        highestRole !== 'MdeDataOwner')
   );
 
   const statuses = $derived.by(() => {
@@ -135,20 +134,6 @@
             throw new Error('Failed to delete metadata');
           }
 
-          const responseJson = await response.json();
-
-          const successResult = (metadata.isoMetadata.services as any[])?.filter(
-            service => responseJson.deletedCatalogRecords.includes(service.fileIdentifier)
-          );
-
-          const errorResult = (metadata.isoMetadata.services as any[])?.filter(
-            service => !responseJson.deletedCatalogRecords.includes(service.fileIdentifier)
-          );
-
-          // TODO Show results in UI?
-          // console.log(successResult);
-          // console.log(errorResult);
-
           await invalidateAll();
         } catch (e) {
           console.error('Error deleting metadata:', e);
@@ -166,7 +151,7 @@
       const response = await fetch('/replace_variable', {
         method: 'POST',
         headers: {
-          'content-type': 'application/json',
+          'content-type': 'application/json'
         },
         body: JSON.stringify({
           value: metadata.isoMetadata?.preview
@@ -186,7 +171,6 @@
       return { src: FALLBACK_IMAGE, success };
     }
   }
-
 </script>
 
 <Card class="metadata-card">
@@ -194,13 +178,13 @@
     <span class="title">{metadata.title}</span>
     <Media aspectRatio="16x9">
       <MediaContent>
-        {#await getImageSource() }
+        {#await getImageSource()}
           <img
             class={['preview-image not-available']}
             src={FALLBACK_IMAGE}
             alt="Vorschau nicht erreichbar"
           />
-        {:then asyncSource }
+        {:then asyncSource}
           <img
             class={[
               'preview-image',
@@ -216,45 +200,37 @@
   </PrimaryAction>
   <Set class="status-chipset" chips={statuses} nonInteractive>
     {#snippet chip(chip)}
-      <StatusChip chip={chip} colored={true} mini/>
+      <StatusChip {chip} colored={true} mini />
     {/snippet}
   </Set>
   <ActionIcons class="metadata-card-actions">
     {#if showDeleteAction}
-    <IconButton
-      aria-label={'Metadatensatz Löschen'}
-      title={'Metadatensatz Löschen'}
-      onclick={onDelete}
-    >
-      <Icon class="material-icons">delete</Icon>
-    </IconButton>
+      <IconButton
+        aria-label={'Metadatensatz Löschen'}
+        title={'Metadatensatz Löschen'}
+        onclick={onDelete}
+      >
+        <Icon class="material-icons">delete</Icon>
+      </IconButton>
     {/if}
     {#if showCommentsAction}
-    <IconButton
-      aria-label={'Kommentare anzeigen'}
-      title={'Kommentare anzeigen'}
-      onclick={onComments}
-    >
-      <Icon class="material-icons">chat</Icon>
-    </IconButton>
+      <IconButton
+        aria-label={'Kommentare anzeigen'}
+        title={'Kommentare anzeigen'}
+        onclick={onComments}
+      >
+        <Icon class="material-icons">chat</Icon>
+      </IconButton>
     {/if}
     {#if showPrintAction}
-    <IconButton
-      aria-label={'Drucken'}
-      title={'Drucken'}
-      onclick={onPrint}
-    >
-      <Icon class="material-icons">print</Icon>
-    </IconButton>
+      <IconButton aria-label={'Drucken'} title={'Drucken'} onclick={onPrint}>
+        <Icon class="material-icons">print</Icon>
+      </IconButton>
     {/if}
     {#if showEditAction}
-    <IconButton
-      aria-label={'Bearbeiten'}
-      title={'Bearbeiten'}
-      onclick={onEdit}
-    >
-      <Icon class="material-icons">edit</Icon>
-    </IconButton>
+      <IconButton aria-label={'Bearbeiten'} title={'Bearbeiten'} onclick={onEdit}>
+        <Icon class="material-icons">edit</Icon>
+      </IconButton>
     {/if}
     {#if showAssignAction}
       <IconButton

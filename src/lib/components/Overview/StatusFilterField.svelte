@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { Set } from "@smui/chips";
-  import { getContext } from "svelte";
-  import type { Token } from "$lib/models/keycloak";
-  import FormField from "@smui/form-field";
-  import { getAvailableStatuses } from "$lib/context/StatusesContext.svelte";
-  import StatusChip from "../StatusChip.svelte";
-  import { page } from "$app/state";
-  import { goto } from "$app/navigation";
+  import { Set } from '@smui/chips';
+  import { getContext } from 'svelte';
+  import type { Token } from '$lib/models/keycloak';
+  import FormField from '@smui/form-field';
+  import { getAvailableStatuses } from '$lib/context/StatusesContext.svelte';
+  import StatusChip from '../StatusChip.svelte';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
 
   const token = getContext<Token>('user_token');
   const availableStatuses = $derived(getAvailableStatuses(token));
@@ -22,23 +22,20 @@
     goto(url, {
       keepFocus: true
     });
-  }
+  };
 </script>
 
 <div class="status-filter-field">
   <FormField align="end">
     <Set
       class="status-chipset"
-      chips={availableStatuses.map(status => status.key)}
+      chips={availableStatuses.map((status) => status.key)}
       filter
-      onSMUIChipInteraction={onSMUIChipInteraction}
+      {onSMUIChipInteraction}
       bind:selected
     >
       {#snippet chip(chip)}
-        <StatusChip
-          chip={chip}
-          colored={selected.includes(chip)}
-        />
+        <StatusChip {chip} colored={selected.includes(chip)} />
       {/snippet}
     </Set>
     {#snippet label()}

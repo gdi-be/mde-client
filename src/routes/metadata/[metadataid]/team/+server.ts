@@ -5,11 +5,10 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ cookies, params }) {
-
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 
-  const team = await getTeam({ token, metadataid: params.metadataid});
+  const team = await getTeam({ token, metadataid: params.metadataid });
 
   return json(team);
 }

@@ -4,7 +4,7 @@ type QueryConfig = {
   isTeamMember?: boolean;
   isApproved?: boolean;
   assignedRoles?: Role[];
-}
+};
 
 type UserData = {
   keycloakId: string;

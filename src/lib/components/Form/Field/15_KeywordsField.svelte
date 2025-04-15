@@ -82,14 +82,11 @@
 
   const persistKeywords = async () => {
     const keywords: Keywords = valueFromData || {
-      default: [],
+      default: []
     };
     keywords.default = value.map((entry) => ({ keyword: entry }));
 
-    const response = await persistValue(
-      KEY,
-      keywords
-    );
+    const response = await persistValue(KEY, keywords);
     if (response.ok) {
       showCheckmark = true;
     }

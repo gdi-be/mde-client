@@ -9,9 +9,9 @@ const onProxyReq = async (proxyReq: ClientRequest) => {
     return;
   }
 
-  const cookies = cookie.split(';').map(c => c.trim());
-  const accessTokenCookie = cookies.find(c => c.startsWith('access_token='));
-  const refreshTokenCookie = cookies.find(c => c.startsWith('refresh_token='));
+  const cookies = cookie.split(';').map((c) => c.trim());
+  const accessTokenCookie = cookies.find((c) => c.startsWith('access_token='));
+  const refreshTokenCookie = cookies.find((c) => c.startsWith('refresh_token='));
 
   if (!accessTokenCookie && !refreshTokenCookie) {
     console.error('No access token or refresh token found in cookies');
@@ -55,16 +55,13 @@ const onProxyReq = async (proxyReq: ClientRequest) => {
     body.append('client_secret', clientSecret);
     body.append('refresh_token', refreshToken);
 
-    const response = await fetch(
-      `${url}/realms/${realm}/protocol/openid-connect/token`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: body.toString()
-      }
-    );
+    const response = await fetch(`${url}/realms/${realm}/protocol/openid-connect/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: body.toString()
+    });
 
     if (!response.ok) {
       console.error('Could not refresh tokens: ' + response.status);
@@ -88,9 +85,7 @@ const onProxyError = (error: Error) => {
 };
 
 export default defineConfig({
-  plugins: [
-    sveltekit()
-  ],
+  plugins: [sveltekit()],
   server: {
     host: '0.0.0.0',
     port: 5173,

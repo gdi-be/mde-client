@@ -57,11 +57,10 @@ export async function GET({ cookies, params }) {
         'Content-Type': 'text/html'
       }
     });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (e.code === 'ENOENT') {
       return error(404, `Configured help file not found: ${helpFilePath}`);
     }
   }
-
 }

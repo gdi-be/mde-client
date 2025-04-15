@@ -14,7 +14,7 @@
   type ExtentOption = {
     title: string;
     value: Extent;
-  }
+  };
 
   const KEY = 'isoMetadata.extent';
   const CRS_KEY = 'isoMetadata.crs';
@@ -93,7 +93,6 @@
 
     const extentResponse = await fetch('/data/extents');
     extentOptions = await extentResponse.json();
-
   });
 </script>
 

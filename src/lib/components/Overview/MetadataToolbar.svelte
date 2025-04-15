@@ -1,15 +1,12 @@
 <script lang="ts">
-  import Button, { Label } from "@smui/button";
-  import StatusFilterField from "./StatusFilterField.svelte";
-  import TextFilterField from "./TextFilterField.svelte";
-  import { goto } from "$app/navigation";
+  import Button, { Label } from '@smui/button';
+  import StatusFilterField from './StatusFilterField.svelte';
+  import TextFilterField from './TextFilterField.svelte';
+  import { goto } from '$app/navigation';
 </script>
 
 <div class="toolbar-inner">
-  <Button
-    variant="raised"
-    onclick={() => goto('/metadata/create')}
-  >
+  <Button variant="raised" onclick={() => goto('/metadata/create')}>
     <Label>Neuerfassung</Label>
   </Button>
   <div class="search-container">
@@ -45,5 +42,4 @@
       width: 100%;
     }
   }
-
 </style>
