@@ -76,7 +76,6 @@
     const notOlderThenTenMinutes = diff < 10 * 60 * 1000;
     return comment.userId === myUserId && index === comments.length - 1 && notOlderThenTenMinutes;
   }
-
 </script>
 
 <div class="comments-panel-container">

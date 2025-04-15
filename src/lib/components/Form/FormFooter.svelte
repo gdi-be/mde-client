@@ -1,6 +1,10 @@
 <script lang="ts">
   import { sseContext } from '$lib/context/ServerEventContext.svelte';
-  import { allFieldsValid, FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
+  import {
+    allFieldsValid,
+    FORMSTATE_CONTEXT,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
   import CommentsPanel from './CommentsPanel.svelte';
@@ -193,7 +197,7 @@
   <ValidationPanel {metadata} />
 {/if}
 
-<AssignmentDialog bind:open={assignmentPanelVisible}/>
+<AssignmentDialog bind:open={assignmentPanelVisible} />
 
 <style lang="scss">
   footer.form-footer {

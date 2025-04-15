@@ -1,6 +1,10 @@
 <script lang="ts">
   import Form from '$lib/components/Form/Form.svelte';
-  import { type FormState, FORMSTATE_CONTEXT, initializeFormContext } from '$lib/context/FormContext.svelte';
+  import {
+    type FormState,
+    FORMSTATE_CONTEXT,
+    initializeFormContext
+  } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
 
   let { data } = $props();
@@ -13,7 +17,6 @@
   $effect(() => {
     formState.metadata = data.metadata;
   });
-
 </script>
 
 <div class="metadata">
