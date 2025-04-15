@@ -1,10 +1,18 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getFieldConfig,
+    getValue,
+    persistValue,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
+  import { getContext } from 'svelte';
   import FieldTools from '../FieldTools.svelte';
   import FormField from '@smui/form-field';
   import Switch from '@smui/switch';
 
-  const { metadata } = $props();
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formState.metadata);
 
   const KEY = 'isoMetadata.valid';
 

@@ -1,7 +1,10 @@
 <script lang="ts">
   import { sseContext } from '$lib/context/ServerEventContext.svelte';
-  import { allFieldsValid } from '$lib/context/FormContext.svelte';
-  import type { MetadataCollection } from '$lib/models/metadata';
+  import {
+    allFieldsValid,
+    FORMSTATE_CONTEXT,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
   import CommentsPanel from './CommentsPanel.svelte';
@@ -13,7 +16,6 @@
   import Spinner from '../Spinner.svelte';
 
   type FormFooterProps = {
-    metadata?: MetadataCollection;
     text?: string;
     children?: Snippet;
     commentsPanelVisible?: boolean;
@@ -22,12 +24,14 @@
   };
 
   let {
-    metadata,
     children,
     commentsPanelVisible: commentsPanelVisibleProp,
     approvalPanelVisible: approvalPanelVisibleProp,
     assignmentPanelVisible: assignmentPanelVisibleProp
   }: FormFooterProps = $props();
+
+  const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formContext.metadata);
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -186,14 +190,14 @@
 {/if}
 
 {#if commentsPanelVisible}
-  <CommentsPanel {metadata} />
+  <CommentsPanel />
 {/if}
 
 {#if validationPanelVisible}
   <ValidationPanel {metadata} />
 {/if}
 
-<AssignmentDialog {metadata} bind:open={assignmentPanelVisible} />
+<AssignmentDialog bind:open={assignmentPanelVisible} />
 
 <style lang="scss">
   footer.form-footer {

@@ -44,12 +44,7 @@
   import HelpPanel from './HelpPanel.svelte';
   import { page } from '$app/state';
 
-  type FormProps = {
-    metadata?: MetadataCollection;
-    activeSection?: string;
-  };
-
-  let { activeSection }: FormProps = $props();
+  let activeSection = $state(page.url.hash.slice(1) || 'basedata');
 
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
@@ -156,11 +151,11 @@
           <F05_MetadataProfile />
           <F04_PrivacyField />
           <F24_TermsOfUseField />
-          <F07_AnnexThemeField {metadata} />
-          <F38_InspireAnnexVersionField {metadata} />
-          <F37_QualityReportCheckField {metadata} />
+          <F07_AnnexThemeField />
+          <F38_InspireAnnexVersionField />
+          <F37_QualityReportCheckField />
           <F06_HighValueDatasetField />
-          <F13_TopicCategory {metadata} />
+          <F13_TopicCategory />
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
@@ -195,7 +190,7 @@
     </form>
     <HelpPanel />
   </div>
-  <FormFooter {metadata} {commentsPanelVisible} {approvalPanelVisible}>
+  <FormFooter {commentsPanelVisible} {approvalPanelVisible}>
     <Button
       class="previous-button"
       title="Zurück"

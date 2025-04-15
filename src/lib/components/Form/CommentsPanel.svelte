@@ -1,6 +1,6 @@
 <script lang="ts">
   import Textfield from '@smui/textfield';
-  import type { Comment, MetadataCollection } from '$lib/models/metadata';
+  import type { Comment } from '$lib/models/metadata';
   import Paper from '@smui/paper';
   import CharacterCounter from '@smui/textfield/character-counter';
   import IconButton, { Icon } from '@smui/icon-button';
@@ -9,12 +9,10 @@
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
 
-  type CommentsPanelProps = {
-    metadata?: MetadataCollection;
-  };
-
-  let { metadata }: CommentsPanelProps = $props();
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formState.metadata);
 
   const token = getContext<Token>('user_token');
 

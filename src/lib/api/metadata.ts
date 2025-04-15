@@ -309,7 +309,7 @@ export const deleteComment = async ({
     Authorization: `Bearer ${token}`
   });
 
-  const response = await fetch(`${env.BACKEND_URL}/metadata/client/comment/${metadataid}`, {
+  const response = await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/comment`, {
     method: 'DELETE',
     headers,
     body: commentId

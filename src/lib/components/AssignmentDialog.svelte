@@ -8,8 +8,12 @@
   import type { UserData } from '$lib/models/api';
   import Switch from '@smui/switch';
   import FormField from '@smui/form-field';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
 
-  let { metadata, open = $bindable(false) } = $props();
+  let { open = $bindable(false) } = $props();
+
+  const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formContext.metadata);
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -81,6 +85,7 @@
   };
 
   const fetchTeamAndGroupByRole = async () => {
+    if (!metadata) return;
     const response = await fetch(`/metadata/${metadata.metadataId}/team`);
     if (response.ok) {
       const teamMembers = await response.json();
@@ -107,6 +112,7 @@
   };
 
   const onApprovalStateChange = async (approved: boolean) => {
+    if (!metadata) return;
     const response = await fetch(`/metadata/${metadata.metadataId}/approved`, {
       method: approved ? 'POST' : 'DELETE'
     });
