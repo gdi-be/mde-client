@@ -1,3 +1,10 @@
+## [3.3.2](https://github.com/gdi-be/mde-client/compare/v3.3.1...v3.3.2) (2025-04-16)
+
+
+### Bug Fixes
+
+* remove proxy for server sent events ([5360a2d](https://github.com/gdi-be/mde-client/commit/5360a2dbe329c5bb7e14fa3df40bbbe54b474a27))
+
 ## [3.3.1](https://github.com/gdi-be/mde-client/compare/v3.3.0...v3.3.1) (2025-04-16)
 
 
