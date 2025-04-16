@@ -1,3 +1,10 @@
+## [3.3.1](https://github.com/gdi-be/mde-client/compare/v3.3.0...v3.3.1) (2025-04-16)
+
+
+### Bug Fixes
+
+* remove vite proxy, include app internal route ([d5f7b0a](https://github.com/gdi-be/mde-client/commit/d5f7b0a5b36bee55a63471919cdf0cb0a22b7eac))
+
 # [3.3.0](https://github.com/gdi-be/mde-client/compare/v3.2.0...v3.3.0) (2025-04-16)
 
 ### Bug Fixes
