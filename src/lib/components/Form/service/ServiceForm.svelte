@@ -54,7 +54,9 @@
           value = json.isoMetadata.services?.find(
             (s: Service) => s.serviceIdentification === service.serviceIdentification
           )?.legendImage;
-          service = setNestedValue(service, 'legendImage', value);
+          if (value) {
+            service = setNestedValue(service, 'legendImage', value);
+          }
         }
       }
     }
