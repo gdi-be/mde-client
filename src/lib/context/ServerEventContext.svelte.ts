@@ -1,5 +1,7 @@
 import { getContext, setContext } from 'svelte';
 
+import { EventSource } from 'eventsource';
+
 const CONTEXT_KEY = Symbol('SSE');
 
 export type SseEvent = 'generic' | 'validation' | 'heartbeat';
@@ -54,7 +56,7 @@ const createSseListener = () => {
     return getContext<EventState>(CONTEXT_KEY);
   };
 
-  const connect = (url: string) => {
+  const connect = (url: string, token?: string) => {
     if (isConnected) {
       console.warn('[SSE] Already connected.');
       return;
@@ -63,7 +65,22 @@ const createSseListener = () => {
     isConnected = true;
 
     const initConnection = () => {
-      eventSource = new EventSource(url);
+      const customHeaders: HeadersInit = {};
+
+      if (token) {
+        customHeaders['Authorization'] = `Bearer ${token}`;
+      }
+
+      eventSource = new EventSource(url, {
+        fetch: (input, init) =>
+          fetch(input, {
+            ...init,
+            headers: {
+              ...init?.headers,
+              ...customHeaders
+            }
+          })
+      });
 
       eventSource.onopen = () => {
         console.log('[SSE] Connected');
