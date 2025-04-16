@@ -13,7 +13,7 @@
   sseContext.setSseContext();
 
   onMount(() => {
-    sseContext.connect('/events/subscribe');
+    sseContext.connect('/api/events/subscribe', data.tokenUnparsed);
     sseContext.listenTo('validation');
 
     return () => {
