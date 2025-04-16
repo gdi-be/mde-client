@@ -1,7 +1,12 @@
 <script lang="ts">
   import type { Lineage } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getSubFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import {
+    getFieldConfig,
+    getSubFieldConfig,
+    getValue,
+    persistValue
+  } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';

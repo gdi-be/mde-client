@@ -8,7 +8,7 @@
     key?: string;
     label?: string;
     class?: string;
-    fieldConfig?: FieldConfig<number> | DynamicFieldConfig
+    fieldConfig?: FieldConfig<number> | DynamicFieldConfig;
     onfocus?: (evt: FocusEvent) => void;
     onblur?: (evt: FocusEvent) => void;
     validationResult?: ValidationResult;

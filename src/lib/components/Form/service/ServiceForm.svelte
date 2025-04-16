@@ -91,10 +91,7 @@
     value={service.serviceType}
     onChange={(serviceType) => set('serviceType', serviceType)}
   />
-  <ServiceTitle_58
-    value={service.title}
-    onChange={(title) => set('title', title)}
-  />
+  <ServiceTitle_58 value={service.title} onChange={(title) => set('title', title)} />
   <ServiceShortDescription_59
     value={service.shortDescription}
     onChange={(shortDescription) => set('shortDescription', shortDescription)}
@@ -102,14 +99,9 @@
   {#if isMappingService}
     <ServiceId_45
       value={service.serviceIdentification}
-      onChange={(serviceIdentification) =>
-        set('serviceIdentification', serviceIdentification)
-      }
+      onChange={(serviceIdentification) => set('serviceIdentification', serviceIdentification)}
     />
-    <ServicePreview_46
-      value={service.preview}
-      onChange={(preview) => set('preview', preview)}
-    />
+    <ServicePreview_46 value={service.preview} onChange={(preview) => set('preview', preview)} />
     <ServiceLegendImage_53
       value={service.legendImage}
       onChange={(legendImage) => set('legendImage', legendImage)}

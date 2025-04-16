@@ -17,25 +17,25 @@
   const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'featuretypes', 'attributes', 'filterType');
+  const fieldConfig = getSubFieldConfig(
+    'isoMetadata.services',
+    'featuretypes',
+    'attributes',
+    'filterType'
+  );
 
   const options: Option[] = [
-  { key: 'SelectBox', label: 'SelectBox' },
-  { key: 'CatalogBox', label: 'CatalogBox' },
-  { key: 'DoubleEditOrderField', label: 'DoubleEditOrderField' },
-  { key: 'EditField', label: 'EditField' },
-  { key: 'EditOrderField', label: 'EditOrderField' }
-];
+    { key: 'SelectBox', label: 'SelectBox' },
+    { key: 'CatalogBox', label: 'CatalogBox' },
+    { key: 'DoubleEditOrderField', label: 'DoubleEditOrderField' },
+    { key: 'EditField', label: 'EditField' },
+    { key: 'EditOrderField', label: 'EditOrderField' }
+  ];
 </script>
 
 {#if fieldVisible}
   <div class="attribute-filter-type-field">
-    <SelectInput
-    label={fieldConfig?.label || 'Attribut-Datentyp'}
-      {value}
-      {options}
-      {onChange}
-    />
+    <SelectInput label={fieldConfig?.label || 'Attribut-Datentyp'} {value} {options} {onChange} />
   </div>
 {/if}
 

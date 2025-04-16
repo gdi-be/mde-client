@@ -10,9 +10,8 @@
   };
   let { value, onChange }: ServiceTypeProps = $props();
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'type');
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'type');
   const HELP_KEY = 'isoMetadata.services.type';
-
 </script>
 
 <div class="service-type-field">

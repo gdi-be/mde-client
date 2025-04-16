@@ -13,7 +13,7 @@
 
   let { value = $bindable(), onChange }: ServiceTypeProps = $props();
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'shortDescription');
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'shortDescription');
 
   const HELP_KEY = 'isoMetadata.services.shortDescription';
 

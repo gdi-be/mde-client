@@ -2,7 +2,11 @@
 import { getContext, setContext } from 'svelte';
 import { page } from '$app/state';
 import type { FieldKey } from '$lib/models/form';
-import { FieldConfigs, type DynamicFieldConfig, type FieldConfig } from '$lib/components/Form/FieldsConfig';
+import {
+  FieldConfigs,
+  type DynamicFieldConfig,
+  type FieldConfig
+} from '$lib/components/Form/FieldsConfig';
 import { invalidateAll } from '$app/navigation';
 import type { MetadataCollection } from '$lib/models/metadata';
 
@@ -46,7 +50,10 @@ export function getValue<T>(key: string, metadata?: MetadataCollection): T | und
   return value as T;
 }
 
-export function getSubFieldConfig(key: FieldKey, ...subKeys: string[]): DynamicFieldConfig | undefined {
+export function getSubFieldConfig(
+  key: FieldKey,
+  ...subKeys: string[]
+): DynamicFieldConfig | undefined {
   const configs: DynamicFieldConfig[] = formState.fieldConfigs || [];
   const dynamicFieldConfig = configs.find(({ key: k }) => k === key);
   if (!dynamicFieldConfig) return undefined;

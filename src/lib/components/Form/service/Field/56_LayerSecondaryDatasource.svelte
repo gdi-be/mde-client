@@ -13,7 +13,7 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'layers', 'secondaryDatasource');
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'secondaryDatasource');
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));

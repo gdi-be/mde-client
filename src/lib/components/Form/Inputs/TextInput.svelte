@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { type DynamicFieldConfig, type FieldConfig, type ValidationResult } from '../FieldsConfig';
+  import {
+    type DynamicFieldConfig,
+    type FieldConfig,
+    type ValidationResult
+  } from '../FieldsConfig';
   import type { HTMLInputAttributes } from 'svelte/elements';
   import FieldHint from '../FieldHint.svelte';
 
@@ -27,7 +31,6 @@
   }: InputProps = $props();
 
   let showHint = $state(false);
-
 </script>
 
 <fieldset class={['text-input', wrapperClass]}>

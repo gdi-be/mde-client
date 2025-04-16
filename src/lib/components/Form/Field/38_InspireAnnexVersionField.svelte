@@ -42,8 +42,8 @@
   };
 
   const fieldVisible = $derived(
-    metadataProfile === 'INSPIRE_HARMONISED'
-    && ['MdeEditor', 'MdeAdministrator'].includes(highestRole)
+    metadataProfile === 'INSPIRE_HARMONISED' &&
+      ['MdeEditor', 'MdeAdministrator'].includes(highestRole)
   );
 </script>
 

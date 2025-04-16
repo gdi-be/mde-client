@@ -70,7 +70,9 @@
 
 <fieldset class="columns-form">
   <legend>Attribute</legend>
-  <FieldHint fieldConfig={getSubFieldConfig('isoMetadata.services', 'featuretypes', 'attributes')} />
+  <FieldHint
+    fieldConfig={getSubFieldConfig('isoMetadata.services', 'featuretypes', 'attributes')}
+  />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>

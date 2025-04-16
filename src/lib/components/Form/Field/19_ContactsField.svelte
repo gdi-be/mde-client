@@ -1,7 +1,12 @@
 <script lang="ts">
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getSubFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import {
+    getFieldConfig,
+    getSubFieldConfig,
+    getValue,
+    persistValue
+  } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
@@ -110,10 +115,7 @@
         add
       </IconButton>
     </legend>
-    <FieldHint
-      validationResult={generalValidationResult}
-      {fieldConfig}
-    />
+    <FieldHint validationResult={generalValidationResult} {fieldConfig} />
     {#each contacts as contact, index (contact.listId)}
       <fieldset class="contact">
         <legend>

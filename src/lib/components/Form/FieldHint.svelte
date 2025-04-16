@@ -11,16 +11,11 @@
     showHint?: boolean;
   };
 
-  const {
-    validationResult,
-    fieldConfig,
-    showHint = false,
-  }: FieldBottomTextProps = $props();
+  const { validationResult, fieldConfig, showHint = false }: FieldBottomTextProps = $props();
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
   const isValid = $derived(validationResult?.valid !== false);
-
 
   let text = $derived.by(() => {
     if (highestRole === 'MdeDataOwner') {
@@ -36,13 +31,7 @@
   });
 </script>
 
-<span
-  class={[
-    "field-hint",
-    highestRole.toLowerCase(),
-    isValid ? "valid" : "invalid",
-  ]}
->
+<span class={['field-hint', highestRole.toLowerCase(), isValid ? 'valid' : 'invalid']}>
   {text}
 </span>
 

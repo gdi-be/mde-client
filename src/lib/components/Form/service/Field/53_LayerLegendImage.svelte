@@ -10,7 +10,7 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'layers', 'legendImage');
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'legendImage');
 </script>
 
 <div class="layer-legend-image-field">

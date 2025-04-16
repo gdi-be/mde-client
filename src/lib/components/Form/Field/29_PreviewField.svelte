@@ -22,7 +22,6 @@
       showCheckmark = true;
     }
   };
-
 </script>
 
 <div class="preview-field">

@@ -17,7 +17,12 @@
   const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'featuretypes', 'attributes', 'type');
+  const fieldConfig = getSubFieldConfig(
+    'isoMetadata.services',
+    'featuretypes',
+    'attributes',
+    'type'
+  );
 
   const options: Option[] = [
     { key: 'BigDecimal', label: 'BigDecimal' },
@@ -36,12 +41,7 @@
 
 {#if fieldVisible}
   <div class="attribute-type-field">
-    <SelectInput
-    label={fieldConfig?.label || 'Attribut-Datentyp'}
-      {value}
-      {options}
-      {onChange}
-    />
+    <SelectInput label={fieldConfig?.label || 'Attribut-Datentyp'} {value} {options} {onChange} />
   </div>
 {/if}
 

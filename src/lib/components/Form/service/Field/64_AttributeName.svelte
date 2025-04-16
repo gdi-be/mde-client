@@ -10,8 +10,12 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'featuretypes', 'attributes', 'name');
-
+  const fieldConfig = getSubFieldConfig(
+    'isoMetadata.services',
+    'featuretypes',
+    'attributes',
+    'name'
+  );
 </script>
 
 <div class="attribute-name-field">

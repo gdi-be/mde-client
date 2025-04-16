@@ -15,7 +15,7 @@
   let { value, onChange }: ComponentProps = $props();
 
   const HELP_KEY = 'isoMetadata.services.serviceIdentification';
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'serviceIdentification');
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'serviceIdentification');
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));

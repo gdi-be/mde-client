@@ -11,10 +11,7 @@
     onChange: (newValue: string) => void;
   };
 
-  let {
-    value,
-    onChange
-  }: ServiceTypeProps = $props();
+  let { value, onChange }: ServiceTypeProps = $props();
 
   const HELP_KEY = 'isoMetadata.services.title';
 
@@ -23,13 +20,12 @@
   const metadata = getContext<MetadataCollection>('metadata');
   const metadataTitle = $derived(getValue<string>(METADATA_TITLE_KEY, metadata));
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'title');
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'title');
 
   const getAutoFillValues = async () => {
     if (!metadataTitle) return;
     onChange(metadataTitle);
   };
-
 </script>
 
 <div class="service-title-field">

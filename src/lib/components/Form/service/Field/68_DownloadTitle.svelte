@@ -10,8 +10,7 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'downloads', 'title');
-
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'downloads', 'title');
 </script>
 
 <div class="download-title-field">

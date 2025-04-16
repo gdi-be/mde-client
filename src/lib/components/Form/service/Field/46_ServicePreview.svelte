@@ -11,8 +11,8 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-const fieldConfig= getSubFieldConfig('isoMetadata.services', 'preview');
-const HELP_KEY = 'isoMetadata.services.preview';
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'preview');
+  const HELP_KEY = 'isoMetadata.services.preview';
 </script>
 
 <div class="service-preview-field">

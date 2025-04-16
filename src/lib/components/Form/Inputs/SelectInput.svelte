@@ -38,13 +38,7 @@
 
 <fieldset class={['select-input', wrapperClass]}>
   <legend>{label}</legend>
-  <Select
-    bind:this={element}
-    {disabled}
-    hiddenInput
-    menu$anchorElement={document.body}
-    bind:value
-  >
+  <Select bind:this={element} {disabled} hiddenInput menu$anchorElement={document.body} bind:value>
     {#each options as option}
       <SelectOption
         onSMUIAction={() => {

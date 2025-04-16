@@ -10,7 +10,7 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'layers', 'shortDescription');
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'shortDescription');
 </script>
 
 <div class="layer-short-description-field">

@@ -1,6 +1,11 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getSubFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import {
+    getFieldConfig,
+    getSubFieldConfig,
+    getValue,
+    persistValue
+  } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
