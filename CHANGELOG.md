@@ -1,24 +1,22 @@
 # [3.3.0](https://github.com/gdi-be/mde-client/compare/v3.2.0...v3.3.0) (2025-04-16)
 
-
 ### Bug Fixes
 
-* fix link in MetadataCard ([3a996e6](https://github.com/gdi-be/mde-client/commit/3a996e6df3257a845279bbe850618e9c91b85cb3))
-* fix rolename handling ([2625367](https://github.com/gdi-be/mde-client/commit/262536707d3643062a94770f21b4930cd7f16fe9))
-* linting ([a8b728a](https://github.com/gdi-be/mde-client/commit/a8b728ae195394299a42c02e39419f0465941c43))
-* linting ([a3bbd55](https://github.com/gdi-be/mde-client/commit/a3bbd5523fdf8d2281d2af9ad6d84e64f2dc974f))
-* typo ([4868355](https://github.com/gdi-be/mde-client/commit/48683559ac1434590a120fb3668f0ffaa847916b))
-* updates metadata context correctly ([41b8d87](https://github.com/gdi-be/mde-client/commit/41b8d87173a8e31765f8068ed137297693258aee))
-
+- fix link in MetadataCard ([3a996e6](https://github.com/gdi-be/mde-client/commit/3a996e6df3257a845279bbe850618e9c91b85cb3))
+- fix rolename handling ([2625367](https://github.com/gdi-be/mde-client/commit/262536707d3643062a94770f21b4930cd7f16fe9))
+- linting ([a8b728a](https://github.com/gdi-be/mde-client/commit/a8b728ae195394299a42c02e39419f0465941c43))
+- linting ([a3bbd55](https://github.com/gdi-be/mde-client/commit/a3bbd5523fdf8d2281d2af9ad6d84e64f2dc974f))
+- typo ([4868355](https://github.com/gdi-be/mde-client/commit/48683559ac1434590a120fb3668f0ffaa847916b))
+- updates metadata context correctly ([41b8d87](https://github.com/gdi-be/mde-client/commit/41b8d87173a8e31765f8068ed137297693258aee))
 
 ### Features
 
-* adds LayersForm ([0aed492](https://github.com/gdi-be/mde-client/commit/0aed4925b0b9520f094f3d97eeb64b1c8dc7b8cc))
-* introduces FeatureTypes ([ed96a40](https://github.com/gdi-be/mde-client/commit/ed96a40816aa27a21b529f54035a289e42f64c0a))
-* rename roles ([054ecc6](https://github.com/gdi-be/mde-client/commit/054ecc62a0b576543b4c99ba50623d6d57bba186))
-* show validation results ([44f8d28](https://github.com/gdi-be/mde-client/commit/44f8d28f8584c25f087d86ffda236d76cc8e2d81))
-* update legend size in the form ([551d4ec](https://github.com/gdi-be/mde-client/commit/551d4ecb331c35d8c24e9cf56427cb5abe003ac5))
-* updates readonly view ([0e9ffed](https://github.com/gdi-be/mde-client/commit/0e9ffede529a016ecc2d64d074b5b49dec4a6aab))
+- adds LayersForm ([0aed492](https://github.com/gdi-be/mde-client/commit/0aed4925b0b9520f094f3d97eeb64b1c8dc7b8cc))
+- introduces FeatureTypes ([ed96a40](https://github.com/gdi-be/mde-client/commit/ed96a40816aa27a21b529f54035a289e42f64c0a))
+- rename roles ([054ecc6](https://github.com/gdi-be/mde-client/commit/054ecc62a0b576543b4c99ba50623d6d57bba186))
+- show validation results ([44f8d28](https://github.com/gdi-be/mde-client/commit/44f8d28f8584c25f087d86ffda236d76cc8e2d81))
+- update legend size in the form ([551d4ec](https://github.com/gdi-be/mde-client/commit/551d4ecb331c35d8c24e9cf56427cb5abe003ac5))
+- updates readonly view ([0e9ffed](https://github.com/gdi-be/mde-client/commit/0e9ffede529a016ecc2d64d074b5b49dec4a6aab))
 
 # [3.2.0](https://github.com/gdi-be/mde-client/compare/v3.1.0...v3.2.0) (2025-04-10)
 
