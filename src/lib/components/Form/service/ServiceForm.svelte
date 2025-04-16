@@ -51,9 +51,9 @@
         } else if (key === 'legendImage') {
           // legend sizes are determined and returned in the backend
           const json = await response.json();
-          value = json.isoMetadata.services.find(
+          value = json.isoMetadata.services?.find(
             (s: Service) => s.serviceIdentification === service.serviceIdentification
-          ).legendImage;
+          )?.legendImage;
           service = setNestedValue(service, 'legendImage', value);
         }
       }
