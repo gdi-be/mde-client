@@ -2,22 +2,24 @@
   import type { Service } from '$lib/models/metadata';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import SelectInput from '$lib/components/Form/Inputs/SelectInput.svelte';
+  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
 
   export type ServiceTypeProps = {
     value: Service['serviceType'];
     onChange: (newValue: string) => void;
   };
-
-  const KEY = 'isoMetadata.services.type';
-
   let { value, onChange }: ServiceTypeProps = $props();
+
+  const fieldConfig= getSubFieldConfig('isoMetadata.services', 'type');
+  const HELP_KEY = 'isoMetadata.services.type';
+
 </script>
 
 <div class="service-type-field">
   <SelectInput
     label="Typ"
-    key="type"
     {value}
+    {fieldConfig}
     options={[
       {
         key: 'ATOM',
@@ -38,7 +40,7 @@
     ]}
     {onChange}
   />
-  <FieldTools key={KEY} noCheckmark />
+  <FieldTools key={HELP_KEY} noCheckmark />
 </div>
 
 <style lang="scss">

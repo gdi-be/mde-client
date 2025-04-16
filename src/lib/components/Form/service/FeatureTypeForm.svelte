@@ -1,10 +1,12 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import Checkmark from '../Checkmark.svelte';
+  import Checkmark from '$lib/components/Form/Checkmark.svelte';
   import ColumnsForm from './ColumnsForm.svelte';
   import type { FeatureType } from '$lib/models/metadata';
-  import FeatureTypeTitle_61 from './Field/FeatureTypeTitle_61.svelte';
-  import FeatureTypeName_62 from './Field/FeatureTypeName_62.svelte';
+  import FeatureTypeTitle_61 from './Field/61_FeatureTypeTitle.svelte';
+  import FeatureTypeName_62 from './Field/62_FeatureTypeName.svelte';
+  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import FieldHint from '$lib/components/Form/FieldHint.svelte';
 
   type Tab = {
     name: string;
@@ -26,7 +28,7 @@
   let tabs = $derived<Tab[]>(
     featureTypes.map((featureType) => {
       return {
-        name: featureType.name || 'Unbekannter Featuretype'
+        name: featureType.title || 'Unbekannter Featuretype'
       };
     })
   );
@@ -70,11 +72,12 @@
   }
 </script>
 
-<fieldset class="columns-form">
+<fieldset class="featuretypes-form">
   <legend>
     Featuretypes
     <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
+  <FieldHint fieldConfig={getSubFieldConfig('isoMetadata.services', 'featuretypes')} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
@@ -102,11 +105,11 @@
   </nav>
   <div class="content">
     {#if activeTabIndex !== undefined}
-      <FeatureTypeName_62 value={activeFeatureType?.name} onChange={(name) => set('name', name)} />
       <FeatureTypeTitle_61
         value={activeFeatureType?.title}
         onChange={(title) => set('title', title)}
       />
+      <FeatureTypeName_62 value={activeFeatureType?.name} onChange={(name) => set('name', name)} />
       <ColumnsForm
         value={activeFeatureType.columns}
         onChange={(columns) => set('columns', columns)}
@@ -116,7 +119,7 @@
 </fieldset>
 
 <style lang="scss">
-  fieldset.columns-form {
+  fieldset.featuretypes-form {
     flex: 1;
     border-radius: 0.25em;
 
@@ -128,6 +131,7 @@
     }
 
     nav {
+      margin-top: 1em;
       display: flex;
       flex-wrap: wrap;
       align-items: center;

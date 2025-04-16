@@ -1,14 +1,20 @@
 <script lang="ts">
   import type { Layer, Service } from '$lib/models/metadata';
   import { setNestedValue } from '$lib/util';
-  import ServiceType_57 from './Field/ServiceType_57.svelte';
-  import ServiceTitle_58 from './Field/ServiceTitle_58.svelte';
-  import ServiceShortDescription_59 from './Field/ServiceShortDescription_59.svelte';
-  import ServiceLegendImage_53 from './Field/ServiceLegendImage_53.svelte';
+  import ServiceId_45 from './Field/45_ServiceId.svelte';
+  import ServicePreview_46 from './Field/46_ServicePreview.svelte';
+  import ServiceType_57 from './Field/57_ServiceType.svelte';
+  import ServiceTitle_58 from './Field/58_ServiceTitle.svelte';
+  import ServiceShortDescription_59 from './Field/59_ServiceShortDescription.svelte';
+  import ServiceLegendImage_53 from './Field/53_ServiceLegendImage.svelte';
   import DownloadForm from './DownloadForm.svelte';
   import FeatureTypeForm from './FeatureTypeForm.svelte';
   import { getContext } from 'svelte';
-  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getSubFieldConfig,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import LayersForm from './LayersForm.svelte';
   import { page } from '$app/state';
 
@@ -76,6 +82,8 @@
 
     layerCheckmarkVisible = response.ok;
   }
+
+  $inspect(getSubFieldConfig('isoMetadata.services', 'title'));
 </script>
 
 <div class="service-form">
@@ -83,12 +91,25 @@
     value={service.serviceType}
     onChange={(serviceType) => set('serviceType', serviceType)}
   />
-  <ServiceTitle_58 value={service.title} onChange={(title) => set('title', title)} />
+  <ServiceTitle_58
+    value={service.title}
+    onChange={(title) => set('title', title)}
+  />
   <ServiceShortDescription_59
     value={service.shortDescription}
     onChange={(shortDescription) => set('shortDescription', shortDescription)}
   />
   {#if isMappingService}
+    <ServiceId_45
+      value={service.serviceIdentification}
+      onChange={(serviceIdentification) =>
+        set('serviceIdentification', serviceIdentification)
+      }
+    />
+    <ServicePreview_46
+      value={service.preview}
+      onChange={(preview) => set('preview', preview)}
+    />
     <ServiceLegendImage_53
       value={service.legendImage}
       onChange={(legendImage) => set('legendImage', legendImage)}

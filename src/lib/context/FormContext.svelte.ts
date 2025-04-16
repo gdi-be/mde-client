@@ -46,13 +46,19 @@ export function getValue<T>(key: string, metadata?: MetadataCollection): T | und
   return value as T;
 }
 
-export function getSubFieldConfig(key: FieldKey, subKey: string): DynamicFieldConfig | undefined {
+export function getSubFieldConfig(key: FieldKey, ...subKeys: string[]): DynamicFieldConfig | undefined {
   const configs: DynamicFieldConfig[] = formState.fieldConfigs || [];
   const dynamicFieldConfig = configs.find(({ key: k }) => k === key);
   if (!dynamicFieldConfig) return undefined;
-  const subFieldConfig = dynamicFieldConfig.subFields?.find(({ key: k }) => k === subKey);
-  if (!subFieldConfig) return undefined;
-  return subFieldConfig;
+  let config: DynamicFieldConfig | undefined = dynamicFieldConfig;
+  subKeys.forEach((k) => {
+    if (!config) {
+      config = dynamicFieldConfig.subFields?.find(({ key: subKey }) => subKey === k);
+    } else {
+      config = config.subFields?.find(({ key: subKey }) => subKey === k);
+    }
+  });
+  return config;
 }
 
 export function getFieldConfig<T>(key: FieldKey): FieldConfig<T> | undefined {

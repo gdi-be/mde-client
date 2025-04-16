@@ -2,14 +2,16 @@
   import IconButton from '@smui/icon-button';
   import Checkmark from '../Checkmark.svelte';
   import type { Layer } from '$lib/models/metadata';
-  import LayerName_50 from './Field/LayerName_50.svelte';
-  import LayerTitle_49 from './Field/LayerTitle_49.svelte';
-  import LayerStyleName_51 from './Field/LayerStyleName_51.svelte';
-  import LayerStyleTitle_52 from './Field/LayerStyleTitle_52.svelte';
-  import LayerLegendImage_53 from './Field/LayerLegendImage_53.svelte';
-  import LayerDescription_54 from './Field/LayerDescription_54.svelte';
-  import LayerDatasource_55 from './Field/LayerDatasource_55.svelte';
-  import LayerSecondaryDatasource_56 from './Field/LayerSecondaryDatasource_56.svelte';
+  import LayerName_50 from './Field/50_LayerName.svelte';
+  import LayerTitle_49 from './Field/49_LayerTitle.svelte';
+  import LayerStyleName_51 from './Field/51_LayerStyleName.svelte';
+  import LayerStyleTitle_52 from './Field/52_LayerStyleTitle.svelte';
+  import LayerLegendImage_53 from './Field/53_LayerLegendImage.svelte';
+  import LayerDescription_54 from './Field/54_LayerDescription.svelte';
+  import LayerDatasource_55 from './Field/55_LayerDatasource.svelte';
+  import LayerSecondaryDatasource_56 from './Field/56_LayerSecondaryDatasource.svelte';
+  import FieldHint from '../FieldHint.svelte';
+  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
 
   type Tab = {
     name: string;
@@ -31,7 +33,7 @@
   let tabs = $derived<Tab[]>(
     layers.map((layer) => {
       return {
-        name: layer.name || 'Unbekannter Layer'
+        name: layer.title || 'Unbekannter Layer'
       };
     })
   );
@@ -74,11 +76,12 @@
   }
 </script>
 
-<fieldset class="columns-form">
+<fieldset class="layers-form">
   <legend>
     Layers
     <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
+  <FieldHint fieldConfig={getSubFieldConfig('isoMetadata.services', 'layers')} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
@@ -106,8 +109,8 @@
   </nav>
   <div class="content">
     {#if activeTabIndex !== undefined}
-      <LayerName_50 value={activeLayer?.name} onChange={(name) => set('name', name)} />
       <LayerTitle_49 value={activeLayer?.title} onChange={(title) => set('title', title)} />
+      <LayerName_50 value={activeLayer?.name} onChange={(name) => set('name', name)} />
       <LayerStyleName_51
         value={activeLayer?.styleName}
         onChange={(styleName) => set('styleName', styleName)}
@@ -137,7 +140,7 @@
 </fieldset>
 
 <style lang="scss">
-  fieldset.columns-form {
+  fieldset.layers-form {
     flex: 1;
     border-radius: 0.25em;
 
@@ -149,6 +152,7 @@
     }
 
     nav {
+      margin-top: 1em;
       display: flex;
       flex-wrap: wrap;
       align-items: center;

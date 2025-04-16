@@ -2,10 +2,12 @@
   import type { ColumnInfo } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import Checkmark from '../Checkmark.svelte';
-  import AttributeName_64 from './Field/AttributeName_64.svelte';
-  import AttributeAlias_65 from './Field/AttributeAlias_65.svelte';
-  import AttributeDatatype_66 from './Field/AttributeDatatype_66.svelte';
-  import AttributeFilterType_67 from './Field/AttributeFilterType_67.svelte';
+  import AttributeName_64 from './Field/64_AttributeName.svelte';
+  import AttributeAlias_65 from './Field/65_AttributeAlias.svelte';
+  import AttributeDatatype_66 from './Field/66_AttributeDatatype.svelte';
+  import AttributeFilterType_67 from './Field/67_AttributeFilterType.svelte';
+  import { getSubFieldConfig } from '../../../context/FormContext.svelte';
+  import FieldHint from '../FieldHint.svelte';
 
   type Tab = {
     name: string;
@@ -68,6 +70,7 @@
 
 <fieldset class="columns-form">
   <legend>Attribute</legend>
+  <FieldHint fieldConfig={getSubFieldConfig('isoMetadata.services', 'featuretypes', 'attributes')} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
@@ -119,6 +122,7 @@
     }
 
     nav {
+      margin-top: 1em;
       display: flex;
       flex-wrap: wrap;
       align-items: center;

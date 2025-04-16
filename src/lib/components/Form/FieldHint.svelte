@@ -25,7 +25,7 @@
   let text = $derived.by(() => {
     if (highestRole === 'MdeDataOwner') {
       if (showHint) {
-        return fieldConfig?.hint;
+        return fieldConfig?.hint || fieldConfig?.explanation;
       } else {
         return fieldConfig?.explanation;
       }
@@ -34,9 +34,6 @@
       return validationResult?.helpText;
     }
   });
-
-  $inspect(showHint, highestRole, isValid, text);
-
 </script>
 
 <span

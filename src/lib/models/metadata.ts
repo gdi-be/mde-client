@@ -126,7 +126,7 @@ export type Service = {
   created?: string;
   updated?: string;
   published?: string;
-  previews?: Source[];
+  preview?: string;
   featureTypes?: FeatureType[];
   downloads?: DownloadInfo[];
 };

@@ -52,7 +52,9 @@
       chips.push('TEAM_MEMBER');
     }
     if (metadata.responsibleRole) {
-      chips.push('ROLE_' + metadata.responsibleRole);
+      if (!(metadata.responsibleRole === 'MdeDataOwner' && highestRole === 'MdeDataOwner')) {
+        chips.push('ROLE_' + metadata.responsibleRole);
+      }
     }
     if (metadata.approved) {
       chips.push('READY_FOR_RELEASE');

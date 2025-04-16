@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { FieldConfig, ValidationResult } from '../FieldsConfig';
+  import type {
+    DynamicFieldConfig,
+    FieldConfig,
+    ValidationResult
+  } from '$lib/components/Form/FieldsConfig';
   import type { HTMLTextareaAttributes } from 'svelte/elements';
   import FieldHint from '../FieldHint.svelte';
 
@@ -8,7 +12,7 @@
     value?: string;
     class?: string;
     label?: string;
-    fieldConfig?: FieldConfig<string>;
+    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
     onfocus?: (evt: FocusEvent) => void;
     onblur?: (evt: FocusEvent) => void;
     validationResult?: ValidationResult;
