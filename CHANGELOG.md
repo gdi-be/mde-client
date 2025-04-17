@@ -1,3 +1,11 @@
+# [3.4.0](https://github.com/gdi-be/mde-client/compare/v3.3.2...v3.4.0) (2025-04-17)
+
+
+### Features
+
+* add explanation configs for services ([56c676d](https://github.com/gdi-be/mde-client/commit/56c676db8d46da2a87c1b0ad07dced79aef76da8))
+* introduces FieldHint component ([be1e7c7](https://github.com/gdi-be/mde-client/commit/be1e7c726d73bb0b17f1bff5ee9c0ad2bf670c11))
+
 ## [3.3.2](https://github.com/gdi-be/mde-client/compare/v3.3.1...v3.3.2) (2025-04-16)
 
 
