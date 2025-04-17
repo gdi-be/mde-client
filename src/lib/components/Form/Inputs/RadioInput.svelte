@@ -2,13 +2,15 @@
   import type { Option } from '$lib/models/form';
   import FormField from '@smui/form-field';
   import Radio from '@smui/radio';
-  import type { ValidationResult } from '../FieldsConfig';
+  import type { DynamicFieldConfig, FieldConfig, ValidationResult } from '../FieldsConfig';
+  import FieldHint from '../FieldHint.svelte';
 
   type InputProps = {
     onChange?: (value: string) => void;
     key: string;
     label?: string;
     value?: string;
+    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
     options: Option[];
     validationResult?: ValidationResult;
   };
@@ -18,14 +20,10 @@
     value = $bindable<string>(),
     key,
     label,
+    fieldConfig,
     options,
     validationResult
   }: InputProps = $props();
-
-  let isValid = $derived(validationResult?.valid !== false);
-  let focused = $state(false);
-  let showHelpText = $derived(focused || !isValid);
-  let helpText = $derived(validationResult?.helpText);
 
   const onSelect = () => {
     onChange?.(value);
@@ -45,11 +43,7 @@
     {/each}
   </div>
   <div class="field-footer">
-    <div class={['help-text', isValid ? 'valid' : 'invalid']}>
-      {#if showHelpText}
-        {helpText}
-      {/if}
-    </div>
+    <FieldHint {validationResult} {fieldConfig} />
   </div>
 </fieldset>
 
@@ -67,19 +61,9 @@
 
     .field-footer {
       margin-top: 0.2em;
-      height: 1em;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-
-      .help-text {
-        color: var(--mdc-theme-text-primary-on-background);
-        font-size: 0.75em;
-
-        &.invalid {
-          color: var(--mdc-theme-error);
-        }
-      }
     }
 
     .radio-group {

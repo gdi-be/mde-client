@@ -50,8 +50,8 @@
       <p>Lade Annex Themen</p>
     {:then OPTIONS}
       <SelectInput
-        key={KEY}
         label={fieldConfig?.label}
+        {fieldConfig}
         options={OPTIONS}
         {value}
         {onChange}

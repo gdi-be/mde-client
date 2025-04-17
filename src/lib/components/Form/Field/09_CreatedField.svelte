@@ -31,6 +31,7 @@
     bind:value
     key={KEY}
     label={fieldConfig?.label}
+    {fieldConfig}
     onchange={onChange}
     {validationResult}
   />

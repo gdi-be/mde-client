@@ -24,12 +24,7 @@
 </script>
 
 <div class="technical-description-field">
-  <TextInput
-    bind:value
-    label={fieldConfig?.label}
-    placeholder={fieldConfig?.explanation}
-    onblur={onBlur}
-  />
+  <TextInput bind:value label={fieldConfig?.label} {fieldConfig} onblur={onBlur} />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 

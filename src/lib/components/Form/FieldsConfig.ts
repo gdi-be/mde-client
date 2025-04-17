@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from '$lib/models/form';
 import type { Contacts, Extent } from '$lib/models/metadata';
-import { getFieldConfig, getValue, type Section } from '$lib/context/FormContext.svelte';
+import { getValue, type Section } from '$lib/context/FormContext.svelte';
 
 export type ValidationResult = {
   valid: boolean;
@@ -12,6 +12,15 @@ export type ValidationResultList = (ValidationResult & {
   index?: number;
   subKey?: string;
 })[];
+
+// From yaml file field_labels
+export type DynamicFieldConfig = {
+  key: FieldKey;
+  label: string;
+  explanation?: string;
+  hint?: string;
+  subFields?: DynamicFieldConfig[];
+};
 
 export type FieldConfig<T> = {
   profile_id: number;
@@ -51,10 +60,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
           helpText: 'Bitte geben Sie einen Titel an.'
         };
       }
-      return {
-        valid: true,
-        helpText: getFieldConfig('isoMetadata.title')?.hint
-      };
+      return { valid: true };
     },
     section: 'basedata',
     required: true
@@ -545,28 +551,6 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'additional',
-    required: false
-  },
-  {
-    profile_id: 43,
-    label: 'Titel des Kartendienstes',
-    key: 'isoMetadata.services.title',
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
-    section: 'services',
-    required: false
-  },
-  {
-    profile_id: 44,
-    label: 'Kurzbeschreibung des Kartendienstes',
-    key: 'isoMetadata.services.shortDescription',
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
-    section: 'services',
     required: false
   }
 ];

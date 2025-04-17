@@ -89,7 +89,7 @@
         bind:value={resolutionValue as number}
         key={RESOLUTION_KEY}
         label={resolutionFieldConfig?.label}
-        placeholder={resolutionFieldConfig?.explanation}
+        fieldConfig={resolutionFieldConfig}
         type="float"
         onblur={onBlur}
         validationResult={resolutionValidationResult}
@@ -99,7 +99,7 @@
         bind:value={scaleValue as number}
         key={SCALE_KEY}
         label={scaleFieldConfig?.label}
-        placeholder={scaleFieldConfig?.explanation}
+        fieldConfig={scaleFieldConfig}
         onblur={onBlur}
         prefix="1:"
         validationResult={scaleValidationResult}

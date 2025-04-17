@@ -1,14 +1,15 @@
 <script lang="ts">
   import Select, { Option as SelectOption } from '@smui/select';
   import type { Option } from '$lib/models/form';
-  import type { ValidationResult } from '../FieldsConfig.ts';
+  import type { DynamicFieldConfig, FieldConfig, ValidationResult } from '../FieldsConfig.ts';
+  import FieldHint from '../FieldHint.svelte';
 
   type InputProps = {
     onChange?: (value: string) => void;
     value?: string;
-    key: string;
     class?: string;
     label?: string;
+    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
     options: Option[];
     validationResult?: ValidationResult;
     disabled?: boolean;
@@ -17,19 +18,15 @@
   let {
     onChange,
     value = $bindable<string | undefined>(undefined),
-    key,
     label,
     class: wrapperClass,
+    fieldConfig,
     options,
     disabled = false,
     validationResult
   }: InputProps = $props();
 
   let element = $state();
-  let isValid = $derived(validationResult?.valid !== false);
-  let focused = $state(false);
-  let showHelpText = $derived(focused || !isValid);
-  let helpText = $derived(validationResult?.helpText);
 
   // Remove duplicates
   options = Array.from(new Map(options.map((item) => [item.key, item])).values());
@@ -41,14 +38,7 @@
 
 <fieldset class={['select-input', wrapperClass]}>
   <legend>{label}</legend>
-  <Select
-    bind:this={element}
-    {disabled}
-    hiddenInput
-    input$name={key}
-    menu$anchorElement={document.body}
-    bind:value
-  >
+  <Select bind:this={element} {disabled} hiddenInput menu$anchorElement={document.body} bind:value>
     {#each options as option}
       <SelectOption
         onSMUIAction={() => {
@@ -63,11 +53,7 @@
     {/each}
   </Select>
   <div class="field-footer">
-    <div class={['help-text', isValid ? 'valid' : 'invalid']}>
-      {#if showHelpText}
-        {helpText}
-      {/if}
-    </div>
+    <FieldHint {validationResult} {fieldConfig} />
   </div>
 </fieldset>
 
@@ -85,19 +71,9 @@
 
     .field-footer {
       margin-top: 0.2em;
-      height: 1em;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-
-      .help-text {
-        color: var(--mdc-theme-text-primary-on-background);
-        font-size: 0.75em;
-
-        &.invalid {
-          color: var(--mdc-theme-error);
-        }
-      }
     }
 
     :global(.mdc-menu) {

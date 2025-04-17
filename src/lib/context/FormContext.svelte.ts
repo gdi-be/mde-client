@@ -2,7 +2,11 @@
 import { getContext, setContext } from 'svelte';
 import { page } from '$app/state';
 import type { FieldKey } from '$lib/models/form';
-import { FieldConfigs, type FieldConfig } from '$lib/components/Form/FieldsConfig';
+import {
+  FieldConfigs,
+  type DynamicFieldConfig,
+  type FieldConfig
+} from '$lib/components/Form/FieldsConfig';
 import { invalidateAll } from '$app/navigation';
 import type { MetadataCollection } from '$lib/models/metadata';
 
@@ -12,13 +16,6 @@ export type FormState = {
   assignedUser?: string;
   assignedRole?: string;
   fieldConfigs?: any;
-};
-
-export type DynamicFieldConfig = {
-  key: FieldKey;
-  label: string;
-  placeholder?: string;
-  helpText?: string;
 };
 
 const formState = $state<FormState>({
@@ -53,10 +50,29 @@ export function getValue<T>(key: string, metadata?: MetadataCollection): T | und
   return value as T;
 }
 
+export function getSubFieldConfig(
+  key: FieldKey,
+  ...subKeys: string[]
+): DynamicFieldConfig | undefined {
+  const configs: DynamicFieldConfig[] = formState.fieldConfigs || [];
+  const dynamicFieldConfig = configs.find(({ key: k }) => k === key);
+  if (!dynamicFieldConfig) return undefined;
+  let config: DynamicFieldConfig | undefined = dynamicFieldConfig;
+  subKeys.forEach((k) => {
+    if (!config) {
+      config = dynamicFieldConfig.subFields?.find(({ key: subKey }) => subKey === k);
+    } else {
+      config = config.subFields?.find(({ key: subKey }) => subKey === k);
+    }
+  });
+  return config;
+}
+
 export function getFieldConfig<T>(key: FieldKey): FieldConfig<T> | undefined {
   const staticFieldConfig = FieldConfigs.find(({ key: k }) => k === key);
   const configs: DynamicFieldConfig[] = formState.fieldConfigs || [];
   const dynamicFieldConfig = configs.find(({ key: k }) => k === key);
+
   return {
     ...staticFieldConfig,
     ...dynamicFieldConfig

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { ValidationResult } from '../FieldsConfig';
+  import FieldHint from '../FieldHint.svelte';
+  import type { DynamicFieldConfig, FieldConfig, ValidationResult } from '../FieldsConfig';
   import type { HTMLInputAttributes } from 'svelte/elements';
 
   type InputProps = {
@@ -7,6 +8,7 @@
     key?: string;
     label?: string;
     class?: string;
+    fieldConfig?: FieldConfig<number> | DynamicFieldConfig;
     onfocus?: (evt: FocusEvent) => void;
     onblur?: (evt: FocusEvent) => void;
     validationResult?: ValidationResult;
@@ -19,14 +21,12 @@
     class: wrapperClass,
     validationResult,
     onblur,
+    fieldConfig,
     onfocus,
     ...restProps
   }: InputProps = $props();
 
-  let isValid = $derived(validationResult?.valid !== false);
-  let focused = $state(false);
-  let showHelpText = $derived(focused || !isValid);
-  let helpText = $derived(validationResult?.helpText);
+  let showHint = $state(false);
 </script>
 
 <fieldset class={['number-input', wrapperClass]}>
@@ -35,22 +35,18 @@
     type="number"
     id={key}
     onfocus={(evt) => {
-      focused = true;
+      showHint = true;
       onfocus?.(evt);
     }}
     onblur={(evt) => {
-      focused = false;
+      showHint = false;
       onblur?.(evt);
     }}
     bind:value
     {...restProps}
   />
   <div class="field-footer">
-    <div class={['help-text', isValid ? 'valid' : 'invalid']}>
-      {#if showHelpText}
-        {helpText}
-      {/if}
-    </div>
+    <FieldHint {validationResult} {fieldConfig} {showHint} />
   </div>
 </fieldset>
 
@@ -82,19 +78,9 @@
 
     .field-footer {
       margin-top: 0.2em;
-      height: 1em;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-
-      .help-text {
-        color: var(--mdc-theme-text-primary-on-background);
-        font-size: 0.75em;
-
-        &.invalid {
-          color: var(--mdc-theme-error);
-        }
-      }
     }
   }
 </style>

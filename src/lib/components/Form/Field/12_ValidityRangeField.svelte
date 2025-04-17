@@ -50,12 +50,14 @@
       bind:value={startValue}
       label={fromFieldConfig?.label}
       onchange={() => onChange(FROM_KEY)}
+      fieldConfig={fromFieldConfig}
       validationResult={fromValidationResult}
     />
     <DateInput
       bind:value={endValue}
       label={toFieldConfig?.label}
       onchange={() => onChange(TO_KEY)}
+      fieldConfig={toFieldConfig}
       validationResult={toValidationResult}
     />
   </fieldset>

@@ -15,7 +15,7 @@
   import F15_KeywordsField from './Field/15_KeywordsField.svelte';
   import F29_PreviewField from './Field/29_PreviewField.svelte';
   import F19_ContactsField from './Field/19_ContactsField.svelte';
-  import F05_MetadataProfile from './Field/05_MetadataProfile.svelte';
+  import F05_InspireType from './Field/05_InspireType.svelte';
   import F04_PrivacyField from './Field/04_PrivacyField.svelte';
   import F24_TermsOfUseField from './Field/24_TermsOfUseField.svelte';
   import F07_AnnexThemeField from './Field/07_AnnexThemeField.svelte';
@@ -148,7 +148,7 @@
       {/if}
       {#if activeSection === 'classification'}
         <section id="classification" transition:fade>
-          <F05_MetadataProfile />
+          <F05_InspireType />
           <F04_PrivacyField />
           <F24_TermsOfUseField />
           <F07_AnnexThemeField />

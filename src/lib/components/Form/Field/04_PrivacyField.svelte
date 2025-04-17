@@ -37,6 +37,7 @@
     <RadioInput
       key={KEY}
       label={fieldConfig?.label}
+      {fieldConfig}
       options={OPTIONS}
       {validationResult}
       {value}

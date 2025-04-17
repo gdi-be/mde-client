@@ -1,10 +1,16 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
-  import TextInput from '../Inputs/TextInput.svelte';
-  import FieldTools from '../FieldTools.svelte';
+  import {
+    getFieldConfig,
+    getSubFieldConfig,
+    getValue,
+    persistValue
+  } from '$lib/context/FormContext.svelte';
+  import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
-  import type { ContentDescription } from '../../../models/metadata';
+  import type { ContentDescription } from '$lib/models/metadata';
+  import FieldHint from '$lib/components/Form/FieldHint.svelte';
 
   type ContentDescriptionListEntry = ContentDescription & { listId: string };
 
@@ -93,11 +99,12 @@
         class="material-icons"
         onclick={(evt) => addItem(evt)}
         size="button"
-        title="Kontakt hinzufügen"
+        title="Informationen hinzufügen"
       >
         add
       </IconButton>
     </legend>
+    <FieldHint {fieldConfig} />
     {#each contentDescriptions as contentDescription (contentDescription.listId)}
       <fieldset class="contentDescription">
         <legend>
@@ -105,23 +112,23 @@
             class="material-icons"
             onclick={(evt) => removeItem(contentDescription.listId, evt)}
             size="button"
-            title="Kontakt entfernen"
+            title="Informationen entfernen"
           >
             delete
           </IconButton>
         </legend>
         <TextInput
           bind:value={contentDescription.description}
-          key={KEY}
           label="Titel"
           onblur={persistContentDescriptions}
+          fieldConfig={getSubFieldConfig(KEY, 'title')}
           required
         />
         <TextInput
           bind:value={contentDescription.url}
-          key={KEY}
           label="Url"
           onblur={persistContentDescriptions}
+          fieldConfig={getSubFieldConfig(KEY, 'url')}
           required
         />
       </fieldset>

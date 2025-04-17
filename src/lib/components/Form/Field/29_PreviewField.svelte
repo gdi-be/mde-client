@@ -27,9 +27,8 @@
 <div class="preview-field">
   <TextInput
     bind:value
-    key={KEY}
     label={fieldConfig?.label}
-    placeholder={fieldConfig?.explanation}
+    {fieldConfig}
     onblur={onBlur}
     {validationResult}
   />

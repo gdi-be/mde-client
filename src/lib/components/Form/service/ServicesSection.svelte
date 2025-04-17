@@ -1,9 +1,10 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import { getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import type { Service } from '$lib/models/metadata';
   import ServiceForm from './ServiceForm.svelte';
   import Checkmark from '../Checkmark.svelte';
+  import FieldHint from '../FieldHint.svelte';
 
   type Tab = {
     title: string;
@@ -83,6 +84,7 @@
   });
 </script>
 
+<FieldHint fieldConfig={getFieldConfig('isoMetadata.services')} />
 <nav class="tabs">
   {#each tabs as tab}
     <div class="tab-container" class:active={activeTab === tab.id}>

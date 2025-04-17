@@ -5,11 +5,12 @@
   import type { CRS, Extent } from '$lib/models/metadata';
   import Button, { Icon, Label } from '@smui/button';
   import SelectInput from '../Inputs/SelectInput.svelte';
-  import { transformExtent } from '$lib/util';
+  import { getHighestRole, transformExtent } from '$lib/util';
   import type { ValidationResult, ValidationResultList } from '../FieldsConfig';
-  import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
+  import ValidationFeedbackText from '../FieldHint.svelte';
   import type { Option } from '$lib/models/form';
-  import { onMount } from 'svelte';
+  import { getContext, onMount } from 'svelte';
+  import type { Token } from '$lib/models/keycloak';
 
   type ExtentOption = {
     title: string;
@@ -23,6 +24,9 @@
   const LABEL_MIN_X = 'Minimaler X-Wert';
   const LABEL_MAX_Y = 'Maximaler Y-Wert';
   const LABEL_MIN_Y = 'Minimaler Y-Wert';
+
+  const token = getContext<Token>('user_token');
+  const highestRole = $derived(getHighestRole(token));
 
   let initialCRSKey = getValue<CRS>(CRS_KEY);
   const valueFromData = $derived(getValue<Extent>(KEY));
@@ -96,80 +100,82 @@
   });
 </script>
 
-<div class="extent-field">
-  <fieldset>
-    <legend>{fieldConfig?.label}</legend>
-    <div class="tools">
-      <SelectInput bind:value={crsKey} key={KEY} label={CRS_LABEL} options={crsOptions} />
-      {#each extentOptions as option}
-        <Button
-          type="button"
-          variant={matchingOption?.title === option.title ? 'raised' : 'text'}
-          title={option.title}
-          onclick={() => {
-            value4326 = option.value;
-            sendValue();
-          }}
-        >
-          <Label>{option.title}</Label>
-          <Icon class="material-icons">pageless</Icon>
-        </Button>
-      {/each}
-    </div>
-    <div class="extent-fields">
-      <div class="inline-fields">
-        <NumberInput
-          value={transformedValue.minx}
-          label={LABEL_MIN_X}
-          onblur={sendValue}
-          onchange={(evt) => {
-            const target = evt?.target as HTMLInputElement;
-            onChange(Number(target.value), 'minx');
-          }}
-          step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
-          validationResult={getFieldValidation('minx')}
-        />
-        <NumberInput
-          value={transformedValue.maxx}
-          label={LABEL_MAX_X}
-          onblur={sendValue}
-          onchange={(evt) => {
-            const target = evt?.target as HTMLInputElement;
-            onChange(Number(target.value), 'maxx');
-          }}
-          step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
-          validationResult={getFieldValidation('maxx')}
-        />
+{#if highestRole !== 'MdeDataOwner'}
+  <div class="extent-field">
+    <fieldset>
+      <legend>{fieldConfig?.label}</legend>
+      <div class="tools">
+        <SelectInput bind:value={crsKey} label={CRS_LABEL} options={crsOptions} />
+        {#each extentOptions as option}
+          <Button
+            type="button"
+            variant={matchingOption?.title === option.title ? 'raised' : 'text'}
+            title={option.title}
+            onclick={() => {
+              value4326 = option.value;
+              sendValue();
+            }}
+          >
+            <Label>{option.title}</Label>
+            <Icon class="material-icons">pageless</Icon>
+          </Button>
+        {/each}
       </div>
-      <div class="inline-fields">
-        <NumberInput
-          value={transformedValue.miny}
-          label={LABEL_MIN_Y}
-          onblur={sendValue}
-          onchange={(evt) => {
-            const target = evt?.target as HTMLInputElement;
-            onChange(Number(target.value), 'miny');
-          }}
-          step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
-          validationResult={getFieldValidation('miny')}
-        />
-        <NumberInput
-          value={transformedValue.maxy}
-          label={LABEL_MAX_Y}
-          onblur={sendValue}
-          onchange={(evt) => {
-            const target = evt?.target as HTMLInputElement;
-            onChange(Number(target.value), 'maxy');
-          }}
-          step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
-          validationResult={getFieldValidation('maxy')}
-        />
+      <div class="extent-fields">
+        <div class="inline-fields">
+          <NumberInput
+            value={transformedValue.minx}
+            label={LABEL_MIN_X}
+            onblur={sendValue}
+            onchange={(evt) => {
+              const target = evt?.target as HTMLInputElement;
+              onChange(Number(target.value), 'minx');
+            }}
+            step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
+            validationResult={getFieldValidation('minx')}
+          />
+          <NumberInput
+            value={transformedValue.maxx}
+            label={LABEL_MAX_X}
+            onblur={sendValue}
+            onchange={(evt) => {
+              const target = evt?.target as HTMLInputElement;
+              onChange(Number(target.value), 'maxx');
+            }}
+            step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
+            validationResult={getFieldValidation('maxx')}
+          />
+        </div>
+        <div class="inline-fields">
+          <NumberInput
+            value={transformedValue.miny}
+            label={LABEL_MIN_Y}
+            onblur={sendValue}
+            onchange={(evt) => {
+              const target = evt?.target as HTMLInputElement;
+              onChange(Number(target.value), 'miny');
+            }}
+            step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
+            validationResult={getFieldValidation('miny')}
+          />
+          <NumberInput
+            value={transformedValue.maxy}
+            label={LABEL_MAX_Y}
+            onblur={sendValue}
+            onchange={(evt) => {
+              const target = evt?.target as HTMLInputElement;
+              onChange(Number(target.value), 'maxy');
+            }}
+            step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
+            validationResult={getFieldValidation('maxy')}
+          />
+        </div>
+        <ValidationFeedbackText validationResult={generalValidationResult} />
       </div>
-      <ValidationFeedbackText validationResult={generalValidationResult} />
-    </div>
-  </fieldset>
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
-</div>
+    </fieldset>
+    <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  </div>
+{/if}
 
 <style lang="scss">
   .extent-field {

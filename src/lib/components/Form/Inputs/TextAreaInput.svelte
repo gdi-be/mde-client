@@ -1,41 +1,55 @@
 <script lang="ts">
-  import type { ValidationResult } from '../FieldsConfig';
+  import type {
+    DynamicFieldConfig,
+    FieldConfig,
+    ValidationResult
+  } from '$lib/components/Form/FieldsConfig';
   import type { HTMLTextareaAttributes } from 'svelte/elements';
+  import FieldHint from '../FieldHint.svelte';
 
   type InputProps = {
-    key: string;
-    label?: string;
     maxlength?: number;
     value?: string;
     class?: string;
+    label?: string;
+    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
+    onfocus?: (evt: FocusEvent) => void;
+    onblur?: (evt: FocusEvent) => void;
     validationResult?: ValidationResult;
   } & HTMLTextareaAttributes;
 
   let {
-    key,
-    label,
     maxlength,
+    fieldConfig,
+    label,
     value = $bindable(),
     class: wrapperClass,
     validationResult,
+    onblur,
+    onfocus,
     ...restProps
   }: InputProps = $props();
 
-  let isValid = $derived(validationResult?.valid !== false);
-  let focused = $state(false);
-  let showHelpText = $derived(focused || !isValid);
-  let helpText = $derived(validationResult?.helpText);
+  let showHint = $state(false);
 </script>
 
 <fieldset class={['text-area-input', wrapperClass]}>
   <legend>{label}</legend>
-  <textarea id={key} {maxlength} bind:value {...restProps}></textarea>
+  <textarea
+    {maxlength}
+    bind:value
+    onfocus={(evt) => {
+      showHint = true;
+      onfocus?.(evt);
+    }}
+    onblur={(evt) => {
+      showHint = false;
+      onblur?.(evt);
+    }}
+    {...restProps}
+  ></textarea>
   <div class="field-footer">
-    <div class={['help-text', isValid ? 'valid' : 'invalid']}>
-      {#if showHelpText}
-        {helpText}
-      {/if}
-    </div>
+    <FieldHint {validationResult} {fieldConfig} {showHint} />
     {#if maxlength}
       <div class="character-counter">
         {value ? value.length : 0} / {maxlength}
@@ -73,19 +87,9 @@
 
     .field-footer {
       margin-top: 0.2em;
-      height: 1em;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-
-      .help-text {
-        color: var(--mdc-theme-text-primary-on-background);
-        font-size: 0.75em;
-
-        &.invalid {
-          color: var(--mdc-theme-error);
-        }
-      }
 
       .character-counter {
         color: var(--mdc-theme-text-primary-on-background);

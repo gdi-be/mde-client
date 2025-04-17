@@ -1,10 +1,15 @@
 <script lang="ts">
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import {
+    getFieldConfig,
+    getSubFieldConfig,
+    getValue,
+    persistValue
+  } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
-  import ValidationFeedbackText from '../ValidationFeedbackText.svelte';
+  import FieldHint from '../FieldHint.svelte';
   import type { ValidationResult, ValidationResultList } from '../FieldsConfig';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
 
@@ -110,6 +115,7 @@
         add
       </IconButton>
     </legend>
+    <FieldHint validationResult={generalValidationResult} {fieldConfig} />
     {#each contacts as contact, index (contact.listId)}
       <fieldset class="contact">
         <legend>
@@ -124,35 +130,34 @@
         </legend>
         <TextInput
           bind:value={contact.name}
-          key={KEY}
           label="Name"
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'name')}
+          fieldConfig={getSubFieldConfig(KEY, 'name')}
         />
         <TextInput
           bind:value={contact.organisation}
-          key={KEY}
           label="Organisation"
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'organisation')}
+          fieldConfig={getSubFieldConfig(KEY, 'organisation')}
         />
         <TextInput
           bind:value={contact.phone}
-          key={KEY}
           label="Telefon"
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'phone')}
+          fieldConfig={getSubFieldConfig(KEY, 'phone')}
         />
         <TextInput
           bind:value={contact.email}
-          key={KEY}
           label="E-Mail"
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'email')}
+          fieldConfig={getSubFieldConfig(KEY, 'email')}
         />
       </fieldset>
     {/each}
-    <ValidationFeedbackText validationResult={generalValidationResult} />
   </fieldset>
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>

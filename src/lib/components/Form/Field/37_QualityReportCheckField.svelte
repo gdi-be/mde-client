@@ -7,12 +7,17 @@
     type FormState
   } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
-  import FieldTools from '../FieldTools.svelte';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import FormField from '@smui/form-field';
   import Switch from '@smui/switch';
+  import type { Token } from '$lib/models/keycloak';
+  import { getHighestRole } from '$lib/util';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
+
+  const token = getContext<Token>('user_token');
+  const highestRole = $derived(getHighestRole(token));
 
   const KEY = 'isoMetadata.valid';
 
@@ -33,9 +38,14 @@
       showCheckmark = true;
     }
   };
+
+  const fieldVisible = $derived(
+    metadataProfile === 'INSPIRE_HARMONISED' &&
+      ['MdeQualityAssurance', 'MdeAdministrator'].includes(highestRole)
+  );
 </script>
 
-{#if metadataProfile === 'INSPIRE_HARMONISED'}
+{#if fieldVisible}
   <div class="quality-report-check-field">
     <fieldset>
       <legend>{fieldConfig?.label}</legend>

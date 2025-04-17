@@ -65,8 +65,8 @@
 
 <div class="metadata-type-field">
   <SelectInput
-    key={KEY}
     label={fieldConfig?.label}
+    {fieldConfig}
     options={OPTIONS}
     {value}
     {onChange}

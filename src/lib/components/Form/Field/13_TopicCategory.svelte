@@ -11,9 +11,14 @@
   import type { IsoTheme } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
   import { getContext } from 'svelte';
+  import type { Token } from '$lib/models/keycloak';
+  import { getHighestRole } from '$lib/util';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
+
+  const token = getContext<Token>('user_token');
+  const highestRole = $derived(getHighestRole(token));
 
   const KEY = 'isoMetadata.topicCategory';
   const ANNEX_THEME_KEY = 'isoMetadata.inspireTheme';
@@ -62,22 +67,24 @@
   };
 </script>
 
-<div class="topic-category-field">
-  {#await fetchOptions()}
-    <p>Lade Themen Kategorien</p>
-  {:then OPTIONS}
-    <SelectInput
-      key={KEY}
-      label={fieldConfig?.label}
-      options={OPTIONS}
-      disabled={!!inspireTheme}
-      {value}
-      {onChange}
-      {validationResult}
-    />
-  {/await}
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
-</div>
+{#if highestRole !== 'MdeDataOwner'}
+  <div class="topic-category-field">
+    {#await fetchOptions()}
+      <p>Lade Themen Kategorien</p>
+    {:then OPTIONS}
+      <SelectInput
+        label={fieldConfig?.label}
+        {fieldConfig}
+        options={OPTIONS}
+        disabled={!!inspireTheme}
+        {value}
+        {onChange}
+        {validationResult}
+      />
+    {/await}
+    <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  </div>
+{/if}
 
 <style lang="scss">
   .topic-category-field {
