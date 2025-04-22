@@ -2,9 +2,9 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import Switch from '@smui/switch';
-  import SelectInput from '../Inputs/SelectInput.svelte';
   import type { Option } from '$lib/models/form';
   import FieldHint from '../FieldHint.svelte';
+  import MultiSelectInput from '$lib/components/Form/Inputs/MultiSelectInput.svelte';
 
   const CHECKED_KEY = 'clientMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
@@ -15,10 +15,10 @@
   $effect(() => {
     checkedValue = checkedValueFromData || false;
   });
-  const selectionValueFromData = $derived(getValue<string>(CATEGORY_KEY));
-  let selectionValue = $state('');
+  const selectionValueFromData = $derived(getValue<string[]>(CATEGORY_KEY));
+  let selectionValue = $state<string[]>([]);
   $effect(() => {
-    selectionValue = selectionValueFromData || '';
+    selectionValue = selectionValueFromData || ['mobility'];
   });
 
   const checkedFieldConfig = getFieldConfig<string>(CHECKED_KEY);
@@ -34,7 +34,7 @@
     }
   };
 
-  const onSelectionChange = async (newSelection?: string) => {
+  const onSelectionChange = async (newSelection?: string[]) => {
     const response = await persistValue(CATEGORY_KEY, newSelection);
     if (response.ok) {
       showCheckmark = true;
@@ -59,7 +59,7 @@
       {#await fetchOptions()}
         <p>Lade HVD Kategorien</p>
       {:then OPTIONS}
-        <SelectInput
+        <MultiSelectInput
           label={LABEL}
           options={OPTIONS}
           value={selectionValue}
