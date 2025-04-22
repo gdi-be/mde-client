@@ -69,7 +69,6 @@
     onChange?.(newValue);
   };
 
-  // const getKey = (option: Option) => option.key;
   const getLabel = (option: Option) => {
     if (!option) return '';
     return option.label || option.key;
