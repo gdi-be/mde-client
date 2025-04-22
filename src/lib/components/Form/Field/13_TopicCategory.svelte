@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    getFieldConfig,
-    getValue,
-    persistValue,
-  } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { IsoTheme } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
@@ -55,7 +51,7 @@
         label={fieldConfig?.label}
         {fieldConfig}
         options={OPTIONS}
-        value={value}
+        {value}
         {disabled}
         {onChange}
         {validationResult}

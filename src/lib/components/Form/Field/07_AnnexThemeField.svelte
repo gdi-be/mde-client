@@ -45,9 +45,9 @@
     if (!inspireIDs || inspireIDs.length === 0) return;
     const response = await fetch(`/data/iso_themes`);
     const data: IsoTheme[] = await response.json();
-    const matches = inspireIDs.map((inspireId) =>
-      data.find(entry => entry.inspireID === inspireId)?.isoID
-    ).filter(Boolean) as string[];
+    const matches = inspireIDs
+      .map((inspireId) => data.find((entry) => entry.inspireID === inspireId)?.isoID)
+      .filter(Boolean) as string[];
     const uniqueValues = Array.from(new Set(matches));
     return persistValue(TOPIC_KEY, uniqueValues);
   };
@@ -68,7 +68,7 @@
         label={fieldConfig?.label}
         {fieldConfig}
         options={OPTIONS}
-        value={(Array.isArray(value) && value.length > 0) ? value[0] : undefined}
+        value={Array.isArray(value) && value.length > 0 ? value[0] : undefined}
         onChange={(newValue) => onChange([newValue])}
         {validationResult}
       />
