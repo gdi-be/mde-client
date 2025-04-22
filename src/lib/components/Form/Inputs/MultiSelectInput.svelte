@@ -30,13 +30,13 @@
   let inputValue = $state<string>();
 
   const chips = $derived<Option[]>(
-    value
-      ?.map(val => options.find(option => option.key === val))
-      .filter(Boolean) as Option[] || []
+    (value
+      ?.map((val) => options.find((option) => option.key === val))
+      .filter(Boolean) as Option[]) || []
   );
 
   const filteredOptions = $derived<Option[]>(
-    options.filter(option => !value?.includes(option.key))
+    options.filter((option) => !value?.includes(option.key))
   );
 
   const onSelect = (event: CustomEvent<Option>) => {
@@ -65,7 +65,7 @@
     event.preventDefault();
     const removedChip = event.detail;
     const removedKey = removedChip.chipId.key;
-    const newValue = value.filter(val => val !== removedKey);
+    const newValue = value.filter((val) => val !== removedKey);
     onChange?.(newValue);
   };
 
@@ -76,36 +76,29 @@
   };
 </script>
 
-<fieldset
-  bind:this={element}
-  class={['multi-select-input', wrapperClass]}
->
+<fieldset bind:this={element} class={['multi-select-input', wrapperClass]}>
   <legend>{label}</legend>
-    <ChipSet
-      {chips}
-      nonInteractive
-      key={(chip) => `${chip.key}`}
-    >
-      {#snippet chip(chip)}
-        <Chip {chip} onSMUIChipRemoval={onRemove}>
-          <Text>{chip.label}</Text>
-          <TrailingAction icon$class="material-icons">cancel</TrailingAction>
-        </Chip>
-      {/snippet}
-    </ChipSet>
-    <Autocomplete
-      options={filteredOptions}
-      bind:value={inputValue}
-      getOptionLabel={getLabel}
-      selectOnExactMatch={false}
-      showMenuWithNoInput
-      onSMUIAutocompleteSelected={onSelect}
-    >
-      {#snippet noMatches()}
-        <Text>Keine weiteren Optionen verfügbar</Text>
-      {/snippet}
-    </Autocomplete>
-    <FieldHint {validationResult} {fieldConfig} />
+  <ChipSet {chips} nonInteractive key={(chip) => `${chip.key}`}>
+    {#snippet chip(chip)}
+      <Chip {chip} onSMUIChipRemoval={onRemove}>
+        <Text>{chip.label}</Text>
+        <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+      </Chip>
+    {/snippet}
+  </ChipSet>
+  <Autocomplete
+    options={filteredOptions}
+    bind:value={inputValue}
+    getOptionLabel={getLabel}
+    selectOnExactMatch={false}
+    showMenuWithNoInput
+    onSMUIAutocompleteSelected={onSelect}
+  >
+    {#snippet noMatches()}
+      <Text>Keine weiteren Optionen verfügbar</Text>
+    {/snippet}
+  </Autocomplete>
+  <FieldHint {validationResult} {fieldConfig} />
   <div class="field-footer">
     <FieldHint {validationResult} {fieldConfig} />
   </div>
