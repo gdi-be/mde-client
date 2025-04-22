@@ -139,7 +139,7 @@
       value={searchValue}
       label="UMTHES Schlagwortsuche ..."
       noMatchesActionDisabled={false}
-      showMenuWithNoInput={true}
+      showMenuWithNoInput
       selectOnExactMatch={false}
       onSMUIAutocompleteNoMatchesAction={() => {
         newKeyword = searchValue;
