@@ -22,6 +22,7 @@
     label,
     class: wrapperClass,
     fieldConfig,
+    disabled = false,
     options,
     validationResult
   }: InputProps = $props();
@@ -81,22 +82,26 @@
     {#snippet chip(chip)}
       <Chip {chip} onSMUIChipRemoval={onRemove}>
         <Text>{chip.label}</Text>
-        <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+        {#if !disabled}
+          <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+        {/if}
       </Chip>
     {/snippet}
   </ChipSet>
-  <Autocomplete
-    options={filteredOptions}
-    bind:value={inputValue}
-    getOptionLabel={getLabel}
-    selectOnExactMatch={false}
-    showMenuWithNoInput
-    onSMUIAutocompleteSelected={onSelect}
-  >
-    {#snippet noMatches()}
-      <Text>Keine weiteren Optionen verfügbar</Text>
-    {/snippet}
-  </Autocomplete>
+  {#if !disabled}
+    <Autocomplete
+      options={filteredOptions}
+      bind:value={inputValue}
+      getOptionLabel={getLabel}
+      selectOnExactMatch={false}
+      showMenuWithNoInput
+      onSMUIAutocompleteSelected={onSelect}
+    >
+      {#snippet noMatches()}
+        <Text>Keine weiteren Optionen verfügbar</Text>
+      {/snippet}
+    </Autocomplete>
+  {/if}
   <FieldHint {validationResult} {fieldConfig} />
   <div class="field-footer">
     <FieldHint {validationResult} {fieldConfig} />
@@ -104,7 +109,7 @@
 </fieldset>
 
 <style lang="scss">
-  .multi-select-input {
+  :global(.multi-select-input) {
     padding-top: 1.2em;
     border-radius: 0.25rem;
     display: flex;
@@ -120,6 +125,10 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+    }
+
+    :global(.smui-autocomplete) {
+      justify-self: stretch;
     }
 
     :global(.mdc-text-field) {

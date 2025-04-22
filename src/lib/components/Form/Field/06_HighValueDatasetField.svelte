@@ -16,9 +16,9 @@
     checkedValue = checkedValueFromData || false;
   });
   const selectionValueFromData = $derived(getValue<string[]>(CATEGORY_KEY));
-  let selectionValue = $state<string[]>([]);
+  let selectionValue = $state<string[]>();
   $effect(() => {
-    selectionValue = selectionValueFromData || ['mobility'];
+    selectionValue = selectionValueFromData;
   });
 
   const checkedFieldConfig = getFieldConfig<string>(CHECKED_KEY);

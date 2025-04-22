@@ -11,30 +11,45 @@
   import type { Option } from '$lib/models/form';
   import type { ValidationResult } from '../FieldsConfig';
   import { getContext } from 'svelte';
+  import type { IsoTheme, MetadataProfile } from '$lib/models/metadata';
+  import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireTheme';
+  const TOPIC_KEY = 'isoMetadata.topicCategory';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
 
-  let metadataProfile = $derived(getValue<string>(PROFILE_KEY, metadata));
+  let metadataProfile = $derived(getValue<MetadataProfile>(PROFILE_KEY, metadata));
 
-  const valueFromData = $derived(getValue<string>(KEY));
-  let value = $state('');
+  const valueFromData = $derived(getValue<string[]>(KEY));
+  let value = $state<string[]>();
   $effect(() => {
-    value = valueFromData || '';
+    value = valueFromData;
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string[]>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  const onChange = async (newValue?: string) => {
+  const onChange = async (newValue?: string[]) => {
     const response = await persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }
+    await updateTopicCategory(newValue);
+  };
+
+  const updateTopicCategory = async (inspireIDs?: string[]) => {
+    if (!inspireIDs || inspireIDs.length === 0) return;
+    const response = await fetch(`/data/iso_themes`);
+    const data: IsoTheme[] = await response.json();
+    const matches = inspireIDs.map((inspireId) =>
+      data.find(entry => entry.inspireID === inspireId)?.isoID
+    ).filter(Boolean) as string[];
+    const uniqueValues = Array.from(new Set(matches));
+    return persistValue(TOPIC_KEY, uniqueValues);
   };
 
   const fetchOptions = async () => {
@@ -44,12 +59,30 @@
   };
 </script>
 
-{#if metadataProfile !== 'ISO'}
+{#if metadataProfile === 'INSPIRE_HARMONISED'}
   <div class="annex-theme-field">
     {#await fetchOptions()}
       <p>Lade Annex Themen</p>
     {:then OPTIONS}
       <SelectInput
+        label={fieldConfig?.label}
+        {fieldConfig}
+        options={OPTIONS}
+        value={(Array.isArray(value) && value.length > 0) ? value[0] : undefined}
+        onChange={(newValue) => onChange([newValue])}
+        {validationResult}
+      />
+    {/await}
+    <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  </div>
+{/if}
+
+{#if metadataProfile === 'INSPIRE_IDENTIFIED'}
+  <div class="annex-theme-field">
+    {#await fetchOptions()}
+      <p>Lade Annex Themen</p>
+    {:then OPTIONS}
+      <MultiSelectInput
         label={fieldConfig?.label}
         {fieldConfig}
         options={OPTIONS}
@@ -68,7 +101,8 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.select-input) {
+    :global(.select-input),
+    :global(.multi-select-input) {
       flex: 1;
     }
   }
