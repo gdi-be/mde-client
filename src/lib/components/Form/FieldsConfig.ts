@@ -18,6 +18,7 @@ export type DynamicFieldConfig = {
   key: FieldKey;
   label: string;
   explanation?: string;
+  placeholder?: string;
   hint?: string;
   subFields?: DynamicFieldConfig[];
 };
