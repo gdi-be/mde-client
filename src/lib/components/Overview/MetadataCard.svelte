@@ -285,7 +285,7 @@
       padding: 0.25em 4em;
       font-size: 0.75em;
       font-weight: bold;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     }
 
     .title {
