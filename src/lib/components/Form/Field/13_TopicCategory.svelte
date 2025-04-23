@@ -1,21 +1,12 @@
 <script lang="ts">
-  import {
-    FORMSTATE_CONTEXT,
-    getFieldConfig,
-    getValue,
-    persistValue,
-    type FormState
-  } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
-  import SelectInput from '../Inputs/SelectInput.svelte';
   import type { IsoTheme } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
-
-  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
-  const metadata = $derived(formState.metadata);
+  import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -23,24 +14,16 @@
   const KEY = 'isoMetadata.topicCategory';
   const ANNEX_THEME_KEY = 'isoMetadata.inspireTheme';
 
-  const inspireTheme = $derived(getValue<string>(ANNEX_THEME_KEY, metadata));
-  const valueFromData = $derived(getValue<string>(KEY));
-  let value = $state('');
-  $effect(() => {
-    if (valueFromData) {
-      value = valueFromData;
-    }
-  });
-
-  $effect(() => {
-    getAutoFillValues(inspireTheme);
-  });
+  const value = $derived(getValue<string[]>(KEY));
+  const annexValue = $derived(getValue<string[]>(ANNEX_THEME_KEY));
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string[]>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  const onChange = async (newValue?: string) => {
+  let disabled = $derived(!!annexValue?.length);
+
+  const onChange = async (newValue?: string[]) => {
     const response = await persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
@@ -56,15 +39,7 @@
     }));
   };
 
-  const getAutoFillValues = async (inspireID?: string) => {
-    if (!inspireID) return;
-    const response = await fetch(`/data/iso_themes`);
-    const data = await response.json();
-    const match = data.find((entry: IsoTheme) => entry.inspireID === inspireID);
-    if (!match) return;
-    value = match.isoID;
-    onChange(value);
-  };
+  $inspect(disabled);
 </script>
 
 {#if highestRole !== 'MdeDataOwner'}
@@ -72,12 +47,12 @@
     {#await fetchOptions()}
       <p>Lade Themen Kategorien</p>
     {:then OPTIONS}
-      <SelectInput
+      <MultiSelectInput
         label={fieldConfig?.label}
         {fieldConfig}
         options={OPTIONS}
-        disabled={!!inspireTheme}
         {value}
+        {disabled}
         {onChange}
         {validationResult}
       />
@@ -92,7 +67,7 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.select-input) {
+    :global(.multi-select-input) {
       flex: 1;
     }
 
