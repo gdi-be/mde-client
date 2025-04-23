@@ -8,20 +8,10 @@
 
   const KEY = 'isoMetadata.termsOfUseId';
 
-  const valueFromData = $derived(getValue<string>(KEY));
-  let value = $state('');
-  $effect(() => {
-    value = valueFromData || '';
-  });
+  const value = $derived(getValue<number>(KEY));
 
   let showCheckmark = $state(false);
-  let termsOfUseList: TermsOfUse[] = $state([]);
-  const selectedDescription = $derived.by(() => {
-    const description = termsOfUseList.find((item) => item.id === Number(value))?.description;
-    if (!description) return '';
-    return description.replace(/{{(.*?)}}/g, (match, p1) => getValue(p1.trim()) || match);
-  });
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<number>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const fetchOptions = async () => {
@@ -33,7 +23,6 @@
       }
       return a.active ? -1 : 1;
     });
-    termsOfUseList = data;
     return data;
   };
 
@@ -57,15 +46,19 @@
           (item: TermsOfUse): Option => ({
             key: item.id.toString(),
             label: item.shortname,
-            disabled: !item.active
+            disabled: !item.active,
+            description: item.description
           })
         )}
-        value={value.toString()}
+        value={value?.toString()}
         {onChange}
         {validationResult}
       />
-      {#if selectedDescription}
-        <p class="description">{selectedDescription}</p>
+      {#if value !== 1}
+        <p class="not-standard">
+          Die Nutzungsbedingungen weichen von den Standardnutzungsbedingungen ab. Dies sollte nur in
+          Ausnahmefällen und in Absprache mit einem Redakteur geschehen.
+        </p>
       {/if}
     </div>
   {/await}
@@ -86,9 +79,10 @@
       flex: 1;
     }
 
-    .description {
-      font-size: 0.75em;
-      color: var(--mdc-theme-secondary);
+    .not-standard {
+      font-size: 0.75rem;
+      color: var(--error-color);
+      margin: 1em;
     }
   }
 </style>

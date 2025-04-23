@@ -18,6 +18,7 @@
   import F05_InspireType from './Field/05_InspireType.svelte';
   import F04_PrivacyField from './Field/04_PrivacyField.svelte';
   import F24_TermsOfUseField from './Field/24_TermsOfUseField.svelte';
+  import F26_TermsOfUseSourceField from './Field/26_TermsOfUseSourceField.svelte';
   import F07_AnnexThemeField from './Field/07_AnnexThemeField.svelte';
   import F37_QualityReportCheckField from './Field/37_QualityReportCheckField.svelte';
   import F06_HighValueDatasetField from './Field/06_HighValueDatasetField.svelte';
@@ -34,6 +35,7 @@
   import F30_ContentDescription from './Field/30_ContentDescription.svelte';
   import F31_TechnicalDescription from './Field/31_TechnicalDescription.svelte';
   import F32_Lineage from './Field/32_Lineage.svelte';
+  import F36_RelatedTopicsField from './Field/36_RelatedTopicsField.svelte';
   import F39_AdditionalInformation from './Field/39_AdditionalInformation.svelte';
   import F38_InspireAnnexVersionField from './Field/38_InspireAnnexVersionField.svelte';
   import ServicesSection from './service/ServicesSection.svelte';
@@ -151,6 +153,7 @@
           <F05_InspireType />
           <F04_PrivacyField />
           <F24_TermsOfUseField />
+          <F26_TermsOfUseSourceField />
           <F07_AnnexThemeField />
           <F38_InspireAnnexVersionField />
           <F37_QualityReportCheckField />
@@ -178,6 +181,7 @@
           <F30_ContentDescription />
           <F31_TechnicalDescription />
           <F32_Lineage />
+          <F36_RelatedTopicsField />
           <F39_AdditionalInformation />
           <ScrollToTopButton target={formWrapper} />
         </section>

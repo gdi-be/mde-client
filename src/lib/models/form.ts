@@ -13,6 +13,7 @@ export type Option = {
   disabled?: boolean;
   key: string;
   label: string;
+  description?: string;
 };
 
 /**
