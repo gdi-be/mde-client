@@ -34,11 +34,13 @@
   const onSelect = (newValue: string) => {
     onChange?.(newValue);
   };
+
+  const selectedDescription = $derived(options.find((item) => item.key === value)?.description);
 </script>
 
 <fieldset class={['select-input', wrapperClass]}>
   <legend>{label}</legend>
-  <Select bind:this={element} {disabled} hiddenInput menu$anchorElement={document.body} bind:value>
+  <Select bind:this={element} {disabled} menu$anchorElement={document.body} bind:value>
     {#each options as option}
       <SelectOption
         onSMUIAction={() => {
@@ -50,8 +52,12 @@
       >
         {option.label}
       </SelectOption>
+      {#if option.description}
+        <div class="option-description">{option.description}</div>
+      {/if}
     {/each}
   </Select>
+  <div class="selected-description">{selectedDescription}</div>
   <div class="field-footer">
     <FieldHint {validationResult} {fieldConfig} />
   </div>
@@ -85,6 +91,31 @@
         opacity: 0.5;
         pointer-events: none;
       }
+    }
+
+    :global(li:hover + .option-description) {
+      background-color: #f5f5f5;
+    }
+
+    :global(li[aria-selected='true'] + .option-description) {
+      background-color: #d6d6d6;
+      color: black;
+    }
+
+    .option-description {
+      font-size: 0.66em;
+      color: grey;
+      padding-left: 3em;
+      padding-bottom: 1em;
+      line-height: 1em;
+      border-bottom: 1px solid lightgrey;
+    }
+
+    .selected-description {
+      font-size: 0.66em;
+      color: grey;
+      padding: 0.5em;
+      line-height: 1em;
     }
   }
 </style>

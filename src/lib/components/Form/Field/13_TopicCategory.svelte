@@ -38,8 +38,6 @@
       label: entry.isoName
     }));
   };
-
-  $inspect(disabled);
 </script>
 
 {#if highestRole !== 'MdeDataOwner'}

@@ -229,6 +229,16 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
+    profile_id: 26,
+    label: 'Nutzungsbestimmungen Quellenangabe',
+    key: 'isoMetadata.termsOfUseSource',
+    validator: () => {
+      return { valid: true };
+    },
+    section: 'classification',
+    required: true
+  },
+  {
     profile_id: 7,
     label: 'INSPIRE Annex Thema',
     key: 'isoMetadata.inspireTheme',
@@ -537,6 +547,16 @@ export const FieldConfigs: FieldConfig<any>[] = [
           helpText: 'Bitte geben Sie eine Herkunft an.'
         };
       }
+      return { valid: true };
+    },
+    section: 'additional',
+    required: false
+  },
+  {
+    profile_id: 36,
+    label: 'Verwandte Themen (MTK)',
+    key: 'clientMetadata.relatedTopics',
+    validator: () => {
       return { valid: true };
     },
     section: 'additional',

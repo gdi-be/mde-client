@@ -10,11 +10,7 @@
   import DownloadForm from './DownloadForm.svelte';
   import FeatureTypeForm from './FeatureTypeForm.svelte';
   import { getContext } from 'svelte';
-  import {
-    FORMSTATE_CONTEXT,
-    getSubFieldConfig,
-    type FormState
-  } from '$lib/context/FormContext.svelte';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import LayersForm from './LayersForm.svelte';
   import { page } from '$app/state';
 
@@ -91,8 +87,6 @@
 
     layerCheckmarkVisible = response.ok;
   }
-
-  $inspect(getSubFieldConfig('isoMetadata.services', 'title'));
 </script>
 
 <div class="service-form">
