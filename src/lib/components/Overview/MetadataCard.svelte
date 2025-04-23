@@ -173,6 +173,15 @@
       return { src: FALLBACK_IMAGE, success };
     }
   }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('de-DE', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+  };
 </script>
 
 <Card class="metadata-card">
@@ -180,6 +189,12 @@
     <span class="title">{metadata.title}</span>
     <Media aspectRatio="16x9">
       <MediaContent>
+        {#if metadata.isoMetadata.published}
+          {@const formatedDate = formatDate(metadata.isoMetadata.published)}
+          <div class="ribbon" title={`Veröffentlicht am ${formatedDate}`}>
+            {formatedDate}
+          </div>
+        {/if}
         {#await getImageSource()}
           <img
             class={['preview-image not-available']}
@@ -256,6 +271,22 @@
   :global(.metadata-card) {
     max-width: 300px;
     max-height: 300px;
+
+    :global(.mdc-card__media) {
+      overflow: hidden;
+    }
+
+    .ribbon {
+      position: absolute;
+      transform: rotate(-45deg) translate(-50%, 175%);
+      transform-origin: top left;
+      background-color: lightgreen;
+      color: black;
+      padding: 0.25em 4em;
+      font-size: 0.75em;
+      font-weight: bold;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
 
     .title {
       min-height: 2.5em;
