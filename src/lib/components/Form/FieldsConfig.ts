@@ -28,6 +28,7 @@ export type FieldConfig<T> = {
   label: string;
   explanation?: string;
   hint?: string;
+  placeholder?: string;
   validator: (
     val: T | undefined,
     extra?: Record<string, any>
@@ -394,6 +395,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 16,
     label: 'geliefertes Koordinatensystem',
     key: 'technicalMetadata.deliveredCrs',
+    placeholder: 'EPSG:25833',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {

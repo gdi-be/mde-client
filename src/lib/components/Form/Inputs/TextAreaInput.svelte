@@ -46,6 +46,7 @@
       showHint = false;
       onblur?.(evt);
     }}
+    placeholder={fieldConfig?.placeholder}
     {...restProps}
   ></textarea>
   <div class="field-footer">

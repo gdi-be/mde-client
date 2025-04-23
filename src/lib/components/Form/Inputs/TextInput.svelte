@@ -48,6 +48,7 @@
     }}
     bind:value
     {maxlength}
+    placeholder={fieldConfig?.placeholder}
     {...restProps}
   />
   <div class="field-footer">
