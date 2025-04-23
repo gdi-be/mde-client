@@ -12,6 +12,7 @@
   import FieldHint from '../FieldHint.svelte';
   import type { ValidationResult, ValidationResultList } from '../FieldsConfig';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
 
   const KEY = 'isoMetadata.pointsOfContact';
 
@@ -52,6 +53,24 @@
     validationResult?.find(({ index }) => index === undefined)
   );
 
+  const autoFillUserDetails = async () => {
+    addItem();
+    const contact = contacts[0];
+    const response = await fetch('/userdetails', {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json'
+      }
+    });
+    const json = await response.json();
+    if (response.ok) {
+      contact.name = json.firstName + ' ' + json.lastName;
+      contact.phone = json.phone;
+      contact.email = json.email;
+    }
+    persistContacts();
+  };
+
   const persistContacts = async () => {
     const value = contacts.map((contact) => ({
       name: contact.name,
@@ -65,8 +84,7 @@
     }
   };
 
-  const addItem = (evt: MouseEvent) => {
-    evt.preventDefault();
+  const addItem = () => {
     const listId = Date.now().toString(36);
     contacts = [
       {
@@ -108,7 +126,7 @@
       <span>{fieldConfig?.label}</span>
       <IconButton
         class="material-icons"
-        onclick={(evt) => addItem(evt)}
+        onclick={() => addItem()}
         size="button"
         title="Kontakt hinzufügen"
       >
@@ -159,7 +177,9 @@
       </fieldset>
     {/each}
   </fieldset>
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
+    <AutoFillButton title="Eigene Kontaktdaten übernehmen" onclick={autoFillUserDetails} />
+  </FieldTools>
 </div>
 
 <style lang="scss">
