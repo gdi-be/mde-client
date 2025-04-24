@@ -1,3 +1,21 @@
+# [3.5.0](https://github.com/gdi-be/mde-client/compare/v3.4.0...v3.5.0) (2025-04-24)
+
+
+### Bug Fixes
+
+* only transform extent if defined ([8c18ad7](https://github.com/gdi-be/mde-client/commit/8c18ad71373d867abfd7a871c96ecbcc8b01dd80))
+
+
+### Features
+
+* add ability to search for existing lineages ([4e16ecc](https://github.com/gdi-be/mde-client/commit/4e16eccb3e2bf606151e9489c37339df5f2354f1))
+* add missing fields termsOfUseSource and relatedTopics ([0385aaa](https://github.com/gdi-be/mde-client/commit/0385aaa2119ca2e5bf7b902c155ca8b01f1877ca))
+* add placeholder deliveredCrs field ([64c333f](https://github.com/gdi-be/mde-client/commit/64c333f9b71b2eff1ea2cef19b9f7720b7889bde))
+* adds a ribbon with the published date ([a55666a](https://github.com/gdi-be/mde-client/commit/a55666a8bcfa9ff06487095eccf684157da52ac2))
+* allows multiple values for inspireTheme and topicCategory ([7936e05](https://github.com/gdi-be/mde-client/commit/7936e055be963c5ba8af3ed6a731b49975dc59c5))
+* auto fill contact data ([c4c2064](https://github.com/gdi-be/mde-client/commit/c4c2064e84c1a7561ae0d84a9ac2f508a79e80aa))
+* introduces MultiSelectInput ([bac41f9](https://github.com/gdi-be/mde-client/commit/bac41f9d927209bbb047cbf29ca40a0edd54fcd4))
+
 # [3.4.0](https://github.com/gdi-be/mde-client/compare/v3.3.2...v3.4.0) (2025-04-17)
 
 
