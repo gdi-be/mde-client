@@ -10,9 +10,15 @@
     metadata?: MetadataCollection;
   };
 
+  type MessageGroup = {
+    'gdi-inspire': string[][][];
+    'gdi-de': string[][][];
+    'inspire-validator': string[][][];
+  };
+
   let isLoading = $state(false);
   let validationStartError = $state(false);
-  let validationResult = $state<string | null>(null);
+  let validationResult = $state<MessageGroup | null>(null);
   let validationError = $state<string | null>(null);
 
   let { metadata }: ValidationPanelProps = $props();
@@ -33,7 +39,8 @@
       .at(-1);
 
     isLoading = lastItem?.status === 'RUNNING' || false;
-    validationResult = lastItem?.status === 'FINISHED' ? lastItem.message : null;
+    validationResult =
+      lastItem?.status === 'FINISHED' ? getGroupedMessages(lastItem.message) : null;
     validationError = lastItem?.status === 'FAILED' ? lastItem.message : null;
   });
 
@@ -57,6 +64,48 @@
       console.error('Error while starting the validation: ', error);
       validationStartError = true;
     }
+  };
+  const getGroupedMessages = (message: string) => {
+    const errorsByTestEngine: MessageGroup = {
+      'gdi-inspire': [],
+      'gdi-de': [],
+      'inspire-validator': []
+    };
+
+    let currentEngine: keyof MessageGroup | null = null;
+
+    const splitMessage = message.split('|').map((res) => res.trim());
+
+    for (const line of splitMessage) {
+      if (line.startsWith('Ergebnisse GDI-DE für INSPIRE:')) {
+        currentEngine = 'gdi-inspire';
+        errorsByTestEngine[currentEngine].push([]);
+      } else if (line.startsWith('Ergebnisse GDI-DE:')) {
+        currentEngine = 'gdi-de';
+        errorsByTestEngine[currentEngine].push([]);
+      } else if (line.startsWith('Ergebnisse INSPIRE-Validator:')) {
+        currentEngine = 'inspire-validator';
+        errorsByTestEngine[currentEngine].push([]);
+      } else if (currentEngine) {
+        if (
+          line.startsWith('Prüfung auf') ||
+          line.startsWith('Execute tests') ||
+          line.startsWith('Test that')
+        ) {
+          errorsByTestEngine[currentEngine].push([[line]]);
+        } else {
+          errorsByTestEngine[currentEngine].at(-1)?.at(-1)?.push(line);
+        }
+      }
+    }
+
+    for (const errorByTestEngine in errorsByTestEngine) {
+      const engine = errorByTestEngine as keyof MessageGroup;
+      const testErrors = errorsByTestEngine[engine].filter((group) => group.length > 0);
+      errorsByTestEngine[engine] = testErrors;
+    }
+
+    return errorsByTestEngine;
   };
 </script>
 
@@ -90,43 +139,79 @@
           {:else if validationResult}
             <p>Ergebnisse der Validierung:</p>
             <div class="validation-results">
-              {#if validationResult.split('|').length > 0}
-                {@const results = validationResult
-                  .split('|')
-                  .map((res) => res.trim())
-                  .filter((res) => {
-                    return (
-                      !res.startsWith('Ergebnisse GDI-DE') &&
-                      !res.startsWith('GDI-DE Konventionen') &&
-                      !res.startsWith('Metadaten: GDI-DE')
-                    );
-                  })}
-                {#if results.length === 0}
-                  <p class="success">Keine Fehler oder Warnungen gefunden.</p>
-                {:else}
-                  {#each results as result}
-                    {#if result.startsWith('Fehler beim Validieren')}
-                      <p class="error">
-                        {@html result}
-                      </p>
-                    {:else if result.startsWith('Prüfung auf')}
-                      <h4>
-                        {@html result}
-                      </h4>
-                    {:else}
+              {#if validationResult?.['gdi-inspire'].length}
+                <h3>Ergebnisse GDI-DE für INSPIRE:</h3>
+                <ol>
+                  {#each validationResult?.['gdi-inspire'] as message}
+                    {#each message as entry}
+                      <li>Fehler</li>
                       <ul>
-                        <li
-                          class={[
-                            result.toLowerCase().startsWith('fehler') && 'error',
-                            result.toLowerCase().startsWith('warnung') && 'warn'
-                          ]}
-                        >
-                          {@html result}
-                        </li>
+                        {#each entry as e}
+                          <li
+                            class={[
+                              e.toLowerCase().startsWith('fehler') && 'error',
+                              e.toLowerCase().startsWith('warnung') && 'warn'
+                            ]}
+                          >
+                            {@html e}
+                          </li>
+                        {/each}
                       </ul>
-                    {/if}
+                    {/each}
                   {/each}
-                {/if}
+                </ol>
+              {/if}
+              {#if validationResult?.['gdi-de'].length}
+                <h3>Ergebnisse GDI-DE:</h3>
+                <ol>
+                  {#each validationResult?.['gdi-de'] as message}
+                    {#each message as entry}
+                      <li>Fehler</li>
+                      <ul>
+                        {#each entry as e}
+                          <li
+                            class={[
+                              e.toLowerCase().startsWith('fehler') && 'error',
+                              e.toLowerCase().startsWith('warnung') && 'warn'
+                            ]}
+                          >
+                            {@html e}
+                          </li>
+                        {/each}
+                      </ul>
+                    {/each}
+                  {/each}
+                </ol>
+              {/if}
+              {#if validationResult?.['inspire-validator'].length}
+                <h3>Ergebnisse INSPIRE-Validator:</h3>
+                <ol>
+                  {#each validationResult?.['inspire-validator'] as message}
+                    {#each message as entry}
+                      <li>Fehler</li>
+                      <ul>
+                        {#each entry as e}
+                          <li
+                            class={[
+                              e.toLowerCase().includes('with errors') && 'error',
+                              e.toLowerCase().includes('system error') && 'error',
+                              e.toLowerCase().includes('cannot be retrieved') && 'error',
+                              e.toLowerCase().includes('not provided') && 'error',
+                              e.toLowerCase().includes('must have') && 'error',
+                              e.toLowerCase().includes('shall be given') && 'warn',
+                              e.toLowerCase().includes('shall exist') && 'warn'
+                            ]}
+                          >
+                            {@html e}
+                          </li>
+                        {/each}
+                      </ul>
+                    {/each}
+                  {/each}
+                </ol>
+              {/if}
+              {#if validationResult?.['gdi-inspire'].length === 0 && validationResult?.['gdi-de'].length === 0 && validationResult?.['inspire-validator'].length === 0}
+                <p class="success">Keine Fehler oder Warnungen gefunden.</p>
               {/if}
             </div>
           {:else if validationError}
@@ -176,6 +261,14 @@
     .validation-results {
       max-height: 50vh;
       overflow-y: auto;
+
+      @media (max-height: 768px) {
+        max-height: 40vh;
+      }
+
+      @media (max-height: 610px) {
+        max-height: 30vh;
+      }
 
       .success {
         &::before {
