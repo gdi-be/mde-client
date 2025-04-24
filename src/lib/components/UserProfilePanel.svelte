@@ -1,11 +1,12 @@
 <script lang="ts">
-  import type { Role, Token } from '$lib/models/keycloak';
+  import type { RefreshToken, Role, Token } from '$lib/models/keycloak';
 
   type UserProfilePanelProps = {
     token: Token;
+    refreshToken: RefreshToken;
   };
 
-  let { token }: UserProfilePanelProps = $props();
+  let { token, refreshToken }: UserProfilePanelProps = $props();
 
   const hiddenRoles = ['offline_access', 'uma_authorization', 'default-roles-metadata-editor'];
 
@@ -27,6 +28,24 @@
   const roles = $derived(
     (token?.realm_access?.roles as Role[]).filter(roleFilter).map(roleMap).join(', ')
   );
+
+  let remainingSessionTime: number | undefined = $state();
+
+  let interval: ReturnType<typeof setInterval>;
+
+  $effect(() => {
+    remainingSessionTime = getRemainingSessionTime();
+
+    interval = setInterval(() => {
+      remainingSessionTime = getRemainingSessionTime();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  });
+
+  const getRemainingSessionTime = () => {
+    return Math.max(0, Math.floor((refreshToken.exp * 1000 - Date.now()) / 1000));
+  };
 </script>
 
 <div class="user-profile-panel">
@@ -39,6 +58,14 @@
   <div class="roles">
     <span>{roles}</span>
   </div>
+  {#if typeof remainingSessionTime === 'number'}
+    <div class="session-idle-time">
+      <p>
+        Sitzung läuft ab in:
+        {Math.floor(remainingSessionTime / 60)} Minuten
+      </p>
+    </div>
+  {/if}
 </div>
 
 <style lang="scss">
@@ -61,6 +88,17 @@
       color: var(--mdc-theme-secondary);
       font-style: italic;
       margin-top: 1em;
+    }
+
+    .session-idle-time {
+      margin-top: 1em;
+      padding: 0.5em;
+      background-color: var(--mdc-theme-background);
+      border: 1px solid var(--mdc-outlined-button-outline-color, rgba(0, 0, 0, 0.12));
+      border-radius: 4px;
+      font-size: 0.9em;
+      text-align: center;
+      color: var(--mdc-theme-on-background);
     }
   }
 </style>

@@ -1,11 +1,15 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
+
+import type { Token, RefreshToken } from '$lib/models/keycloak';
+
 // for information about these interfaces
 declare global {
   namespace App {
     // interface Error {}
     interface Locals {
-      token?: string;
+      token?: Token;
       tokenUnparsed?: string;
+      refreshToken?: RefreshToken;
     }
     // interface PageData {}
     // interface PageState {}
