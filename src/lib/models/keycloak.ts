@@ -28,4 +28,17 @@ export type Token = {
   email: string;
 };
 
+export type RefreshToken = {
+  aud: string;
+  azp: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  scope: string;
+  sid: string;
+  sub: string;
+  typ: string;
+};
+
 export type Role = 'MdeDataOwner' | 'MdeEditor' | 'MdeQualityAssurance' | 'MdeAdministrator';

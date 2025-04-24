@@ -4,6 +4,7 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
   return {
     path: url.pathname,
     token: locals.token,
-    tokenUnparsed: locals.tokenUnparsed
+    tokenUnparsed: locals.tokenUnparsed,
+    refreshToken: locals.refreshToken
   };
 };

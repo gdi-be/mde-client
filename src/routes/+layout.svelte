@@ -8,6 +8,7 @@
   let { children, data } = $props();
 
   setContext('user_token', data.token);
+  setContext('refresh_token', data.refreshToken);
   initializePopconfimContext();
 
   sseContext.setSseContext();
