@@ -8,7 +8,7 @@
 
   const { data } = $props();
   let commentsPanelVisible = $state(false);
-  let approvalPanelVisible = $state(false);
+  let publishPanelVisible = $state(false);
   let assignmentPanelVisible = $state(false);
 
   const metadata = $derived(data.metadata);
@@ -31,8 +31,8 @@
       commentsPanelVisible = true;
     }
 
-    if (action?.includes('approval')) {
-      approvalPanelVisible = true;
+    if (action?.includes('publish')) {
+      publishPanelVisible = true;
     }
 
     if (action?.includes('assignment')) {
@@ -47,7 +47,7 @@
   </Fab>
   <h1>{metadata?.isoMetadata?.title}</h1>
   <MetadataDisplay />
-  <FormFooter {commentsPanelVisible} {approvalPanelVisible} {assignmentPanelVisible} />
+  <FormFooter {commentsPanelVisible} {publishPanelVisible} {assignmentPanelVisible} />
 </div>
 
 <style lang="scss">
