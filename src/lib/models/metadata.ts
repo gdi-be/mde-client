@@ -224,4 +224,5 @@ export type MetadataCollection = {
   clientMetadata: JsonClientMetadata;
   isoMetadata: JsonIsoMetadata;
   technicalMetadata: JsonTechnialMetadata;
+  status?: 'NEW' | 'IN_EDIT' | 'PUBLISHED';
 };

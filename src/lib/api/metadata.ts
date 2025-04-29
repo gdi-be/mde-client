@@ -506,3 +506,24 @@ export const validate = async ({ token, metadataid }: ValidateProps) => {
     headers
   });
 };
+
+type PublishProps = {
+  token: string;
+  metadataid: string;
+};
+
+export const publish = async ({ token, metadataid }: PublishProps) => {
+  if (!token) {
+    log.error('No token provided.');
+    return Promise.reject(new Error('No token provided.'));
+  }
+
+  const headers = new Headers({
+    Authorization: `Bearer ${token}`
+  });
+
+  return await fetch(`${env.BACKEND_URL}/metadata/${metadataid}/publish`, {
+    method: 'POST',
+    headers
+  });
+};

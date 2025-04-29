@@ -58,7 +58,7 @@
   };
 
   let commentsPanelVisible = $state(false);
-  let approvalPanelVisible = $state(false);
+  let publishPanelVisible = $state(false);
 
   const SECTIONS: SectionConfig[] = [
     {
@@ -112,8 +112,8 @@
       commentsPanelVisible = true;
     }
 
-    if (action?.includes('approval')) {
-      approvalPanelVisible = true;
+    if (action?.includes('publish')) {
+      publishPanelVisible = true;
     }
   });
 </script>
@@ -194,7 +194,7 @@
     </form>
     <HelpPanel />
   </div>
-  <FormFooter {commentsPanelVisible} {approvalPanelVisible}>
+  <FormFooter {commentsPanelVisible} {publishPanelVisible}>
     <Button
       class="previous-button"
       title="Zurück"

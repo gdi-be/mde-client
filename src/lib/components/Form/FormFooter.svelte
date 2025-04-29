@@ -13,20 +13,21 @@
   import ValidationPanel from './ValidationPanel.svelte';
   import AssignmentDialog from '$lib/components/AssignmentDialog.svelte';
   import { page } from '$app/state';
-  import Spinner from '../Spinner.svelte';
+  import Spinner from '$lib/components/Spinner.svelte';
+  import PublishPanel from '$lib/components/Form/PublishPanel.svelte';
 
   type FormFooterProps = {
     text?: string;
     children?: Snippet;
     commentsPanelVisible?: boolean;
-    approvalPanelVisible?: boolean;
+    publishPanelVisible?: boolean;
     assignmentPanelVisible?: boolean;
   };
 
   let {
     children,
     commentsPanelVisible: commentsPanelVisibleProp,
-    approvalPanelVisible: approvalPanelVisibleProp,
+    publishPanelVisible: publishPanelVisibleProp,
     assignmentPanelVisible: assignmentPanelVisibleProp
   }: FormFooterProps = $props();
 
@@ -38,12 +39,12 @@
   const userId = $derived(token?.sub);
   const assignedToMe = $derived(metadata?.assignedUserId === userId);
   let commentsPanelVisible = $state(false);
-  let approvalPanelVisible = $state(false);
+  let publishPanelVisible = $state(false);
   let assignmentPanelVisible = $state(false);
   let validationPanelVisible = $state(false);
   let isValidationLoading = $state(false);
   let showMask = $derived(
-    commentsPanelVisible || approvalPanelVisible || validationPanelVisible || assignmentPanelVisible
+    commentsPanelVisible || publishPanelVisible || validationPanelVisible || assignmentPanelVisible
   );
   const metadataId = $derived(metadata?.metadataId);
   const { validation } = $derived(sseContext.getSseContext());
@@ -70,7 +71,7 @@
   });
 
   $effect(() => {
-    approvalPanelVisible = approvalPanelVisibleProp ?? false;
+    publishPanelVisible = publishPanelVisibleProp ?? false;
   });
 
   $effect(() => {
@@ -88,7 +89,7 @@
 
   const closePanels = () => {
     commentsPanelVisible = false;
-    approvalPanelVisible = false;
+    publishPanelVisible = false;
     validationPanelVisible = false;
     assignmentPanelVisible = false;
   };
@@ -172,7 +173,7 @@
         class="submit-button"
         title="Freigabe"
         variant="raised"
-        onclick={() => (approvalPanelVisible = !approvalPanelVisible)}
+        onclick={() => (publishPanelVisible = !publishPanelVisible)}
       >
         <Label>Freigabe</Label>
         <Icon class="material-icons">rocket_launch</Icon>
@@ -195,6 +196,10 @@
 
 {#if validationPanelVisible}
   <ValidationPanel {metadata} />
+{/if}
+
+{#if publishPanelVisible}
+  <PublishPanel {metadata} />
 {/if}
 
 <AssignmentDialog bind:open={assignmentPanelVisible} />
