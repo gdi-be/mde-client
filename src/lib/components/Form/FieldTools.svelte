@@ -63,7 +63,7 @@
     {#await getValueFromOriginal()}
       <Icon
         class="material-icons spinner"
-        title="Es wird geprüft ob der Wert im Originaldatensatz gesetzt war."
+        title="Es wird geprüft, ob der Wert im Originaldatensatz gesetzt ist."
       >
         progress_activity
       </Icon>
