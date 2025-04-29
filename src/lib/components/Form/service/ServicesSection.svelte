@@ -20,7 +20,7 @@
   let tabs = $derived<Tab[]>(
     services.map((service) => {
       const mappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-      const titlePrefix = mappingService ? '🗺️ ' : '🗃️ ';
+      const titlePrefix = mappingService ? '🌎 ' : '📥 ';
 
       return {
         title: titlePrefix + (service.title || service.serviceIdentification),

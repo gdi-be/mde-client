@@ -22,19 +22,19 @@
     options={[
       {
         key: 'ATOM',
-        label: '🗃️ ATOM'
+        label: '📥 ATOM'
       },
       {
         key: 'WFS',
-        label: '🗃️ WFS'
+        label: '📥 WFS'
       },
       {
         key: 'WMS',
-        label: '🗺️ WMS'
+        label: '🌎 WMS'
       },
       {
         key: 'WMTS',
-        label: '🗺️ WMTS'
+        label: '🌎 WMTS'
       }
     ]}
     {onChange}
