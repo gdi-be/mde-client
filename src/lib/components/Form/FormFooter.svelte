@@ -10,11 +10,11 @@
   import CommentsPanel from './CommentsPanel.svelte';
   import Button, { Icon, Label } from '@smui/button';
   import { getContext, type Snippet } from 'svelte';
-  import ValidationPanel from './ValidationPanel.svelte';
+  import ValidationDialog from './ValidationDialog.svelte';
   import AssignmentDialog from '$lib/components/AssignmentDialog.svelte';
   import { page } from '$app/state';
   import Spinner from '$lib/components/Spinner.svelte';
-  import PublishPanel from '$lib/components/Form/PublishPanel.svelte';
+  import PublishDialog from '$lib/components/Form/PublishDialog.svelte';
 
   type FormFooterProps = {
     text?: string;
@@ -186,15 +186,9 @@
   <CommentsPanel />
 {/if}
 
-{#if validationPanelVisible}
-  <ValidationPanel {metadata} />
-{/if}
-
-{#if publishPanelVisible}
-  <PublishPanel {metadata} />
-{/if}
-
 <AssignmentDialog bind:open={assignmentPanelVisible} />
+<ValidationDialog bind:open={validationPanelVisible} />
+<PublishDialog bind:open={publishPanelVisible} />
 
 <style lang="scss">
   footer.form-footer {
