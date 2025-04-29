@@ -23,8 +23,7 @@
   const fieldConfig = getFieldConfig<string[]>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-
-  let disabled = $derived((!!annexValue?.length) && profileValue !== 'ISO');
+  let disabled = $derived(!!annexValue?.length && profileValue !== 'ISO');
 
   $inspect(annexValue?.length, profileValue, disabled);
 
