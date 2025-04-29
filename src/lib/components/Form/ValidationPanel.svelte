@@ -14,6 +14,7 @@
     'gdi-inspire': string[][][];
     'gdi-de': string[][][];
     'inspire-validator': string[][][];
+    'internal-etf-errors': string[];
   };
 
   let isLoading = $state(false);
@@ -69,7 +70,8 @@
     const errorsByTestEngine: MessageGroup = {
       'gdi-inspire': [],
       'gdi-de': [],
-      'inspire-validator': []
+      'inspire-validator': [],
+      'internal-etf-errors': []
     };
 
     let currentEngine: keyof MessageGroup | null = null;
@@ -86,6 +88,8 @@
       } else if (line.startsWith('Ergebnisse INSPIRE-Validator:')) {
         currentEngine = 'inspire-validator';
         errorsByTestEngine[currentEngine].push([]);
+      } else if (line.startsWith('Fehler beim Validieren:')) {
+        errorsByTestEngine['internal-etf-errors'].push(line);
       } else if (currentEngine) {
         if (
           line.startsWith('Prüfung auf') ||
@@ -101,6 +105,11 @@
 
     for (const errorByTestEngine in errorsByTestEngine) {
       const engine = errorByTestEngine as keyof MessageGroup;
+
+      if (engine === 'internal-etf-errors') {
+        continue;
+      }
+
       const testErrors = errorsByTestEngine[engine].filter((group) => group.length > 0);
       errorsByTestEngine[engine] = testErrors;
     }
@@ -210,7 +219,17 @@
                   {/each}
                 </ol>
               {/if}
-              {#if validationResult?.['gdi-inspire'].length === 0 && validationResult?.['gdi-de'].length === 0 && validationResult?.['inspire-validator'].length === 0}
+              {#if validationResult?.['internal-etf-errors'].length}
+                <h3>Interne ETF-Fehler:</h3>
+                <ul>
+                  {#each validationResult?.['internal-etf-errors'] as message}
+                    <li class="error">
+                      {@html message}
+                    </li>
+                  {/each}
+                </ul>
+              {/if}
+              {#if validationResult?.['gdi-inspire'].length === 0 && validationResult?.['gdi-de'].length === 0 && validationResult?.['inspire-validator'].length === 0 && validationResult?.['internal-etf-errors'].length === 0}
                 <p class="success">Keine Fehler oder Warnungen gefunden.</p>
               {/if}
             </div>
