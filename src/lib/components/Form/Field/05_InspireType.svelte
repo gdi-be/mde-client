@@ -24,7 +24,7 @@
     }
   ];
 
-  const valueFromData = $derived(getValue<string>(KEY));
+  const valueFromData = $derived(getValue<MetadataProfile>(KEY));
   let value = $state('');
   $effect(() => {
     value = valueFromData || '';

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
-  import type { IsoTheme } from '$lib/models/metadata';
+  import type { IsoTheme, MetadataProfile } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
@@ -12,16 +12,20 @@
   const highestRole = $derived(getHighestRole(token));
 
   const KEY = 'isoMetadata.topicCategory';
+  const TYPE_KEY = 'isoMetadata.metadataProfile';
   const ANNEX_THEME_KEY = 'isoMetadata.inspireTheme';
 
   const value = $derived(getValue<string[]>(KEY));
   const annexValue = $derived(getValue<string[]>(ANNEX_THEME_KEY));
+  const profileValue = $derived(getValue<MetadataProfile>(TYPE_KEY));
 
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<string[]>(KEY);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  let disabled = $derived(!!annexValue?.length);
+  let disabled = $derived(!!annexValue?.length && profileValue !== 'ISO');
+
+  $inspect(annexValue?.length, profileValue, disabled);
 
   const onChange = async (newValue?: string[]) => {
     const response = await persistValue(KEY, newValue);
