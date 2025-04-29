@@ -56,12 +56,6 @@
         highestRole === 'MdeEditor' &&
         metadata?.isoMetadata.valid === true)
   );
-  let showValidateButton = $derived(
-    highestRole === 'MdeAdministrator' ||
-      (allFieldsValid(metadata) &&
-        highestRole === 'MdeEditor' &&
-        metadata?.isoMetadata.valid === true)
-  );
   let showAssignmentButton = $derived(
     highestRole === 'MdeAdministrator' || assignedToMe || highestRole === metadata?.responsibleRole
   );
@@ -143,20 +137,18 @@
     {@render children?.()}
   </div>
   <div class="container right-container">
-    {#if showValidateButton}
-      <Button
-        class="submit-button"
-        title="Validieren"
-        variant="raised"
-        onclick={() => (validationPanelVisible = !validationPanelVisible)}
-      >
-        <Label>Validieren</Label>
-        <Icon class="material-icons">assignment_turned_in</Icon>
-        {#if isValidationLoading}
-          <Spinner />
-        {/if}
-      </Button>
-    {/if}
+    <Button
+      class="submit-button"
+      title="Validieren"
+      variant="raised"
+      onclick={() => (validationPanelVisible = !validationPanelVisible)}
+    >
+      <Label>Validieren</Label>
+      <Icon class="material-icons">assignment_turned_in</Icon>
+      {#if isValidationLoading}
+        <Spinner />
+      {/if}
+    </Button>
     {#if showAssignmentButton}
       <Button
         class="submit-button"
