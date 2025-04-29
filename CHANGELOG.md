@@ -1,3 +1,22 @@
+# [3.6.0](https://github.com/gdi-be/mde-client/compare/v3.5.0...v3.6.0) (2025-04-29)
+
+
+### Bug Fixes
+
+* show internal error messages ([cd6b51d](https://github.com/gdi-be/mde-client/commit/cd6b51de252519711cfc5eae251d9a9a671e184e))
+* show validation button always ([12fdbf6](https://github.com/gdi-be/mde-client/commit/12fdbf690a27e6f425b662b05abeefae3e2ba3cb))
+* update handling of disabled state for TopicCategory ([68b42c3](https://github.com/gdi-be/mde-client/commit/68b42c38385788e9ae1ed781cc0e25d2521c226d))
+* update parsing the error messages ([50443eb](https://github.com/gdi-be/mde-client/commit/50443eb0e889aae9a09f5c8aed524d382950c5d1))
+* use emoji similar to GNOS icons ([7ece9d0](https://github.com/gdi-be/mde-client/commit/7ece9d0ba1486585f912e6319b4d87c9ff4b37cb))
+
+
+### Features
+
+* get value from original button ([9ee3f14](https://github.com/gdi-be/mde-client/commit/9ee3f144f9d81e5d38fb0bcf4133e98ff3486609))
+* harmonize usage of the Dialog component ([724d8d2](https://github.com/gdi-be/mde-client/commit/724d8d20ea16cc609a8a377b6982ca795b55fdbc))
+* init publish panel ([9827ff8](https://github.com/gdi-be/mde-client/commit/9827ff8c789c19c084e1a7b5902b0a8c7cfb6e20))
+* show remaining session time ([e9357a8](https://github.com/gdi-be/mde-client/commit/e9357a8d3123318a8590d554ac587ceef499bb7f))
+
 # [3.5.0](https://github.com/gdi-be/mde-client/compare/v3.4.0...v3.5.0) (2025-04-24)
 
 
