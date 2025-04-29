@@ -1,23 +1,24 @@
 <script lang="ts">
-  import type { MetadataCollection } from '$lib/models/metadata';
   import { env } from '$env/dynamic/public';
   import Button, { Icon, Label } from '@smui/button';
-  import Paper from '@smui/paper';
   import Spinner from '../Spinner.svelte';
+  import { getContext } from 'svelte';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
+  import Dialog, { Content, Header, Title } from '@smui/dialog';
 
   type MetadataPublishResponse = {
     publishedCatalogRecords: string[];
   };
 
-  type PublishPanelProps = {
-    metadata?: MetadataCollection;
-  };
+  const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
 
-  let { metadata }: PublishPanelProps = $props();
+  let { open = $bindable(false) } = $props();
 
   let isLoading = $state(false);
   let responseStatus = $state<number | null>(null);
   let responseUuids = $state<MetadataPublishResponse | null>(null);
+
+  const metadata = $derived(formContext.metadata);
 
   const isAllowedToPublish = $derived(() => {
     return metadata?.approved === true && metadata?.responsibleRole === 'MdeEditor';
@@ -54,10 +55,12 @@
   };
 </script>
 
-<div class="publish-panel-container">
-  <Paper elevation={6} class="publish-panel">
-    <div class="publish-panel-content">
-      <h2>Freigabe {metadata?.isoMetadata?.title}</h2>
+<Dialog bind:open aria-labelledby="Freigabe" aria-describedby="Freigabe">
+  <Header>
+    <Title>Freigabe {metadata?.isoMetadata?.title}</Title>
+  </Header>
+  <Content>
+    <div class="publish-content">
       <div>
         <p>
           In diesem Schritt wird die Freigabe der Metadaten durchgeführt. Hierdurch wird der
@@ -77,7 +80,7 @@
         {:else}
           <p>Wollen Sie die Metadaten freigeben?</p>
         {/if}
-        <div class="publish-panel-actions">
+        <div class="publish-actions">
           <Button
             variant="raised"
             onclick={onPublishClick}
@@ -91,7 +94,7 @@
           </Button>
         </div>
       </div>
-      <div class="publish-panel-results">
+      <div class="publish-results">
         {#if isLoading}
           <p class="loading">Die Veröffentlichung läuft. Bitte warten Sie…</p>
         {:else if responseStatus === 200}
@@ -117,28 +120,16 @@
         {/if}
       </div>
     </div>
-  </Paper>
-</div>
+  </Content>
+</Dialog>
 
 <style lang="scss">
-  .publish-panel-container {
-    position: fixed;
-    z-index: 1;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  :global(div.smui-paper.publish-panel) {
-    background-color: white;
-    padding: 0.5em 1em;
-  }
-
-  .publish-panel-content {
+  .publish-content {
+    color: black;
     display: flex;
     flex-direction: column;
-    min-width: 60vw;
-    max-height: 90vh;
+    gap: 1em;
+    padding: 1em;
   }
 
   li.check {
@@ -155,7 +146,7 @@
     }
   }
 
-  .publish-panel-actions {
+  .publish-actions {
     display: flex;
     justify-content: center;
     margin-top: 2em;
@@ -166,7 +157,7 @@
     margin-left: 1em;
   }
 
-  .publish-panel-results {
+  .publish-results {
     .success {
       border: 1px solid #b6ea97;
       padding: 0.5em;
