@@ -2,8 +2,10 @@
   import Checkmark from './Checkmark.svelte';
   import HelpButton from './HelpButton.svelte';
   import CopyButton from './CopyButton.svelte';
-  import type { Snippet } from 'svelte';
+  import { type Snippet } from 'svelte';
   import { Icon } from '@smui/button';
+  import { getFormContext, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import IconButton from '@smui/icon-button';
 
   export type FieldToolsProps = {
     key: string;
@@ -23,10 +25,22 @@
     noCopyButton = false
   }: FieldToolsProps = $props();
 
+  const metadata = $derived(getFormContext()?.metadata);
+
   const checkIfHasHelp = async () => {
     const response = await fetch(`/help/${key}`);
     if (!response.ok || response.status === 204) return false;
     return true;
+  };
+
+  const getValueFromOriginal = async () => {
+    const response = await fetch(`/metadata/${metadata?.clonedFromId}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const originalMetadata = await response.json();
+    return getValue(key, originalMetadata);
   };
 </script>
 
@@ -44,6 +58,31 @@
   {/await}
   {#if !noCopyButton}
     <CopyButton {key} />
+  {/if}
+  {#if metadata?.clonedFromId}
+    {#await getValueFromOriginal()}
+      <Icon
+        class="material-icons spinner"
+        title="Es wird geprüft, ob der Wert im Originaldatensatz gesetzt ist."
+      >
+        progress_activity
+      </Icon>
+    {:then valueFromOriginal}
+      {#if valueFromOriginal}
+        <IconButton
+          type="button"
+          size="button"
+          title="Wert aus Originaldatensatz übernehmen"
+          onclick={() => persistValue(key, valueFromOriginal)}
+        >
+          <Icon class="material-icons">settings_backup_restore</Icon>
+        </IconButton>
+      {/if}
+    {:catch}
+      <Icon class="material-icons" title="Fehler beim Prüfen des Originaldatensatzes.">
+        warning
+      </Icon>
+    {/await}
   {/if}
   {@render children?.()}
   {#if !noCheckmark}

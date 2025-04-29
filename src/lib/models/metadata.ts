@@ -215,6 +215,7 @@ export type Contacts = Contact[];
 
 export type MetadataCollection = {
   id?: string;
+  clonedFromId?: string;
   metadataId?: MetadataId;
   teamMemberIds?: string[];
   assignedUserId?: string;

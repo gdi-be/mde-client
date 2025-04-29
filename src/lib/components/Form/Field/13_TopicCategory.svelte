@@ -25,8 +25,6 @@
 
   let disabled = $derived(!!annexValue?.length && profileValue !== 'ISO');
 
-  $inspect(annexValue?.length, profileValue, disabled);
-
   const onChange = async (newValue?: string[]) => {
     const response = await persistValue(KEY, newValue);
     if (response.ok) {
