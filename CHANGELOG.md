@@ -1,3 +1,10 @@
+## [3.6.1](https://github.com/gdi-be/mde-client/compare/v3.6.0...v3.6.1) (2025-04-30)
+
+
+### Bug Fixes
+
+* fix loss of focus when tabbing ([aaae88e](https://github.com/gdi-be/mde-client/commit/aaae88e87502096dd80e27bcecc4535abba6e6b6))
+
 # [3.6.0](https://github.com/gdi-be/mde-client/compare/v3.5.0...v3.6.0) (2025-04-29)
 
 
