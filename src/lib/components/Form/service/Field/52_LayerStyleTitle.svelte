@@ -7,13 +7,13 @@
   import type { Token } from '$lib/models/keycloak';
 
   export type ComponentProps = {
-    value?: Layer['styleName'];
+    value?: Layer['styleTitle'];
     onChange: (newValue: string) => void;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'styleName');
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'styleTitle');
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));

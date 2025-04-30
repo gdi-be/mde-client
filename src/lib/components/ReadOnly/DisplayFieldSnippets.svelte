@@ -9,8 +9,11 @@
     MaintenanceFrequency,
     TermsOfUse,
     Lineage,
-    ContentDescription
+    ContentDescription,
+    MetadataCollection,
+    Layer
   } from '$lib/models/metadata';
+
   import type { Option } from '$lib/models/form';
 
   export {
@@ -77,6 +80,18 @@
   const getCrs = async () => {
     const response = await fetch('/data/crs');
     return response.json();
+  };
+
+  const getLayers = (service: Service, metadata?: MetadataCollection): Layer[] => {
+    if (!service || !metadata) {
+      return [];
+    }
+    const layersMap = metadata?.clientMetadata?.layers;
+    const serviceIdentification = service?.serviceIdentification;
+    if (!layersMap || !serviceIdentification) {
+      return [];
+    }
+    return layersMap[serviceIdentification] || [];
   };
 </script>
 
@@ -250,9 +265,13 @@
   </fieldset>
 {/snippet}
 
-{#snippet isoMetadataServices(services: Service[])}
+{#snippet isoMetadataServices(services: Service[], metadata: MetadataCollection)}
+  {#if services.length === 0}
+    <span>Keine Angabe</span>
+  {/if}
   <div class="services">
     {#each services as service}
+      {@const layers = getLayers(service, metadata)}
       <fieldset class="service">
         <div>
           <strong>Titel</strong>
@@ -308,6 +327,47 @@
                     {/each}
                   </div>
                 {/if}
+              </fieldset>
+            {/each}
+          </div>
+        {/if}
+        {#if layers?.length}
+          <div class="subheader">Kartenebenen</div>
+          <div class="feature-types">
+            {#each layers || [] as layer}
+              <fieldset class="service-feature-type">
+                <div>
+                  <strong>Titel der Kartenebene</strong>
+                  <span>{layer.title}</span>
+                </div>
+                <div>
+                  <strong>Name der Kartenebene</strong>
+                  <span>{layer.name}</span>
+                </div>
+                <div>
+                  <strong>Titel des Styles</strong>
+                  <span>{layer.styleTitle}</span>
+                </div>
+                <div>
+                  <strong>Name des Styles</strong>
+                  <span>{layer.styleName}</span>
+                </div>
+                <div>
+                  <strong>Legende</strong>
+                  <span>{layer.legendImage}</span>
+                </div>
+                <div>
+                  <strong>Kurzbeschreibung</strong>
+                  <span>{layer.shortDescription}</span>
+                </div>
+                <div>
+                  <strong>Ablageort der Daten</strong>
+                  <span>{layer.datasource}</span>
+                </div>
+                <div>
+                  <strong>sekundäre Datenhaltung</strong>
+                  <span>{layer.secondaryDatasource}</span>
+                </div>
               </fieldset>
             {/each}
           </div>
