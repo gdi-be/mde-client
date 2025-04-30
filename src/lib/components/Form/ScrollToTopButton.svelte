@@ -15,7 +15,7 @@
     });
   };
 
-  let visible = $state(false);
+  let visible = $state(true);
 
   let mutationObserver: MutationObserver;
   let resizeObserver: ResizeObserver;
