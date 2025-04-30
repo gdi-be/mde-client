@@ -78,7 +78,7 @@
       phone: contact.phone,
       email: contact.email
     }));
-    const response = await persistValue(KEY, value);
+    const response = await persistValue(KEY, value, false);
     if (response.ok) {
       showCheckmark = true;
     }
