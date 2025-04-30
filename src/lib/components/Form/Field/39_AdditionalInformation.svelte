@@ -52,7 +52,7 @@
       url: contentDescription.url,
       code: 'information'
     }));
-    const response = await persistValue(KEY, value);
+    const response = await persistValue(KEY, value, false);
     if (response.ok) {
       showCheckmark = true;
     }

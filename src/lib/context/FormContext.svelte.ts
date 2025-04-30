@@ -7,7 +7,7 @@ import {
   type DynamicFieldConfig,
   type FieldConfig
 } from '$lib/components/Form/FieldsConfig';
-import { invalidateAll } from '$app/navigation';
+import { invalidate, invalidateAll } from '$app/navigation';
 import type { MetadataCollection } from '$lib/models/metadata';
 
 export type FormState = {
@@ -143,7 +143,7 @@ export function allFieldsValid(metadata?: MetadataCollection): boolean {
   });
 }
 
-export async function persistValue(key: string, value: unknown) {
+export async function persistValue(key: string, value: unknown, invokeInvalidateAll = true) {
   const response = await fetch(page.url, {
     method: 'PATCH',
     headers: {
@@ -155,7 +155,11 @@ export async function persistValue(key: string, value: unknown) {
     })
   });
   if (response.ok) {
-    invalidateAll();
+    if (invokeInvalidateAll) {
+      invalidateAll();
+    } else {
+      invalidate(page.url.origin);
+    }
   }
   return response;
 }
