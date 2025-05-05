@@ -29,5 +29,15 @@
     overflow: auto;
     flex: 1;
     padding: 0 3rem;
+
+    :global(img.thumbnail) {
+      max-width: 100%;
+      height: auto;
+      padding: 0.5rem;
+
+      &:hover {
+        outline: 1px solid var(--primary-color);
+      }
+    }
   }
 </style>
