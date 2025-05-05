@@ -3,12 +3,20 @@
   import StatusFilterField from './StatusFilterField.svelte';
   import TextFilterField from './TextFilterField.svelte';
   import { goto } from '$app/navigation';
+  import { getHighestRole } from '$lib/util';
+  import { getContext } from 'svelte';
+  import type { Token } from '$lib/models/keycloak';
+
+  const token = getContext<Token>('user_token');
+  const highestRole = $derived(getHighestRole(token));
 </script>
 
 <div class="toolbar-inner">
-  <Button variant="raised" onclick={() => goto('/metadata/create')}>
-    <Label>Neuerfassung</Label>
-  </Button>
+  {#if highestRole !== 'MdeQualityAssurance'}
+    <Button variant="raised" onclick={() => goto('/metadata/create')}>
+      <Label>Neuerfassung</Label>
+    </Button>
+  {/if}
   <div class="search-container">
     <TextFilterField />
   </div>
