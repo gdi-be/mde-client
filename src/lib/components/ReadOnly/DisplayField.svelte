@@ -21,7 +21,6 @@
   });
 
   const metadata = $derived(getFormContext()?.metadata);
-
 </script>
 
 <div class="display-field">
