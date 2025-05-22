@@ -1,3 +1,17 @@
+# [3.7.0](https://github.com/gdi-be/mde-client/compare/v3.6.1...v3.7.0) (2025-05-22)
+
+
+### Bug Fixes
+
+* hide create button for QualityAssurance ([beaaf54](https://github.com/gdi-be/mde-client/commit/beaaf543a5cde37386bd1fbccb14e7fb35b3f0fc))
+* show ScrollToTopButton per default ([7c4247a](https://github.com/gdi-be/mde-client/commit/7c4247a2e791bf9390c137772736ad156aa0a71a))
+
+
+### Features
+
+* add CSS for thumbnail in help ([a999bfa](https://github.com/gdi-be/mde-client/commit/a999bfa9da8efb9504c7793505cb92386be4484c))
+* add layers to read only view ([d43e26c](https://github.com/gdi-be/mde-client/commit/d43e26ce3733758f3341d285f25611930ff706f9))
+
 ## [3.6.1](https://github.com/gdi-be/mde-client/compare/v3.6.0...v3.6.1) (2025-04-30)
 
 
