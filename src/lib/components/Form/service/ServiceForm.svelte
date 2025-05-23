@@ -100,7 +100,7 @@
     onChange={(shortDescription) => set('shortDescription', shortDescription)}
   />
   {#if isMappingService}
-    <ServiceId_45 value={service.serviceIdentification}/>
+    <ServiceId_45 value={service.serviceIdentification} />
     <ServicePreview_46 value={service.preview} onChange={(preview) => set('preview', preview)} />
     <ServiceLegendImage_53
       value={service.legendImage}

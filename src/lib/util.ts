@@ -22,7 +22,7 @@ export function setNestedValue(obj: any, path: string | string[], value: any) {
   }
 
   try {
-    let current = JSON.parse(JSON.stringify((obj)));
+    let current = JSON.parse(JSON.stringify(obj));
 
     path.forEach((key, index) => {
       if (index === path.length - 1) {
