@@ -35,7 +35,7 @@
       bind:selected
     >
       {#snippet chip(chip)}
-        <StatusChip {chip} colored={selected.includes(chip)} />
+        <StatusChip {chip} hasAction colored={selected.includes(chip)} />
       {/snippet}
     </Set>
     {#snippet label()}

@@ -63,6 +63,9 @@
   }
 
   async function updateService(id: string, newService: Service) {
+    if (!id || !newService) {
+      return Promise.reject('Invalid parameters');
+    }
     services = services.map((service) => {
       if (service.serviceIdentification === id) {
         return newService;
@@ -121,7 +124,7 @@
       <ServiceForm
         service={activeService}
         onChange={(newService) => {
-          return updateService(activeService.serviceIdentification!, newService);
+          return updateService(activeService?.serviceIdentification, newService);
         }}
       />
     </span>

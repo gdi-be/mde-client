@@ -5,14 +5,13 @@
   import { getContext } from 'svelte';
   import { getHighestRole } from '$lib/util';
   import type { Token } from '$lib/models/keycloak';
-  import FieldTools from '../../FieldTools.svelte';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
     value?: Layer['title'];
-    onChange: (newValue: string) => void;
   };
 
-  let { value, onChange }: ComponentProps = $props();
+  let { value }: ComponentProps = $props();
 
   const HELP_KEY = 'isoMetadata.services.serviceIdentification';
   const fieldConfig = getSubFieldConfig('isoMetadata.services', 'serviceIdentification');
@@ -28,7 +27,7 @@
       label={fieldConfig?.label || 'Identifikator des Kartendienstess'}
       {value}
       {fieldConfig}
-      onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+      readonly
     />
     <FieldTools key={HELP_KEY} noCheckmark />
   </div>

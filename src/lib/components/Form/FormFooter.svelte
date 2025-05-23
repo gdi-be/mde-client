@@ -54,7 +54,7 @@
       (assignedToMe &&
         allFieldsValid(metadata) &&
         highestRole === 'MdeEditor' &&
-        metadata?.isoMetadata.valid === true)
+        metadata?.approved === true)
   );
   let showAssignmentButton = $derived(
     highestRole === 'MdeAdministrator' || assignedToMe || highestRole === metadata?.responsibleRole

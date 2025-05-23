@@ -129,7 +129,10 @@
         >
           <Label>{label}</Label>
         </button>
-        <LinearProgress progress={getProgress(section, metadata)} />
+        <LinearProgress
+          progress={getProgress(section, metadata)}
+          aria-label={label + ' Fortschritt'}
+        />
       </div>
       {#if i + 1 < SECTIONS.length}
         <i class="material-icons">arrow_right_alt</i>

@@ -21,20 +21,25 @@ export function setNestedValue(obj: any, path: string | string[], value: any) {
     path = path.replace(/\[(\d+)\]/g, '.$1').split('.');
   }
 
-  let current = obj;
+  try {
+    let current = JSON.parse(JSON.stringify(obj));
 
-  path.forEach((key, index) => {
-    if (index === path.length - 1) {
-      current[key] = value;
-    } else {
-      if (!current[key] || typeof current[key] !== 'object') {
-        current[key] = isNaN(Number(path[index + 1])) ? {} : [];
+    path.forEach((key, index) => {
+      if (index === path.length - 1) {
+        current[key] = value;
+      } else {
+        if (!current[key] || typeof current[key] !== 'object') {
+          current[key] = isNaN(Number(path[index + 1])) ? {} : [];
+        }
+        current = current[key];
       }
-      current = current[key];
-    }
-  });
+    });
 
-  return obj;
+    return current;
+  } catch {
+    log('error', 'setNestedValue: Error setting value');
+    return obj;
+  }
 }
 
 /**
