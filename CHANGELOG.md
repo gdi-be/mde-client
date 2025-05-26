@@ -1,3 +1,15 @@
+# [3.8.0](https://github.com/gdi-be/mde-client/compare/v3.7.0...v3.8.0) (2025-05-26)
+
+
+### Bug Fixes
+
+* adapt check of publish button ([8c6e03d](https://github.com/gdi-be/mde-client/commit/8c6e03d00bc9ae66f84d5e30267497661a1e79e6))
+
+
+### Features
+
+* make ServiceId field read only ([465e20d](https://github.com/gdi-be/mde-client/commit/465e20db02ad7b7b9225f481c44c311173602556))
+
 # [3.7.0](https://github.com/gdi-be/mde-client/compare/v3.6.1...v3.7.0) (2025-05-22)
 
 
