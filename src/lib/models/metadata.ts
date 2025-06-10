@@ -121,7 +121,6 @@ export type Service = {
   url?: string;
   serviceDescriptions?: ServiceDescription[];
   legendImage?: LegendImage;
-  dataBases?: Source[];
   publications?: Source[];
   created?: string;
   updated?: string;
