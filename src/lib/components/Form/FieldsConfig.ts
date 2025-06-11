@@ -592,7 +592,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL SERVICE TITLE',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => isDefined(service.title));
+      const valid = services?.every((service) => isDefined(service.title));
       return { valid };
     },
     section: 'services',
@@ -603,7 +603,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL SERVICE SHORT DESCRIPTION',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => isDefined(service.shortDescription));
+      const valid = services?.every((service) => isDefined(service.shortDescription));
       return { valid };
     },
     section: 'services',
@@ -614,7 +614,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL SERVICE PREVIEW',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
         return !isMappingService || isDefined(service.preview);
       });
@@ -629,7 +629,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
         return !isMappingService || layersMap[service.serviceIdentification]?.length > 0;
       });
@@ -644,7 +644,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
         return (
           !isMappingService ||
@@ -662,7 +662,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
         return (
           !isMappingService ||
@@ -682,7 +682,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
         return (
           !isMappingService ||
@@ -700,7 +700,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
         return (
           !isMappingService ||
@@ -719,7 +719,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL FEATURETYPE LENGTH',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isWFS = service.serviceType === 'WFS';
         return !isWFS || service.featureTypes?.length;
       });
@@ -733,7 +733,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL FEATURETYPE TITEL',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isWFS = service.serviceType === 'WFS';
         return !isWFS || service.featureTypes?.every((ft) => isDefined(ft.title));
       });
@@ -747,7 +747,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL FEATURETYPE NAME',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isWFS = service.serviceType === 'WFS';
         return !isWFS || service.featureTypes?.every((ft) => isDefined(ft.name));
       });
@@ -761,7 +761,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE LENGTH',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isWFS = service.serviceType === 'WFS';
         return !isWFS || service.featureTypes?.every((ft) => ft.columns?.length);
       });
@@ -775,7 +775,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE NAME',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isWFS = service.serviceType === 'WFS';
         return (
           !isWFS ||
@@ -792,7 +792,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE ALIAS',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isWFS = service.serviceType === 'WFS';
         return (
           !isWFS ||
@@ -809,7 +809,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE DATA TYPE',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isWFS = service.serviceType === 'WFS';
         return (
           !isWFS ||
@@ -826,7 +826,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE FILTER TYPE',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isWFS = service.serviceType === 'WFS';
         return (
           !isWFS ||
@@ -843,7 +843,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL DOWNLOAD LENGTH',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isAtom = service.serviceType === 'ATOM';
         return !isAtom || service.downloads?.length;
       });
@@ -857,7 +857,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL DOWNLOAD TITEL',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isAtom = service.serviceType === 'ATOM';
         return !isAtom || service.downloads?.every((download) => isDefined(download.title));
       });
@@ -871,7 +871,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL DOWNLOAD TYPE',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isAtom = service.serviceType === 'ATOM';
         return !isAtom || service.downloads?.every((download) => isDefined(download.type));
       });
@@ -885,7 +885,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL DOWNLOAD URL',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isAtom = service.serviceType === 'ATOM';
         return !isAtom || service.downloads?.every((download) => isDefined(download.href));
       });
@@ -899,7 +899,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     label: 'FAKE_LABEL DOWNLOAD FILE SIZE',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {
-      const valid = services.every((service) => {
+      const valid = services?.every((service) => {
         const isAtom = service.serviceType === 'ATOM';
         return !isAtom || service.downloads?.every((download) => isDefined(download.fileSize));
       });
