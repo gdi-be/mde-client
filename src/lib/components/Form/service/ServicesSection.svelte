@@ -5,6 +5,7 @@
   import ServiceForm from './ServiceForm.svelte';
   import Checkmark from '../Checkmark.svelte';
   import FieldHint from '../FieldHint.svelte';
+  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
 
   type Tab = {
     title: string;
@@ -55,12 +56,23 @@
     activeTab = serviceIdentification;
   }
 
-  function removeService(id: string) {
-    services = services.filter((service) => service.serviceIdentification !== id);
-    if (activeTab === id) {
-      activeTab = services[0].serviceIdentification || '';
-    }
-    persistValue(KEY, services);
+  function removeService(id: string, evt: MouseEvent) {
+    const targetEl = evt.currentTarget as HTMLElement;
+    evt.preventDefault();
+    popconfirm(
+      targetEl,
+      async () => {
+        services = services.filter((service) => service.serviceIdentification !== id);
+        if (activeTab === id) {
+          activeTab = services[0].serviceIdentification || '';
+        }
+        persistValue(KEY, services);
+      },
+      {
+        text: 'Sind sie sicher, dass sie diesen Dienst löschen möchten? Alle dazugehörigen Daten gehen verloren.',
+        confirmButtonText: 'Löschen'
+      }
+    );
   }
 
   async function updateService(id: string, newService: Service) {
@@ -101,7 +113,7 @@
       {#if services.length > 1 && !visibleCheckmarks[tab.id]}
         <IconButton
           class="material-icons"
-          onclick={() => removeService(tab.id)}
+          onclick={(evt) => removeService(tab.id, evt)}
           size="button"
           title="Dienst entfernen"
         >

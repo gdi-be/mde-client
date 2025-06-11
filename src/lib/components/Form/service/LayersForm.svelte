@@ -12,6 +12,7 @@
   import LayerSecondaryDatasource_56 from './Field/56_LayerSecondaryDatasource.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
 
   type Tab = {
     name: string;
@@ -53,13 +54,24 @@
     activeTabIndex = layers.length - 1;
   }
 
-  function removeColumn(index: number) {
-    layers = layers.filter((_, i) => i !== index);
-    if (activeTabIndex === index) {
-      activeTabIndex = layers.length - 1;
-    }
-    onChange(layers);
-    activeTabIndex = layers.length > 0 ? activeTabIndex : undefined;
+  function removeLayer(index: number, evt: MouseEvent) {
+    const targetEl = evt.currentTarget as HTMLElement;
+    evt.preventDefault();
+    popconfirm(
+      targetEl,
+      async () => {
+        layers = layers.filter((_, i) => i !== index);
+        if (activeTabIndex === index) {
+          activeTabIndex = layers.length - 1;
+        }
+        onChange(layers);
+        activeTabIndex = layers.length > 0 ? activeTabIndex : undefined;
+      },
+      {
+        text: 'Sind sie sicher, dass sie diesen Layer löschen möchten?',
+        confirmButtonText: 'Löschen'
+      }
+    );
   }
 
   function set(key: string, value: Layer[keyof Layer]) {
@@ -90,7 +102,7 @@
         </button>
         <IconButton
           class="material-icons"
-          onclick={() => removeColumn(i)}
+          onclick={(evt) => removeLayer(i, evt)}
           size="button"
           title="Layer entfernen"
         >
