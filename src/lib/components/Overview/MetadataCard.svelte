@@ -83,7 +83,7 @@
   };
 
   const onComments = () => {
-    goto(`/metadata/${metadata.metadataId}/?action=comments`);
+    goto(`/metadata/${metadata.metadataId}/readonly?action=comments`);
   };
 
   const onPrint = () => {
