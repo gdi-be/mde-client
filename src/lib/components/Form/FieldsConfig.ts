@@ -646,8 +646,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
       const valid = services.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return !isMappingService || layersMap[service.serviceIdentification]?.every((layer) =>
-          isDefined(layer.legendImage)
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.legendImage))
         );
       });
       return { valid };
@@ -663,8 +664,11 @@ export const FieldConfigs: FieldConfig<any>[] = [
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
       const valid = services.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return !isMappingService || layersMap[service.serviceIdentification]?.every((layer) =>
-          isDefined(layer.shortDescription)
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) =>
+            isDefined(layer.shortDescription)
+          )
         );
       });
       return { valid };
@@ -680,8 +684,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
       const valid = services.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return !isMappingService || layersMap[service.serviceIdentification]?.every((layer) =>
-          isDefined(layer.datasource)
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.datasource))
         );
       });
       return { valid };
@@ -697,8 +702,11 @@ export const FieldConfigs: FieldConfig<any>[] = [
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
       const valid = services.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return !isMappingService || layersMap[service.serviceIdentification]?.every((layer) =>
-          isDefined(layer.secondaryDatasource)
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) =>
+            isDefined(layer.secondaryDatasource)
+          )
         );
       });
       return { valid };
@@ -769,8 +777,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
     validator: (services: Service[]) => {
       const valid = services.every((service) => {
         const isWFS = service.serviceType === 'WFS';
-        return !isWFS || service.featureTypes?.every((ft) =>
-          ft.columns?.every((col) => isDefined(col.name))
+        return (
+          !isWFS ||
+          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.name)))
         );
       });
       return { valid };
@@ -785,8 +794,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
     validator: (services: Service[]) => {
       const valid = services.every((service) => {
         const isWFS = service.serviceType === 'WFS';
-        return !isWFS || service.featureTypes?.every((ft) =>
-          ft.columns?.every((col) => isDefined(col.alias))
+        return (
+          !isWFS ||
+          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.alias)))
         );
       });
       return { valid };
@@ -801,8 +811,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
     validator: (services: Service[]) => {
       const valid = services.every((service) => {
         const isWFS = service.serviceType === 'WFS';
-        return !isWFS || service.featureTypes?.every((ft) =>
-          ft.columns?.every((col) => isDefined(col.type))
+        return (
+          !isWFS ||
+          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.type)))
         );
       });
       return { valid };
@@ -817,8 +828,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
     validator: (services: Service[]) => {
       const valid = services.every((service) => {
         const isWFS = service.serviceType === 'WFS';
-        return !isWFS || service.featureTypes?.every((ft) =>
-          ft.columns?.every((col) => isDefined(col.filterType))
+        return (
+          !isWFS ||
+          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.filterType)))
         );
       });
       return { valid };
@@ -895,5 +907,5 @@ export const FieldConfigs: FieldConfig<any>[] = [
     },
     section: 'services',
     required: true
-  },
+  }
 ];

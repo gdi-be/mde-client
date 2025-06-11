@@ -60,7 +60,7 @@
     if (activeTab === id) {
       activeTab = services[0].serviceIdentification || '';
     }
-    persistValue(KEY, services)
+    persistValue(KEY, services);
   }
 
   async function updateService(id: string, newService: Service) {
