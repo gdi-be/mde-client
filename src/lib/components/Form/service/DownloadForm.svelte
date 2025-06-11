@@ -6,6 +6,7 @@
   import DownloadFiletype_69 from './Field/69_DownloadFiletype.svelte';
   import DownloadHref_70 from './Field/70_DownloadHref.svelte';
   import DownloadFilesize_71 from './Field/71_DownloadFilesize.svelte';
+  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
 
   type Tab = {
     title: string;
@@ -46,12 +47,23 @@
     activeTabIndex = downloads.length - 1;
   }
 
-  function removeDownload(index: number) {
-    downloads = downloads.filter((_, i) => i !== index);
-    if (activeTabIndex === index) {
-      activeTabIndex = downloads.length - 1;
-    }
-    onChange(downloads);
+  function removeDownload(index: number, evt: MouseEvent) {
+    const targetEl = evt.currentTarget as HTMLElement;
+    evt.preventDefault();
+    popconfirm(
+      targetEl,
+      async () => {
+        downloads = downloads.filter((_, i) => i !== index);
+        if (activeTabIndex === index) {
+          activeTabIndex = downloads.length - 1;
+        }
+        onChange(downloads);
+      },
+      {
+        text: 'Sind sie sicher, dass sie diesen Download löschen möchten?',
+        confirmButtonText: 'Löschen'
+      }
+    );
   }
 
   function set(key: string, value: DownloadInfo[keyof DownloadInfo]) {
@@ -81,7 +93,7 @@
         </button>
         <IconButton
           class="material-icons"
-          onclick={() => removeDownload(i)}
+          onclick={(evt) => removeDownload(i, evt)}
           size="button"
           title="Download entfernen"
         >

@@ -8,6 +8,7 @@
   import AttributeFilterType_67 from './Field/67_AttributeFilterType.svelte';
   import { getSubFieldConfig } from '../../../context/FormContext.svelte';
   import FieldHint from '../FieldHint.svelte';
+  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
 
   type Tab = {
     name: string;
@@ -49,13 +50,24 @@
     activeTabIndex = columns.length - 1;
   }
 
-  function removeColumn(index: number) {
-    columns = columns.filter((_, i) => i !== index);
-    if (activeTabIndex === index) {
-      activeTabIndex = columns.length - 1;
-    }
-    onChange(columns);
-    activeTabIndex = columns.length > 0 ? activeTabIndex : undefined;
+  function removeColumn(index: number, evt: MouseEvent) {
+    const targetEl = evt.currentTarget as HTMLElement;
+    evt.preventDefault();
+    popconfirm(
+      targetEl,
+      async () => {
+        columns = columns.filter((_, i) => i !== index);
+        if (activeTabIndex === index) {
+          activeTabIndex = columns.length - 1;
+        }
+        onChange(columns);
+        activeTabIndex = columns.length > 0 ? activeTabIndex : undefined;
+      },
+      {
+        text: 'Sind sie sicher, dass sie dieses Attribut löschen möchten?',
+        confirmButtonText: 'Löschen'
+      }
+    );
   }
 
   function set(key: string, value: ColumnInfo[keyof ColumnInfo]) {
@@ -88,7 +100,7 @@
         {/if}
         <IconButton
           class="material-icons"
-          onclick={() => removeColumn(i)}
+          onclick={(evt) => removeColumn(i, evt)}
           size="button"
           title="Attribut entfernen"
         >

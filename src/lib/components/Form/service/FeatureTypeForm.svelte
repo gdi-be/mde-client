@@ -7,6 +7,7 @@
   import FeatureTypeName_62 from './Field/62_FeatureTypeName.svelte';
   import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
+  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
 
   type Tab = {
     name: string;
@@ -49,13 +50,24 @@
     activeTabIndex = featureTypes.length - 1;
   }
 
-  function removeColumn(index: number) {
-    featureTypes = featureTypes.filter((_, i) => i !== index);
-    if (activeTabIndex === index) {
-      activeTabIndex = featureTypes.length - 1;
-    }
-    onChange(featureTypes);
-    activeTabIndex = featureTypes.length > 0 ? activeTabIndex : undefined;
+  function removeFeatureType(index: number, evt: MouseEvent) {
+    const targetEl = evt.currentTarget as HTMLElement;
+    evt.preventDefault();
+    popconfirm(
+      targetEl,
+      async () => {
+        featureTypes = featureTypes.filter((_, i) => i !== index);
+        if (activeTabIndex === index) {
+          activeTabIndex = featureTypes.length - 1;
+        }
+        onChange(featureTypes);
+        activeTabIndex = featureTypes.length > 0 ? activeTabIndex : undefined;
+      },
+      {
+        text: 'Sind sie sicher, dass sie diesen FeatureType löschen möchten?',
+        confirmButtonText: 'Löschen'
+      }
+    );
   }
 
   function set(key: string, value: FeatureType[keyof FeatureType]) {
@@ -74,7 +86,7 @@
 
 <fieldset class="featuretypes-form">
   <legend>
-    Featuretypes
+    FeatureTypes
     <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
   <FieldHint fieldConfig={getSubFieldConfig('isoMetadata.services', 'featuretypes')} />
@@ -86,7 +98,7 @@
         </button>
         <IconButton
           class="material-icons"
-          onclick={() => removeColumn(i)}
+          onclick={(evt) => removeFeatureType(i, evt)}
           size="button"
           title="Featuretype entfernen"
         >
