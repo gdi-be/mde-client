@@ -9,12 +9,13 @@
 
   export type ComponentProps = {
     value?: Layer['title'];
+    onChange: (newValue: string) => void;
   };
 
-  let { value }: ComponentProps = $props();
+  let { value, onChange }: ComponentProps = $props();
 
-  const HELP_KEY = 'isoMetadata.services.serviceIdentification';
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'serviceIdentification');
+  const HELP_KEY = 'isoMetadata.services.workspace';
+  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'workspace');
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -24,12 +25,12 @@
 {#if fieldVisible}
   <div class="service-id-field">
     <TextInput
-      label={fieldConfig?.label || 'Identifikator des Kartendienstess'}
+      label={fieldConfig?.label || 'Identifikator des Kartendienstes'}
       {value}
       {fieldConfig}
-      readonly
+      onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
     />
-    <FieldTools key={HELP_KEY} noCheckmark />
+    <FieldTools key={HELP_KEY} />
   </div>
 {/if}
 
