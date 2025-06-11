@@ -282,7 +282,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
   {
     profile_id: 6,
     label: 'High Value Datensatz',
-    key: 'clientMetadata.highValueDataset',
+    key: 'isoMetadata.highValueDataset',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
