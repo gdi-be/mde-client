@@ -36,6 +36,7 @@
     miny: 0,
     maxy: 0
   });
+
   $effect(() => {
     if (valueFromData) {
       value4326 = valueFromData;
@@ -48,7 +49,7 @@
   let crs = $derived(crsOptions.find((option) => option.key === crsKey));
   let showCheckmark = $state(false);
   let transformedValue = $derived(
-    crs && valueFromData ? transformExtent(value4326, 'EPSG:4326', crs.label as CRS) : value4326
+    crs && value4326 ? transformExtent(value4326, 'EPSG:4326', crs.label as CRS) : value4326
   );
   let matchingOption = $derived(
     extentOptions.find((option) => {
