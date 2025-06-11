@@ -33,7 +33,7 @@
     label={fieldConfig?.label}
     {value}
     {fieldConfig}
-    maxlength={100}
+    maxlength={250}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />
   <FieldTools key={HELP_KEY} noCheckmark>
