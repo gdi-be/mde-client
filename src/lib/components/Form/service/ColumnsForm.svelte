@@ -30,7 +30,7 @@
   );
 
   $effect(() => {
-    columns = value || []
+    columns = value || [];
   });
 
   let activeTabIndex: number | undefined = $state(value?.length ? 0 : undefined);
