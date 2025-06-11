@@ -28,7 +28,7 @@
   let downloadCheckmarkVisible = $state<boolean>(false);
 
   const layers = $derived.by((): Layer[] => {
-    const layersMap = metadata?.clientMetadata?.layers;
+    const layersMap: Record<string, Layer[]> = metadata?.clientMetadata?.layers;
     const serviceIdentification = service?.serviceIdentification;
     if (!layersMap || !serviceIdentification) {
       return [];
@@ -86,6 +86,7 @@
     }
 
     layerCheckmarkVisible = response.ok;
+    // TODO: update progress bar
   }
 </script>
 

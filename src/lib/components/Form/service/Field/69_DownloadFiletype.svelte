@@ -20,7 +20,7 @@
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 </script>
 
-{#if !fieldVisible}
+{#if fieldVisible}
   <div class="download-type-field">
     <TextInput
       label={fieldConfig?.label || 'Download-Titel'}

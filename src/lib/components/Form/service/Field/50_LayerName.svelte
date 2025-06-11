@@ -21,7 +21,7 @@
 </script>
 
 {#if fieldVisible}
-  <div class="layer-title-field">
+  <div class="layer-name-field">
     <TextInput
       label={fieldConfig?.label || 'Name der Kartenebene'}
       {value}
@@ -32,7 +32,7 @@
 {/if}
 
 <style lang="scss">
-  .layer-title-field {
+  .layer-name-field {
     position: relative;
     display: flex;
     gap: 0.25em;
