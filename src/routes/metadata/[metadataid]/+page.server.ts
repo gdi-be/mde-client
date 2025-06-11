@@ -9,15 +9,19 @@ export async function load({ params, cookies, url }) {
   const token = await getAccessToken(cookies);
   if (!token) return redirect(302, '/login');
 
-  const parsedToken = parseToken(token);
-  const readOnly = getHighestRole(parsedToken) === 'MdeQualityAssurance';
-
-  if (readOnly) {
-    return redirect(302, url + '/readonly');
-  }
-
   const metadata = await getMetadataCollectionByMetadataId(params.metadataid, token);
   if (!metadata) return error(404, `Metadata with ID ${params.metadataid} could not be found`);
+
+  const parsedToken = parseToken(token);
+  const highestRole = getHighestRole(parsedToken);
+  const allowedToEdit =
+    highestRole === 'MdeAdministrator' ||
+    (['MdeEditor', 'MdeDataOwner'].includes(highestRole) &&
+      metadata.assignedUserId === parsedToken.sub);
+
+  if (!allowedToEdit) {
+    return redirect(302, url + '/readonly');
+  }
 
   try {
     const file = Bun.file('/data/codelists/field_labels.yaml');
