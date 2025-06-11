@@ -18,9 +18,9 @@
     onChange?: (columns: ColumnInfo[]) => void;
   };
 
-  let { value: initialColumns, onChange = () => {} }: ColumnsFormProps = $props();
+  let { value, onChange = () => {} }: ColumnsFormProps = $props();
 
-  let columns = $state(initialColumns || []);
+  let columns = $state<ColumnInfo[]>([]);
   let tabs = $derived<Tab[]>(
     columns.map((column) => {
       return {
@@ -29,7 +29,11 @@
     })
   );
 
-  let activeTabIndex: number | undefined = $state(initialColumns?.length ? 0 : undefined);
+  $effect(() => {
+    columns = value || [];
+  });
+
+  let activeTabIndex: number | undefined = $state(value?.length ? 0 : undefined);
   let activeColumn = $derived(activeTabIndex ? columns[activeTabIndex] : columns[0]);
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
@@ -102,7 +106,7 @@
     </IconButton>
   </nav>
   <div class="content">
-    {#if activeTabIndex !== undefined}
+    {#if activeColumn}
       <AttributeName_64 value={activeColumn?.name} onChange={(name) => set('name', name)} />
       <AttributeAlias_65 value={activeColumn?.alias} onChange={(alias) => set('alias', alias)} />
       <AttributeDatatype_66 value={activeColumn?.type} onChange={(type) => set('type', type)} />
