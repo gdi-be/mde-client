@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from '$lib/models/form';
-import type { Contacts, Extent } from '$lib/models/metadata';
+import type { Contacts, Extent, Layer, Service } from '$lib/models/metadata';
 import { getValue, type Section } from '$lib/context/FormContext.svelte';
 
 export type ValidationResult = {
@@ -299,8 +299,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 13,
     label: 'Themenkategorie',
     key: 'isoMetadata.topicCategory',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
+    validator: (val: any[]) => {
+      if (!val?.length) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie eine Themenkategorie an.'
@@ -575,5 +575,337 @@ export const FieldConfigs: FieldConfig<any>[] = [
     },
     section: 'additional',
     required: false
+  },
+  {
+    profile_id: 40,
+    label: 'FAKE_LABEL SERVICE LENGTH',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = Array.isArray(services) && services.length > 0;
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 43,
+    label: 'FAKE_LABEL SERVICE TITLE',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => isDefined(service.title));
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 44,
+    label: 'FAKE_LABEL SERVICE SHORT DESCRIPTION',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => isDefined(service.shortDescription));
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 45,
+    label: 'FAKE_LABEL SERVICE PREVIEW',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return !isMappingService || isDefined(service.preview);
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 48,
+    label: 'FAKE_LABEL LAYER LENGTH',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
+      const valid = services.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return !isMappingService || layersMap[service.serviceIdentification]?.length > 0;
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 53,
+    label: 'FAKE_LABEL LAYER LEGEND',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
+      const valid = services.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.legendImage))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 54,
+    label: 'FAKE_LABEL LAYER SHORT DESCRIPTION',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
+      const valid = services.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) =>
+            isDefined(layer.shortDescription)
+          )
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 55,
+    label: 'FAKE_LABEL LAYER DATASOURCE',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
+      const valid = services.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.datasource))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 56,
+    label: 'FAKE_LABEL LAYER SECONDARY DATASOURCE',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
+      const valid = services.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) =>
+            isDefined(layer.secondaryDatasource)
+          )
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 61,
+    label: 'FAKE_LABEL FEATURETYPE LENGTH',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isWFS = service.serviceType === 'WFS';
+        return !isWFS || service.featureTypes?.length;
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 62,
+    label: 'FAKE_LABEL FEATURETYPE TITEL',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isWFS = service.serviceType === 'WFS';
+        return !isWFS || service.featureTypes?.every((ft) => isDefined(ft.title));
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 63,
+    label: 'FAKE_LABEL FEATURETYPE NAME',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isWFS = service.serviceType === 'WFS';
+        return !isWFS || service.featureTypes?.every((ft) => isDefined(ft.name));
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 64,
+    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE LENGTH',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isWFS = service.serviceType === 'WFS';
+        return !isWFS || service.featureTypes?.every((ft) => ft.columns?.length);
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 65,
+    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE NAME',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isWFS = service.serviceType === 'WFS';
+        return (
+          !isWFS ||
+          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.name)))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 66,
+    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE ALIAS',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isWFS = service.serviceType === 'WFS';
+        return (
+          !isWFS ||
+          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.alias)))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 67,
+    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE DATA TYPE',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isWFS = service.serviceType === 'WFS';
+        return (
+          !isWFS ||
+          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.type)))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 67,
+    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE FILTER TYPE',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isWFS = service.serviceType === 'WFS';
+        return (
+          !isWFS ||
+          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.filterType)))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 61.1,
+    label: 'FAKE_LABEL DOWNLOAD LENGTH',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isAtom = service.serviceType === 'ATOM';
+        return !isAtom || service.downloads?.length;
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 69,
+    label: 'FAKE_LABEL DOWNLOAD TITEL',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isAtom = service.serviceType === 'ATOM';
+        return !isAtom || service.downloads?.every((download) => isDefined(download.title));
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 70,
+    label: 'FAKE_LABEL DOWNLOAD TYPE',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isAtom = service.serviceType === 'ATOM';
+        return !isAtom || service.downloads?.every((download) => isDefined(download.type));
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 71,
+    label: 'FAKE_LABEL DOWNLOAD URL',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isAtom = service.serviceType === 'ATOM';
+        return !isAtom || service.downloads?.every((download) => isDefined(download.href));
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 72,
+    label: 'FAKE_LABEL DOWNLOAD FILE SIZE',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services.every((service) => {
+        const isAtom = service.serviceType === 'ATOM';
+        return !isAtom || service.downloads?.every((download) => isDefined(download.fileSize));
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
   }
 ];

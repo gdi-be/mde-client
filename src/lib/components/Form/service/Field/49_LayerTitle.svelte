@@ -18,6 +18,7 @@
     label={fieldConfig?.label || 'Titel der Kartenebene'}
     {value}
     {fieldConfig}
+    maxlength={250}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />
 </div>

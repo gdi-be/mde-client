@@ -42,13 +42,15 @@
 
   const onBlur = async () => {
     if (selected === RESOLUTION_KEY) {
-      if (Number.isFinite(resolutionValue)) {
-        await updateResolution([resolutionValue as number]);
+      const val = Number(resolutionValue);
+      if (Number.isFinite(val)) {
+        await updateResolution([val]);
         updateScale(null);
       }
     } else {
-      if (Number.isFinite(scaleValue)) {
-        await updateScale(scaleValue as number);
+      const val = Number(scaleValue);
+      if (Number.isFinite(val)) {
+        await updateScale(val);
         updateResolution(null);
       }
     }

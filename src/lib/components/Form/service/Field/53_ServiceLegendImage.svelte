@@ -32,16 +32,16 @@
     <div class="inputs">
       <div class="legend-text-fields">
         <TextInput
-          label="Format"
-          value={value?.format}
-          onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
-          fieldConfig={getSubFieldConfig('isoMetadata.services', 'legendImage', 'format')}
-        />
-        <TextInput
           label="Url"
           value={value?.url}
           onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
           fieldConfig={getSubFieldConfig('isoMetadata.services', 'legendImage', 'url')}
+        />
+        <TextInput
+          label="Format"
+          value={value?.format}
+          onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
+          fieldConfig={getSubFieldConfig('isoMetadata.services', 'legendImage', 'format')}
         />
       </div>
       <div class="legend-size-fields">
