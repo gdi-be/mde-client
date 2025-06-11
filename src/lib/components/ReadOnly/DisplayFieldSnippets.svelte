@@ -43,7 +43,7 @@
     isoMetadataContentDescriptions as 'isoMetadata.contentDescriptions',
     isoMetadataServices as 'isoMetadata.services',
     clientMetadataPrivacy as 'clientMetadata.privacy',
-    clientMetadataHighValueDataset as 'clientMetadata.highValueDataset',
+    isoMetadataHighValueDataset as 'isoMetadata.highValueDataset',
     technicalMetadataCategories as 'technicalMetadata.categories'
   };
 
@@ -402,7 +402,7 @@
   </div>
 {/snippet}
 
-{#snippet clientMetadataHighValueDataset(value: boolean)}
+{#snippet isoMetadataHighValueDataset(value: boolean)}
   {value ? 'Ja' : 'Nein'}
 {/snippet}
 

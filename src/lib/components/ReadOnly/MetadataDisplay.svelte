@@ -21,7 +21,7 @@
       <DisplayField key="isoMetadata.termsOfUseId" />
       <DisplayField key="isoMetadata.annexTheme" />
       <DisplayField key="isoMetadata.qualityReportCheck" />
-      <DisplayField key="clientMetadata.highValueDataset" />
+      <DisplayField key="isoMetadata.highValueDataset" />
       <DisplayField key="isoMetadata.topicCategory" />
     </section>
     <section id="temp_and_spatial">

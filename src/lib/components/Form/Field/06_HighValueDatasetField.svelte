@@ -6,7 +6,7 @@
   import FieldHint from '../FieldHint.svelte';
   import MultiSelectInput from '$lib/components/Form/Inputs/MultiSelectInput.svelte';
 
-  const CHECKED_KEY = 'clientMetadata.highValueDataset';
+  const CHECKED_KEY = 'isoMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
   const LABEL = 'HVD Kategorie';
 
