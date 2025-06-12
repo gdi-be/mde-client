@@ -59,6 +59,7 @@
   let showAssignmentButton = $derived(
     highestRole === 'MdeAdministrator' || assignedToMe || highestRole === metadata?.responsibleRole
   );
+  let hideDownloadButton = $derived(highestRole === 'MdeDataOwner');
 
   $effect(() => {
     commentsPanelVisible = commentsPanelVisibleProp ?? false;
@@ -137,10 +138,12 @@
     {@render children?.()}
   </div>
   <div class="container right-container">
-    <Button class="submit-button" title="Download" variant="raised" onclick={onDownloadClick}>
-      <Label>Download</Label>
-      <Icon class="material-icons">download</Icon>
-    </Button>
+    {#if !hideDownloadButton}
+      <Button class="submit-button" title="Download" variant="raised" onclick={onDownloadClick}>
+        <Label>Download</Label>
+        <Icon class="material-icons">download</Icon>
+      </Button>
+    {/if}
     <Button
       class="submit-button"
       title="Validieren"
