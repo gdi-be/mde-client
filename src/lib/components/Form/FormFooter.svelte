@@ -15,6 +15,7 @@
   import { page } from '$app/state';
   import Spinner from '$lib/components/Spinner.svelte';
   import PublishDialog from '$lib/components/Form/PublishDialog.svelte';
+  import { toast } from 'svelte-french-toast';
 
   type FormFooterProps = {
     text?: string;
@@ -96,28 +97,33 @@
       method: 'GET'
     });
 
-    if (response.ok) {
-      let label = `${metadata?.isoMetadata.title || metadata}`;
-      label = label
-        .replace(/ä/g, 'ae')
-        .replace(/ö/g, 'oe')
-        .replace(/ü/g, 'ue')
-        .replace(/ß/g, 'ss')
-        .replace(/\s+/g, '_');
-      const date = new Date().toISOString().split('T')[0];
-      const fileName = `${label}_${date}`;
-
-      // response is a zip file blob that will be downloaded
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${fileName}.zip`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
+    if (!response.ok) {
+      toast.error(
+        'Fehler beim Herunterladen der Metadaten. Bitte versuchen Sie es später erneut.'
+      );
+      return Promise.reject('Failed to download metadata');
     }
+
+    let label = `${metadata?.isoMetadata.title || metadata}`;
+    label = label
+      .replace(/ä/g, 'ae')
+      .replace(/ö/g, 'oe')
+      .replace(/ü/g, 'ue')
+      .replace(/ß/g, 'ss')
+      .replace(/\s+/g, '_');
+    const date = new Date().toISOString().split('T')[0];
+    const fileName = `${label}_${date}`;
+
+    // response is a zip file blob that will be downloaded
+    const blob = await response.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = `${fileName}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(blobUrl);
   };
 </script>
 

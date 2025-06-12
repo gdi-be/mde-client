@@ -5,6 +5,7 @@
   import { getContext } from 'svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import Dialog, { Content, Header, Title } from '@smui/dialog';
+  import { toast } from 'svelte-french-toast';
 
   type MetadataPublishResponse = {
     publishedCatalogRecords: string[];
@@ -41,7 +42,8 @@
       responseStatus = response.status;
 
       if (!response.ok) {
-        throw new Error(`Failed to publish the metadata: ${response.statusText}`);
+        toast.error(`Fehler beim Veröffentlichen der Metadaten: ${response.statusText}`);
+        return Promise.reject(`Failed to publish the metadata: ${response.statusText}`);
       }
 
       const uuids = (await response.json()) as MetadataPublishResponse;

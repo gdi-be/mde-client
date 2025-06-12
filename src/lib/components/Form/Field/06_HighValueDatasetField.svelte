@@ -5,6 +5,7 @@
   import type { Option } from '$lib/models/form';
   import FieldHint from '../FieldHint.svelte';
   import MultiSelectInput from '$lib/components/Form/Inputs/MultiSelectInput.svelte';
+  import { toast } from 'svelte-french-toast';
 
   const CHECKED_KEY = 'isoMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
@@ -43,6 +44,12 @@
 
   const fetchOptions = async () => {
     const response = await fetch('/data/hvd_categories');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der HVD Kategorien');
+      return [];
+    }
+
     const data: Option[] = await response.json();
     return data;
   };

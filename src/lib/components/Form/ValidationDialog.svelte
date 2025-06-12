@@ -6,6 +6,7 @@
   import Dialog, { Content, Header, Title } from '@smui/dialog';
   import { getContext } from 'svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
+  import { toast } from 'svelte-french-toast';
 
   type MessageGroup = {
     'gdi-inspire': string[][][];
@@ -57,7 +58,11 @@
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to start the validation process: ${response.statusText}`);
+        toast.error(
+          `Fehler beim Starten der Validierung: ${response.statusText}`
+        );
+        validationStartError = true;
+        return;
       }
 
       validationStartError = false;

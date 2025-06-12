@@ -5,6 +5,7 @@
   import Icon from '@smui/textfield/icon';
   import Textfield from '@smui/textfield';
   import type { MetadataCollection } from '$lib/models/metadata';
+  import { toast } from 'svelte-french-toast';
 
   export type MetadataSearchFieldProps = {
     value: Option | undefined;
@@ -25,15 +26,17 @@
 
     const response = await fetch(url);
 
-    if (response.ok) {
-      const data = await response.json();
-      return data.map((metadataCollection: MetadataCollection) => ({
-        key: metadataCollection.metadataId,
-        label: metadataCollection.title
-      }));
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Metadaten');
+      return [];
     }
 
-    return [];
+    const data = await response.json();
+    return data.map((metadataCollection: MetadataCollection) => ({
+      key: metadataCollection.metadataId,
+      label: metadataCollection.title
+    }));
+
   }
 
   const splitLabel = (l: string) => {

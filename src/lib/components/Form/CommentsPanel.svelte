@@ -10,6 +10,7 @@
   import type { Token } from '$lib/models/keycloak';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
+  import { toast } from 'svelte-french-toast';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
@@ -34,10 +35,13 @@
       })
     });
 
-    if (response.ok) {
-      value = '';
-      invalidateAll();
+    if (!response.ok) {
+      toast.error('Fehler beim Senden des Kommentars');
+      return;
     }
+
+    value = '';
+    invalidateAll();
   }
 
   async function onDelete(id: string, evt: MouseEvent) {
@@ -58,9 +62,12 @@
           })
         });
 
-        if (response.ok) {
-          invalidateAll();
+        if (!response.ok) {
+          toast.error('Fehler beim Löschen des Kommentars');
+          return;
         }
+
+        invalidateAll();
       },
       {
         text: 'Möchten Sie diesen Kommentar wirklich löschen?',

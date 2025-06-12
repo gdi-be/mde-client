@@ -11,6 +11,7 @@
   import FieldHint from '../FieldHint.svelte';
   import type { ValidationResult } from '../FieldsConfig';
   import type { Keywords } from '$lib/models/metadata';
+  import { toast } from 'svelte-french-toast';
 
   const KEY = 'isoMetadata.keywords';
 
@@ -36,11 +37,15 @@
 
   const getAutoKeywords = async () => {
     const response = await fetch(`/metadata/${metadataid}/autokeywords`);
-    if (response.ok) {
-      autoKeywords = (await response.json()) || [];
-    } else {
+
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der automatisch generierten Schlagwörter');
       autoKeywords = [];
+      return;
     }
+
+    autoKeywords = (await response.json()) || [];
   };
 
   const searchItems = async (input: string) => {
@@ -48,8 +53,14 @@
       return [];
     }
 
-    const options = await fetch(`/data/keywords?terms=${input}`);
-    const data = await options.json();
+    const response = await fetch(`/data/keywords?terms=${input}`);
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Schlagwortliste');
+      return [];
+    }
+
+    const data = await response.json();
 
     if (data.total_results === 0) {
       return false;

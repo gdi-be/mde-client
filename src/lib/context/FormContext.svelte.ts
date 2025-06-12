@@ -9,6 +9,7 @@ import {
 } from '$lib/components/Form/FieldsConfig';
 import { invalidate, invalidateAll } from '$app/navigation';
 import type { MetadataCollection } from '$lib/models/metadata';
+import { toast } from 'svelte-french-toast';
 
 export type FormState = {
   metadata?: MetadataCollection;
@@ -154,12 +155,16 @@ export async function persistValue(key: string, value: unknown, invokeInvalidate
       value
     })
   });
+
   if (response.ok) {
     if (invokeInvalidateAll) {
       invalidateAll();
     } else {
       invalidate(page.url.origin);
     }
+  } else {
+    toast.error(`Fehler beim Speichern der Daten: ${response.statusText}`);
   }
+
   return response;
 }

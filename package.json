@@ -68,6 +68,7 @@
     "marked": "^15.0.2",
     "proj4": "^2.15.0",
     "smui-theme": "^8.0.0-beta.3",
+    "svelte-french-toast": "^1.2.0",
     "yaml": "^2.7.0"
   }
 }

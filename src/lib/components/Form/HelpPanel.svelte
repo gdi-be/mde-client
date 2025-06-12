@@ -1,12 +1,15 @@
 <script lang="ts">
   /* eslint-disable svelte/no-at-html-tags */
   import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { toast } from 'svelte-french-toast';
+
   const activeHelpKey = $derived(getFormContext().activeHelpKey);
 
   const getHelpMarkdown = async (key: string) => {
     const response = await fetch(`/help/${key}`);
     if (!response.ok) {
-      throw new Error('Failed to fetch help text');
+      toast.error('Fehler beim Abrufen der Hilfe');
+      return Promise.reject('Failed to fetch help markdown');
     }
     return response.text();
   };

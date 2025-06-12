@@ -13,6 +13,7 @@
   import type { ValidationResult, ValidationResultList } from '../FieldsConfig';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
+  import { toast } from 'svelte-french-toast';
 
   const KEY = 'isoMetadata.pointsOfContact';
 
@@ -62,12 +63,16 @@
         'content-type': 'application/json'
       }
     });
-    const json = await response.json();
-    if (response.ok) {
-      contact.name = json.firstName + ' ' + json.lastName;
-      contact.phone = json.phone;
-      contact.email = json.email;
+
+    if (!response.ok) {
+      toast.error('Fehler beim automatischen Abrufen der Kontaktdaten. Bitte manuell eingeben.');
+      return Promise.reject('Fehler beim Abrufen der Kontaktdaten. Bitte manuell eingeben.');
     }
+
+    const json = await response.json();
+    contact.name = json.firstName + ' ' + json.lastName;
+    contact.phone = json.phone;
+    contact.email = json.email;
     persistContacts();
   };
 

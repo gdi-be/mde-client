@@ -13,6 +13,7 @@
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import LayersForm from './LayersForm.svelte';
   import { page } from '$app/state';
+  import { toast } from 'svelte-french-toast';
 
   export type ServiceFormProps = {
     service: Service;
@@ -82,7 +83,7 @@
     );
 
     if (!response.ok) {
-      console.error('Error persisting layers:', response);
+      toast.error(`Fehler beim aktualisieren der Layer: ${response.statusText}`);
     }
 
     layerCheckmarkVisible = response.ok;

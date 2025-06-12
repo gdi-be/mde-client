@@ -5,6 +5,8 @@
   import { initializePopconfimContext } from '$lib/context/PopConfirmContex.svelte.js';
   import { sseContext } from '$lib/context/ServerEventContext.svelte.js';
   import ValidationPopup from '$lib/components/ValidationPopup.svelte';
+  import { Toaster } from 'svelte-french-toast';
+
   let { children, data } = $props();
 
   setContext('user_token', data.token);
@@ -29,6 +31,7 @@
 
 <PopConfirm />
 <ValidationPopup />
+<Toaster />
 
 <div class="main-container">
   <Header />

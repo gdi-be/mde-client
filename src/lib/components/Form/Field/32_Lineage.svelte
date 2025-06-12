@@ -13,6 +13,7 @@
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { page } from '$app/state';
+  import { toast } from 'svelte-french-toast';
 
   type LineageListEntry = Lineage & { listId: string };
 
@@ -73,8 +74,14 @@
     url.searchParams.append('property', property);
     url.searchParams.append('unique', '1');
 
-    const data = await fetch(url);
-    const lineages = await data.json();
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Datengrundlagen');
+      return [];
+    }
+
+    const lineages = await response.json();
 
     return lineages;
   };
