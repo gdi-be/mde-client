@@ -30,7 +30,7 @@
     {/if}
   {:else}
     <Button variant="outlined" href="/login">
-      <Label>Login</Label>
+      <Label>Anmeldung</Label>
     </Button>
   {/if}
 </div>

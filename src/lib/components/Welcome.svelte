@@ -10,7 +10,7 @@
     <h2>Metadateneditor der GDI-Berlin</h2>
     <p>Anmelden, um Metadaten zu bearbeiten.</p>
     <Button variant="outlined" href="/login">
-      <Label>Login</Label>
+      <Label>Anmeldung</Label>
     </Button>
   {:else}
     <h1>{`Hallo ${token?.given_name || token?.preferred_username}`}</h1>
