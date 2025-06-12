@@ -4,7 +4,11 @@
   import MetadataDisplay from '$lib/components/ReadOnly/MetadataDisplay.svelte';
   import { page } from '$app/state';
   import FormFooter from '$lib/components/Form/FormFooter.svelte';
-  import { FORMSTATE_CONTEXT, initializeFormContext, type FormState } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    initializeFormContext,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
 
   const { data } = $props();
