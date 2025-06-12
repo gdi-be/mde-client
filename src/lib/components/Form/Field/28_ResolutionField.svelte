@@ -101,7 +101,7 @@
         bind:value={
           () => scaleValue as number,
           (val: number) => {
-            scaleValue = val ? Math.round(Number(val)) : null
+            scaleValue = val ? Math.round(Number(val)) : null;
           }
         }
         key={SCALE_KEY}
