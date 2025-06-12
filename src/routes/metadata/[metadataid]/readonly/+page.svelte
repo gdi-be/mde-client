@@ -4,7 +4,8 @@
   import MetadataDisplay from '$lib/components/ReadOnly/MetadataDisplay.svelte';
   import { page } from '$app/state';
   import FormFooter from '$lib/components/Form/FormFooter.svelte';
-  import { initializeFormContext } from '$lib/context/FormContext.svelte';
+  import { FORMSTATE_CONTEXT, initializeFormContext, type FormState } from '$lib/context/FormContext.svelte';
+  import { getContext } from 'svelte';
 
   const { data } = $props();
   let commentsPanelVisible = $state(false);
@@ -13,6 +14,11 @@
 
   const metadata = $derived(data.metadata);
   initializeFormContext(data.metadata);
+
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  $effect(() => {
+    formState.metadata = data.metadata;
+  });
 
   const print = () => {
     if (browser) {
