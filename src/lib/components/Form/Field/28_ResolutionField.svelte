@@ -12,7 +12,7 @@
   let selected = $state<typeof RESOLUTION_KEY | typeof SCALE_KEY>();
 
   // TODO: check why this is a List
-  const resolutionValueFromData = $derived(getValue<number>(RESOLUTION_KEY?.[0]));
+  const resolutionValueFromData = $derived(getValue<number[]>(RESOLUTION_KEY)?.[0]);
   let resolutionValue = $state<number | null>(null);
   $effect(() => {
     if (resolutionValueFromData) {
@@ -92,18 +92,22 @@
         key={RESOLUTION_KEY}
         label={resolutionFieldConfig?.label}
         fieldConfig={resolutionFieldConfig}
-        type="float"
         onblur={onBlur}
         validationResult={resolutionValidationResult}
       />
-    {:else}
+    {/if}
+    {#if selected === SCALE_KEY}
       <NumberInput
-        bind:value={scaleValue as number}
+        bind:value={
+          () => scaleValue as number,
+          (val: number) => {
+            scaleValue = val ? Math.round(Number(val)) : null;
+          }
+        }
         key={SCALE_KEY}
         label={scaleFieldConfig?.label}
         fieldConfig={scaleFieldConfig}
         onblur={onBlur}
-        prefix="1:"
         validationResult={scaleValidationResult}
       />
     {/if}
