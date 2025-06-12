@@ -7,6 +7,7 @@
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
+  import { toast } from 'svelte-french-toast';
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -34,6 +35,12 @@
 
   const fetchOptions = async () => {
     const response = await fetch('/data/iso_themes');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der ISO Themen');
+      return [];
+    }
+
     const data = await response.json();
     return data.map((entry: IsoTheme) => ({
       key: entry.isoID,

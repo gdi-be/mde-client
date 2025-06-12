@@ -4,6 +4,7 @@
   import RadioInput from '../Inputs/RadioInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
   import type { Option } from '$lib/models/form';
+  import { toast } from 'svelte-french-toast';
 
   const KEY = 'clientMetadata.privacy';
 
@@ -25,6 +26,12 @@
 
   const fetchOptions = async () => {
     const response = await fetch('/data/privacy');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Datenschutzoptionen');
+      return [];
+    }
+
     const data: Option[] = await response.json();
     return data;
   };

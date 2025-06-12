@@ -9,6 +9,7 @@
   import { Set } from '@smui/chips';
   import StatusChip from '$lib/components/StatusChip.svelte';
   import { getHighestRole } from '$lib/util';
+  import { toast } from 'svelte-french-toast';
 
   const FALLBACK_IMAGE = '/logo_berlin_m_srgb.svg';
 
@@ -99,24 +100,37 @@
   };
 
   const assignToMe = async () => {
-    await fetch(`/metadata/${metadata.metadataId}/user`, {
+    const response = await fetch(`/metadata/${metadata.metadataId}/user`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
       body: JSON.stringify({ userId })
     });
+
+    if (!response.ok) {
+      toast.error(
+        'Fehler beim Zuweisen des Metadatensatzes. Bitte versuchen Sie es später erneut.'
+      );
+    }
     invalidateAll();
   };
 
   const removeAssignment = async () => {
-    await fetch(`/metadata/${metadata.metadataId}/user`, {
+    const response = await fetch(`/metadata/${metadata.metadataId}/user`, {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json'
       },
       body: JSON.stringify({ userId })
     });
+
+    if (!response.ok) {
+      toast.error(
+        'Fehler beim Entfernen der Zuweisung des Metadatensatzes. Bitte versuchen Sie es später erneut.'
+      );
+    }
+
     invalidateAll();
   };
 
@@ -133,7 +147,10 @@
           });
 
           if (!response.ok) {
-            throw new Error('Failed to delete metadata');
+            toast.error(
+              'Fehler beim Löschen des Metadatensatzes. Bitte versuchen Sie es später erneut.'
+            );
+            return;
           }
 
           await invalidateAll();

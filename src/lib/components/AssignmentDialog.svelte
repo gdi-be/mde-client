@@ -9,6 +9,7 @@
   import Switch from '@smui/switch';
   import FormField from '@smui/form-field';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
+  import { toast } from 'svelte-french-toast';
 
   let { open = $bindable(false) } = $props();
 
@@ -49,7 +50,7 @@
   const assignToRole = async (role: Role) => {
     if (!metadata) return;
 
-    await fetch(`/metadata/${metadata.metadataId}/role`, {
+    const response = await fetch(`/metadata/${metadata.metadataId}/role`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
@@ -58,6 +59,13 @@
         role
       })
     });
+
+    if (!response.ok) {
+      toast.error(
+        `Fehler beim Zuweisen der Metadaten an die Rolle "${role}". Bitte versuchen Sie es später erneut.`
+      );
+      return Promise.reject('Failed to assign metadata to role');
+    }
 
     goto('/metadata', {
       invalidateAll: true
@@ -69,13 +77,20 @@
   const assignToUser = async (keycloakId: string) => {
     if (!metadata) return;
 
-    await fetch(`/metadata/${metadata.metadataId}/user`, {
+    const response = await fetch(`/metadata/${metadata.metadataId}/user`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
       body: JSON.stringify({ userId: keycloakId })
     });
+
+    if (!response.ok) {
+      toast.error(
+        `Fehler beim Zuweisen der Metadaten an den User "${keycloakId}". Bitte versuchen Sie es später erneut.`
+      );
+      return Promise.reject('Failed to assign metadata to user');
+    }
 
     goto('/metadata', {
       invalidateAll: true
@@ -87,28 +102,32 @@
   const fetchTeamAndGroupByRole = async () => {
     if (!metadata) return;
     const response = await fetch(`/metadata/${metadata.metadataId}/team`);
-    if (response.ok) {
-      const teamMembers = await response.json();
 
-      // group teamMembers by role
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const groupedTeamMembers = teamMembers.reduce((acc: any, member: any) => {
-        if (!acc[member.role]) {
-          acc[member.role] = [];
-        }
-        acc[member.role].push(member);
-        return acc;
-      }, {});
-
-      // sort team members by displayName
-      Object.keys(groupedTeamMembers).forEach((role) => {
-        groupedTeamMembers[role].sort((a: UserData, b: UserData) =>
-          a.displayName.localeCompare(b.displayName)
-        );
-      });
-
-      return groupedTeamMembers;
+    if (!response.ok) {
+      toast.error('Fehler beim Laden des Teams. Bitte versuchen Sie es später erneut.');
+      return Promise.reject('Failed to fetch team members');
     }
+
+    const teamMembers = await response.json();
+
+    // group teamMembers by role
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const groupedTeamMembers = teamMembers.reduce((acc: any, member: any) => {
+      if (!acc[member.role]) {
+        acc[member.role] = [];
+      }
+      acc[member.role].push(member);
+      return acc;
+    }, {});
+
+    // sort team members by displayName
+    Object.keys(groupedTeamMembers).forEach((role) => {
+      groupedTeamMembers[role].sort((a: UserData, b: UserData) =>
+        a.displayName.localeCompare(b.displayName)
+      );
+    });
+
+    return groupedTeamMembers;
   };
 
   const onApprovalStateChange = async (approved: boolean) => {
@@ -116,8 +135,12 @@
     const response = await fetch(`/metadata/${metadata.metadataId}/approved`, {
       method: approved ? 'POST' : 'DELETE'
     });
+
     if (!response.ok) {
-      console.error('Failed to update approval state');
+      toast.error(
+        `Fehler beim ${approved ? 'Freigeben' : 'Zurückziehen der Freigabe'} der Metadaten. Bitte versuchen Sie es später erneut.`
+      );
+      return Promise.reject(`Failed to ${approved ? 'approve' : 'revoke approval'} metadata`);
     }
   };
 </script>

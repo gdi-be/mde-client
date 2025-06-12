@@ -6,6 +6,7 @@
   import { Icon } from '@smui/button';
   import { getFormContext, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import IconButton from '@smui/icon-button';
+  import { toast } from 'svelte-french-toast';
 
   export type FieldToolsProps = {
     key: string;
@@ -39,6 +40,12 @@
         'Content-Type': 'application/json'
       }
     });
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen des Vorlagedatensatzes');
+      return null;
+    }
+
     const originalMetadata = await response.json();
     return getValue(key, originalMetadata);
   };

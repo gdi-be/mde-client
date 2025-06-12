@@ -5,6 +5,7 @@
   import type { TermsOfUse } from '$lib/models/metadata';
   import type { Option } from '$lib/models/form';
   import type { ValidationResult } from '../FieldsConfig';
+  import { toast } from 'svelte-french-toast';
 
   const KEY = 'isoMetadata.termsOfUseId';
 
@@ -16,6 +17,12 @@
 
   const fetchOptions = async () => {
     const response = await fetch('/data/terms_of_use');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Nutzungsbedingungen');
+      return [];
+    }
+
     const data: TermsOfUse[] = await response.json();
     data.sort((a, b) => {
       if (a.active === b.active) {

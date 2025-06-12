@@ -7,6 +7,7 @@
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
+  import { toast } from 'svelte-french-toast';
 
   const KEY = 'isoMetadata.crs';
 
@@ -32,6 +33,12 @@
 
   const fetchOptions = async () => {
     const response = await fetch('/data/crs');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der CRS Optionen');
+      return [];
+    }
+
     const data: Option[] = await response.json();
     return data;
   };

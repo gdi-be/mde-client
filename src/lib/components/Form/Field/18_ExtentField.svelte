@@ -11,6 +11,7 @@
   import type { Option } from '$lib/models/form';
   import { getContext, onMount } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
+  import { toast } from 'svelte-french-toast';
 
   type ExtentOption = {
     title: string;
@@ -90,13 +91,22 @@
 
   onMount(async () => {
     const crsResponse = await fetch('/data/crs');
-    crsOptions = await crsResponse.json();
 
-    if (!crsKey && crsOptions[0].key) {
-      crsKey = crsOptions[0].key as CRS;
+    if (!crsResponse.ok) {
+      toast.error('Fehler beim Abrufen der CRS Optionen');
+    } else {
+      crsOptions = await crsResponse.json();
+      if (!crsKey && crsOptions[0].key) {
+        crsKey = crsOptions[0].key as CRS;
+      }
     }
 
     const extentResponse = await fetch('/data/extents');
+    if (!extentResponse.ok) {
+      toast.error('Fehler beim Abrufen der Extent Optionen');
+      return;
+    }
+
     extentOptions = await extentResponse.json();
   });
 </script>

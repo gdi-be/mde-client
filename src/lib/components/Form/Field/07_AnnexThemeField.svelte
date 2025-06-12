@@ -13,6 +13,7 @@
   import { getContext } from 'svelte';
   import type { IsoTheme, MetadataProfile } from '$lib/models/metadata';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
+  import { toast } from 'svelte-french-toast';
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireTheme';
@@ -44,16 +45,32 @@
   const updateTopicCategory = async (inspireIDs?: string[]) => {
     if (!inspireIDs || inspireIDs.length === 0) return;
     const response = await fetch(`/data/iso_themes`);
-    const data: IsoTheme[] = await response.json();
-    const matches = inspireIDs
-      .map((inspireId) => data.find((entry) => entry.inspireID === inspireId)?.isoID)
-      .filter(Boolean) as string[];
-    const uniqueValues = Array.from(new Set(matches));
-    return persistValue(TOPIC_KEY, uniqueValues);
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der ISO Themen');
+      return;
+    }
+
+    try {
+      const data: IsoTheme[] = await response.json();
+      const matches = inspireIDs
+        .map((inspireId) => data.find((entry) => entry.inspireID === inspireId)?.isoID)
+        .filter(Boolean) as string[];
+      const uniqueValues = Array.from(new Set(matches));
+      return persistValue(TOPIC_KEY, uniqueValues);
+    } catch {
+      toast.error('Fehler beim Verarbeiten der ISO Themen');
+    }
   };
 
   const fetchOptions = async () => {
     const response = await fetch('/data/inspire_themes');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Annex Themen');
+      return [];
+    }
+
     const data: Option[] = await response.json();
     return data;
   };

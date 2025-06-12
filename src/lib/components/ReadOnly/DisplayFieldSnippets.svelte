@@ -15,6 +15,7 @@
   } from '$lib/models/metadata';
 
   import type { Option } from '$lib/models/form';
+  import { toast } from 'svelte-french-toast';
 
   export {
     defaultSnippet,
@@ -49,6 +50,12 @@
 
   const getIsoThemes = async () => {
     const response = await fetch('/data/iso_themes');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der ISO Themen');
+      return [];
+    }
+
     return response.json();
   };
 
@@ -69,16 +76,34 @@
 
   const getTermsOfUse = async () => {
     const response = await fetch('/data/terms_of_use');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Nutzungsbedingungen');
+      return [];
+    }
+
     return response.json();
   };
 
   const getPrivacy = async () => {
     const response = await fetch('/data/privacy');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Datenschutzoptionen');
+      return [];
+    }
+
     return response.json();
   };
 
   const getCrs = async () => {
     const response = await fetch('/data/crs');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Koordinatensysteme');
+      return [];
+    }
+
     return response.json();
   };
 
