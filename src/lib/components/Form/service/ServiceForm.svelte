@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Layer, Service } from '$lib/models/metadata';
   import { setNestedValue } from '$lib/util';
-  import ServiceId_45 from './Field/45_ServiceId.svelte';
+  import ServiceWorkspace_45 from './Field/45_ServiceWorkspace.svelte';
   import ServicePreview_46 from './Field/46_ServicePreview.svelte';
   import ServiceType_57 from './Field/57_ServiceType.svelte';
   import ServiceTitle_58 from './Field/58_ServiceTitle.svelte';
@@ -101,7 +101,10 @@
     onChange={(shortDescription) => set('shortDescription', shortDescription)}
   />
   {#if isMappingService}
-    <ServiceId_45 value={service.serviceIdentification} />
+    <ServiceWorkspace_45
+      value={service.workspace}
+      onChange={(workspace) => set('workspace', workspace)}
+    />
     <ServicePreview_46 value={service.preview} onChange={(preview) => set('preview', preview)} />
     <ServiceLegendImage_53
       value={service.legendImage}

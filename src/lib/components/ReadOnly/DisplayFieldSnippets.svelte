@@ -285,6 +285,12 @@
           <strong>Kurzbeschreibung</strong>
           <span>{service.shortDescription}</span>
         </div>
+        {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
+          <div>
+            <strong>Identifikator des Kartendienstes</strong>
+            <span>{service.workspace}</span>
+          </div>
+        {/if}
         <div>
           <strong>Service Identifier</strong>
           <span>{service.serviceIdentification}</span>

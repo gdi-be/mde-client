@@ -128,6 +128,7 @@ export type Service = {
   preview?: string;
   featureTypes?: FeatureType[];
   downloads?: DownloadInfo[];
+  workspace?: string;
 };
 
 export type MetadataProfile = 'ISO' | 'INSPIRE_HARMONISED' | 'INSPIRE_IDENTIFIED';
