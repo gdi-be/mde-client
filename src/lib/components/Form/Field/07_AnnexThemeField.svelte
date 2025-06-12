@@ -61,7 +61,6 @@
     } catch {
       toast.error('Fehler beim Verarbeiten der ISO Themen');
     }
-
   };
 
   const fetchOptions = async () => {

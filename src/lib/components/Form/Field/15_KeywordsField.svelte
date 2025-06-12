@@ -38,7 +38,6 @@
   const getAutoKeywords = async () => {
     const response = await fetch(`/metadata/${metadataid}/autokeywords`);
 
-
     if (!response.ok) {
       toast.error('Fehler beim Abrufen der automatisch generierten Schlagwörter');
       autoKeywords = [];

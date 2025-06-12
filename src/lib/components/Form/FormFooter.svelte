@@ -98,9 +98,7 @@
     });
 
     if (!response.ok) {
-      toast.error(
-        'Fehler beim Herunterladen der Metadaten. Bitte versuchen Sie es später erneut.'
-      );
+      toast.error('Fehler beim Herunterladen der Metadaten. Bitte versuchen Sie es später erneut.');
       return Promise.reject('Failed to download metadata');
     }
 

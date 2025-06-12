@@ -58,9 +58,7 @@
       });
 
       if (!response.ok) {
-        toast.error(
-          `Fehler beim Starten der Validierung: ${response.statusText}`
-        );
+        toast.error(`Fehler beim Starten der Validierung: ${response.statusText}`);
         validationStartError = true;
         return;
       }

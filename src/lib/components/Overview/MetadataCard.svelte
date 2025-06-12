@@ -147,7 +147,9 @@
           });
 
           if (!response.ok) {
-            toast.error('Fehler beim Löschen des Metadatensatzes. Bitte versuchen Sie es später erneut.');
+            toast.error(
+              'Fehler beim Löschen des Metadatensatzes. Bitte versuchen Sie es später erneut.'
+            );
             return;
           }
 

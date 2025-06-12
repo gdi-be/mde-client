@@ -36,7 +36,6 @@
       key: metadataCollection.metadataId,
       label: metadataCollection.title
     }));
-
   }
 
   const splitLabel = (l: string) => {

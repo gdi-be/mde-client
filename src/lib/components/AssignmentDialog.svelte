@@ -64,7 +64,7 @@
       toast.error(
         `Fehler beim Zuweisen der Metadaten an die Rolle "${role}". Bitte versuchen Sie es später erneut.`
       );
-      return  Promise.reject('Failed to assign metadata to role');
+      return Promise.reject('Failed to assign metadata to role');
     }
 
     goto('/metadata', {
@@ -104,9 +104,7 @@
     const response = await fetch(`/metadata/${metadata.metadataId}/team`);
 
     if (!response.ok) {
-      toast.error(
-        'Fehler beim Laden des Teams. Bitte versuchen Sie es später erneut.'
-      );
+      toast.error('Fehler beim Laden des Teams. Bitte versuchen Sie es später erneut.');
       return Promise.reject('Failed to fetch team members');
     }
 
@@ -142,11 +140,8 @@
       toast.error(
         `Fehler beim ${approved ? 'Freigeben' : 'Zurückziehen der Freigabe'} der Metadaten. Bitte versuchen Sie es später erneut.`
       );
-      return Promise.reject(
-        `Failed to ${approved ? 'approve' : 'revoke approval'} metadata`
-      );
+      return Promise.reject(`Failed to ${approved ? 'approve' : 'revoke approval'} metadata`);
     }
-
   };
 </script>
 
