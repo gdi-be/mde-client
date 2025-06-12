@@ -1,3 +1,24 @@
+# [3.9.0](https://github.com/gdi-be/mde-client/compare/v3.8.0...v3.9.0) (2025-06-12)
+
+
+### Bug Fixes
+
+* adapt comment quick link ([5204f7e](https://github.com/gdi-be/mde-client/commit/5204f7e69dcc1782f61ad4b2ffbc6a3c3f57d60c))
+* add fallback if services is null ([c165766](https://github.com/gdi-be/mde-client/commit/c16576641caed0923382d88aeecd23bf8626565f))
+* correct index in attribute form ([acde73f](https://github.com/gdi-be/mde-client/commit/acde73f1512895d23e896b1689928a4cde2becf0))
+* move high value dataset flag ([e5be936](https://github.com/gdi-be/mde-client/commit/e5be93604f0c1833e229878908728a781d134531))
+* remove obsolete field ([9fd9285](https://github.com/gdi-be/mde-client/commit/9fd928518e8b9488a16bc03f677382dca50c8b82))
+* update field validation for service section ([a57b3f9](https://github.com/gdi-be/mde-client/commit/a57b3f9ac2a1b24b0d6e9e93fe0ab98530fe87c6))
+* update redirect to readonly ([3d20a23](https://github.com/gdi-be/mde-client/commit/3d20a23e357a964b69b87b6abf1b94e0317a0846))
+* update ResolutionField ([8363803](https://github.com/gdi-be/mde-client/commit/83638032098d71624a1d4eb967c7f14fe262fe65))
+* update transformedValue in extent ([d4f6ab5](https://github.com/gdi-be/mde-client/commit/d4f6ab550bc2f874ab253ae23cfc2ea9b5b98242))
+
+
+### Features
+
+* add popconfirm to delete icons ([d75a79f](https://github.com/gdi-be/mde-client/commit/d75a79f7c10ea62f726da0bd53f7d034b1e9423e))
+* add service.workspace (45) ([6845d29](https://github.com/gdi-be/mde-client/commit/6845d29b18debc873bc70aeddcd02bef75dc9165))
+
 # [3.8.0](https://github.com/gdi-be/mde-client/compare/v3.7.0...v3.8.0) (2025-05-26)
 
 
