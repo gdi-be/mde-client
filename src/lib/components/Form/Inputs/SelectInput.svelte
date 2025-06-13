@@ -83,6 +83,8 @@
     }
 
     :global(.mdc-menu) {
+      top: 56px !important;
+      bottom: auto !important;
       // calc(items * item height + top margin)
       max-height: calc(5 * 48px + 8px);
 
