@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Lineage } from '$lib/models/metadata';
+  import type { Lineage, MetadataCollection } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import {
     getFieldConfig,
@@ -12,7 +12,6 @@
   import DateInput from '../Inputs/DateInput.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import FieldHint from '../FieldHint.svelte';
-  import { page } from '$app/state';
   import { toast } from 'svelte-french-toast';
 
   type LineageListEntry = Lineage & { listId: string };
@@ -24,7 +23,7 @@
 
   let searchResultsElement = $state<HTMLElement>();
 
-  let titleSearchResults = $state<Lineage[]>([]);
+  let metadataCollections = $state<MetadataCollection[]>([]);
   let titleSearchListId = $state<string>();
 
   $effect(() => {
@@ -53,9 +52,9 @@
   // add global click listener if titleSearchResults are open
   // to close the search results when clicking outside
   $effect(() => {
-    if (titleSearchResults.length > 0) {
+    if (metadataCollections.length > 0) {
       const closeSearchResults = () => {
-        titleSearchResults = [];
+        metadataCollections = [];
       };
       document.addEventListener('click', closeSearchResults);
       return () => {
@@ -64,26 +63,22 @@
     }
   });
 
-  const searchLineages = async (searchTerm: string, property = 'title') => {
+  const searchMetadataCollections = async (searchTerm: string) => {
     if (searchTerm === '') {
       return [];
     }
 
-    const url = new URL(page.url.origin + '/searchLineage');
-    url.searchParams.append('searchTerm', searchTerm);
-    url.searchParams.append('property', property);
-    url.searchParams.append('unique', '1');
+    const url = new URL('/metadata/search', window.location.origin);
+    url.searchParams.append('query', searchTerm);
 
     const response = await fetch(url);
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Datengrundlagen');
+      toast.error('Fehler beim Abrufen der Metadaten');
       return [];
     }
 
-    const lineages = await response.json();
-
-    return lineages;
+    return await response.json();
   };
 
   let showCheckmark = $state(false);
@@ -130,26 +125,29 @@
     );
   };
 
-  const onSelectLineage = (selectedLineage: Lineage, targetLineage: LineageListEntry) => {
+  const onSelectMetadataCollection = (
+    metadataCollection: MetadataCollection,
+    targetLineage: LineageListEntry
+  ) => {
     lineages = lineages.map((lineage) => {
       if (lineage.listId === targetLineage.listId) {
         return {
           ...lineage,
-          title: selectedLineage.title,
-          identifier: selectedLineage.identifier,
-          date: selectedLineage.date
+          title: metadataCollection.title!,
+          identifier: metadataCollection.metadataId!,
+          date: metadataCollection.isoMetadata?.published
         };
       }
       return lineage;
     });
 
     persistLineages();
-    titleSearchResults = [];
+    metadataCollections = [];
   };
 
   const onTitleKeyUp = async (evt: KeyboardEvent, lineage: LineageListEntry) => {
     const value = (evt.target as HTMLInputElement)?.value;
-    titleSearchResults = await searchLineages(value, 'title');
+    metadataCollections = await searchMetadataCollections(value);
     titleSearchListId = lineage.listId;
   };
 
@@ -191,12 +189,12 @@
             onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
             fieldConfig={getSubFieldConfig(KEY, 'title')}
           />
-          {#if titleSearchResults.length > 0 && titleSearchListId === lineage.listId}
+          {#if metadataCollections.length > 0 && titleSearchListId === lineage.listId}
             <ul class="search-results" bind:this={searchResultsElement}>
-              {#each titleSearchResults as result}
+              {#each metadataCollections as metadataCollection}
                 <li class="search-result">
-                  <button onclick={() => onSelectLineage(result, lineage)}>
-                    {result.title}
+                  <button onclick={() => onSelectMetadataCollection(metadataCollection, lineage)}>
+                    {metadataCollection.title}
                   </button>
                 </li>
               {/each}

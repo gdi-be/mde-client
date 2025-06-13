@@ -29,7 +29,13 @@
 
 <fieldset class={['date-input', wrapperClass]}>
   <legend>{label}</legend>
-  <input type="date" id={key} name={key} bind:value {...restProps} />
+  <input
+    type="date"
+    id={key}
+    name={key}
+    bind:value={() => value?.split('T')[0] || '', (v) => (value = v)}
+    {...restProps}
+  />
   <div class="field-footer">
     <FieldHint {validationResult} {fieldConfig} />
   </div>
