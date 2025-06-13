@@ -83,7 +83,7 @@
       phone: contact.phone,
       email: contact.email
     }));
-    const response = await persistValue(KEY, value, false);
+    const response = await persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
     }

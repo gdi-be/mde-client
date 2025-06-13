@@ -7,7 +7,7 @@ import {
   type DynamicFieldConfig,
   type FieldConfig
 } from '$lib/components/Form/FieldsConfig';
-import { invalidate, invalidateAll } from '$app/navigation';
+import { goto } from '$app/navigation';
 import type { MetadataCollection } from '$lib/models/metadata';
 import { toast } from 'svelte-french-toast';
 
@@ -131,9 +131,8 @@ export function getProgress(section: Section, metadata?: MetadataCollection): nu
     }
   };
 
-  const filledRequired = totalRequired.filter(isValidFilter);
-
-  return filledRequired.length / totalRequired.length;
+  const validRequired = totalRequired.filter(isValidFilter);
+  return validRequired.length / totalRequired.length;
 }
 
 export function allFieldsValid(metadata?: MetadataCollection): boolean {
@@ -144,7 +143,7 @@ export function allFieldsValid(metadata?: MetadataCollection): boolean {
   });
 }
 
-export async function persistValue(key: string, value: unknown, invokeInvalidateAll = true) {
+export async function persistValue(key: string, value: unknown) {
   const response = await fetch(page.url, {
     method: 'PATCH',
     headers: {
@@ -157,11 +156,10 @@ export async function persistValue(key: string, value: unknown, invokeInvalidate
   });
 
   if (response.ok) {
-    if (invokeInvalidateAll) {
-      invalidateAll();
-    } else {
-      invalidate(page.url.origin);
-    }
+    await goto(window.location.pathname, {
+      invalidateAll: true,
+      keepFocus: true
+    });
   } else {
     toast.error(`Fehler beim Speichern der Daten: ${response.statusText}`);
   }
