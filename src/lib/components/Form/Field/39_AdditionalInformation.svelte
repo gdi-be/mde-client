@@ -9,8 +9,9 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
-  import type { ContentDescription } from '$lib/models/metadata';
+  import type { CI_OnLineFunctionCode, ContentDescription } from '$lib/models/metadata';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
+  import SelectInput from '../Inputs/SelectInput.svelte';
 
   type ContentDescriptionListEntry = ContentDescription & { listId: string };
 
@@ -22,19 +23,19 @@
   $effect(() => {
     if (valueFromData && valueFromData.length > 0) {
       contentDescriptions = valueFromData?.map((contentDescription) => {
-        const listId =
-          contentDescription.url + contentDescription.description + Date.now().toString(36);
+        const { url, description, code } = contentDescription;
+        const listId = crypto.randomUUID();
         return {
           listId,
-          code: 'information',
-          description: contentDescription.description || '',
-          url: contentDescription.url || ''
+          code,
+          description,
+          url
         };
       });
     } else {
       contentDescriptions = [
         {
-          listId: Date.now().toString(36),
+          listId: crypto.randomUUID(),
           code: 'information',
           description: '',
           url: ''
@@ -50,9 +51,9 @@
     const value = contentDescriptions.map((contentDescription) => ({
       description: contentDescription.description,
       url: contentDescription.url,
-      code: 'information'
+      code: contentDescription.code
     }));
-    const response = await persistValue(KEY, value, false);
+    const response = await persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
     }
@@ -60,7 +61,7 @@
 
   const addItem = (evt: MouseEvent) => {
     evt.preventDefault();
-    const listId = Date.now().toString(36);
+    const listId = crypto.randomUUID();
     contentDescriptions = [
       {
         listId,
@@ -124,13 +125,33 @@
           fieldConfig={getSubFieldConfig(KEY, 'title')}
           required
         />
-        <TextInput
-          bind:value={contentDescription.url}
-          label="Url"
-          onblur={persistContentDescriptions}
-          fieldConfig={getSubFieldConfig(KEY, 'url')}
-          required
-        />
+        <div class="inline-fields">
+          <SelectInput
+            value={contentDescription.code}
+            onChange={(code) => {
+              contentDescription.code = code as CI_OnLineFunctionCode;
+              persistContentDescriptions();
+            }}
+            class="code-select-field"
+            label="Code"
+            fieldConfig={getSubFieldConfig(KEY, 'code')}
+            options={[
+              { label: 'Herunterladen', key: 'download' },
+              { label: 'Information', key: 'information' },
+              { label: 'Offline-Zugriff', key: 'offlineAccess' },
+              { label: 'Bestellung', key: 'order' },
+              { label: 'Suche', key: 'search' }
+            ]}
+          />
+          <TextInput
+            bind:value={contentDescription.url}
+            class="url-field"
+            label="Url"
+            onblur={persistContentDescriptions}
+            fieldConfig={getSubFieldConfig(KEY, 'url')}
+            required
+          />
+        </div>
       </fieldset>
     {/each}
   </fieldset>
@@ -163,16 +184,35 @@
         text-align: right;
       }
 
-      :global(.text-input) {
+      :global(.text-input),
+      :global(.select-input) {
         border: none;
         background-color: rgba(244, 244, 244, 0.7);
       }
 
-      :global(.text-input > legend) {
+      :global(.text-input > legend),
+      :global(.select-input > legend) {
         font-size: 1.2em;
         background-color: white;
         border-radius: 0.25em;
         padding: 0 0.25em;
+      }
+
+      :global(.mdc-select) {
+        background-color: white;
+      }
+    }
+
+    .inline-fields {
+      display: flex;
+      gap: 1em;
+
+      :global(.code-select-field) {
+        flex: 1;
+      }
+
+      :global(.url-field) {
+        flex: 3;
       }
     }
 
