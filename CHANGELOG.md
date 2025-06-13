@@ -1,3 +1,20 @@
+# [3.10.0](https://github.com/gdi-be/mde-client/compare/v3.9.0...v3.10.0) (2025-06-13)
+
+
+### Bug Fixes
+
+* add license ([9fe4526](https://github.com/gdi-be/mde-client/commit/9fe4526cb68fc26ee3fd9e7682b39c8004185ced))
+* change button order ([6ab3ba0](https://github.com/gdi-be/mde-client/commit/6ab3ba0297bf7f9035257dd80067e10a28e305e4))
+* hide download button for data owners ([49beb1d](https://github.com/gdi-be/mde-client/commit/49beb1d774f0007d032c3614546773ff22b0ace3))
+* remove css important ([04d4e90](https://github.com/gdi-be/mde-client/commit/04d4e90c025e4c804d845a9e4f4a45fab090c103))
+* rename login ([f0a17e7](https://github.com/gdi-be/mde-client/commit/f0a17e7df5b23649074f99987f63f23dc5383df3))
+* update formState on changed data ([37f231a](https://github.com/gdi-be/mde-client/commit/37f231afb3ed1a885de195fa66cfc7bf51c96903))
+
+
+### Features
+
+* add error feedback via toasts ([ef76465](https://github.com/gdi-be/mde-client/commit/ef764655a0047a653fada424237eb68682120c0b))
+
 # [3.9.0](https://github.com/gdi-be/mde-client/compare/v3.8.0...v3.9.0) (2025-06-12)
 
 
