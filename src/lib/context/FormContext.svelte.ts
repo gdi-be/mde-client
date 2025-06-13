@@ -7,7 +7,7 @@ import {
   type DynamicFieldConfig,
   type FieldConfig
 } from '$lib/components/Form/FieldsConfig';
-import { goto } from '$app/navigation';
+import { invalidateAll } from '$app/navigation';
 import type { MetadataCollection } from '$lib/models/metadata';
 import { toast } from 'svelte-french-toast';
 
@@ -156,10 +156,7 @@ export async function persistValue(key: string, value: unknown) {
   });
 
   if (response.ok) {
-    await goto(window.location.pathname, {
-      invalidateAll: true,
-      keepFocus: true
-    });
+    await invalidateAll();
   } else {
     toast.error(`Fehler beim Speichern der Daten: ${response.statusText}`);
   }
