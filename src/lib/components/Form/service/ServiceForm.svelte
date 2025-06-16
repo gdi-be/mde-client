@@ -14,6 +14,7 @@
   import LayersForm from './LayersForm.svelte';
   import { page } from '$app/state';
   import { toast } from 'svelte-french-toast';
+  import { invalidateAll } from '$app/navigation';
 
   export type ServiceFormProps = {
     service: Service;
@@ -61,6 +62,7 @@
             service = setNestedValue(service, 'legendImage', value);
           }
         }
+        invalidateAll();
       }
     }
   }
