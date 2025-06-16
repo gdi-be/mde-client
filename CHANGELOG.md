@@ -1,3 +1,18 @@
+## [3.11.1](https://github.com/gdi-be/mde-client/compare/v3.11.0...v3.11.1) (2025-06-16)
+
+
+### Bug Fixes
+
+* add workaround for focus issue ([7da679a](https://github.com/gdi-be/mde-client/commit/7da679a131460a956b593c8353b0b60cce59e9dd))
+* always reload data in persistValue method ([e5f7441](https://github.com/gdi-be/mde-client/commit/e5f74411aa975dce15f3aad01b4eece6b843a674))
+* dataowner can't assign to user ([3b4d0a6](https://github.com/gdi-be/mde-client/commit/3b4d0a693e6664ce0e7204a043bd6c8fd718f3f5))
+* generate ids with crypto ([7d9780c](https://github.com/gdi-be/mde-client/commit/7d9780c412970254dd210610c15606be0492f89f))
+* remove "required" from inputs ([de7d231](https://github.com/gdi-be/mde-client/commit/de7d231c676b88f2c70dad211cb27cc2e14610d6))
+* remove duplicated field hint ([565404e](https://github.com/gdi-be/mde-client/commit/565404e905a49cf81cb115d63348fec1d5f2725f))
+* update service form ([7be6b5a](https://github.com/gdi-be/mde-client/commit/7be6b5a37f9b135dc07b09573b0f31c0c7231931))
+* update tab rendering in service section ([6836c4c](https://github.com/gdi-be/mde-client/commit/6836c4cc1093c38d6076a261b03fc95a5e84ab0f))
+* update validation of HVD input ([9730a83](https://github.com/gdi-be/mde-client/commit/9730a833026efe270d334efb377f1b45ff7b55cf))
+
 # [3.11.0](https://github.com/gdi-be/mde-client/compare/v3.10.0...v3.11.0) (2025-06-16)
 
 
