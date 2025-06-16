@@ -10,6 +10,7 @@ import {
 import { invalidateAll } from '$app/navigation';
 import type { MetadataCollection } from '$lib/models/metadata';
 import { toast } from 'svelte-french-toast';
+import type { Role } from '../models/keycloak';
 
 export type FormState = {
   metadata?: MetadataCollection;
@@ -114,10 +115,19 @@ export type Section =
   | 'additional'
   | 'services';
 
-export function getProgress(section: Section, metadata?: MetadataCollection): number {
-  const totalRequired = FieldConfigs.filter(
-    ({ section: s, required }) => s === section && required
-  );
+export function getProgress(
+  section: Section,
+  highestRole: Role,
+  metadata?: MetadataCollection
+): number {
+  const totalRequired = FieldConfigs.filter(({ section: s, required, editingRoles }) => {
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' || editingRoles
+        ? editingRoles?.includes(highestRole)
+        : true;
+    const isSection = s === section;
+    return required && isSection && isEditingRole;
+  });
 
   if (!metadata || totalRequired.length === 0) return 1;
 
@@ -135,11 +145,11 @@ export function getProgress(section: Section, metadata?: MetadataCollection): nu
   return validRequired.length / totalRequired.length;
 }
 
-export function allFieldsValid(metadata?: MetadataCollection): boolean {
+export function allFieldsValid(highestRole: Role, metadata?: MetadataCollection): boolean {
   if (!metadata) return false;
   const sections = Array.from(new Set(FieldConfigs.map(({ section }) => section)));
   return sections.every((section: Section) => {
-    return getProgress(section, metadata) === 1;
+    return getProgress(section, highestRole, metadata) === 1;
   });
 }
 
