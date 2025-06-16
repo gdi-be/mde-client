@@ -6,6 +6,7 @@
   import FieldHint from '../FieldHint.svelte';
   import MultiSelectInput from '$lib/components/Form/Inputs/MultiSelectInput.svelte';
   import { toast } from 'svelte-french-toast';
+  import type { ValidationResult } from '../FieldsConfig';
 
   const CHECKED_KEY = 'isoMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
@@ -22,8 +23,11 @@
     selectionValue = selectionValueFromData;
   });
 
-  const checkedFieldConfig = getFieldConfig<string>(CHECKED_KEY);
-  const categoryFieldConfig = getFieldConfig<string>(CATEGORY_KEY);
+  const checkedFieldConfig = getFieldConfig<boolean>(CHECKED_KEY);
+  const categoryFieldConfig = getFieldConfig<string[]>(CATEGORY_KEY);
+  let categoryValidationResult = $derived(
+    categoryFieldConfig?.validator(selectionValue)
+  ) as ValidationResult;
 
   let showCheckmark = $state(false);
 
@@ -72,6 +76,7 @@
           value={selectionValue}
           onChange={onSelectionChange}
           fieldConfig={categoryFieldConfig}
+          validationResult={categoryValidationResult}
         />
       {/await}
     {/if}
