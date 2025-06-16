@@ -1,3 +1,19 @@
+# [3.12.0](https://github.com/gdi-be/mde-client/compare/v3.11.1...v3.12.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* exclude hidden fields from progress calculation ([5be4f1c](https://github.com/gdi-be/mde-client/commit/5be4f1c8c16630a4df5133b50c23356cc09fa25a))
+* remove quotes from copied valued ([703cf26](https://github.com/gdi-be/mde-client/commit/703cf2671aa25a3c3ce620f3779b752e12426f18))
+* typo ([1485adc](https://github.com/gdi-be/mde-client/commit/1485adc5e6740ce41ce78258c0e2baef0dd32450))
+* typo ([44764b2](https://github.com/gdi-be/mde-client/commit/44764b2d3bff1821a093e13091cbe9bc6c6e2198))
+
+
+### Features
+
+* add popconfirm to copyFromOriginal button ([0d255a8](https://github.com/gdi-be/mde-client/commit/0d255a83561950561b0515f35642f6b95477f9df))
+* fix progress update in LayersForm ([476f0f3](https://github.com/gdi-be/mde-client/commit/476f0f367027217ab6a36dc81b8d32e1209fa51e))
+
 ## [3.11.1](https://github.com/gdi-be/mde-client/compare/v3.11.0...v3.11.1) (2025-06-16)
 
 
