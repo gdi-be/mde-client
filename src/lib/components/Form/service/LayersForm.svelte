@@ -56,6 +56,7 @@
       }
     ];
     activeTabIndex = layers.length - 1;
+    onChange(layers);
   }
 
   function removeLayer(index: number, evt: MouseEvent) {
