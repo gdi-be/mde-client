@@ -25,7 +25,7 @@
     if (valueFromData && valueFromData.length > 0) {
       contacts =
         valueFromData?.map((contact) => {
-          const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
+          const listId = crypto.randomUUID();
           return {
             listId,
             name: contact.name || '',
@@ -37,7 +37,7 @@
     } else {
       contacts = [
         {
-          listId: Date.now().toString(36),
+          listId: crypto.randomUUID(),
           name: '',
           organisation: '',
           phone: '',
