@@ -61,7 +61,7 @@
           await persistValue(k, valueFromOriginal);
         },
         {
-          text: 'Möchten Sie den Werte wirklich aus der Vorlage übernehmen? Änderungen gehen verloren.',
+          text: 'Möchten Sie den Wert wirklich aus der Vorlage übernehmen? Änderungen gehen verloren.',
           confirmButtonText: 'Übernehmen'
         }
       );
