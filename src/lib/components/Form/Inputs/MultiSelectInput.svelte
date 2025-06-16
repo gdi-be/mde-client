@@ -102,7 +102,6 @@
       {/snippet}
     </Autocomplete>
   {/if}
-  <FieldHint {validationResult} {fieldConfig} />
   <div class="field-footer">
     <FieldHint {validationResult} {fieldConfig} />
   </div>

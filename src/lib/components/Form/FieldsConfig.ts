@@ -38,7 +38,11 @@ export type FieldConfig<T> = {
   required?: boolean;
 };
 
-const isDefined = (val: any) => val !== undefined && val !== null && val !== '';
+const isDefined = (val: any) => {
+  if (val === undefined || val === null || val === '') return false;
+  if (Array.isArray(val)) return val.length > 0;
+  return true;
+};
 
 const isValidPhoneNumber = (val: string) => {
   const numberRegex = /^[+]?[0-9\s]+$/;
@@ -288,6 +292,23 @@ export const FieldConfigs: FieldConfig<any>[] = [
         return {
           valid: false,
           helpText: 'Bitte geben Sie an, ob es sich um einen High Value Datensatz handelt.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'classification',
+    required: true
+  },
+  {
+    profile_id: 6.1,
+    label: 'HVD Kategorie',
+    key: 'isoMetadata.highValueDataCategory',
+    validator: (val: any) => {
+      const isHighValueDataset = getValue('isoMetadata.highValueDataset');
+      if (isHighValueDataset === true && !isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte wählen Sie die passende(n) HVD Kategorie(n) aus.'
         };
       }
       return { valid: true };
@@ -611,6 +632,17 @@ export const FieldConfigs: FieldConfig<any>[] = [
   },
   {
     profile_id: 45,
+    label: 'FAKE_LABEL SERVICE IDENTIFIER',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const valid = services?.every((service) => isDefined(service.workspace));
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 46,
     label: 'FAKE_LABEL SERVICE PREVIEW',
     key: 'isoMetadata.services',
     validator: (services: Service[]) => {

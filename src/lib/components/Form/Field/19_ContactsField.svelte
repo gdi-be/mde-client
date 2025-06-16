@@ -25,7 +25,7 @@
     if (valueFromData && valueFromData.length > 0) {
       contacts =
         valueFromData?.map((contact) => {
-          const listId = (Math.floor(Math.random() * 1000000) + Date.now()).toString(36);
+          const listId = crypto.randomUUID();
           return {
             listId,
             name: contact.name || '',
@@ -37,7 +37,7 @@
     } else {
       contacts = [
         {
-          listId: Date.now().toString(36),
+          listId: crypto.randomUUID(),
           name: '',
           organisation: '',
           phone: '',
@@ -76,21 +76,31 @@
     persistContacts();
   };
 
-  const persistContacts = async () => {
+  const persistContacts = async (evt?: FocusEvent) => {
+    // Due to the SvelteKit lifecycle the blur effect gets trigger twice
+    // this leads to a loss of focus on the input field. This need to be fixed.
+    const focusedElement = evt?.relatedTarget as HTMLElement | null;
+
     const value = contacts.map((contact) => ({
       name: contact.name,
       organisation: contact.organisation,
       phone: contact.phone,
       email: contact.email
     }));
-    const response = await persistValue(KEY, value, false);
+    const response = await persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
     }
+
+    if (!focusedElement) return;
+    setTimeout(() => {
+      const elementToFocus = document.getElementById(focusedElement.id);
+      elementToFocus?.focus();
+    }, 300);
   };
 
   const addItem = () => {
-    const listId = Date.now().toString(36);
+    const listId = crypto.randomUUID();
     contacts = [
       {
         listId,
@@ -157,6 +167,7 @@
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'name')}
           fieldConfig={getSubFieldConfig(KEY, 'name')}
+          id={`${KEY}-${index}-name`}
         />
         <TextInput
           bind:value={contact.organisation}
@@ -164,6 +175,7 @@
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'organisation')}
           fieldConfig={getSubFieldConfig(KEY, 'organisation')}
+          id={`${KEY}-${index}-organisation`}
         />
         <TextInput
           bind:value={contact.phone}
@@ -171,6 +183,7 @@
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'phone')}
           fieldConfig={getSubFieldConfig(KEY, 'phone')}
+          id={`${KEY}-${index}-phone`}
         />
         <TextInput
           bind:value={contact.email}
@@ -178,6 +191,7 @@
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'email')}
           fieldConfig={getSubFieldConfig(KEY, 'email')}
+          id={`${KEY}-${index}-email`}
         />
       </fieldset>
     {/each}
