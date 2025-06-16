@@ -115,9 +115,16 @@ export type Section =
   | 'additional'
   | 'services';
 
-export function getProgress(section: Section, highestRole: Role, metadata?: MetadataCollection): number {
+export function getProgress(
+  section: Section,
+  highestRole: Role,
+  metadata?: MetadataCollection
+): number {
   const totalRequired = FieldConfigs.filter(({ section: s, required, editingRoles }) => {
-    const isEditingRole = highestRole === 'MdeAdministrator' || editingRoles ? editingRoles?.includes(highestRole) : true;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' || editingRoles
+        ? editingRoles?.includes(highestRole)
+        : true;
     const isSection = s === section;
     return required && isSection && isEditingRole;
   });

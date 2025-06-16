@@ -37,7 +37,7 @@ export type FieldConfig<T> = {
   ) => ValidationResultList | ValidationResult;
   section: Section;
   required?: boolean;
-  editingRoles?: Role[]
+  editingRoles?: Role[];
 };
 
 const isDefined = (val: any) => {
