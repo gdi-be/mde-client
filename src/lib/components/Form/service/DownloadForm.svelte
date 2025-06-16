@@ -24,7 +24,7 @@
     onChange = () => {}
   }: DownloadFormProps = $props();
 
-  let downloads = $state(initialDownloads || []);
+  let downloads = $state<DownloadInfo[]>([]);
   let tabs = $derived<Tab[]>(
     downloads.map((download) => {
       return {
@@ -32,9 +32,13 @@
       };
     })
   );
-
-  let activeTabIndex: number | undefined = $state(initialDownloads?.length ? 0 : undefined);
+  let activeTabIndex: number | undefined = $state();
   let activeDownload = $derived(activeTabIndex ? downloads[activeTabIndex] : downloads[0]);
+
+  $effect(() => {
+    downloads = initialDownloads || [];
+    activeTabIndex = initialDownloads?.length ? 0 : undefined;
+  });
 
   function addDownload() {
     const title = 'Neuer Download' + downloads.length;

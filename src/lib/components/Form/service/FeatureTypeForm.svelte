@@ -25,7 +25,7 @@
     onChange = () => {}
   }: FeatureTypeFormProps = $props();
 
-  let featureTypes = $state(initialFeatureTypes || []);
+  let featureTypes = $state<FeatureType[]>([]);
   let tabs = $derived<Tab[]>(
     featureTypes.map((featureType) => {
       return {
@@ -33,9 +33,13 @@
       };
     })
   );
-
-  let activeTabIndex: number | undefined = $state(initialFeatureTypes?.length ? 0 : undefined);
+  let activeTabIndex: number | undefined = $state();
   let activeFeatureType = $derived(activeTabIndex ? featureTypes[activeTabIndex] : featureTypes[0]);
+
+  $effect(() => {
+    featureTypes = initialFeatureTypes || [];
+    activeTabIndex = initialFeatureTypes?.length ? 0 : undefined;
+  });
 
   function addFeatureType() {
     const name = 'Neuer Featuretype' + featureTypes.length;

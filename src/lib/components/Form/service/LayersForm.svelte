@@ -30,7 +30,7 @@
     onChange = () => {}
   }: LayersFormProps = $props();
 
-  let layers = $state(initialLayers || []);
+  let layers = $state<Layer[]>([]);
   let tabs = $derived<Tab[]>(
     layers.map((layer) => {
       return {
@@ -38,9 +38,13 @@
       };
     })
   );
-
-  let activeTabIndex: number | undefined = $state(initialLayers?.length ? 0 : undefined);
+  let activeTabIndex: number | undefined = $state();
   let activeLayer = $derived(activeTabIndex ? layers[activeTabIndex] : layers[0]);
+
+  $effect(() => {
+    layers = initialLayers || [];
+    activeTabIndex = initialLayers?.length ? 0 : undefined;
+  });
 
   function addLayer() {
     const name = 'Neuer Layer' + layers.length;

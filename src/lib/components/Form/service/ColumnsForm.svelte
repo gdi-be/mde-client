@@ -19,7 +19,7 @@
     onChange?: (columns: ColumnInfo[]) => void;
   };
 
-  let { value, onChange = () => {} }: ColumnsFormProps = $props();
+  let { value: initialColumns, onChange = () => {} }: ColumnsFormProps = $props();
 
   let columns = $state<ColumnInfo[]>([]);
   let tabs = $derived<Tab[]>(
@@ -29,13 +29,14 @@
       };
     })
   );
+  let activeTabIndex: number | undefined = $state(undefined);
+  let activeColumn = $derived(activeTabIndex ? columns[activeTabIndex] : columns[0]);
 
   $effect(() => {
-    columns = value || [];
+    columns = initialColumns || [];
+    activeTabIndex = initialColumns?.length ? 0 : undefined;
   });
 
-  let activeTabIndex: number | undefined = $state(value?.length ? 0 : undefined);
-  let activeColumn = $derived(activeTabIndex ? columns[activeTabIndex] : columns[0]);
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
   function addColumn() {

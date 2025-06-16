@@ -123,7 +123,6 @@
           label="Titel"
           onblur={persistContentDescriptions}
           fieldConfig={getSubFieldConfig(KEY, 'title')}
-          required
         />
         <div class="inline-fields">
           <SelectInput
@@ -149,7 +148,6 @@
             label="Url"
             onblur={persistContentDescriptions}
             fieldConfig={getSubFieldConfig(KEY, 'url')}
-            required
           />
         </div>
       </fieldset>

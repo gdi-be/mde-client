@@ -171,7 +171,7 @@
   <div class="assign-section assign-editor">
     <h4>Redaktion</h4>
     <div class="actions">
-      {#if users?.length > 0}
+      {#if users?.length > 0 && highestRole !== 'MdeDataOwner'}
         {#each users as user}
           <Button variant="raised" onclick={() => assignToUser(user.keycloakId)}>
             <Label>An "{user.displayName}" übergeben</Label>

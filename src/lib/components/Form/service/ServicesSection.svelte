@@ -15,9 +15,7 @@
   const KEY = 'isoMetadata.services';
 
   let initialServices = getValue<Service[]>(KEY);
-
-  let services = $state(initialServices || []);
-
+  let services = $state<Service[]>([]);
   let tabs = $derived<Tab[]>(
     services.map((service) => {
       const mappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
@@ -29,10 +27,15 @@
       };
     })
   );
-  let activeTab: string = $state(initialServices?.[0]?.serviceIdentification || '');
+  let activeTab: string | undefined = $state();
   let activeService = $derived(
     services.find((service) => service.serviceIdentification === activeTab)
   );
+
+  $effect(() => {
+    services = initialServices || [];
+    activeTab = initialServices?.length ? initialServices[0].serviceIdentification : '';
+  });
 
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
@@ -89,6 +92,9 @@
   }
 
   $effect(() => {
+    if (!activeTab) {
+      activeTab = services.length ? services[0].serviceIdentification : '';
+    }
     const el = document.getElementById(activeTab);
     if (el) {
       el.scrollIntoView({
