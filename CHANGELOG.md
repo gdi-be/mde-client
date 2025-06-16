@@ -1,3 +1,16 @@
+# [3.11.0](https://github.com/gdi-be/mde-client/compare/v3.10.0...v3.11.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* readd (improved) CSS hack for SelectInputs ([4e78f78](https://github.com/gdi-be/mde-client/commit/4e78f78615c31503a14c7783aed07d50a46d1364))
+
+
+### Features
+
+* add code input to AdditionalInformation ([dc83eb7](https://github.com/gdi-be/mde-client/commit/dc83eb7510aa8459e43a95f9870eb8c98a250d31))
+* search for MetadataCollections in Lineage field ([5c4b1de](https://github.com/gdi-be/mde-client/commit/5c4b1de5d85f3dcbec3e399bde7c2698a6ca4ce9))
+
 # [3.10.0](https://github.com/gdi-be/mde-client/compare/v3.9.0...v3.10.0) (2025-06-13)
 
 
