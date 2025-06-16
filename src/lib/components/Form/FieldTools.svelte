@@ -66,7 +66,7 @@
         }
       );
     } else {
-      toast.error('Kein Wert im Vorlagedatensatzes gefunden');
+      toast.error('Kein Wert im Vorlagedatensatz gefunden');
     }
   };
 </script>
@@ -90,7 +90,7 @@
     {#await getValueFromOriginal()}
       <Icon
         class="material-icons spinner"
-        title="Es wird geprüft, ob der Wert im Vorlagedatensatzes gesetzt ist."
+        title="Es wird geprüft, ob der Wert im Vorlagedatensatz gesetzt ist."
       >
         progress_activity
       </Icon>
@@ -99,7 +99,7 @@
         <IconButton
           type="button"
           size="button"
-          title="Wert aus Vorlagedatensatzes übernehmen"
+          title="Wert aus Vorlagedatensatz übernehmen"
           onclick={(evt) => copyFromOriginal(key, valueFromOriginal, evt)}
         >
           <Icon class="material-icons">settings_backup_restore</Icon>
