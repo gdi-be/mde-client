@@ -89,7 +89,7 @@
     }
 
     layerCheckmarkVisible = response.ok;
-    // TODO: update progress bar
+    invalidateAll();
   }
 </script>
 

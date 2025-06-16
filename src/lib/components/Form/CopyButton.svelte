@@ -11,7 +11,13 @@
 
   const copyValue = async () => {
     try {
-      await navigator.clipboard.writeText(JSON.stringify(value));
+      let text = JSON.stringify(value);
+      // remove quotes from the string if it's a stringified object
+      if (text.startsWith('"') && text.endsWith('"')) {
+        text = text.slice(1, -1);
+      }
+
+      await navigator.clipboard.writeText(text);
       copied = true;
       setTimeout(() => (copied = false), 500);
     } catch (error) {
