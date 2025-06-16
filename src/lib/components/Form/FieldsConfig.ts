@@ -2,6 +2,7 @@
 import type { FieldKey } from '$lib/models/form';
 import type { Contacts, Extent, Layer, Service } from '$lib/models/metadata';
 import { getValue, type Section } from '$lib/context/FormContext.svelte';
+import type { Role } from '$lib/models/keycloak';
 
 export type ValidationResult = {
   valid: boolean;
@@ -36,6 +37,7 @@ export type FieldConfig<T> = {
   ) => ValidationResultList | ValidationResult;
   section: Section;
   required?: boolean;
+  editingRoles?: Role[]
 };
 
 const isDefined = (val: any) => {
@@ -101,7 +103,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'basedata',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 29,
@@ -232,7 +235,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'classification',
-    required: true
+    required: true,
+    editingRoles: ['MdeDataOwner']
   },
   {
     profile_id: 26,
@@ -242,7 +246,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'classification',
-    required: true
+    required: true,
+    editingRoles: ['MdeDataOwner']
   },
   {
     profile_id: 7,
@@ -273,7 +278,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'classification',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 37,
@@ -330,7 +336,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'classification',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 9,
@@ -428,7 +435,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'temp_and_spatial',
-    required: true
+    required: true,
+    editingRoles: ['MdeDataOwner']
   },
   {
     profile_id: 17,
@@ -444,7 +452,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'temp_and_spatial',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 18,
@@ -492,7 +501,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return validationResult;
     },
     section: 'temp_and_spatial',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 28,
@@ -584,7 +594,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'additional',
-    required: false
+    required: false,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 39,
@@ -639,7 +650,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 46,
@@ -669,6 +681,81 @@ export const FieldConfigs: FieldConfig<any>[] = [
     },
     section: 'services',
     required: true
+  },
+  {
+    profile_id: 49,
+    label: 'FAKE_LABEL LAYER TITLE',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
+      const valid = services?.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.title))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profile_id: 50,
+    label: 'FAKE_LABEL LAYER NAME',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
+      const valid = services?.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.name))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true,
+    editingRoles: ['MdeEditor']
+  },
+  {
+    profile_id: 51,
+    label: 'FAKE_LABEL LAYER STYLE TITLE',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
+      const valid = services?.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.styleTitle))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true,
+    editingRoles: ['MdeEditor']
+  },
+  {
+    profile_id: 52,
+    label: 'FAKE_LABEL LAYER STYLE NAME',
+    key: 'isoMetadata.services',
+    validator: (services: Service[]) => {
+      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
+      const valid = services?.every((service) => {
+        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
+        return (
+          !isMappingService ||
+          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.styleName))
+        );
+      });
+      return { valid };
+    },
+    section: 'services',
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 53,
@@ -724,7 +811,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true
+    required: true,
+    editingRoles: ['MdeDataOwner']
   },
   {
     profile_id: 56,
@@ -744,7 +832,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 61,
@@ -786,7 +875,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 64,
@@ -851,7 +941,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 67,
@@ -868,7 +959,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 61.1,
@@ -910,7 +1002,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 71,
@@ -924,7 +1017,8 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
     profile_id: 72,
@@ -938,6 +1032,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true
+    required: true,
+    editingRoles: ['MdeEditor']
   }
 ];

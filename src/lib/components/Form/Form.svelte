@@ -45,11 +45,16 @@
   import ScrollToTopButton from './ScrollToTopButton.svelte';
   import HelpPanel from './HelpPanel.svelte';
   import { page } from '$app/state';
+  import type { Token } from '$lib/models/keycloak';
+  import { getHighestRole } from '$lib/util';
 
   let activeSection = $state(page.url.hash.slice(1) || 'basedata');
 
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
+
+  const token = getContext<Token>('user_token');
+  const highestRole = $derived(getHighestRole(token));
 
   type SectionConfig = {
     section: Section;
@@ -130,7 +135,7 @@
           <Label>{label}</Label>
         </button>
         <LinearProgress
-          progress={getProgress(section, metadata)}
+          progress={getProgress(section, highestRole, metadata)}
           aria-label={label + ' Fortschritt'}
         />
       </div>
