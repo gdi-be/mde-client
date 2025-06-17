@@ -27,6 +27,7 @@
 <div class="title-field">
   <TextInput
     bind:value
+    maxlength={250}
     label={fieldConfig?.label || KEY}
     {fieldConfig}
     {validationResult}
@@ -47,6 +48,10 @@
 
     :global(.mdc-text-field) {
       display: flex;
+    }
+
+    :global(.text-input .field-footer .character-counter) {
+      display: none;
     }
   }
 </style>
