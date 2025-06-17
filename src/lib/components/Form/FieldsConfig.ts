@@ -68,7 +68,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
           helpText: 'Bitte geben Sie einen Titel an.'
         };
       }
-      return { valid: true };
+      return { valid: val.length <= 250 };
     },
     section: 'basedata',
     required: true
