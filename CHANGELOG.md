@@ -1,3 +1,13 @@
+## [3.12.1](https://github.com/gdi-be/mde-client/compare/v3.12.0...v3.12.1) (2025-06-18)
+
+
+### Bug Fixes
+
+* allow removal of published date ([b10e87e](https://github.com/gdi-be/mde-client/commit/b10e87ebea3ee9a9dbe6671d50a9574069687768))
+* fix validation for dhs ([1d3069d](https://github.com/gdi-be/mde-client/commit/1d3069d409588c8d321db0f21fba93203316b969))
+* limit title to 250 characters ([36bbc0d](https://github.com/gdi-be/mde-client/commit/36bbc0d7c1e14b373c6deadef1de9c050cf1b548))
+* prevent default event behavior when adding items ([6899eab](https://github.com/gdi-be/mde-client/commit/6899eab3e760f560b1ff6903c1e2a04d43be44bb))
+
 # [3.12.0](https://github.com/gdi-be/mde-client/compare/v3.11.1...v3.12.0) (2025-06-16)
 
 
