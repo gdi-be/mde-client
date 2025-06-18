@@ -35,7 +35,7 @@
   );
 
   const onChange = async () => {
-    const response = await persistValue(KEY, new Date(value!).toISOString());
+    const response = await persistValue(KEY, value ? new Date(value!).toISOString() : '');
 
     if (isAutomatedValue(value, maintenanceFrequency) && maintenanceFrequency) {
       const lastUpdatedValue = getLastUpdateValue(value, maintenanceFrequency);
