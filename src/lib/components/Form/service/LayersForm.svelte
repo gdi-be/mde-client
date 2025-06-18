@@ -12,7 +12,7 @@
   import LayerSecondaryDatasource_56 from './Field/56_LayerSecondaryDatasource.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
-  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
 
   type Tab = {
     name: string;
@@ -47,12 +47,13 @@
   });
 
   function addLayer() {
-    const name = 'Neuer Layer' + layers.length;
+    const name = String.fromCharCode(97 + layers.length);
     layers = [
       ...layers,
       {
         name,
-        title: name
+        title: name,
+        styleName: name + '_DefaultStyle'
       }
     ];
     activeTabIndex = layers.length - 1;
@@ -183,7 +184,8 @@
       gap: 1em;
 
       :global(.text-input),
-      :global(.select-input) {
+      :global(.select-input),
+      :global(.text-area-input) {
         border: none;
         background-color: rgba(244, 244, 244, 0.7);
       }
@@ -193,7 +195,8 @@
       }
 
       :global(.text-input > legend),
-      :global(.select-input > legend) {
+      :global(.select-input > legend),
+      :global(.text-area-input > legend) {
         font-size: 1.2em;
         background-color: white;
         border-radius: 0.25em;

@@ -1,8 +1,8 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import type { Layer } from '$lib/models/metadata';
+  import type { Layer, MetadataProfile } from '$lib/models/metadata';
   import { getContext } from 'svelte';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getSubFieldConfig, getValue } from '$lib/context/FormContext.svelte';
   import { getHighestRole } from '$lib/util';
   import type { Token } from '$lib/models/keycloak';
 
@@ -11,13 +11,19 @@
     onChange: (newValue: string) => void;
   };
 
+  const PROFILE_KEY = 'isoMetadata.metadataProfile';
+
   let { value, onChange }: ComponentProps = $props();
 
+  let metadataProfile = $derived(getValue<MetadataProfile>(PROFILE_KEY));
   const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'styleTitle');
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
-  const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
+  const fieldVisible = $derived(
+    highestRole === 'MdeAdministrator' ||
+      (metadataProfile === 'INSPIRE_HARMONISED' && highestRole === 'MdeEditor')
+  );
 </script>
 
 {#if fieldVisible}
@@ -25,6 +31,7 @@
     <TextInput
       label={fieldConfig?.label || 'Titel des Styles'}
       {value}
+      maxlength={250}
       {fieldConfig}
       onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
     />
