@@ -96,7 +96,8 @@
     }
   };
 
-  const addItem = () => {
+  const addItem = (evt: MouseEvent) => {
+    evt.preventDefault();
     const listId = crypto.randomUUID();
     lineages = [
       {
@@ -164,7 +165,12 @@
   <fieldset>
     <legend>
       {fieldConfig?.label}
-      <IconButton class="material-icons" onclick={addItem} size="button" title="Daten hinzufügen">
+      <IconButton
+        class="material-icons"
+        onclick={(evt) => addItem(evt)}
+        size="button"
+        title="Daten hinzufügen"
+      >
         add
       </IconButton>
     </legend>
