@@ -18,15 +18,15 @@
   const isValid = $derived(validationResult?.valid !== false);
 
   let text = $derived.by(() => {
+    if (!isValid) {
+      return validationResult?.helpText;
+    }
     if (highestRole === 'MdeDataOwner') {
       if (showHint) {
         return fieldConfig?.hint || fieldConfig?.explanation;
       } else {
         return fieldConfig?.explanation;
       }
-    }
-    if (!isValid) {
-      return validationResult?.helpText;
     }
   });
 </script>
@@ -39,7 +39,7 @@
   .field-hint {
     font-size: var(--mdc-typography-caption-font-size, 0.75rem);
 
-    &.invalid:not(.mdedataowner) {
+    &.invalid {
       color: var(--mdc-theme-error);
     }
   }
