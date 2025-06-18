@@ -710,7 +710,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
         return (
           !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.name))
+          layersMap[service.serviceIdentification]?.every((layer) => (
+            isDefined(layer.name) && /^[a-zA-Z0-9_]+$/.test(layer.name)
+          ))
         );
       });
       return { valid };
@@ -748,7 +750,9 @@ export const FieldConfigs: FieldConfig<any>[] = [
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
         return (
           !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.styleName))
+          layersMap[service.serviceIdentification]?.every((layer) => (
+            isDefined(layer.styleName) && /^[a-zA-Z0-9_]+$/.test(layer.styleName!)
+          ))
         );
       });
       return { valid };
@@ -779,7 +783,17 @@ export const FieldConfigs: FieldConfig<any>[] = [
     profile_id: 54,
     label: 'FAKE_LABEL LAYER SHORT DESCRIPTION',
     key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
+    validator: (services: Service[], extra?: Record<string, any>) => {
+      if (extra) {
+        const valid = isDefined(extra?.value);
+        if (!valid) {
+          return {
+            valid: false,
+            helpText: 'Bitte geben Sie eine kurze Beschreibung an.'
+          }
+        }
+        return { valid: true };
+      }
       const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
       const valid = services?.every((service) => {
         const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';

@@ -52,6 +52,10 @@ export function getValue<T>(key: string, metadata?: MetadataCollection): T | und
   return value as T;
 }
 
+export function getFieldConfigByProfileId<T>(profileId: number) {
+  return FieldConfigs.find(({ profile_id }) => profile_id === profileId) as FieldConfig<T>;
+};
+
 export function getSubFieldConfig(
   key: FieldKey,
   ...subKeys: string[]
