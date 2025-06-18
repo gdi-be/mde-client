@@ -99,7 +99,8 @@
     }, 300);
   };
 
-  const addItem = () => {
+  const addItem = (evt?: MouseEvent) => {
+    if (evt) evt.preventDefault();
     const listId = crypto.randomUUID();
     contacts = [
       {
@@ -141,7 +142,7 @@
       <span>{fieldConfig?.label}</span>
       <IconButton
         class="material-icons"
-        onclick={() => addItem()}
+        onclick={(evt) => addItem(evt)}
         size="button"
         title="Kontakt hinzufügen"
       >
