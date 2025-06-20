@@ -3,10 +3,10 @@
   import { setNestedValue } from '$lib/util';
   import ServiceWorkspace_45 from './Field/45_ServiceWorkspace.svelte';
   import ServicePreview_46 from './Field/46_ServicePreview.svelte';
-  import ServiceType_57 from './Field/57_ServiceType.svelte';
-  import ServiceTitle_58 from './Field/58_ServiceTitle.svelte';
-  import ServiceShortDescription_59 from './Field/59_ServiceShortDescription.svelte';
-  import ServiceLegendImage_53 from './Field/53_ServiceLegendImage.svelte';
+  import ServiceType_57 from './Field/58_ServiceType.svelte';
+  import ServiceTitle_58 from './Field/59_ServiceTitle.svelte';
+  import ServiceShortDescription_59 from './Field/60_ServiceShortDescription.svelte';
+  import ServiceLegendImage_53 from './Field/47_ServiceLegendImage.svelte';
   import DownloadForm from './DownloadForm.svelte';
   import FeatureTypeForm from './FeatureTypeForm.svelte';
   import { getContext } from 'svelte';

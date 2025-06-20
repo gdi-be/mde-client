@@ -1,16 +1,11 @@
 <script lang="ts">
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import {
-    getFieldConfig,
-    getSubFieldConfig,
-    getValue,
-    persistValue
-  } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
-  import type { ValidationResult, ValidationResultList } from '../FieldsConfig';
+  import type { ValidationResult } from '../FieldsConfig';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { toast } from 'svelte-french-toast';
@@ -48,11 +43,8 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<Contacts>(KEY);
-  let validationResult = $derived(fieldConfig?.validator(contacts)) as ValidationResultList;
-  let generalValidationResult = $derived(
-    validationResult?.find(({ index }) => index === undefined)
-  );
+  const fieldConfig = getFieldConfig<Contacts>(19);
+  let validationResult = $derived(fieldConfig?.validator(contacts));
 
   const autoFillUserDetails = async () => {
     addItem();
@@ -149,7 +141,7 @@
         add
       </IconButton>
     </legend>
-    <FieldHint validationResult={generalValidationResult} {fieldConfig} />
+    <FieldHint {validationResult} {fieldConfig} />
     {#each contacts as contact, index (contact.listId)}
       <fieldset class="contact">
         <legend>
@@ -167,7 +159,7 @@
           label="Name"
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'name')}
-          fieldConfig={getSubFieldConfig(KEY, 'name')}
+          fieldConfig={getFieldConfig(20)}
           id={`${KEY}-${index}-name`}
         />
         <TextInput
@@ -175,7 +167,7 @@
           label="Organisation"
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'organisation')}
-          fieldConfig={getSubFieldConfig(KEY, 'organisation')}
+          fieldConfig={getFieldConfig(21)}
           id={`${KEY}-${index}-organisation`}
         />
         <TextInput
@@ -183,7 +175,7 @@
           label="Telefon"
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'phone')}
-          fieldConfig={getSubFieldConfig(KEY, 'phone')}
+          fieldConfig={getFieldConfig(23)}
           id={`${KEY}-${index}-phone`}
         />
         <TextInput
@@ -191,7 +183,7 @@
           label="E-Mail"
           onblur={persistContacts}
           validationResult={getFieldValidation(index, 'email')}
-          fieldConfig={getSubFieldConfig(KEY, 'email')}
+          fieldConfig={getFieldConfig(22)}
           id={`${KEY}-${index}-email`}
         />
       </fieldset>

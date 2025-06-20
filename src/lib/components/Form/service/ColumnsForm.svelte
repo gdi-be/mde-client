@@ -1,14 +1,14 @@
 <script lang="ts">
   import type { ColumnInfo } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import Checkmark from '../Checkmark.svelte';
-  import AttributeName_64 from './Field/64_AttributeName.svelte';
-  import AttributeAlias_65 from './Field/65_AttributeAlias.svelte';
-  import AttributeDatatype_66 from './Field/66_AttributeDatatype.svelte';
-  import AttributeFilterType_67 from './Field/67_AttributeFilterType.svelte';
-  import { getSubFieldConfig } from '../../../context/FormContext.svelte';
-  import FieldHint from '../FieldHint.svelte';
-  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
+  import Checkmark from '$lib/components/Form/Checkmark.svelte';
+  import AttributeName_64 from './Field/65_AttributeName.svelte';
+  import AttributeAlias_65 from './Field/66_AttributeAlias.svelte';
+  import AttributeDatatype_66 from './Field/67_AttributeDatatype.svelte';
+  import AttributeFilterType_67 from './Field/68_AttributeFilterType.svelte';
+  import FieldHint from '$lib/components/Form/FieldHint.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { getFieldConfig } from '../../../context/FormContext.svelte';
 
   type Tab = {
     name: string;
@@ -87,9 +87,7 @@
 
 <fieldset class="columns-form">
   <legend>Attribute</legend>
-  <FieldHint
-    fieldConfig={getSubFieldConfig('isoMetadata.services', 'featuretypes', 'attributes')}
-  />
+  <FieldHint fieldConfig={getFieldConfig(64, 'attributes')} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>

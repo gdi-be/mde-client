@@ -11,8 +11,8 @@
   import LayerDatasource_55 from './Field/55_LayerDatasource.svelte';
   import LayerSecondaryDatasource_56 from './Field/56_LayerSecondaryDatasource.svelte';
   import FieldHint from '../FieldHint.svelte';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   type Tab = {
     name: string;
@@ -99,7 +99,7 @@
     Layers
     <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
-  <FieldHint fieldConfig={getSubFieldConfig('isoMetadata.services', 'layers')} />
+  <FieldHint fieldConfig={getFieldConfig(48)} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>

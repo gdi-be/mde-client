@@ -1,6 +1,6 @@
 <script lang="ts">
   import type {
-    DynamicFieldConfig,
+    StaticFieldConfig,
     FieldConfig,
     ValidationResult
   } from '$lib/components/Form/FieldsConfig';
@@ -12,7 +12,7 @@
     value?: string;
     class?: string;
     label?: string;
-    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
+    fieldConfig?: FieldConfig<string> | StaticFieldConfig;
     onfocus?: (evt: FocusEvent) => void;
     onblur?: (evt: FocusEvent) => void;
     validationResult?: ValidationResult;

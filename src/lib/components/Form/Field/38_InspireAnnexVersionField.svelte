@@ -31,7 +31,7 @@
   let metadataProfile = $derived(getValue<string>(PROFILE_KEY, metadata));
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string>(38);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {

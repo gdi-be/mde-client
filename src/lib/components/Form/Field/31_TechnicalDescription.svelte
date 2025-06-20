@@ -13,7 +13,7 @@
     }
   });
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string>(31);
 
   const onBlur = async () => {
     const response = await persistValue(KEY, value);
