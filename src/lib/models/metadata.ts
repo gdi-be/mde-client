@@ -181,9 +181,9 @@ export type Extent = {
 };
 
 export type Lineage = {
-  title: string;
-  identifier: string;
-  date: string;
+  title?: string;
+  identifier?: string;
+  date?: string;
 };
 
 export type Keywords = {

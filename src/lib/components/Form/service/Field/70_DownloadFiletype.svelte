@@ -1,19 +1,19 @@
 <script lang="ts">
-  import NumberInput from '$lib/components/Form/Inputs/NumberInput.svelte';
+  import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { DownloadInfo } from '$lib/models/metadata';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
   import { getHighestRole } from '$lib/util';
   import type { Token } from '$lib/models/keycloak';
 
   export type ComponentProps = {
-    value?: DownloadInfo['fileSize'];
+    value?: DownloadInfo['type'];
     onChange: (newValue: string) => void;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'downloads', 'fileSize');
+  const fieldConfig = getFieldConfig(70);
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -21,8 +21,8 @@
 </script>
 
 {#if fieldVisible}
-  <div class="download-file-size-field">
-    <NumberInput
+  <div class="download-type-field">
+    <TextInput
       label={fieldConfig?.label || 'Download-Titel'}
       {value}
       {fieldConfig}
@@ -32,12 +32,12 @@
 {/if}
 
 <style lang="scss">
-  .download-file-size-field {
+  .download-type-field {
     position: relative;
     display: flex;
     gap: 0.25em;
 
-    :global(.number-input) {
+    :global(.text-input) {
       flex: 1;
     }
   }

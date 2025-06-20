@@ -1,7 +1,7 @@
 <script lang="ts">
   import Select, { Option as SelectOption } from '@smui/select';
   import type { Option } from '$lib/models/form';
-  import type { DynamicFieldConfig, FieldConfig, ValidationResult } from '../FieldsConfig.ts';
+  import type { StaticFieldConfig, FieldConfig, ValidationResult } from '../FieldsConfig.ts';
   import FieldHint from '../FieldHint.svelte';
 
   type InputProps = {
@@ -9,7 +9,7 @@
     value?: string;
     class?: string;
     label?: string;
-    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
+    fieldConfig?: FieldConfig<string> | StaticFieldConfig;
     options: Option[];
     validationResult?: ValidationResult;
     disabled?: boolean;

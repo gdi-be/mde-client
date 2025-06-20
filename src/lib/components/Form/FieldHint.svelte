@@ -1,12 +1,12 @@
 <script lang="ts">
   import { getContext } from 'svelte';
-  import type { DynamicFieldConfig, FieldConfig, ValidationResult } from './FieldsConfig.js';
+  import type { StaticFieldConfig, FieldConfig, ValidationResult } from './FieldsConfig.js';
   import type { Token } from '$lib/models/keycloak.js';
   import { getHighestRole } from '$lib/util.js';
 
   type FieldBottomTextProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fieldConfig?: FieldConfig<any> | DynamicFieldConfig;
+    fieldConfig?: FieldConfig<any> | StaticFieldConfig;
     validationResult?: ValidationResult;
     showHint?: boolean;
   };

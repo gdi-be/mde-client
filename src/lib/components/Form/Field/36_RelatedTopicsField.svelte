@@ -19,7 +19,7 @@
   const highestRole = $derived(getHighestRole(token));
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string>(36);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 

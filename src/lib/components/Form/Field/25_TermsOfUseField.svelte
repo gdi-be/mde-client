@@ -12,7 +12,7 @@
   const value = $derived(getValue<number>(KEY));
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<number>(KEY);
+  const fieldConfig = getFieldConfig<number>(25);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const fetchOptions = async () => {

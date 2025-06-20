@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from 'svelte/elements';
   import type {
-    DynamicFieldConfig,
+    StaticFieldConfig,
     FieldConfig,
     ValidationResult
   } from '$lib/components/Form/FieldsConfig';
@@ -11,7 +11,7 @@
     value?: string;
     key?: string;
     label?: string;
-    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
+    fieldConfig?: FieldConfig<string> | StaticFieldConfig;
     class?: string;
     validationResult?: ValidationResult;
   } & HTMLInputAttributes;

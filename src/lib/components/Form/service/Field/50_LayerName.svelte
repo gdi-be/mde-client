@@ -2,7 +2,7 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { Layer } from '$lib/models/metadata';
   import { getContext } from 'svelte';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
 
@@ -13,11 +13,16 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'name');
+  const fieldConfig = getFieldConfig(50);
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
+
+  const onChangeInternal = (e: Event) => {
+    const newValue = (e.target as HTMLInputElement).value;
+    onChange(newValue);
+  };
 </script>
 
 {#if fieldVisible}
@@ -25,8 +30,9 @@
     <TextInput
       label={fieldConfig?.label || 'Name der Kartenebene'}
       {value}
+      maxlength={100}
       {fieldConfig}
-      onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+      onchange={onChangeInternal}
     />
   </div>
 {/if}

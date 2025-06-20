@@ -1,7 +1,7 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { Layer } from '$lib/models/metadata';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
@@ -13,7 +13,7 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'datasource');
+  const fieldConfig = getFieldConfig(55);
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));

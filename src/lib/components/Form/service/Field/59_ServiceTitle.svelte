@@ -2,7 +2,7 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { MetadataCollection, Service } from '$lib/models/metadata';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
-  import { getSubFieldConfig, getValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { getContext } from 'svelte';
 
@@ -20,7 +20,7 @@
   const metadata = getContext<MetadataCollection>('metadata');
   const metadataTitle = $derived(getValue<string>(METADATA_TITLE_KEY, metadata));
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'title');
+  const fieldConfig = getFieldConfig(59);
 
   const getAutoFillValues = async () => {
     if (!metadataTitle) return;

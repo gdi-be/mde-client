@@ -25,11 +25,11 @@
   });
 
   let showCheckmark = $state(false);
-  const fromFieldConfig = getFieldConfig<string>(FROM_KEY);
+  const fromFieldConfig = getFieldConfig<string>(12, 'validFrom');
   let fromValidationResult = $derived(
     fromFieldConfig?.validator(startValue, { endValue })
   ) as ValidationResult;
-  const toFieldConfig = getFieldConfig<string>(TO_KEY);
+  const toFieldConfig = getFieldConfig<string>(12, 'validTo');
   let toValidationResult = $derived(
     toFieldConfig?.validator(endValue, { startValue })
   ) as ValidationResult;

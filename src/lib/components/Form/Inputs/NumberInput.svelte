@@ -1,6 +1,6 @@
 <script lang="ts">
   import FieldHint from '../FieldHint.svelte';
-  import type { DynamicFieldConfig, FieldConfig, ValidationResult } from '../FieldsConfig';
+  import type { StaticFieldConfig, FieldConfig, ValidationResult } from '../FieldsConfig';
   import type { HTMLInputAttributes } from 'svelte/elements';
 
   type InputProps = {
@@ -8,7 +8,7 @@
     key?: string;
     label?: string;
     class?: string;
-    fieldConfig?: FieldConfig<number> | DynamicFieldConfig;
+    fieldConfig?: FieldConfig<number> | StaticFieldConfig;
     onfocus?: (evt: FocusEvent) => void;
     onblur?: (evt: FocusEvent) => void;
     validationResult?: ValidationResult;

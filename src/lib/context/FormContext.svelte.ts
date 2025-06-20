@@ -4,20 +4,20 @@ import { page } from '$app/state';
 import type { FieldKey } from '$lib/models/form';
 import {
   FieldConfigs,
-  type DynamicFieldConfig,
-  type FieldConfig
+  type FullFieldConfig,
+  type YamlFieldConfig
 } from '$lib/components/Form/FieldsConfig';
 import { invalidateAll } from '$app/navigation';
 import type { MetadataCollection } from '$lib/models/metadata';
 import { toast } from 'svelte-french-toast';
-import type { Role } from '../models/keycloak';
+import type { Role } from '$lib/models/keycloak';
 
 export type FormState = {
   metadata?: MetadataCollection;
   activeHelpKey?: FieldKey;
   assignedUser?: string;
   assignedRole?: string;
-  fieldConfigs?: any;
+  fieldConfigs?: YamlFieldConfig[];
 };
 
 const formState = $state<FormState>({
@@ -28,7 +28,7 @@ export const FORMSTATE_CONTEXT = Symbol('formState');
 
 export async function initializeFormContext(
   metadata: MetadataCollection,
-  fieldConfigs?: FieldConfig<any>[]
+  fieldConfigs?: YamlFieldConfig[]
 ) {
   formState.metadata = metadata;
   formState.fieldConfigs = fieldConfigs;
@@ -52,33 +52,17 @@ export function getValue<T>(key: string, metadata?: MetadataCollection): T | und
   return value as T;
 }
 
-export function getSubFieldConfig(
-  key: FieldKey,
-  ...subKeys: string[]
-): DynamicFieldConfig | undefined {
-  const configs: DynamicFieldConfig[] = formState.fieldConfigs || [];
-  const dynamicFieldConfig = configs.find(({ key: k }) => k === key);
-  if (!dynamicFieldConfig) return undefined;
-  let config: DynamicFieldConfig | undefined = dynamicFieldConfig;
-  subKeys.forEach((k) => {
-    if (!config) {
-      config = dynamicFieldConfig.subFields?.find(({ key: subKey }) => subKey === k);
-    } else {
-      config = config.subFields?.find(({ key: subKey }) => subKey === k);
-    }
-  });
-  return config;
-}
-
-export function getFieldConfig<T>(key: FieldKey): FieldConfig<T> | undefined {
-  const staticFieldConfig = FieldConfigs.find(({ key: k }) => k === key);
-  const configs: DynamicFieldConfig[] = formState.fieldConfigs || [];
-  const dynamicFieldConfig = configs.find(({ key: k }) => k === key);
+export function getFieldConfig<T>(profileId: number, key?: string): FullFieldConfig<T> | undefined {
+  const staticFieldConfig = FieldConfigs.find(({ profileId: id }) => id === profileId);
+  const yamlConfigs = formState.fieldConfigs?.filter(({ profileId: id }) => id === profileId) || [];
+  const dynamicFieldConfig = yamlConfigs.length === 1
+    ? yamlConfigs[0]
+    : yamlConfigs.find(({ key: k }) => k === key);
 
   return {
     ...staticFieldConfig,
     ...dynamicFieldConfig
-  } as FieldConfig<T>;
+  } as FullFieldConfig<T>;
 }
 
 export function setValue<T>(key: string, value: T) {
@@ -122,16 +106,16 @@ export function getProgress(
 ): number {
   const totalRequired = FieldConfigs.filter(({ section: s, required, editingRoles }) => {
     const isEditingRole =
-      highestRole === 'MdeAdministrator' || editingRoles
+      highestRole === 'MdeAdministrator' || (editingRoles
         ? editingRoles?.includes(highestRole)
-        : true;
+        : true);
     const isSection = s === section;
     return required && isSection && isEditingRole;
   });
 
   if (!metadata || totalRequired.length === 0) return 1;
 
-  const isValidFilter = ({ key, validator }: FieldConfig<any>) => {
+  const isValidFilter = ({ key, validator }: FullFieldConfig<any>) => {
     const value = getValue(key, metadata);
     const validationResult = validator(value);
     if (Array.isArray(validationResult)) {
