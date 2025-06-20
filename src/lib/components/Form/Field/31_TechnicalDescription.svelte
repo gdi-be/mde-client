@@ -13,7 +13,8 @@
     }
   });
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string>(31);
+  let validationResult = $derived(fieldConfig?.validator(value));
 
   const onBlur = async () => {
     const response = await persistValue(KEY, value);
@@ -24,7 +25,13 @@
 </script>
 
 <div class="technical-description-field">
-  <TextInput bind:value label={fieldConfig?.label} {fieldConfig} onblur={onBlur} />
+  <TextInput
+    bind:value
+    label={fieldConfig?.label}
+    {fieldConfig}
+    {validationResult}
+    onblur={onBlur}
+  />
   <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 

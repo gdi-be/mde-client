@@ -2,7 +2,7 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { Layer, MetadataProfile } from '$lib/models/metadata';
   import { getContext } from 'svelte';
-  import { getSubFieldConfig, getValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
   import { getHighestRole } from '$lib/util';
   import type { Token } from '$lib/models/keycloak';
 
@@ -16,7 +16,8 @@
   let { value, onChange }: ComponentProps = $props();
 
   let metadataProfile = $derived(getValue<MetadataProfile>(PROFILE_KEY));
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'styleTitle');
+  const fieldConfig = getFieldConfig(52);
+  const validationResult = $derived(fieldConfig?.validator(value));
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -33,6 +34,7 @@
       {value}
       maxlength={250}
       {fieldConfig}
+      {validationResult}
       onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
     />
   </div>

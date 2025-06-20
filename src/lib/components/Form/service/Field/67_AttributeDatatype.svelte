@@ -2,7 +2,7 @@
   import type { ColumnInfo } from '$lib/models/metadata';
   import SelectInput from '$lib/components/Form/Inputs/SelectInput.svelte';
   import type { Option } from '$lib/models/form';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
@@ -17,12 +17,8 @@
   const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 
-  const fieldConfig = getSubFieldConfig(
-    'isoMetadata.services',
-    'featuretypes',
-    'attributes',
-    'type'
-  );
+  const fieldConfig = getFieldConfig(67);
+  const validationResult = $derived(fieldConfig?.validator(value));
 
   const options: Option[] = [
     { key: 'BigDecimal', label: 'BigDecimal' },
@@ -41,7 +37,14 @@
 
 {#if fieldVisible}
   <div class="attribute-type-field">
-    <SelectInput label={fieldConfig?.label || 'Attribut-Datentyp'} {value} {options} {onChange} />
+    <SelectInput
+      label={fieldConfig?.label || 'Attribut-Datentyp'}
+      {fieldConfig}
+      {validationResult}
+      {value}
+      {options}
+      {onChange}
+    />
   </div>
 {/if}
 

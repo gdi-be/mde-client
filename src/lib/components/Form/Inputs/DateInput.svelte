@@ -1,17 +1,13 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from 'svelte/elements';
-  import type {
-    DynamicFieldConfig,
-    FieldConfig,
-    ValidationResult
-  } from '$lib/components/Form/FieldsConfig';
+  import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
 
   type InputProps = {
     value?: string;
     key?: string;
     label?: string;
-    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
+    fieldConfig?: FullFieldConfig<string>;
     class?: string;
     validationResult?: ValidationResult;
   } & HTMLInputAttributes;

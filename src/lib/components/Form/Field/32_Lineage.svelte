@@ -1,12 +1,7 @@
 <script lang="ts">
   import type { Lineage, MetadataCollection } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import {
-    getFieldConfig,
-    getSubFieldConfig,
-    getValue,
-    persistValue
-  } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
@@ -82,7 +77,7 @@
   };
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<Lineage[]>(KEY);
+  const fieldConfig = getFieldConfig<Lineage[]>(32);
 
   const persistLineages = async () => {
     const value = lineages.map((lineage) => ({
@@ -193,7 +188,8 @@
             label="Titel"
             onblur={onTitleBlur}
             onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
-            fieldConfig={getSubFieldConfig(KEY, 'title')}
+            fieldConfig={getFieldConfig(33)}
+            validationResult={getFieldConfig(33)?.validator(lineage.title)}
           />
           {#if metadataCollections.length > 0 && titleSearchListId === lineage.listId}
             <ul class="search-results" bind:this={searchResultsElement}>
@@ -214,14 +210,16 @@
             key={KEY}
             label="Veröffentlichungsdatum"
             onblur={persistLineages}
-            fieldConfig={getSubFieldConfig(KEY, 'date')}
+            fieldConfig={getFieldConfig(34)}
+            validationResult={getFieldConfig(34)?.validator(lineage.date)}
           />
           <TextInput
             class="lineage-source-field"
             bind:value={lineage.identifier}
             label="Identifier"
             onblur={persistLineages}
-            fieldConfig={getSubFieldConfig(KEY, 'identifier')}
+            fieldConfig={getFieldConfig(35)}
+            validationResult={getFieldConfig(35)?.validator(lineage.identifier)}
           />
         </div>
       </fieldset>

@@ -2,7 +2,6 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
-  import type { ValidationResult } from '../FieldsConfig';
 
   const KEY = 'isoMetadata.title';
 
@@ -13,8 +12,8 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
-  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
+  const fieldConfig = getFieldConfig<string>(1);
+  let validationResult = $derived(fieldConfig?.validator(value));
 
   const onBlur = async () => {
     const response = await persistValue(KEY, value);

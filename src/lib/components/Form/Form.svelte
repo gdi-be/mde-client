@@ -17,7 +17,7 @@
   import F19_ContactsField from './Field/19_ContactsField.svelte';
   import F05_InspireType from './Field/05_InspireType.svelte';
   import F04_PrivacyField from './Field/04_PrivacyField.svelte';
-  import F24_TermsOfUseField from './Field/24_TermsOfUseField.svelte';
+  import F25_TermsOfUseField from './Field/25_TermsOfUseField.svelte';
   import F26_TermsOfUseSourceField from './Field/26_TermsOfUseSourceField.svelte';
   import F07_AnnexThemeField from './Field/07_AnnexThemeField.svelte';
   import F37_QualityReportCheckField from './Field/37_QualityReportCheckField.svelte';
@@ -135,7 +135,7 @@
           <Label>{label}</Label>
         </button>
         <LinearProgress
-          progress={getProgress(section, highestRole, metadata)}
+          progress={getProgress(highestRole, section, metadata)}
           aria-label={label + ' Fortschritt'}
         />
       </div>
@@ -160,7 +160,7 @@
         <section id="classification" transition:fade>
           <F05_InspireType />
           <F04_PrivacyField />
-          <F24_TermsOfUseField />
+          <F25_TermsOfUseField />
           <F26_TermsOfUseSourceField />
           <F07_AnnexThemeField />
           <F38_InspireAnnexVersionField />

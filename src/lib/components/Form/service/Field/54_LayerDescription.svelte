@@ -1,8 +1,7 @@
 <script lang="ts">
   import TextAreaInput from '$lib/components/Form/Inputs/TextAreaInput.svelte';
   import type { Layer } from '$lib/models/metadata';
-  import { getFieldConfigByProfileId, getSubFieldConfig } from '$lib/context/FormContext.svelte';
-  import type { ValidationResult } from '$lib/components/Form/FieldsConfig';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   export type ComponentProps = {
     value?: Layer['shortDescription'];
@@ -11,21 +10,16 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const dynamicFieldConfig = getSubFieldConfig(
-    'isoMetadata.services',
-    'layers',
-    'shortDescription'
-  );
-  const staticFieldConfig = $derived(getFieldConfigByProfileId<[]>(54));
-  let validationResult = $derived(staticFieldConfig.validator([], { value })) as ValidationResult;
+  const fieldConfig = getFieldConfig(54);
+  const validationResult = $derived(fieldConfig?.validator(value));
 </script>
 
 <div class="layer-short-description-field">
   <TextAreaInput
-    label={dynamicFieldConfig?.label || 'Kurzbeschreibung'}
+    label={fieldConfig?.label || 'Kurzbeschreibung'}
     {value}
     maxlength={500}
-    fieldConfig={dynamicFieldConfig}
+    {fieldConfig}
     {validationResult}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />

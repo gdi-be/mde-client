@@ -1,21 +1,22 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import type { Layer } from '$lib/models/metadata';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import type { Service } from '$lib/models/metadata';
   import { getContext } from 'svelte';
   import { getHighestRole } from '$lib/util';
   import type { Token } from '$lib/models/keycloak';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   export type ComponentProps = {
-    value?: Layer['title'];
+    value?: Service['workspace'];
     onChange: (newValue: string) => void;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
   const HELP_KEY = 'isoMetadata.services.workspace';
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'workspace');
+  const fieldConfig = getFieldConfig(45);
+  const validationResult = $derived(fieldConfig?.validator(value));
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -28,6 +29,7 @@
       label={fieldConfig?.label || 'Identifikator des Kartendienstes'}
       {value}
       {fieldConfig}
+      {validationResult}
       onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
     />
     <FieldTools key={HELP_KEY} />

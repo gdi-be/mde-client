@@ -2,7 +2,7 @@
   import type { Option } from '$lib/models/form';
   import FormField from '@smui/form-field';
   import Radio from '@smui/radio';
-  import type { DynamicFieldConfig, FieldConfig, ValidationResult } from '../FieldsConfig';
+  import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
 
   type InputProps = {
@@ -10,7 +10,7 @@
     key: string;
     label?: string;
     value?: string;
-    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
+    fieldConfig?: FullFieldConfig<string>;
     options: Option[];
     validationResult?: ValidationResult;
   };

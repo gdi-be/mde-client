@@ -1,7 +1,7 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { ColumnInfo } from '$lib/models/metadata';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   export type ComponentProps = {
     value?: ColumnInfo['alias'];
@@ -10,12 +10,8 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig = getSubFieldConfig(
-    'isoMetadata.services',
-    'featuretypes',
-    'attributes',
-    'alias'
-  );
+  const fieldConfig = getFieldConfig(66);
+  const validationResult = $derived(fieldConfig?.validator(value));
 </script>
 
 <div class="attribute-alias-field">
@@ -23,6 +19,7 @@
     label={fieldConfig?.label || 'Attribut-Alias'}
     {value}
     {fieldConfig}
+    {validationResult}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />
 </div>

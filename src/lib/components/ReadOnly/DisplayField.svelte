@@ -6,13 +6,14 @@
   import type { MetadataCollection } from '$lib/models/metadata';
 
   type DisplayFieldProps = {
+    profileId?: number;
     key: FieldKey;
     label?: string;
   };
 
-  const { key, label }: DisplayFieldProps = $props();
+  const { key, profileId, label }: DisplayFieldProps = $props();
 
-  const config = $derived(getFieldConfig(key));
+  const config = $derived(profileId ? getFieldConfig(profileId) : undefined);
   const value = $derived(getValue(key));
 
   const valueSnippet: Snippet<[unknown, MetadataCollection | undefined]> = $derived.by(() => {

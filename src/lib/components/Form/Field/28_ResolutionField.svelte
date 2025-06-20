@@ -31,11 +31,11 @@
   });
 
   let showCheckmark = $state(false);
-  const resolutionFieldConfig = getFieldConfig<number>(RESOLUTION_KEY);
+  const resolutionFieldConfig = getFieldConfig<number>(28);
   let resolutionValidationResult = $derived(
     resolutionFieldConfig?.validator(resolutionValue || undefined)
   ) as ValidationResult;
-  const scaleFieldConfig = getFieldConfig<number>(SCALE_KEY);
+  const scaleFieldConfig = getFieldConfig<number>(27);
   let scaleValidationResult = $derived(
     scaleFieldConfig?.validator(scaleValue || undefined)
   ) as ValidationResult;

@@ -1,11 +1,6 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import {
-    getFieldConfig,
-    getSubFieldConfig,
-    getValue,
-    persistValue
-  } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
@@ -45,7 +40,7 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<ContentDescription[]>(KEY);
+  const fieldConfig = getFieldConfig<ContentDescription[]>(39);
 
   const persistContentDescriptions = async () => {
     const value = contentDescriptions.map((contentDescription) => ({
@@ -122,7 +117,10 @@
           bind:value={contentDescription.description}
           label="Titel"
           onblur={persistContentDescriptions}
-          fieldConfig={getSubFieldConfig(KEY, 'title')}
+          fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.titel')}
+          validationResult={getFieldConfig(39, 'isoMetadata.contentDescriptions.titel')?.validator(
+            contentDescription.description
+          )}
         />
         <div class="inline-fields">
           <SelectInput
@@ -133,7 +131,10 @@
             }}
             class="code-select-field"
             label="Code"
-            fieldConfig={getSubFieldConfig(KEY, 'code')}
+            fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.code')}
+            validationResult={getFieldConfig(39, 'isoMetadata.contentDescriptions.code')?.validator(
+              contentDescription.code
+            )}
             options={[
               { label: 'Herunterladen', key: 'download' },
               { label: 'Information', key: 'information' },
@@ -147,7 +148,10 @@
             class="url-field"
             label="Url"
             onblur={persistContentDescriptions}
-            fieldConfig={getSubFieldConfig(KEY, 'url')}
+            fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.url')}
+            validationResult={getFieldConfig(39, 'isoMetadata.contentDescriptions.url')?.validator(
+              contentDescription.url
+            )}
           />
         </div>
       </fieldset>

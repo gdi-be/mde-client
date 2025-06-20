@@ -1,7 +1,7 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { DownloadInfo } from '$lib/models/metadata';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
   import { getHighestRole } from '$lib/util';
   import type { Token } from '$lib/models/keycloak';
@@ -13,7 +13,8 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'downloads', 'href');
+  const fieldConfig = getFieldConfig(71);
+  const validationResult = $derived(fieldConfig?.validator(value));
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -26,6 +27,7 @@
       label={fieldConfig?.label || 'Download-Titel'}
       {value}
       {fieldConfig}
+      {validationResult}
       onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
     />
   </div>

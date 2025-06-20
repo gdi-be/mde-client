@@ -30,7 +30,7 @@
     value = valueFromData || '';
   });
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string>(5);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue?: string) => {

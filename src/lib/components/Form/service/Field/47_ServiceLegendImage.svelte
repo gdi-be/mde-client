@@ -3,8 +3,8 @@
   import type { Service } from '$lib/models/metadata';
   import NumberInput from '$lib/components/Form/Inputs/NumberInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
-  import FieldHint from '../../FieldHint.svelte';
-  import { getSubFieldConfig } from '../../../../context/FormContext.svelte';
+  import FieldHint from '$lib/components/Form/FieldHint.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   const KEY = 'isoMetadata.services.legendImage';
 
@@ -15,7 +15,8 @@
 
   let { value, onChange }: ServiceTypeProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'legendImage');
+  const fieldConfig = getFieldConfig(47);
+  const validationResult = $derived(fieldConfig?.validator(value));
 
   const update = (key: string, val: string) => {
     onChange({
@@ -28,20 +29,20 @@
 <div class="legend-fieldset">
   <fieldset>
     <legend>{fieldConfig?.label || 'Gesamtlegende'}</legend>
-    <FieldHint {fieldConfig} />
+    <FieldHint {fieldConfig} {validationResult} />
     <div class="inputs">
       <div class="legend-text-fields">
         <TextInput
           label="Url"
           value={value?.url}
           onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
-          fieldConfig={getSubFieldConfig('isoMetadata.services', 'legendImage', 'url')}
+          fieldConfig={getFieldConfig(47, 'url')}
         />
         <TextInput
           label="Format"
           value={value?.format}
           onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
-          fieldConfig={getSubFieldConfig('isoMetadata.services', 'legendImage', 'format')}
+          fieldConfig={getFieldConfig(47, 'format')}
         />
       </div>
       <div class="legend-size-fields">
@@ -49,13 +50,13 @@
           label="Breite"
           value={value?.width}
           onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
-          fieldConfig={getSubFieldConfig('isoMetadata.services', 'legendImage', 'width')}
+          fieldConfig={getFieldConfig(47, 'width')}
         />
         <NumberInput
           label="Höhe"
           value={value?.height}
           onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
-          fieldConfig={getSubFieldConfig('isoMetadata.services', 'legendImage', 'height')}
+          fieldConfig={getFieldConfig(47, 'height')}
         />
       </div>
     </div>

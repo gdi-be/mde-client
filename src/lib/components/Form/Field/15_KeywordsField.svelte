@@ -29,7 +29,7 @@
 
   let uniqueKeywords = $derived(Array.from(new Set([...autoKeywords, ...value])));
   let searchValue = $state('');
-  const fieldConfig = getFieldConfig<string[]>(KEY);
+  const fieldConfig = getFieldConfig<string[]>(15);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   let dialogOpen = $state(false);

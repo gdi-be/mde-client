@@ -4,7 +4,7 @@
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { TermsOfUse } from '$lib/models/metadata';
   import type { Option } from '$lib/models/form';
-  import type { ValidationResult } from '../FieldsConfig';
+  import type { FullFieldConfig } from '../FieldsConfig';
   import { toast } from 'svelte-french-toast';
 
   const KEY = 'isoMetadata.termsOfUseId';
@@ -12,8 +12,8 @@
   const value = $derived(getValue<number>(KEY));
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<number>(KEY);
-  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
+  const fieldConfig = getFieldConfig<number>(25);
+  let validationResult = $derived(fieldConfig?.validator(value));
 
   const fetchOptions = async () => {
     const response = await fetch('/data/terms_of_use');
@@ -48,7 +48,7 @@
     <div class="input-wrapper">
       <SelectInput
         label={fieldConfig?.label}
-        {fieldConfig}
+        fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
         options={OPTIONS.map(
           (item: TermsOfUse): Option => ({
             key: item.id.toString(),

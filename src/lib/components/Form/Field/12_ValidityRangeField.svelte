@@ -2,7 +2,7 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
-  import type { ValidationResult } from '../FieldsConfig';
+  import { invalidateAll } from '$app/navigation';
 
   const FROM_KEY = 'isoMetadata.validFrom';
   const TO_KEY = 'isoMetadata.validTo';
@@ -25,14 +25,11 @@
   });
 
   let showCheckmark = $state(false);
-  const fromFieldConfig = getFieldConfig<string>(FROM_KEY);
-  let fromValidationResult = $derived(
-    fromFieldConfig?.validator(startValue, { endValue })
-  ) as ValidationResult;
-  const toFieldConfig = getFieldConfig<string>(TO_KEY);
-  let toValidationResult = $derived(
-    toFieldConfig?.validator(endValue, { startValue })
-  ) as ValidationResult;
+  const fromFieldConfig = getFieldConfig<string>(12, 'isoMetadata.validFrom');
+  let fromValidationResult = $derived(fromFieldConfig?.validator(startValue, [endValue]));
+
+  const toFieldConfig = getFieldConfig<string>(12, 'isoMetadata.validTo');
+  let toValidationResult = $derived(toFieldConfig?.validator(endValue, [startValue]));
 
   const onChange = async (key: string) => {
     const value = key === FROM_KEY ? startValue : endValue!;
@@ -40,6 +37,7 @@
     if (response.ok) {
       showCheckmark = true;
     }
+    invalidateAll();
   };
 </script>
 

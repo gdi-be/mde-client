@@ -2,11 +2,11 @@
   import type { DownloadInfo } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import Checkmark from '../Checkmark.svelte';
-  import DownloadTitle_68 from './Field/68_DownloadTitle.svelte';
-  import DownloadFiletype_69 from './Field/69_DownloadFiletype.svelte';
-  import DownloadHref_70 from './Field/70_DownloadHref.svelte';
-  import DownloadFilesize_71 from './Field/71_DownloadFilesize.svelte';
-  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
+  import DownloadTitle_68 from './Field/69_DownloadTitle.svelte';
+  import DownloadFiletype_69 from './Field/70_DownloadFiletype.svelte';
+  import DownloadHref_70 from './Field/71_DownloadHref.svelte';
+  import DownloadFilesize_71 from './Field/72_DownloadFilesize.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
 
   type Tab = {
     title: string;
