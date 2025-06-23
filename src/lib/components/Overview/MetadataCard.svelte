@@ -26,6 +26,7 @@
     (metadata.assignedUserId && metadata.assignedUserId !== userId) || false
   );
   const isTeamMember = $derived(metadata.teamMemberIds?.includes(userId));
+  const isOwner = $derived(metadata.ownerId === userId);
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
   const showDeleteAction = $derived(
     highestRole === 'MdeAdministrator' ||
@@ -37,12 +38,26 @@
     highestRole === 'MdeAdministrator' ||
       (['MdeEditor', 'MdeDataOwner'].includes(highestRole) && metadata.assignedUserId === userId)
   );
-  const showAssignAction = $derived(
-    highestRole === 'MdeAdministrator' ||
-      (!assignedToSomeoneElse &&
-        highestRole === metadata.responsibleRole &&
-        highestRole !== 'MdeDataOwner')
-  );
+  const showAssignAction = $derived.by(() => {
+    // admin can always assign
+    if (highestRole === 'MdeAdministrator') {
+      return true;
+    }
+    // Dataowners cannot unassign (only via AssignmentDialog)
+    else if (highestRole === 'MdeDataOwner' && metadata.assignedUserId === userId) {
+      return false;
+    }
+    // if no on is assigned and i have the assigned role and im owner or team member
+    // or if i have the role "editor" or "quality assurance" i can assign
+    else if (
+      !assignedToSomeoneElse &&
+      metadata.responsibleRole === highestRole &&
+      (isOwner || isTeamMember || ['MdeEditor', 'MdeQualityAssurance'].includes(highestRole))
+    ) {
+      return true;
+    }
+    return false;
+  });
 
   const statuses = $derived.by(() => {
     const chips = [];
