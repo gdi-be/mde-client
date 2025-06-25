@@ -53,7 +53,7 @@ export function getFormContext() {
  * @param metadata - Optional: Alternative metadata collection. If not provided, formState.metadata is used
  * @returns The value at the specified path or undefined if the path does not exist
  */
-export function getValue<T>(key: string, metadata?: MetadataCollection): T | undefined {
+export function getValue<T>(key: string, metadata?: MetadataCollection): T | undefined | null {
   const data = metadata || formState.metadata;
   if (!data) return undefined;
 
@@ -74,7 +74,7 @@ export function getValue<T>(key: string, metadata?: MetadataCollection): T | und
     }
 
     return value;
-  }, data as Record<string, any>) as T;
+  }, data as Record<string, any>) as T | undefined | null;
 }
 
 /**
@@ -255,10 +255,6 @@ export function getProgress(
               } else {
                 // I hope we never get here
                 console.error(`Unexpected parameter ${param} in validatorExtraParams for ${field.key}`);
-                // extraParams = {
-                //   ...extraParams,
-                //   [param]: getValue(param, metadata)
-                // }
               }
             });
           }
@@ -311,9 +307,10 @@ export function getProgress(
     validateField(field);
   }
 
-  if (invalidFields.length > 0) {
-    console.table(invalidFields);
-  }
+  // uncomment for debugging
+  // if (invalidFields.length > 0) {
+  //   console.table(invalidFields);
+  // }
 
   // Calculate progress
   if (totalCount === 0) return 1;
