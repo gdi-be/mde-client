@@ -36,13 +36,13 @@
           label="Url"
           value={value?.url}
           onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
-          fieldConfig={getFieldConfig(47, 'url')}
+          fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.url')}
         />
         <TextInput
           label="Format"
           value={value?.format}
           onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
-          fieldConfig={getFieldConfig(47, 'format')}
+          fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.format')}
         />
       </div>
       <div class="legend-size-fields">
@@ -50,13 +50,13 @@
           label="Breite"
           value={value?.width}
           onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
-          fieldConfig={getFieldConfig(47, 'width')}
+          fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.width')}
         />
         <NumberInput
           label="Höhe"
           value={value?.height}
           onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
-          fieldConfig={getFieldConfig(47, 'height')}
+          fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.height')}
         />
       </div>
     </div>

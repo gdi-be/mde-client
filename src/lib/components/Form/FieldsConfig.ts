@@ -711,7 +711,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 39,
-    key: 'isoMetadata.contentDescriptions.titel',
+    key: 'isoMetadata.contentDescriptions.title',
     collectionKey: 'isoMetadata.contentDescriptions',
     validator: (val: string) => {
       if (!isDefined(val)) {
@@ -790,10 +790,49 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     section: 'services',
     required: true
   },
-  // TODO: create seperate configs for subfields of legendImage
   {
     profileId: 47,
     key: 'isoMetadata.services.legendImage',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    profileId: 47,
+    key: 'isoMetadata.services.legendImage.url',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    profileId: 47,
+    key: 'isoMetadata.services.legendImage.format',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    profileId: 47,
+    key: 'isoMetadata.services.legendImage.width',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    profileId: 47,
+    key: 'isoMetadata.services.legendImage.height',
     validator: () => {
       // optional
       return { valid: true };

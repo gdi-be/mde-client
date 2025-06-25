@@ -36,6 +36,9 @@
   let activeTabIndex: number | undefined = $state();
   let activeFeatureType = $derived(activeTabIndex ? featureTypes[activeTabIndex] : featureTypes[0]);
 
+  const fieldConfig = getFieldConfig(61);
+  const validationResult = $derived(fieldConfig?.validator(featureTypes));
+
   $effect(() => {
     featureTypes = initialFeatureTypes || [];
     activeTabIndex = initialFeatureTypes?.length ? 0 : undefined;
@@ -90,10 +93,10 @@
 
 <fieldset class="featuretypes-form">
   <legend>
-    FeatureTypes
+    {fieldConfig?.label}
     <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
-  <FieldHint fieldConfig={getFieldConfig(61)} />
+  <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>

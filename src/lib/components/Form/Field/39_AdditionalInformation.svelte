@@ -117,8 +117,8 @@
           bind:value={contentDescription.description}
           label="Titel"
           onblur={persistContentDescriptions}
-          fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.titel')}
-          validationResult={getFieldConfig(39, 'isoMetadata.contentDescriptions.titel')?.validator(
+          fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.title')}
+          validationResult={getFieldConfig(39, 'isoMetadata.contentDescriptions.title')?.validator(
             contentDescription.description
           )}
         />

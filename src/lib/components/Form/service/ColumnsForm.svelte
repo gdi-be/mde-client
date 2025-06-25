@@ -8,7 +8,7 @@
   import AttributeFilterType_67 from './Field/68_AttributeFilterType.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
-  import { getFieldConfig } from '../../../context/FormContext.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   type Tab = {
     name: string;
@@ -31,6 +31,9 @@
   );
   let activeTabIndex: number | undefined = $state(undefined);
   let activeColumn = $derived(activeTabIndex ? columns[activeTabIndex] : columns[0]);
+
+  const fieldConfig = getFieldConfig(64, 'isoMetadata.services.featureTypes.attributes');
+  const validationResult = $derived(fieldConfig?.validator(columns));
 
   $effect(() => {
     columns = initialColumns || [];
@@ -86,8 +89,8 @@
 </script>
 
 <fieldset class="columns-form">
-  <legend>Attribute</legend>
-  <FieldHint fieldConfig={getFieldConfig(64, 'attributes')} />
+  <legend>{fieldConfig?.label}</legend>
+  <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>

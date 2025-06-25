@@ -61,6 +61,7 @@
     })
   );
 
+  const fieldConfig = getFieldConfig<Extent>(18);
   const minXFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.minx');
   const minYFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.miny');
   const maxXFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.maxx');
@@ -111,7 +112,7 @@
 {#if highestRole !== 'MdeDataOwner'}
   <div class="extent-field">
     <fieldset>
-      <legend>{minXFieldConfig?.label}</legend>
+      <legend>{fieldConfig?.label}</legend>
       <div class="tools">
         <SelectInput bind:value={crsKey} label={CRS_LABEL} options={crsOptions} />
         {#each extentOptions as option}
@@ -133,7 +134,7 @@
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.minx}
-            label={LABEL_MIN_X}
+            label={minXFieldConfig?.label || LABEL_MIN_X}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
@@ -144,7 +145,7 @@
           />
           <NumberInput
             value={transformedValue.maxx}
-            label={LABEL_MAX_X}
+            label={maxXFieldConfig?.label || LABEL_MAX_X}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
@@ -157,7 +158,7 @@
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.miny}
-            label={LABEL_MIN_Y}
+            label={minYFieldConfig?.label || LABEL_MIN_Y}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
@@ -168,7 +169,7 @@
           />
           <NumberInput
             value={transformedValue.maxy}
-            label={LABEL_MAX_Y}
+            label={maxYFieldConfig?.label || LABEL_MAX_Y}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
