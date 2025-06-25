@@ -1,17 +1,18 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import type { Layer } from '$lib/models/metadata';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import type { Service } from '$lib/models/metadata';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
-    value?: Layer['title'];
+    value?: Service['preview'];
     onChange: (newValue: string) => void;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'preview');
+  const fieldConfig = getFieldConfig(46);
+  const validationResult = $derived(fieldConfig?.validator(value));
   const HELP_KEY = 'isoMetadata.services.preview';
 </script>
 
@@ -20,6 +21,7 @@
     label={fieldConfig?.label || 'Vorschau des Kartendienstes'}
     {value}
     {fieldConfig}
+    {validationResult}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />
   <FieldTools key={HELP_KEY} noCheckmark />

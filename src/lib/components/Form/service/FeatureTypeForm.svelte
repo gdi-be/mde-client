@@ -3,11 +3,11 @@
   import Checkmark from '$lib/components/Form/Checkmark.svelte';
   import ColumnsForm from './ColumnsForm.svelte';
   import type { FeatureType } from '$lib/models/metadata';
-  import FeatureTypeTitle_61 from './Field/61_FeatureTypeTitle.svelte';
-  import FeatureTypeName_62 from './Field/62_FeatureTypeName.svelte';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import FeatureTypeTitle_61 from './Field/62_FeatureTypeTitle.svelte';
+  import FeatureTypeName_62 from './Field/63_FeatureTypeName.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
-  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   type Tab = {
     name: string;
@@ -35,6 +35,9 @@
   );
   let activeTabIndex: number | undefined = $state();
   let activeFeatureType = $derived(activeTabIndex ? featureTypes[activeTabIndex] : featureTypes[0]);
+
+  const fieldConfig = getFieldConfig(61);
+  const validationResult = $derived(fieldConfig?.validator(featureTypes));
 
   $effect(() => {
     featureTypes = initialFeatureTypes || [];
@@ -90,10 +93,10 @@
 
 <fieldset class="featuretypes-form">
   <legend>
-    FeatureTypes
+    {fieldConfig?.label}
     <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
-  <FieldHint fieldConfig={getSubFieldConfig('isoMetadata.services', 'featuretypes')} />
+  <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>

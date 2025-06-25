@@ -2,7 +2,7 @@
   import type { Service } from '$lib/models/metadata';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import SelectInput from '$lib/components/Form/Inputs/SelectInput.svelte';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   export type ServiceTypeProps = {
     value: Service['serviceType'];
@@ -10,7 +10,8 @@
   };
   let { value, onChange }: ServiceTypeProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'type');
+  const fieldConfig = getFieldConfig(58);
+  const validationResult = $derived(fieldConfig?.validator(value));
   const HELP_KEY = 'isoMetadata.services.type';
 </script>
 
@@ -19,6 +20,7 @@
     label="Typ"
     {value}
     {fieldConfig}
+    {validationResult}
     options={[
       {
         key: 'ATOM',

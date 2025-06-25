@@ -2,11 +2,13 @@
   import type { DownloadInfo } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import Checkmark from '../Checkmark.svelte';
-  import DownloadTitle_68 from './Field/68_DownloadTitle.svelte';
-  import DownloadFiletype_69 from './Field/69_DownloadFiletype.svelte';
-  import DownloadHref_70 from './Field/70_DownloadHref.svelte';
-  import DownloadFilesize_71 from './Field/71_DownloadFilesize.svelte';
-  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
+  import DownloadTitle_68 from './Field/69_DownloadTitle.svelte';
+  import DownloadFiletype_69 from './Field/70_DownloadFiletype.svelte';
+  import DownloadHref_70 from './Field/71_DownloadHref.svelte';
+  import DownloadFilesize_71 from './Field/72_DownloadFilesize.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import FieldHint from '../FieldHint.svelte';
 
   type Tab = {
     title: string;
@@ -34,6 +36,9 @@
   );
   let activeTabIndex: number | undefined = $state();
   let activeDownload = $derived(activeTabIndex ? downloads[activeTabIndex] : downloads[0]);
+
+  const fieldConfig = getFieldConfig(61, 'isoMetadata.services.downloads');
+  const validationResult = $derived(fieldConfig?.validator(downloads));
 
   $effect(() => {
     downloads = initialDownloads || [];
@@ -86,9 +91,10 @@
 
 <fieldset class="downloads-form">
   <legend>
-    Downloads
+    {fieldConfig?.label}
     <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
+  <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>

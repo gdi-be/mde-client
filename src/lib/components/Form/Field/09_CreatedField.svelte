@@ -15,11 +15,11 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string>(9);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async () => {
-    const response = await persistValue(KEY, new Date(value!).toISOString());
+    const response = await persistValue(KEY, value ? new Date(value!).toISOString() : '');
     if (response.ok) {
       showCheckmark = true;
     }

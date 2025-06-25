@@ -32,6 +32,9 @@
     services.find((service) => service.serviceIdentification === activeTab)
   );
 
+  const fieldConfig = getFieldConfig(40);
+  let validationResult = $derived(fieldConfig?.validator(services));
+
   $effect(() => {
     services = initialServices || [];
     activeTab = initialServices?.length ? initialServices[0].serviceIdentification : '';
@@ -66,10 +69,10 @@
       targetEl,
       async () => {
         services = services.filter((service) => service.serviceIdentification !== id);
+        persistValue(KEY, services);
         if (activeTab === id) {
           activeTab = services[0].serviceIdentification || '';
         }
-        persistValue(KEY, services);
       },
       {
         text: 'Sind sie sicher, dass sie diesen Dienst löschen möchten? Alle dazugehörigen Daten gehen verloren.',
@@ -106,7 +109,7 @@
   });
 </script>
 
-<FieldHint fieldConfig={getFieldConfig('isoMetadata.services')} />
+<FieldHint {fieldConfig} {validationResult} />
 <nav class="tabs">
   {#each tabs as tab}
     <div class="tab-container" class:active={activeTab === tab.id}>
@@ -116,7 +119,7 @@
       {#if visibleCheckmarks[tab.id]}
         <Checkmark bind:running={visibleCheckmarks[tab.id]} />
       {/if}
-      {#if services.length > 1 && !visibleCheckmarks[tab.id]}
+      {#if !visibleCheckmarks[tab.id]}
         <IconButton
           class="material-icons"
           onclick={(evt) => removeService(tab.id, evt)}

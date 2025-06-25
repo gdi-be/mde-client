@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FieldKey } from '$lib/models/form';
-import type { Contacts, Extent, Layer, Service } from '$lib/models/metadata';
+import {
+  type ColumnInfo,
+  type Contacts,
+  type DownloadInfo,
+  type FeatureType,
+  type Layer,
+  type MetadataProfile,
+  type Service
+} from '$lib/models/metadata';
 import { getValue, type Section } from '$lib/context/FormContext.svelte';
 import type { Role } from '$lib/models/keycloak';
 
@@ -9,38 +17,35 @@ export type ValidationResult = {
   helpText?: string;
 };
 
-export type ValidationResultList = (ValidationResult & {
-  index?: number;
-  subKey?: string;
-})[];
-
-// From yaml file field_labels
-export type DynamicFieldConfig = {
-  key: FieldKey;
-  label: string;
+export interface YamlFieldConfig {
+  key?: FieldKey;
+  profileId: number;
+  label?: string;
   explanation?: string;
   placeholder?: string;
   hint?: string;
-  subFields?: DynamicFieldConfig[];
-};
+}
 
-export type FieldConfig<T> = {
-  profile_id: number;
+export interface FullFieldConfig<T> extends YamlFieldConfig {
+  // the key in the json structure
   key: FieldKey;
-  label: string;
-  explanation?: string;
-  hint?: string;
-  placeholder?: string;
-  validator: (
-    val: T | undefined,
-    extra?: Record<string, any>
-  ) => ValidationResultList | ValidationResult;
-  section: Section;
+  // if the field is required
   required?: boolean;
+  // the rootKey for nested fields
+  collectionKey?: FieldKey;
+  // indicates if this field is just a collection container (e.g. services[], featureTypes[])
+  isCollection?: boolean;
+  // the roles that can edit this field
   editingRoles?: Role[];
-};
+  // the section this field belongs to
+  section: Section;
+  // the validator function for this field
+  validator: (val: T | undefined, extra?: Record<string, any>) => ValidationResult;
+  // additional parameters for the validator function
+  validatorExtraParams?: FieldKey[];
+}
 
-const isDefined = (val: any) => {
+const isDefined = <T>(val: T): val is NonNullable<T> => {
   if (val === undefined || val === null || val === '') return false;
   if (Array.isArray(val)) return val.length > 0;
   return true;
@@ -56,9 +61,9 @@ const isValidEmail = (val: string) => {
   return emailRegex.test(val);
 };
 
-export const FieldConfigs: FieldConfig<any>[] = [
+export const FieldConfigs: FullFieldConfig<any>[] = [
   {
-    profile_id: 1,
+    profileId: 1,
     key: 'isoMetadata.title',
     label: 'Titel des Datenbestandes',
     validator: (val) => {
@@ -74,7 +79,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    profile_id: 2,
+    profileId: 2,
     key: 'isoMetadata.description',
     label: 'Kurzbeschreibung des Datenbestandes',
     validator: (val) => {
@@ -90,123 +95,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    profile_id: 15,
-    label: 'Schlagwörter',
-    key: 'isoMetadata.keywords',
-    validator: (val: any) => {
-      if (val?.length < 1) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie mindestens ein Schlagwort an.'
-        };
-      }
-      return { valid: true };
-    },
-    section: 'basedata',
-    required: true,
-    editingRoles: ['MdeEditor']
-  },
-  {
-    profile_id: 29,
-    label: 'Vorschaubild',
-    key: 'isoMetadata.preview',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie ein Vorschaubild an.'
-        };
-      }
-      return { valid: true };
-    },
-    section: 'basedata',
-    required: true
-  },
-  {
-    profile_id: 19,
-    label: 'Kontaktangaben',
-    key: 'isoMetadata.pointsOfContact',
-    validator: (contacts?: Contacts): ValidationResultList => {
-      const validationResult: ValidationResultList = [];
-      if (!contacts || contacts.length < 1)
-        return [
-          {
-            valid: false,
-            helpText: 'Bitte geben Sie mindestens einen Kontakt an.'
-          }
-        ];
-
-      for (const [index, contact] of contacts.entries()) {
-        if (!isDefined(contact.name)) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie den Namen des Kontakts an.',
-            index,
-            subKey: 'name'
-          });
-        }
-        if (!isDefined(contact.email)) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie die E-Mail-Adresse des Kontakts an.',
-            index,
-            subKey: 'email'
-          });
-        } else if (!isValidEmail(contact.email!)) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie eine gültige E-Mail-Adresse an.',
-            index,
-            subKey: 'email'
-          });
-        }
-        if (!isDefined(contact.organisation)) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie die Organisation des Kontakts an.',
-            index,
-            subKey: 'organisation'
-          });
-        }
-        if (!isDefined(contact.phone)) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie die Telefonnummer des Kontakts an.',
-            index,
-            subKey: 'phone'
-          });
-        } else if (!isValidPhoneNumber(contact.phone!)) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie eine gültige Telefonnummer an.',
-            index,
-            subKey: 'phone'
-          });
-        }
-      }
-      return validationResult;
-    },
-    section: 'basedata',
-    required: true
-  },
-  {
-    profile_id: 5,
-    label: 'INSPIRE Relevanz',
-    key: 'isoMetadata.metadataProfile',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Metadaten-Typ an.'
-        };
-      }
-      return { valid: true };
-    },
-    section: 'classification',
-    required: true
-  },
-  {
-    profile_id: 4,
+    profileId: 4,
     label: 'Datenschutz-Einstellungen',
     key: 'clientMetadata.privacy',
     validator: (val: any) => {
@@ -222,35 +111,39 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    profile_id: 24,
-    label: 'Nutzungsbestimmungen',
-    key: 'isoMetadata.termsOfUseId',
+    profileId: 5,
+    label: 'INSPIRE Relevanz',
+    key: 'isoMetadata.metadataProfile',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte wählen sie die passenden Nutzungsbestimmungen.'
+          helpText: 'Bitte geben Sie einen Metadaten-Typ an.'
         };
       }
       return { valid: true };
     },
     section: 'classification',
-    required: true,
-    editingRoles: ['MdeDataOwner']
+    required: true
   },
   {
-    profile_id: 26,
-    label: 'Nutzungsbestimmungen Quellenangabe',
-    key: 'isoMetadata.termsOfUseSource',
-    validator: () => {
+    profileId: 6,
+    label: 'High Value Datensatz',
+    key: 'isoMetadata.highValueDataset',
+    validator: (val: any) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie an, ob es sich um einen High Value Datensatz handelt.'
+        };
+      }
       return { valid: true };
     },
     section: 'classification',
-    required: true,
-    editingRoles: ['MdeDataOwner']
+    required: true
   },
   {
-    profile_id: 7,
+    profileId: 7,
     label: 'INSPIRE Annex Thema',
     key: 'isoMetadata.inspireTheme',
     validator: (val: any) => {
@@ -270,43 +163,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    profile_id: 38,
-    label: 'Schema-Version des INSPIRE Themas',
-    key: 'isoMetadata.inspireAnnexVersion',
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
-    section: 'classification',
-    required: true,
-    editingRoles: ['MdeEditor']
-  },
-  {
-    profile_id: 37,
-    label: 'Überprüfung des Qualitätsberichts',
-    key: 'isoMetadata.valid',
-    validator: () => ({ valid: true }),
-    section: 'classification',
-    required: false
-  },
-  {
-    profile_id: 6,
-    label: 'High Value Datensatz',
-    key: 'isoMetadata.highValueDataset',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie an, ob es sich um einen High Value Datensatz handelt.'
-        };
-      }
-      return { valid: true };
-    },
-    section: 'classification',
-    required: true
-  },
-  {
-    profile_id: 6.1,
+    profileId: 8,
     label: 'HVD Kategorie',
     key: 'isoMetadata.highValueDataCategory',
     validator: (val: any) => {
@@ -323,7 +180,81 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    profile_id: 13,
+    profileId: 9,
+    label: 'Erstellungsdatum',
+    key: 'isoMetadata.created',
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: false
+  },
+  {
+    profileId: 10,
+    label: 'Veröffentlichungsdatum',
+    key: 'isoMetadata.published',
+    validator: (val: any) => {
+      if (!isDefined(val) || val.length === 0) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie ein Veröffentlichungsdatum an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: true
+  },
+  {
+    profileId: 11,
+    label: 'letzte Aktualisierung',
+    key: 'isoMetadata.modified',
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: true
+  },
+  {
+    profileId: 12, // duplication with "isoMetadata.validTo"
+    label: 'gültig ab',
+    key: 'isoMetadata.validFrom',
+    validatorExtraParams: ['isoMetadata.validTo'],
+    validator: (startValue: string, extraParams) => {
+      const endValue = extraParams?.[0];
+      if (startValue && endValue && new Date(startValue) > new Date(endValue)) {
+        return {
+          valid: false,
+          helpText: 'Das Startdatum muss vor dem Enddatum liegen.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: false
+  },
+  {
+    profileId: 12, // duplication with "isoMetadata.validFrom"
+    label: 'gültig bis',
+    key: 'isoMetadata.validTo',
+    validatorExtraParams: ['isoMetadata.validFrom'],
+    validator: (endValue: string, extraParams) => {
+      const startValue = extraParams?.[0];
+      if (endValue && startValue && new Date(startValue) > new Date(endValue)) {
+        return {
+          valid: false,
+          helpText: 'Das Startdatum muss vor dem Enddatum liegen.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: false
+  },
+  {
+    profileId: 13,
     label: 'Themenkategorie',
     key: 'isoMetadata.topicCategory',
     validator: (val: any[]) => {
@@ -340,34 +271,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 9,
-    label: 'Erstellungsdatum',
-    key: 'isoMetadata.created',
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
-    section: 'temp_and_spatial',
-    required: false
-  },
-  {
-    profile_id: 10,
-    label: 'Veröffentlichungsdatum',
-    key: 'isoMetadata.published',
-    validator: (val: any) => {
-      if (!isDefined(val) || val.length === 0) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie ein Veröffentlichungsdatum an.'
-        };
-      }
-      return { valid: true };
-    },
-    section: 'temp_and_spatial',
-    required: true
-  },
-  {
-    profile_id: 14,
+    profileId: 14,
     label: 'Pflegeintervall',
     key: 'isoMetadata.maintenanceFrequency',
     validator: () => {
@@ -378,50 +282,24 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    profile_id: 11,
-    label: 'letzte Aktualisierung',
-    key: 'isoMetadata.modified',
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
-    section: 'temp_and_spatial',
-    required: true
-  },
-  {
-    profile_id: 12,
-    label: 'gültig ab',
-    key: 'isoMetadata.validFrom',
-    validator: (startValue: string, extra: any) => {
-      if (startValue && extra?.endValue && new Date(startValue) > new Date(extra?.endValue)) {
+    profileId: 15,
+    label: 'Schlagwörter',
+    key: 'isoMetadata.keywords',
+    validator: (val: any) => {
+      if (val?.length < 1) {
         return {
           valid: false,
-          helpText: 'Das Startdatum muss vor dem Enddatum liegen.'
+          helpText: 'Bitte geben Sie mindestens ein Schlagwort an.'
         };
       }
       return { valid: true };
     },
-    section: 'temp_and_spatial',
-    required: false
+    section: 'basedata',
+    required: true,
+    editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 12,
-    label: 'gültig bis',
-    key: 'isoMetadata.validTo',
-    validator: (endValue: string, extra: any) => {
-      if (endValue && extra?.startValue && new Date(extra?.startValue) > new Date(endValue)) {
-        return {
-          valid: false,
-          helpText: 'Das Startdatum muss vor dem Enddatum liegen.'
-        };
-      }
-      return { valid: true };
-    },
-    section: 'temp_and_spatial',
-    required: false
-  },
-  {
-    profile_id: 16,
+    profileId: 16,
     label: 'geliefertes Koordinatensystem',
     key: 'technicalMetadata.deliveredCrs',
     placeholder: 'EPSG:25833',
@@ -439,7 +317,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeDataOwner']
   },
   {
-    profile_id: 17,
+    profileId: 17,
     label: 'abzugebendes Koordinatensystem',
     key: 'isoMetadata.crs',
     validator: (val: any) => {
@@ -456,73 +334,201 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 18,
+    profileId: 18,
     label: 'Räumliche Ausdehnung',
-    key: 'isoMetadata.extent',
-    validator: (val?: Extent) => {
-      const validationResult: ValidationResultList = [];
-      if (!val) {
-        return [
-          {
-            valid: false,
-            helpText: 'Bitte geben Sie die Ausdehnung an.'
-          }
-        ];
-      } else {
-        if (!val.minx || val.minx < 1) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie den minimalen x-Wert an.',
-            subKey: 'minx'
-          });
-        }
-        if (!val.miny || val.miny < 1) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie den minimalen y-Wert an.',
-            subKey: 'miny'
-          });
-        }
-        if (!val.maxx || val.maxx < 1) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie den maximalen x-Wert an.',
-            subKey: 'maxx'
-          });
-        }
-        if (!val.maxy || val.maxy < 1) {
-          validationResult.push({
-            valid: false,
-            helpText: 'Bitte geben Sie den maximalen y-Wert an.',
-            subKey: 'maxy'
-          });
-        }
-      }
-      return validationResult;
-    },
+    key: 'isoMetadata.extent.minx',
     section: 'temp_and_spatial',
     required: true,
-    editingRoles: ['MdeEditor']
-  },
-  {
-    profile_id: 28,
-    label: 'Bodenauflösung',
-    key: 'isoMetadata.resolutions',
-    validator: (val: any) => {
-      const scale = getValue('isoMetadata.scale');
-      if (!isDefined(val) && !isDefined(scale)) {
+    editingRoles: ['MdeEditor'],
+    validator: (val?: number) => {
+      if (!val || val < 1) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie die Bodenauflösung an.'
+          helpText: 'Bitte geben Sie den minimalen x-Wert an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 18,
+    label: 'Räumliche Ausdehnung',
+    key: 'isoMetadata.extent.miny',
+    section: 'temp_and_spatial',
+    required: true,
+    editingRoles: ['MdeEditor'],
+    validator: (val?: number) => {
+      if (!val || val < 1) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie den minimalen y-Wert an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 18,
+    label: 'Räumliche Ausdehnung',
+    key: 'isoMetadata.extent.maxx',
+    section: 'temp_and_spatial',
+    required: true,
+    editingRoles: ['MdeEditor'],
+    validator: (val?: number) => {
+      if (!val || val < 1) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie den maximalen x-Wert an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 18,
+    label: 'Räumliche Ausdehnung',
+    key: 'isoMetadata.extent.maxy',
+    section: 'temp_and_spatial',
+    required: true,
+    editingRoles: ['MdeEditor'],
+    validator: (val?: number) => {
+      if (!val || val < 1) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie den maximalen y-Wert an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 19,
+    label: 'Kontaktangaben',
+    key: 'isoMetadata.pointsOfContact',
+    isCollection: true,
+    section: 'basedata',
+    required: true,
+    validator: (contacts?: Contacts) => {
+      if (!contacts || contacts.length < 1) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie mindestens einen Kontakt an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 20,
+    label: 'Name',
+    key: 'isoMetadata.pointsOfContact.name',
+    section: 'basedata',
+    required: true,
+    collectionKey: 'isoMetadata.pointsOfContact',
+    validator: (val: string) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie den Namen des Kontakts an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 21,
+    label: 'Organisation',
+    key: 'isoMetadata.pointsOfContact.organisation',
+    section: 'basedata',
+    required: true,
+    collectionKey: 'isoMetadata.pointsOfContact',
+    validator: (val: string) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie die Organisation des Kontakts an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 22,
+    label: 'E-Mail',
+    key: 'isoMetadata.pointsOfContact.email',
+    section: 'basedata',
+    required: true,
+    collectionKey: 'isoMetadata.pointsOfContact',
+    validator: (val: string) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie die E-Mail-Adresse des Kontakts an.'
+        };
+      }
+      if (!isValidEmail(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine gültige E-Mail-Adresse an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 23,
+    label: 'Telefonnummer',
+    key: 'isoMetadata.pointsOfContact.phone',
+    section: 'basedata',
+    required: true,
+    collectionKey: 'isoMetadata.pointsOfContact',
+    validator: (val: string) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie die Telefonnummer des Kontakts an.'
+        };
+      }
+      if (!isValidPhoneNumber(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine gültige Telefonnummer an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  // profileId: 24 is not used anymore
+  {
+    profileId: 25,
+    label: 'Nutzungsbestimmungen',
+    key: 'isoMetadata.termsOfUseId',
+    validator: (val: any) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte wählen sie die passenden Nutzungsbestimmungen.'
         };
       }
       return { valid: true };
     },
-    section: 'temp_and_spatial',
-    required: true
+    section: 'classification',
+    required: true,
+    editingRoles: ['MdeDataOwner']
   },
   {
-    profile_id: 27,
+    profileId: 26,
+    label: 'Nutzungsbestimmungen Quellenangabe',
+    key: 'isoMetadata.termsOfUseSource',
+    validator: () => {
+      return { valid: true };
+    },
+    section: 'classification',
+    required: true,
+    editingRoles: ['MdeDataOwner']
+  },
+  {
+    profileId: 27,
     label: 'Vergleichsmaßstab',
     key: 'isoMetadata.scale',
     validator: (val: any) => {
@@ -539,7 +545,40 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: true
   },
   {
-    profile_id: 30,
+    profileId: 28,
+    label: 'Bodenauflösung',
+    key: 'isoMetadata.resolutions',
+    validator: (val: any) => {
+      const scale = getValue('isoMetadata.scale');
+      if (!isDefined(val) && !isDefined(scale)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie die Bodenauflösung an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: true
+  },
+  {
+    profileId: 29,
+    label: 'Vorschaubild',
+    key: 'isoMetadata.preview',
+    validator: (val: any) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie ein Vorschaubild an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'basedata',
+    required: true
+  },
+  {
+    profileId: 30,
     label: 'Inhaltliche Beschreibung',
     key: 'isoMetadata.contentDescription',
     validator: (val: any) => {
@@ -555,7 +594,7 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: false
   },
   {
-    profile_id: 31,
+    profileId: 31,
     label: 'Technische Beschreibung',
     key: 'isoMetadata.technicalDescription',
     validator: (val: any) => {
@@ -571,9 +610,10 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: false
   },
   {
-    profile_id: 32,
+    profileId: 32,
     label: 'Herkunft der Daten',
     key: 'isoMetadata.lineage',
+    isCollection: true,
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
@@ -587,7 +627,47 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: false
   },
   {
-    profile_id: 36,
+    profileId: 33,
+    label: 'Herkunft der Daten',
+    key: 'isoMetadata.lineage.title',
+    collectionKey: 'isoMetadata.lineage',
+    validator: (val: any) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Titel an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'additional',
+    required: true
+  },
+  {
+    profileId: 34,
+    label: 'Herkunft der Daten',
+    key: 'isoMetadata.lineage.date',
+    collectionKey: 'isoMetadata.lineage',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'additional',
+    required: false
+  },
+  {
+    profileId: 35,
+    label: 'Herkunft der Daten',
+    key: 'isoMetadata.lineage.identifier',
+    collectionKey: 'isoMetadata.lineage',
+    validator: () => {
+      return { valid: true };
+    },
+    section: 'additional',
+    required: false
+  },
+  {
+    profileId: 36,
     label: 'Verwandte Themen (MTK)',
     key: 'clientMetadata.relatedTopics',
     validator: () => {
@@ -598,9 +678,30 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 39,
+    profileId: 37,
+    label: 'Überprüfung des Qualitätsberichts',
+    key: 'isoMetadata.valid',
+    validator: () => ({ valid: true }),
+    section: 'classification',
+    required: false
+  },
+  {
+    profileId: 38,
+    label: 'Schema-Version des INSPIRE Themas',
+    key: 'isoMetadata.inspireAnnexVersion',
+    validator: () => {
+      // Optional
+      return { valid: true };
+    },
+    section: 'classification',
+    required: true,
+    editingRoles: ['MdeEditor']
+  },
+  {
+    profileId: 39,
     label: 'Weitere Informationen',
     key: 'isoMetadata.contentDescriptions',
+    isCollection: true,
     validator: () => {
       // Optional
       return { valid: true };
@@ -609,110 +710,64 @@ export const FieldConfigs: FieldConfig<any>[] = [
     required: false
   },
   {
-    profile_id: 40,
-    label: 'FAKE_LABEL SERVICE LENGTH',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = Array.isArray(services) && services.length > 0;
-      return { valid };
+    profileId: 39,
+    key: 'isoMetadata.contentDescriptions.title',
+    collectionKey: 'isoMetadata.contentDescriptions',
+    validator: (val: string) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Titel an.'
+        };
+      }
+      return { valid: true };
     },
-    section: 'services',
-    required: true
+    section: 'additional',
+    required: false
   },
   {
-    profile_id: 43,
-    label: 'FAKE_LABEL SERVICE TITLE',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => isDefined(service.title));
-      return { valid };
+    profileId: 39,
+    key: 'isoMetadata.contentDescriptions.code',
+    collectionKey: 'isoMetadata.contentDescriptions',
+    validator: () => {
+      // Optional
+      return { valid: true };
     },
-    section: 'services',
-    required: true
+    section: 'additional',
+    required: false
   },
   {
-    profile_id: 44,
-    label: 'FAKE_LABEL SERVICE SHORT DESCRIPTION',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => isDefined(service.shortDescription));
-      return { valid };
+    profileId: 39,
+    key: 'isoMetadata.contentDescriptions.url',
+    collectionKey: 'isoMetadata.contentDescriptions',
+    validator: () => {
+      // Optional
+      return { valid: true };
     },
-    section: 'services',
-    required: true
+    section: 'additional',
+    required: false
   },
   {
-    profile_id: 45,
-    label: 'FAKE_LABEL SERVICE IDENTIFIER',
+    profileId: 40,
     key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => isDefined(service.workspace));
-      return { valid };
-    },
+    isCollection: true,
+    validator: () => ({ valid: true }),
     section: 'services',
-    required: true,
-    editingRoles: ['MdeEditor']
+    required: false
   },
+  // profileId: 41 and 42 are not used anymore (WMTS special handling)
+  // profiledId: 43 and 44 are superseeded by (58 and 59) service title and short description
   {
-    profile_id: 46,
-    label: 'FAKE_LABEL SERVICE PREVIEW',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return !isMappingService || isDefined(service.preview);
-      });
-      return { valid };
-    },
-    section: 'services',
-    required: true
-  },
-  {
-    profile_id: 48,
-    label: 'FAKE_LABEL LAYER LENGTH',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return !isMappingService || layersMap[service.serviceIdentification]?.length > 0;
-      });
-      return { valid };
-    },
-    section: 'services',
-    required: true
-  },
-  {
-    profile_id: 49,
-    label: 'FAKE_LABEL LAYER TITLE',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return (
-          !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.title))
-        );
-      });
-      return { valid };
-    },
-    section: 'services',
-    required: true
-  },
-  {
-    profile_id: 50,
-    label: 'FAKE_LABEL LAYER NAME',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return (
-          !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.name))
-        );
-      });
+    profileId: 45,
+    key: 'isoMetadata.services.workspace',
+    collectionKey: 'isoMetadata.services',
+    validatorExtraParams: ['isoMetadata.services'],
+    validator: (workspace: Service['workspace'], extraParams) => {
+      const service = extraParams?.['isoMetadata.services'];
+      if (service?.serviceType !== 'WMTS' && service?.serviceType !== 'WMS') {
+        return { valid: true };
+      }
+      const valid = !!(workspace && isDefined(workspace) && /^[a-zA-Z0-9_]+$/.test(workspace));
       return { valid };
     },
     section: 'services',
@@ -720,94 +775,221 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 51,
-    label: 'FAKE_LABEL LAYER STYLE TITLE',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return (
-          !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.styleTitle))
-        );
-      });
-      return { valid };
-    },
-    section: 'services',
-    required: true,
-    editingRoles: ['MdeEditor']
-  },
-  {
-    profile_id: 52,
-    label: 'FAKE_LABEL LAYER STYLE NAME',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return (
-          !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.styleName))
-        );
-      });
-      return { valid };
-    },
-    section: 'services',
-    required: true,
-    editingRoles: ['MdeEditor']
-  },
-  {
-    profile_id: 53,
-    label: 'FAKE_LABEL LAYER LEGEND',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return (
-          !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.legendImage))
-        );
-      });
+    profileId: 46,
+    key: 'isoMetadata.services.preview',
+    collectionKey: 'isoMetadata.services',
+    validatorExtraParams: ['isoMetadata.services'],
+    validator: (preview: Service['preview'], extraParams) => {
+      const service = extraParams?.['isoMetadata.services'];
+      if (service?.serviceType !== 'WMS' && service?.serviceType !== 'WMTS') {
+        return { valid: true };
+      }
+      const valid = isDefined(preview);
       return { valid };
     },
     section: 'services',
     required: true
   },
   {
-    profile_id: 54,
-    label: 'FAKE_LABEL LAYER SHORT DESCRIPTION',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return (
-          !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) =>
-            isDefined(layer.shortDescription)
-          )
-        );
-      });
+    profileId: 47,
+    key: 'isoMetadata.services.legendImage',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    profileId: 47,
+    key: 'isoMetadata.services.legendImage.url',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    profileId: 47,
+    key: 'isoMetadata.services.legendImage.format',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    profileId: 47,
+    key: 'isoMetadata.services.legendImage.width',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    profileId: 47,
+    key: 'isoMetadata.services.legendImage.height',
+    validator: () => {
+      // optional
+      return { valid: true };
+    },
+    section: 'services',
+    required: false
+  },
+  {
+    // This is used in the LayersForm
+    profileId: 48,
+    key: 'clientMetadata.layers',
+    collectionKey: 'isoMetadata.services',
+    validatorExtraParams: ['isoMetadata.services'],
+    validator: (layers: Layer[], extraParams) => {
+      const service = extraParams?.['isoMetadata.services'];
+      // only needs layers if type is WMS or WMTS
+      if (service?.serviceType !== 'WMS' && service?.serviceType !== 'WMTS') {
+        return { valid: true };
+      }
+      const valid = layers?.length > 0;
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie mindestens einen Layer an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
     required: true
   },
   {
-    profile_id: 55,
-    label: 'FAKE_LABEL LAYER DATASOURCE',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return (
-          !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) => isDefined(layer.datasource))
-        );
-      });
+    profileId: 49,
+    key: 'clientMetadata.layers.title',
+    collectionKey: 'clientMetadata.layers',
+    validator: (layerTitle: Layer['title']) => {
+      if (!isDefined(layerTitle)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Titel für den Layer an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profileId: 50,
+    key: 'clientMetadata.layers.name',
+    collectionKey: 'clientMetadata.layers',
+    validator: (layerName: Layer['name']) => {
+      if (!isDefined(layerName)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Namen für den Layer an.'
+        };
+      }
+      if (!/^[a-zA-Z0-9_]+$/.test(layerName)) {
+        return {
+          valid: false,
+          helpText: 'Der Name des Layers darf nur Buchstaben, Zahlen und Unterstriche enthalten.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'services',
+    required: true,
+    editingRoles: ['MdeEditor']
+  },
+  {
+    profileId: 51,
+    key: 'clientMetadata.layers.styleName',
+    collectionKey: 'clientMetadata.layers',
+    validator: (styleName: Layer['styleName']) => {
+      if (!styleName || !isDefined(styleName)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Style-Namen für den Layer an.'
+        };
+      } else if (!/^[a-zA-Z0-9_]+$/.test(styleName)) {
+        return {
+          valid: false,
+          helpText:
+            'Der Style-Name des Layers darf nur Buchstaben, Zahlen und Unterstriche enthalten.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'services',
+    required: true,
+    editingRoles: ['MdeEditor']
+  },
+  {
+    profileId: 52,
+    key: 'clientMetadata.layers.styleTitle',
+    collectionKey: 'clientMetadata.layers',
+    validator: (styleTitle: Layer['styleTitle']) => {
+      const isInspireHarmonized =
+        getValue<MetadataProfile>('isoMetadata.metadataProfile') === 'INSPIRE_HARMONISED';
+      if (isInspireHarmonized && !isDefined(styleTitle)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Style-Titel für den Layer an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'services',
+    required: true,
+    editingRoles: ['MdeEditor']
+  },
+  {
+    profileId: 53,
+    key: 'clientMetadata.layers.legendImage',
+    collectionKey: 'clientMetadata.layers',
+    validator: (legendImage: Layer['legendImage']) => {
+      if (!isDefined(legendImage)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie ein Legendenbild für den Layer an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profileId: 54,
+    key: 'clientMetadata.layers.shortDescription',
+    collectionKey: 'clientMetadata.layers',
+    validator: (description: Layer['shortDescription']) => {
+      const valid = isDefined(description);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine kurze Beschreibung an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profileId: 55,
+    key: 'clientMetadata.layers.datasource',
+    collectionKey: 'clientMetadata.layers',
+    validator: (datasource: Layer['datasource']) => {
+      const valid = isDefined(datasource);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine Datenquelle an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
@@ -815,20 +997,114 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeDataOwner']
   },
   {
-    profile_id: 56,
-    label: 'FAKE_LABEL LAYER SECONDARY DATASOURCE',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const layersMap: Record<string, Layer[]> = getValue('clientMetadata.layers') || {};
-      const valid = services?.every((service) => {
-        const isMappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
-        return (
-          !isMappingService ||
-          layersMap[service.serviceIdentification]?.every((layer) =>
-            isDefined(layer.secondaryDatasource)
-          )
-        );
-      });
+    profileId: 56,
+    key: 'clientMetadata.layers.secondaryDatasource',
+    collectionKey: 'clientMetadata.layers',
+    validator: (secondaryDatasource: Layer['secondaryDatasource']) => {
+      const valid = isDefined(secondaryDatasource);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine sekundäre Datenquelle an.'
+        };
+      }
+      return { valid };
+    },
+    section: 'services',
+    required: true,
+    editingRoles: ['MdeEditor']
+  },
+  // profileId: 57 is not used anymore (service count)
+  {
+    profileId: 58,
+    key: 'isoMetadata.services.serviceType',
+    collectionKey: 'isoMetadata.services',
+    validator: (serviceType: Service['serviceType']) => {
+      const valid = isDefined(serviceType);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Service-Typ an.'
+        };
+      }
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profileId: 59,
+    key: 'isoMetadata.services.title',
+    collectionKey: 'isoMetadata.services',
+    validator: (title: Service['title']) => {
+      const valid = isDefined(title);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Titel für den Service an.'
+        };
+      }
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profileId: 60,
+    key: 'isoMetadata.services.shortDescription',
+    collectionKey: 'isoMetadata.services',
+    validator: (shortDescription: Service['shortDescription']) => {
+      const valid = isDefined(shortDescription);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine kurze Beschreibung für den Service an.'
+        };
+      }
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profileId: 61,
+    key: 'isoMetadata.services.featureTypes',
+    collectionKey: 'isoMetadata.services',
+    isCollection: true,
+    validator: () => ({ valid: true }),
+    section: 'services',
+    required: true
+  },
+  {
+    profileId: 62,
+    key: 'isoMetadata.services.featureTypes.title',
+    collectionKey: 'isoMetadata.services.featureTypes',
+    validator: (title: FeatureType['title']) => {
+      const valid = isDefined(title);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Titel für den FeatureType an.'
+        };
+      }
+      return { valid };
+    },
+    section: 'services',
+    required: true
+  },
+  {
+    profileId: 63,
+    key: 'isoMetadata.services.featureTypes.name',
+    collectionKey: 'isoMetadata.services.featureTypes',
+    validator: (name: FeatureType['name']) => {
+      const valid = isDefined(name) && /^[a-zA-Z0-9_]+$/.test(name);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText:
+            'Der Name des FeatureTypes darf nur Buchstaben, Zahlen und Unterstriche enthalten.'
+        };
+      }
       return { valid };
     },
     section: 'services',
@@ -836,42 +1112,60 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 61,
-    label: 'FAKE_LABEL FEATURETYPE LENGTH',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isWFS = service.serviceType === 'WFS';
-        return !isWFS || service.featureTypes?.length;
-      });
+    profileId: 64,
+    key: 'isoMetadata.services.featureTypes.columns',
+    collectionKey: 'isoMetadata.services.featureTypes',
+    isCollection: true,
+    validator: () => ({ valid: true }),
+    section: 'services',
+    required: true
+  },
+  {
+    profileId: 65,
+    key: 'isoMetadata.services.featureTypes.columns.name',
+    collectionKey: 'isoMetadata.services.featureTypes.columns',
+    validator: (name: ColumnInfo['name']) => {
+      const valid = isDefined(name);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Namen für die Spalte an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
     required: true
   },
   {
-    profile_id: 62,
-    label: 'FAKE_LABEL FEATURETYPE TITEL',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isWFS = service.serviceType === 'WFS';
-        return !isWFS || service.featureTypes?.every((ft) => isDefined(ft.title));
-      });
+    profileId: 66,
+    key: 'isoMetadata.services.featureTypes.columns.alias',
+    collectionKey: 'isoMetadata.services.featureTypes.columns',
+    validator: (alias: ColumnInfo['alias']) => {
+      const valid = isDefined(alias);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Alias für die Spalte an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
     required: true
   },
   {
-    profile_id: 63,
-    label: 'FAKE_LABEL FEATURETYPE NAME',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isWFS = service.serviceType === 'WFS';
-        return !isWFS || service.featureTypes?.every((ft) => isDefined(ft.name));
-      });
+    profileId: 67,
+    key: 'isoMetadata.services.featureTypes.columns.type',
+    collectionKey: 'isoMetadata.services.featureTypes.columns',
+    validator: (type: ColumnInfo['type']) => {
+      const valid = isDefined(type);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Typ für die Spalte an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
@@ -879,65 +1173,17 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 64,
-    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE LENGTH',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isWFS = service.serviceType === 'WFS';
-        return !isWFS || service.featureTypes?.every((ft) => ft.columns?.length);
-      });
-      return { valid };
-    },
-    section: 'services',
-    required: true
-  },
-  {
-    profile_id: 65,
-    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE NAME',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isWFS = service.serviceType === 'WFS';
-        return (
-          !isWFS ||
-          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.name)))
-        );
-      });
-      return { valid };
-    },
-    section: 'services',
-    required: true
-  },
-  {
-    profile_id: 66,
-    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE ALIAS',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isWFS = service.serviceType === 'WFS';
-        return (
-          !isWFS ||
-          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.alias)))
-        );
-      });
-      return { valid };
-    },
-    section: 'services',
-    required: true
-  },
-  {
-    profile_id: 67,
-    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE DATA TYPE',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isWFS = service.serviceType === 'WFS';
-        return (
-          !isWFS ||
-          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.type)))
-        );
-      });
+    profileId: 68,
+    key: 'isoMetadata.services.featureTypes.columns.filterType',
+    collectionKey: 'isoMetadata.services.featureTypes.columns',
+    validator: (filterType: ColumnInfo['filterType']) => {
+      const valid = isDefined(filterType);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Filtertyp für die Spalte an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
@@ -945,60 +1191,57 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 67,
-    label: 'FAKE_LABEL FEATURETYPE ATTRIBUTE FILTER TYPE',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isWFS = service.serviceType === 'WFS';
-        return (
-          !isWFS ||
-          service.featureTypes?.every((ft) => ft.columns?.every((col) => isDefined(col.filterType)))
-        );
-      });
-      return { valid };
-    },
-    section: 'services',
-    required: true,
-    editingRoles: ['MdeEditor']
-  },
-  {
-    profile_id: 61.1,
-    label: 'FAKE_LABEL DOWNLOAD LENGTH',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isAtom = service.serviceType === 'ATOM';
-        return !isAtom || service.downloads?.length;
-      });
+    profileId: 61, // duplication with 'isoMetadata.services.featureTypes (61)'
+    key: 'isoMetadata.services.downloads',
+    collectionKey: 'isoMetadata.services',
+    isCollection: true,
+    validator: (downloads: DownloadInfo[], extraParams) => {
+      const service = extraParams?.['isoMetadata.services'];
+      // only needs downloads if type is ATOM
+      if (!service || service.serviceType !== 'ATOM') {
+        return { valid: true };
+      }
+      const valid = downloads?.length > 0;
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie mindestens einen Download an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
     required: true
   },
   {
-    profile_id: 69,
-    label: 'FAKE_LABEL DOWNLOAD TITEL',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isAtom = service.serviceType === 'ATOM';
-        return !isAtom || service.downloads?.every((download) => isDefined(download.title));
-      });
+    profileId: 69,
+    key: 'isoMetadata.services.downloads.title',
+    collectionKey: 'isoMetadata.services.downloads',
+    validator: (title: DownloadInfo['title']) => {
+      const valid = isDefined(title);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Titel für den Download an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
     required: true
   },
   {
-    profile_id: 70,
-    label: 'FAKE_LABEL DOWNLOAD TYPE',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isAtom = service.serviceType === 'ATOM';
-        return !isAtom || service.downloads?.every((download) => isDefined(download.type));
-      });
+    profileId: 70,
+    key: 'isoMetadata.services.downloads.type',
+    collectionKey: 'isoMetadata.services.downloads',
+    validator: (type: DownloadInfo['type']) => {
+      const valid = isDefined(type);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Typ für den Download an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
@@ -1006,14 +1249,17 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 71,
-    label: 'FAKE_LABEL DOWNLOAD URL',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isAtom = service.serviceType === 'ATOM';
-        return !isAtom || service.downloads?.every((download) => isDefined(download.href));
-      });
+    profileId: 71,
+    key: 'isoMetadata.services.downloads.href',
+    collectionKey: 'isoMetadata.services.downloads',
+    validator: (href: DownloadInfo['href']) => {
+      const valid = isDefined(href);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine URL für den Download an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
@@ -1021,14 +1267,21 @@ export const FieldConfigs: FieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profile_id: 72,
-    label: 'FAKE_LABEL DOWNLOAD FILE SIZE',
-    key: 'isoMetadata.services',
-    validator: (services: Service[]) => {
-      const valid = services?.every((service) => {
-        const isAtom = service.serviceType === 'ATOM';
-        return !isAtom || service.downloads?.every((download) => isDefined(download.fileSize));
-      });
+    profileId: 72,
+    key: 'isoMetadata.services.downloads.fileSize',
+    collectionKey: 'isoMetadata.services.downloads',
+    validator: (fileSize: DownloadInfo['fileSize']) => {
+      const services = getValue<Service[]>('isoMetadata.services');
+      if (!services || services?.length === 0) {
+        return { valid: true };
+      }
+      const valid = isDefined(fileSize) && fileSize > 0;
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine Dateigröße für den Download an.'
+        };
+      }
       return { valid };
     },
     section: 'services',

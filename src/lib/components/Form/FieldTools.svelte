@@ -8,9 +8,10 @@
   import IconButton from '@smui/icon-button';
   import { toast } from 'svelte-french-toast';
   import { popconfirm } from '../../context/PopConfirmContex.svelte';
+  import type { FieldKey } from '$lib/models/form';
 
   export type FieldToolsProps = {
-    key: string;
+    key: FieldKey;
     children?: Snippet;
     checkMarkAnmiationRunning?: boolean;
     noCheckmark?: boolean;

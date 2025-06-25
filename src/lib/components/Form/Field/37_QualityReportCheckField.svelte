@@ -30,7 +30,7 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<boolean>(KEY);
+  const fieldConfig = getFieldConfig<boolean>(37);
 
   const onCheckChange = async (event: CustomEvent<{ selected: boolean }>) => {
     const response = await persistValue(KEY, event.detail.selected);

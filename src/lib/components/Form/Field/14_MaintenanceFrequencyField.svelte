@@ -42,7 +42,7 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string>(14);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
   let published = $derived(getValue<string>('isoMetadata.published', metadata));
 

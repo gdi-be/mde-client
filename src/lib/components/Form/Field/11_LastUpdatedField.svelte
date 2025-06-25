@@ -30,7 +30,7 @@
       value = new Date(valueFromData).toISOString().split('T')[0];
     }
   });
-  const fieldConfig = getFieldConfig<string>(KEY);
+  const fieldConfig = getFieldConfig<string>(11);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   let showCheckmark = $state(false);

@@ -4,6 +4,7 @@ import { getAccessToken, parseToken } from '$lib/auth/cookies.js';
 import { getHighestRole } from '$lib/util';
 import { redirect } from '@sveltejs/kit';
 import { parse } from 'yaml';
+import type { YamlFieldConfig } from '../../../lib/components/Form/FieldsConfig.js';
 
 export async function load({ params, cookies, url }) {
   const token = await getAccessToken(cookies);
@@ -26,7 +27,7 @@ export async function load({ params, cookies, url }) {
   try {
     const file = Bun.file('/data/codelists/field_labels.yaml');
     const themes = await file.text();
-    const fieldLabels = parse(themes);
+    const fieldLabels = parse(themes) as YamlFieldConfig[];
     return {
       metadata,
       fieldLabels

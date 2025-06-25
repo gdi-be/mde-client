@@ -8,7 +8,8 @@
     type Section,
     clearActiveHelp,
     type FormState,
-    FORMSTATE_CONTEXT
+    FORMSTATE_CONTEXT,
+    type ProgressInfo
   } from '$lib/context/FormContext.svelte';
   import F01_TitleField from './Field/01_TitleField.svelte';
   import F02_DescriptionField from './Field/02_DescriptionField.svelte';
@@ -17,7 +18,7 @@
   import F19_ContactsField from './Field/19_ContactsField.svelte';
   import F05_InspireType from './Field/05_InspireType.svelte';
   import F04_PrivacyField from './Field/04_PrivacyField.svelte';
-  import F24_TermsOfUseField from './Field/24_TermsOfUseField.svelte';
+  import F25_TermsOfUseField from './Field/25_TermsOfUseField.svelte';
   import F26_TermsOfUseSourceField from './Field/26_TermsOfUseSourceField.svelte';
   import F07_AnnexThemeField from './Field/07_AnnexThemeField.svelte';
   import F37_QualityReportCheckField from './Field/37_QualityReportCheckField.svelte';
@@ -121,22 +122,30 @@
       publishPanelVisible = true;
     }
   });
+
+  const getPropgressTitle = (progressInfo: ProgressInfo) => {
+    let baseText = `Fortschritt: ${Math.floor(progressInfo.progress * 100)} %`;
+    return baseText;
+  };
 </script>
 
 <div class="metadata-form">
   <nav class="tabs" bind:this={tabs}>
     {#each SECTIONS as { section, label, disabledCheck }, i}
+      {@const progressInfo = getProgress(highestRole, section, metadata)}
       <div class="tab-container" class:active={activeSection === section}>
         <button
           class="tab"
           onclick={() => onSectionClick(section)}
           disabled={disabledCheck(metadata)}
+          title={label}
         >
           <Label>{label}</Label>
         </button>
         <LinearProgress
-          progress={getProgress(section, highestRole, metadata)}
+          progress={progressInfo.progress}
           aria-label={label + ' Fortschritt'}
+          title={getPropgressTitle(progressInfo)}
         />
       </div>
       {#if i + 1 < SECTIONS.length}
@@ -160,7 +169,7 @@
         <section id="classification" transition:fade>
           <F05_InspireType />
           <F04_PrivacyField />
-          <F24_TermsOfUseField />
+          <F25_TermsOfUseField />
           <F26_TermsOfUseSourceField />
           <F07_AnnexThemeField />
           <F38_InspireAnnexVersionField />
@@ -252,6 +261,10 @@
 
       :global(svg) {
         margin: 10px;
+      }
+
+      :global(.mdc-linear-progress:hover) {
+        scale: 1 2;
       }
 
       &:hover {

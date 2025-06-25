@@ -1,16 +1,10 @@
 <script lang="ts">
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import {
-    getFieldConfig,
-    getSubFieldConfig,
-    getValue,
-    persistValue
-  } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
-  import type { ValidationResult, ValidationResultList } from '../FieldsConfig';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { toast } from 'svelte-french-toast';
@@ -48,11 +42,8 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<Contacts>(KEY);
-  let validationResult = $derived(fieldConfig?.validator(contacts)) as ValidationResultList;
-  let generalValidationResult = $derived(
-    validationResult?.find(({ index }) => index === undefined)
-  );
+  const fieldConfig = getFieldConfig<Contacts>(19);
+  let validationResult = $derived(fieldConfig?.validator(contacts));
 
   const autoFillUserDetails = async () => {
     addItem();
@@ -129,11 +120,6 @@
       }
     );
   };
-
-  const getFieldValidation = (i: number, k: string): ValidationResult | undefined => {
-    if (!Array.isArray(validationResult)) return;
-    return validationResult.find(({ index, subKey }) => index === i && subKey === k);
-  };
 </script>
 
 <div class="contacts-field">
@@ -149,7 +135,7 @@
         add
       </IconButton>
     </legend>
-    <FieldHint validationResult={generalValidationResult} {fieldConfig} />
+    <FieldHint {validationResult} {fieldConfig} />
     {#each contacts as contact, index (contact.listId)}
       <fieldset class="contact">
         <legend>
@@ -166,32 +152,32 @@
           bind:value={contact.name}
           label="Name"
           onblur={persistContacts}
-          validationResult={getFieldValidation(index, 'name')}
-          fieldConfig={getSubFieldConfig(KEY, 'name')}
+          fieldConfig={getFieldConfig(20)}
+          validationResult={getFieldConfig(20)?.validator(contact.name)}
           id={`${KEY}-${index}-name`}
         />
         <TextInput
           bind:value={contact.organisation}
           label="Organisation"
           onblur={persistContacts}
-          validationResult={getFieldValidation(index, 'organisation')}
-          fieldConfig={getSubFieldConfig(KEY, 'organisation')}
+          fieldConfig={getFieldConfig(21)}
+          validationResult={getFieldConfig(21)?.validator(contact.organisation)}
           id={`${KEY}-${index}-organisation`}
         />
         <TextInput
           bind:value={contact.phone}
           label="Telefon"
           onblur={persistContacts}
-          validationResult={getFieldValidation(index, 'phone')}
-          fieldConfig={getSubFieldConfig(KEY, 'phone')}
+          fieldConfig={getFieldConfig(23)}
+          validationResult={getFieldConfig(23)?.validator(contact.phone)}
           id={`${KEY}-${index}-phone`}
         />
         <TextInput
           bind:value={contact.email}
           label="E-Mail"
           onblur={persistContacts}
-          validationResult={getFieldValidation(index, 'email')}
-          fieldConfig={getSubFieldConfig(KEY, 'email')}
+          fieldConfig={getFieldConfig(22)}
+          validationResult={getFieldConfig(22)?.validator(contact.email)}
           id={`${KEY}-${index}-email`}
         />
       </fieldset>

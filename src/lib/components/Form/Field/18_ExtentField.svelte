@@ -6,8 +6,6 @@
   import Button, { Icon, Label } from '@smui/button';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import { getHighestRole, transformExtent } from '$lib/util';
-  import type { ValidationResult, ValidationResultList } from '../FieldsConfig';
-  import ValidationFeedbackText from '../FieldHint.svelte';
   import type { Option } from '$lib/models/form';
   import { getContext, onMount } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
@@ -63,11 +61,16 @@
     })
   );
 
-  const fieldConfig = getFieldConfig<Extent>(KEY);
-  let validationResult = $derived(fieldConfig?.validator(value4326)) as ValidationResultList;
-  let generalValidationResult = $derived(
-    validationResult?.find(({ subKey }) => subKey === undefined)
-  );
+  const fieldConfig = getFieldConfig<Extent>(18);
+  const minXFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.minx');
+  const minYFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.miny');
+  const maxXFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.maxx');
+  const maxYFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.maxy');
+
+  let validationResultMinX = $derived(minXFieldConfig?.validator(transformedValue.minx));
+  let validationResultMinY = $derived(minYFieldConfig?.validator(transformedValue.miny));
+  let validationResultMaxX = $derived(maxXFieldConfig?.validator(transformedValue.maxx));
+  let validationResultMaxY = $derived(maxYFieldConfig?.validator(transformedValue.maxy));
 
   const onChange = (newValue: number, key: keyof Extent) => {
     const newTransformedValue = {
@@ -82,11 +85,6 @@
     if (response.ok) {
       showCheckmark = true;
     }
-  };
-
-  const getFieldValidation = (k: string): ValidationResult | undefined => {
-    if (!Array.isArray(validationResult)) return;
-    return validationResult.find(({ subKey }) => subKey === k);
   };
 
   onMount(async () => {
@@ -136,52 +134,51 @@
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.minx}
-            label={LABEL_MIN_X}
+            label={minXFieldConfig?.label || LABEL_MIN_X}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
               onChange(Number(target.value), 'minx');
             }}
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
-            validationResult={getFieldValidation('minx')}
+            validationResult={validationResultMinX}
           />
           <NumberInput
             value={transformedValue.maxx}
-            label={LABEL_MAX_X}
+            label={maxXFieldConfig?.label || LABEL_MAX_X}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
               onChange(Number(target.value), 'maxx');
             }}
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
-            validationResult={getFieldValidation('maxx')}
+            validationResult={validationResultMaxX}
           />
         </div>
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.miny}
-            label={LABEL_MIN_Y}
+            label={minYFieldConfig?.label || LABEL_MIN_Y}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
               onChange(Number(target.value), 'miny');
             }}
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
-            validationResult={getFieldValidation('miny')}
+            validationResult={validationResultMinY}
           />
           <NumberInput
             value={transformedValue.maxy}
-            label={LABEL_MAX_Y}
+            label={maxYFieldConfig?.label || LABEL_MAX_Y}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
               onChange(Number(target.value), 'maxy');
             }}
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
-            validationResult={getFieldValidation('maxy')}
+            validationResult={validationResultMaxY}
           />
         </div>
-        <ValidationFeedbackText validationResult={generalValidationResult} />
       </div>
     </fieldset>
     <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />

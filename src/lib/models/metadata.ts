@@ -181,9 +181,9 @@ export type Extent = {
 };
 
 export type Lineage = {
-  title: string;
-  identifier: string;
-  date: string;
+  title?: string;
+  identifier?: string;
+  date?: string;
 };
 
 export type Keywords = {
@@ -214,9 +214,11 @@ export type Contact = {
 export type Contacts = Contact[];
 
 export type MetadataCollection = {
-  id?: string;
+  id?: number;
+  created?: string;
+  modified?: string;
   ownerId?: string;
-  clonedFromId?: string;
+  clonedFromId?: string | null;
   metadataId?: MetadataId;
   teamMemberIds?: string[];
   assignedUserId?: string;

@@ -9,7 +9,7 @@
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { Option } from '$lib/models/form';
-  import type { ValidationResult } from '../FieldsConfig';
+  import type { FullFieldConfig } from '../FieldsConfig';
   import { getContext } from 'svelte';
   import type { IsoTheme, MetadataProfile } from '$lib/models/metadata';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
@@ -31,8 +31,8 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string[]>(KEY);
-  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
+  const fieldConfig = getFieldConfig<string[]>(7);
+  let validationResult = $derived(fieldConfig?.validator(value));
 
   const onChange = async (newValue?: string[]) => {
     const response = await persistValue(KEY, newValue);
@@ -83,7 +83,7 @@
     {:then OPTIONS}
       <SelectInput
         label={fieldConfig?.label}
-        {fieldConfig}
+        fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
         options={OPTIONS}
         value={Array.isArray(value) && value.length > 0 ? value[0] : undefined}
         onChange={(newValue) => onChange([newValue])}

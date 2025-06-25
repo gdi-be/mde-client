@@ -2,7 +2,7 @@
   import Chip, { Set as ChipSet, Text, TrailingAction } from '@smui/chips';
   import Autocomplete from '@smui-extra/autocomplete';
   import type { Option } from '$lib/models/form';
-  import type { DynamicFieldConfig, FieldConfig, ValidationResult } from '../FieldsConfig.js';
+  import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
 
   type InputProps = {
@@ -10,7 +10,7 @@
     value?: string[];
     class?: string;
     label?: string;
-    fieldConfig?: FieldConfig<string> | DynamicFieldConfig;
+    fieldConfig?: FullFieldConfig<string[]>;
     options: Option[];
     validationResult?: ValidationResult;
     disabled?: boolean;

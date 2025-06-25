@@ -1,7 +1,7 @@
 <script lang="ts">
-  import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
+  import TextAreaInput from '$lib/components/Form/Inputs/TextAreaInput.svelte';
   import type { Layer } from '$lib/models/metadata';
-  import { getSubFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   export type ComponentProps = {
     value?: Layer['shortDescription'];
@@ -10,14 +10,17 @@
 
   let { value, onChange }: ComponentProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'layers', 'shortDescription');
+  const fieldConfig = getFieldConfig(54);
+  const validationResult = $derived(fieldConfig?.validator(value));
 </script>
 
 <div class="layer-short-description-field">
-  <TextInput
+  <TextAreaInput
     label={fieldConfig?.label || 'Kurzbeschreibung'}
     {value}
+    maxlength={500}
     {fieldConfig}
+    {validationResult}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />
 </div>
@@ -28,8 +31,12 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.text-input) {
+    :global(.text-area-input) {
       flex: 1;
+    }
+
+    :global(.mdc-text-field) {
+      display: flex;
     }
   }
 </style>

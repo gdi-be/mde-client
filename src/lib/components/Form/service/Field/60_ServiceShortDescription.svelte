@@ -2,7 +2,7 @@
   import type { MetadataCollection, Service } from '$lib/models/metadata';
   import TextAreaInput from '$lib/components/Form/Inputs/TextAreaInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
-  import { getSubFieldConfig, getValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
 
@@ -13,7 +13,8 @@
 
   let { value = $bindable(), onChange }: ServiceTypeProps = $props();
 
-  const fieldConfig = getSubFieldConfig('isoMetadata.services', 'shortDescription');
+  const fieldConfig = getFieldConfig(60);
+  const validationResult = $derived(fieldConfig?.validator(value));
 
   const HELP_KEY = 'isoMetadata.services.shortDescription';
 
@@ -33,6 +34,7 @@
     label={fieldConfig?.label}
     maxlength={500}
     {fieldConfig}
+    {validationResult}
     rows={5}
     onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
   />

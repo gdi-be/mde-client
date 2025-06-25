@@ -23,8 +23,8 @@
     selectionValue = selectionValueFromData;
   });
 
-  const checkedFieldConfig = getFieldConfig<boolean>(CHECKED_KEY);
-  const categoryFieldConfig = getFieldConfig<string[]>(CATEGORY_KEY);
+  const checkedFieldConfig = getFieldConfig<boolean>(6);
+  const categoryFieldConfig = getFieldConfig<string[]>(8);
   let categoryValidationResult = $derived(
     categoryFieldConfig?.validator(selectionValue)
   ) as ValidationResult;
