@@ -53,28 +53,31 @@ export function getFormContext() {
  * @param metadata - Optional: Alternative metadata collection. If not provided, formState.metadata is used
  * @returns The value at the specified path or undefined if the path does not exist
  */
-export function getValue<T>(key: string, metadata?: MetadataCollection): T | undefined | null {
+export function getValue<T>(key: string, metadata?: MetadataCollection): T | undefined {
   const data = metadata || formState.metadata;
   if (!data) return undefined;
 
-  return key.split('.').reduce((obj, path) => {
-    if (!obj) return undefined;
+  return key.split('.').reduce(
+    (obj, path) => {
+      if (!obj) return undefined;
 
-    // Check if we have an array index (e.g. "services[0]")
-    const match = path.match(/^(\w+)(?:\[(\d+)\])?$/);
-    if (!match) return undefined;
+      // Check if we have an array index (e.g. "services[0]")
+      const match = path.match(/^(\w+)(?:\[(\d+)\])?$/);
+      if (!match) return undefined;
 
-    const [, property, indexStr] = match;
-    const value = obj[property];
+      const [, property, indexStr] = match;
+      const value = obj[property];
 
-    // If an index is specified and we have an array
-    if (indexStr !== undefined && Array.isArray(value)) {
-      const index = parseInt(indexStr, 10);
-      return value[index];
-    }
+      // If an index is specified and we have an array
+      if (indexStr !== undefined && Array.isArray(value)) {
+        const index = parseInt(indexStr, 10);
+        return value[index];
+      }
 
-    return value;
-  }, data as Record<string, any>) as T | undefined | null;
+      return value;
+    },
+    data as Record<string, any>
+  ) as T | undefined;
 }
 
 /**
@@ -105,18 +108,20 @@ export function getAllValues<T>(key: string, metadata?: MetadataCollection): T[]
     const fullPath = [...currentPath, current].join('.');
 
     // Get field config for current path to check if it's a collection
-    const fieldConfig = FieldConfigs.find(config => config.key === fullPath);
+    const fieldConfig = FieldConfigs.find((config) => config.key === fullPath);
 
     // Special handling for layers
     if (fieldConfig?.profileId === 48 && value) {
       // Flatten all layers regardless of service
       const flattened = Object.values(value).flat() as T[];
-      return rest.length === 0 ? flattened : flattened.flatMap(item => collectValues(item, rest, [...currentPath, current]));
+      return rest.length === 0
+        ? flattened
+        : flattened.flatMap((item) => collectValues(item, rest, [...currentPath, current]));
     }
 
     // Handle collections based on fieldConfig
     if ((fieldConfig?.isCollection || fieldConfig?.collectionKey) && Array.isArray(value)) {
-      return value.flatMap(item => collectValues(item, rest, [...currentPath, current]));
+      return value.flatMap((item) => collectValues(item, rest, [...currentPath, current]));
     }
 
     // Regular object traversal
@@ -223,14 +228,21 @@ export function getProgress(
       if (!Array.isArray(value) || value.length === 0) {
         totalCount++;
         if (field.validatorExtraParams) {
-          console.log(`Skipping validation for ${field.key} as it is a collection field with no values.`);
+          console.log(
+            `Skipping validation for ${field.key} as it is a collection field with no values.`
+          );
           return;
         }
         const validation = field.validator(value, field.validatorExtraParams);
         if (validation.valid) {
           validCount++;
         } else {
-          invalidFields.push({ field: field.key, profileId: field.profileId, value, helpText: validation.helpText });
+          invalidFields.push({
+            field: field.key,
+            profileId: field.profileId,
+            value,
+            helpText: validation.helpText
+          });
         }
       }
       return;
@@ -267,7 +279,9 @@ export function getProgress(
                 };
               } else {
                 // I hope we never get here
-                console.error(`Unexpected parameter ${param} in validatorExtraParams for ${field.key}`);
+                console.error(
+                  `Unexpected parameter ${param} in validatorExtraParams for ${field.key}`
+                );
               }
             });
           }
@@ -276,14 +290,16 @@ export function getProgress(
           if (field.profileId === 48 && field.validatorExtraParams?.[0]) {
             const serviceId = extraParams?.[field.validatorExtraParams[0]].serviceIdentification;
             if (!serviceId) {
-              toast.error(`No serviceId found for ${field.key} in profile ${field.profileId}. Skipping validation.`);
+              toast.error(
+                `No serviceId found for ${field.key} in profile ${field.profileId}. Skipping validation.`
+              );
               return;
             }
             const layersMap: Record<string, Layer[]> = metadata?.clientMetadata?.layers;
             subValue = layersMap[serviceId];
           }
 
-          const validation = field.validator(subValue, extraParams)
+          const validation = field.validator(subValue, extraParams);
           if (validation.valid) {
             validCount++;
           } else {
@@ -304,14 +320,21 @@ export function getProgress(
     totalCount++;
     const value = getValue(field.key, metadata);
     if (field.validatorExtraParams) {
-      console.log(`Skipping validation for ${field.key} as it is a collection field with no values.`);
+      console.log(
+        `Skipping validation for ${field.key} as it is a collection field with no values.`
+      );
       return;
     }
     const validation = field.validator(value, field.validatorExtraParams);
     if (validation.valid) {
       validCount++;
     } else {
-      invalidFields.push({ field: field.key, profileId: field.profileId, value, helpText: validation.helpText });
+      invalidFields.push({
+        field: field.key,
+        profileId: field.profileId,
+        value,
+        helpText: validation.helpText
+      });
     }
   };
 
@@ -323,7 +346,7 @@ export function getProgress(
   // Calculate progress
   if (totalCount === 0) {
     return { progress: 1 };
-  };
+  }
 
   return {
     progress: validCount / totalCount,
