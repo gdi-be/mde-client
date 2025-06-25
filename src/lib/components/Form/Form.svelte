@@ -8,7 +8,8 @@
     type Section,
     clearActiveHelp,
     type FormState,
-    FORMSTATE_CONTEXT
+    FORMSTATE_CONTEXT,
+    type ProgressInfo
   } from '$lib/context/FormContext.svelte';
   import F01_TitleField from './Field/01_TitleField.svelte';
   import F02_DescriptionField from './Field/02_DescriptionField.svelte';
@@ -121,22 +122,30 @@
       publishPanelVisible = true;
     }
   });
+
+  const getPropgressTitle = (progressInfo: ProgressInfo) => {
+    let baseText = `Fortschritt: ${Math.floor(progressInfo.progress * 100)} %`;
+    return baseText;
+  };
 </script>
 
 <div class="metadata-form">
   <nav class="tabs" bind:this={tabs}>
     {#each SECTIONS as { section, label, disabledCheck }, i}
+      {@const progressInfo = getProgress(highestRole, section, metadata)}
       <div class="tab-container" class:active={activeSection === section}>
         <button
           class="tab"
           onclick={() => onSectionClick(section)}
           disabled={disabledCheck(metadata)}
+          title={label}
         >
           <Label>{label}</Label>
         </button>
         <LinearProgress
-          progress={getProgress(highestRole, section, metadata)}
+          progress={progressInfo.progress}
           aria-label={label + ' Fortschritt'}
+          title={getPropgressTitle(progressInfo)}
         />
       </div>
       {#if i + 1 < SECTIONS.length}
@@ -252,6 +261,10 @@
 
       :global(svg) {
         margin: 10px;
+      }
+
+      :global(.mdc-linear-progress:hover) {
+        scale: 1 2;
       }
 
       &:hover {

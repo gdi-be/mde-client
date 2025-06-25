@@ -162,6 +162,18 @@ export type Section =
   | 'additional'
   | 'services';
 
+export type InvalidFieldInfo = {
+  field: string;
+  profileId: number;
+  value: any;
+  helpText?: string;
+};
+
+export type ProgressInfo = {
+  progress: number;
+  invalidFields?: InvalidFieldInfo[];
+};
+
 /**
  * Get the progres of the form based on the highest role and an optional section.
  *
@@ -180,11 +192,10 @@ export function getProgress(
   highestRole: Role,
   section?: Section,
   metadata?: MetadataCollection
-): number {
+): ProgressInfo {
   let totalCount = 0;
   let validCount = 0;
-
-  const invalidFields: Array<{ field: string; profileId: number; value: any, helpText?: string }> = [];
+  const invalidFields: InvalidFieldInfo[] = [];
 
   // Get base required fields configuration
   const baseRequired = FieldConfigs.filter(({ section: s, required, editingRoles }) => {
@@ -200,7 +211,9 @@ export function getProgress(
     return required && isSection && isEditingRole;
   });
 
-  if (!metadata || baseRequired.length === 0) return 1;
+  if (!metadata || baseRequired.length === 0) {
+    return { progress: 1 };
+  }
 
   // Helper function to validate a field
   const validateField = (field: FullFieldConfig<any>) => {
@@ -307,20 +320,20 @@ export function getProgress(
     validateField(field);
   }
 
-  // uncomment for debugging
-  // if (invalidFields.length > 0) {
-  //   console.table(invalidFields);
-  // }
-
   // Calculate progress
-  if (totalCount === 0) return 1;
+  if (totalCount === 0) {
+    return { progress: 1 };
+  };
 
-  return validCount / totalCount;
+  return {
+    progress: validCount / totalCount,
+    invalidFields: invalidFields
+  };
 }
 
 export function allFieldsValid(highestRole: Role, metadata?: MetadataCollection): boolean {
   if (!metadata) return false;
-  return getProgress(highestRole, undefined, metadata) === 1;
+  return getProgress(highestRole, undefined, metadata).progress === 1;
 }
 
 export async function persistValue(key: string, value: unknown) {
