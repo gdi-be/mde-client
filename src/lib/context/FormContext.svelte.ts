@@ -264,54 +264,56 @@ export function getProgress(
       }
 
       if (Array.isArray(parentCollection) && parentCollection.length > 0) {
-        parentCollection.forEach((v, i) => {
-          let subValue = v[subKey];
+        parentCollection
+          .filter((v) => !!v)
+          .forEach((v, i) => {
+            let subValue = v[subKey];
 
-          // Get the needed extra parameters if configured
-          let extraParams: Record<string, any> | undefined;
-          if (field.validatorExtraParams?.length) {
-            extraParams = {};
-            field.validatorExtraParams.forEach((param) => {
-              if (param === parentKey) {
-                extraParams = {
-                  ...extraParams,
-                  [param]: v
-                };
-              } else {
-                // I hope we never get here
-                console.error(
-                  `Unexpected parameter ${param} in validatorExtraParams for ${field.key}`
-                );
-              }
-            });
-          }
-
-          // layers need special handling
-          if (field.profileId === 48 && field.validatorExtraParams?.[0]) {
-            const serviceId = extraParams?.[field.validatorExtraParams[0]].serviceIdentification;
-            if (!serviceId) {
-              toast.error(
-                `No serviceId found for ${field.key} in profile ${field.profileId}. Skipping validation.`
-              );
-              return;
+            // Get the needed extra parameters if configured
+            let extraParams: Record<string, any> | undefined;
+            if (field.validatorExtraParams?.length) {
+              extraParams = {};
+              field.validatorExtraParams.forEach((param) => {
+                if (param === parentKey) {
+                  extraParams = {
+                    ...extraParams,
+                    [param]: v
+                  };
+                } else {
+                  // I hope we never get here
+                  console.error(
+                    `Unexpected parameter ${param} in validatorExtraParams for ${field.key}`
+                  );
+                }
+              });
             }
-            const layersMap: Record<string, Layer[]> = metadata?.clientMetadata?.layers;
-            subValue = layersMap[serviceId];
-          }
 
-          const validation = field.validator(subValue, extraParams);
-          if (validation.valid) {
-            validCount++;
-          } else {
-            invalidFields.push({
-              field: parentKey + `[${i}].` + subKey,
-              profileId: field.profileId,
-              helpText: validation.helpText,
-              value: subValue
-            });
-          }
-          totalCount++;
-        });
+            // layers need special handling
+            if (field.profileId === 48 && field.validatorExtraParams?.[0]) {
+              const serviceId = extraParams?.[field.validatorExtraParams[0]].serviceIdentification;
+              if (!serviceId) {
+                toast.error(
+                  `No serviceId found for ${field.key} in profile ${field.profileId}. Skipping validation.`
+                );
+                return;
+              }
+              const layersMap: Record<string, Layer[]> = metadata?.clientMetadata?.layers;
+              subValue = layersMap[serviceId];
+            }
+
+            const validation = field.validator(subValue, extraParams);
+            if (validation.valid) {
+              validCount++;
+            } else {
+              invalidFields.push({
+                field: parentKey + `[${i}].` + subKey,
+                profileId: field.profileId,
+                helpText: validation.helpText,
+                value: subValue
+              });
+            }
+            totalCount++;
+          });
       }
       return;
     }
