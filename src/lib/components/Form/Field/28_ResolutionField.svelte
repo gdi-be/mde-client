@@ -4,7 +4,6 @@
   import NumberInput from '../Inputs/NumberInput.svelte';
   import FormField from '@smui/form-field';
   import Radio from '@smui/radio';
-  import type { ValidationResult } from '../FieldsConfig';
 
   const RESOLUTION_KEY = 'isoMetadata.resolutions';
   const SCALE_KEY = 'isoMetadata.scale';
@@ -34,11 +33,9 @@
   const resolutionFieldConfig = getFieldConfig<number>(28);
   let resolutionValidationResult = $derived(
     resolutionFieldConfig?.validator(resolutionValue || undefined)
-  ) as ValidationResult;
+  );
   const scaleFieldConfig = getFieldConfig<number>(27);
-  let scaleValidationResult = $derived(
-    scaleFieldConfig?.validator(scaleValue || undefined)
-  ) as ValidationResult;
+  let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined));
 
   const clearAllValues = async () => {
     await updateResolution(null);

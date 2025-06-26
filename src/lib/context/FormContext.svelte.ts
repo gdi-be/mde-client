@@ -2,6 +2,7 @@
 import { getContext, setContext } from 'svelte';
 import { page } from '$app/state';
 import type { FieldKey } from '$lib/models/form';
+import { log } from 'loggisch';
 import {
   FieldConfigs,
   type FullFieldConfig,
@@ -271,11 +272,16 @@ export function getProgress(
 
         // layers need special handling
         if (field.profileId === 48) {
-          const layers = metadata?.clientMetadata.layers as Record<string, Layer> | undefined;
-          if (!layers) {
+          const layersMap = metadata?.clientMetadata.layers as Record<string, Layer> | undefined;
+
+          if (!layersMap || Object.keys(layersMap).length === 0) {
+            // TODO: we have no layers, so we cant get the service by the layers map.
+            // How to get the correct service here?
             return;
           }
-          for (const [serviceId, layer] of Object.entries(layers)) {
+          const layers = Object.entries(layersMap);
+
+          for (const [serviceId, layer] of layers) {
             const services = getValue<Service[]>('isoMetadata.services', metadata);
             const layerService = services?.find((s) => s.serviceIdentification === serviceId);
             validateValue(
@@ -354,8 +360,7 @@ export function getProgress(
 export function allFieldsValid(highestRole: Role, metadata?: MetadataCollection): boolean {
   if (!metadata) return false;
   const progress = getProgress(highestRole, undefined, metadata);
-  console.log('Progress:', progress);
-  console.log('Invalid fields:', progress.invalidFields);
+  log('warning', 'Invalid fields: ' + progress.invalidFields?.map((f) => f.field));
   // Check if progress is 1 (100%)
   return progress.progress === 1;
 }
