@@ -9,7 +9,6 @@
   import Textfield from '@smui/textfield';
   import Button, { Label } from '@smui/button';
   import FieldHint from '../FieldHint.svelte';
-  import type { ValidationResult } from '../FieldsConfig';
   import type { Keywords } from '$lib/models/metadata';
   import { toast } from 'svelte-french-toast';
 
@@ -29,8 +28,8 @@
 
   let uniqueKeywords = $derived(Array.from(new Set([...autoKeywords, ...value])));
   let searchValue = $state('');
-  const fieldConfig = getFieldConfig<string[]>(15);
-  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
+  const fieldConfig = getFieldConfig<Keywords>(15);
+  let validationResult = $derived(fieldConfig?.validator(valueFromData));
 
   let dialogOpen = $state(false);
   let newKeyword = $state('');

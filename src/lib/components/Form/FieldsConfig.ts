@@ -5,6 +5,7 @@ import {
   type Contacts,
   type DownloadInfo,
   type FeatureType,
+  type Keywords,
   type Layer,
   type MetadataProfile,
   type Service
@@ -289,8 +290,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 15,
     label: 'Schlagwörter',
     key: 'isoMetadata.keywords',
-    validator: (val: any) => {
-      if (val?.length < 1) {
+    validator: (val?: Keywords) => {
+      if (!val || !val.default || val.default.length < 1) {
+        console.log(val);
         return {
           valid: false,
           helpText: 'Bitte geben Sie mindestens ein Schlagwort an.'
