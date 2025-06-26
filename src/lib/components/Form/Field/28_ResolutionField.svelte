@@ -40,19 +40,16 @@
     scaleFieldConfig?.validator(scaleValue || undefined)
   ) as ValidationResult;
 
+  const clearAllValues = async () => {
+    await updateResolution(null);
+    await updateScale(null);
+  };
+
   const onBlur = async () => {
     if (selected === RESOLUTION_KEY) {
-      const val = Number(resolutionValue);
-      if (Number.isFinite(val)) {
-        await updateResolution([val]);
-        updateScale(null);
-      }
+      await updateResolution(resolutionValue ? [resolutionValue] : null);
     } else {
-      const val = Number(scaleValue);
-      if (Number.isFinite(val)) {
-        await updateScale(val);
-        updateResolution(null);
-      }
+      await updateScale(scaleValue);
     }
   };
 
@@ -75,13 +72,13 @@
   <fieldset>
     <legend>Räumliche Auflösung</legend>
     <FormField>
-      <Radio bind:group={selected} value={RESOLUTION_KEY} />
+      <Radio bind:group={selected} value={RESOLUTION_KEY} onchange={clearAllValues} />
       {#snippet label()}
         {resolutionFieldConfig?.label}
       {/snippet}
     </FormField>
     <FormField>
-      <Radio bind:group={selected} value={SCALE_KEY} />
+      <Radio bind:group={selected} value={SCALE_KEY} onchange={clearAllValues} />
       {#snippet label()}
         {scaleFieldConfig?.label}
       {/snippet}
