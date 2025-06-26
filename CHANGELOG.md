@@ -1,3 +1,18 @@
+# [3.13.0](https://github.com/gdi-be/mde-client/compare/v3.12.1...v3.13.0) (2025-06-26)
+
+
+### Bug Fixes
+
+* adapt assignment button visibility ([7bed5c4](https://github.com/gdi-be/mde-client/commit/7bed5c492b4e0add1815e99b8db0b514c535eefa))
+* field config refactoring ([ef039a7](https://github.com/gdi-be/mde-client/commit/ef039a72661a36fcdc7f448644fc399dfe36510b))
+* update keys in FieldsConfig ([41c5410](https://github.com/gdi-be/mde-client/commit/41c541039a875c043f8e8150893ea8e9caadc55a))
+* update LayersForm validation ([f848f50](https://github.com/gdi-be/mde-client/commit/f848f50d38b021dc52562ab276a4a907b1c88637))
+
+
+### Features
+
+* add progress info to Progressbar ([d5897b9](https://github.com/gdi-be/mde-client/commit/d5897b90675df7e52eb756b14e5580811c5ef638))
+
 ## [3.12.1](https://github.com/gdi-be/mde-client/compare/v3.12.0...v3.12.1) (2025-06-18)
 
 
