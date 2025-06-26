@@ -1,3 +1,10 @@
+## [3.13.1](https://github.com/gdi-be/mde-client/compare/v3.13.0...v3.13.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* filter null/undefined values ([b1d91ad](https://github.com/gdi-be/mde-client/commit/b1d91ad2695919d1251ee2d5719a8e1f19dd27ed))
+
 # [3.13.0](https://github.com/gdi-be/mde-client/compare/v3.12.1...v3.13.0) (2025-06-26)
 
 
