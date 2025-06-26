@@ -8,7 +8,7 @@ import {
   type YamlFieldConfig
 } from '$lib/components/Form/FieldsConfig';
 import { invalidateAll } from '$app/navigation';
-import type { Layer, MetadataCollection } from '$lib/models/metadata';
+import { type Layer, type MetadataCollection, type Service } from '$lib/models/metadata';
 import { toast } from 'svelte-french-toast';
 import type { Role } from '$lib/models/keycloak';
 
@@ -179,6 +179,22 @@ export type ProgressInfo = {
   invalidFields?: InvalidFieldInfo[];
 };
 
+export function getExtraParams(
+  field: FullFieldConfig<any>,
+  metadata?: MetadataCollection
+): Record<string, any> | undefined {
+  if (!field.validatorExtraParams) return undefined;
+
+  const extraParams: Record<string, any> = {};
+  for (const param of field.validatorExtraParams) {
+    const paramValue = getValue(param, metadata);
+    if (paramValue !== undefined) {
+      extraParams[param] = paramValue;
+    }
+  }
+  return extraParams;
+}
+
 /**
  * Get the progres of the form based on the highest role and an optional section.
  *
@@ -220,124 +236,103 @@ export function getProgress(
     return { progress: 1 };
   }
 
-  // Helper function to validate a field
-  const validateField = (field: FullFieldConfig<any>) => {
-    // For collection fields, only validate if they don't exist or are empty
-    if (field.isCollection) {
-      const value = getValue(field.key, metadata);
-      if (!Array.isArray(value) || value.length === 0) {
-        totalCount++;
-        if (field.validatorExtraParams) {
-          console.log(
-            `Skipping validation for ${field.key} as it is a collection field with no values.`
-          );
-          return;
-        }
-        const validation = field.validator(value, field.validatorExtraParams);
-        if (validation.valid) {
-          validCount++;
-        } else {
-          invalidFields.push({
-            field: field.key,
-            profileId: field.profileId,
-            value,
-            helpText: validation.helpText
-          });
-        }
-      }
-      return;
-    }
-
-    // for child fields in collections, validate each value
-    if (field.collectionKey) {
-      const parentConfig = FieldConfigs.find(({ key }) => key === field.collectionKey);
-      const parentKey = parentConfig?.key;
-      const subKey = field.key.replace(field.collectionKey + '.', '');
-
-      if (!parentConfig) return;
-
-      const parentCollection = getAllValues(parentConfig.key, metadata) as any;
-
-      if (!Array.isArray(parentCollection)) {
-        console.warn(`Expected ${parentConfig.key} to be an array, but got:`, parentCollection);
-        return;
-      }
-
-      if (Array.isArray(parentCollection) && parentCollection.length > 0) {
-        parentCollection
-          .filter((v) => !!v)
-          .forEach((v, i) => {
-            let subValue = v[subKey];
-
-            // Get the needed extra parameters if configured
-            let extraParams: Record<string, any> | undefined;
-            if (field.validatorExtraParams?.length) {
-              extraParams = {};
-              field.validatorExtraParams.forEach((param) => {
-                if (param === parentKey) {
-                  extraParams = {
-                    ...extraParams,
-                    [param]: v
-                  };
-                } else {
-                  // I hope we never get here
-                  console.error(
-                    `Unexpected parameter ${param} in validatorExtraParams for ${field.key}`
-                  );
-                }
-              });
-            }
-
-            // layers need special handling
-            if (field.profileId === 48 && field.validatorExtraParams?.[0]) {
-              const serviceId = extraParams?.[field.validatorExtraParams[0]].serviceIdentification;
-              if (!serviceId) {
-                toast.error(
-                  `No serviceId found for ${field.key} in profile ${field.profileId}. Skipping validation.`
-                );
-                return;
-              }
-              const layersMap: Record<string, Layer[]> = metadata?.clientMetadata?.layers;
-              subValue = layersMap[serviceId];
-            }
-
-            const validation = field.validator(subValue, extraParams);
-            if (validation.valid) {
-              validCount++;
-            } else {
-              invalidFields.push({
-                field: parentKey + `[${i}].` + subKey,
-                profileId: field.profileId,
-                helpText: validation.helpText,
-                value: subValue
-              });
-            }
-            totalCount++;
-          });
-      }
-      return;
-    }
-
-    // For regular fields (not in collections)
+  // Helper function to validate a single value and track results
+  const validateValue = (
+    field: FullFieldConfig<any>,
+    value: any,
+    extraParams: Record<string, any> | undefined,
+    fieldPath: string
+  ) => {
     totalCount++;
-    const value = getValue(field.key, metadata);
-    if (field.validatorExtraParams) {
-      console.log(
-        `Skipping validation for ${field.key} as it is a collection field with no values.`
-      );
-      return;
-    }
-    const validation = field.validator(value, field.validatorExtraParams);
+    const validation = field.validator(value, extraParams);
     if (validation.valid) {
       validCount++;
     } else {
       invalidFields.push({
-        field: field.key,
+        field: fieldPath,
         profileId: field.profileId,
         value,
         helpText: validation.helpText
       });
     }
+  };
+
+  const validateCollectionField = (
+    field: FullFieldConfig<any>,
+    parentCollection: any[],
+    parentKey: string,
+    subKey: string
+  ) => {
+    parentCollection
+      .filter((v) => !!v)
+      .forEach((v, i) => {
+        const subValue = v[subKey];
+        const extraParams = getExtraParams(field, metadata);
+
+        // layers need special handling
+        if (field.profileId === 48) {
+          const layers = metadata?.clientMetadata.layers as Record<string, Layer> | undefined;
+          if (!layers) {
+            return;
+          }
+          for (const [serviceId, layer] of Object.entries(layers)) {
+            const services = getValue<Service[]>('isoMetadata.services', metadata);
+            const layerService = services?.find((s) => s.serviceIdentification === serviceId);
+            validateValue(
+              field,
+              layer,
+              {
+                'isoMetadata.services': layerService
+              },
+              `${field.key}['${serviceId}']`
+            );
+          }
+          return;
+        }
+
+        // Only validate explicitly marked collections
+        if (field.isCollection) {
+          if (!Array.isArray(subValue) || subValue.length === 0) {
+            validateValue(field, subValue, extraParams, `${parentKey}[${i}].${subKey}`);
+          }
+          return;
+        }
+
+        // For all other fields
+        validateValue(field, subValue, extraParams, `${parentKey}[${i}].${subKey}`);
+      });
+  };
+
+  const validateField = (field: FullFieldConfig<any>) => {
+    // Handle fields that are part of a collection
+    if (field.collectionKey) {
+      const parentConfig = FieldConfigs.find(({ key }) => key === field.collectionKey);
+      if (!parentConfig) return;
+
+      const parentCollection = getAllValues(parentConfig.key, metadata) as any[];
+
+      // If parent collection is empty or not an array, skip validation
+      if (!Array.isArray(parentCollection) || parentCollection.length === 0) {
+        return;
+      }
+
+      // If parent collection is not empty, validate its fields
+      const subKey = field.key.replace(field.collectionKey + '.', '');
+      validateCollectionField(field, parentCollection, parentConfig.key, subKey);
+      return;
+    }
+
+    // For standalone collections, only validate if they don't exist or are empty
+    if (field.isCollection) {
+      const value = getValue(field.key, metadata);
+      if (!Array.isArray(value) || value.length === 0) {
+        validateValue(field, value, getExtraParams(field, metadata), field.key);
+      }
+      return;
+    }
+
+    // For regular fields (not in collections)
+    validateValue(field, getValue(field.key, metadata), getExtraParams(field, metadata), field.key);
   };
 
   // Process all fields
@@ -358,7 +353,11 @@ export function getProgress(
 
 export function allFieldsValid(highestRole: Role, metadata?: MetadataCollection): boolean {
   if (!metadata) return false;
-  return getProgress(highestRole, undefined, metadata).progress === 1;
+  const progress = getProgress(highestRole, undefined, metadata);
+  console.log('Progress:', progress);
+  console.log('Invalid fields:', progress.invalidFields);
+  // Check if progress is 1 (100%)
+  return progress.progress === 1;
 }
 
 export async function persistValue(key: string, value: unknown) {
@@ -374,9 +373,11 @@ export async function persistValue(key: string, value: unknown) {
   });
 
   if (response.ok) {
+    // Invalidate all data to refetch from the server
     await invalidateAll();
   } else {
-    toast.error(`Fehler beim Speichern der Daten: ${response.statusText}`);
+    const { message } = await response.json();
+    toast.error(message || 'Fehler beim Speichern der Daten');
   }
 
   return response;

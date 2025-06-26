@@ -1,7 +1,7 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
   import Checkmark from '../Checkmark.svelte';
-  import type { Layer } from '$lib/models/metadata';
+  import type { Layer, Service } from '$lib/models/metadata';
   import LayerName_50 from './Field/50_LayerName.svelte';
   import LayerTitle_49 from './Field/49_LayerTitle.svelte';
   import LayerStyleName_51 from './Field/51_LayerStyleName.svelte';
@@ -20,12 +20,14 @@
 
   export type LayersFormProps = {
     value?: Layer[];
+    service?: Service;
     checkmarkVisible: boolean;
     onChange?: (layers: Layer[]) => void;
   };
 
   let {
     value: initialLayers,
+    service,
     checkmarkVisible = $bindable<boolean>(false),
     onChange = () => {}
   }: LayersFormProps = $props();
@@ -42,7 +44,11 @@
   let activeLayer = $derived(activeTabIndex ? layers[activeTabIndex] : layers[0]);
 
   const fieldConfig = getFieldConfig(48);
-  const validationResult = $derived(fieldConfig?.validator(layers));
+  const validationResult = $derived(
+    fieldConfig?.validator(layers, {
+      'isoMetadata.services': service
+    })
+  );
 
   $effect(() => {
     layers = initialLayers || [];

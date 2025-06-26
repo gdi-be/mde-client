@@ -61,6 +61,10 @@ const isValidEmail = (val: string) => {
   return emailRegex.test(val);
 };
 
+const optionalValidator = () => ({
+  valid: true
+});
+
 export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 1,
@@ -146,9 +150,10 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 7,
     label: 'INSPIRE Annex Thema',
     key: 'isoMetadata.inspireTheme',
-    validator: (val: any) => {
-      const isIso = getValue('isoMetadata.metadataProfile') === 'ISO';
-      if (isIso) {
+    validatorExtraParams: ['isoMetadata.metadataProfile'],
+    validator: (val: any, extraParams) => {
+      const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
+      if (metadataProfile === 'ISO') {
         return { valid: true };
       }
       if (!isDefined(val)) {
@@ -183,10 +188,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 9,
     label: 'Erstellungsdatum',
     key: 'isoMetadata.created',
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'temp_and_spatial',
     required: false
   },
@@ -210,10 +212,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 11,
     label: 'letzte Aktualisierung',
     key: 'isoMetadata.modified',
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'temp_and_spatial',
     required: true
   },
@@ -274,8 +273,13 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 14,
     label: 'Pflegeintervall',
     key: 'isoMetadata.maintenanceFrequency',
-    validator: () => {
-      // Optional
+    validator: (val: string) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie ein Pflegeintervall an.'
+        };
+      }
       return { valid: true };
     },
     section: 'temp_and_spatial',
@@ -334,7 +338,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profileId: 18,
+    profileId: 18, // multiple entries for extent
     label: 'Räumliche Ausdehnung',
     key: 'isoMetadata.extent.minx',
     section: 'temp_and_spatial',
@@ -351,7 +355,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     }
   },
   {
-    profileId: 18,
+    profileId: 18, // multiple entries for extent
     label: 'Räumliche Ausdehnung',
     key: 'isoMetadata.extent.miny',
     section: 'temp_and_spatial',
@@ -368,7 +372,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     }
   },
   {
-    profileId: 18,
+    profileId: 18, // multiple entries for extent
     label: 'Räumliche Ausdehnung',
     key: 'isoMetadata.extent.maxx',
     section: 'temp_and_spatial',
@@ -385,7 +389,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     }
   },
   {
-    profileId: 18,
+    profileId: 18, // multiple entries for extent
     label: 'Räumliche Ausdehnung',
     key: 'isoMetadata.extent.maxy',
     section: 'temp_and_spatial',
@@ -531,9 +535,10 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 27,
     label: 'Vergleichsmaßstab',
     key: 'isoMetadata.scale',
-    validator: (val: any) => {
-      const resolution = getValue('isoMetadata.resolutions');
-      if (!isDefined(val) && !isDefined(resolution)) {
+    validatorExtraParams: ['isoMetadata.resolutions'],
+    validator: (val: any, extraParams) => {
+      const resolutions = extraParams?.['isoMetadata.resolutions'];
+      if (!isDefined(val) && !isDefined(resolutions)) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie den Vergleichsmaßstab an.'
@@ -648,10 +653,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'Herkunft der Daten',
     key: 'isoMetadata.lineage.date',
     collectionKey: 'isoMetadata.lineage',
-    validator: () => {
-      // optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'additional',
     required: false
   },
@@ -689,8 +691,15 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 38,
     label: 'Schema-Version des INSPIRE Themas',
     key: 'isoMetadata.inspireAnnexVersion',
-    validator: () => {
-      // Optional
+    validatorExtraParams: ['isoMetadata.metadataProfile'],
+    validator: (val: any, extraParams) => {
+      const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
+      if (metadataProfile === 'INSPIRE_HARMONISED' && !isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie die Schema-Version des INSPIRE Themas an.'
+        };
+      }
       return { valid: true };
     },
     section: 'classification',
@@ -702,10 +711,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'Weitere Informationen',
     key: 'isoMetadata.contentDescriptions',
     isCollection: true,
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'additional',
     required: false
   },
@@ -729,10 +735,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 39,
     key: 'isoMetadata.contentDescriptions.code',
     collectionKey: 'isoMetadata.contentDescriptions',
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'additional',
     required: false
   },
@@ -740,10 +743,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 39,
     key: 'isoMetadata.contentDescriptions.url',
     collectionKey: 'isoMetadata.contentDescriptions',
-    validator: () => {
-      // Optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'additional',
     required: false
   },
@@ -793,50 +793,35 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 47,
     key: 'isoMetadata.services.legendImage',
-    validator: () => {
-      // optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'services',
     required: false
   },
   {
     profileId: 47,
     key: 'isoMetadata.services.legendImage.url',
-    validator: () => {
-      // optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'services',
     required: false
   },
   {
     profileId: 47,
     key: 'isoMetadata.services.legendImage.format',
-    validator: () => {
-      // optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'services',
     required: false
   },
   {
     profileId: 47,
     key: 'isoMetadata.services.legendImage.width',
-    validator: () => {
-      // optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'services',
     required: false
   },
   {
     profileId: 47,
     key: 'isoMetadata.services.legendImage.height',
-    validator: () => {
-      // optional
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'services',
     required: false
   },
@@ -1073,7 +1058,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     isCollection: true,
     validator: () => ({ valid: true }),
     section: 'services',
-    required: true
+    required: false
   },
   {
     profileId: 62,
@@ -1116,7 +1101,16 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.services.featureTypes.columns',
     collectionKey: 'isoMetadata.services.featureTypes',
     isCollection: true,
-    validator: () => ({ valid: true }),
+    validator: (val: ColumnInfo) => {
+      const valid = isDefined(val);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie mindestens eine Spalte für den FeatureType an.'
+        };
+      }
+      return { valid };
+    },
     section: 'services',
     required: true
   },

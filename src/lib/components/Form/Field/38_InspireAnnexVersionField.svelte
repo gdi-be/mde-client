@@ -9,7 +9,6 @@
   } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
   import FieldTools from '../FieldTools.svelte';
-  import type { ValidationResult } from '../FieldsConfig';
   import { getHighestRole } from '$lib/util';
   import type { Token } from '$lib/models/keycloak';
 
@@ -32,7 +31,11 @@
 
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<string>(38);
-  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
+  let validationResult = $derived(
+    fieldConfig?.validator(value, {
+      'isoMetadata.metadataProfile': metadataProfile
+    })
+  );
 
   const onBlur = async () => {
     const response = await persistValue(KEY, value);
