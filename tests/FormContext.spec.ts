@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { getProgress, getValue, getAllValues } from '$lib/context/FormContext.svelte';
 import type { Role } from '$lib/models/keycloak';
 import metadata1 from './fixtures/metadata1';
+import metadata2 from './fixtures/metadata2';
 import type { Contact } from '$lib/models/metadata';
 
 describe('FormContext', () => {
@@ -90,6 +91,22 @@ describe('FormContext', () => {
       const { progress } = getProgress('MdeAdministrator', undefined, metadata1);
       expect(progress).toBeGreaterThanOrEqual(0);
       expect(progress).toBeLessThanOrEqual(1);
+    });
+  });
+
+  describe('allFieldsValid', () => {
+    test('should return true for valid metadata with services', () => {
+      const role: Role = 'MdeEditor';
+      const { progress, invalidFields } = getProgress(role, undefined, metadata1);
+      expect(invalidFields).toEqual([]);
+      expect(progress).toBe(1);
+    });
+
+    test('should return true for valid metadata without services', async () => {
+      const role: Role = 'MdeEditor';
+      const { progress, invalidFields } = getProgress(role, undefined, metadata2);
+      expect(invalidFields).toEqual([]);
+      expect(progress).toBe(1);
     });
   });
 });

@@ -4,7 +4,6 @@
   import NumberInput from '../Inputs/NumberInput.svelte';
   import FormField from '@smui/form-field';
   import Radio from '@smui/radio';
-  import type { ValidationResult } from '../FieldsConfig';
 
   const RESOLUTION_KEY = 'isoMetadata.resolutions';
   const SCALE_KEY = 'isoMetadata.scale';
@@ -34,25 +33,20 @@
   const resolutionFieldConfig = getFieldConfig<number>(28);
   let resolutionValidationResult = $derived(
     resolutionFieldConfig?.validator(resolutionValue || undefined)
-  ) as ValidationResult;
+  );
   const scaleFieldConfig = getFieldConfig<number>(27);
-  let scaleValidationResult = $derived(
-    scaleFieldConfig?.validator(scaleValue || undefined)
-  ) as ValidationResult;
+  let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined));
+
+  const clearAllValues = async () => {
+    await updateResolution(null);
+    await updateScale(null);
+  };
 
   const onBlur = async () => {
     if (selected === RESOLUTION_KEY) {
-      const val = Number(resolutionValue);
-      if (Number.isFinite(val)) {
-        await updateResolution([val]);
-        updateScale(null);
-      }
+      await updateResolution(resolutionValue ? [resolutionValue] : null);
     } else {
-      const val = Number(scaleValue);
-      if (Number.isFinite(val)) {
-        await updateScale(val);
-        updateResolution(null);
-      }
+      await updateScale(scaleValue);
     }
   };
 
@@ -75,13 +69,13 @@
   <fieldset>
     <legend>Räumliche Auflösung</legend>
     <FormField>
-      <Radio bind:group={selected} value={RESOLUTION_KEY} />
+      <Radio bind:group={selected} value={RESOLUTION_KEY} onchange={clearAllValues} />
       {#snippet label()}
         {resolutionFieldConfig?.label}
       {/snippet}
     </FormField>
     <FormField>
-      <Radio bind:group={selected} value={SCALE_KEY} />
+      <Radio bind:group={selected} value={SCALE_KEY} onchange={clearAllValues} />
       {#snippet label()}
         {scaleFieldConfig?.label}
       {/snippet}

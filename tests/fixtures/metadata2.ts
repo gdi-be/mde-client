@@ -14,83 +14,14 @@ export default {
   assignedUserId: '9282dbab-a97d-44fa-8f06-042ab34f6de6',
   responsibleRole: 'MdeEditor',
   clientMetadata: {
-    privacy: 'NONE',
-    layers: {
-      '00e19242-8d3c-4617-ad73-d5a6b79ae55f': [
-        {
-          name: 'ewfwefew',
-          title: 'a',
-          styleName: 'gggg',
-          styleTitle: 'ewwefwe',
-          shortDescription: 'ewewff',
-          legendImage: 'wef',
-          datasource: 'ewfefwefw',
-          secondaryDatasource: 'ewfewf'
-        }
-      ]
-    }
+    privacy: 'NONE'
   },
   isoMetadata: {
     metadataProfile: 'INSPIRE_HARMONISED',
     identifier: 'a723e625-815c-4553-93bf-2fb62bb623d4',
     title: '123 Datentest',
     description: 'wergwergergergergergrge',
-    services: [
-      {
-        workspace: 'ewfewf',
-        title: '123 Datentest',
-        shortDescription: 'dewf',
-        serviceIdentification: '00e19242-8d3c-4617-ad73-d5a6b79ae55f',
-        serviceType: 'WMS',
-        legendImage: {
-          format: 'wefwef',
-          url: 'weffwe',
-          width: 234,
-          height: 234
-        },
-        preview: 'eeeee'
-      },
-      {
-        title: 'ewfewf',
-        shortDescription: 'ewfewfew',
-        serviceIdentification: '3a5b3081-a5e0-4133-ad18-ea756331e33f',
-        serviceType: 'ATOM',
-        downloads: [
-          {
-            title: 'Neuer Download0',
-            type: 'wefewefw',
-            href: 'ewfwefew',
-            fileSize: 123
-          }
-        ]
-      },
-      {
-        title: 'WFS Titel',
-        shortDescription: 'WFS Kurzbeschreibung',
-        serviceIdentification: '284332a8-a765-4fd6-8ac8-66b49fb01794',
-        serviceType: 'WFS',
-        featureTypes: [
-          {
-            columns: [
-              {
-                name: 'Mein Attribut',
-                alias: 'Der andere Name meines Attributs',
-                type: 'Date',
-                filterType: 'CatalogBox'
-              },
-              {
-                name: 'Mein zweites Attribut ',
-                alias: 'Attribut 2',
-                type: 'Double',
-                filterType: 'CatalogBox'
-              }
-            ],
-            name: 'my_feature_type',
-            title: 'Titel des FeatureTypes'
-          }
-        ]
-      }
-    ],
+    services: [],
     keywords: {
       default: [
         {

@@ -114,6 +114,7 @@
       onChange={(legendImage) => set('legendImage', legendImage)}
     />
     <LayersForm
+      {service}
       value={layers}
       onChange={onLayersChange}
       bind:checkmarkVisible={layerCheckmarkVisible}
