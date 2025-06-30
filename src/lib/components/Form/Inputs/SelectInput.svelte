@@ -52,7 +52,7 @@
       >
         {option.label}
       </SelectOption>
-      {#if option.description}
+      {#if option.description && !option.disabled}
         <div class="option-description">{option.description}</div>
       {/if}
     {/each}
@@ -89,8 +89,7 @@
       max-height: calc(5 * 48px + 8px);
 
       :global([aria-disabled='true']) {
-        opacity: 0.5;
-        pointer-events: none;
+        display: none;
       }
     }
 
