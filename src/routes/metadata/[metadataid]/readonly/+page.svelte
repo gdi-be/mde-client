@@ -17,7 +17,7 @@
   let assignmentPanelVisible = $state(false);
 
   const metadata = $derived(data.metadata);
-  initializeFormContext(data.metadata);
+  initializeFormContext(data.metadata, data.fieldLabels);
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   $effect(() => {
