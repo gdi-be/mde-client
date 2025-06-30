@@ -5,15 +5,18 @@
   import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
   import { getHighestRole } from '$lib/util';
   import type { Token } from '$lib/models/keycloak';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
     value?: Layer['styleTitle'];
-    onChange: (newValue: string) => void;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
+  const HELP_KEY = 'clientMetadata.layers.styleTitle';
 
   let { value, onChange }: ComponentProps = $props();
+  let showCheckmark = $state(false);
 
   let metadataProfile = $derived(getValue<MetadataProfile>(PROFILE_KEY));
   const fieldConfig = getFieldConfig(52);
@@ -35,8 +38,14 @@
       maxlength={250}
       {fieldConfig}
       {validationResult}
-      onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+      onchange={async (e: Event) => {
+        const response = await onChange((e.target as HTMLInputElement).value);
+        if (response.ok) {
+          showCheckmark = true;
+        }
+      }}
     />
+    <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 

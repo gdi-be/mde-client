@@ -8,7 +8,7 @@
 
   export type ServiceTypeProps = {
     value: Service['title'];
-    onChange: (newValue: string) => void;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
@@ -22,6 +22,7 @@
 
   const fieldConfig = getFieldConfig(59);
   const validationResult = $derived(fieldConfig?.validator(value));
+  let showCheckmark = $state(false);
 
   const getAutoFillValues = async () => {
     if (!metadataTitle) return;
@@ -36,9 +37,14 @@
     {fieldConfig}
     {validationResult}
     maxlength={250}
-    onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+    onchange={async (e: Event) => {
+      const response = await onChange((e.target as HTMLInputElement).value);
+      if (response.ok) {
+        showCheckmark = true;
+      }
+    }}
   />
-  <FieldTools key={HELP_KEY} noCheckmark>
+  <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
     {#if metadataTitle}
       <AutoFillButton title="Titel des Metadatensatzes übernehmen" onclick={getAutoFillValues} />
     {/if}

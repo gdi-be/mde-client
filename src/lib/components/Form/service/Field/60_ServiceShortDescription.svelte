@@ -8,13 +8,14 @@
 
   export type ServiceTypeProps = {
     value: Service['shortDescription'];
-    onChange: (newValue: string) => void;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value = $bindable(), onChange }: ServiceTypeProps = $props();
 
   const fieldConfig = getFieldConfig(60);
   const validationResult = $derived(fieldConfig?.validator(value));
+  let showCheckmark = $state(false);
 
   const HELP_KEY = 'isoMetadata.services.shortDescription';
 
@@ -36,9 +37,14 @@
     {fieldConfig}
     {validationResult}
     rows={5}
-    onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+    onchange={async (e: Event) => {
+      const response = await onChange((e.target as HTMLInputElement).value);
+      if (response.ok) {
+        showCheckmark = true;
+      }
+    }}
   />
-  <FieldTools key={HELP_KEY} noCheckmark>
+  <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
     {#if metadataDescription}
       <AutoFillButton
         title="Beschreibung des Metadatensatzes übernehmen"

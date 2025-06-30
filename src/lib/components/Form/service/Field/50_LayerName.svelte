@@ -5,24 +5,30 @@
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
     value?: Layer['name'];
-    onChange: (newValue: string) => void;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
+  const HELP_KEY = 'clientMetadata.layers.name';
   const fieldConfig = getFieldConfig(50);
   const validationResult = $derived(fieldConfig?.validator(value));
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
+  let showCheckmark = $state(false);
 
-  const onChangeInternal = (e: Event) => {
+  const onChangeInternal = async (e: Event) => {
     const newValue = (e.target as HTMLInputElement).value;
-    onChange(newValue);
+    const response = await onChange(newValue);
+    if (response.ok) {
+      showCheckmark = true;
+    }
   };
 </script>
 
@@ -36,6 +42,7 @@
       {validationResult}
       onchange={onChangeInternal}
     />
+    <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 

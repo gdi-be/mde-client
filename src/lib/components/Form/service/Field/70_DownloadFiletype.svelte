@@ -5,16 +5,19 @@
   import { getContext } from 'svelte';
   import { getHighestRole } from '$lib/util';
   import type { Token } from '$lib/models/keycloak';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
     value?: DownloadInfo['type'];
-    onChange: (newValue: string) => void;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
+  const HELP_KEY = 'isoMetadata.services.downloads.type';
   const fieldConfig = getFieldConfig(70);
   const validationResult = $derived(fieldConfig?.validator(value));
+  let showCheckmark = $state(false);
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -28,8 +31,14 @@
       {value}
       {fieldConfig}
       {validationResult}
-      onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+      onchange={async (e: Event) => {
+        const response = await onChange((e.target as HTMLInputElement).value);
+        if (response.ok) {
+          showCheckmark = true;
+        }
+      }}
     />
+    <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 

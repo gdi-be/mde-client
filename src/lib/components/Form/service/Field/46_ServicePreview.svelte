@@ -6,13 +6,14 @@
 
   export type ComponentProps = {
     value?: Service['preview'];
-    onChange: (newValue: string) => void;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
   const fieldConfig = getFieldConfig(46);
   const validationResult = $derived(fieldConfig?.validator(value));
+  let showCheckmark = $state(false);
   const HELP_KEY = 'isoMetadata.services.preview';
 </script>
 
@@ -22,9 +23,14 @@
     {value}
     {fieldConfig}
     {validationResult}
-    onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+    onchange={async (e: Event) => {
+      const response = await onChange((e.target as HTMLInputElement).value);
+      if (response.ok) {
+        showCheckmark = true;
+      }
+    }}
   />
-  <FieldTools key={HELP_KEY} noCheckmark />
+  <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { DownloadInfo } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import Checkmark from '../Checkmark.svelte';
   import DownloadTitle_68 from './Field/69_DownloadTitle.svelte';
   import DownloadFiletype_69 from './Field/70_DownloadFiletype.svelte';
   import DownloadHref_70 from './Field/71_DownloadHref.svelte';
@@ -16,15 +15,10 @@
 
   export type DownloadFormProps = {
     value?: DownloadInfo[];
-    checkmarkVisible: boolean;
-    onChange?: (downloads: DownloadInfo[]) => void;
+    onChange: (downloads: DownloadInfo[]) => Promise<Response>;
   };
 
-  let {
-    value: initialDownloads,
-    checkmarkVisible = $bindable<boolean>(false),
-    onChange = () => {}
-  }: DownloadFormProps = $props();
+  let { value: initialDownloads, onChange }: DownloadFormProps = $props();
 
   let downloads = $state<DownloadInfo[]>([]);
   let tabs = $derived<Tab[]>(
@@ -42,7 +36,6 @@
 
   $effect(() => {
     downloads = initialDownloads || [];
-    activeTabIndex = initialDownloads?.length ? 0 : undefined;
   });
 
   function addDownload() {
@@ -85,20 +78,27 @@
       }
       return download;
     });
-    onChange(downloads);
+    return onChange(downloads);
   }
 </script>
 
 <fieldset class="downloads-form">
   <legend>
     {fieldConfig?.label}
-    <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
   <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
-        <button id={tab.title} class="tab" title={tab.title} onclick={() => (activeTabIndex = i)}>
+        <button
+          id={tab.title}
+          class="tab"
+          title={tab.title}
+          onclick={(evt) => {
+            evt.preventDefault();
+            activeTabIndex = i;
+          }}
+        >
           {tab.title}
         </button>
         <IconButton
@@ -113,7 +113,10 @@
     {/each}
     <IconButton
       class="material-icons"
-      onclick={() => addDownload()}
+      onclick={(evt) => {
+        evt.preventDefault();
+        addDownload();
+      }}
       size="button"
       title="Download hinzufügen"
     >

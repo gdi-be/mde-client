@@ -1,6 +1,5 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import Checkmark from '../Checkmark.svelte';
   import type { Layer, Service } from '$lib/models/metadata';
   import LayerName_50 from './Field/50_LayerName.svelte';
   import LayerTitle_49 from './Field/49_LayerTitle.svelte';
@@ -21,16 +20,10 @@
   export type LayersFormProps = {
     value?: Layer[];
     service?: Service;
-    checkmarkVisible: boolean;
-    onChange?: (layers: Layer[]) => void;
+    onChange: (layers: Layer[]) => Promise<Response>;
   };
 
-  let {
-    value: initialLayers,
-    service,
-    checkmarkVisible = $bindable<boolean>(false),
-    onChange = () => {}
-  }: LayersFormProps = $props();
+  let { value: initialLayers, service, onChange }: LayersFormProps = $props();
 
   let layers = $state<Layer[]>([]);
   let tabs = $derived<Tab[]>(
@@ -52,7 +45,6 @@
 
   $effect(() => {
     layers = initialLayers || [];
-    activeTabIndex = initialLayers?.length ? 0 : undefined;
   });
 
   function addLayer() {
@@ -99,20 +91,25 @@
       }
       return column;
     });
-    onChange(layers);
+    return onChange(layers);
   }
 </script>
 
 <fieldset class="layers-form">
-  <legend>
-    Layers
-    <Checkmark bind:running={checkmarkVisible} displayNone />
-  </legend>
+  <legend> Layers </legend>
   <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
-        <button id={tab.name} class="tab" title={tab.name} onclick={() => (activeTabIndex = i)}>
+        <button
+          id={tab.name}
+          class="tab"
+          title={tab.name}
+          onclick={(evt) => {
+            evt.preventDefault();
+            activeTabIndex = i;
+          }}
+        >
           {tab.name}
         </button>
         <IconButton
@@ -127,7 +124,10 @@
     {/each}
     <IconButton
       class="material-icons"
-      onclick={() => addLayer()}
+      onclick={(evt) => {
+        evt.preventDefault();
+        addLayer();
+      }}
       size="button"
       title="Layer hinzufügen"
     >

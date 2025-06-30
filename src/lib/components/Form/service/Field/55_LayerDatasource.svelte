@@ -5,13 +5,17 @@
   import { getContext } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
     value?: Layer['datasource'];
-    onChange: (newValue: string) => void;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
+
+  const HELP_KEY = 'clientMetadata.layers.datasource';
+  let showCheckmark = $state(false);
 
   const fieldConfig = getFieldConfig(55);
   const validationResult = $derived(fieldConfig?.validator(value));
@@ -28,8 +32,14 @@
       {value}
       {fieldConfig}
       {validationResult}
-      onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+      onchange={async (e: Event) => {
+        const response = await onChange((e.target as HTMLInputElement).value);
+        if (response.ok) {
+          showCheckmark = true;
+        }
+      }}
     />
+    <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 
