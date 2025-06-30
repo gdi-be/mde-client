@@ -3,10 +3,10 @@
   import { setNestedValue } from '$lib/util';
   import ServiceWorkspace_45 from './Field/45_ServiceWorkspace.svelte';
   import ServicePreview_46 from './Field/46_ServicePreview.svelte';
-  import ServiceType_57 from './Field/58_ServiceType.svelte';
-  import ServiceTitle_58 from './Field/59_ServiceTitle.svelte';
-  import ServiceShortDescription_59 from './Field/60_ServiceShortDescription.svelte';
-  import ServiceLegendImage_53 from './Field/47_ServiceLegendImage.svelte';
+  import ServiceLegendImage_47 from './Field/47_ServiceLegendImage.svelte';
+  import ServiceType_58 from './Field/58_ServiceType.svelte';
+  import ServiceTitle_59 from './Field/59_ServiceTitle.svelte';
+  import ServiceShortDescription_60 from './Field/60_ServiceShortDescription.svelte';
   import DownloadForm from './DownloadForm.svelte';
   import FeatureTypeForm from './FeatureTypeForm.svelte';
   import { getContext } from 'svelte';
@@ -30,9 +30,6 @@
 
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
-  let layerCheckmarkVisible = $state<boolean>(false);
-  let featureTypeCheckmarkVisible = $state<boolean>(false);
-  let downloadCheckmarkVisible = $state<boolean>(false);
 
   const layers = $derived.by((): Layer[] => {
     const layersMap: Record<string, Layer[]> = metadata?.clientMetadata?.layers;
@@ -61,10 +58,6 @@
             delete layers[id];
             await persistValue('clientMetadata.layers', layers);
           }
-        } else if (key === 'featureTypes') {
-          featureTypeCheckmarkVisible = true;
-        } else if (key === 'downloads') {
-          downloadCheckmarkVisible = true;
         } else if (key === 'legendImage') {
           // legend sizes are determined and returned in the backend
           const json = await response.json();
@@ -75,14 +68,16 @@
             service = setNestedValue(service, 'legendImage', value);
           }
         }
-        invalidateAll();
+        await invalidateAll();
       }
+      return response;
     }
+    return Promise.reject('onChange function is not provided');
   }
 
   async function onLayersChange(layers: Layer[]) {
     const serviceIdentification = service?.serviceIdentification;
-    if (!serviceIdentification) return;
+    if (!serviceIdentification) return Promise.reject('Service identification is missing');
 
     const response = await fetch(
       `${page.url.origin}${page.url.pathname}/updateLayers/${serviceIdentification}`,
@@ -100,19 +95,18 @@
     if (!response.ok) {
       toast.error(`Fehler beim aktualisieren der Layer: ${response.statusText}`);
     }
-
-    layerCheckmarkVisible = response.ok;
     invalidateAll();
+    return response;
   }
 </script>
 
 <div class="service-form">
-  <ServiceType_57
+  <ServiceType_58
     value={service.serviceType}
     onChange={(serviceType) => set('serviceType', serviceType)}
   />
-  <ServiceTitle_58 value={service.title} onChange={(title) => set('title', title)} />
-  <ServiceShortDescription_59
+  <ServiceTitle_59 value={service.title} onChange={(title) => set('title', title)} />
+  <ServiceShortDescription_60
     value={service.shortDescription}
     onChange={(shortDescription) => set('shortDescription', shortDescription)}
   />
@@ -122,30 +116,20 @@
       onChange={(workspace) => set('workspace', workspace)}
     />
     <ServicePreview_46 value={service.preview} onChange={(preview) => set('preview', preview)} />
-    <ServiceLegendImage_53
+    <ServiceLegendImage_47
       value={service.legendImage}
       onChange={(legendImage) => set('legendImage', legendImage)}
     />
-    <LayersForm
-      {service}
-      value={layers}
-      onChange={onLayersChange}
-      bind:checkmarkVisible={layerCheckmarkVisible}
-    />
+    <LayersForm {service} value={layers} onChange={onLayersChange} />
   {/if}
   {#if isWFSService}
     <FeatureTypeForm
       value={service.featureTypes}
       onChange={(featureTypes) => set('featureTypes', featureTypes)}
-      bind:checkmarkVisible={featureTypeCheckmarkVisible}
     />
   {/if}
   {#if isAtomService}
-    <DownloadForm
-      value={service.downloads}
-      onChange={(downloads) => set('downloads', downloads)}
-      bind:checkmarkVisible={downloadCheckmarkVisible}
-    />
+    <DownloadForm value={service.downloads} onChange={(downloads) => set('downloads', downloads)} />
   {/if}
 </div>
 

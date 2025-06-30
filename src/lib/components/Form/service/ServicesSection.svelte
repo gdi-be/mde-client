@@ -123,7 +123,15 @@
 <nav class="tabs">
   {#each tabs as tab}
     <div class="tab-container" class:active={activeTab === tab.id}>
-      <button id={tab.id} class="tab" title={tab.title} onclick={() => (activeTab = tab.id)}>
+      <button
+        id={tab.id}
+        class="tab"
+        title={tab.title}
+        onclick={(evt) => {
+          evt.preventDefault();
+          activeTab = tab.id;
+        }}
+      >
         {tab.title}
       </button>
       {#if visibleCheckmarks[tab.id]}

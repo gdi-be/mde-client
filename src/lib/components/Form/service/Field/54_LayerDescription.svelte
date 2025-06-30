@@ -2,13 +2,17 @@
   import TextAreaInput from '$lib/components/Form/Inputs/TextAreaInput.svelte';
   import type { Layer } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
     value?: Layer['shortDescription'];
-    onChange: (newValue: string) => void;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
+
+  const HELP_KEY = 'clientMetadata.layers.shortDescription';
+  let showCheckmark = $state(false);
 
   const fieldConfig = getFieldConfig(54);
   const validationResult = $derived(fieldConfig?.validator(value));
@@ -21,8 +25,14 @@
     maxlength={500}
     {fieldConfig}
     {validationResult}
-    onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+    onchange={async (e: Event) => {
+      const response = await onChange((e.target as HTMLInputElement).value);
+      if (response.ok) {
+        showCheckmark = true;
+      }
+    }}
   />
+  <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

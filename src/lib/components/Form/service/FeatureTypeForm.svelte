@@ -1,6 +1,5 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import Checkmark from '$lib/components/Form/Checkmark.svelte';
   import ColumnsForm from './ColumnsForm.svelte';
   import type { FeatureType } from '$lib/models/metadata';
   import FeatureTypeTitle_61 from './Field/62_FeatureTypeTitle.svelte';
@@ -15,15 +14,10 @@
 
   export type FeatureTypeFormProps = {
     value?: FeatureType[];
-    checkmarkVisible: boolean;
-    onChange?: (featureTypes: FeatureType[]) => void;
+    onChange: (featureTypes: FeatureType[]) => Promise<Response>;
   };
 
-  let {
-    value: initialFeatureTypes,
-    checkmarkVisible = $bindable<boolean>(false),
-    onChange = () => {}
-  }: FeatureTypeFormProps = $props();
+  let { value: initialFeatureTypes, onChange }: FeatureTypeFormProps = $props();
 
   let featureTypes = $state<FeatureType[]>([]);
   let tabs = $derived<Tab[]>(
@@ -41,7 +35,6 @@
 
   $effect(() => {
     featureTypes = initialFeatureTypes || [];
-    activeTabIndex = initialFeatureTypes?.length ? 0 : undefined;
   });
 
   function addFeatureType() {
@@ -87,20 +80,27 @@
       }
       return column;
     });
-    onChange(featureTypes);
+    return onChange(featureTypes);
   }
 </script>
 
 <fieldset class="featuretypes-form">
   <legend>
     {fieldConfig?.label}
-    <Checkmark bind:running={checkmarkVisible} displayNone />
   </legend>
   <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
-        <button id={tab.name} class="tab" title={tab.name} onclick={() => (activeTabIndex = i)}>
+        <button
+          id={tab.name}
+          class="tab"
+          title={tab.name}
+          onclick={(evt) => {
+            evt.preventDefault();
+            activeTabIndex = i;
+          }}
+        >
           {tab.name}
         </button>
         <IconButton
@@ -115,7 +115,10 @@
     {/each}
     <IconButton
       class="material-icons"
-      onclick={() => addFeatureType()}
+      onclick={(evt) => {
+        evt.preventDefault();
+        addFeatureType();
+      }}
       size="button"
       title="Featuretype hinzufügen"
     >

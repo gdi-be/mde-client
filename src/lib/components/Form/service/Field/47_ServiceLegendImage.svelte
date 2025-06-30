@@ -10,19 +10,23 @@
 
   export type ServiceTypeProps = {
     value: Service['legendImage'];
-    onChange: (newValue: Service['legendImage']) => void;
+    onChange: (newValue: Service['legendImage']) => Promise<Response>;
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
 
   const fieldConfig = getFieldConfig(47);
   const validationResult = $derived(fieldConfig?.validator(value));
+  let showCheckmark = $state(false);
 
-  const update = (key: string, val: string) => {
-    onChange({
+  const update = async (key: string, val: string) => {
+    const response = await onChange({
       ...value,
       [key]: val
     });
+    if (response.ok) {
+      showCheckmark = true;
+    }
   };
 </script>
 
@@ -61,7 +65,7 @@
       </div>
     </div>
   </fieldset>
-  <FieldTools key={KEY} />
+  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

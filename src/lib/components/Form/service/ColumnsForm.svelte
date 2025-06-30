@@ -16,10 +16,10 @@
 
   export type ColumnsFormProps = {
     value?: ColumnInfo[];
-    onChange?: (columns: ColumnInfo[]) => void;
+    onChange: (columns: ColumnInfo[]) => Promise<Response>;
   };
 
-  let { value: initialColumns, onChange = () => {} }: ColumnsFormProps = $props();
+  let { value: initialColumns, onChange }: ColumnsFormProps = $props();
 
   let columns = $state<ColumnInfo[]>([]);
   let tabs = $derived<Tab[]>(
@@ -37,7 +37,6 @@
 
   $effect(() => {
     columns = initialColumns || [];
-    activeTabIndex = initialColumns?.length ? 0 : undefined;
   });
 
   let visibleCheckmarks = $state<Record<string, boolean>>({});
@@ -84,7 +83,7 @@
       }
       return column;
     });
-    onChange(columns);
+    return onChange(columns);
   }
 </script>
 
@@ -112,7 +111,10 @@
     {/each}
     <IconButton
       class="material-icons"
-      onclick={() => addColumn()}
+      onclick={(evt) => {
+        evt.preventDefault();
+        addColumn();
+      }}
       size="button"
       title="Attribut hinzufügen"
     >

@@ -9,7 +9,7 @@
 
   export type ComponentProps = {
     value?: Service['workspace'];
-    onChange: (newValue: string) => void;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
@@ -17,6 +17,7 @@
   const HELP_KEY = 'isoMetadata.services.workspace';
   const fieldConfig = getFieldConfig(45);
   const validationResult = $derived(fieldConfig?.validator(value));
+  let showCheckmark = $state(false);
 
   const token = getContext<Token>('user_token');
   const highestRole = $derived(getHighestRole(token));
@@ -30,9 +31,14 @@
       {value}
       {fieldConfig}
       {validationResult}
-      onchange={(e: Event) => onChange((e.target as HTMLInputElement).value)}
+      onchange={async (e: Event) => {
+        const response = await onChange((e.target as HTMLInputElement).value);
+        if (response.ok) {
+          showCheckmark = true;
+        }
+      }}
     />
-    <FieldTools key={HELP_KEY} />
+    <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 
