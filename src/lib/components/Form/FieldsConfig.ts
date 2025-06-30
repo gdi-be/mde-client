@@ -53,7 +53,7 @@ const isDefined = <T>(val: T): val is NonNullable<T> => {
 };
 
 const isValidPhoneNumber = (val: string) => {
-  const numberRegex = /^[+]?[0-9\s]+$/;
+  const numberRegex = /^[0-9]+$/;
   return numberRegex.test(val);
 };
 
@@ -498,7 +498,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       if (!isValidPhoneNumber(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie eine gültige Telefonnummer an.'
+          helpText: 'Bitte geben Sie eine gültige Telefonnummer an. Es sind ausschließlich Zahlen erlaubt.'
         };
       }
       return { valid: true };

@@ -47,7 +47,7 @@
   {:then OPTIONS}
     <div class="input-wrapper">
       <SelectInput
-        label={fieldConfig?.label}
+        label={fieldConfig?.label || KEY}
         fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
         options={OPTIONS.map(
           (item: TermsOfUse): Option => ({
