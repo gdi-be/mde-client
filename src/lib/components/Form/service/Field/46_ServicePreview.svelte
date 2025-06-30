@@ -1,8 +1,10 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import type { Service } from '$lib/models/metadata';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import type { MetadataCollection, Service } from '$lib/models/metadata';
+  import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
+  import { getContext } from 'svelte';
 
   export type ComponentProps = {
     value?: Service['preview'];
@@ -13,8 +15,22 @@
 
   const fieldConfig = getFieldConfig(46);
   const validationResult = $derived(fieldConfig?.validator(value));
+
+  const METADATA_PREVIEW_KEY = 'isoMetadata.preview';
+
+  const metadata = getContext<MetadataCollection>('metadata');
+  const metadataPreview = $derived(getValue<string>(METADATA_PREVIEW_KEY, metadata));
+
   let showCheckmark = $state(false);
   const HELP_KEY = 'isoMetadata.services.preview';
+
+  const getAutoFillValues = async () => {
+    if (!metadataPreview) return;
+    const response = await onChange(metadataPreview);
+    if (response.ok) {
+      showCheckmark = true;
+    }
+  };
 </script>
 
 <div class="service-preview-field">
@@ -30,7 +46,14 @@
       }
     }}
   />
-  <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
+    {#if metadataPreview}
+      <AutoFillButton
+        title="Vorschaubild des Metadatensatzes übernehmen"
+        onclick={getAutoFillValues}
+      />
+    {/if}
+  </FieldTools>
 </div>
 
 <style lang="scss">
