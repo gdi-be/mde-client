@@ -62,8 +62,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2em;
     overflow: auto;
+
+    @media print {
+      font-size: 11pt;
+    }
 
     .content {
       width: 80%;
@@ -71,7 +74,6 @@
       section {
         display: flex;
         flex-direction: column;
-        gap: 1em;
         padding: 1em;
       }
 

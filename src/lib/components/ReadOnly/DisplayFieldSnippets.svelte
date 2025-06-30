@@ -144,19 +144,19 @@
   <fieldset class="list">
     {#each value as contact}
       <div class="list-item">
-        <div>
+        <div class="list-item-field">
           <strong class="list-item-label">Name</strong>
           <span class="list-item-value">{contact.name}</span>
         </div>
-        <div>
+        <div class="list-item-field">
           <strong class="list-item-label">Organisation</strong>
           <span class="list-item-value">{contact.organisation}</span>
         </div>
-        <div>
+        <div class="list-item-field">
           <strong class="list-item-label">Telefon</strong>
           <span class="list-item-value">{contact.phone}</span>
         </div>
-        <div>
+        <div class="list-item-field">
           <strong class="list-item-label">E-Mail</strong>
           <span class="list-item-value">{contact.email}</span>
         </div>
@@ -256,15 +256,15 @@
   <fieldset class="list">
     {#each value as lineage}
       <div class="list-item">
-        <div>
+        <div class="list-item-field">
           <strong class="list-item-label">Title</strong>
           <span class="list-item-value">{lineage.title}</span>
         </div>
-        <div>
+        <div class="list-item-field">
           <strong class="list-item-label">Veröffentlichungsdatum</strong>
           <span class="list-item-value">{lineage.date || 'Keine Angaben'}</span>
         </div>
-        <div>
+        <div class="list-item-field">
           <strong class="list-item-label">Identifier</strong>
           <span class="list-item-value">{lineage.identifier || 'Keine Angaben'}</span>
         </div>
@@ -277,11 +277,11 @@
   <fieldset class="list">
     {#each value as contentDescription}
       <div class="list-item">
-        <div>
+        <div class="list-item-field">
           <strong class="list-item-label">Title</strong>
           <span class="list-item-value">{contentDescription.description}</span>
         </div>
-        <div>
+        <div class="list-item-field">
           <strong class="list-item-label">Url</strong>
           <span class="list-item-value">{contentDescription.url || 'Keine Angaben'}</span>
         </div>
@@ -294,143 +294,154 @@
   {#if services.length === 0}
     <span>Keine Angabe</span>
   {/if}
-  <div class="services">
+  <fieldset class="list">
     {#each services as service}
       {@const layers = getLayers(service, metadata)}
-      <fieldset class="service">
-        <div>
-          <strong>Titel</strong>
-          <span>{service.title}</span>
+      <div class="list-item">
+        <div class="list-item-field">
+          <strong class="list-item-label">Titel</strong>
+          <span class="list-item-value">{service.title}</span>
         </div>
-        <div>
-          <strong>Typ</strong>
-          <span>{service.serviceType}</span>
+        <div class="list-item-field">
+          <strong class="list-item-label">Typ</strong>
+          <span class="list-item-value">{service.serviceType}</span>
         </div>
-        <div>
-          <strong>Kurzbeschreibung</strong>
-          <span>{service.shortDescription}</span>
+        <div class="list-item-field">
+          <strong class="list-item-label">Kurzbeschreibung</strong>
+          <span class="list-item-value">{service.shortDescription}</span>
         </div>
         {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
-          <div>
-            <strong>Identifikator des Kartendienstes</strong>
-            <span>{service.workspace}</span>
+          <div class="list-item-field">
+            <strong class="list-item-label">Identifikator des Kartendienstes</strong>
+            <span class="list-item-value">{service.workspace}</span>
           </div>
         {/if}
-        <div>
-          <strong>Service Identifier</strong>
-          <span>{service.serviceIdentification}</span>
+        <div class="list-item-field">
+          <strong class="list-item-label">Service Identifier</strong>
+          <span class="list-item-value">{service.serviceIdentification}</span>
         </div>
-        <div>
-          <strong>File Identifier</strong>
-          <span>{service.fileIdentifier}</span>
+        <div class="list-item-field">
+          <strong class="list-item-label">File Identifier</strong>
+          <span class="list-item-value">{service.fileIdentifier}</span>
         </div>
+
         {#if service.featureTypes?.length}
-          <div class="subheader">Feature-Typen</div>
-          <div class="feature-types">
-            {#each service?.featureTypes || [] as featureType}
-              <fieldset class="service-feature-type">
-                <div>
-                  <strong>Feature-Typ</strong>
-                  <span>{featureType.name}</span>
-                </div>
-                <div>
-                  <strong>Feature-Typ-Alias</strong>
-                  <span>{featureType.title}</span>
-                </div>
-                {#if featureType?.columns}
-                  <div class="subheader">Attribute</div>
-                  <div class="columns">
-                    {#each featureType?.columns || [] as columnInfo}
-                      <fieldset class="service-column">
-                        <div>
-                          <strong>Attribut-Name</strong>
-                          <span>{columnInfo.name}</span>
-                        </div>
-                        <div>
-                          <strong>Attribut-Alias</strong>
-                          <span>{columnInfo.alias}</span>
-                        </div>
-                        <div>
-                          <strong>Attribut-Typ</strong>
-                          <span>{columnInfo.type}</span>
-                        </div>
-                      </fieldset>
-                    {/each}
+          <div class="list-item-field">
+            <strong class="list-item-label">Feature-Typen</strong>
+            <fieldset class="list">
+              {#each service?.featureTypes || [] as featureType}
+                <div class="list-item">
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Feature-Typ</strong>
+                    <span class="list-item-value">{featureType.name}</span>
                   </div>
-                {/if}
-              </fieldset>
-            {/each}
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Feature-Typ-Alias</strong>
+                    <span class="list-item-value">{featureType.title}</span>
+                  </div>
+                  {#if featureType?.columns}
+                    <div class="list-item-field">
+                      <strong class="list-item-label">Attribute</strong>
+                      <fieldset class="list">
+                        {#each featureType?.columns || [] as columnInfo}
+                          <div class="list-item">
+                            <div class="list-item-field">
+                              <strong class="list-item-label">Attribut-Name</strong>
+                              <span class="list-item-value">{columnInfo.name}</span>
+                            </div>
+                            <div class="list-item-field">
+                              <strong class="list-item-label">Attribut-Alias</strong>
+                              <span class="list-item-value">{columnInfo.alias}</span>
+                            </div>
+                            <div class="list-item-field">
+                              <strong class="list-item-label">Attribut-Typ</strong>
+                              <span class="list-item-value">{columnInfo.type}</span>
+                            </div>
+                          </div>
+                        {/each}
+                      </fieldset>
+                    </div>
+                  {/if}
+                </div>
+              {/each}
+            </fieldset>
           </div>
         {/if}
+
         {#if layers?.length}
-          <div class="subheader">Kartenebenen</div>
-          <div class="feature-types">
-            {#each layers || [] as layer}
-              <fieldset class="service-feature-type">
-                <div>
-                  <strong>Titel der Kartenebene</strong>
-                  <span>{layer.title}</span>
+          <div class="list-item-field">
+            <strong class="list-item-label">Kartenebenen</strong>
+            <fieldset class="list">
+              {#each layers || [] as layer}
+                <div class="list-item">
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Titel der Kartenebene</strong>
+                    <span class="list-item-value">{layer.title}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Name der Kartenebene</strong>
+                    <span class="list-item-value">{layer.name}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Titel des Styles</strong>
+                    <span class="list-item-value">{layer.styleTitle}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Name des Styles</strong>
+                    <span class="list-item-value">{layer.styleName}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Legende</strong>
+                    <span class="list-item-value">{layer.legendImage}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Kurzbeschreibung</strong>
+                    <span class="list-item-value">{layer.shortDescription}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Ablageort der Daten</strong>
+                    <span class="list-item-value">{layer.datasource}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">sekundäre Datenhaltung</strong>
+                    <span class="list-item-value">{layer.secondaryDatasource}</span>
+                  </div>
                 </div>
-                <div>
-                  <strong>Name der Kartenebene</strong>
-                  <span>{layer.name}</span>
-                </div>
-                <div>
-                  <strong>Titel des Styles</strong>
-                  <span>{layer.styleTitle}</span>
-                </div>
-                <div>
-                  <strong>Name des Styles</strong>
-                  <span>{layer.styleName}</span>
-                </div>
-                <div>
-                  <strong>Legende</strong>
-                  <span>{layer.legendImage}</span>
-                </div>
-                <div>
-                  <strong>Kurzbeschreibung</strong>
-                  <span>{layer.shortDescription}</span>
-                </div>
-                <div>
-                  <strong>Ablageort der Daten</strong>
-                  <span>{layer.datasource}</span>
-                </div>
-                <div>
-                  <strong>sekundäre Datenhaltung</strong>
-                  <span>{layer.secondaryDatasource}</span>
-                </div>
-              </fieldset>
-            {/each}
+              {/each}
+            </fieldset>
           </div>
         {/if}
+
         {#if service?.downloads}
-          <div class="subheader">Downloads</div>
-          <div class="downloads">
-            {#each service?.downloads || [] as downloadInfo}
-              <fieldset class="service-download">
-                <div>
-                  <strong>Download-Titel</strong>
-                  <span>{downloadInfo.title}</span>
+          <div class="list-item-field">
+            <strong class="list-item-label">Downloads</strong>
+            <fieldset class="list">
+              {#each service?.downloads || [] as downloadInfo}
+                <div class="list-item">
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Download-Titel</strong>
+                    <span class="list-item-value">{downloadInfo.title}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Download-Typ</strong>
+                    <span class="list-item-value">{downloadInfo.type}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Download-URL</strong>
+                    <span class="list-item-value">{downloadInfo.href}</span>
+                  </div>
+                  <div class="list-item-field">
+                    <strong class="list-item-label">Download-Dateigröße</strong>
+                    <span class="list-item-value">{downloadInfo.fileSize}</span>
+                  </div>
                 </div>
-                <div>
-                  <strong>Download-Typ</strong>
-                  <span>{downloadInfo.type}</span>
-                </div>
-                <div>
-                  <strong>Download-URL</strong>
-                  <span>{downloadInfo.href}</span>
-                </div>
-                <div>
-                  <strong>Download-Dateigröße</strong>
-                  <span>{downloadInfo.fileSize}</span>
-                </div>
-              </fieldset>
-            {/each}
+              {/each}
+            </fieldset>
           </div>
         {/if}
-      </fieldset>
+      </div>
     {/each}
-  </div>
+  </fieldset>
 {/snippet}
 
 {#snippet isoMetadataHighValueDataset(value: boolean)}
@@ -446,11 +457,6 @@
     border-radius: 0.5em;
   }
 
-  .subheader {
-    margin-top: 2em;
-    font-weight: bold;
-  }
-
   .list {
     display: flex;
     flex-direction: column;
@@ -459,54 +465,25 @@
     .list-item {
       display: flex;
       flex-direction: column;
-      gap: 0.5em;
 
-      div {
-        display: flex;
-        gap: 1em;
-
-        strong {
-          flex: 1;
-          text-align: right;
-        }
-
-        span {
-          flex: 8;
-        }
-      }
-    }
-  }
-
-  .services {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-
-    .service {
-      display: flex;
-      flex-direction: column;
-
-      div {
-        display: flex;
-        gap: 2em;
-
-        strong {
-          flex: 1;
-          text-align: right;
-        }
-
-        span {
-          flex: 5;
-        }
+      &:nth-of-type(even) {
+        background: rgba(0, 0, 0, 0.05);
       }
 
-      .feature-types,
-      .columns,
-      .downloads {
-        margin-left: 2em;
-        padding: 1em;
+      .list-item-field {
         display: flex;
         flex-direction: column;
+        &:nth-of-type(even) {
+          background: rgba(0, 0, 0, 0.05);
+        }
+
+        .list-item-value {
+          margin-bottom: 0.25em;
+        }
+
+        &:has(fieldset) {
+          margin-top: 1em;
+        }
       }
     }
   }
