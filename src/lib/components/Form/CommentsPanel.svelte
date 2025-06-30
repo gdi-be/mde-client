@@ -93,17 +93,19 @@
         <ul class="comments">
           {#each comments as comment, index}
             <li class="comment {comment.userId === myUserId ? 'my-comment' : ''}">
-              {#if isDeletable(comment, index)}
-                <Icon
-                  class="material-icons delete-icon"
-                  onclick={(evt) => onDelete(comment.id, evt)}
-                >
-                  delete
-                </Icon>
-              {/if}
-              <span class="user-name">
+              <span class="user">
+                {#if isDeletable(comment, index)}
+                  <Icon
+                    class="material-icons delete-icon"
+                    onclick={(evt) => onDelete(comment.id, evt)}
+                  >
+                    delete
+                  </Icon>
+                {/if}
                 <Icon class="material-icons">account_circle</Icon>
-                {comment.userName}
+                <span class="user-name" title={comment.userName}>
+                  {comment.userName}
+                </span>
               </span>
               <span class="comment-text">
                 {comment.text}
@@ -185,25 +187,30 @@
             align-items: flex-end;
           }
 
-          :global(.delete-icon) {
-            position: absolute;
-            top: 0.5em;
-            left: 0.5em;
-            color: #797979;
-            cursor: pointer;
-
-            &:hover {
-              color: red;
-            }
-          }
-
-          .user-name {
+          .user {
             display: flex;
             gap: 0.25rem;
+            align-self: stretch;
             align-items: center;
             font-weight: bold;
             margin-bottom: 0.25rem;
             font-size: 0.875rem;
+
+            :global(.delete-icon) {
+              color: #797979;
+              cursor: pointer;
+              flex: 1;
+
+              &:hover {
+                color: red;
+              }
+            }
+
+            .user-name {
+              max-width: 200px;
+              text-overflow: ellipsis;
+              overflow: hidden;
+            }
           }
 
           .comment-text {
