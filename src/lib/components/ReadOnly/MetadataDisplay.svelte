@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CommentsDisplay from './CommentsDisplay.svelte';
   import DisplayField from './DisplayField.svelte';
 </script>
 
@@ -48,6 +49,10 @@
     <section id="services">
       <h2>5. Dienste</h2>
       <DisplayField key="isoMetadata.services" profileId={40} />
+    </section>
+    <section id="comments">
+      <h2>Kommentare</h2>
+      <CommentsDisplay />
     </section>
   </div>
 </div>
