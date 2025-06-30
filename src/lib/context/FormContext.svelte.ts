@@ -279,14 +279,17 @@ export function getProgress(
             // How to get the correct service here?
             return;
           }
-          const layers = Object.entries(layersMap);
 
-          for (const [serviceId, layer] of layers) {
+          for (const [serviceId, layers] of Object.entries(layersMap)) {
             const services = getValue<Service[]>('isoMetadata.services', metadata);
             const layerService = services?.find((s) => s.serviceIdentification === serviceId);
+            if (!layerService) {
+              // No service found for this layer, skip it
+              continue;
+            }
             validateValue(
               field,
-              layer,
+              layers,
               {
                 'isoMetadata.services': layerService
               },
