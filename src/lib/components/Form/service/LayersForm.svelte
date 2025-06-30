@@ -96,7 +96,7 @@
 </script>
 
 <fieldset class="layers-form">
-  <legend> Layers </legend>
+  <legend>{fieldConfig?.label || 'Layers'} </legend>
   <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
