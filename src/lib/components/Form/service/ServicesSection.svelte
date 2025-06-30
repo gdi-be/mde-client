@@ -13,6 +13,7 @@
   };
 
   const KEY = 'isoMetadata.services';
+  const LAYERS_KEY = 'clientMetadata.layers';
 
   let initialServices = getValue<Service[]>(KEY);
   let services = $state<Service[]>([]);
@@ -69,7 +70,16 @@
       targetEl,
       async () => {
         services = services.filter((service) => service.serviceIdentification !== id);
-        persistValue(KEY, services);
+
+        await persistValue(KEY, services);
+
+        // Remove layers associated with the service
+        const layers = getValue<Record<string, Service[]>>(LAYERS_KEY);
+        if (layers && layers[id]) {
+          delete layers[id];
+          await persistValue(LAYERS_KEY, layers);
+        }
+
         if (activeTab === id) {
           activeTab = services[0].serviceIdentification || '';
         }

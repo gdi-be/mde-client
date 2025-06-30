@@ -10,7 +10,12 @@
   import DownloadForm from './DownloadForm.svelte';
   import FeatureTypeForm from './FeatureTypeForm.svelte';
   import { getContext } from 'svelte';
-  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getValue,
+    persistValue,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import LayersForm from './LayersForm.svelte';
   import { page } from '$app/state';
   import { toast } from 'svelte-french-toast';
@@ -48,7 +53,15 @@
     if (onChange) {
       const response = await onChange(service);
       if (response.ok) {
-        if (key === 'featureTypes') {
+        if (key === 'serviceType' && value !== 'WMS') {
+          // Remove layers associated with the service
+          const id = service.serviceIdentification;
+          const layers = getValue<Record<string, Service[]>>('clientMetadata.layers');
+          if (layers && layers[id]) {
+            delete layers[id];
+            await persistValue('clientMetadata.layers', layers);
+          }
+        } else if (key === 'featureTypes') {
           featureTypeCheckmarkVisible = true;
         } else if (key === 'downloads') {
           downloadCheckmarkVisible = true;
