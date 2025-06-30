@@ -1,3 +1,22 @@
+# [3.15.0](https://github.com/gdi-be/mde-client/compare/v3.14.0...v3.15.0) (2025-06-30)
+
+
+### Bug Fixes
+
+* cleanup layers if needed ([26547ea](https://github.com/gdi-be/mde-client/commit/26547ea43f383430e7bc2cd394b8f3ada14850b7))
+* hide disabled options ([959c512](https://github.com/gdi-be/mde-client/commit/959c512ae88ad31494d9230d48749a47d761fbce))
+* improve progress handling ([70a815c](https://github.com/gdi-be/mde-client/commit/70a815c8ff82f12baeabf9928f9ba6043f55987f))
+* update layout of comment delete icon ([eaf7602](https://github.com/gdi-be/mde-client/commit/eaf760233bfb035beee1ffd4df207d4b23e1e208))
+* update phone number validation ([48e1a44](https://github.com/gdi-be/mde-client/commit/48e1a44cdbbfecb88706761ea43bda6fdafcd6ca))
+* use label from config ([720719a](https://github.com/gdi-be/mde-client/commit/720719a5806c4009e0afa90127bf79190152cb6d))
+
+
+### Features
+
+* add autofill button for ServicePreview ([dcfecd2](https://github.com/gdi-be/mde-client/commit/dcfecd20be85efe5ed1ffeb5c531007a4df75654))
+* add extra fieldset for INSPIRE fields ([71cb3f5](https://github.com/gdi-be/mde-client/commit/71cb3f53dbca473cf548f9c655ac10be51ccaec9))
+* fix focus issues and add checkmarks to service fields ([7062adb](https://github.com/gdi-be/mde-client/commit/7062adb0335c62820ba92a2b8829af8e8e048ab4))
+
 # [3.14.0](https://github.com/gdi-be/mde-client/compare/v3.13.1...v3.14.0) (2025-06-30)
 
 
