@@ -141,28 +141,28 @@
 {/snippet}
 
 {#snippet isoMetadataContacts(value: Contacts)}
-  <fieldset class="list">
+  <div class="list">
     {#each value as contact}
       <div class="list-item">
         <div class="list-item-field">
-          <strong class="list-item-label">Name</strong>
+          <strong>Name</strong>
           <span class="list-item-value">{contact.name}</span>
         </div>
         <div class="list-item-field">
-          <strong class="list-item-label">Organisation</strong>
+          <strong>Organisation</strong>
           <span class="list-item-value">{contact.organisation}</span>
         </div>
         <div class="list-item-field">
-          <strong class="list-item-label">Telefon</strong>
+          <strong>Telefon</strong>
           <span class="list-item-value">{contact.phone}</span>
         </div>
         <div class="list-item-field">
-          <strong class="list-item-label">E-Mail</strong>
+          <strong>E-Mail</strong>
           <span class="list-item-value">{contact.email}</span>
         </div>
       </div>
     {/each}
-  </fieldset>
+  </div>
 {/snippet}
 
 {#snippet isoMetadataMetadataProfile(value: MetadataProfile)}
@@ -253,195 +253,195 @@
 {/snippet}
 
 {#snippet isoMetadataLineage(value: Lineage[])}
-  <fieldset class="list">
+  <div class="list">
     {#each value as lineage}
       <div class="list-item">
         <div class="list-item-field">
-          <strong class="list-item-label">Title</strong>
+          <strong>Title</strong>
           <span class="list-item-value">{lineage.title}</span>
         </div>
         <div class="list-item-field">
-          <strong class="list-item-label">Veröffentlichungsdatum</strong>
+          <strong>Veröffentlichungsdatum</strong>
           <span class="list-item-value">{lineage.date || 'Keine Angaben'}</span>
         </div>
         <div class="list-item-field">
-          <strong class="list-item-label">Identifier</strong>
+          <strong>Identifier</strong>
           <span class="list-item-value">{lineage.identifier || 'Keine Angaben'}</span>
         </div>
       </div>
     {/each}
-  </fieldset>
+  </div>
 {/snippet}
 
 {#snippet isoMetadataContentDescriptions(value: ContentDescription[])}
-  <fieldset class="list">
+  <div class="list">
     {#each value as contentDescription}
       <div class="list-item">
         <div class="list-item-field">
-          <strong class="list-item-label">Title</strong>
+          <strong>Title</strong>
           <span class="list-item-value">{contentDescription.description}</span>
         </div>
         <div class="list-item-field">
-          <strong class="list-item-label">Url</strong>
+          <strong>Url</strong>
           <span class="list-item-value">{contentDescription.url || 'Keine Angaben'}</span>
         </div>
       </div>
     {/each}
-  </fieldset>
+  </div>
 {/snippet}
 
 {#snippet isoMetadataServices(services: Service[], metadata: MetadataCollection)}
   {#if services.length === 0}
     <span>Keine Angabe</span>
   {/if}
-  <fieldset class="list">
+  <div class="list">
     {#each services as service}
       {@const layers = getLayers(service, metadata)}
       <div class="list-item">
         <div class="list-item-field">
-          <strong class="list-item-label">Titel</strong>
+          <strong>Titel</strong>
           <span class="list-item-value">{service.title}</span>
         </div>
         <div class="list-item-field">
-          <strong class="list-item-label">Typ</strong>
+          <strong>Typ</strong>
           <span class="list-item-value">{service.serviceType}</span>
         </div>
         <div class="list-item-field">
-          <strong class="list-item-label">Kurzbeschreibung</strong>
+          <strong>Kurzbeschreibung</strong>
           <span class="list-item-value">{service.shortDescription}</span>
         </div>
         {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
           <div class="list-item-field">
-            <strong class="list-item-label">Identifikator des Kartendienstes</strong>
+            <strong>Identifikator des Kartendienstes</strong>
             <span class="list-item-value">{service.workspace}</span>
           </div>
         {/if}
         <div class="list-item-field">
-          <strong class="list-item-label">Service Identifier</strong>
+          <strong>Service Identifier</strong>
           <span class="list-item-value">{service.serviceIdentification}</span>
         </div>
         <div class="list-item-field">
-          <strong class="list-item-label">File Identifier</strong>
+          <strong>File Identifier</strong>
           <span class="list-item-value">{service.fileIdentifier}</span>
         </div>
 
         {#if service.featureTypes?.length}
           <div class="list-item-field">
-            <strong class="list-item-label">Feature-Typen</strong>
-            <fieldset class="list">
+            <strong>Feature-Typen</strong>
+            <div class="list">
               {#each service?.featureTypes || [] as featureType}
                 <div class="list-item">
                   <div class="list-item-field">
-                    <strong class="list-item-label">Feature-Typ</strong>
+                    <strong>Feature-Typ</strong>
                     <span class="list-item-value">{featureType.name}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Feature-Typ-Alias</strong>
+                    <strong>Feature-Typ-Alias</strong>
                     <span class="list-item-value">{featureType.title}</span>
                   </div>
                   {#if featureType?.columns}
                     <div class="list-item-field">
-                      <strong class="list-item-label">Attribute</strong>
-                      <fieldset class="list">
+                      <strong>Attribute</strong>
+                      <div class="list">
                         {#each featureType?.columns || [] as columnInfo}
                           <div class="list-item">
                             <div class="list-item-field">
-                              <strong class="list-item-label">Attribut-Name</strong>
+                              <strong>Attribut-Name</strong>
                               <span class="list-item-value">{columnInfo.name}</span>
                             </div>
                             <div class="list-item-field">
-                              <strong class="list-item-label">Attribut-Alias</strong>
+                              <strong>Attribut-Alias</strong>
                               <span class="list-item-value">{columnInfo.alias}</span>
                             </div>
                             <div class="list-item-field">
-                              <strong class="list-item-label">Attribut-Typ</strong>
+                              <strong>Attribut-Typ</strong>
                               <span class="list-item-value">{columnInfo.type}</span>
                             </div>
                           </div>
                         {/each}
-                      </fieldset>
+                      </div>
                     </div>
                   {/if}
                 </div>
               {/each}
-            </fieldset>
+            </div>
           </div>
         {/if}
 
         {#if layers?.length}
           <div class="list-item-field">
-            <strong class="list-item-label">Kartenebenen</strong>
-            <fieldset class="list">
+            <strong>Kartenebenen</strong>
+            <div class="list">
               {#each layers || [] as layer}
                 <div class="list-item">
                   <div class="list-item-field">
-                    <strong class="list-item-label">Titel der Kartenebene</strong>
+                    <strong>Titel der Kartenebene</strong>
                     <span class="list-item-value">{layer.title}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Name der Kartenebene</strong>
+                    <strong>Name der Kartenebene</strong>
                     <span class="list-item-value">{layer.name}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Titel des Styles</strong>
+                    <strong>Titel des Styles</strong>
                     <span class="list-item-value">{layer.styleTitle}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Name des Styles</strong>
+                    <strong>Name des Styles</strong>
                     <span class="list-item-value">{layer.styleName}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Legende</strong>
+                    <strong>Legende</strong>
                     <span class="list-item-value">{layer.legendImage}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Kurzbeschreibung</strong>
+                    <strong>Kurzbeschreibung</strong>
                     <span class="list-item-value">{layer.shortDescription}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Ablageort der Daten</strong>
+                    <strong>Ablageort der Daten</strong>
                     <span class="list-item-value">{layer.datasource}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">sekundäre Datenhaltung</strong>
+                    <strong>sekundäre Datenhaltung</strong>
                     <span class="list-item-value">{layer.secondaryDatasource}</span>
                   </div>
                 </div>
               {/each}
-            </fieldset>
+            </div>
           </div>
         {/if}
 
         {#if service?.downloads}
           <div class="list-item-field">
-            <strong class="list-item-label">Downloads</strong>
-            <fieldset class="list">
+            <strong>Downloads</strong>
+            <div class="list">
               {#each service?.downloads || [] as downloadInfo}
                 <div class="list-item">
                   <div class="list-item-field">
-                    <strong class="list-item-label">Download-Titel</strong>
+                    <strong>Download-Titel</strong>
                     <span class="list-item-value">{downloadInfo.title}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Download-Typ</strong>
+                    <strong>Download-Typ</strong>
                     <span class="list-item-value">{downloadInfo.type}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Download-URL</strong>
+                    <strong>Download-URL</strong>
                     <span class="list-item-value">{downloadInfo.href}</span>
                   </div>
                   <div class="list-item-field">
-                    <strong class="list-item-label">Download-Dateigröße</strong>
+                    <strong>Download-Dateigröße</strong>
                     <span class="list-item-value">{downloadInfo.fileSize}</span>
                   </div>
                 </div>
               {/each}
-            </fieldset>
+            </div>
           </div>
         {/if}
       </div>
     {/each}
-  </fieldset>
+  </div>
 {/snippet}
 
 {#snippet isoMetadataHighValueDataset(value: boolean)}
@@ -453,37 +453,95 @@
 {/snippet}
 
 <style lang="scss">
-  fieldset {
-    border-radius: 0.5em;
-  }
-
   .list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
+    max-width: 100%;
+
+    .list {
+      padding: 0 0 0 1.5em;
+      margin: 0.5em 0 0 0;
+      background: transparent;
+    }
 
     .list-item {
-      display: flex;
-      flex-direction: column;
+      break-inside: avoid;
+      display: table;
+      width: 100%;
+      padding: 0.5em 0.35em;
 
-      &:nth-of-type(even) {
+      &:nth-child(even) {
         background: rgba(0, 0, 0, 0.05);
       }
 
+      &:last-child {
+        margin-bottom: 0;
+      }
+
       .list-item-field {
-        display: flex;
-        flex-direction: column;
-        &:nth-of-type(even) {
+        display: table;
+        width: 100%;
+
+        &:has(> .list) {
+          display: flex;
+          flex-direction: column;
+
+          > strong {
+            font-weight: 600;
+          }
+
+          .list {
+            margin: 0;
+          }
+        }
+
+        &:nth-child(even) {
           background: rgba(0, 0, 0, 0.05);
         }
 
-        .list-item-value {
-          margin-bottom: 0.25em;
+        strong {
+          display: table-cell;
+          width: 33%;
+          padding-right: 1em;
+          font-weight: 500;
+          color: #333;
+          vertical-align: top;
         }
 
-        &:has(fieldset) {
-          margin-top: 1em;
+        .list-item-value {
+          display: table-cell;
+          vertical-align: top;
+          color: #333;
         }
+      }
+    }
+  }
+
+  @media print {
+    .list {
+      page-break-inside: avoid;
+      font-size: 9pt;
+      padding: 0;
+      box-shadow: none;
+      max-width: 100%;
+
+      .list {
+        padding-left: 1em;
+      }
+
+      .list-item {
+        padding: 0.25em 0;
+        border-bottom: 1px solid #eee;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:nth-child(even) {
+          background: none;
+        }
+      }
+
+      .list-item-field:has(> .list) strong {
+        border-bottom-color: #ccc;
       }
     }
   }
