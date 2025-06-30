@@ -167,12 +167,15 @@
       {/if}
       {#if activeSection === 'classification'}
         <section id="classification" transition:fade>
-          <F05_InspireType />
+          <fieldset class="inspire-fieldset">
+            <legend>INSPIRE Relevanz</legend>
+            <F05_InspireType />
+            <F07_AnnexThemeField />
+            <F38_InspireAnnexVersionField />
+          </fieldset>
           <F04_PrivacyField />
           <F25_TermsOfUseField />
           <F26_TermsOfUseSourceField />
-          <F07_AnnexThemeField />
-          <F38_InspireAnnexVersionField />
           <F37_QualityReportCheckField />
           <F06_HighValueDatasetField />
           <F13_TopicCategory />
@@ -247,6 +250,35 @@
     display: flex;
     flex-direction: column;
     align-self: stretch;
+
+    fieldset.inspire-fieldset {
+      padding-top: 1.2em;
+      border-radius: 0.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1em;
+
+      legend {
+        font-size: 1.5em;
+      }
+
+      :global(.text-input),
+      :global(.select-input),
+      :global(.multi-select-input) {
+        border: none;
+        background-color: rgba(244, 244, 244, 0.7);
+      }
+
+      :global(.text-input > legend),
+      :global(.select-input > legend),
+      :global(.multi-select-input > legend) {
+        font-size: 1.2em;
+        background-color: white;
+        border-radius: 0.25em;
+        padding: 0 0.25em;
+      }
+    }
 
     nav.tabs {
       display: flex;

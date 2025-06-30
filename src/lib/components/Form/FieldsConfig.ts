@@ -117,7 +117,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 5,
-    label: 'INSPIRE Relevanz',
+    label: 'Metadaten-Typ',
     key: 'isoMetadata.metadataProfile',
     validator: (val: any) => {
       if (!isDefined(val)) {
