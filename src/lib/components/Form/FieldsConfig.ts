@@ -498,7 +498,8 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       if (!isValidPhoneNumber(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie eine gültige Telefonnummer an. Es sind ausschließlich Zahlen erlaubt.'
+          helpText:
+            'Bitte geben Sie eine gültige Telefonnummer an. Es sind ausschließlich Zahlen erlaubt.'
         };
       }
       return { valid: true };
