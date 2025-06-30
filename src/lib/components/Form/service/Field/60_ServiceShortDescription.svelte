@@ -25,7 +25,10 @@
 
   const getAutoFillValues = async () => {
     if (!metadataDescription) return;
-    onChange(metadataDescription);
+    const response = await onChange(metadataDescription);
+    if (response.ok) {
+      showCheckmark = true;
+    }
   };
 </script>
 
