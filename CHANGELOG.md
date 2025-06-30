@@ -1,3 +1,17 @@
+# [3.14.0](https://github.com/gdi-be/mde-client/compare/v3.13.1...v3.14.0) (2025-06-30)
+
+
+### Bug Fixes
+
+* update validation of KeyWords field ([58cdd00](https://github.com/gdi-be/mde-client/commit/58cdd00b4345c3537da39f855977073501f2c20f))
+* update value handling of ResolutionField ([604d358](https://github.com/gdi-be/mde-client/commit/604d358b0593f237ff0f722ffcb3a46fe9ec537e))
+
+
+### Features
+
+* add debug logging to allFieldsValid method ([e1b6df7](https://github.com/gdi-be/mde-client/commit/e1b6df7dd91c53e723c54a8101ac627ad0a19caf))
+* enhance validation logic and add service support in forms ([257b602](https://github.com/gdi-be/mde-client/commit/257b602923726e9b8c95ae47e650613e7bc0ffdb))
+
 ## [3.13.1](https://github.com/gdi-be/mde-client/compare/v3.13.0...v3.13.1) (2025-06-26)
 
 
