@@ -126,6 +126,7 @@
             variant="outlined"
             input$maxlength={500}
             input$rows={inputRows}
+            input$resizable={false}
             bind:value
             label="Neuer Kommentar"
           >
