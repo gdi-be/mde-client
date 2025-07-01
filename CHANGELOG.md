@@ -1,3 +1,13 @@
+# [3.16.0](https://github.com/gdi-be/mde-client/compare/v3.15.0...v3.16.0) (2025-07-01)
+
+
+### Features
+
+*  add comments to readonly view ([e09678a](https://github.com/gdi-be/mde-client/commit/e09678a38916b846acd0b0e0efcdd4e78844bda8))
+* add more read only snippets ([a563492](https://github.com/gdi-be/mde-client/commit/a563492018fdf5f63d36ad0d58883287c64c9e51))
+* reduce spacing in read only view ([234c391](https://github.com/gdi-be/mde-client/commit/234c39116f04e023d3ede1715ea4d3e2275bd7da))
+* update print layout ([c2fd8ce](https://github.com/gdi-be/mde-client/commit/c2fd8cee130e41946d5ecdea5db93556d2f39ca2))
+
 # [3.15.0](https://github.com/gdi-be/mde-client/compare/v3.14.0...v3.15.0) (2025-06-30)
 
 
