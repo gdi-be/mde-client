@@ -12,7 +12,6 @@ export async function load({ params, cookies }) {
   const metadata = await getMetadataCollectionByMetadataId(params.metadataid, token);
   if (!metadata) return error(404, `Metadata with ID ${params.metadataid} could not be found`);
 
-
   try {
     const file = Bun.file('/data/codelists/field_labels.yaml');
     const themes = await file.text();
