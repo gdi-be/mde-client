@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CommentsDisplay from './CommentsDisplay.svelte';
   import DisplayField from './DisplayField.svelte';
 </script>
 
@@ -19,9 +20,12 @@
       <DisplayField key="isoMetadata.metadataProfile" profileId={5} />
       <DisplayField key="clientMetadata.privacy" profileId={4} />
       <DisplayField key="isoMetadata.termsOfUseId" profileId={25} />
+      <DisplayField key="isoMetadata.termsOfUseSource" profileId={26} />
       <DisplayField key="isoMetadata.inspireTheme" profileId={7} />
-      <DisplayField key="isoMetadata.qualityReportCheck" profileId={37} />
+      <DisplayField key="isoMetadata.inspireAnnexVersion" profileId={38} />
+      <DisplayField key="isoMetadata.valid" profileId={37} />
       <DisplayField key="isoMetadata.highValueDataset" profileId={6} />
+      <DisplayField key="isoMetadata.highValueDataCategory" profileId={8} />
       <DisplayField key="isoMetadata.topicCategory" profileId={13} />
     </section>
     <section id="temp_and_spatial">
@@ -43,11 +47,16 @@
       <DisplayField key="isoMetadata.contentDescription" profileId={30} />
       <DisplayField key="isoMetadata.technicalDescription" profileId={31} />
       <DisplayField key="isoMetadata.lineage" profileId={32} />
+      <DisplayField key="clientMetadata.relatedTopics" profileId={36} />
       <DisplayField key="isoMetadata.contentDescriptions" profileId={39} />
     </section>
     <section id="services">
       <h2>5. Dienste</h2>
-      <DisplayField key="isoMetadata.services" profileId={40} />
+      <DisplayField key="isoMetadata.services" profileId={40} label="" />
+    </section>
+    <section id="comments">
+      <h2>Kommentare</h2>
+      <CommentsDisplay />
     </section>
   </div>
 </div>
@@ -57,8 +66,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2em;
     overflow: auto;
+
+    @media print {
+      font-size: 9pt;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
 
     .content {
       width: 80%;
@@ -66,7 +80,6 @@
       section {
         display: flex;
         flex-direction: column;
-        gap: 1em;
         padding: 1em;
       }
 

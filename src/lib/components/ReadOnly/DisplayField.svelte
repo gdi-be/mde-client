@@ -39,7 +39,11 @@
   .display-field {
     display: flex;
     gap: 2em;
-    padding: 1em 0;
+    padding: 0.25em 0;
+
+    &:nth-of-type(even) {
+      background: rgba(0, 0, 0, 0.05);
+    }
 
     strong.title {
       flex: 1;
