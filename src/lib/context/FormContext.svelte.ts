@@ -8,7 +8,7 @@ import {
   type FullFieldConfig,
   type YamlFieldConfig
 } from '$lib/components/Form/FieldsConfig';
-import { invalidateAll } from '$app/navigation';
+import { goto, invalidateAll } from '$app/navigation';
 import { type Layer, type MetadataCollection, type Service } from '$lib/models/metadata';
 import { toast } from 'svelte-french-toast';
 import type { Role } from '$lib/models/keycloak';
@@ -396,8 +396,13 @@ export async function persistValue(key: string, value: unknown) {
     // Invalidate all data to refetch from the server
     await invalidateAll();
   } else {
-    const { message } = await response.json();
+    const message = await response.text();
     toast.error(message || 'Fehler beim Speichern der Daten');
+    if (response.status === 401) {
+      // If unauthorized, redirect to login
+      log('warning', 'Unauthorized access, redirecting to login');
+      goto('/login');
+    }
   }
 
   return response;
