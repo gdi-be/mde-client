@@ -16,6 +16,10 @@ mock.module('$app/navigation', () => {
     invalidateAll: async () => {
       // Mock implementation of invalidateAll
       console.log('invalidateAll called');
+    },
+    goto: async (url: string, options?: { replaceState?: boolean; invalidateAll?: boolean }) => {
+      // Mock implementation of goto
+      console.log(`goto called with url: ${url}`, options);
     }
   };
 });
