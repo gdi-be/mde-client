@@ -38,7 +38,7 @@
           listId: crypto.randomUUID(),
           title: '',
           identifier: '',
-          date: new Date().toISOString().split('T')[0]
+          date: ''
         }
       ];
     }
