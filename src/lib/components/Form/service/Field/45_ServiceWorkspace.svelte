@@ -9,14 +9,19 @@
 
   export type ComponentProps = {
     value?: Service['workspace'];
+    service: Service;
     onChange: (newValue: string) => Promise<Response>;
   };
 
-  let { value, onChange }: ComponentProps = $props();
+  let { value, service, onChange }: ComponentProps = $props();
 
   const HELP_KEY = 'isoMetadata.services.workspace';
   const fieldConfig = getFieldConfig(45);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const validationResult = $derived(
+    fieldConfig?.validator(value, {
+      ['PARENT_VALUE']: service
+    })
+  );
   let showCheckmark = $state(false);
 
   const token = getContext<Token>('user_token');

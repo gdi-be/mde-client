@@ -43,7 +43,7 @@ export interface FullFieldConfig<T> extends YamlFieldConfig {
   // the validator function for this field
   validator: (val: T | undefined, extra?: Record<string, any>) => ValidationResult;
   // additional parameters for the validator function
-  validatorExtraParams?: FieldKey[];
+  validatorExtraParams?: Array<FieldKey | 'PARENT_VALUE'>;
 }
 
 const isDefined = <T>(val: T): val is NonNullable<T> => {
@@ -556,8 +556,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 28,
     label: 'Bodenauflösung',
     key: 'isoMetadata.resolutions',
-    validator: (val: any) => {
-      const scale = getValue('isoMetadata.scale');
+    validatorExtraParams: ['isoMetadata.scale'],
+    validator: (val: any, extraParams) => {
+      const scale = extraParams?.['isoMetadata.scale'];
       if (!isDefined(val) && !isDefined(scale)) {
         return {
           valid: false,
@@ -764,13 +765,20 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 45,
     key: 'isoMetadata.services.workspace',
     collectionKey: 'isoMetadata.services',
-    validatorExtraParams: ['isoMetadata.services'],
+    validatorExtraParams: ['PARENT_VALUE'],
     validator: (workspace: Service['workspace'], extraParams) => {
-      const service = extraParams?.['isoMetadata.services'];
+      const service = extraParams?.['PARENT_VALUE'];
       if (service?.serviceType !== 'WMTS' && service?.serviceType !== 'WMS') {
         return { valid: true };
       }
-      const valid = !!(workspace && isDefined(workspace) && /^[a-zA-Z0-9_]+$/.test(workspace));
+      const valid = !!(isDefined(workspace) && /^[a-zA-Z0-9_]+$/.test(workspace));
+      if (!valid) {
+        return {
+          valid: false,
+          helpText:
+            'Bitte geben Sie einen gültigen Workspace an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.'
+        };
+      }
       return { valid };
     },
     section: 'services',
@@ -781,13 +789,19 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 46,
     key: 'isoMetadata.services.preview',
     collectionKey: 'isoMetadata.services',
-    validatorExtraParams: ['isoMetadata.services'],
+    validatorExtraParams: ['PARENT_VALUE'],
     validator: (preview: Service['preview'], extraParams) => {
-      const service = extraParams?.['isoMetadata.services'];
+      const service = extraParams?.['PARENT_VALUE'];
       if (service?.serviceType !== 'WMS' && service?.serviceType !== 'WMTS') {
         return { valid: true };
       }
       const valid = isDefined(preview);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie ein Vorschaubild für den Service an.'
+        };
+      }
       return { valid };
     },
     section: 'services',
@@ -833,9 +847,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 48,
     key: 'clientMetadata.layers',
     collectionKey: 'isoMetadata.services',
-    validatorExtraParams: ['isoMetadata.services'],
+    validatorExtraParams: ['PARENT_VALUE'],
     validator: (layers: Layer[], extraParams) => {
-      const service = extraParams?.['isoMetadata.services'];
+      const service = extraParams?.['PARENT_VALUE'];
       // only needs layers if type is WMS or WMTS
       if (service?.serviceType !== 'WMS' && service?.serviceType !== 'WMTS') {
         return { valid: true };

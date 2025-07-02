@@ -217,7 +217,7 @@ export type MetadataCollection = {
   id?: number;
   created?: string;
   modified?: string;
-  ownerId?: string;
+  ownerId?: string | null;
   clonedFromId?: string | null;
   metadataId?: MetadataId;
   teamMemberIds?: string[];

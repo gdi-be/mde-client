@@ -127,12 +127,25 @@
     let baseText = `Fortschritt: ${Math.floor(progressInfo.progress * 100)} %`;
     return baseText;
   };
+
+  const getProgressStyle = (progress: number) => {
+    if (progress < 1) {
+      return `--progress-color: var(--mdc-theme-primary);`;
+    } else {
+      return `--progress-color: var(--ready-for-release-color);`;
+    }
+  };
+
+  $inspect(metadata);
 </script>
 
 <div class="metadata-form">
   <nav class="tabs" bind:this={tabs}>
     {#each SECTIONS as { section, label, disabledCheck }, i}
       {@const progressInfo = getProgress(highestRole, section, metadata)}
+      {#if i > 0}
+        <i class="material-icons">arrow_right_alt</i>
+      {/if}
       <div class="tab-container" class:active={activeSection === section}>
         <button
           class="tab"
@@ -146,6 +159,7 @@
           progress={progressInfo.progress}
           aria-label={label + ' Fortschritt'}
           title={getPropgressTitle(progressInfo)}
+          style={getProgressStyle(progressInfo.progress)}
         />
       </div>
       {#if i + 1 < SECTIONS.length}
@@ -297,6 +311,10 @@
 
       :global(.mdc-linear-progress:hover) {
         scale: 1 2;
+      }
+
+      :global(.mdc-linear-progress__bar-inner) {
+        border-color: var(--progress-color, var(--mdc-theme-secondary));
       }
 
       &:hover {
