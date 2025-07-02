@@ -774,7 +774,8 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       if (!valid) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie einen gültigen Workspace an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.'
+          helpText:
+            'Bitte geben Sie einen gültigen Workspace an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.'
         };
       }
       return { valid };

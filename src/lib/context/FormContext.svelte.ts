@@ -300,21 +300,11 @@ export function getProgress(
             const fieldPath = `clientMetadata.layers['${serviceId}']`;
             // handle the 'clientMetadata.layers' collection itself
             if (field.profileId === 48) {
-              validateValue(
-                field,
-                layers,
-                extraParams,
-                fieldPath
-              );
+              validateValue(field, layers, extraParams, fieldPath);
             } else if (Array.isArray(layers) && layers.length > 0) {
               // For each layer in the service, validate the subValue
               for (const layer of layers) {
-                validateValue(
-                  field,
-                  layer[subKey],
-                  extraParams,
-                  `${fieldPath}[${i}].${subKey}`
-                );
+                validateValue(field, layer[subKey], extraParams, `${fieldPath}[${i}].${subKey}`);
               }
             }
           }
