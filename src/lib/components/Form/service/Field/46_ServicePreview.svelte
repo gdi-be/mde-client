@@ -8,13 +8,18 @@
 
   export type ComponentProps = {
     value?: Service['preview'];
+    service: Service;
     onChange: (newValue: string) => Promise<Response>;
   };
 
-  let { value, onChange }: ComponentProps = $props();
+  let { value, service, onChange }: ComponentProps = $props();
 
   const fieldConfig = getFieldConfig(46);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const validationResult = $derived(
+    fieldConfig?.validator(value, {
+      ['PARENT_VALUE']: service
+    })
+  );
 
   const METADATA_PREVIEW_KEY = 'isoMetadata.preview';
 

@@ -39,7 +39,7 @@
   const fieldConfig = getFieldConfig(48);
   const validationResult = $derived(
     fieldConfig?.validator(layers, {
-      'isoMetadata.services': service
+      PARENT_VALUE: service
     })
   );
 

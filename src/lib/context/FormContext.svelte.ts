@@ -182,15 +182,24 @@ export type ProgressInfo = {
 
 export function getExtraParams(
   field: FullFieldConfig<any>,
-  metadata?: MetadataCollection
+  metadata?: MetadataCollection,
+  parentValue?: any
 ): Record<string, any> | undefined {
   if (!field.validatorExtraParams) return undefined;
 
   const extraParams: Record<string, any> = {};
   for (const param of field.validatorExtraParams) {
-    const paramValue = getValue(param, metadata);
-    if (paramValue !== undefined) {
-      extraParams[param] = paramValue;
+    if (param === 'PARENT_VALUE') {
+      if (parentValue === undefined) {
+        log('error', 'parent_value is undefined, but requested in validatorExtraParams');
+        continue;
+      }
+      extraParams['PARENT_VALUE'] = parentValue;
+    } else {
+      const paramValue = getValue(param, metadata);
+      if (paramValue !== undefined) {
+        extraParams[param] = paramValue;
+      }
     }
   }
   return extraParams;
@@ -268,11 +277,11 @@ export function getProgress(
       .filter((v) => !!v)
       .forEach((v, i) => {
         const subValue = v[subKey];
-        const extraParams = getExtraParams(field, metadata);
+        const extraParams = getExtraParams(field, metadata, v);
 
         // layers need special handling
-        if (field.profileId === 48) {
-          const layersMap = metadata?.clientMetadata.layers as Record<string, Layer> | undefined;
+        if (field.profileId === 48 || field.collectionKey === 'clientMetadata.layers') {
+          const layersMap = getValue<Record<string, Layer>>('clientMetadata.layers', metadata);
 
           if (!layersMap || Object.keys(layersMap).length === 0) {
             // TODO: we have no layers, so we cant get the service by the layers map.
@@ -283,18 +292,31 @@ export function getProgress(
           for (const [serviceId, layers] of Object.entries(layersMap)) {
             const services = getValue<Service[]>('isoMetadata.services', metadata);
             const layerService = services?.find((s) => s.serviceIdentification === serviceId);
-            if (!layerService) {
+            if (!layerService || layerService.serviceType !== 'WMS') {
               // No service found for this layer, skip it
               continue;
             }
-            validateValue(
-              field,
-              layers,
-              {
-                'isoMetadata.services': layerService
-              },
-              `${field.key}['${serviceId}']`
-            );
+
+            const fieldPath = `clientMetadata.layers['${serviceId}']`;
+            // handle the 'clientMetadata.layers' collection itself
+            if (field.profileId === 48) {
+              validateValue(
+                field,
+                layers,
+                extraParams,
+                fieldPath
+              );
+            } else if (Array.isArray(layers) && layers.length > 0) {
+              // For each layer in the service, validate the subValue
+              for (const layer of layers) {
+                validateValue(
+                  field,
+                  layer[subKey],
+                  extraParams,
+                  `${fieldPath}[${i}].${subKey}`
+                );
+              }
+            }
           }
           return;
         }
@@ -363,6 +385,7 @@ export function getProgress(
 export function allFieldsValid(highestRole: Role, metadata?: MetadataCollection): boolean {
   if (!metadata) return false;
   const progress = getProgress(highestRole, undefined, metadata);
+  console.log('INVALID FIELDS', progress.invalidFields);
   log('warning', 'Invalid fields: ' + progress.invalidFields?.map((f) => f.field));
   // Check if progress is 1 (100%)
   return progress.progress === 1;
