@@ -375,7 +375,6 @@ export function getProgress(
 export function allFieldsValid(highestRole: Role, metadata?: MetadataCollection): boolean {
   if (!metadata) return false;
   const progress = getProgress(highestRole, undefined, metadata);
-  console.log('INVALID FIELDS', progress.invalidFields);
   log('warning', 'Invalid fields: ' + progress.invalidFields?.map((f) => f.field));
   // Check if progress is 1 (100%)
   return progress.progress === 1;
