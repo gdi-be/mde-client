@@ -1,12 +1,7 @@
 import { getAccessToken, getRefreshToken, isTokenExpired, parseToken } from '$lib/auth/cookies';
 import { redirect, type Handle } from '@sveltejs/kit';
 
-const PUBLIC_ROUTES = [
-  '/login',
-  '/logout',
-  '/auth-callback',
-  '/'
-];
+const PUBLIC_ROUTES = ['/login', '/logout', '/auth-callback', '/'];
 
 const authHandle: Handle = async ({ event, resolve }) => {
   const { url, cookies, request } = event;
@@ -17,9 +12,7 @@ const authHandle: Handle = async ({ event, resolve }) => {
   const accessToken = await getAccessToken(cookies);
   const refreshToken = getRefreshToken(cookies);
 
-  const tokensValid =
-    accessToken ||
-    (refreshToken && !isTokenExpired(refreshToken));
+  const tokensValid = accessToken || (refreshToken && !isTokenExpired(refreshToken));
 
   if (!isPublic && !tokensValid) {
     if (method === 'GET' || method === 'HEAD') {

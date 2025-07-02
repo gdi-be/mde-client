@@ -31,7 +31,9 @@ export const fetchPublicKey = async () => {
   return pemKey;
 };
 
-export const updateTokens = async (cookies: Cookies): Promise<{
+export const updateTokens = async (
+  cookies: Cookies
+): Promise<{
   accessToken?: string;
   refreshToken?: string;
 }> => {

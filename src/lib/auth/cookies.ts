@@ -79,5 +79,5 @@ export const isTokenExpired = (token?: string, bufferMs: number = 0) => {
   if (!token) return false;
   const parsedToken = parseToken(token);
   if (!parsedToken?.exp) return false;
-  return Date.now() >= (parsedToken.exp * 1000 - bufferMs);
+  return Date.now() >= parsedToken.exp * 1000 - bufferMs;
 };
