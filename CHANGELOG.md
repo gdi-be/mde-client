@@ -1,3 +1,12 @@
+## [3.16.1](https://github.com/gdi-be/mde-client/compare/v3.16.0...v3.16.1) (2025-07-02)
+
+
+### Bug Fixes
+
+* no default value for lineage date ([15bd0cf](https://github.com/gdi-be/mde-client/commit/15bd0cfbf265419cb7ed64854c222f03ab492a09))
+* prevent resizing of comments input ([c6441b5](https://github.com/gdi-be/mde-client/commit/c6441b56d87f6474bb4d902570dff009ae10f3e7))
+* update validation of layers and its properties ([f9335fc](https://github.com/gdi-be/mde-client/commit/f9335fca0c1e272fb8453e42bc3487e2787cd816))
+
 # [3.16.0](https://github.com/gdi-be/mde-client/compare/v3.15.0...v3.16.0) (2025-07-01)
 
 
