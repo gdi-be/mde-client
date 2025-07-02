@@ -556,8 +556,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 28,
     label: 'Bodenauflösung',
     key: 'isoMetadata.resolutions',
-    validator: (val: any) => {
-      const scale = getValue('isoMetadata.scale');
+    validatorExtraParams: ['isoMetadata.scale'],
+    validator: (val: any, extraParams) => {
+      const scale = extraParams?.['isoMetadata.scale'];
       if (!isDefined(val) && !isDefined(scale)) {
         return {
           valid: false,
