@@ -39,16 +39,26 @@ export const getAccessToken = async (cookies: Cookies): Promise<string | undefin
   }
 
   if (token) {
-    return token;
+    if (!isTokenExpired(token)) {
+      return token;
+    }
+    const { accessToken } = await updateTokens(cookies);
+    if (accessToken) {
+      return accessToken;
+    } else {
+      log.warning('Failed to refresh access token');
+      return undefined;
+    }
   }
 
   log.info('Access token missing, trying to refresh');
-  const success = await updateTokens(cookies);
-  if (success) {
-    return getAccessToken(cookies);
+  const { accessToken } = await updateTokens(cookies);
+  if (!accessToken) {
+    log.warning('Failed to refresh access token');
+    return Promise.reject('Failed to refresh access token');
   }
 
-  return;
+  return accessToken;
 };
 
 export const getRefreshToken = (cookies: Cookies) => {
@@ -65,8 +75,9 @@ export const parseToken = (token: string) => {
   }
 };
 
-export const isTokenExpired = (token?: string) => {
+export const isTokenExpired = (token?: string, bufferMs: number = 0) => {
   if (!token) return false;
   const parsedToken = parseToken(token);
-  return Date.now() >= parsedToken.exp * 1000;
+  if (!parsedToken?.exp) return false;
+  return Date.now() >= (parsedToken.exp * 1000 - bufferMs);
 };
