@@ -31,7 +31,14 @@
   });
 </script>
 
-<span class={['field-hint', highestRole.toLowerCase(), isValid ? 'valid' : 'invalid']}>
+<span
+  class={[
+    'field-hint',
+    highestRole.toLowerCase(),
+    isValid ? 'valid' : 'invalid',
+    fieldConfig?.required ? 'required' : ''
+  ]}
+>
   {text}
 </span>
 
@@ -40,7 +47,11 @@
     font-size: var(--mdc-typography-caption-font-size, 0.75rem);
 
     &.invalid {
-      color: var(--mdc-theme-error);
+      color: var(--mdc-theme-secondary);
+
+      &.required {
+        color: var(--mdc-theme-error);
+      }
     }
   }
 </style>
