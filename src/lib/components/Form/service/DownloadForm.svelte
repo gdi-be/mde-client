@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { DownloadInfo } from '$lib/models/metadata';
+  import type { DownloadInfo, Service } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import DownloadTitle_68 from './Field/69_DownloadTitle.svelte';
   import DownloadFiletype_69 from './Field/70_DownloadFiletype.svelte';
@@ -15,10 +15,11 @@
 
   export type DownloadFormProps = {
     value?: DownloadInfo[];
+    service: Service;
     onChange: (downloads: DownloadInfo[]) => Promise<Response>;
   };
 
-  let { value: initialDownloads, onChange }: DownloadFormProps = $props();
+  let { value: initialDownloads, onChange, service }: DownloadFormProps = $props();
 
   let downloads = $state<DownloadInfo[]>([]);
   let tabs = $derived<Tab[]>(
@@ -32,7 +33,7 @@
   let activeDownload = $derived(activeTabIndex ? downloads[activeTabIndex] : downloads[0]);
 
   const fieldConfig = getFieldConfig(61, 'isoMetadata.services.downloads');
-  const validationResult = $derived(fieldConfig?.validator(downloads));
+  const validationResult = $derived(fieldConfig?.validator(downloads, { PARENT_VALUE: service }));
 
   $effect(() => {
     downloads = initialDownloads || [];
@@ -80,6 +81,8 @@
     });
     return onChange(downloads);
   }
+
+  $inspect(validationResult);
 </script>
 
 <fieldset class="downloads-form">

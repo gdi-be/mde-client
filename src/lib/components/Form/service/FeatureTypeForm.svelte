@@ -1,7 +1,7 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
   import ColumnsForm from './ColumnsForm.svelte';
-  import type { FeatureType } from '$lib/models/metadata';
+  import type { FeatureType, Service } from '$lib/models/metadata';
   import FeatureTypeTitle_61 from './Field/62_FeatureTypeTitle.svelte';
   import FeatureTypeName_62 from './Field/63_FeatureTypeName.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
@@ -14,10 +14,11 @@
 
   export type FeatureTypeFormProps = {
     value?: FeatureType[];
+    service: Service;
     onChange: (featureTypes: FeatureType[]) => Promise<Response>;
   };
 
-  let { value: initialFeatureTypes, onChange }: FeatureTypeFormProps = $props();
+  let { value: initialFeatureTypes, onChange, service }: FeatureTypeFormProps = $props();
 
   let featureTypes = $state<FeatureType[]>([]);
   let tabs = $derived<Tab[]>(
@@ -31,7 +32,9 @@
   let activeFeatureType = $derived(activeTabIndex ? featureTypes[activeTabIndex] : featureTypes[0]);
 
   const fieldConfig = getFieldConfig(61);
-  const validationResult = $derived(fieldConfig?.validator(featureTypes));
+  const validationResult = $derived(
+    fieldConfig?.validator(featureTypes, { PARENT_VALUE: service })
+  );
 
   $effect(() => {
     featureTypes = initialFeatureTypes || [];

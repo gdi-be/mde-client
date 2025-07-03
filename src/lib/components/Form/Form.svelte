@@ -136,8 +136,6 @@
       return `--progress-color: var(--ready-for-release-color);`;
     }
   };
-
-  $inspect(metadata);
 </script>
 
 <div class="metadata-form">

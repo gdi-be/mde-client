@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Service } from '$lib/models/metadata';
+  import type { Service, ServiceType } from '$lib/models/metadata';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import SelectInput from '$lib/components/Form/Inputs/SelectInput.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   export type ServiceTypeProps = {
     value: Service['serviceType'];
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: ServiceType) => Promise<Response>;
   };
   let { value, onChange }: ServiceTypeProps = $props();
 
@@ -41,7 +41,7 @@
       }
     ]}
     onChange={async (value) => {
-      const response = await onChange(value);
+      const response = await onChange(value as ServiceType);
       if (response.ok) {
         showCheckmark = true;
       }

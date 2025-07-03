@@ -1072,9 +1072,24 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.services.featureTypes',
     collectionKey: 'isoMetadata.services',
     isCollection: true,
-    validator: () => ({ valid: true }),
+    validatorExtraParams: ['PARENT_VALUE'],
+    validator: (featureTypes: FeatureType[], extraParams) => {
+      const service = extraParams?.['PARENT_VALUE'];
+      // only needs featureTypes if type is WFS
+      if (!service || service.serviceType !== 'WFS') {
+        return { valid: true };
+      }
+      const valid = featureTypes?.length > 0;
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie mindestens einen FeatureType an.'
+        };
+      }
+      return { valid };
+    },
     section: 'services',
-    required: false
+    required: true
   },
   {
     profileId: 62,
@@ -1205,8 +1220,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.services.downloads',
     collectionKey: 'isoMetadata.services',
     isCollection: true,
+    validatorExtraParams: ['PARENT_VALUE'],
     validator: (downloads: DownloadInfo[], extraParams) => {
-      const service = extraParams?.['isoMetadata.services'];
+      const service = extraParams?.['PARENT_VALUE'];
       // only needs downloads if type is ATOM
       if (!service || service.serviceType !== 'ATOM') {
         return { valid: true };
