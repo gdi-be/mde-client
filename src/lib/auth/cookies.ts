@@ -69,7 +69,8 @@ export const parseToken = (token: string) => {
   try {
     const payload = token.split('.')[1];
     const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(atob(base64));
+    const result = new TextDecoder().decode(Uint8Array.from(atob(base64), (c) => c.charCodeAt(0)));
+    return JSON.parse(result);
   } catch {
     return null;
   }
