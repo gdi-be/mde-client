@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Layer, Service } from '$lib/models/metadata';
+  import type { Layer, Service, ServiceType } from '$lib/models/metadata';
   import { setNestedValue } from '$lib/util';
   import ServiceWorkspace_45 from './Field/45_ServiceWorkspace.svelte';
   import ServicePreview_46 from './Field/46_ServicePreview.svelte';
@@ -23,7 +23,7 @@
 
   export type ServiceFormProps = {
     service: Service;
-    onChange?: (service: Service) => Promise<Response>;
+    onChange: (service: Service) => Promise<Response>;
   };
 
   let { service, onChange }: ServiceFormProps = $props();
@@ -44,35 +44,48 @@
   let isAtomService = $derived(service.serviceType === 'ATOM');
   let isMappingService = $derived(service.serviceType === 'WMS' || service.serviceType === 'WMTS');
 
+  async function onServiceTypeChange(serviceType: ServiceType): Promise<Response> {
+    service = setNestedValue(service, 'serviceType', serviceType);
+    if (serviceType !== 'WMS' && serviceType !== 'WMTS') {
+      // Remove layers associated with the service
+      const id = service.serviceIdentification;
+      const layers = getValue<Record<string, Service[]>>('clientMetadata.layers');
+      if (layers && layers[id]) {
+        delete layers[id];
+        await persistValue('clientMetadata.layers', layers);
+      }
+    }
+    if (serviceType !== 'WFS') {
+      // Remove feature types associated with the service
+      delete service.featureTypes;
+    }
+    if (serviceType !== 'ATOM') {
+      // Remove downloads associated with the service
+      delete service.downloads;
+    }
+    return onChange(service);
+  }
+
   async function set(key: string, value: Service[keyof Service]) {
     service = setNestedValue(service, key, value);
 
-    if (onChange) {
-      const response = await onChange(service);
-      if (response.ok) {
-        if (key === 'serviceType' && value !== 'WMS') {
-          // Remove layers associated with the service
-          const id = service.serviceIdentification;
-          const layers = getValue<Record<string, Service[]>>('clientMetadata.layers');
-          if (layers && layers[id]) {
-            delete layers[id];
-            await persistValue('clientMetadata.layers', layers);
-          }
-        } else if (key === 'legendImage') {
-          // legend sizes are determined and returned in the backend
-          const json = await response.json();
-          value = json.isoMetadata.services?.find(
-            (s: Service) => s.serviceIdentification === service.serviceIdentification
-          )?.legendImage;
-          if (value) {
-            service = setNestedValue(service, 'legendImage', value);
-          }
+    const response = await onChange(service);
+    if (response.ok) {
+      if (key === 'serviceType') {
+        onServiceTypeChange(value as ServiceType);
+      } else if (key === 'legendImage') {
+        // legend sizes are determined and returned in the backend
+        const json = await response.json();
+        value = json.isoMetadata.services?.find(
+          (s: Service) => s.serviceIdentification === service.serviceIdentification
+        )?.legendImage;
+        if (value) {
+          service = setNestedValue(service, 'legendImage', value);
         }
-        await invalidateAll();
       }
-      return response;
+      await invalidateAll();
     }
-    return Promise.reject('onChange function is not provided');
+    return response;
   }
 
   async function onLayersChange(layers: Layer[]) {
@@ -101,10 +114,7 @@
 </script>
 
 <div class="service-form">
-  <ServiceType_58
-    value={service.serviceType}
-    onChange={(serviceType) => set('serviceType', serviceType)}
-  />
+  <ServiceType_58 value={service.serviceType} onChange={onServiceTypeChange} />
   <ServiceTitle_59 value={service.title} onChange={(title) => set('title', title)} />
   <ServiceShortDescription_60
     value={service.shortDescription}
