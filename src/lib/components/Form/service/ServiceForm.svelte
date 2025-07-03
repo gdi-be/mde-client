@@ -110,12 +110,12 @@
     value={service.shortDescription}
     onChange={(shortDescription) => set('shortDescription', shortDescription)}
   />
+  <ServiceWorkspace_45
+    value={service.workspace}
+    {service}
+    onChange={(workspace) => set('workspace', workspace)}
+  />
   {#if isMappingService}
-    <ServiceWorkspace_45
-      value={service.workspace}
-      {service}
-      onChange={(workspace) => set('workspace', workspace)}
-    />
     <ServicePreview_46
       value={service.preview}
       {service}
