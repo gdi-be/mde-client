@@ -1,3 +1,22 @@
+# [3.17.0](https://github.com/gdi-be/mde-client/compare/v3.16.1...v3.17.0) (2025-07-03)
+
+
+### Bug Fixes
+
+* allow configuration of workspace for all services ([06d4c7f](https://github.com/gdi-be/mde-client/commit/06d4c7f4c15ff635560637c9b9ec8d4ff84be2b3))
+* cleanup services when changing type ([452d039](https://github.com/gdi-be/mde-client/commit/452d039c4fb6024ed019a0db432f9856e5bd3157))
+* delay print to ensure data is loaded ([ed489dc](https://github.com/gdi-be/mde-client/commit/ed489dccd968766dbbe82a07ef56b0efa8c811ad))
+* improve CommentsPanel ([831b277](https://github.com/gdi-be/mde-client/commit/831b277381c60cc6b1d3f13af538eb04a624fa0e))
+* improve token handling ([96dc4e8](https://github.com/gdi-be/mde-client/commit/96dc4e8126c3b6fcbd73ae0c8133dc9f23b28422))
+* imprve redirecting on outdated tokens ([d3b28d5](https://github.com/gdi-be/mde-client/commit/d3b28d5465b11a789b6b4b951b3ac79e42fe99b9))
+* remove duplicated arrow icon ([9afa735](https://github.com/gdi-be/mde-client/commit/9afa7354e848369cd9fbaef6b352fd440d5ebb83))
+* update validation error color for optional fields ([95875ba](https://github.com/gdi-be/mde-client/commit/95875ba3f5c73d55f67799e5a6bd20c51381aaa1))
+
+
+### Features
+
+* make featureTypes and downloads required ([b007b19](https://github.com/gdi-be/mde-client/commit/b007b199754659474e7e4def2c99af56883c3904))
+
 ## [3.16.1](https://github.com/gdi-be/mde-client/compare/v3.16.0...v3.16.1) (2025-07-02)
 
 
