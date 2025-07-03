@@ -71,7 +71,7 @@ export const parseToken = (token: string) => {
     const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
 
     const binary = atob(base64);
-    const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
 
     const json = new TextDecoder('utf-8').decode(bytes);
 
