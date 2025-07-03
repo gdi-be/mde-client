@@ -129,12 +129,17 @@
   {/if}
   {#if isWFSService}
     <FeatureTypeForm
+      {service}
       value={service.featureTypes}
       onChange={(featureTypes) => set('featureTypes', featureTypes)}
     />
   {/if}
   {#if isAtomService}
-    <DownloadForm value={service.downloads} onChange={(downloads) => set('downloads', downloads)} />
+    <DownloadForm
+      {service}
+      value={service.downloads}
+      onChange={(downloads) => set('downloads', downloads)}
+    />
   {/if}
 </div>
 
