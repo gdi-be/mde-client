@@ -6,7 +6,7 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import { page } from '$app/state';
   import { invalidateAll } from '$app/navigation';
-  import { getContext } from 'svelte';
+  import { getContext, onMount } from 'svelte';
   import type { Token } from '$lib/models/keycloak';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
@@ -21,6 +21,10 @@
   let comments = $derived<Comment[]>(metadata?.clientMetadata?.comments as Comment[]);
   let myUserId = $derived(token.sub);
   let inputRows = $derived(Math.min(value.split('\n').length, 4));
+
+  onMount(() => {
+    scrollToBottom();
+  });
 
   async function sendComment() {
     const metadataId = metadata?.metadataId;
@@ -41,7 +45,8 @@
     }
 
     value = '';
-    invalidateAll();
+    await invalidateAll();
+    scrollToBottom();
   }
 
   async function onDelete(id: string, evt: MouseEvent) {
@@ -82,6 +87,13 @@
     const diff = now.getTime() - commentDate.getTime();
     const notOlderThenTenMinutes = diff < 10 * 60 * 1000;
     return comment.userId === myUserId && index === comments.length - 1 && notOlderThenTenMinutes;
+  }
+
+  function scrollToBottom() {
+    const commentsList = document.querySelector('.comments');
+    if (commentsList) {
+      commentsList.scrollTop = commentsList.scrollHeight;
+    }
   }
 </script>
 
@@ -148,6 +160,10 @@
     z-index: 1;
     bottom: 4.5em;
     left: 1em;
+
+    :global(.mdc-text-field) {
+      align-items: stretch;
+    }
   }
 
   :global(div.smui-paper.comments-panel) {
@@ -216,6 +232,7 @@
 
           .comment-text {
             white-space: pre-wrap;
+            line-break: anywhere;
             font-size: 0.875rem;
             text-align: left;
           }
