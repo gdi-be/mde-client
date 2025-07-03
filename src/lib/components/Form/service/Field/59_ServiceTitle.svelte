@@ -49,7 +49,7 @@
   />
   <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
     {#if metadataTitle}
-      <AutoFillButton title="Titel des Metadatensatzes übernehmen" onclick={getAutoFillValues} />
+      <AutoFillButton title="Wert aus Vorlage übernehmen" onclick={getAutoFillValues} />
     {/if}
   </FieldTools>
 </div>
