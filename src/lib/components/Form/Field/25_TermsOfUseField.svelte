@@ -2,21 +2,24 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
-  import type { TermsOfUse } from '$lib/models/metadata';
+  import type { Privacy, TermsOfUse } from '$lib/models/metadata';
   import type { Option } from '$lib/models/form';
   import type { FullFieldConfig } from '../FieldsConfig';
   import { toast } from 'svelte-french-toast';
 
   const KEY = 'isoMetadata.termsOfUseId';
+  const PRIVACY_KEY = 'clientMetadata.privacy';
 
   const value = $derived(getValue<number>(KEY));
+  const privacy = $derived(getValue<Privacy>(PRIVACY_KEY));
 
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<number>(25);
   let validationResult = $derived(fieldConfig?.validator(value));
 
   const fetchOptions = async () => {
-    const response = await fetch('/data/terms_of_use');
+    const url = privacy !== 'NONE' ? '/data/terms_of_use_privacy' : '/data/terms_of_use';
+    const response = await fetch(url);
 
     if (!response.ok) {
       toast.error('Fehler beim Abrufen der Nutzungsbedingungen');
