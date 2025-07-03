@@ -81,8 +81,6 @@
     });
     return onChange(downloads);
   }
-
-  $inspect(validationResult);
 </script>
 
 <fieldset class="downloads-form">

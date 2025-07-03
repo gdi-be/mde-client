@@ -2,9 +2,6 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { Layer } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
-  import { getContext } from 'svelte';
-  import type { Token } from '$lib/models/keycloak';
-  import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
@@ -19,29 +16,23 @@
 
   const fieldConfig = getFieldConfig(55);
   const validationResult = $derived(fieldConfig?.validator(value));
-
-  const token = getContext<Token>('user_token');
-  const highestRole = $derived(getHighestRole(token));
-  const fieldVisible = $derived(['MdeDataOwner', 'MdeAdministrator'].includes(highestRole));
 </script>
 
-{#if fieldVisible}
-  <div class="layer-short-description-field">
-    <TextInput
-      label={fieldConfig?.label || 'Ablageort der Daten'}
-      {value}
-      {fieldConfig}
-      {validationResult}
-      onchange={async (e: Event) => {
-        const response = await onChange((e.target as HTMLInputElement).value);
-        if (response.ok) {
-          showCheckmark = true;
-        }
-      }}
-    />
-    <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
-  </div>
-{/if}
+<div class="layer-short-description-field">
+  <TextInput
+    label={fieldConfig?.label || 'Ablageort der Daten'}
+    {value}
+    {fieldConfig}
+    {validationResult}
+    onchange={async (e: Event) => {
+      const response = await onChange((e.target as HTMLInputElement).value);
+      if (response.ok) {
+        showCheckmark = true;
+      }
+    }}
+  />
+  <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+</div>
 
 <style lang="scss">
   .layer-short-description-field {

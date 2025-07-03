@@ -994,8 +994,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return { valid };
     },
     section: 'services',
-    required: true,
-    editingRoles: ['MdeDataOwner']
+    required: true
   },
   {
     profileId: 56,

@@ -27,7 +27,8 @@ export default {
           styleTitle: 'qwdqw',
           shortDescription: 'qwdwqqwd',
           legendImage: 'wqdwq',
-          secondaryDatasource: 'qwdwqwqd'
+          secondaryDatasource: 'qwdwqwqd',
+          datasource: 'datasource'
         }
       ],
       'e01b0c3e-b634-39ab-bbc4-88ebd01599e8': null,
