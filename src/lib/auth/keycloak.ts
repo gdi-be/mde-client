@@ -31,10 +31,16 @@ export const fetchPublicKey = async () => {
   return pemKey;
 };
 
-export const updateTokens = async (cookies: Cookies): Promise<boolean> => {
+export const updateTokens = async (
+  cookies: Cookies
+): Promise<{
+  accessToken?: string;
+  refreshToken?: string;
+}> => {
   const refreshToken = getRefreshToken(cookies);
 
   if (!refreshToken || isTokenExpired(refreshToken)) {
+    log.warning('No valid refresh token found or it is expired');
     return Promise.reject('No valid refresh token found');
   }
 
@@ -57,7 +63,7 @@ export const updateTokens = async (cookies: Cookies): Promise<boolean> => {
 
     if (!response.ok) {
       log.warning('Could not refresh tokens: ' + response.status);
-      return false;
+      return Promise.reject('Could not refresh tokens: ' + response.status);
     }
 
     const data = await response.json();
@@ -69,9 +75,12 @@ export const updateTokens = async (cookies: Cookies): Promise<boolean> => {
       setRefreshToken(cookies, data.refresh_token);
     }
 
-    return true;
+    return {
+      accessToken: data.access_token,
+      refreshToken: data.refresh_token
+    };
   } catch (error) {
     log.warning('Error refreshing tokens: ' + error);
-    return false;
+    return Promise.reject('Error refreshing tokens: ' + error);
   }
 };

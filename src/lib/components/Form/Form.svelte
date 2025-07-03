@@ -102,7 +102,8 @@
     clearActiveHelp();
 
     goto(`#${section}`, {
-      replaceState: true
+      replaceState: true,
+      invalidateAll: true
     });
     await tick();
   };
@@ -143,9 +144,6 @@
   <nav class="tabs" bind:this={tabs}>
     {#each SECTIONS as { section, label, disabledCheck }, i}
       {@const progressInfo = getProgress(highestRole, section, metadata)}
-      {#if i > 0}
-        <i class="material-icons">arrow_right_alt</i>
-      {/if}
       <div class="tab-container" class:active={activeSection === section}>
         <button
           class="tab"

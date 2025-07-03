@@ -292,7 +292,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.keywords',
     validator: (val?: Keywords) => {
       if (!val || !val.default || val.default.length < 1) {
-        console.log(val);
         return {
           valid: false,
           helpText: 'Bitte geben Sie mindestens ein Schlagwort an.'
