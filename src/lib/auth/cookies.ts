@@ -69,7 +69,13 @@ export const parseToken = (token: string) => {
   try {
     const payload = token.split('.')[1];
     const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(atob(base64));
+
+    const binary = atob(base64);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+
+    const json = new TextDecoder('utf-8').decode(bytes);
+
+    return JSON.parse(json);
   } catch {
     return null;
   }
