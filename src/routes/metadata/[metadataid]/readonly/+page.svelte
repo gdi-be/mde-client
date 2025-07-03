@@ -10,6 +10,7 @@
     type FormState
   } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
+  import toast from 'svelte-french-toast';
 
   const { data } = $props();
   let commentsPanelVisible = $state(false);
@@ -34,7 +35,15 @@
     const action = page.url.searchParams.get('action');
 
     if (action?.includes('print')) {
-      print();
+      // delay the print action to ensure the async data is loaded
+      toast('Druck wird vorbereitet...', {
+        icon: '\u{1F5A8}\uFE0F',
+        duration: 3000,
+        position: 'top-center'
+      });
+      setTimeout(() => {
+        print();
+      }, 3000);
     }
 
     if (action?.includes('comments')) {
