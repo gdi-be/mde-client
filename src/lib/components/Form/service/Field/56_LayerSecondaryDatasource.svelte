@@ -2,10 +2,9 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { Layer } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
-  import { getContext } from 'svelte';
-  import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   export type ComponentProps = {
     value?: Layer['secondaryDatasource'];
@@ -20,7 +19,7 @@
   const fieldConfig = getFieldConfig(56);
   const validationResult = $derived(fieldConfig?.validator(value));
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 </script>

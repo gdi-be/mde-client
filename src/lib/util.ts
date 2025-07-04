@@ -241,7 +241,10 @@ export const getRoleName = (role: Role): string => {
   return roleMapLong[role];
 };
 
-export const getHighestRole = (token: Token): Role => {
+export const getHighestRole = (token?: Token): Role => {
+  if (!token || !token.realm_access || !token.realm_access.roles) {
+    throw Error('Token is not valid or does not contain roles');
+  }
   if (token.realm_access.roles.includes('MdeAdministrator')) return 'MdeAdministrator';
   if (token.realm_access.roles.includes('MdeEditor')) return 'MdeEditor';
   if (token.realm_access.roles.includes('MdeQualityAssurance')) return 'MdeQualityAssurance';

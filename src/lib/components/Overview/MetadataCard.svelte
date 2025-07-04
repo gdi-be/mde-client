@@ -2,14 +2,13 @@
   import { goto, invalidateAll } from '$app/navigation';
   import Card, { ActionIcons, Media, MediaContent, PrimaryAction } from '@smui/card';
   import IconButton, { Icon } from '@smui/icon-button';
-  import { getContext } from 'svelte';
-  import type { Token } from '$lib/models/keycloak';
   import type { MetadataCollection } from '$lib/models/metadata';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { Set } from '@smui/chips';
   import StatusChip from '$lib/components/StatusChip.svelte';
   import { getHighestRole } from '$lib/util';
   import { toast } from 'svelte-french-toast';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   const FALLBACK_IMAGE = '/logo_berlin_m_srgb.svg';
 
@@ -18,14 +17,14 @@
   };
   let { metadata }: MetadataCardProps = $props();
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const userId = $derived(token?.sub);
   const highestRole = $derived(getHighestRole(token));
   const assignedToMe = $derived(metadata.assignedUserId === userId);
   const assignedToSomeoneElse = $derived(
     (metadata.assignedUserId && metadata.assignedUserId !== userId) || false
   );
-  const isTeamMember = $derived(metadata.teamMemberIds?.includes(userId));
+  const isTeamMember = $derived(userId && metadata.teamMemberIds?.includes(userId));
   const isOwner = $derived(metadata.ownerId === userId);
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
   const showDeleteAction = $derived(

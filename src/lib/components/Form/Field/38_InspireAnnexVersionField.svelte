@@ -10,7 +10,7 @@
   import { getContext } from 'svelte';
   import FieldTools from '../FieldTools.svelte';
   import { getHighestRole } from '$lib/util';
-  import type { Token } from '$lib/models/keycloak';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   const KEY = 'isoMetadata.inspireAnnexVersion';
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
@@ -18,7 +18,7 @@
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
   const valueFromData = $derived(getValue<string>(KEY));

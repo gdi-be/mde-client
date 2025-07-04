@@ -1,14 +1,11 @@
 <script lang="ts">
   import Paper from '@smui/paper';
   import Button, { Icon, Label } from '@smui/button';
-  import { getContext } from 'svelte';
-  import type { RefreshToken, Token } from '$lib/models/keycloak';
   import UserProfilePanel from './UserProfilePanel.svelte';
   import { fly } from 'svelte/transition';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
-  const token = getContext<Token>('user_token');
-  const refreshToken = getContext<RefreshToken>('refresh_token');
-
+  const token = $derived(getAccessToken());
   let visible = $state(false);
 </script>
 
@@ -21,7 +18,7 @@
     {#if visible}
       <div in:fly={{ y: -10, duration: 150 }} out:fly={{ y: -10, duration: 150 }}>
         <Paper class="user-menu">
-          <UserProfilePanel {token} {refreshToken} />
+          <UserProfilePanel {token} />
           <Button variant="outlined" href="/logout">
             <Label>Logout</Label>
           </Button>

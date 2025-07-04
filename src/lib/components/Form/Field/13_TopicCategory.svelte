@@ -3,13 +3,12 @@
   import FieldTools from '../FieldTools.svelte';
   import type { IsoTheme, MetadataProfile } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
-  import { getContext } from 'svelte';
-  import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
   import { toast } from 'svelte-french-toast';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
   const KEY = 'isoMetadata.topicCategory';

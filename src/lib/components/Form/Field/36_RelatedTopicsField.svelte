@@ -1,11 +1,10 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
-  import { getContext } from 'svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { ValidationResult } from '../FieldsConfig';
-  import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   const KEY = 'clientMetadata.relatedTopics';
 
@@ -15,7 +14,7 @@
     value = valueFromData || '';
   });
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
   let showCheckmark = $state(false);

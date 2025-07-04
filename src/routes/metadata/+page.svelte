@@ -2,11 +2,19 @@
   import MetadataCard from '$lib/components/Overview/MetadataCard.svelte';
   import MetadataToolbar from '$lib/components/Overview/MetadataToolbar.svelte';
   import Pagination from '$lib/components/Overview/Pagination.svelte';
+  import { setRefreshToken } from '$lib/context/TokenContext.svelte.js';
 
   let { data } = $props();
 
   const metadata = $derived(data.queryResponse.content);
   const pageable = $derived(data.queryResponse);
+
+  const refreshToken = $derived(data.refreshToken);
+  $effect(() => {
+    if (refreshToken) {
+      setRefreshToken(refreshToken);
+    }
+  });
 </script>
 
 <div class="metadata-overview">

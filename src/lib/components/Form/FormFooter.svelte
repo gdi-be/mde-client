@@ -5,7 +5,6 @@
     FORMSTATE_CONTEXT,
     type FormState
   } from '$lib/context/FormContext.svelte';
-  import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
   import CommentsPanel from './CommentsPanel.svelte';
   import Button, { Icon, Label } from '@smui/button';
@@ -16,6 +15,7 @@
   import Spinner from '$lib/components/Spinner.svelte';
   import PublishDialog from '$lib/components/Form/PublishDialog.svelte';
   import { toast } from 'svelte-french-toast';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   type FormFooterProps = {
     text?: string;
@@ -35,10 +35,10 @@
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
   const userId = $derived(token?.sub);
-  const assignedToMe = $derived(metadata?.assignedUserId === userId);
+  const assignedToMe = $derived(userId && metadata?.assignedUserId === userId);
   let commentsPanelVisible = $state(false);
   let publishPanelVisible = $state(false);
   let assignmentPanelVisible = $state(false);
