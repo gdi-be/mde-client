@@ -1,3 +1,18 @@
+# [3.18.0](https://github.com/gdi-be/mde-client/compare/v3.17.0...v3.18.0) (2025-07-04)
+
+
+### Bug Fixes
+
+* open links in new tab for published catalog records ([50ce113](https://github.com/gdi-be/mde-client/commit/50ce11338e291aa31630b0e155c1387278a7a1e4))
+* update parseToken with correct encoding ([aa732f1](https://github.com/gdi-be/mde-client/commit/aa732f1d954676c96dada6db4a13f45d8112de38))
+* update text ([1220d14](https://github.com/gdi-be/mde-client/commit/1220d14e021bc64f585d71f6c207c9db834ea3c4))
+* update token context handling ([9c69005](https://github.com/gdi-be/mde-client/commit/9c69005392e6c145c50b70968782c31968dce3d2))
+
+
+### Features
+
+* grant editor access to datasource field ([fa626d0](https://github.com/gdi-be/mde-client/commit/fa626d0eb33c2ca8880d21afa7b0007089fd610c))
+
 # [3.17.0](https://github.com/gdi-be/mde-client/compare/v3.16.1...v3.17.0) (2025-07-03)
 
 
