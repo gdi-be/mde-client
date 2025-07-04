@@ -1,16 +1,16 @@
 <script lang="ts">
   import Header from '$lib/components/Header.svelte';
-  import { onMount, setContext } from 'svelte';
+  import { onMount } from 'svelte';
   import PopConfirm from '$lib/components/Popconfirm.svelte';
   import { initializePopconfimContext } from '$lib/context/PopConfirmContex.svelte.js';
   import { sseContext } from '$lib/context/ServerEventContext.svelte.js';
   import ValidationPopup from '$lib/components/ValidationPopup.svelte';
   import { Toaster } from 'svelte-french-toast';
+  import { initializeTokenContext } from '../lib/context/TokenContext.svelte.js';
 
   let { children, data } = $props();
 
-  setContext('user_token', data.token);
-  setContext('refresh_token', data.refreshToken);
+  initializeTokenContext(data.token, data.refreshToken);
   initializePopconfimContext();
 
   sseContext.setSseContext();

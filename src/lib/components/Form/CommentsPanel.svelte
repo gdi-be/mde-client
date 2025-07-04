@@ -7,19 +7,19 @@
   import { page } from '$app/state';
   import { invalidateAll } from '$app/navigation';
   import { getContext, onMount } from 'svelte';
-  import type { Token } from '$lib/models/keycloak';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import { toast } from 'svelte-french-toast';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
 
   let value = $state('');
   let comments = $derived<Comment[]>(metadata?.clientMetadata?.comments as Comment[]);
-  let myUserId = $derived(token.sub);
+  let myUserId = $derived(token?.sub);
   let inputRows = $derived(Math.min(value.split('\n').length, 4));
 
   onMount(() => {

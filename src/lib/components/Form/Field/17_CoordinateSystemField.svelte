@@ -4,14 +4,13 @@
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
   import type { Option } from '$lib/models/form';
-  import { getContext } from 'svelte';
-  import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
   import { toast } from 'svelte-french-toast';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   const KEY = 'isoMetadata.crs';
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
   const valueFromData = $derived(getValue<string>(KEY));

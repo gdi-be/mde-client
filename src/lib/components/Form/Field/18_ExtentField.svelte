@@ -7,9 +7,9 @@
   import SelectInput from '../Inputs/SelectInput.svelte';
   import { getHighestRole, transformExtent } from '$lib/util';
   import type { Option } from '$lib/models/form';
-  import { getContext, onMount } from 'svelte';
-  import type { Token } from '$lib/models/keycloak';
+  import { onMount } from 'svelte';
   import { toast } from 'svelte-french-toast';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   type ExtentOption = {
     title: string;
@@ -24,7 +24,7 @@
   const LABEL_MAX_Y = 'Maximaler Y-Wert';
   const LABEL_MIN_Y = 'Minimaler Y-Wert';
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
   let initialCRSKey = getValue<CRS>(CRS_KEY);

@@ -10,13 +10,13 @@
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import FormField from '@smui/form-field';
   import Switch from '@smui/switch';
-  import type { Token } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
   const KEY = 'isoMetadata.valid';

@@ -1,15 +1,14 @@
 <script lang="ts">
   import { Set } from '@smui/chips';
-  import { getContext } from 'svelte';
-  import type { Token } from '$lib/models/keycloak';
   import FormField from '@smui/form-field';
   import { getAvailableStatuses } from '$lib/context/StatusesContext.svelte';
   import StatusChip from '../StatusChip.svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
-  const token = getContext<Token>('user_token');
-  const availableStatuses = $derived(getAvailableStatuses(token));
+  const token = $derived(getAccessToken());
+  const availableStatuses = $derived(token ? getAvailableStatuses(token) : []);
   let selected = $state(page.url.searchParams.get('statusfilter')?.split(',') || []);
 
   let onSMUIChipInteraction = () => {

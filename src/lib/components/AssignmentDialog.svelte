@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { getContext } from 'svelte';
   import { goto } from '$app/navigation';
-  import type { Role, Token } from '$lib/models/keycloak';
+  import type { Role } from '$lib/models/keycloak';
   import { getHighestRole } from '$lib/util';
   import Button, { Label } from '@smui/button';
   import Dialog, { Content, Header, Title } from '@smui/dialog';
@@ -10,13 +9,15 @@
   import FormField from '@smui/form-field';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import { toast } from 'svelte-french-toast';
+  import { getContext } from 'svelte';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   let { open = $bindable(false) } = $props();
 
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
   const myUserId = $derived(token?.sub);
   const assignedToMe = $derived(metadata?.assignedUserId === myUserId);

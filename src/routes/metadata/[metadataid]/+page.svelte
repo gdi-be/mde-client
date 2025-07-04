@@ -6,6 +6,7 @@
     initializeFormContext
   } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
+  import { setRefreshToken } from '$lib/context/TokenContext.svelte.js';
 
   let { data } = $props();
 
@@ -16,6 +17,13 @@
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   $effect(() => {
     formState.metadata = data.metadata;
+  });
+
+  const refreshToken = $derived(data.refreshToken);
+  $effect(() => {
+    if (refreshToken) {
+      setRefreshToken(refreshToken);
+    }
   });
 </script>
 

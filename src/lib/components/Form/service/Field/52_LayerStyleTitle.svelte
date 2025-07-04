@@ -1,11 +1,10 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { Layer, MetadataProfile } from '$lib/models/metadata';
-  import { getContext } from 'svelte';
   import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
   import { getHighestRole } from '$lib/util';
-  import type { Token } from '$lib/models/keycloak';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   export type ComponentProps = {
     value?: Layer['styleTitle'];
@@ -22,7 +21,7 @@
   const fieldConfig = getFieldConfig(52);
   const validationResult = $derived(fieldConfig?.validator(value));
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(
     highestRole === 'MdeAdministrator' ||

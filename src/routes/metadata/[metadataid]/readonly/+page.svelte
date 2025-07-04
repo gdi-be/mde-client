@@ -11,6 +11,7 @@
   } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
   import toast from 'svelte-french-toast';
+  import { setRefreshToken } from '$lib/context/TokenContext.svelte.js';
 
   const { data } = $props();
   let commentsPanelVisible = $state(false);
@@ -23,6 +24,13 @@
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   $effect(() => {
     formState.metadata = data.metadata;
+  });
+
+  const refreshToken = $derived(data.refreshToken);
+  $effect(() => {
+    if (refreshToken) {
+      setRefreshToken(refreshToken);
+    }
   });
 
   const print = () => {

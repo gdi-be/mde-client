@@ -1,8 +1,8 @@
 <script>
   import Button, { Label } from '@smui/button';
-  import { getContext } from 'svelte';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
-  const token = getContext('user_token');
+  const token = $derived(getAccessToken());
 </script>
 
 <div class="welcome">

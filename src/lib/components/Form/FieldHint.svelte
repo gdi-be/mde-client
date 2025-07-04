@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { getContext } from 'svelte';
   import type { FullFieldConfig, ValidationResult } from './FieldsConfig.js';
-  import type { Token } from '$lib/models/keycloak.js';
   import { getHighestRole } from '$lib/util.js';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   type FieldBottomTextProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,7 +12,7 @@
 
   const { validationResult, fieldConfig, showHint = false }: FieldBottomTextProps = $props();
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
   const isValid = $derived(validationResult?.valid !== false);
 

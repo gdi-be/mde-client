@@ -4,10 +4,9 @@
   import TextFilterField from './TextFilterField.svelte';
   import { goto } from '$app/navigation';
   import { getHighestRole } from '$lib/util';
-  import { getContext } from 'svelte';
-  import type { Token } from '$lib/models/keycloak';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
-  const token = getContext<Token>('user_token');
+  const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 </script>
 
