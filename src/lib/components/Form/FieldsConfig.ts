@@ -767,6 +767,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.lineage.date',
     collectionKey: 'isoMetadata.lineage',
     validator: optionalValidator,
+    getCopyValue: (val?: string) => {
+      if (!isDefined(val)) {
+        return '';
+      }
+      return formatDate(val);
+    },
     section: 'additional',
     required: false
   },

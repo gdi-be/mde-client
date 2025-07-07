@@ -170,7 +170,7 @@
       </IconButton>
     </legend>
     <FieldHint {fieldConfig} />
-    {#each lineages as lineage (lineage.listId)}
+    {#each lineages as lineage, index (lineage.listId)}
       <fieldset class="lineage">
         <legend>
           <IconButton
@@ -183,14 +183,17 @@
           </IconButton>
         </legend>
         <div class="search-input-wrapper">
-          <TextInput
-            bind:value={lineage.title}
-            label="Titel"
-            onblur={onTitleBlur}
-            onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
-            fieldConfig={getFieldConfig(33)}
-            validationResult={getFieldConfig(33)?.validator(lineage.title)}
-          />
+          <div class="wrap">
+            <TextInput
+              bind:value={lineage.title}
+              label="Titel"
+              onblur={onTitleBlur}
+              onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
+              fieldConfig={getFieldConfig(33)}
+              validationResult={getFieldConfig(33)?.validator(lineage.title)}
+            />
+            <FieldTools key={`${KEY}[${index}].title`} fieldConfig={getFieldConfig(33)} />
+          </div>
           {#if metadataCollections.length > 0 && titleSearchListId === lineage.listId}
             <ul class="search-results" bind:this={searchResultsElement}>
               {#each metadataCollections as metadataCollection}
@@ -204,28 +207,32 @@
           {/if}
         </div>
         <div class="inline-fields">
-          <DateInput
-            class="publish-date-field"
-            bind:value={lineage.date}
-            key={KEY}
-            label="Veröffentlichungsdatum"
-            onblur={persistLineages}
-            fieldConfig={getFieldConfig(34)}
-            validationResult={getFieldConfig(34)?.validator(lineage.date)}
-          />
-          <TextInput
-            class="lineage-source-field"
-            bind:value={lineage.identifier}
-            label="Identifier"
-            onblur={persistLineages}
-            fieldConfig={getFieldConfig(35)}
-            validationResult={getFieldConfig(35)?.validator(lineage.identifier)}
-          />
+          <div class="publish-date-field">
+            <DateInput
+              bind:value={lineage.date}
+              key={KEY}
+              label="Veröffentlichungsdatum"
+              onblur={persistLineages}
+              fieldConfig={getFieldConfig(34)}
+              validationResult={getFieldConfig(34)?.validator(lineage.date)}
+            />
+            <FieldTools key={`${KEY}[${index}].date`} fieldConfig={getFieldConfig(34)} />
+          </div>
+          <div class="lineage-source-field">
+            <TextInput
+              bind:value={lineage.identifier}
+              label="Identifier"
+              onblur={persistLineages}
+              fieldConfig={getFieldConfig(35)}
+              validationResult={getFieldConfig(35)?.validator(lineage.identifier)}
+            />
+            <FieldTools key={`${KEY}[${index}].identifier`} fieldConfig={getFieldConfig(35)} />
+          </div>
         </div>
       </fieldset>
     {/each}
   </fieldset>
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools noCopyButton key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">
@@ -238,6 +245,14 @@
       position: relative;
       display: flex;
       flex-direction: column;
+
+      .wrap {
+        display: flex;
+
+        :global(.text-input) {
+          flex: 1;
+        }
+      }
 
       .search-results {
         position: absolute;
@@ -315,11 +330,17 @@
       gap: 1em;
 
       :global(.publish-date-field) {
+        display: flex;
         flex: 1;
       }
 
       :global(.lineage-source-field) {
         flex: 3;
+        display: flex;
+
+        :global(.text-input) {
+          flex: 1;
+        }
       }
     }
 
