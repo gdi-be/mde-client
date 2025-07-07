@@ -72,7 +72,7 @@
     {onChange}
     {validationResult}
   />
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

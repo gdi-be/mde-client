@@ -8,6 +8,7 @@ import {
   type IsoTheme,
   type Keywords,
   type Layer,
+  type MaintenanceFrequency,
   type MetadataProfile,
   type Service,
   type TermsOfUse
@@ -360,6 +361,23 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue: async (val?: MaintenanceFrequency) => {
+      const maintenanceFrequencyLabels: Record<MaintenanceFrequency, string> = {
+        continual: 'kontinuierlich',
+        daily: 'täglich',
+        weekly: 'wöchentlich',
+        fortnightly: 'vierzehntägig',
+        monthly: 'monatlich',
+        quarterly: 'vierteljährlich',
+        biannually: 'halbjährlich',
+        annually: 'jährlich',
+        asNeeded: 'bei Bedarf',
+        irregular: 'unregelmäßig',
+        notPlanned: 'nicht geplant',
+        unknown: 'unbekannt'
+      };
+      return val ? maintenanceFrequencyLabels[val] : '';
     },
     section: 'temp_and_spatial',
     required: true
