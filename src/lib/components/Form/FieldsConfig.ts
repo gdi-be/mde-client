@@ -858,6 +858,16 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.contentDescriptions.code',
     collectionKey: 'isoMetadata.contentDescriptions',
     validator: optionalValidator,
+    getCopyValue: (val?: string) => {
+      const codeLabels: Record<string, string> = {
+        download: 'Herunterladen',
+        information: 'Information',
+        offlineAccess: 'Offline-Zugriff',
+        order: 'Bestellung',
+        search: 'Suche'
+      };
+      return val ? codeLabels[val] || '' : '';
+    },
     section: 'additional',
     required: false
   },

@@ -229,7 +229,6 @@
 
       .subfield-wrapper {
         display: flex;
-        gap: 0.5em;
 
         :global(.text-input) {
           flex: 1;
