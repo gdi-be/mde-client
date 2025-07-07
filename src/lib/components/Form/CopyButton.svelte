@@ -29,7 +29,16 @@
           return;
         }
       } else if (value) {
-        text = JSON.stringify(value);
+        if (typeof value === 'string') {
+          text = value;
+        } else if (typeof value === 'number') {
+          text = value.toString();
+        } else if (typeof value === 'boolean') {
+          text = value ? 'Ja' : 'Nein';
+        } else {
+          // Fallback for other types, e.g., objects
+          text = JSON.stringify(value);
+        }
         // remove quotes from the string if it's a stringified object
         if (text?.startsWith('"') && text?.endsWith('"')) {
           text = text.slice(1, -1);
