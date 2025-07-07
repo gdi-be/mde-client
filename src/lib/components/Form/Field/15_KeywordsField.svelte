@@ -167,7 +167,7 @@
     </Autocomplete>
     <FieldHint {validationResult} {fieldConfig} />
   </fieldset>
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}></FieldTools>
+  <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}></FieldTools>
 </div>
 
 <Dialog

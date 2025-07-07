@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FieldKey } from '$lib/models/form';
+import type { FieldKey, Option } from '$lib/models/form';
 import {
   type ColumnInfo,
   type Contacts,
@@ -27,7 +27,7 @@ export interface YamlFieldConfig {
   hint?: string;
 }
 
-export interface FullFieldConfig<T> extends YamlFieldConfig {
+export interface FullFieldConfig<T = any> extends YamlFieldConfig {
   // the key in the json structure
   key: FieldKey;
   // if the field is required
@@ -307,6 +307,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue: (val?: Keywords) => {
+      if (!val || !val.default || val.default.length < 1) {
+        return '';
+      }
+      return val.default.map((kw) => kw.keyword).join(', ');
+    },
     section: 'basedata',
     required: true,
     editingRoles: ['MdeEditor']
@@ -316,7 +322,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'geliefertes Koordinatensystem',
     key: 'technicalMetadata.deliveredCrs',
     placeholder: 'EPSG:25833',
-    validator: (val: any) => {
+    validator: (val?: string) => {
       if (!isDefined(val)) {
         return {
           valid: false,
