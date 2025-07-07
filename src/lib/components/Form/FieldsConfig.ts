@@ -154,7 +154,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'INSPIRE Annex Thema',
     key: 'isoMetadata.inspireTheme',
     validatorExtraParams: ['isoMetadata.metadataProfile'],
-    validator: (val: any, extraParams) => {
+    validator: (val: string[], extraParams) => {
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
       if (metadataProfile === 'ISO') {
         return { valid: true };
@@ -166,6 +166,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue: async (val?: string[]) => {
+      const response = await fetch('/data/inspire_themes');
+      const themesArray: Option[] = await response.json();
+      const themes = val?.map((v) => themesArray.find(theme => theme.key === v)?.label) || [];
+      return themes.join(', ');
     },
     section: 'classification',
     required: true
