@@ -29,7 +29,7 @@
           return;
         }
       } else {
-        let text = JSON.stringify(value);
+        text = JSON.stringify(value);
         // remove quotes from the string if it's a stringified object
         if (text.startsWith('"') && text.endsWith('"')) {
           text = text.slice(1, -1);
