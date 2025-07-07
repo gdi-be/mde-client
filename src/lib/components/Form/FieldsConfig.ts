@@ -130,6 +130,17 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue(val?: MetadataProfile) {
+      if (!val) {
+        return '';
+      }
+      const valueMap = {
+        ISO: 'ISO',
+        INSPIRE_HARMONISED: 'INSPIRE harmonisiert',
+        INSPIRE_IDENTIFIED: 'INSPIRE identifiziert'
+      };
+      return valueMap[val];
+    },
     section: 'classification',
     required: true
   },

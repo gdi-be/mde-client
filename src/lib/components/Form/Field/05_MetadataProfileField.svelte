@@ -6,7 +6,7 @@
   import type { ValidationResult } from '../FieldsConfig';
 
   const KEY = 'isoMetadata.metadataProfile';
-  const OPTIONS: {
+  export const MetadataProfileOptions: {
     key: MetadataProfile;
     label: string;
   }[] = [
@@ -44,13 +44,13 @@
 <div class="metadata-type-field">
   <SelectInput
     label={fieldConfig?.label}
-    options={OPTIONS}
+    options={MetadataProfileOptions}
     {fieldConfig}
     {value}
     {onChange}
     {validationResult}
   />
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">
