@@ -1,3 +1,10 @@
+## [3.18.1](https://github.com/gdi-be/mde-client/compare/v3.18.0...v3.18.1) (2025-07-07)
+
+
+### Bug Fixes
+
+* also allow selfassigning when resonsibleRole is null ([268057e](https://github.com/gdi-be/mde-client/commit/268057e45559fb3d81f2cbc86ef2937f184b8eda))
+
 # [3.18.0](https://github.com/gdi-be/mde-client/compare/v3.17.0...v3.18.0) (2025-07-04)
 
 
