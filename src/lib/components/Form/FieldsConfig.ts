@@ -70,6 +70,18 @@ const optionalValidator = () => ({
   valid: true
 });
 
+const formatDate = (date: Date | string): string => {
+  if (typeof date === 'string') {
+    date = new Date(date);
+  }
+  const format = Intl.DateTimeFormat('de-DE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  return format.format(date);
+}
+
 export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 1,
@@ -216,6 +228,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'Erstellungsdatum',
     key: 'isoMetadata.created',
     validator: optionalValidator,
+    getCopyValue: (val?: string) => {
+      if (!isDefined(val)) {
+        return '';
+      }
+      return formatDate(val);
+    },
     section: 'temp_and_spatial',
     required: false
   },
@@ -232,6 +250,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue: (val?: string) => {
+      if (!isDefined(val)) {
+        return '';
+      }
+      return formatDate(val);
+    },
     section: 'temp_and_spatial',
     required: true
   },
@@ -240,6 +264,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'letzte Aktualisierung',
     key: 'isoMetadata.modified',
     validator: optionalValidator,
+    getCopyValue: (val?: string) => {
+      if (!isDefined(val)) {
+        return '';
+      }
+      return formatDate(val);
+    },
     section: 'temp_and_spatial',
     required: true
   },
@@ -257,6 +287,22 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue: (val?: string) => {
+      const validTo = getValue<string>('isoMetadata.validTo');
+      const fromDate = val && formatDate(val);
+      const toDate = validTo && formatDate(validTo);
+
+      if (fromDate && toDate) {
+        return `Vom ${fromDate} bis ${toDate}`;
+      }
+      if (fromDate) {
+        return `Ab ${fromDate}`;
+      }
+      if (toDate) {
+        return `Bis ${toDate}`;
+      }
+      return '';
     },
     section: 'temp_and_spatial',
     required: false
