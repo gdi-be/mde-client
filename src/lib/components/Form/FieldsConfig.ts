@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FieldKey } from '$lib/models/form';
+import type { FieldKey, Option } from '$lib/models/form';
 import {
   type ColumnInfo,
   type Contacts,
   type DownloadInfo,
   type FeatureType,
+  type IsoTheme,
   type Keywords,
   type Layer,
+  type MaintenanceFrequency,
   type MetadataProfile,
-  type Service
+  type Service,
+  type TermsOfUse
 } from '$lib/models/metadata';
 import { getValue, type Section } from '$lib/context/FormContext.svelte';
 import type { Role } from '$lib/models/keycloak';
@@ -27,7 +30,7 @@ export interface YamlFieldConfig {
   hint?: string;
 }
 
-export interface FullFieldConfig<T> extends YamlFieldConfig {
+export interface FullFieldConfig<T = any> extends YamlFieldConfig {
   // the key in the json structure
   key: FieldKey;
   // if the field is required
@@ -44,6 +47,8 @@ export interface FullFieldConfig<T> extends YamlFieldConfig {
   validator: (val: T | undefined, extra?: Record<string, any>) => ValidationResult;
   // additional parameters for the validator function
   validatorExtraParams?: Array<FieldKey | 'PARENT_VALUE'>;
+  // this function is used to get the value for the copy button
+  getCopyValue?: (val: T | undefined) => string | Promise<string>;
 }
 
 const isDefined = <T>(val: T): val is NonNullable<T> => {
@@ -65,6 +70,18 @@ const isValidEmail = (val: string) => {
 const optionalValidator = () => ({
   valid: true
 });
+
+const formatDate = (date: Date | string): string => {
+  if (typeof date === 'string') {
+    date = new Date(date);
+  }
+  const format = Intl.DateTimeFormat('de-DE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  return format.format(date);
+};
 
 export const FieldConfigs: FullFieldConfig<any>[] = [
   {
@@ -112,6 +129,11 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue: async (val: string) => {
+      const response = await fetch('/data/privacy');
+      const privacyOptions: Option[] = await response.json();
+      return privacyOptions.find((option) => option.key === val)?.label || '';
+    },
     section: 'classification',
     required: true
   },
@@ -127,6 +149,17 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue(val?: MetadataProfile) {
+      if (!val) {
+        return '';
+      }
+      const valueMap = {
+        ISO: 'ISO',
+        INSPIRE_HARMONISED: 'INSPIRE harmonisiert',
+        INSPIRE_IDENTIFIED: 'INSPIRE identifiziert'
+      };
+      return valueMap[val];
     },
     section: 'classification',
     required: true
@@ -152,7 +185,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'INSPIRE Annex Thema',
     key: 'isoMetadata.inspireTheme',
     validatorExtraParams: ['isoMetadata.metadataProfile'],
-    validator: (val: any, extraParams) => {
+    validator: (val: string[], extraParams) => {
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
       if (metadataProfile === 'ISO') {
         return { valid: true };
@@ -164,6 +197,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue: async (val?: string[]) => {
+      const response = await fetch('/data/inspire_themes');
+      const themesArray: Option[] = await response.json();
+      const themes = val?.map((v) => themesArray.find((theme) => theme.key === v)?.label) || [];
+      return themes.join(', ');
     },
     section: 'classification',
     required: true
@@ -190,6 +229,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'Erstellungsdatum',
     key: 'isoMetadata.created',
     validator: optionalValidator,
+    getCopyValue: (val?: string) => {
+      if (!isDefined(val)) {
+        return '';
+      }
+      return formatDate(val);
+    },
     section: 'temp_and_spatial',
     required: false
   },
@@ -206,6 +251,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue: (val?: string) => {
+      if (!isDefined(val)) {
+        return '';
+      }
+      return formatDate(val);
+    },
     section: 'temp_and_spatial',
     required: true
   },
@@ -214,6 +265,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'letzte Aktualisierung',
     key: 'isoMetadata.modified',
     validator: optionalValidator,
+    getCopyValue: (val?: string) => {
+      if (!isDefined(val)) {
+        return '';
+      }
+      return formatDate(val);
+    },
     section: 'temp_and_spatial',
     required: true
   },
@@ -231,6 +288,22 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue: (val?: string) => {
+      const validTo = getValue<string>('isoMetadata.validTo');
+      const fromDate = val && formatDate(val);
+      const toDate = validTo && formatDate(validTo);
+
+      if (fromDate && toDate) {
+        return `Vom ${fromDate} bis ${toDate}`;
+      }
+      if (fromDate) {
+        return `Ab ${fromDate}`;
+      }
+      if (toDate) {
+        return `Bis ${toDate}`;
+      }
+      return '';
     },
     section: 'temp_and_spatial',
     required: false
@@ -266,6 +339,13 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue: async (val?: string[]) => {
+      const response = await fetch('/data/iso_themes');
+      const isoThemes: IsoTheme[] = await response.json();
+      const categories =
+        val?.map((v) => isoThemes.find((category) => category.isoID === v)?.isoName) || [];
+      return categories.join(', ');
+    },
     section: 'classification',
     required: true,
     editingRoles: ['MdeEditor']
@@ -283,6 +363,23 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue: async (val?: MaintenanceFrequency) => {
+      const maintenanceFrequencyLabels: Record<MaintenanceFrequency, string> = {
+        continual: 'kontinuierlich',
+        daily: 'täglich',
+        weekly: 'wöchentlich',
+        fortnightly: 'vierzehntägig',
+        monthly: 'monatlich',
+        quarterly: 'vierteljährlich',
+        biannually: 'halbjährlich',
+        annually: 'jährlich',
+        asNeeded: 'bei Bedarf',
+        irregular: 'unregelmäßig',
+        notPlanned: 'nicht geplant',
+        unknown: 'unbekannt'
+      };
+      return val ? maintenanceFrequencyLabels[val] : '';
+    },
     section: 'temp_and_spatial',
     required: true
   },
@@ -299,6 +396,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue: (val?: Keywords) => {
+      if (!val || !val.default || val.default.length < 1) {
+        return '';
+      }
+      return val.default.map((kw) => kw.keyword).join(', ');
+    },
     section: 'basedata',
     required: true,
     editingRoles: ['MdeEditor']
@@ -308,7 +411,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'geliefertes Koordinatensystem',
     key: 'technicalMetadata.deliveredCrs',
     placeholder: 'EPSG:25833',
-    validator: (val: any) => {
+    validator: (val?: string) => {
       if (!isDefined(val)) {
         return {
           valid: false,
@@ -518,6 +621,11 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue: async (val: number) => {
+      const response = await fetch('/data/terms_of_use');
+      const termsOfUseList: TermsOfUse[] = await response.json();
+      return termsOfUseList.find((tou) => tou.id === val)?.shortname || '';
+    },
     section: 'classification',
     required: true,
     editingRoles: ['MdeDataOwner']
@@ -565,6 +673,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue: (val?: [number]) => {
+      return val?.length === 1 ? val[0].toString() : '';
     },
     section: 'temp_and_spatial',
     required: true
@@ -657,6 +768,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.lineage.date',
     collectionKey: 'isoMetadata.lineage',
     validator: optionalValidator,
+    getCopyValue: (val?: string) => {
+      if (!isDefined(val)) {
+        return '';
+      }
+      return formatDate(val);
+    },
     section: 'additional',
     required: false
   },
@@ -687,6 +804,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'Überprüfung des Qualitätsberichts',
     key: 'isoMetadata.valid',
     validator: () => ({ valid: true }),
+    getCopyValue: (val?: boolean) => {
+      return val ? 'Überprüft' : 'Nicht überprüft';
+    },
     section: 'classification',
     required: false
   },
@@ -739,6 +859,16 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.contentDescriptions.code',
     collectionKey: 'isoMetadata.contentDescriptions',
     validator: optionalValidator,
+    getCopyValue: (val?: string) => {
+      const codeLabels: Record<string, string> = {
+        download: 'Herunterladen',
+        information: 'Information',
+        offlineAccess: 'Offline-Zugriff',
+        order: 'Bestellung',
+        search: 'Suche'
+      };
+      return val ? codeLabels[val] || '' : '';
+    },
     section: 'additional',
     required: false
   },

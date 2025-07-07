@@ -106,7 +106,11 @@
       />
     {/if}
   </fieldset>
-  <FieldTools key={RESOLUTION_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools
+    fieldConfig={selected === SCALE_KEY ? scaleFieldConfig : resolutionFieldConfig}
+    key={selected === SCALE_KEY ? SCALE_KEY : RESOLUTION_KEY}
+    bind:checkMarkAnmiationRunning={showCheckmark}
+  />
 </div>
 
 <style lang="scss">

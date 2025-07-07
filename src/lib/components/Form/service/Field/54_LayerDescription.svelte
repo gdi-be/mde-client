@@ -32,7 +32,7 @@
       }
     }}
   />
-  <FieldTools key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools noCopyButton key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

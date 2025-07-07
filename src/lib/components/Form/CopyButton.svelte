@@ -2,8 +2,16 @@
   import IconButton from '@smui/icon-button';
   import { Icon } from '@smui/button';
   import { getValue } from '$lib/context/FormContext.svelte';
+  import type { FieldKey } from '$lib/models/form';
+  import type { FullFieldConfig } from './FieldsConfig';
+  import toast from 'svelte-french-toast';
 
-  let { key } = $props();
+  export type CopyButtonProps = {
+    key: FieldKey;
+    fieldConfig?: FullFieldConfig;
+  };
+
+  let { key, fieldConfig }: CopyButtonProps = $props();
 
   const value = $derived(getValue(key));
   let copied = $state(false);
@@ -11,10 +19,30 @@
 
   const copyValue = async () => {
     try {
-      let text = JSON.stringify(value);
-      // remove quotes from the string if it's a stringified object
-      if (text.startsWith('"') && text.endsWith('"')) {
-        text = text.slice(1, -1);
+      let text = '';
+
+      if (fieldConfig?.getCopyValue) {
+        try {
+          text = await fieldConfig.getCopyValue(value);
+        } catch {
+          toast.error('Fehler beim Abrufen des Wertes für die Zwischenablage.');
+          return;
+        }
+      } else if (value) {
+        if (typeof value === 'string') {
+          text = value;
+        } else if (typeof value === 'number') {
+          text = value.toString();
+        } else if (typeof value === 'boolean') {
+          text = value ? 'Ja' : 'Nein';
+        } else {
+          // Fallback for other types, e.g., objects
+          text = JSON.stringify(value);
+        }
+        // remove quotes from the string if it's a stringified object
+        if (text?.startsWith('"') && text?.endsWith('"')) {
+          text = text.slice(1, -1);
+        }
       }
 
       await navigator.clipboard.writeText(text);

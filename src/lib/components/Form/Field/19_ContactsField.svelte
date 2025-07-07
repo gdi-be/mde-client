@@ -148,42 +148,59 @@
             delete
           </IconButton>
         </legend>
-        <TextInput
-          bind:value={contact.name}
-          label="Name"
-          onblur={persistContacts}
-          fieldConfig={getFieldConfig(20)}
-          validationResult={getFieldConfig(20)?.validator(contact.name)}
-          id={`${KEY}-${index}-name`}
-        />
-        <TextInput
-          bind:value={contact.organisation}
-          label="Organisation"
-          onblur={persistContacts}
-          fieldConfig={getFieldConfig(21)}
-          validationResult={getFieldConfig(21)?.validator(contact.organisation)}
-          id={`${KEY}-${index}-organisation`}
-        />
-        <TextInput
-          bind:value={contact.phone}
-          label="Telefon"
-          onblur={persistContacts}
-          fieldConfig={getFieldConfig(23)}
-          validationResult={getFieldConfig(23)?.validator(contact.phone)}
-          id={`${KEY}-${index}-phone`}
-        />
-        <TextInput
-          bind:value={contact.email}
-          label="E-Mail"
-          onblur={persistContacts}
-          fieldConfig={getFieldConfig(22)}
-          validationResult={getFieldConfig(22)?.validator(contact.email)}
-          id={`${KEY}-${index}-email`}
-        />
+        <div class="subfield-wrapper">
+          <TextInput
+            bind:value={contact.name}
+            label="Name"
+            onblur={persistContacts}
+            fieldConfig={getFieldConfig(20)}
+            validationResult={getFieldConfig(20)?.validator(contact.name)}
+            id={`${KEY}-${index}-name`}
+          />
+          <FieldTools key={`${KEY}[${index}].name`} noHelpButton noCheckmark {fieldConfig} />
+        </div>
+        <div class="subfield-wrapper">
+          <TextInput
+            bind:value={contact.organisation}
+            label="Organisation"
+            onblur={persistContacts}
+            fieldConfig={getFieldConfig(21)}
+            validationResult={getFieldConfig(21)?.validator(contact.organisation)}
+            id={`${KEY}-${index}-organisation`}
+          />
+          <FieldTools
+            key={`${KEY}[${index}].organisation`}
+            noHelpButton
+            noCheckmark
+            {fieldConfig}
+          />
+        </div>
+        <div class="subfield-wrapper">
+          <TextInput
+            bind:value={contact.phone}
+            label="Telefon"
+            onblur={persistContacts}
+            fieldConfig={getFieldConfig(23)}
+            validationResult={getFieldConfig(23)?.validator(contact.phone)}
+            id={`${KEY}-${index}-phone`}
+          />
+          <FieldTools key={`${KEY}[${index}].phone`} noHelpButton noCheckmark {fieldConfig} />
+        </div>
+        <div class="subfield-wrapper">
+          <TextInput
+            bind:value={contact.email}
+            label="E-Mail"
+            onblur={persistContacts}
+            fieldConfig={getFieldConfig(22)}
+            validationResult={getFieldConfig(22)?.validator(contact.email)}
+            id={`${KEY}-${index}-email`}
+          />
+          <FieldTools key={`${KEY}[${index}].email`} noHelpButton noCheckmark {fieldConfig} />
+        </div>
       </fieldset>
     {/each}
   </fieldset>
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
+  <FieldTools noCopyButton key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
     <AutoFillButton title="Eigene Kontaktdaten übernehmen" onclick={autoFillUserDetails} />
   </FieldTools>
 </div>
@@ -209,6 +226,14 @@
       display: flex;
       flex-direction: column;
       gap: 1em;
+
+      .subfield-wrapper {
+        display: flex;
+
+        :global(.text-input) {
+          flex: 1;
+        }
+      }
 
       legend {
         text-align: right;

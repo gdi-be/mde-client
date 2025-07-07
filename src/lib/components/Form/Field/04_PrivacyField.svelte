@@ -51,7 +51,7 @@
       {onChange}
     />
   {/await}
-  <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools key={KEY} {fieldConfig} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

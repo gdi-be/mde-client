@@ -33,7 +33,8 @@
 
   const onChange = async (key: string) => {
     const value = key === FROM_KEY ? startValue : endValue!;
-    const response = await persistValue(key, new Date(value!).toISOString());
+    const valueToPersist = value ? new Date(value).toISOString() : null;
+    const response = await persistValue(key, valueToPersist);
     if (response.ok) {
       showCheckmark = true;
     }
@@ -59,7 +60,11 @@
       validationResult={toValidationResult}
     />
   </fieldset>
-  <FieldTools key={FROM_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools
+    fieldConfig={fromFieldConfig}
+    key={FROM_KEY}
+    bind:checkMarkAnmiationRunning={showCheckmark}
+  />
 </div>
 
 <style lang="scss">

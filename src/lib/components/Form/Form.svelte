@@ -16,7 +16,7 @@
   import F15_KeywordsField from './Field/15_KeywordsField.svelte';
   import F29_PreviewField from './Field/29_PreviewField.svelte';
   import F19_ContactsField from './Field/19_ContactsField.svelte';
-  import F05_InspireType from './Field/05_InspireType.svelte';
+  import F05_MetadataProfileField from './Field/05_MetadataProfileField.svelte';
   import F04_PrivacyField from './Field/04_PrivacyField.svelte';
   import F25_TermsOfUseField from './Field/25_TermsOfUseField.svelte';
   import F26_TermsOfUseSourceField from './Field/26_TermsOfUseSourceField.svelte';
@@ -179,7 +179,7 @@
         <section id="classification" transition:fade>
           <fieldset class="inspire-fieldset">
             <legend>INSPIRE Relevanz</legend>
-            <F05_InspireType />
+            <F05_MetadataProfileField />
             <F07_AnnexThemeField />
             <F38_InspireAnnexVersionField />
           </fieldset>

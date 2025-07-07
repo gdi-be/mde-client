@@ -54,7 +54,7 @@
         <Switch bind:checked={value} onSMUISwitchChange={onCheckChange} />
       </FormField>
     </fieldset>
-    <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+    <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 

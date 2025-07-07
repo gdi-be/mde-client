@@ -101,7 +101,7 @@
       </IconButton>
     </legend>
     <FieldHint {fieldConfig} />
-    {#each contentDescriptions as contentDescription (contentDescription.listId)}
+    {#each contentDescriptions as contentDescription, index (contentDescription.listId)}
       <fieldset class="contentDescription">
         <legend>
           <IconButton
@@ -113,46 +113,65 @@
             delete
           </IconButton>
         </legend>
-        <TextInput
-          bind:value={contentDescription.description}
-          label="Titel"
-          onblur={persistContentDescriptions}
-          fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.title')}
-          validationResult={getFieldConfig(39, 'isoMetadata.contentDescriptions.title')?.validator(
-            contentDescription.description
-          )}
-        />
-        <div class="inline-fields">
-          <SelectInput
-            value={contentDescription.code}
-            onChange={(code) => {
-              contentDescription.code = code as CI_OnLineFunctionCode;
-              persistContentDescriptions();
-            }}
-            class="code-select-field"
-            label="Code"
-            fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.code')}
-            validationResult={getFieldConfig(39, 'isoMetadata.contentDescriptions.code')?.validator(
-              contentDescription.code
-            )}
-            options={[
-              { label: 'Herunterladen', key: 'download' },
-              { label: 'Information', key: 'information' },
-              { label: 'Offline-Zugriff', key: 'offlineAccess' },
-              { label: 'Bestellung', key: 'order' },
-              { label: 'Suche', key: 'search' }
-            ]}
-          />
+        <div class="subfield-wrapper">
           <TextInput
-            bind:value={contentDescription.url}
-            class="url-field"
-            label="Url"
+            bind:value={contentDescription.description}
+            label="Titel"
             onblur={persistContentDescriptions}
-            fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.url')}
-            validationResult={getFieldConfig(39, 'isoMetadata.contentDescriptions.url')?.validator(
-              contentDescription.url
-            )}
+            fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.title')}
+            validationResult={getFieldConfig(
+              39,
+              'isoMetadata.contentDescriptions.title'
+            )?.validator(contentDescription.description)}
           />
+          <FieldTools
+            key={`${KEY}[${index}].description`}
+            fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.description.title')}
+          />
+        </div>
+        <div class="inline-fields">
+          <div class="subfield-wrapper code-select-field">
+            <SelectInput
+              value={contentDescription.code}
+              onChange={(code) => {
+                contentDescription.code = code as CI_OnLineFunctionCode;
+                persistContentDescriptions();
+              }}
+              label="Code"
+              fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.code')}
+              validationResult={getFieldConfig(
+                39,
+                'isoMetadata.contentDescriptions.code'
+              )?.validator(contentDescription.code)}
+              options={[
+                { label: 'Herunterladen', key: 'download' },
+                { label: 'Information', key: 'information' },
+                { label: 'Offline-Zugriff', key: 'offlineAccess' },
+                { label: 'Bestellung', key: 'order' },
+                { label: 'Suche', key: 'search' }
+              ]}
+            />
+            <FieldTools
+              key={`${KEY}[${index}].code`}
+              fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.code')}
+            />
+          </div>
+          <div class="subfield-wrapper url-field">
+            <TextInput
+              bind:value={contentDescription.url}
+              label="Url"
+              onblur={persistContentDescriptions}
+              fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.url')}
+              validationResult={getFieldConfig(
+                39,
+                'isoMetadata.contentDescriptions.url'
+              )?.validator(contentDescription.url)}
+            />
+            <FieldTools
+              key={`${KEY}[${index}].url`}
+              fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.url')}
+            />
+          </div>
         </div>
       </fieldset>
     {/each}
@@ -181,6 +200,14 @@
       display: flex;
       flex-direction: column;
       gap: 1em;
+
+      .subfield-wrapper {
+        display: flex;
+
+        :global(.text-input) {
+          flex: 1;
+        }
+      }
 
       legend {
         text-align: right;
