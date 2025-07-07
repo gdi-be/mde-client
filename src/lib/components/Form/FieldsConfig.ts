@@ -8,7 +8,8 @@ import {
   type Keywords,
   type Layer,
   type MetadataProfile,
-  type Service
+  type Service,
+  type TermsOfUse
 } from '$lib/models/metadata';
 import { getValue, type Section } from '$lib/context/FormContext.svelte';
 import type { Role } from '$lib/models/keycloak';
@@ -113,6 +114,11 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue: async (val: string) => {
+      const response = await fetch('/data/privacy');
+      const privacyOptions: Option[] = await response.json();
+      return privacyOptions.find(option => option.key === val)?.label || '';
     },
     section: 'classification',
     required: true
@@ -542,6 +548,11 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue: async (val: number) => {
+      const response = await fetch('/data/terms_of_use');
+      const termsOfUseList: TermsOfUse[] = await response.json();
+      return termsOfUseList.find(tou => tou.id === val)?.shortname || '';
     },
     section: 'classification',
     required: true,
