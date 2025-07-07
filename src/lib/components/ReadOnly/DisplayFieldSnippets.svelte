@@ -635,34 +635,6 @@
               </div>
             </div>
           {/if}
-
-          {#if service.serviceType === 'ATOM' && service?.downloads?.length}
-            <div class="list-item-field">
-              <strong>Downloads ({service.downloads.length})</strong>
-              <div class="list">
-                {#each service?.downloads || [] as downloadInfo}
-                  <div class="list-item">
-                    <div class="list-item-field">
-                      <strong>Download-Titel</strong>
-                      <span class="list-item-value">{downloadInfo.title}</span>
-                    </div>
-                    <div class="list-item-field">
-                      <strong>Download-Typ</strong>
-                      <span class="list-item-value">{downloadInfo.type}</span>
-                    </div>
-                    <div class="list-item-field">
-                      <strong>Download-URL</strong>
-                      <span class="list-item-value">{downloadInfo.href}</span>
-                    </div>
-                    <div class="list-item-field">
-                      <strong>Download-Dateigröße</strong>
-                      <span class="list-item-value">{downloadInfo.fileSize}</span>
-                    </div>
-                  </div>
-                {/each}
-              </div>
-            </div>
-          {/if}
         </div>
       {/each}
     </div>
