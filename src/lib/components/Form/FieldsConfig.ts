@@ -81,7 +81,7 @@ const formatDate = (date: Date | string): string => {
     day: '2-digit'
   });
   return format.format(date);
-}
+};
 
 export const FieldConfigs: FullFieldConfig<any>[] = [
   {
@@ -132,7 +132,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     getCopyValue: async (val: string) => {
       const response = await fetch('/data/privacy');
       const privacyOptions: Option[] = await response.json();
-      return privacyOptions.find(option => option.key === val)?.label || '';
+      return privacyOptions.find((option) => option.key === val)?.label || '';
     },
     section: 'classification',
     required: true
@@ -201,7 +201,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     getCopyValue: async (val?: string[]) => {
       const response = await fetch('/data/inspire_themes');
       const themesArray: Option[] = await response.json();
-      const themes = val?.map((v) => themesArray.find(theme => theme.key === v)?.label) || [];
+      const themes = val?.map((v) => themesArray.find((theme) => theme.key === v)?.label) || [];
       return themes.join(', ');
     },
     section: 'classification',
@@ -342,7 +342,8 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     getCopyValue: async (val?: string[]) => {
       const response = await fetch('/data/iso_themes');
       const isoThemes: IsoTheme[] = await response.json();
-      const categories = val?.map((v) => isoThemes.find(category => category.isoID === v)?.isoName) || [];
+      const categories =
+        val?.map((v) => isoThemes.find((category) => category.isoID === v)?.isoName) || [];
       return categories.join(', ');
     },
     section: 'classification',
@@ -623,7 +624,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     getCopyValue: async (val: number) => {
       const response = await fetch('/data/terms_of_use');
       const termsOfUseList: TermsOfUse[] = await response.json();
-      return termsOfUseList.find(tou => tou.id === val)?.shortname || '';
+      return termsOfUseList.find((tou) => tou.id === val)?.shortname || '';
     },
     section: 'classification',
     required: true,
