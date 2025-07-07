@@ -41,7 +41,7 @@
   });
 
   function addFeatureType() {
-    const name = 'Neuer Featuretype' + featureTypes.length;
+    const name = String.fromCharCode(97 + featureTypes.length);
     featureTypes = [
       ...featureTypes,
       {
@@ -65,6 +65,9 @@
         }
         onChange(featureTypes);
         activeTabIndex = featureTypes.length > 0 ? activeTabIndex : undefined;
+        if (activeTabIndex && activeTabIndex > featureTypes.length - 1) {
+          activeTabIndex = 0;
+        }
       },
       {
         text: 'Sind sie sicher, dass sie diesen FeatureType löschen möchten?',
@@ -136,7 +139,7 @@
       />
       <FeatureTypeName_62 value={activeFeatureType?.name} onChange={(name) => set('name', name)} />
       <ColumnsForm
-        value={activeFeatureType.columns}
+        value={activeFeatureType?.columns}
         onChange={(columns) => set('columns', columns)}
       />
     {/if}

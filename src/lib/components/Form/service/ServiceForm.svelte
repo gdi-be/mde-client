@@ -7,7 +7,6 @@
   import ServiceType_58 from './Field/58_ServiceType.svelte';
   import ServiceTitle_59 from './Field/59_ServiceTitle.svelte';
   import ServiceShortDescription_60 from './Field/60_ServiceShortDescription.svelte';
-  import DownloadForm from './DownloadForm.svelte';
   import FeatureTypeForm from './FeatureTypeForm.svelte';
   import { getContext } from 'svelte';
   import {
@@ -41,7 +40,6 @@
   });
 
   let isWFSService = $derived(service.serviceType === 'WFS');
-  let isAtomService = $derived(service.serviceType === 'ATOM');
   let isMappingService = $derived(service.serviceType === 'WMS' || service.serviceType === 'WMTS');
 
   async function onServiceTypeChange(serviceType: ServiceType): Promise<Response> {
@@ -58,10 +56,6 @@
     if (serviceType !== 'WFS') {
       // Remove feature types associated with the service
       delete service.featureTypes;
-    }
-    if (serviceType !== 'ATOM') {
-      // Remove downloads associated with the service
-      delete service.downloads;
     }
     return onChange(service);
   }
@@ -142,13 +136,6 @@
       {service}
       value={service.featureTypes}
       onChange={(featureTypes) => set('featureTypes', featureTypes)}
-    />
-  {/if}
-  {#if isAtomService}
-    <DownloadForm
-      {service}
-      value={service.downloads}
-      onChange={(downloads) => set('downloads', downloads)}
     />
   {/if}
 </div>

@@ -3,7 +3,6 @@ import type { FieldKey, Option } from '$lib/models/form';
 import {
   type ColumnInfo,
   type Contacts,
-  type DownloadInfo,
   type FeatureType,
   type IsoTheme,
   type Keywords,
@@ -1336,105 +1335,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         return {
           valid: false,
           helpText: 'Bitte geben Sie einen Filtertyp für die Spalte an.'
-        };
-      }
-      return { valid };
-    },
-    section: 'services',
-    required: true,
-    editingRoles: ['MdeEditor']
-  },
-  {
-    profileId: 61, // duplication with 'isoMetadata.services.featureTypes (61)'
-    key: 'isoMetadata.services.downloads',
-    collectionKey: 'isoMetadata.services',
-    isCollection: true,
-    validatorExtraParams: ['PARENT_VALUE'],
-    validator: (downloads: DownloadInfo[], extraParams) => {
-      const service = extraParams?.['PARENT_VALUE'];
-      // only needs downloads if type is ATOM
-      if (!service || service.serviceType !== 'ATOM') {
-        return { valid: true };
-      }
-      const valid = downloads?.length > 0;
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie mindestens einen Download an.'
-        };
-      }
-      return { valid };
-    },
-    section: 'services',
-    required: true
-  },
-  {
-    profileId: 69,
-    key: 'isoMetadata.services.downloads.title',
-    collectionKey: 'isoMetadata.services.downloads',
-    validator: (title: DownloadInfo['title']) => {
-      const valid = isDefined(title);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Titel für den Download an.'
-        };
-      }
-      return { valid };
-    },
-    section: 'services',
-    required: true
-  },
-  {
-    profileId: 70,
-    key: 'isoMetadata.services.downloads.type',
-    collectionKey: 'isoMetadata.services.downloads',
-    validator: (type: DownloadInfo['type']) => {
-      const valid = isDefined(type);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Typ für den Download an.'
-        };
-      }
-      return { valid };
-    },
-    section: 'services',
-    required: true,
-    editingRoles: ['MdeEditor']
-  },
-  {
-    profileId: 71,
-    key: 'isoMetadata.services.downloads.href',
-    collectionKey: 'isoMetadata.services.downloads',
-    validator: (href: DownloadInfo['href']) => {
-      const valid = isDefined(href);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine URL für den Download an.'
-        };
-      }
-      return { valid };
-    },
-    section: 'services',
-    required: true,
-    editingRoles: ['MdeEditor']
-  },
-  {
-    profileId: 72,
-    key: 'isoMetadata.services.downloads.fileSize',
-    collectionKey: 'isoMetadata.services.downloads',
-    validator: (fileSize: DownloadInfo['fileSize']) => {
-      const services = getValue<Service[]>('isoMetadata.services');
-      if (!services || services?.length === 0) {
-        return { valid: true };
-      }
-      const valid = isDefined(fileSize) && fileSize > 0;
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine Dateigröße für den Download an.'
         };
       }
       return { valid };

@@ -73,6 +73,9 @@
         }
         onChange(layers);
         activeTabIndex = layers.length > 0 ? activeTabIndex : undefined;
+        if (activeTabIndex && activeTabIndex > layers.length - 1) {
+          activeTabIndex = 0;
+        }
       },
       {
         text: 'Sind sie sicher, dass sie diesen Layer löschen möchten?',
