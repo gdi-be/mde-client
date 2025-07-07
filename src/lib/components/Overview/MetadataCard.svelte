@@ -50,7 +50,7 @@
     // or if i have the role "editor" or "quality assurance" i can assign
     else if (
       !assignedToSomeoneElse &&
-      metadata.responsibleRole === highestRole &&
+      (metadata.responsibleRole === highestRole || !metadata.responsibleRole) &&
       (isOwner || isTeamMember || ['MdeEditor', 'MdeQualityAssurance'].includes(highestRole))
     ) {
       return true;
