@@ -723,6 +723,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'Überprüfung des Qualitätsberichts',
     key: 'isoMetadata.valid',
     validator: () => ({ valid: true }),
+    getCopyValue: (val?: boolean) => {
+      return val ? 'Überprüft' : 'Nicht überprüft';
+    },
     section: 'classification',
     required: false
   },
