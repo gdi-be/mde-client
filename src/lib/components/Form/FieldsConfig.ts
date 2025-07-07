@@ -5,6 +5,7 @@ import {
   type Contacts,
   type DownloadInfo,
   type FeatureType,
+  type IsoTheme,
   type Keywords,
   type Layer,
   type MetadataProfile,
@@ -290,6 +291,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
+    },
+    getCopyValue: async (val?: string[]) => {
+      const response = await fetch('/data/iso_themes');
+      const isoThemes: IsoTheme[] = await response.json();
+      const categories = val?.map((v) => isoThemes.find(category => category.isoID === v)?.isoName) || [];
+      return categories.join(', ');
     },
     section: 'classification',
     required: true,

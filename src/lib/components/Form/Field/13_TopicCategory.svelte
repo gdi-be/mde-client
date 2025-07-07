@@ -63,7 +63,7 @@
         {validationResult}
       />
     {/await}
-    <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+    <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 
