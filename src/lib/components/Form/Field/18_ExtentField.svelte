@@ -181,7 +181,7 @@
         </div>
       </div>
     </fieldset>
-    <FieldTools key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+    <FieldTools noCopyButton key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>
 {/if}
 

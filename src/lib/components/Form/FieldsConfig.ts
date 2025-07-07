@@ -673,6 +673,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    getCopyValue: (val?: [number]) => {
+      return val?.length === 1 ? val[0].toString() : '';
+    },
     section: 'temp_and_spatial',
     required: true
   },
