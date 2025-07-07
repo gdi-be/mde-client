@@ -1,3 +1,30 @@
+# [3.19.0](https://github.com/gdi-be/mde-client/compare/v3.18.1...v3.19.0) (2025-07-07)
+
+
+### Bug Fixes
+
+* improve default copy function ([1751591](https://github.com/gdi-be/mde-client/commit/1751591916f82e94886a0800ed252d61f797466c))
+* remove copy button from all service field ([3992484](https://github.com/gdi-be/mde-client/commit/3992484148dc6f6aa5949bc4f2a707a437569db6))
+* update copyValue function ([a27c6be](https://github.com/gdi-be/mde-client/commit/a27c6bee30bf44903d4a21059b4d69eedf585eb9))
+
+
+### Features
+
+* **25686:**  add copy function for keywords ([527399b](https://github.com/gdi-be/mde-client/commit/527399ba96ae4c896c6913075a692adb8e57d960))
+* **25787:**  add copy function for annex theme ([2b0fc9e](https://github.com/gdi-be/mde-client/commit/2b0fc9eaec8e010aae78313a3f39dd496a9e3ad0))
+* add copy button to all contacts subfields ([724757b](https://github.com/gdi-be/mde-client/commit/724757b6837672af6d5ee8fc899624830ab911ee))
+* add getCopyValue for AdditionalInformation ([5d38b12](https://github.com/gdi-be/mde-client/commit/5d38b12e1e90a45bc2a9a522d4d5628ced4c4de0))
+* add getCopyValue for date fields ([22bf741](https://github.com/gdi-be/mde-client/commit/22bf7414e45fe3eb03e36ca46175251531097b63))
+* add getCopyValue for lineage ([fd14e35](https://github.com/gdi-be/mde-client/commit/fd14e355a18efe1624cf8fac7a1aa6cf08c21418))
+* add getCopyValue for maintenance frequency ([0a9df6a](https://github.com/gdi-be/mde-client/commit/0a9df6ad1db89c896b5d6cd527a089623d1ca177))
+* add getCopyValue for privacy and terms of use ([eb0bbe1](https://github.com/gdi-be/mde-client/commit/eb0bbe1337ddc2732fddd366aaf58c7e2f004d9e))
+* add getCopyValue for quality report checked ([10fb170](https://github.com/gdi-be/mde-client/commit/10fb17061f744db88360cc63a4bedb1496eb4fa4))
+* add getCopyValue for resolution ([29de297](https://github.com/gdi-be/mde-client/commit/29de297626d993c94928327308e5bf21a5081288))
+* add getCopyValue for topic category ([6018ad6](https://github.com/gdi-be/mde-client/commit/6018ad654424b1bf8eeb8adfd27684ef975099cb))
+* add getCopyValue function ([6431382](https://github.com/gdi-be/mde-client/commit/6431382b1f877713fa87b8b5e79faa6dc8f278d8))
+* add getCopyValue to metadataProfile field ([4752b34](https://github.com/gdi-be/mde-client/commit/4752b349fefbffb8119ec8ac90012bdcb5576120))
+* remove downloads section from form ([f4efd84](https://github.com/gdi-be/mde-client/commit/f4efd845fe6e108028ec98f3dd31f8697526c704))
+
 ## [3.18.1](https://github.com/gdi-be/mde-client/compare/v3.18.0...v3.18.1) (2025-07-07)
 
 
