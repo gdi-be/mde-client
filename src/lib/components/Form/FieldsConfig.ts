@@ -44,6 +44,8 @@ export interface FullFieldConfig<T> extends YamlFieldConfig {
   validator: (val: T | undefined, extra?: Record<string, any>) => ValidationResult;
   // additional parameters for the validator function
   validatorExtraParams?: Array<FieldKey | 'PARENT_VALUE'>;
+  // this function is used to get the value for the copy button
+  getCopyValue?: (val: T | undefined) => string | Promise<string>;
 }
 
 const isDefined = <T>(val: T): val is NonNullable<T> => {

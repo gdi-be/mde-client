@@ -9,11 +9,13 @@
   import { toast } from 'svelte-french-toast';
   import { popconfirm } from '../../context/PopConfirmContex.svelte';
   import type { FieldKey } from '$lib/models/form';
+  import type { FullFieldConfig } from './FieldsConfig';
 
   export type FieldToolsProps = {
     key: FieldKey;
     children?: Snippet;
     checkMarkAnmiationRunning?: boolean;
+    fieldConfig?: FullFieldConfig;
     noCheckmark?: boolean;
     noHelpButton?: boolean;
     noCopyButton?: boolean;
@@ -23,6 +25,7 @@
     key,
     children,
     checkMarkAnmiationRunning: running = $bindable<boolean>(false),
+    fieldConfig,
     noCheckmark = false,
     noHelpButton = false,
     noCopyButton = false
@@ -85,7 +88,7 @@
     <Icon class="material-icons" title="Fehler beim Prüfen der Hilfe.">warning</Icon>
   {/await}
   {#if !noCopyButton}
-    <CopyButton {key} />
+    <CopyButton {key} {fieldConfig} />
   {/if}
   {#if metadata?.clonedFromId}
     {#await getValueFromOriginal()}
