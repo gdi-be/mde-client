@@ -28,10 +28,10 @@
           toast.error('Fehler beim Abrufen des Wertes für die Zwischenablage.');
           return;
         }
-      } else {
+      } else if (value) {
         text = JSON.stringify(value);
         // remove quotes from the string if it's a stringified object
-        if (text.startsWith('"') && text.endsWith('"')) {
+        if (text?.startsWith('"') && text?.endsWith('"')) {
           text = text.slice(1, -1);
         }
       }
