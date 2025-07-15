@@ -32,10 +32,13 @@
     }
 
     const data = await response.json();
-    return data.map((metadataCollection: MetadataCollection) => ({
-      key: metadataCollection.metadataId,
-      label: metadataCollection.title
-    }));
+
+    return (
+      data.content?.map((metadataCollection: MetadataCollection) => ({
+        key: metadataCollection.metadataId,
+        label: metadataCollection.title
+      })) || []
+    );
   }
 
   const splitLabel = (l: string) => {

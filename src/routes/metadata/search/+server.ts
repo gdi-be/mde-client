@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
-import { searchForMetadata } from '$lib/api/metadata.js';
+import { queryMetadata } from '$lib/api/metadata.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ cookies, url }) {
@@ -14,7 +14,16 @@ export async function GET({ cookies, url }) {
     return error(400, 'Bad Request');
   }
 
-  const createResponse = await searchForMetadata(token, query);
+  const queryResponse = await queryMetadata(
+    token,
+    {
+      searchTerm: query
+    },
+    {
+      page: 0,
+      size: 1000000
+    }
+  );
 
-  return json(createResponse);
+  return json(queryResponse);
 }
