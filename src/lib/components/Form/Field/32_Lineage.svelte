@@ -73,7 +73,9 @@
       return [];
     }
 
-    return await response.json();
+    const data = await response.json();
+
+    return data?.content || [];
   };
 
   let showCheckmark = $state(false);
@@ -264,7 +266,8 @@
         background-color: white;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         z-index: 1;
-        overflow: hidden;
+        max-height: 200px;
+        overflow-y: auto;
 
         .search-result {
           list-style-type: none;
