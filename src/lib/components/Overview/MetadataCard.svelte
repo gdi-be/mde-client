@@ -9,6 +9,7 @@
   import { getHighestRole } from '$lib/util';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { log } from 'loggisch';
 
   const FALLBACK_IMAGE = '/logo_berlin_m_srgb.svg';
 
@@ -28,33 +29,71 @@
   const isOwner = $derived(metadata.ownerId === userId);
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
   const showDeleteAction = $derived(
-    highestRole === 'MdeAdministrator' ||
-      (metadata.assignedUserId === userId && highestRole === 'MdeEditor')
+    highestRole === 'MdeAdministrator' || (assignedToMe && highestRole === 'MdeEditor')
   );
   const showCommentsAction = $derived(true);
   const showPrintAction = $derived(true);
   const showEditAction = $derived(
     highestRole === 'MdeAdministrator' ||
-      (['MdeEditor', 'MdeDataOwner'].includes(highestRole) && metadata.assignedUserId === userId)
+      (['MdeEditor', 'MdeDataOwner'].includes(highestRole) && assignedToMe)
   );
   const showAssignAction = $derived.by(() => {
-    // admin can always assign
+    // Admin
     if (highestRole === 'MdeAdministrator') {
+      // … can always assign
       return true;
     }
-    // Dataowners cannot unassign (only via AssignmentDialog)
-    else if (highestRole === 'MdeDataOwner' && metadata.assignedUserId === userId) {
+
+    // Metadata is assigned to someone else
+    if (assignedToSomeoneElse) {
+      // … cannot assign
       return false;
     }
-    // if no on is assigned and i have the assigned role and im owner or team member
-    // or if i have the role "editor" or "quality assurance" i can assign
-    else if (
-      !assignedToSomeoneElse &&
-      (metadata.responsibleRole === highestRole || !metadata.responsibleRole) &&
-      (isOwner || isTeamMember || ['MdeEditor', 'MdeQualityAssurance'].includes(highestRole))
-    ) {
-      return true;
+
+    // Dataowners
+    if (highestRole === 'MdeDataOwner') {
+      if (assignedToMe) {
+        // … cannot unassign (only via AssignmentDialog)
+        return false;
+      }
+      if (metadata.responsibleRole === 'MdeDataOwner' && (isOwner || isTeamMember)) {
+        // … can assign if responsible and they are owner or team member
+        return true;
+      }
+      return false;
     }
+
+    // Quality Assurance
+    if (highestRole === 'MdeQualityAssurance') {
+      if (metadata.responsibleRole === 'MdeQualityAssurance') {
+        // … can assign if responsible
+        return true;
+      }
+      if (assignedToMe) {
+        // … can unassign if assigned
+        return true;
+      }
+      // … cannot assign if not responsible
+      return false;
+    }
+
+    // Editor
+    if (highestRole === 'MdeEditor') {
+      if (!metadata.responsibleRole) {
+        // … can assign if no one is responsible
+        return true;
+      }
+      if (metadata.responsibleRole === 'MdeEditor') {
+        // … can assign if responsible
+        return true;
+      } else {
+        // … cannot assign if someone else is responsible (e.g. DataOwner or QualityAssurance)
+        return false;
+      }
+    }
+
+    // Fallback, we should never reach this point
+    log('warning', `Unexpected role: ${highestRole}. Cannot determine assign action.`);
     return false;
   });
 
