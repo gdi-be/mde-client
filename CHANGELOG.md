@@ -1,3 +1,12 @@
+## [3.19.1](https://github.com/gdi-be/mde-client/compare/v3.19.0...v3.19.1) (2025-07-15)
+
+
+### Bug Fixes
+
+* remove unused searchForMetadata method ([efb9e65](https://github.com/gdi-be/mde-client/commit/efb9e65d952faf22896e182d6c80de69bc875791))
+* update assignment button visibility ([0ab1711](https://github.com/gdi-be/mde-client/commit/0ab1711748e827384e8be3e6dd658548dc941f16))
+* use query interface instead of search ([20bfba5](https://github.com/gdi-be/mde-client/commit/20bfba59ce9de113936ee886d917775a10a4d99f))
+
 # [3.19.0](https://github.com/gdi-be/mde-client/compare/v3.18.1...v3.19.0) (2025-07-07)
 
 
