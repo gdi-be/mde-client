@@ -20,6 +20,9 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY .env.example .env
 COPY package.json bun.lock ./
 
+# Unfortunately the svelte-adapter-bun does't allow to set the idle timeout.
+RUN sed -i "s/serverOptions = {/serverOptions = {\n  idleTimeout: 255,/g" ./build/index.js
+
 EXPOSE 3000
 
 ENTRYPOINT ["bun", "run", "start"]
