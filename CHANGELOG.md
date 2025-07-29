@@ -1,3 +1,10 @@
+## [3.19.2](https://github.com/gdi-be/mde-client/compare/v3.19.1...v3.19.2) (2025-07-29)
+
+
+### Bug Fixes
+
+* override the (non-configurable) default idle timeout of 10 seconds ([a63154f](https://github.com/gdi-be/mde-client/commit/a63154f4f241ebe75d37dffc83b83af83836a74e))
+
 ## [3.19.1](https://github.com/gdi-be/mde-client/compare/v3.19.0...v3.19.1) (2025-07-15)
 
 
