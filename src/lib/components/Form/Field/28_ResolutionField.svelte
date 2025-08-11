@@ -88,6 +88,7 @@
         fieldConfig={resolutionFieldConfig}
         onblur={onBlur}
         validationResult={resolutionValidationResult}
+        step="any"
       />
     {/if}
     {#if selected === SCALE_KEY}
