@@ -486,53 +486,55 @@
               {/await}
             </span>
           </div>
-          <div class="list-item-field">
-            <strong>Gesamtlegende</strong>
-            <div class="list">
-              <div class="list-item-field">
-                <strong>Url</strong>
-                <span class="list-item-value">
-                  {#await replaceVariable(service.legendImage?.url)}
-                    Lädt ...
-                  {:then url}
-                    {url || DEFAULT_NULL_STRING}
-                  {:catch}
-                    {service.preview || DEFAULT_NULL_STRING}
-                  {/await}
-                </span>
-              </div>
-              <div class="list-item-field">
-                <strong>Format</strong>
-                <span class="list-item-value">
-                  {#if service.legendImage?.format}
-                    {service.legendImage.format}
-                  {:else}
-                    {DEFAULT_NULL_STRING}
-                  {/if}
-                </span>
-              </div>
-              <div class="list-item-field">
-                <strong>Breite</strong>
-                <span class="list-item-value">
-                  {#if service.legendImage?.width}
-                    {service.legendImage.width}
-                  {:else}
-                    {DEFAULT_NULL_STRING}
-                  {/if}
-                </span>
-              </div>
-              <div class="list-item-field">
-                <strong>Höhe</strong>
-                <span class="list-item-value">
-                  {#if service.legendImage?.height}
-                    {service.legendImage.height}
-                  {:else}
-                    {DEFAULT_NULL_STRING}
-                  {/if}
-                </span>
+          {#if service.serviceType !== 'ATOM'}
+            <div class="list-item-field">
+              <strong>Gesamtlegende</strong>
+              <div class="list">
+                <div class="list-item-field">
+                  <strong>Url</strong>
+                  <span class="list-item-value">
+                    {#await replaceVariable(service.legendImage?.url)}
+                      Lädt ...
+                    {:then url}
+                      {url || DEFAULT_NULL_STRING}
+                    {:catch}
+                      {service.preview || DEFAULT_NULL_STRING}
+                    {/await}
+                  </span>
+                </div>
+                <div class="list-item-field">
+                  <strong>Format</strong>
+                  <span class="list-item-value">
+                    {#if service.legendImage?.format}
+                      {service.legendImage.format}
+                    {:else}
+                      {DEFAULT_NULL_STRING}
+                    {/if}
+                  </span>
+                </div>
+                <div class="list-item-field">
+                  <strong>Breite</strong>
+                  <span class="list-item-value">
+                    {#if service.legendImage?.width}
+                      {service.legendImage.width}
+                    {:else}
+                      {DEFAULT_NULL_STRING}
+                    {/if}
+                  </span>
+                </div>
+                <div class="list-item-field">
+                  <strong>Höhe</strong>
+                  <span class="list-item-value">
+                    {#if service.legendImage?.height}
+                      {service.legendImage.height}
+                    {:else}
+                      {DEFAULT_NULL_STRING}
+                    {/if}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          {/if}
           <div class="list-item-field">
             <strong>Service Identifier</strong>
             <span class="list-item-value">{service.serviceIdentification}</span>
