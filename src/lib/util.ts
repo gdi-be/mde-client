@@ -325,7 +325,7 @@ export const canAssignSelf = (token?: Token, metadata?: MetadataCollection): boo
   // Fallback, we should never reach this point
   log('warning', `Unexpected role: ${highestRole}. Cannot determine assign action.`);
   return false;
-}
+};
 
 /**
  * Utility function to determine if the user can unassign themselves from a metadata item.
