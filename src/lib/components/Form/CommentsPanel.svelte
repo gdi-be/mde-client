@@ -89,7 +89,8 @@
     return comment.userId === myUserId && index === comments.length - 1 && notOlderThenTenMinutes;
   }
 
-  function scrollToBottom() {
+  async function scrollToBottom() {
+    await new Promise((resolve) => setTimeout(resolve, 0));
     const commentsList = document.querySelector('.comments');
     if (commentsList) {
       commentsList.scrollTop = commentsList.scrollHeight;
