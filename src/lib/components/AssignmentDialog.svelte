@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import type { Role } from '$lib/models/keycloak';
-  import { getHighestRole } from '$lib/util';
+  import { canAssignSelf, canUnassignSelf, getHighestRole } from '$lib/util';
   import Button, { Label } from '@smui/button';
   import Dialog, { Content, Header, Title } from '@smui/dialog';
   import type { UserData } from '$lib/models/api';
@@ -19,8 +19,8 @@
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
-  const myUserId = $derived(token?.sub);
-  const assignedToMe = $derived(metadata?.assignedUserId === myUserId);
+  const userId = $derived(token?.sub);
+  const assignedToMe = $derived(metadata?.assignedUserId === userId);
   const responsibleRole = $derived(metadata?.responsibleRole || '');
 
   const canAssignToDataOwner = $derived(
@@ -47,6 +47,9 @@
   const canApproveMetadata = $derived(
     ['MdeAdministrator', 'MdeQualityAssurance'].includes(highestRole)
   );
+
+  const canAssignToMe = $derived(canAssignSelf(token, metadata));
+  const canUnassign = $derived(canUnassignSelf(token, metadata));
 
   const assignToRole = async (role: Role) => {
     if (!metadata) return;
@@ -91,6 +94,30 @@
         `Fehler beim Zuweisen der Metadaten an den User "${keycloakId}". Bitte versuchen Sie es später erneut.`
       );
       return Promise.reject('Failed to assign metadata to user');
+    }
+
+    goto('/metadata', {
+      invalidateAll: true
+    });
+
+    open = false;
+  };
+
+  const unassignUser = async () => {
+    if (!metadata || !userId) return;
+
+    const response = await fetch(`/metadata/${metadata.metadataId}/user`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({ userId: userId })
+    });
+
+    if (!response.ok) {
+      toast.error(
+        'Fehler beim Entfernen der Zuweisung des Metadatensatzes. Bitte versuchen Sie es später erneut.'
+      );
     }
 
     goto('/metadata', {
@@ -222,13 +249,37 @@
   </div>
 {/snippet}
 
+{#snippet assignToMe(userId?: string)}
+  {#if userId}
+    <div class="assign-section assign-self">
+      <h4>Selbst zuweisen</h4>
+      <div class="actions">
+        <Button variant="raised" onclick={() => assignToUser(userId)}>
+          <Label>Mir zuweisen</Label>
+        </Button>
+      </div>
+    </div>
+  {/if}
+{/snippet}
+
+{#snippet unassign()}
+  <div class="assign-section unassign">
+    <h4>Mir zugewiesen</h4>
+    <div class="actions">
+      <Button variant="raised" onclick={() => unassignUser()}>
+        <Label>Zuordnung entfernen</Label>
+      </Button>
+    </div>
+  </div>
+{/snippet}
+
 <Dialog bind:open aria-labelledby="Zuweisung" aria-describedby="Zuweisung">
   <Header>
     <Title>Zuweisung</Title>
   </Header>
   <Content>
     <div class="assignment-panel">
-      {#if !canAssignToEditor && !canAssignToDataOwner && !canAssignToQualityAssurance}
+      {#if !canAssignToEditor && !canAssignToDataOwner && !canAssignToQualityAssurance && !canAssignToMe}
         <p>Sie haben keine Berechtigung um die Metadaten zuzuweisen.</p>
       {:else}
         {#if canApproveMetadata}
@@ -238,6 +289,12 @@
         {#await fetchTeamAndGroupByRole()}
           <p>Lade Team</p>
         {:then groups}
+          {#if canAssignToMe}
+            {@render assignToMe(userId)}
+          {/if}
+          {#if canUnassign}
+            {@render unassign()}
+          {/if}
           {#if canAssignToEditor}
             {@render assignToEditor(groups['MdeEditor'])}
           {/if}
@@ -248,6 +305,12 @@
             {@render assignToQualityAssurance(groups['MdeQualityAssurance'])}
           {/if}
         {:catch}
+          {#if canAssignToMe}
+            {@render assignToMe(userId)}
+          {/if}
+          {#if canUnassign}
+            {@render unassign()}
+          {/if}
           {#if canAssignToEditor}
             {@render assignToEditor()}
           {/if}
