@@ -5,6 +5,7 @@
   import ServiceForm from './ServiceForm.svelte';
   import Checkmark from '../Checkmark.svelte';
   import FieldHint from '../FieldHint.svelte';
+  import { page } from '$app/state';
   import { popconfirm } from '../../../context/PopConfirmContex.svelte';
 
   type Tab = {
@@ -69,9 +70,24 @@
     popconfirm(
       targetEl,
       async () => {
+        const removedService = services.find((service) => service.serviceIdentification === id);
+        if (!removedService) {
+          return;
+        }
         services = services.filter((service) => service.serviceIdentification !== id);
 
         await persistValue(KEY, services);
+        if (removedService.fileIdentifier) {
+          await fetch(
+            `${page.url.origin}${page.url.pathname}/delete/${removedService.fileIdentifier}`,
+            {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json'
+              }
+            }
+          );
+        }
 
         // Remove layers associated with the service
         const layers = getValue<Record<string, Service[]>>(LAYERS_KEY);
