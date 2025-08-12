@@ -295,6 +295,7 @@
       justify-content: center;
       align-items: center;
       gap: 1em;
+      padding: 0 2em;
     }
 
     .tab-container {
@@ -332,6 +333,14 @@
       font-size: 1.25rem;
       border-radius: 5px;
       transition: background-color 0.3s;
+
+      :global(span) {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+      }
     }
 
     .form-wrapper {
@@ -361,6 +370,12 @@
             gap: 1em;
           }
         }
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .tab {
+        font-size: 0.75rem;
       }
     }
   }

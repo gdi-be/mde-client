@@ -216,10 +216,10 @@
     }
 
     .container {
-      flex: 1;
       display: flex;
       padding: 0 1em;
       gap: 1em;
+      overflow-y: auto;
 
       &.left-container {
         justify-content: flex-start;
@@ -231,6 +231,19 @@
 
       &.right-container {
         justify-content: flex-end;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .left-container,
+      .right-container {
+        :global(.mdc-button__label) {
+          display: none;
+        }
+        :global(.mdc-button__icon) {
+          margin-left: 0;
+          margin-right: 0;
+        }
       }
     }
   }

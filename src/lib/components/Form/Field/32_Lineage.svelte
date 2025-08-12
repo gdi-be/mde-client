@@ -330,16 +330,21 @@
 
     .inline-fields {
       display: flex;
+      flex-wrap: wrap;
       gap: 1em;
 
       :global(.publish-date-field) {
         display: flex;
         flex: 1;
+
+        :global(fieldset) {
+          flex: 1;
+        }
       }
 
       :global(.lineage-source-field) {
-        flex: 3;
         display: flex;
+        flex: 3;
 
         :global(.text-input) {
           flex: 1;

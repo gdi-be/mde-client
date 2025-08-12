@@ -33,7 +33,7 @@
       {onSMUIChipInteraction}
       bind:selected
     >
-      {#snippet chip(chip)}
+      {#snippet chip(chip: string)}
         <StatusChip {chip} hasAction colored={selected.includes(chip)} />
       {/snippet}
     </Set>
@@ -48,6 +48,17 @@
     .label {
       display: flex;
       align-items: center;
+    }
+
+    :global(.status-chipset) {
+      max-height: 88px;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 1024px) {
+      :global(label) {
+        display: none;
+      }
     }
   }
 </style>
