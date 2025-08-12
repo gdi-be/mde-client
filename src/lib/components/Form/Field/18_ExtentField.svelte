@@ -198,6 +198,7 @@
     fieldset {
       display: flex;
       flex: 1;
+      flex-wrap: wrap;
       border-radius: 0.25em;
       justify-content: space-between;
 
@@ -229,6 +230,7 @@
 
         .inline-fields {
           display: flex;
+          flex-wrap: wrap;
           justify-content: space-evenly;
         }
       }

@@ -46,6 +46,13 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    align-items: center;
+
+    li {
+      max-height: 1em;
+      overflow: clip;
+      text-wrap: inherit;
+    }
 
     i {
       color: gray;

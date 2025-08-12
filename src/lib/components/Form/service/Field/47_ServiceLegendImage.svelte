@@ -84,6 +84,7 @@
       .inputs {
         margin-top: 1em;
         display: flex;
+        flex-wrap: wrap;
         gap: 1em;
 
         div.legend-text-fields {
@@ -92,6 +93,7 @@
 
         div.legend-size-fields {
           display: flex;
+          flex: 1;
           flex-direction: column;
           justify-content: space-between;
         }

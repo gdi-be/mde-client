@@ -234,10 +234,15 @@
 
     .inline-fields {
       display: flex;
+      flex-wrap: wrap;
       gap: 1em;
 
       :global(.code-select-field) {
         flex: 1;
+
+        :global(.select-input) {
+          flex: 1;
+        }
       }
 
       :global(.url-field) {

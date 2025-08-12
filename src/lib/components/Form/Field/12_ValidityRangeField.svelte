@@ -75,6 +75,7 @@
 
     fieldset {
       flex: 1;
+      flex-wrap: wrap;
       border-radius: 0.25em;
       display: flex;
 

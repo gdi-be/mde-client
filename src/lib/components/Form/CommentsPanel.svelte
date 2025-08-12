@@ -157,7 +157,7 @@
 <style lang="scss">
   .comments-panel-container {
     position: fixed;
-    width: 30%;
+    width: min(75%, 500px);
     z-index: 1;
     bottom: 4.5em;
     left: 1em;
