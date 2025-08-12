@@ -2,10 +2,18 @@
 
 ---
 
-This documentation uses `bun` as a JavaScript runtime. In most cases this can be
+The client uses `bun` as a JavaScript runtime. In most cases this can be
 replaced with `npm` if `bun` does not work as expected.
 
 ---
+
+## Getting Started
+
+In most usecases you don't want to run this client on its own, but rather use it the podman environment
+provided by the [mde-deployment](https://github.com/gdi-be/mde-deployment).
+
+The client is not guaranteed to work without the podman environment as it heavily relies on the other services
+provided by the deployment: **NGINX**, **Keycloak**, **Backend**.
 
 ## Requirements
 
@@ -30,10 +38,22 @@ bun run dev
 bun run dev -- --open
 ```
 
-If typing gets messed up in your IDE you can regenerate them with:
+Check the type definitions with:
 
 ```bash
 bun run check
+```
+
+Check the code style with:
+
+```bash
+bun run lint
+```
+
+Fix the code style with:
+
+```bash
+bun run format
 ```
 
 ## Testing
@@ -44,10 +64,9 @@ To run the test execute.
 bun test
 ```
 
-Tests are run via the build in bun testsuite. There is a `test` script in the
-package.json so using `npm run test` should also work aslong as bun is installed.
-
 ## Building
+
+The build process is based on docker and will automatically be started when the corresponding github action is triggered.
 
 To create a production version of your app:
 
@@ -56,5 +75,3 @@ bun run build
 ```
 
 You can preview the production build with `bun run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
