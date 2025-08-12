@@ -1,3 +1,19 @@
+# [3.20.0](https://github.com/gdi-be/mde-client/compare/v3.19.2...v3.20.0) (2025-08-12)
+
+
+### Bug Fixes
+
+* allow float values for resolution ([d264c43](https://github.com/gdi-be/mde-client/commit/d264c430ed3f08dfaf060b169fb5dec5b4dfd0bf))
+* delay scroll to ensure correct height ([f2a577d](https://github.com/gdi-be/mde-client/commit/f2a577d793c53a9f6152cb027e171633d07dffbd))
+* make sure deleted services are reflected in the CSW ([21d4f89](https://github.com/gdi-be/mde-client/commit/21d4f89691a6905e04f91487b18efeadf544b0ab))
+* remove legend entry from ATOM services ([e1fbfe5](https://github.com/gdi-be/mde-client/commit/e1fbfe540b1d8efc593c85142864212e21b38f57))
+* update responsive layout ([3fd42e7](https://github.com/gdi-be/mde-client/commit/3fd42e7dfcec58055fcf98cc7aad09b736b3d241))
+
+
+### Features
+
+* add self (un-)assign buttons to AssignmentDialog ([7bd1d45](https://github.com/gdi-be/mde-client/commit/7bd1d45f096bb1eeab19065f8324fce83a80ed6f))
+
 ## [3.19.2](https://github.com/gdi-be/mde-client/compare/v3.19.1...v3.19.2) (2025-07-29)
 
 
