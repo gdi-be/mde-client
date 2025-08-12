@@ -6,10 +6,9 @@
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { Set } from '@smui/chips';
   import StatusChip from '$lib/components/StatusChip.svelte';
-  import { getHighestRole } from '$lib/util';
+  import { canAssignSelf, canUnassignSelf, getHighestRole } from '$lib/util';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
-  import { log } from 'loggisch';
 
   const FALLBACK_IMAGE = '/logo_berlin_m_srgb.svg';
 
@@ -22,11 +21,7 @@
   const userId = $derived(token?.sub);
   const highestRole = $derived(getHighestRole(token));
   const assignedToMe = $derived(metadata.assignedUserId === userId);
-  const assignedToSomeoneElse = $derived(
-    (metadata.assignedUserId && metadata.assignedUserId !== userId) || false
-  );
   const isTeamMember = $derived(userId && metadata.teamMemberIds?.includes(userId));
-  const isOwner = $derived(metadata.ownerId === userId);
   let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
   const showDeleteAction = $derived(
     highestRole === 'MdeAdministrator' || (assignedToMe && highestRole === 'MdeEditor')
@@ -37,65 +32,9 @@
     highestRole === 'MdeAdministrator' ||
       (['MdeEditor', 'MdeDataOwner'].includes(highestRole) && assignedToMe)
   );
-  const showAssignAction = $derived.by(() => {
-    // Admin
-    if (highestRole === 'MdeAdministrator') {
-      // … can always assign
-      return true;
-    }
-
-    // Metadata is assigned to someone else
-    if (assignedToSomeoneElse) {
-      // … cannot assign
-      return false;
-    }
-
-    // Dataowners
-    if (highestRole === 'MdeDataOwner') {
-      if (assignedToMe) {
-        // … cannot unassign (only via AssignmentDialog)
-        return false;
-      }
-      if (metadata.responsibleRole === 'MdeDataOwner' && (isOwner || isTeamMember)) {
-        // … can assign if responsible and they are owner or team member
-        return true;
-      }
-      return false;
-    }
-
-    // Quality Assurance
-    if (highestRole === 'MdeQualityAssurance') {
-      if (metadata.responsibleRole === 'MdeQualityAssurance') {
-        // … can assign if responsible
-        return true;
-      }
-      if (assignedToMe) {
-        // … can unassign if assigned
-        return true;
-      }
-      // … cannot assign if not responsible
-      return false;
-    }
-
-    // Editor
-    if (highestRole === 'MdeEditor') {
-      if (!metadata.responsibleRole) {
-        // … can assign if no one is responsible
-        return true;
-      }
-      if (metadata.responsibleRole === 'MdeEditor') {
-        // … can assign if responsible
-        return true;
-      } else {
-        // … cannot assign if someone else is responsible (e.g. DataOwner or QualityAssurance)
-        return false;
-      }
-    }
-
-    // Fallback, we should never reach this point
-    log('warning', `Unexpected role: ${highestRole}. Cannot determine assign action.`);
-    return false;
-  });
+  const showAssignAction = $derived(
+    canAssignSelf(token, metadata) || canUnassignSelf(token, metadata)
+  );
 
   const statuses = $derived.by(() => {
     const chips = [];

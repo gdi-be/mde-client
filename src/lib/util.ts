@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import proj4 from 'proj4';
-import type { CRS, Extent, MaintenanceFrequency } from '$lib/models/metadata';
+import type { CRS, Extent, MaintenanceFrequency, MetadataCollection } from '$lib/models/metadata';
 import { log } from 'loggisch';
 import type { Role, Token } from '$lib/models/keycloak';
 
@@ -250,4 +250,111 @@ export const getHighestRole = (token?: Token): Role => {
   if (token.realm_access.roles.includes('MdeQualityAssurance')) return 'MdeQualityAssurance';
   if (token.realm_access.roles.includes('MdeDataOwner')) return 'MdeDataOwner';
   throw Error('User has no role');
+};
+
+/**
+ * Utility function to determine if the user can assign themselves to a metadata item.
+ * This function checks the user's role and the metadata's current state to determine if
+ * the user can assign themselves.
+ *
+ * @param token The user's token containing their roles and user ID.
+ * @param metadata The metadata collection containing information about the metadata item.
+ *
+ * @returns A boolean indicating whether the user can assign themselves to the metadata item.
+ */
+export const canAssignSelf = (token?: Token, metadata?: MetadataCollection): boolean => {
+  const highestRole = getHighestRole(token);
+  const userId = token?.sub;
+  const assignedToMe = metadata?.assignedUserId === userId;
+  const responsibleRole = metadata?.responsibleRole || '';
+  const assignedToSomeoneElse =
+    (metadata?.assignedUserId && metadata?.assignedUserId !== userId) || false;
+  const isTeamMember = userId && metadata?.teamMemberIds?.includes(userId);
+  const isOwner = metadata?.ownerId === userId;
+
+  if (assignedToMe) {
+    return false;
+  }
+
+  // Admin
+  if (highestRole === 'MdeAdministrator') {
+    // … can always assign
+    return true;
+  }
+
+  // Metadata is assigned to someone else
+  if (assignedToSomeoneElse) {
+    // … cannot assign
+    return false;
+  }
+
+  // Dataowners
+  if (highestRole === 'MdeDataOwner') {
+    if (responsibleRole === 'MdeDataOwner' && (isOwner || isTeamMember)) {
+      // … can assign if responsible and they are owner or team member
+      return true;
+    }
+    return false;
+  }
+
+  // Quality Assurance
+  if (highestRole === 'MdeQualityAssurance') {
+    if (responsibleRole === 'MdeQualityAssurance') {
+      // … can assign if responsible
+      return true;
+    }
+    // … cannot assign if not responsible
+    return false;
+  }
+
+  // Editor
+  if (highestRole === 'MdeEditor') {
+    if (!responsibleRole) {
+      // … can assign if no one is responsible
+      return true;
+    }
+    if (responsibleRole === 'MdeEditor') {
+      // … can assign if responsible
+      return true;
+    } else {
+      // … cannot assign if someone else is responsible (e.g. DataOwner or QualityAssurance)
+      return false;
+    }
+  }
+
+  // Fallback, we should never reach this point
+  log('warning', `Unexpected role: ${highestRole}. Cannot determine assign action.`);
+  return false;
+};
+
+/**
+ * Utility function to determine if the user can unassign themselves from a metadata item.
+ * This function checks the user's role and the metadata's current state to determine if
+ * the user can unassign themselves.
+ *
+ * @param token The user's token containing their roles and user ID.
+ * @param metadata The metadata collection containing information about the metadata item.
+ *
+ * @returns A boolean indicating whether the user can unassign themselves from the metadata item.
+ */
+export const canUnassignSelf = (token?: Token, metadata?: MetadataCollection): boolean => {
+  const highestRole = getHighestRole(token);
+  const userId = token?.sub;
+  const responsibleRole = metadata?.responsibleRole || '';
+
+  if (metadata?.assignedUserId !== userId) {
+    return false;
+  }
+
+  if (highestRole === 'MdeAdministrator') {
+    // Admin can always unassign
+    return true;
+  }
+
+  if (responsibleRole !== 'MdeDataOwner' && highestRole === responsibleRole) {
+    // If the user is responsible and not a DataOwner, they can unassign
+    return true;
+  }
+
+  return false;
 };
