@@ -182,11 +182,11 @@
             <F05_MetadataProfileField />
             <F07_AnnexThemeField />
             <F38_InspireAnnexVersionField />
+            <F37_QualityReportCheckField />
           </fieldset>
           <F04_PrivacyField />
           <F25_TermsOfUseField />
           <F26_TermsOfUseSourceField />
-          <F37_QualityReportCheckField />
           <F06_HighValueDatasetField />
           <F13_TopicCategory />
           <ScrollToTopButton target={formWrapper} />
