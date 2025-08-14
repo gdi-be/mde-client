@@ -269,7 +269,7 @@ export const canAssignSelf = (token?: Token, metadata?: MetadataCollection): boo
   const responsibleRole = metadata?.responsibleRole || '';
   const assignedToSomeoneElse =
     (metadata?.assignedUserId && metadata?.assignedUserId !== userId) || false;
-  const isTeamMember = userId && metadata?.teamMemberIds?.includes(userId);
+  const isTeamMember = !!(userId && metadata?.teamMemberIds?.includes(userId));
   const isOwner = metadata?.ownerId === userId;
 
   if (assignedToMe) {
@@ -290,11 +290,17 @@ export const canAssignSelf = (token?: Token, metadata?: MetadataCollection): boo
 
   // Dataowners
   if (highestRole === 'MdeDataOwner') {
-    if (responsibleRole === 'MdeDataOwner' && (isOwner || isTeamMember)) {
-      // … can assign if responsible and they are owner or team member
-      return true;
+    if (!responsibleRole) {
+      // … can assign if no one is responsible and is a team member or owner
+      return isOwner || isTeamMember;
     }
-    return false;
+    if (responsibleRole === 'MdeDataOwner') {
+      // … can assign if responsible and is a team member or owner
+      return isOwner || isTeamMember;
+    } else {
+      // … cannot assign if someone else is responsible (e.g. Editor or QualityAssurance)
+      return false;
+    }
   }
 
   // Quality Assurance
