@@ -1,3 +1,15 @@
+# [3.21.0](https://github.com/gdi-be/mde-client/compare/v3.20.0...v3.21.0) (2025-08-20)
+
+
+### Bug Fixes
+
+* move QualityReportCheckField to Inspire fieldset ([65062d7](https://github.com/gdi-be/mde-client/commit/65062d7764fe839c110f4c7a8d3143e33326e3a8))
+
+
+### Features
+
+* dataowners can self assign if no one responsible ([3ce974d](https://github.com/gdi-be/mde-client/commit/3ce974da66c52e0366820d8bd57fbfcbb1e3ffa7))
+
 # [3.20.0](https://github.com/gdi-be/mde-client/compare/v3.19.2...v3.20.0) (2025-08-12)
 
 
