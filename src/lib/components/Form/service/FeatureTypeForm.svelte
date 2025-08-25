@@ -19,6 +19,7 @@
   };
 
   let { value: initialFeatureTypes, onChange, service }: FeatureTypeFormProps = $props();
+  const serviceId = $derived(service?.serviceIdentification);
 
   let featureTypes = $state<FeatureType[]>([]);
   let tabs = $derived<Tab[]>(
@@ -35,6 +36,13 @@
   const validationResult = $derived(
     fieldConfig?.validator(featureTypes, { PARENT_VALUE: service })
   );
+
+  $effect(() => {
+    // if the serviceId changes set activeTabIndex to undefined
+    if (serviceId) {
+      activeTabIndex = undefined;
+    }
+  });
 
   $effect(() => {
     featureTypes = initialFeatureTypes || [];
@@ -139,6 +147,7 @@
       />
       <FeatureTypeName_62 value={activeFeatureType?.name} onChange={(name) => set('name', name)} />
       <ColumnsForm
+        featureType={activeFeatureType}
         value={activeFeatureType?.columns}
         onChange={(columns) => set('columns', columns)}
       />

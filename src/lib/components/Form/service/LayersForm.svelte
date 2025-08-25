@@ -24,6 +24,7 @@
   };
 
   let { value: initialLayers, service, onChange }: LayersFormProps = $props();
+  const serviceId = $derived(service?.serviceIdentification);
 
   let layers = $state<Layer[]>([]);
   let tabs = $derived<Tab[]>(
@@ -42,6 +43,13 @@
       PARENT_VALUE: service
     })
   );
+
+  $effect(() => {
+    // if the serviceId changes set activeTabIndex to undefined
+    if (serviceId) {
+      activeTabIndex = undefined;
+    }
+  });
 
   $effect(() => {
     layers = initialLayers || [];
