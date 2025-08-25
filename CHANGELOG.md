@@ -1,3 +1,12 @@
+## [3.21.1](https://github.com/gdi-be/mde-client/compare/v3.21.0...v3.21.1) (2025-08-25)
+
+
+### Bug Fixes
+
+* updat text-wrap for BreadCrumbs ([b71e00d](https://github.com/gdi-be/mde-client/commit/b71e00d1bdced3bb2803276b1b80ada5a5f0eb8e))
+* update handling of indices ([19a0dfa](https://github.com/gdi-be/mde-client/commit/19a0dfaf68069bd99d561b88d3b4217b342dca9c))
+* update maxPage param ([4553ad2](https://github.com/gdi-be/mde-client/commit/4553ad2c63c6540bdb916b90761405edee5334b9))
+
 # [3.21.0](https://github.com/gdi-be/mde-client/compare/v3.20.0...v3.21.0) (2025-08-20)
 
 
