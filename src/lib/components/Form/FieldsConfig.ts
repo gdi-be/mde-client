@@ -788,17 +788,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: false
   },
   {
-    profileId: 36,
-    label: 'Verwandte Themen (MTK)',
-    key: 'clientMetadata.relatedTopics',
-    validator: () => {
-      return { valid: true };
-    },
-    section: 'additional',
-    required: false,
-    editingRoles: ['MdeEditor']
-  },
-  {
     profileId: 37,
     label: 'Überprüfung des Qualitätsberichts',
     key: 'isoMetadata.valid',
