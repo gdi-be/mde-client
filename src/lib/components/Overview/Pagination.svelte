@@ -12,7 +12,7 @@
   let { pagingInfo }: PaginationProps = $props();
 
   const currentUrl = $derived(page.url);
-  const maxPage = $derived(pagingInfo.totalPages - 1);
+  const maxPage = $derived(pagingInfo.totalPages);
   const currentPage = $derived(Number(currentUrl.searchParams.get('page') || 1));
   const hasPrevious = $derived(currentPage > 1);
   const hasNext = $derived(maxPage > currentPage);
