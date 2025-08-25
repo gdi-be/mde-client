@@ -51,7 +51,7 @@
     li {
       max-height: 1em;
       overflow: clip;
-      text-wrap: inherit;
+      text-wrap: nowrap;
     }
 
     i {
