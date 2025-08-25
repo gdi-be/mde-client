@@ -474,18 +474,20 @@
               <span class="list-item-value">{service.workspace}</span>
             </div>
           {/if}
-          <div class="list-item-field">
-            <strong>Vorschau</strong>
-            <span class="list-item-value">
-              {#await replaceVariable(service.preview)}
-                Lädt ...
-              {:then url}
-                {url || DEFAULT_NULL_STRING}
-              {:catch}
-                {service.preview || DEFAULT_NULL_STRING}
-              {/await}
-            </span>
-          </div>
+          {#if service.serviceType !== 'ATOM'}
+            <div class="list-item-field">
+              <strong>Vorschau</strong>
+              <span class="list-item-value">
+                {#await replaceVariable(service.preview)}
+                  Lädt ...
+                {:then url}
+                  {url || DEFAULT_NULL_STRING}
+                {:catch}
+                  {service.preview || DEFAULT_NULL_STRING}
+                {/await}
+              </span>
+            </div>
+          {/if}
           {#if service.serviceType !== 'ATOM'}
             <div class="list-item-field">
               <strong>Gesamtlegende</strong>
@@ -539,10 +541,12 @@
             <strong>Service Identifier</strong>
             <span class="list-item-value">{service.serviceIdentification}</span>
           </div>
-          <div class="list-item-field">
-            <strong>File Identifier</strong>
-            <span class="list-item-value">{service.fileIdentifier}</span>
-          </div>
+          {#if service.serviceType !== 'ATOM'}
+            <div class="list-item-field">
+              <strong>File Identifier</strong>
+              <span class="list-item-value">{service.fileIdentifier}</span>
+            </div>
+          {/if}
           {#if service.serviceType === 'WFS' && service.featureTypes?.length}
             <div class="list-item-field">
               <strong>Feature-Typen ({service.featureTypes?.length})</strong>
