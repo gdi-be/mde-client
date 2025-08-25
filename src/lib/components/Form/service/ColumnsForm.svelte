@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ColumnInfo } from '$lib/models/metadata';
+  import type { ColumnInfo, FeatureType } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import Checkmark from '$lib/components/Form/Checkmark.svelte';
   import AttributeName_64 from './Field/65_AttributeName.svelte';
@@ -15,11 +15,13 @@
   };
 
   export type ColumnsFormProps = {
+    featureType: FeatureType;
     value?: ColumnInfo[];
     onChange: (columns: ColumnInfo[]) => Promise<Response>;
   };
 
-  let { value: initialColumns, onChange }: ColumnsFormProps = $props();
+  let { value: initialColumns, onChange, featureType }: ColumnsFormProps = $props();
+  const featureTypeName = $derived(featureType?.name);
 
   let columns = $state<ColumnInfo[]>([]);
   let tabs = $derived<Tab[]>(
@@ -34,6 +36,13 @@
 
   const fieldConfig = getFieldConfig(64, 'isoMetadata.services.featureTypes.attributes');
   const validationResult = $derived(fieldConfig?.validator(columns));
+
+  $effect(() => {
+    // if the featureType changes set activeTabIndex to undefined
+    if (featureTypeName) {
+      activeTabIndex = undefined;
+    }
+  });
 
   $effect(() => {
     columns = initialColumns || [];
@@ -122,7 +131,7 @@
     </IconButton>
   </nav>
   <div class="content">
-    {#if activeColumn}
+    {#if activeTabIndex !== undefined}
       <AttributeName_64 value={activeColumn?.name} onChange={(name) => set('name', name)} />
       <AttributeAlias_65 value={activeColumn?.alias} onChange={(alias) => set('alias', alias)} />
       <AttributeDatatype_66 value={activeColumn?.type} onChange={(type) => set('type', type)} />
