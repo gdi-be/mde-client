@@ -1217,7 +1217,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.services.featureTypes.name',
     collectionKey: 'isoMetadata.services.featureTypes',
     validator: (name: FeatureType['name']) => {
-      const valid = isDefined(name)
+      const valid = isDefined(name);
       if (!valid) {
         return {
           valid: false,
