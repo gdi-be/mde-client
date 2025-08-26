@@ -29,7 +29,7 @@
 
 <style lang="scss">
   .help-section {
-    overflow: auto;
+    overflow-y: hidden;
     flex: 1;
     padding: 0 3rem;
 

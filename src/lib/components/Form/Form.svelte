@@ -255,11 +255,10 @@
 <style lang="scss">
   .metadata-form {
     flex: 1;
-    width: 100%;
     overflow: hidden;
+    align-self: stretch;
     display: flex;
     flex-direction: column;
-    align-self: stretch;
 
     fieldset.inspire-fieldset {
       padding-top: 1.2em;
@@ -347,17 +346,14 @@
       display: flex;
       overflow-y: scroll;
       flex: 1;
-      position: relative;
+      align-items: flex-start;
 
       form {
         flex: 2;
-        position: relative;
         padding-left: 2em;
 
         section {
-          position: absolute;
           width: 100%;
-          top: 0;
           display: flex;
           flex-direction: column;
           padding: 2em 0;
