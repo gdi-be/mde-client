@@ -56,11 +56,6 @@ const isDefined = <T>(val: T): val is NonNullable<T> => {
   return true;
 };
 
-const isValidPhoneNumber = (val: string) => {
-  const numberRegex = /^[0-9]+$/;
-  return numberRegex.test(val);
-};
-
 const isValidEmail = (val: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(val);
@@ -596,13 +591,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
           helpText: 'Bitte geben Sie die Telefonnummer des Kontakts an.'
         };
       }
-      if (!isValidPhoneNumber(val)) {
-        return {
-          valid: false,
-          helpText:
-            'Bitte geben Sie eine gültige Telefonnummer an. Es sind ausschließlich Zahlen erlaubt.'
-        };
-      }
       return { valid: true };
     }
   },
@@ -986,7 +974,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       if (!valid) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie mindestens einen Layer an.'
+          helpText: 'Bitte geben Sie mindestens eine Kartenebene an.'
         };
       }
       return { valid };
@@ -1002,7 +990,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       if (!isDefined(layerTitle)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie einen Titel für den Layer an.'
+          helpText: 'Bitte geben Sie einen Titel für die Kartenebene an.'
         };
       }
       return { valid: true };
@@ -1018,13 +1006,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       if (!isDefined(layerName)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie einen Namen für den Layer an.'
-        };
-      }
-      if (!/^[a-zA-Z0-9_]+$/.test(layerName)) {
-        return {
-          valid: false,
-          helpText: 'Der Name des Layers darf nur Buchstaben, Zahlen und Unterstriche enthalten.'
+          helpText: 'Bitte geben Sie einen Namen für die Kartenebene an.'
         };
       }
       return { valid: true };
@@ -1042,12 +1024,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         return {
           valid: false,
           helpText: 'Bitte geben Sie einen Style-Namen für den Layer an.'
-        };
-      } else if (!/^[a-zA-Z0-9_]+$/.test(styleName)) {
-        return {
-          valid: false,
-          helpText:
-            'Der Style-Name des Layers darf nur Buchstaben, Zahlen und Unterstriche enthalten.'
         };
       }
       return { valid: true };
@@ -1241,12 +1217,11 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.services.featureTypes.name',
     collectionKey: 'isoMetadata.services.featureTypes',
     validator: (name: FeatureType['name']) => {
-      const valid = isDefined(name) && /^[a-zA-Z0-9_]+$/.test(name);
+      const valid = isDefined(name)
       if (!valid) {
         return {
           valid: false,
-          helpText:
-            'Der Name des FeatureTypes darf nur Buchstaben, Zahlen und Unterstriche enthalten.'
+          helpText: 'Bitte geben Sie einen Namen für den FeatureType an.'
         };
       }
       return { valid };
