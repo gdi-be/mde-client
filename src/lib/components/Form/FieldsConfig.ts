@@ -405,17 +405,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     label: 'geliefertes Koordinatensystem',
     key: 'technicalMetadata.deliveredCrs',
     placeholder: 'EPSG:25833',
-    validator: (val?: string) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie das gelieferte Koordinatensystem an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'temp_and_spatial',
-    required: true,
+    required: false,
     editingRoles: ['MdeDataOwner']
   },
   {
@@ -1055,17 +1047,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 53,
     key: 'clientMetadata.layers.legendImage',
     collectionKey: 'clientMetadata.layers',
-    validator: (legendImage: Layer['legendImage']) => {
-      if (!isDefined(legendImage)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie ein Legendenbild für den Layer an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'services',
-    required: true
+    required: false
   },
   {
     profileId: 54,
@@ -1088,35 +1072,17 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 55,
     key: 'clientMetadata.layers.datasource',
     collectionKey: 'clientMetadata.layers',
-    validator: (datasource: Layer['datasource']) => {
-      const valid = isDefined(datasource);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine Datenquelle an.'
-        };
-      }
-      return { valid };
-    },
+    validator: optionalValidator,
     section: 'services',
-    required: true
+    required: false
   },
   {
     profileId: 56,
     key: 'clientMetadata.layers.secondaryDatasource',
     collectionKey: 'clientMetadata.layers',
-    validator: (secondaryDatasource: Layer['secondaryDatasource']) => {
-      const valid = isDefined(secondaryDatasource);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine sekundäre Datenquelle an.'
-        };
-      }
-      return { valid };
-    },
+    validator: optionalValidator,
     section: 'services',
-    required: true,
+    required: false,
     editingRoles: ['MdeEditor']
   },
   // profileId: 57 is not used anymore (service count)
@@ -1286,36 +1252,18 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 67,
     key: 'isoMetadata.services.featureTypes.columns.type',
     collectionKey: 'isoMetadata.services.featureTypes.columns',
-    validator: (type: ColumnInfo['type']) => {
-      const valid = isDefined(type);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Typ für die Spalte an.'
-        };
-      }
-      return { valid };
-    },
+    validator: optionalValidator,
     section: 'services',
-    required: true,
+    required: false,
     editingRoles: ['MdeEditor']
   },
   {
     profileId: 68,
     key: 'isoMetadata.services.featureTypes.columns.filterType',
     collectionKey: 'isoMetadata.services.featureTypes.columns',
-    validator: (filterType: ColumnInfo['filterType']) => {
-      const valid = isDefined(filterType);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Filtertyp für die Spalte an.'
-        };
-      }
-      return { valid };
-    },
+    validator: optionalValidator,
     section: 'services',
-    required: true,
+    required: false,
     editingRoles: ['MdeEditor']
   }
 ];
