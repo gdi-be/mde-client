@@ -400,7 +400,7 @@ export async function persistValue(key: string, value: unknown) {
     try {
       const data = await response.json();
       message = data?.message ?? JSON.stringify(data);
-    } catch (error) {
+    } catch {
       message = await response.text();
     }
     if (response.status === 401) {
