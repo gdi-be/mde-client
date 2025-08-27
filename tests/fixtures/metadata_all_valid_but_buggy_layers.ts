@@ -196,6 +196,7 @@ export default {
               }
             ],
             name: 'ad_hko_Address',
+            shortDescription: 'ad_hko_Address description',
             title: 'Adresse'
           },
           {
@@ -208,6 +209,7 @@ export default {
               }
             ],
             name: 'adfad',
+            shortDescription: 'adfad description',
             title: 'Bezeichnung der Verwaltungseinheit'
           },
           {
@@ -220,6 +222,7 @@ export default {
               }
             ],
             name: 'adfdas',
+            shortDescription: 'adfdas description',
             title: 'Bezeichnung des Verkehrswegs'
           },
           {
@@ -232,6 +235,7 @@ export default {
               }
             ],
             name: 'adfasds',
+            shortDescription: 'adfasds description',
             title: 'Name des Adressbereichs'
           },
           {
@@ -244,6 +248,7 @@ export default {
               }
             ],
             name: 'adfadasf',
+            shortDescription: 'adfadasf description',
             title: 'Postalischer Deskriptor'
           }
         ]
