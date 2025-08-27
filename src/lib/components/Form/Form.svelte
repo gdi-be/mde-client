@@ -36,7 +36,6 @@
   import F30_ContentDescription from './Field/30_ContentDescription.svelte';
   import F31_TechnicalDescription from './Field/31_TechnicalDescription.svelte';
   import F32_Lineage from './Field/32_Lineage.svelte';
-  import F36_RelatedTopicsField from './Field/36_RelatedTopicsField.svelte';
   import F39_AdditionalInformation from './Field/39_AdditionalInformation.svelte';
   import F38_InspireAnnexVersionField from './Field/38_InspireAnnexVersionField.svelte';
   import ServicesSection from './service/ServicesSection.svelte';
@@ -211,7 +210,6 @@
           <F30_ContentDescription />
           <F31_TechnicalDescription />
           <F32_Lineage />
-          <F36_RelatedTopicsField />
           <F39_AdditionalInformation />
           <ScrollToTopButton target={formWrapper} />
         </section>
