@@ -177,7 +177,7 @@
       {#if activeSection === 'classification'}
         <section id="classification" transition:fade>
           <fieldset class="inspire-fieldset">
-            <legend>INSPIRE Relevanz</legend>
+            <legend>Angaben zu INSPIRE</legend>
             <F05_MetadataProfileField />
             <F07_AnnexThemeField />
             <F38_InspireAnnexVersionField />
