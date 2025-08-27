@@ -142,6 +142,7 @@
 
     :global(.spinner) {
       padding: 10px;
+      margin: 0;
       animation: spinning 1s linear infinite;
     }
 
