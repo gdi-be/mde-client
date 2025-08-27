@@ -135,7 +135,9 @@ export const updateDataValue = async ({
 
   if (!response.ok) {
     if (response.status === 409) {
-      return Promise.reject(new ConflictError(`Conflict: Metadata with the same ${restKey} already exists.`));
+      return Promise.reject(
+        new ConflictError(`Conflict: Metadata with the same ${restKey} already exists.`)
+      );
     }
     throw new Error(`HTTP error status: ${response.status}`);
   }
@@ -176,7 +178,9 @@ export const createMetadataCollection = async ({
 
   if (!response.ok) {
     if (response.status === 409) {
-      return Promise.reject(new ConflictError('Conflict: Metadata with the same title already exists.'));
+      return Promise.reject(
+        new ConflictError('Conflict: Metadata with the same title already exists.')
+      );
     }
   }
 

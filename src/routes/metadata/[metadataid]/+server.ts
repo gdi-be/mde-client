@@ -41,7 +41,6 @@ export async function PATCH({ cookies, request, params }) {
     }
     return error(500, 'Internal Server Error');
   }
-
 }
 
 export async function DELETE({ cookies, params }) {

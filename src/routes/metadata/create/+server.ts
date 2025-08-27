@@ -26,5 +26,4 @@ export async function POST({ cookies, request }) {
     }
     return error(500, 'Internal Server Error');
   }
-
 }
