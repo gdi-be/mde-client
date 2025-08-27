@@ -9,6 +9,7 @@ import type {
 
 import type { PageableProps, PageableResponse, QueryConfig } from '$lib/models/api';
 import type { Role } from '$lib/models/keycloak';
+import { ConflictError } from '$lib/error/error';
 
 const defaultPage: PageableProps = {
   page: 0,
@@ -133,6 +134,9 @@ export const updateDataValue = async ({
   });
 
   if (!response.ok) {
+    if (response.status === 409) {
+      return Promise.reject(new ConflictError(`Conflict: Metadata with the same ${restKey} already exists.`));
+    }
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
@@ -171,7 +175,9 @@ export const createMetadataCollection = async ({
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP error status: ${response.status}`);
+    if (response.status === 409) {
+      return Promise.reject(new ConflictError('Conflict: Metadata with the same title already exists.'));
+    }
   }
 
   return await response.json();

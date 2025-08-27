@@ -396,12 +396,19 @@ export async function persistValue(key: string, value: unknown) {
     // Invalidate all data to refetch from the server
     await invalidateAll();
   } else {
-    const message = await response.text();
-    toast.error(message || 'Fehler beim Speichern der Daten');
+    let message = 'Fehler beim Speichern der Daten';
+    try {
+      const data = await response.json();
+      message = data?.message ?? JSON.stringify(data);
+    } catch (error) {
+      message = await response.text();
+    }
     if (response.status === 401) {
       // If unauthorized, redirect to login
       log('warning', 'Unauthorized access, redirecting to login');
       goto('/login');
+    } else {
+      toast.error(message);
     }
   }
 
