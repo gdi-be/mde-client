@@ -1271,5 +1271,5 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     },
     section: 'services',
     required: true
-  },
+  }
 ];
