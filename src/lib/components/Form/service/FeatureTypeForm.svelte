@@ -4,6 +4,7 @@
   import type { FeatureType, Service } from '$lib/models/metadata';
   import FeatureTypeTitle_61 from './Field/62_FeatureTypeTitle.svelte';
   import FeatureTypeName_62 from './Field/63_FeatureTypeName.svelte';
+  import FeatureTypeDescription_69 from './Field/69_FeatureTypeDescription.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
@@ -55,6 +56,7 @@
       {
         name,
         title: name,
+        shortDescription: '',
         columns: []
       }
     ];
@@ -146,6 +148,10 @@
         onChange={(title) => set('title', title)}
       />
       <FeatureTypeName_62 value={activeFeatureType?.name} onChange={(name) => set('name', name)} />
+      <FeatureTypeDescription_69
+        value={activeFeatureType?.shortDescription}
+        onChange={(shortDescription) => set('shortDescription', shortDescription)}
+      />
       <ColumnsForm
         featureType={activeFeatureType}
         value={activeFeatureType?.columns}
@@ -192,6 +198,7 @@
       }
 
       :global(.text-input > legend),
+      :global(.text-area-input > legend),
       :global(.select-input > legend) {
         font-size: 1.2em;
         background-color: white;

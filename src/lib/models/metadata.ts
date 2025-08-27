@@ -53,6 +53,7 @@ export type ServiceType = 'WFS' | 'WMS' | 'ATOM' | 'WMTS';
 export type FeatureType = {
   name: string;
   title: string;
+  shortDescription: string;
   columns: ColumnInfo[];
 };
 
