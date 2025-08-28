@@ -70,18 +70,10 @@ export type ColumnType =
   | 'Short'
   | 'Timestamp';
 
-export type FilterType =
-  | 'SelectBox'
-  | 'CatalogBox'
-  | 'DoubleEditOrderField'
-  | 'EditField'
-  | 'EditOrderField';
-
 export type ColumnInfo = {
   name: string;
   alias: string;
   type?: ColumnType;
-  filterType?: FilterType;
 };
 
 // TODO: this should probably be an enum

@@ -191,8 +191,7 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Date',
-                filterType: 'SelectBox'
+                type: 'Date'
               }
             ],
             name: 'ad_hko_Address',
@@ -204,8 +203,7 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Date',
-                filterType: 'SelectBox'
+                type: 'Date'
               }
             ],
             name: 'adfad',
@@ -217,8 +215,7 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Double',
-                filterType: 'SelectBox'
+                type: 'Double'
               }
             ],
             name: 'adfdas',
@@ -230,8 +227,7 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Date',
-                filterType: 'CatalogBox'
+                type: 'Date'
               }
             ],
             name: 'adfasds',
@@ -243,8 +239,7 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Date',
-                filterType: 'SelectBox'
+                type: 'Date'
               }
             ],
             name: 'adfadasf',

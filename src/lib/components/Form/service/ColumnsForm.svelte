@@ -5,7 +5,6 @@
   import AttributeName_64 from './Field/65_AttributeName.svelte';
   import AttributeAlias_65 from './Field/66_AttributeAlias.svelte';
   import AttributeDatatype_66 from './Field/67_AttributeDatatype.svelte';
-  import AttributeFilterType_67 from './Field/68_AttributeFilterType.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
@@ -135,10 +134,6 @@
       <AttributeName_64 value={activeColumn?.name} onChange={(name) => set('name', name)} />
       <AttributeAlias_65 value={activeColumn?.alias} onChange={(alias) => set('alias', alias)} />
       <AttributeDatatype_66 value={activeColumn?.type} onChange={(type) => set('type', type)} />
-      <AttributeFilterType_67
-        value={activeColumn?.filterType}
-        onChange={(filterType) => set('filterType', filterType)}
-      />
     {/if}
   </div>
 </fieldset>
