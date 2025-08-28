@@ -1274,8 +1274,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 70,
-    key: 'isoMetadata.services.featureTypes.inspireFormatName',
-    collectionKey: 'isoMetadata.services.featureTypes',
+    key: 'isoMetadata.inspireFormatName',
     validatorExtraParams: ['isoMetadata.metadataProfile'],
     validator: (val: string[], extraParams) => {
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];

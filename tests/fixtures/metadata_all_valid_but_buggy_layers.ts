@@ -64,6 +64,7 @@ export default {
   isoMetadata: {
     metadataProfile: 'INSPIRE_HARMONISED',
     inspireTheme: ['AD'],
+    inspireFormatName: 'Addresses GML Application Schema',
     inspireAnnexVersion: 'version 4.0',
     distributionVersions: [
       {
