@@ -86,6 +86,7 @@ export default {
               }
             ],
             name: 'my_feature_type',
+            shortDescription: 'Kurzbeschreibung des FeatureTypes',
             title: 'Titel des FeatureTypes'
           }
         ]

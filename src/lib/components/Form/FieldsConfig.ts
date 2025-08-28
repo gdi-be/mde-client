@@ -1254,5 +1254,22 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     section: 'services',
     required: false,
     editingRoles: ['MdeEditor']
+  },
+  {
+    profileId: 69,
+    key: 'isoMetadata.services.featureTypes.shortDescription',
+    collectionKey: 'isoMetadata.services.featureTypes',
+    validator: (shortDescription: FeatureType['shortDescription']) => {
+      const valid = isDefined(shortDescription);
+      if (!valid) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine Kurzbeschreibung für den FeatureType an.'
+        };
+      }
+      return { valid };
+    },
+    section: 'services',
+    required: true
   }
 ];
