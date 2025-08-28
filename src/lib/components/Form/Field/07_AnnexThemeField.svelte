@@ -8,16 +8,17 @@
   } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
-  import type { Option } from '$lib/models/form';
   import type { FullFieldConfig } from '../FieldsConfig';
   import { getContext } from 'svelte';
   import type { IsoTheme, MetadataProfile } from '$lib/models/metadata';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
   import { toast } from 'svelte-french-toast';
+  import type { InspireThemeConfig } from '$lib/models/inspire';
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireTheme';
   const TOPIC_KEY = 'isoMetadata.topicCategory';
+  const FORMAT_KEY = 'isoMetadata.inspireFormatName';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
@@ -40,6 +41,9 @@
       showCheckmark = true;
     }
     await updateTopicCategory(newValue);
+
+    // reset format name
+    await persistValue(FORMAT_KEY, null);
   };
 
   const updateTopicCategory = async (inspireIDs?: string[]) => {
@@ -71,7 +75,7 @@
       return [];
     }
 
-    const data: Option[] = await response.json();
+    const data: InspireThemeConfig[] = await response.json();
     return data;
   };
 </script>

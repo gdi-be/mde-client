@@ -1271,5 +1271,26 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     },
     section: 'services',
     required: true
+  },
+  {
+    profileId: 70,
+    key: 'isoMetadata.services.featureTypes.inspireFormatName',
+    collectionKey: 'isoMetadata.services.featureTypes',
+    validatorExtraParams: ['isoMetadata.metadataProfile'],
+    validator: (val: string[], extraParams) => {
+      const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
+      if (metadataProfile === 'ISO') {
+        return { valid: true };
+      }
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen INSPIRE Format Namen an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'services',
+    required: true
   }
 ];

@@ -38,6 +38,7 @@
   import F32_Lineage from './Field/32_Lineage.svelte';
   import F39_AdditionalInformation from './Field/39_AdditionalInformation.svelte';
   import F38_InspireAnnexVersionField from './Field/38_InspireAnnexVersionField.svelte';
+  import F70_InspireFormatNameField from './Field/70_InspireFormatName.svelte';
   import ServicesSection from './service/ServicesSection.svelte';
   import FormFooter from './FormFooter.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
@@ -180,6 +181,7 @@
             <legend>Angaben zu INSPIRE</legend>
             <F05_MetadataProfileField />
             <F07_AnnexThemeField />
+            <F70_InspireFormatNameField />
             <F38_InspireAnnexVersionField />
             <F37_QualityReportCheckField />
           </fieldset>
