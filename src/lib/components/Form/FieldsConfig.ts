@@ -1247,15 +1247,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profileId: 68,
-    key: 'isoMetadata.services.featureTypes.columns.filterType',
-    collectionKey: 'isoMetadata.services.featureTypes.columns',
-    validator: optionalValidator,
-    section: 'services',
-    required: false,
-    editingRoles: ['MdeEditor']
-  },
-  {
     profileId: 69,
     key: 'isoMetadata.services.featureTypes.shortDescription',
     collectionKey: 'isoMetadata.services.featureTypes',

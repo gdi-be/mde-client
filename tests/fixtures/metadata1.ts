@@ -75,14 +75,12 @@ export default {
               {
                 name: 'Mein Attribut',
                 alias: 'Der andere Name meines Attributs',
-                type: 'Date',
-                filterType: 'CatalogBox'
+                type: 'Date'
               },
               {
                 name: 'Mein zweites Attribut ',
                 alias: 'Attribut 2',
-                type: 'Double',
-                filterType: 'CatalogBox'
+                type: 'Double'
               }
             ],
             name: 'my_feature_type',
