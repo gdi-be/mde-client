@@ -1,3 +1,9 @@
+export type InspireThemeConfig = {
+  key: string;
+  label: string;
+  schemaNames: string[];
+};
+
 export type InspireRegister = {
   register: {
     registry: {

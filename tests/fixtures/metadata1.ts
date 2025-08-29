@@ -98,6 +98,7 @@ export default {
       ]
     },
     inspireTheme: ['AC'],
+    inspireFormatName: '0185 GML Application Schema',
     inspireAnnexVersion: '0815',
     thesauri: {},
     highValueDataset: false,
