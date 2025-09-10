@@ -1,3 +1,30 @@
+# [4.0.0](https://github.com/gdi-be/mde-client/compare/v3.21.1...v4.0.0) (2025-09-10)
+
+
+### Bug Fixes
+
+* make some fields optional ([6633b09](https://github.com/gdi-be/mde-client/commit/6633b095b0cbbd491223228e0f8de213f2f82d24))
+* rename inspire section ([dfdb074](https://github.com/gdi-be/mde-client/commit/dfdb07438e20c254fd49a881fb7b6fd1b1e2f77f))
+* update fieldconfig ([73216d8](https://github.com/gdi-be/mde-client/commit/73216d8d3de00f99d8b7005f2570a70ed86c0243))
+* update form layout ([c1e5f92](https://github.com/gdi-be/mde-client/commit/c1e5f92bf5bfd9e613da2ce204f28f39bfe2ed99))
+* update readonly view for Atom services ([f357072](https://github.com/gdi-be/mde-client/commit/f357072888283022c9ef04c26aad8ae078667d62))
+* update/remove validations ([954eceb](https://github.com/gdi-be/mde-client/commit/954eceb04d855cb831b4c379719c04adeb449d4f))
+
+
+### Features
+
+* add shortDescription to FeatureType form ([170185c](https://github.com/gdi-be/mde-client/commit/170185c7b4c001e5b4c9b66c788b69f7aa9b92f4))
+* adds errorhandling status 409 responses ([c95948f](https://github.com/gdi-be/mde-client/commit/c95948f9079b203fe8b2e75c1d1e319091073ba1))
+* **changerequests:** merge change requests ([297d473](https://github.com/gdi-be/mde-client/commit/297d473fc4f1a00051b054efec47d26e7e2d1caf))
+* introduces 70_InspireFormatName field ([3395e20](https://github.com/gdi-be/mde-client/commit/3395e20c7573ac3c159baeb566644a905d04b9f0))
+* remove filterType from attribute ([5ae8949](https://github.com/gdi-be/mde-client/commit/5ae894995e828fcb1876239ca55fd26c522e4cb5))
+* remove relatedTopics field from formular ([c55a7cb](https://github.com/gdi-be/mde-client/commit/c55a7cb37e37e3cfc6c119725013a83bdeea325a))
+
+
+### BREAKING CHANGES
+
+* **changerequests:** force major release for change requests
+
 ## [3.21.1](https://github.com/gdi-be/mde-client/compare/v3.21.0...v3.21.1) (2025-08-25)
 
 
