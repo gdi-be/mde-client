@@ -2,6 +2,7 @@ import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
 import { deleteMetadataCollection, updateDataValue } from '$lib/api/metadata.js';
 import { getMetadataCollectionByMetadataId } from '$lib/api/metadata.js';
+import { ConflictError } from '$lib/error/error';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ cookies, params }) {
@@ -26,15 +27,20 @@ export async function PATCH({ cookies, request, params }) {
   if (!data.key || data.value === undefined) {
     return error(400, 'Bad Request');
   }
-
-  const updateResponse = await updateDataValue({
-    metadataId: params.metadataid,
-    key: data.key,
-    value: data.value,
-    token
-  });
-
-  return json(updateResponse);
+  try {
+    const updateResponse = await updateDataValue({
+      metadataId: params.metadataid,
+      key: data.key,
+      value: data.value,
+      token
+    });
+    return json(updateResponse);
+  } catch (e) {
+    if (e instanceof ConflictError) {
+      return error(409, e.message);
+    }
+    return error(500, 'Internal Server Error');
+  }
 }
 
 export async function DELETE({ cookies, params }) {

@@ -64,6 +64,7 @@ export default {
   isoMetadata: {
     metadataProfile: 'INSPIRE_HARMONISED',
     inspireTheme: ['AD'],
+    inspireFormatName: 'Addresses GML Application Schema',
     inspireAnnexVersion: 'version 4.0',
     distributionVersions: [
       {
@@ -191,11 +192,11 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Date',
-                filterType: 'SelectBox'
+                type: 'Date'
               }
             ],
             name: 'ad_hko_Address',
+            shortDescription: 'ad_hko_Address description',
             title: 'Adresse'
           },
           {
@@ -203,11 +204,11 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Date',
-                filterType: 'SelectBox'
+                type: 'Date'
               }
             ],
             name: 'adfad',
+            shortDescription: 'adfad description',
             title: 'Bezeichnung der Verwaltungseinheit'
           },
           {
@@ -215,11 +216,11 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Double',
-                filterType: 'SelectBox'
+                type: 'Double'
               }
             ],
             name: 'adfdas',
+            shortDescription: 'adfdas description',
             title: 'Bezeichnung des Verkehrswegs'
           },
           {
@@ -227,11 +228,11 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Date',
-                filterType: 'CatalogBox'
+                type: 'Date'
               }
             ],
             name: 'adfasds',
+            shortDescription: 'adfasds description',
             title: 'Name des Adressbereichs'
           },
           {
@@ -239,11 +240,11 @@ export default {
               {
                 name: 'Neues Attribut0',
                 alias: 'Neues Attribut0',
-                type: 'Date',
-                filterType: 'SelectBox'
+                type: 'Date'
               }
             ],
             name: 'adfadasf',
+            shortDescription: 'adfadasf description',
             title: 'Postalischer Deskriptor'
           }
         ]

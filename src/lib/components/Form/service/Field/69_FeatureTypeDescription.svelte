@@ -1,27 +1,28 @@
 <script lang="ts">
-  import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
+  import TextAreaInput from '$lib/components/Form/Inputs/TextAreaInput.svelte';
   import type { FeatureType } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
-    value?: FeatureType['title'];
+    value?: FeatureType['shortDescription'];
     onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
-  const HELP_KEY = 'isoMetadata.services.featureTypes.title';
-  const fieldConfig = getFieldConfig(62);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const HELP_KEY = 'isoMetadata.services.featureTypes.shortDescription';
   let showCheckmark = $state(false);
+
+  const fieldConfig = getFieldConfig(69);
+  const validationResult = $derived(fieldConfig?.validator(value));
 </script>
 
-<div class="featuretype-title-field">
-  <TextInput
-    label={fieldConfig?.label || 'Titel des Objekttyps'}
+<div class="featuretype-short-description-field">
+  <TextAreaInput
+    label={fieldConfig?.label || 'Kurzbeschreibung'}
     {value}
-    maxlength={100}
+    maxlength={500}
     {fieldConfig}
     {validationResult}
     onchange={async (e: Event) => {
@@ -35,13 +36,17 @@
 </div>
 
 <style lang="scss">
-  .featuretype-title-field {
+  .featuretype-short-description-field {
     position: relative;
     display: flex;
     gap: 0.25em;
 
-    :global(.text-input) {
+    :global(.text-area-input) {
       flex: 1;
+    }
+
+    :global(.mdc-text-field) {
+      display: flex;
     }
   }
 </style>

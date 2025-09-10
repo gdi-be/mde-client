@@ -28,6 +28,7 @@
     <TextInput
       label={fieldConfig?.label || 'Titel des Objekttyps'}
       {value}
+      maxlength={100}
       {fieldConfig}
       {validationResult}
       onchange={async (e: Event) => {

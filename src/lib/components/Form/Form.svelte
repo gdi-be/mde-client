@@ -36,9 +36,9 @@
   import F30_ContentDescription from './Field/30_ContentDescription.svelte';
   import F31_TechnicalDescription from './Field/31_TechnicalDescription.svelte';
   import F32_Lineage from './Field/32_Lineage.svelte';
-  import F36_RelatedTopicsField from './Field/36_RelatedTopicsField.svelte';
   import F39_AdditionalInformation from './Field/39_AdditionalInformation.svelte';
   import F38_InspireAnnexVersionField from './Field/38_InspireAnnexVersionField.svelte';
+  import F70_InspireFormatNameField from './Field/70_InspireFormatName.svelte';
   import ServicesSection from './service/ServicesSection.svelte';
   import FormFooter from './FormFooter.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
@@ -178,9 +178,10 @@
       {#if activeSection === 'classification'}
         <section id="classification" transition:fade>
           <fieldset class="inspire-fieldset">
-            <legend>INSPIRE Relevanz</legend>
+            <legend>Angaben zu INSPIRE</legend>
             <F05_MetadataProfileField />
             <F07_AnnexThemeField />
+            <F70_InspireFormatNameField />
             <F38_InspireAnnexVersionField />
             <F37_QualityReportCheckField />
           </fieldset>
@@ -211,7 +212,6 @@
           <F30_ContentDescription />
           <F31_TechnicalDescription />
           <F32_Lineage />
-          <F36_RelatedTopicsField />
           <F39_AdditionalInformation />
           <ScrollToTopButton target={formWrapper} />
         </section>
@@ -255,11 +255,10 @@
 <style lang="scss">
   .metadata-form {
     flex: 1;
-    width: 100%;
     overflow: hidden;
+    align-self: stretch;
     display: flex;
     flex-direction: column;
-    align-self: stretch;
 
     fieldset.inspire-fieldset {
       padding-top: 1.2em;
@@ -347,17 +346,14 @@
       display: flex;
       overflow-y: scroll;
       flex: 1;
-      position: relative;
+      align-items: flex-start;
 
       form {
         flex: 2;
-        position: relative;
         padding-left: 2em;
 
         section {
-          position: absolute;
           width: 100%;
-          top: 0;
           display: flex;
           flex-direction: column;
           padding: 2em 0;
