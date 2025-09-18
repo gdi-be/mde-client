@@ -81,7 +81,11 @@
       {/await}
     {/if}
   </fieldset>
-  <FieldTools key={CATEGORY_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools
+    fieldConfig={categoryFieldConfig}
+    key={CATEGORY_KEY}
+    bind:checkMarkAnmiationRunning={showCheckmark}
+  />
 </div>
 
 <style lang="scss">

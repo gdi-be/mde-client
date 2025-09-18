@@ -51,7 +51,7 @@
       }
     }}
   />
-  <FieldTools noCopyButton key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
+  <FieldTools {value} key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
     {#if metadataPreview}
       <AutoFillButton title="Wert aus Vorlage übernehmen" onclick={getAutoFillValues} />
     {/if}
