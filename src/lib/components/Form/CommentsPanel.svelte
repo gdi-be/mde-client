@@ -1,4 +1,5 @@
 <script lang="ts">
+  /* eslint-disable svelte/no-at-html-tags */
   import Textfield from '@smui/textfield';
   import type { Comment } from '$lib/models/metadata';
   import Paper from '@smui/paper';
@@ -11,6 +12,8 @@
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import Button, { Label } from '@smui/button';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
@@ -21,10 +24,20 @@
   let comments = $derived<Comment[]>(metadata?.clientMetadata?.comments as Comment[]);
   let myUserId = $derived(token?.sub);
   let inputRows = $derived(Math.min(value.split('\n').length, 4));
+  let helpActive = $state(false);
 
   onMount(() => {
     scrollToBottom();
   });
+
+  const getHelpMarkdown = async () => {
+    const response = await fetch(`/help/clientMetadata.comments`);
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der Hilfe');
+      return Promise.reject('Failed to fetch help markdown');
+    }
+    return response.text();
+  };
 
   async function sendComment() {
     const metadataId = metadata?.metadataId;
@@ -101,7 +114,20 @@
 <div class="comments-panel-container">
   <Paper elevation={6} class="comments-panel">
     <div class="comments-panel-content">
-      <h2>Kommentare</h2>
+      <div class="comments-panel-header">
+        <h2>Kommentare</h2>
+        <IconButton
+          title="Hilfe zu Kommentaren anzeigen"
+          type="button"
+          toggle
+          size="button"
+          pressed={helpActive}
+          onclick={() => (helpActive = !helpActive)}
+        >
+          <Icon class="material-icons">help</Icon>
+          <Icon class="material-icons-filled" on>help</Icon>
+        </IconButton>
+      </div>
       {#if comments?.length > 0}
         <ul class="comments">
           {#each comments as comment, index}
@@ -154,6 +180,28 @@
   </Paper>
 </div>
 
+<Dialog
+  bind:open={helpActive}
+  aria-labelledby="comments-help-title"
+  aria-describedby="comments-help-content"
+>
+  <Title id="comments-help-title">Hilfe zu Kommentaren</Title>
+  <Content id="comments-help-content">
+    {#await getHelpMarkdown()}
+      <p>Loading...</p>
+    {:then parsed}
+      {@html parsed}
+    {:catch}
+      <h2>Die Hilfe konnte nicht geladen werden.</h2>
+    {/await}
+  </Content>
+  <Actions>
+    <Button onclick={() => (helpActive = false)}>
+      <Label>Schließen</Label>
+    </Button>
+  </Actions>
+</Dialog>
+
 <style lang="scss">
   .comments-panel-container {
     position: fixed;
@@ -174,6 +222,18 @@
     .comments-panel-content {
       display: flex;
       flex-direction: column;
+
+      .comments-panel-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        h2 {
+          flex: 1;
+          margin: 0.5em 0;
+          font-size: 1.25rem;
+        }
+      }
 
       p {
         color: var(--mdc-theme-secondary);

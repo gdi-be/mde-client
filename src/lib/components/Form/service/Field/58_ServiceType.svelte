@@ -14,6 +14,7 @@
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
   const HELP_KEY = 'isoMetadata.services.type';
+  console.log(value);
 </script>
 
 <div class="service-type-field">
@@ -47,7 +48,7 @@
       }
     }}
   />
-  <FieldTools noCopyButton key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  <FieldTools {value} {fieldConfig} key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
 <style lang="scss">

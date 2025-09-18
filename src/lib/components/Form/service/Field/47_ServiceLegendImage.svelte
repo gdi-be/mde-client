@@ -36,32 +36,44 @@
     <FieldHint {fieldConfig} {validationResult} />
     <div class="inputs">
       <div class="legend-text-fields">
-        <TextInput
-          label="Url"
-          value={value?.url}
-          onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
-          fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.url')}
-        />
-        <TextInput
-          label="Format"
-          value={value?.format}
-          onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
-          fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.format')}
-        />
+        <div class="field-wrapper">
+          <TextInput
+            label="Url"
+            value={value?.url}
+            onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
+            fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.url')}
+          />
+          <FieldTools value={value?.url} key={KEY} noCheckmark noHelpButton />
+        </div>
+        <div class="field-wrapper">
+          <TextInput
+            label="Format"
+            value={value?.format}
+            onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
+            fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.format')}
+          />
+          <FieldTools value={value?.format} key={KEY} noCheckmark noHelpButton />
+        </div>
       </div>
       <div class="legend-size-fields">
-        <NumberInput
-          label="Breite"
-          value={value?.width}
-          onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
-          fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.width')}
-        />
-        <NumberInput
-          label="Höhe"
-          value={value?.height}
-          onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
-          fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.height')}
-        />
+        <div class="field-wrapper">
+          <NumberInput
+            label="Breite"
+            value={value?.width}
+            onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
+            fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.width')}
+          />
+          <FieldTools value={value?.width} key={KEY} noCheckmark noHelpButton />
+        </div>
+        <div class="field-wrapper">
+          <NumberInput
+            label="Höhe"
+            value={value?.height}
+            onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
+            fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.height')}
+          />
+          <FieldTools value={value?.height} key={KEY} noCheckmark noHelpButton />
+        </div>
       </div>
     </div>
   </fieldset>
@@ -87,6 +99,11 @@
         flex-wrap: wrap;
         gap: 1em;
 
+        div.field-wrapper {
+          display: flex;
+          gap: 0.25em;
+        }
+
         div.legend-text-fields {
           flex: 1;
         }
@@ -100,6 +117,7 @@
 
         :global(.text-input),
         :global(.number-input) {
+          flex: 1;
           border: none;
           background-color: rgba(244, 244, 244, 0.7);
         }

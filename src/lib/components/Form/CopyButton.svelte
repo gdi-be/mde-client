@@ -7,13 +7,14 @@
   import toast from 'svelte-french-toast';
 
   export type CopyButtonProps = {
+    value?: unknown;
     key: FieldKey;
     fieldConfig?: FullFieldConfig;
   };
 
-  let { key, fieldConfig }: CopyButtonProps = $props();
+  let { key, fieldConfig, value: valueFromProps }: CopyButtonProps = $props();
 
-  const value = $derived(getValue(key));
+  const value = $derived(valueFromProps ?? getValue(key));
   let copied = $state(false);
   let copyFailed = $state(false);
 
@@ -28,7 +29,7 @@
           toast.error('Fehler beim Abrufen des Wertes für die Zwischenablage.');
           return;
         }
-      } else if (value) {
+      } else if (value != null && value !== undefined) {
         if (typeof value === 'string') {
           text = value;
         } else if (typeof value === 'number') {

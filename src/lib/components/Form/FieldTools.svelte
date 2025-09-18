@@ -12,6 +12,7 @@
   import type { FullFieldConfig } from './FieldsConfig';
 
   export type FieldToolsProps = {
+    value?: unknown;
     key: FieldKey;
     children?: Snippet;
     checkMarkAnmiationRunning?: boolean;
@@ -28,7 +29,8 @@
     fieldConfig,
     noCheckmark = false,
     noHelpButton = false,
-    noCopyButton = false
+    noCopyButton = false,
+    value
   }: FieldToolsProps = $props();
 
   const metadata = $derived(getFormContext()?.metadata);
@@ -88,7 +90,7 @@
     <Icon class="material-icons" title="Fehler beim Prüfen der Hilfe.">warning</Icon>
   {/await}
   {#if !noCopyButton}
-    <CopyButton {key} {fieldConfig} />
+    <CopyButton {value} {key} {fieldConfig} />
   {/if}
   {#if metadata?.clonedFromId}
     {#await getValueFromOriginal()}
