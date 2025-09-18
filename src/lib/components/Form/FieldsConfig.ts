@@ -218,7 +218,8 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     getCopyValue: async (val?: string[]) => {
       const response = await fetch('/data/hvd_categories');
       const categories: Option[] = await response.json();
-      const machtingCategories = val?.map((v) => categories.find((theme) => theme.key === v)?.label) || [];
+      const machtingCategories =
+        val?.map((v) => categories.find((theme) => theme.key === v)?.label) || [];
       return machtingCategories.join(', ');
     },
     section: 'classification',
