@@ -1,8 +1,9 @@
 <script>
   import Breadcrumbs from './Breadcrumbs.svelte';
   import UserMenu from './UserMenu.svelte';
+  import { page } from '$app/state';
 
-  let { text = 'Metadaten Editor' } = $props();
+  const t = $derived(page.data.t);
 </script>
 
 <header class="application-header">
@@ -10,7 +11,7 @@
     <Breadcrumbs />
   </div>
   <div class="container center-container">
-    {text}
+    {t('general.appTitle')}
   </div>
   <div class="container right-container">
     <UserMenu />
