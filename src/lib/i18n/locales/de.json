@@ -1,5 +1,34 @@
 {
   "general": {
+    "htmlTitle": "GDI Berlin - Metadateneditor",
     "appTitle": "Metadaten Editor"
+  },
+  "welcome": {
+    "welcomeTitle": "Metadateneditor der GDI-Berlin",
+    "loginText": "Bitte melden Sie sich an, um auf den Metadateneditor zuzugreifen.",
+    "loginButtonText": "Anmelden",
+    "welcomeText": "Willkommen beim Metadateneditor der GDI-Berlin",
+    "overviewLinkText": "Zur Metadaten Übersicht"
+  },
+  "error": {
+    "notFound": "Seite nicht gefunden"
+  },
+  "layout": {
+    "fallback": "Fehler beim Laden der Seite. Wenden Sie sich an den Administrator."
+  },
+  "metadata_overview": {
+    "noData": "Keine Metadaten gefunden. Bitte Filter anpassen."
+  },
+  "metadata_create": {
+    "title": "Neuerfassung",
+    "intro": "Hier erfassen Sie zu Ihrem Datensatz neue Metadaten. Tragen Sie einen Titel ein.",
+    "fieldTitle": "Titel",
+    "templateHint": "Zusätzlich können Sie einen existierenden Metadatensatz auswählen, den Sie als Vorlage nutzen möchten, bspw. wenn es ein neuer Jahresstand ist.",
+    "templateLabel": "Bestehende Metadaten als Vorlage verwenden",
+    "createButton": "Metadaten anlegen"
+  },
+  "metadata_readonly": {
+    "print": "Drucken",
+    "toastPrint": "Druck wird vorbereitet..."
   }
 }
