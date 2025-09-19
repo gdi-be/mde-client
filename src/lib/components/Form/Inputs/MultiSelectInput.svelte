@@ -2,6 +2,7 @@
   import Chip, { Set as ChipSet, Text, TrailingAction } from '@smui/chips';
   import Autocomplete from '@smui-extra/autocomplete';
   import type { Option } from '$lib/models/form';
+  import { page } from '$app/state';
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
 
@@ -16,6 +17,7 @@
     disabled?: boolean;
   };
 
+  const t = $derived(page.data.t);
   let {
     onChange,
     value = [],
@@ -98,7 +100,7 @@
       onSMUIAutocompleteSelected={onSelect}
     >
       {#snippet noMatches()}
-        <Text>Keine weiteren Optionen verfügbar</Text>
+        <Text>{t('multiselectinput.noOptions')}</Text>
       {/snippet}
     </Autocomplete>
   {/if}
