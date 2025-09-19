@@ -7,6 +7,7 @@
   import { goto } from '$app/navigation';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
+  const t = $derived(page.data.t);
   const token = $derived(getAccessToken());
   const availableStatuses = $derived(token ? getAvailableStatuses(token) : []);
   let selected = $state(page.url.searchParams.get('statusfilter')?.split(',') || []);
@@ -39,7 +40,7 @@
       {/snippet}
     </Set>
     {#snippet label()}
-      <div class="label">Statusfilter:</div>
+      <div class="label">{t('statusfilterfield.statusFilter')}</div>
     {/snippet}
   </FormField>
 </div>

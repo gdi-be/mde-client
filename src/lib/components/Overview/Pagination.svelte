@@ -9,6 +9,7 @@
     pagingInfo: PageableResponse<MetadataCollection>;
   };
 
+  const t = $derived(page.data.t);
   let { pagingInfo }: PaginationProps = $props();
 
   const currentUrl = $derived(page.url);
@@ -55,7 +56,7 @@
     chevron_left
   </IconButton>
   <span>
-    <label for="page-input">Seite</label>
+    <label for="page-input">{t('pagination.pageLabel')}</label>
     <input
       id="page-input"
       class="page-input"
@@ -76,7 +77,7 @@
     chevron_right
   </IconButton>
   <div class="size">
-    <label for="page-size">Datensätze pro Seite</label>
+    <label for="page-size">{t('pagination.pageSizeLabel')}</label>
     <select
       id="page-size"
       class="page-size"
