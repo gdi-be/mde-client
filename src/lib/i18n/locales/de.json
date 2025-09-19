@@ -302,6 +302,39 @@
     "progress": "Fortschritt: {percent} %",
     "progressAria": "{label} Fortschritt"
   },
+  "serviceform": {
+    "layer_update_error": "Fehler beim aktualisieren der Layer: {statusText}"
+  },
+  "featuretypeform": {
+    "unknown": "Unbekannter Featuretype",
+    "delete_confirm": "Sind sie sicher, dass sie diesen FeatureType löschen möchten?",
+    "delete_button": "Löschen",
+    "remove_button": "Featuretype entfernen",
+    "add_button": "Featuretype hinzufügen"
+  },
+  "layersform": {
+    "unknown": "Unbekannter Layer",
+    "legend": "Layers",
+    "delete_confirm": "Sind sie sicher, dass sie diesen Layer löschen möchten?",
+    "delete_button": "Löschen",
+    "remove_button": "Layer entfernen",
+    "add_button": "Layer hinzufügen"
+  },
+  "servicessection": {
+    "new_service": "Neuer Dienst",
+    "delete_confirm": "Sind sie sicher, dass sie diesen Dienst löschen möchten? Alle dazugehörigen Daten gehen verloren.",
+    "delete_button": "Löschen",
+    "remove_button": "Dienst entfernen",
+    "add_button": "Dienst hinzufügen"
+  },
+  "columnsform": {
+    "unknown": "Unbekanntes Attribut",
+    "new_attribute": "Neues Attribut",
+    "delete_confirm": "Sind sie sicher, dass sie dieses Attribut löschen möchten?",
+    "delete_button": "Löschen",
+    "remove_button": "Attribut entfernen",
+    "add_button": "Attribut hinzufügen"
+  },
   "copybutton": {
     "title": "Wert in Zwischenablage kopieren",
     "copyError": "Fehler beim Abrufen des Wertes für die Zwischenablage.",
