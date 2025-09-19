@@ -1,7 +1,10 @@
 {
   "general": {
     "htmlTitle": "GDI Berlin - Metadateneditor",
-    "appTitle": "Metadaten Editor"
+    "appTitle": "Metadaten Editor",
+    "yes": "Ja",
+    "no": "Nein",
+    "loading": "Lädt ..."
   },
   "welcome": {
     "welcomeTitle": "Metadateneditor der GDI-Berlin",
@@ -88,7 +91,85 @@
     "searchLabel": "Suche nach Metadaten",
     "fetchError": "Fehler beim Abrufen der Metadaten"
   },
-  "spinner": {
-    "loading": "Lädt..."
+  "displayfield": {
+    "noValue": "Keine Angabe"
+  },
+  "commentsdisplay": {
+    "noComments": "Keine Kommentare"
+  },
+  "metadatadisplay": {
+    "sectionBase": "1. Basisangaben",
+    "sectionClassification": "2. Einordnung",
+    "sectionTemporalSpatial": "3. Zeitliche und Räumliche Angaben",
+    "sectionAdditional": "4. Weitere Angaben",
+    "sectionServices": "5. Dienste",
+    "sectionComments": "Kommentare"
+  },
+  "displayfieldsnippets": {
+    "errorFetchInspireThemes": "Fehler beim Abrufen der INSPIRE Themen",
+    "errorFetchIsoThemes": "Fehler beim Abrufen der ISO Themen",
+    "errorFetchAutoKeywords": "Fehler beim Abrufen der automatisch generierten Schlagwörter",
+    "errorNoMetadataId": "Metadaten-ID ist nicht verfügbar",
+    "errorFetchTermsOfUse": "Fehler beim Abrufen der Nutzungsbedingungen",
+    "errorFetchPrivacy": "Fehler beim Abrufen der Datenschutzoptionen",
+    "errorFetchCrs": "Fehler beim Abrufen der Koordinatensysteme",
+    "errorFetchHvdCategories": "Fehler beim Abrufen der HVD Kategorien",
+    "errorReplaceVariable": "Fehler beim Ersetzen der Variablen",
+    "identifier": "Identifier",
+    "fileIdentifier": "File-Identifier",
+    "title": "Titel",
+    "description": "Beschreibung",
+    "keywords": "Schlagwörter",
+    "preview": "Vorschau",
+    "contacts": "Kontakt",
+    "metadataProfile": "Metadatenprofil",
+    "termsOfUse": "Nutzungsbedingungen",
+    "inspireTheme": "Thema (INSPIRE)",
+    "annexTheme": "Anhang-Thema",
+    "qualityReportCheck": "Qualitätsbericht-Prüfung",
+    "topicCategory": "Themenkategorie",
+    "created": "Erstellungsdatum",
+    "published": "Veröffentlichungsdatum",
+    "maintenanceFrequency": "Aktualisierungshäufigkeit",
+    "modified": "Geändert am",
+    "validFrom": "Gültig von",
+    "validTo": "Gültig bis",
+    "valid": "Gültig",
+    "deliveredCrs": "Geliefertes Koordinatensystem",
+    "crs": "Koordinatensystem",
+    "extent": "Ausdehnung",
+    "resolutions": "Auflösungen",
+    "contentDescription": "Inhaltsbeschreibung",
+    "technicalDescription": "Technische Beschreibung",
+    "lineage": "Herkunft",
+    "contentDescriptions": "Inhaltsbeschreibungen",
+    "services": "Dienste",
+    "privacy": "Datenschutz",
+    "highValueDataset": "High Value Dataset",
+    "highValueDataCategory": "High Value Data Kategorie",
+    "categories": "Kategorien",
+    "serviceTitle": "Titel",
+    "serviceType": "Typ",
+    "serviceShortDescription": "Kurzbeschreibung",
+    "serviceIdentifier": "Service Identifier",
+    "fileIdentifierField": "File Identifier",
+    "featureType": "Feature-Typ",
+    "featureTypeAlias": "Feature-Typ-Alias",
+    "attribute": "Attribut",
+    "attributeName": "Attribut-Name",
+    "attributeAlias": "Attribut-Alias",
+    "attributeType": "Attribut-Typ",
+    "layerTitle": "Titel der Kartenebene",
+    "layerName": "Name der Kartenebene",
+    "styleTitle": "Titel des Styles",
+    "styleName": "Name des Styles",
+    "legend": "Legende",
+    "legendUrl": "Url",
+    "legendFormat": "Format",
+    "legendWidth": "Breite",
+    "legendHeight": "Höhe",
+    "layerShortDescription": "Kurzbeschreibung",
+    "layerDatasource": "Ablageort der Daten",
+    "layerSecondaryDatasource": "sekundäre Datenhaltung"
   }
 }

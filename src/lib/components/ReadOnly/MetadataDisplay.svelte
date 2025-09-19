@@ -2,17 +2,23 @@
   import { getValue } from '$lib/context/FormContext.svelte';
   import CommentsDisplay from './CommentsDisplay.svelte';
   import DisplayField from './DisplayField.svelte';
+  import { page } from '$app/state';
 
   const metadataProfile = $derived(getValue('isoMetadata.metadataProfile'));
   const highValueDataset = $derived(getValue('isoMetadata.highValueDataset'));
+
+  const t = $derived(page.data.t);
 </script>
 
 <div class="metadata-display">
   <div class="content">
-    <DisplayField key="isoMetadata.identifier" label="Identifier" />
-    <DisplayField key="isoMetadata.fileIdentifier" label="File-Identifier" />
+    <DisplayField key="isoMetadata.identifier" label={t('displayfieldsnippets.identifier')} />
+    <DisplayField
+      key="isoMetadata.fileIdentifier"
+      label={t('displayfieldsnippets.fileIdentifier')}
+    />
     <section id="basedata">
-      <h2>1. Basisangaben</h2>
+      <h2>{t('metadatadisplay.sectionBase')}</h2>
       <DisplayField key="isoMetadata.title" profileId={1} />
       <DisplayField key="isoMetadata.description" profileId={2} />
       <DisplayField key="isoMetadata.keywords" profileId={15} />
@@ -20,7 +26,7 @@
       <DisplayField key="isoMetadata.pointsOfContact" profileId={19} />
     </section>
     <section id="classification">
-      <h2>2. Einordnung</h2>
+      <h2>{t('metadatadisplay.sectionClassification')}</h2>
       <DisplayField key="isoMetadata.metadataProfile" profileId={5} />
       {#if metadataProfile === 'INSPIRE_HARMONISED' || metadataProfile === 'INSPIRE_IDENTIFIED'}
         <DisplayField key="isoMetadata.inspireTheme" profileId={7} />
@@ -44,7 +50,7 @@
       <DisplayField key="isoMetadata.topicCategory" profileId={13} />
     </section>
     <section id="temp_and_spatial">
-      <h2>3. Zeitliche und Räumliche Angaben</h2>
+      <h2>{t('metadatadisplay.sectionTemporalSpatial')}</h2>
       <DisplayField key="isoMetadata.created" profileId={9} />
       <DisplayField key="isoMetadata.published" profileId={10} />
       <DisplayField key="isoMetadata.maintenanceFrequency" profileId={14} />
@@ -58,7 +64,7 @@
       <DisplayField key="isoMetadata.scale" profileId={27} />
     </section>
     <section id="additional">
-      <h2>4. Weitere Angaben</h2>
+      <h2>{t('metadatadisplay.sectionAdditional')}</h2>
       <DisplayField key="isoMetadata.contentDescription" profileId={30} />
       <DisplayField key="isoMetadata.technicalDescription" profileId={31} />
       <DisplayField key="isoMetadata.lineage" profileId={32} />
@@ -66,11 +72,11 @@
       <DisplayField key="isoMetadata.contentDescriptions" profileId={41} />
     </section>
     <section id="services">
-      <h2>5. Dienste</h2>
+      <h2>{t('metadatadisplay.sectionServices')}</h2>
       <DisplayField key="isoMetadata.services" profileId={40} label="" />
     </section>
     <section id="comments">
-      <h2>Kommentare</h2>
+      <h2>{t('metadatadisplay.sectionComments')}</h2>
       <CommentsDisplay />
     </section>
   </div>

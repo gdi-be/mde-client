@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getFieldConfig, getFormContext, getValue } from '$lib/context/FormContext.svelte';
+  import { page } from '$app/state';
   import type { FieldKey } from '$lib/models/form';
   import type { Snippet } from 'svelte';
   import * as DisplayFieldSnippets from './DisplayFieldSnippets.svelte';
@@ -11,6 +12,7 @@
     label?: string;
   };
 
+  const t = $derived(page.data.t);
   const { key, profileId, label }: DisplayFieldProps = $props();
 
   const config = $derived(profileId ? getFieldConfig(profileId) : undefined);
@@ -31,7 +33,7 @@
       {@render valueSnippet(value, metadata)}
     </span>
   {:else}
-    <span class="value">Keine Angabe</span>
+    <span class="value">{t('displayfield.noValue')}</span>
   {/if}
 </div>
 
