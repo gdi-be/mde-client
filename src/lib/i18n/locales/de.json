@@ -30,5 +30,65 @@
   "metadata_readonly": {
     "print": "Drucken",
     "toastPrint": "Druck wird vorbereitet..."
+  },
+  "header": {
+    "appTitle": "Metadaten Editor"
+  },
+  "breadcrumbs": {
+    "metadata": "Metadaten",
+    "create": "Neuerfassung"
+  },
+  "validation_popup": {
+    "finished": "Validierung abgeschlossen für"
+  },
+  "popconfirm": {
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen"
+  },
+  "footer": {
+    "default": "Footer"
+  },
+  "usermenu": {
+    "account": "Mein Account",
+    "logout": "Logout",
+    "login": "Anmeldung"
+  },
+  "userprofile": {
+    "admin": "Administrator",
+    "dataowner": "Datenhaltende Stelle",
+    "quality": "Qualitätsmanagement",
+    "editor": "Redakteur",
+    "sessionExpires": "Sitzung läuft ab in:"
+  },
+  "assignment": {
+    "assignRoleError": "Fehler beim Zuweisen der Metadaten an die Rolle.",
+    "assignUserError": "Fehler beim Zuweisen der Metadaten an den User.",
+    "unassignError": "Fehler beim Entfernen der Zuweisung des Metadatensatzes. Bitte versuchen Sie es später erneut.",
+    "teamLoadError": "Fehler beim Laden des Teams. Bitte versuchen Sie es später erneut.",
+    "approvalError": "Fehler beim Freigeben/Zurückziehen der Freigabe der Metadaten. Bitte versuchen Sie es später erneut.",
+    "review": "Prüfung",
+    "reviewStatus": "Metadaten Prüfung erfolgreich?",
+    "reviewStatusHint": "Bitte bestätigen Sie, ob die Metadaten erfolgreich geprüft wurden.",
+    "assignEditor": "Redaktion",
+    "assignDataOwner": "Datenhaltende Stelle",
+    "assignQuality": "Qualitätssicherung",
+    "assignSelf": "Selbst zuweisen",
+    "unassign": "Zuordnung entfernen",
+    "assignDialog": "Zuweisung",
+    "noPermission": "Sie haben keine Berechtigung um die Metadaten zuzuweisen.",
+    "chooseRoleOrUser": "Wählen Sie eine Rolle oder einen User an die Sie die Metadaten übergeben wollen.",
+    "loadingTeam": "Lade Team",
+    "handoverTo": "An {name} übergeben",
+    "handoverToRole": "An {role} übergeben",
+    "assignToMe": "Mir zuweisen",
+    "assignedToMe": "Mir zugewiesen",
+    "dataOwnerUserNotFound": "Kein Benutzer für die Rolle 'Datenhaltende Stelle' gefunden."
+  },
+  "metadatasearch": {
+    "searchLabel": "Suche nach Metadaten",
+    "fetchError": "Fehler beim Abrufen der Metadaten"
+  },
+  "spinner": {
+    "loading": "Lädt..."
   }
 }

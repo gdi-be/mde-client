@@ -1,6 +1,8 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
   import { sseContext } from '$lib/context/ServerEventContext.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   const duration = 5000;
 
@@ -32,7 +34,7 @@
 
 {#if isVisible}
   <div transition:fade class="popup">
-    Validierung abgeschlossen für <a href="/metadata/{metadataId}/readonly">{metadataId}</a>
+    {t('validation_popup.finished')} <a href="/metadata/{metadataId}/readonly">{metadataId}</a>
     <button
       onclick={() => (isVisible = false)}
       style="margin-left: 1rem; background: none; border: none; color: #fff; cursor: pointer;"
