@@ -7,12 +7,14 @@
   import Dialog, { Content, Header, Title } from '@smui/dialog';
   import { toast } from 'svelte-french-toast';
   import { invalidateAll } from '$app/navigation';
+  import { page } from '$app/state';
 
   type MetadataPublishResponse = {
     publishedCatalogRecords: string[];
   };
 
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
+  const t = $derived(page.data.t);
 
   let { open = $bindable(false) } = $props();
 
@@ -43,7 +45,7 @@
       responseStatus = response.status;
 
       if (!response.ok) {
-        toast.error(`Fehler beim Veröffentlichen der Metadaten: ${response.statusText}`);
+        toast.error(t('publishdialog.fetchError', { statusText: response.statusText }));
         return Promise.reject(`Failed to publish the metadata: ${response.statusText}`);
       }
 
@@ -69,30 +71,25 @@
   onSMUIDialogClosed={onClose}
 >
   <Header>
-    <Title>Freigabe {metadata?.isoMetadata?.title}</Title>
+    <Title>{t('publishdialog.title', { title: metadata?.isoMetadata?.title })}</Title>
   </Header>
   <Content>
     <div class="publish-content">
       {#if responseStatus !== 200}
         <div>
-          <p>
-            In diesem Schritt wird die Freigabe der Metadaten durchgeführt. Hierdurch wird der
-            aktuelle Stand der Metadaten im Geonetwork veröffentlicht und somit für alle Nutzenden
-            einsehbar. Bitte beachten Sie, dass die Metadaten nur veröffentlicht werden können,
-            wenn:
-          </p>
+          <p>{t('publishdialog.description')}</p>
           <ul>
             <li class={[metadata?.approved === true ? 'check' : 'missing']}>
-              die Metadaten genehmigt wurden:
+              {t('publishdialog.approved')}
             </li>
             <li class={[metadata?.responsibleRole === 'MdeEditor' ? 'check' : 'missing']}>
-              die Metadaten einem Redakteur zugewiesen sind:
+              {t('publishdialog.editor')}
             </li>
           </ul>
           {#if metadata?.status === 'PUBLISHED'}
-            <p>Die Metadaten wurden bereits freigegeben. Wollen Sie diese aktualisieren?</p>
+            <p>{t('publishdialog.alreadyPublished')}</p>
           {:else}
-            <p>Wollen Sie die Metadaten freigeben?</p>
+            <p>{t('publishdialog.publish')}</p>
           {/if}
           <div class="publish-actions">
             <Button
@@ -101,7 +98,7 @@
               disabled={isLoading || !isAllowedToPublish()}
               type="button"
             >
-              <Label>Freigabe durchführen</Label>
+              <Label>{t('publishdialog.action')}</Label>
               <Icon class="material-icons">rocket_launch</Icon>
               {#if isLoading}
                 <Spinner />
@@ -112,10 +109,10 @@
       {/if}
       <div class="publish-results">
         {#if isLoading}
-          <p class="loading">Die Veröffentlichung läuft. Bitte warten Sie…</p>
+          <p class="loading">{t('publishdialog.running')}</p>
         {:else if responseStatus === 200}
-          <p class="success">Die Metadaten wurden erfolgreich veröffentlicht.</p>
-          <p>Die veröffentlichten Metadaten sind unter den folgenden UUIDs verfügbar:</p>
+          <p class="success">{t('publishdialog.success')}</p>
+          <p>{t('publishdialog.uuids')}</p>
           <ul>
             {#each responseUuids?.publishedCatalogRecords ?? [] as uuid}
               <li>
@@ -128,13 +125,9 @@
             {/each}
           </ul>
         {:else if responseStatus === 409}
-          <p class="warn">
-            Die Metadaten konnten aufgrund fehlender Vorbedingungen nicht veröffentlicht werden.
-          </p>
+          <p class="warn">{t('publishdialog.preconditionFailed')}</p>
         {:else if responseStatus !== null}
-          <p class="error">
-            Ein interner Serverfehler ist aufgetreten. Bitte versuchen Sie es später erneut.
-          </p>
+          <p class="error">{t('publishdialog.error')}</p>
         {/if}
       </div>
     </div>

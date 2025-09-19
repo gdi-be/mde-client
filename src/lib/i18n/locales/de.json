@@ -4,7 +4,9 @@
     "appTitle": "Metadaten Editor",
     "yes": "Ja",
     "no": "Nein",
-    "loading": "Lädt ..."
+    "loading": "Lädt ...",
+    "error": "Fehler",
+    "warning": "Warnung"
   },
   "welcome": {
     "welcomeTitle": "Metadateneditor der GDI-Berlin",
@@ -206,5 +208,107 @@
     "layerShortDescription": "Kurzbeschreibung",
     "layerDatasource": "Ablageort der Daten",
     "layerSecondaryDatasource": "sekundäre Datenhaltung"
+  },
+  "autofillbutton": {
+    "title": "Feld automatisch ausfüllen/ergänzen"
+  },
+  "commentspanel": {
+    "header": "Kommentare",
+    "help": "Hilfe zu Kommentaren anzeigen",
+    "noComments": "Bisher keine Kommentare vorhanden.",
+    "newComment": "Neuer Kommentar",
+    "send": "Absenden",
+    "deleteConfirm": "Möchten Sie diesen Kommentar wirklich löschen?",
+    "delete": "Löschen",
+    "helpDialogTitle": "Hilfe zu Kommentaren",
+    "helpDialogLoading": "Loading...",
+    "helpDialogError": "Die Hilfe konnte nicht geladen werden.",
+    "close": "Schließen",
+    "fetchHelpError": "Fehler beim Abrufen der Hilfe",
+    "sendError": "Fehler beim Senden des Kommentars",
+    "deleteError": "Fehler beim Löschen des Kommentars"
+  },
+  "scrolltotopbutton": {
+    "title": "Nach oben scrollen",
+    "label": "Nach oben"
+  },
+  "validationdialog": {
+    "title": "Validierung {title}",
+    "description": "In diesem Schritt wird die Validierung der Metadaten durchgeführt. Bitte beachten Sie, dass dies einige Zeit in Anspruch nehmen kann, abhängig von der Größe und Komplexität der Metadaten. Sie können die Validierung über den Button Validierung starten beginnen. Die Validierung wird im Hintergrund durchgeführt und Sie werden benachrichtigt, sobald sie abgeschlossen ist.\n\nMöchten Sie die Validierung jetzt starten?",
+    "start": "Validierung starten",
+    "running": "Die Validierung läuft. Bitte warten Sie…",
+    "results": "Ergebnisse der Validierung:",
+    "gdiInspire": "Ergebnisse GDI-DE für INSPIRE:",
+    "gdiDe": "Ergebnisse GDI-DE:",
+    "inspireValidator": "Ergebnisse INSPIRE-Validator:",
+    "internalEtfErrors": "Interne ETF-Fehler:",
+    "noErrors": "Keine Fehler oder Warnungen gefunden.",
+    "failed": "Die Validierung konnte nicht erfolgreich durchgeführt werden.",
+    "startFailed": "Die Validierung konnte nicht gestartet werden.",
+    "errorStart": "Fehler beim Starten der Validierung: {statusText}"
+  },
+  "publishdialog": {
+    "title": "Freigabe {title}",
+    "description": "In diesem Schritt wird die Freigabe der Metadaten durchgeführt. Hierdurch wird der aktuelle Stand der Metadaten im Geonetwork veröffentlicht und somit für alle Nutzenden einsehbar. Bitte beachten Sie, dass die Metadaten nur veröffentlicht werden können, wenn:",
+    "approved": "die Metadaten genehmigt wurden:",
+    "editor": "die Metadaten einem Redakteur zugewiesen sind:",
+    "alreadyPublished": "Die Metadaten wurden bereits freigegeben. Wollen Sie diese aktualisieren?",
+    "publish": "Wollen Sie die Metadaten freigeben?",
+    "action": "Freigabe durchführen",
+    "running": "Die Veröffentlichung läuft. Bitte warten Sie…",
+    "success": "Die Metadaten wurden erfolgreich veröffentlicht.",
+    "uuids": "Die veröffentlichten Metadaten sind unter den folgenden UUIDs verfügbar:",
+    "preconditionFailed": "Die Metadaten konnten aufgrund fehlender Vorbedingungen nicht veröffentlicht werden.",
+    "error": "Ein interner Serverfehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+    "fetchError": "Fehler beim Veröffentlichen der Metadaten: {statusText}"
+  },
+  "fieldtools": {
+    "checkingHelp": "Es wird geprüft ob eine Hilfe konfiguriert wurde.",
+    "helpError": "Fehler beim Prüfen der Hilfe.",
+    "checkingOriginal": "Es wird geprüft, ob der Wert im Vorlagedatensatz gesetzt ist.",
+    "originalError": "Fehler beim Prüfen des Vorlagedatensatzes.",
+    "copyConfirm": "Möchten Sie den Wert wirklich aus der Vorlage übernehmen? Änderungen gehen verloren.",
+    "copy": "Übernehmen",
+    "copyFromOriginal": "Wert aus Vorlagedatensatz übernehmen",
+    "copyError": "Kein Wert im Vorlagedatensatz gefunden",
+    "fetchOriginalError": "Fehler beim Abrufen des Vorlagedatensatzes"
+  },
+  "progress": {
+    "allValid": "Alle Felder wurde ausgefüllt und sind valide.",
+    "invalidFields": "Von insgesamt {total} Feldern sind {invalid} ungültig bzw leer. Darunter {required} Pflichtfeld(er)."
+  },
+  "formfooter": {
+    "comments": "Kommentare",
+    "download": "Download",
+    "validate": "Validieren",
+    "assign": "Zuweisen",
+    "publish": "Freigabe",
+    "back": "Zurück",
+    "next": "Weiter",
+    "downloadError": "Fehler beim Herunterladen der Metadaten. Bitte versuchen Sie es später erneut."
+  },
+  "helpbutton": {
+    "title": "Hilfe zum Feld anzeigen"
+  },
+  "form": {
+    "basedata": "1. Basisangaben",
+    "classification": "2. Einordnung",
+    "temp_and_spatial": "3. Zeitliche und Räumliche Angaben",
+    "additional": "4. Weitere Angaben",
+    "services": "5. Dienste",
+    "inspireLegend": "Angaben zu INSPIRE",
+    "back": "Zurück",
+    "next": "Weiter",
+    "progress": "Fortschritt: {percent} %",
+    "progressAria": "{label} Fortschritt"
+  },
+  "copybutton": {
+    "title": "Wert in Zwischenablage kopieren",
+    "copyError": "Fehler beim Abrufen des Wertes für die Zwischenablage.",
+    "copied": "Kopiert"
+  },
+  "helppanel": {
+    "noHelp": "Für dieses Eingabefeld ist keine Hilfe verfügbar.",
+    "fetchError": "Fehler beim Abrufen der Hilfe"
   }
 }

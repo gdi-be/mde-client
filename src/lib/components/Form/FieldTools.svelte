@@ -10,7 +10,7 @@
   import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import type { FieldKey } from '$lib/models/form';
   import type { FullFieldConfig } from './FieldsConfig';
-
+  import { page } from '$app/state';
   export type FieldToolsProps = {
     value?: unknown;
     key: FieldKey;
@@ -33,6 +33,7 @@
     value
   }: FieldToolsProps = $props();
 
+  const t = $derived(page.data.t);
   const metadata = $derived(getFormContext()?.metadata);
 
   const checkIfHasHelp = async () => {
@@ -49,7 +50,7 @@
     });
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen des Vorlagedatensatzes');
+      toast.error(t('fieldtools.fetchOriginalError'));
       return null;
     }
 
@@ -67,12 +68,12 @@
           await persistValue(k, valueFromOriginal);
         },
         {
-          text: 'Möchten Sie den Wert wirklich aus der Vorlage übernehmen? Änderungen gehen verloren.',
-          confirmButtonText: 'Übernehmen'
+          text: t('fieldtools.copyConfirm'),
+          confirmButtonText: t('fieldtools.copy')
         }
       );
     } else {
-      toast.error('Kein Wert im Vorlagedatensatz gefunden');
+      toast.error(t('fieldtools.copyError'));
     }
   };
 </script>
@@ -85,17 +86,14 @@
       <HelpButton {key} />
     {/if}
   {:catch}
-    <Icon class="material-icons" title="Fehler beim Prüfen der Hilfe.">warning</Icon>
+    <Icon class="material-icons" title={t('fieldtools.helpError')}>warning</Icon>
   {/await}
   {#if !noCopyButton}
     <CopyButton {value} {key} {fieldConfig} />
   {/if}
   {#if metadata?.clonedFromId}
     {#await getValueFromOriginal()}
-      <Icon
-        class="material-icons spinner"
-        title="Es wird geprüft, ob der Wert im Vorlagedatensatz gesetzt ist."
-      >
+      <Icon class="material-icons spinner" title={t('fieldtools.checkingOriginal')}>
         progress_activity
       </Icon>
     {:then valueFromOriginal}
@@ -103,14 +101,14 @@
         <IconButton
           type="button"
           size="button"
-          title="Wert aus Vorlagedatensatz übernehmen"
+          title={t('fieldtools.copyFromOriginal')}
           onclick={(evt) => copyFromOriginal(key, valueFromOriginal, evt)}
         >
           <Icon class="material-icons">settings_backup_restore</Icon>
         </IconButton>
       {/if}
     {:catch}
-      <Icon class="material-icons" title="Fehler beim Prüfen des Vorlagedatensatzes.">warning</Icon>
+      <Icon class="material-icons" title={t('fieldtools.originalError')}>warning</Icon>
     {/await}
   {/if}
   {@render children?.()}

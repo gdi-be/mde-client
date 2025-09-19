@@ -25,6 +25,7 @@
     assignmentPanelVisible?: boolean;
   };
 
+  const t = $derived(page.data.t);
   let {
     children,
     commentsPanelVisible: commentsPanelVisibleProp,
@@ -135,7 +136,7 @@
         type="button"
       >
         <Icon class="material-icons">chat</Icon>
-        <Label>Kommentare</Label>
+        <Label>{t('formfooter.comments')}</Label>
       </Button>
     {/if}
   </div>
@@ -146,23 +147,22 @@
     {#if !hideDownloadButton}
       <Button
         class="submit-button"
-        title="Download"
+        title={t('formfooter.download')}
         variant="raised"
         onclick={onDownloadClick}
         type="button"
       >
-        <Label>Download</Label>
         <Icon class="material-icons">download</Icon>
       </Button>
     {/if}
     <Button
       class="submit-button"
-      title="Validieren"
+      title={t('formfooter.validate')}
       variant="raised"
       type="button"
       onclick={() => (validationPanelVisible = !validationPanelVisible)}
     >
-      <Label>Validieren</Label>
+      <Label>{t('formfooter.validate')}</Label>
       <Icon class="material-icons">assignment_turned_in</Icon>
       {#if isValidationLoading}
         <Spinner />
@@ -171,24 +171,24 @@
     {#if showAssignmentButton}
       <Button
         class="submit-button"
-        title="Zuweisen"
+        title={t('formfooter.assign')}
         variant="raised"
         onclick={() => (assignmentPanelVisible = !assignmentPanelVisible)}
         type="button"
       >
-        <Label>Zuweisen</Label>
+        <Label>{t('formfooter.assign')}</Label>
         <Icon class="material-icons">partner_exchange</Icon>
       </Button>
     {/if}
     {#if showPublishButton}
       <Button
         class="submit-button"
-        title="Freigabe"
+        title={t('formfooter.publish')}
         variant="raised"
         onclick={() => (publishPanelVisible = !publishPanelVisible)}
         type="button"
       >
-        <Label>Freigabe</Label>
+        <Label>{t('formfooter.publish')}</Label>
         <Icon class="material-icons">rocket_launch</Icon>
       </Button>
     {/if}
