@@ -1,16 +1,18 @@
 <script lang="ts">
+  import { page } from '$app/state';
   import { expoOut } from 'svelte/easing';
   import { Tween } from 'svelte/motion';
 
+  const t = $derived(page.data.t);
   let {
     required = 0,
     optional = 0,
     total = 0,
     title = (required: number, optional: number, total: number) => {
       if (required === 0 && optional === 0) {
-        return 'Alle Felder wurde ausgefüllt und sind valide.';
+        return t('progress.allValid');
       }
-      return `Von insgesamt ${total} Feldern sind ${required + optional} ungültig bzw leer. Darunter ${required} Pflichtfeld(er).`;
+      return t('progress.invalidFields', { total, invalid: required + optional, required });
     }
   } = $props();
 

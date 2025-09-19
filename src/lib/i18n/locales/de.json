@@ -1,0 +1,350 @@
+{
+  "general": {
+    "htmlTitle": "GDI Berlin - Metadateneditor",
+    "appTitle": "Metadaten Editor",
+    "yes": "Ja",
+    "no": "Nein",
+    "loading": "Lädt ...",
+    "error": "Fehler",
+    "warning": "Warnung"
+  },
+  "welcome": {
+    "welcomeTitle": "Metadateneditor der GDI-Berlin",
+    "loginText": "Bitte melden Sie sich an, um auf den Metadateneditor zuzugreifen.",
+    "loginButtonText": "Anmelden",
+    "welcomeText": "Willkommen beim Metadateneditor der GDI-Berlin",
+    "overviewLinkText": "Zur Metadaten Übersicht"
+  },
+  "error": {
+    "notFound": "Seite nicht gefunden"
+  },
+  "layout": {
+    "fallback": "Fehler beim Laden der Seite. Wenden Sie sich an den Administrator."
+  },
+  "metadata_overview": {
+    "noData": "Keine Metadaten gefunden. Bitte Filter anpassen."
+  },
+  "metadata_create": {
+    "title": "Neuerfassung",
+    "intro": "Hier erfassen Sie zu Ihrem Datensatz neue Metadaten. Tragen Sie einen Titel ein.",
+    "fieldTitle": "Titel",
+    "templateHint": "Zusätzlich können Sie einen existierenden Metadatensatz auswählen, den Sie als Vorlage nutzen möchten, bspw. wenn es ein neuer Jahresstand ist.",
+    "templateLabel": "Bestehende Metadaten als Vorlage verwenden",
+    "createButton": "Metadaten anlegen"
+  },
+  "metadata_readonly": {
+    "print": "Drucken",
+    "toastPrint": "Druck wird vorbereitet..."
+  },
+  "header": {
+    "appTitle": "Metadaten Editor"
+  },
+  "breadcrumbs": {
+    "metadata": "Metadaten",
+    "create": "Neuerfassung"
+  },
+  "validation_popup": {
+    "finished": "Validierung abgeschlossen für"
+  },
+  "popconfirm": {
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen"
+  },
+  "footer": {
+    "default": "Footer"
+  },
+  "usermenu": {
+    "account": "Mein Account",
+    "logout": "Logout",
+    "login": "Anmeldung"
+  },
+  "userprofile": {
+    "admin": "Administrator",
+    "dataowner": "Datenhaltende Stelle",
+    "quality": "Qualitätsmanagement",
+    "editor": "Redakteur",
+    "sessionExpires": "Sitzung läuft ab in:"
+  },
+  "metadatatoolbar": {
+    "newEntry": "Neuerfassung"
+  },
+  "metadatacard": {
+    "assignManage": "Zuweisung verwalten",
+    "assignAssignedToMe": "Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.",
+    "assignToMe": "Mir zuweisen",
+    "errorAssign": "Fehler beim Zuweisen des Metadatensatzes. Bitte versuchen Sie es später erneut.",
+    "errorUnassign": "Fehler beim Entfernen der Zuweisung des Metadatensatzes. Bitte versuchen Sie es später erneut.",
+    "errorDelete": "Fehler beim Löschen des Metadatensatzes. Bitte versuchen Sie es später erneut.",
+    "deleteConfirmText": "Möchten Sie diesen Metadatensatz wirklich löschen?",
+    "deleteConfirmButton": "Ok",
+    "publishedAt": "Veröffentlicht am {date}",
+    "previewNotAvailable": "Vorschau nicht erreichbar",
+    "preview": "Vorschau",
+    "delete": "Metadatensatz Löschen",
+    "comments": "Kommentare anzeigen",
+    "print": "Drucken",
+    "edit": "Bearbeiten"
+  },
+  "searchpagination": {
+    "pageLabel": "Seite",
+    "pageSizeLabel": "Datensätze pro Seite"
+  },
+  "pagination": {
+    "pageLabel": "Seite",
+    "pageSizeLabel": "Datensätze pro Seite"
+  },
+  "textfilterfield": {
+    "searchLabel": "Suche",
+    "searchHelper": "Titel durchsuchen"
+  },
+  "statusfilterfield": {
+    "statusFilter": "Statusfilter:"
+  },
+  "assignment": {
+    "assignRoleError": "Fehler beim Zuweisen der Metadaten an die Rolle.",
+    "assignUserError": "Fehler beim Zuweisen der Metadaten an den User.",
+    "unassignError": "Fehler beim Entfernen der Zuweisung des Metadatensatzes. Bitte versuchen Sie es später erneut.",
+    "teamLoadError": "Fehler beim Laden des Teams. Bitte versuchen Sie es später erneut.",
+    "approvalError": "Fehler beim Freigeben/Zurückziehen der Freigabe der Metadaten. Bitte versuchen Sie es später erneut.",
+    "review": "Prüfung",
+    "reviewStatus": "Metadaten Prüfung erfolgreich?",
+    "reviewStatusHint": "Bitte bestätigen Sie, ob die Metadaten erfolgreich geprüft wurden.",
+    "assignEditor": "Redaktion",
+    "assignDataOwner": "Datenhaltende Stelle",
+    "assignQuality": "Qualitätssicherung",
+    "assignSelf": "Selbst zuweisen",
+    "unassign": "Zuordnung entfernen",
+    "assignDialog": "Zuweisung",
+    "noPermission": "Sie haben keine Berechtigung um die Metadaten zuzuweisen.",
+    "chooseRoleOrUser": "Wählen Sie eine Rolle oder einen User an die Sie die Metadaten übergeben wollen.",
+    "loadingTeam": "Lade Team",
+    "handoverTo": "An {name} übergeben",
+    "handoverToRole": "An {role} übergeben",
+    "assignToMe": "Mir zuweisen",
+    "assignedToMe": "Mir zugewiesen",
+    "dataOwnerUserNotFound": "Kein Benutzer für die Rolle 'Datenhaltende Stelle' gefunden."
+  },
+  "metadatasearch": {
+    "searchLabel": "Suche nach Metadaten",
+    "fetchError": "Fehler beim Abrufen der Metadaten"
+  },
+  "displayfield": {
+    "noValue": "Keine Angabe"
+  },
+  "commentsdisplay": {
+    "noComments": "Keine Kommentare"
+  },
+  "metadatadisplay": {
+    "sectionBase": "1. Basisangaben",
+    "sectionClassification": "2. Einordnung",
+    "sectionTemporalSpatial": "3. Zeitliche und Räumliche Angaben",
+    "sectionAdditional": "4. Weitere Angaben",
+    "sectionServices": "5. Dienste",
+    "sectionComments": "Kommentare"
+  },
+  "displayfieldsnippets": {
+    "errorFetchInspireThemes": "Fehler beim Abrufen der INSPIRE Themen",
+    "errorFetchIsoThemes": "Fehler beim Abrufen der ISO Themen",
+    "errorFetchAutoKeywords": "Fehler beim Abrufen der automatisch generierten Schlagwörter",
+    "errorNoMetadataId": "Metadaten-ID ist nicht verfügbar",
+    "errorFetchTermsOfUse": "Fehler beim Abrufen der Nutzungsbedingungen",
+    "errorFetchPrivacy": "Fehler beim Abrufen der Datenschutzoptionen",
+    "errorFetchCrs": "Fehler beim Abrufen der Koordinatensysteme",
+    "errorFetchHvdCategories": "Fehler beim Abrufen der HVD Kategorien",
+    "errorReplaceVariable": "Fehler beim Ersetzen der Variablen",
+    "identifier": "Identifier",
+    "fileIdentifier": "File-Identifier",
+    "title": "Titel",
+    "description": "Beschreibung",
+    "keywords": "Schlagwörter",
+    "preview": "Vorschau",
+    "contacts": "Kontakt",
+    "metadataProfile": "Metadatenprofil",
+    "termsOfUse": "Nutzungsbedingungen",
+    "inspireTheme": "Thema (INSPIRE)",
+    "annexTheme": "Anhang-Thema",
+    "qualityReportCheck": "Qualitätsbericht-Prüfung",
+    "topicCategory": "Themenkategorie",
+    "created": "Erstellungsdatum",
+    "published": "Veröffentlichungsdatum",
+    "maintenanceFrequency": "Aktualisierungshäufigkeit",
+    "modified": "Geändert am",
+    "validFrom": "Gültig von",
+    "validTo": "Gültig bis",
+    "valid": "Gültig",
+    "deliveredCrs": "Geliefertes Koordinatensystem",
+    "crs": "Koordinatensystem",
+    "extent": "Ausdehnung",
+    "resolutions": "Auflösungen",
+    "contentDescription": "Inhaltsbeschreibung",
+    "technicalDescription": "Technische Beschreibung",
+    "lineage": "Herkunft",
+    "contentDescriptions": "Inhaltsbeschreibungen",
+    "services": "Dienste",
+    "privacy": "Datenschutz",
+    "highValueDataset": "High Value Dataset",
+    "highValueDataCategory": "High Value Data Kategorie",
+    "categories": "Kategorien",
+    "serviceTitle": "Titel",
+    "serviceType": "Typ",
+    "serviceShortDescription": "Kurzbeschreibung",
+    "serviceIdentifier": "Service Identifier",
+    "fileIdentifierField": "File Identifier",
+    "featureType": "Feature-Typ",
+    "featureTypeAlias": "Feature-Typ-Alias",
+    "attribute": "Attribut",
+    "attributeName": "Attribut-Name",
+    "attributeAlias": "Attribut-Alias",
+    "attributeType": "Attribut-Typ",
+    "layerTitle": "Titel der Kartenebene",
+    "layerName": "Name der Kartenebene",
+    "styleTitle": "Titel des Styles",
+    "styleName": "Name des Styles",
+    "legend": "Legende",
+    "legendUrl": "Url",
+    "legendFormat": "Format",
+    "legendWidth": "Breite",
+    "legendHeight": "Höhe",
+    "layerShortDescription": "Kurzbeschreibung",
+    "layerDatasource": "Ablageort der Daten",
+    "layerSecondaryDatasource": "sekundäre Datenhaltung"
+  },
+  "autofillbutton": {
+    "title": "Feld automatisch ausfüllen/ergänzen"
+  },
+  "commentspanel": {
+    "header": "Kommentare",
+    "help": "Hilfe zu Kommentaren anzeigen",
+    "noComments": "Bisher keine Kommentare vorhanden.",
+    "newComment": "Neuer Kommentar",
+    "send": "Absenden",
+    "deleteConfirm": "Möchten Sie diesen Kommentar wirklich löschen?",
+    "delete": "Löschen",
+    "helpDialogTitle": "Hilfe zu Kommentaren",
+    "helpDialogLoading": "Loading...",
+    "helpDialogError": "Die Hilfe konnte nicht geladen werden.",
+    "close": "Schließen",
+    "fetchHelpError": "Fehler beim Abrufen der Hilfe",
+    "sendError": "Fehler beim Senden des Kommentars",
+    "deleteError": "Fehler beim Löschen des Kommentars"
+  },
+  "scrolltotopbutton": {
+    "title": "Nach oben scrollen",
+    "label": "Nach oben"
+  },
+  "validationdialog": {
+    "title": "Validierung {title}",
+    "description": "In diesem Schritt wird die Validierung der Metadaten durchgeführt. Bitte beachten Sie, dass dies einige Zeit in Anspruch nehmen kann, abhängig von der Größe und Komplexität der Metadaten. Sie können die Validierung über den Button Validierung starten beginnen. Die Validierung wird im Hintergrund durchgeführt und Sie werden benachrichtigt, sobald sie abgeschlossen ist.\n\nMöchten Sie die Validierung jetzt starten?",
+    "start": "Validierung starten",
+    "running": "Die Validierung läuft. Bitte warten Sie…",
+    "results": "Ergebnisse der Validierung:",
+    "gdiInspire": "Ergebnisse GDI-DE für INSPIRE:",
+    "gdiDe": "Ergebnisse GDI-DE:",
+    "inspireValidator": "Ergebnisse INSPIRE-Validator:",
+    "internalEtfErrors": "Interne ETF-Fehler:",
+    "noErrors": "Keine Fehler oder Warnungen gefunden.",
+    "failed": "Die Validierung konnte nicht erfolgreich durchgeführt werden.",
+    "startFailed": "Die Validierung konnte nicht gestartet werden.",
+    "errorStart": "Fehler beim Starten der Validierung: {statusText}"
+  },
+  "publishdialog": {
+    "title": "Freigabe {title}",
+    "description": "In diesem Schritt wird die Freigabe der Metadaten durchgeführt. Hierdurch wird der aktuelle Stand der Metadaten im Geonetwork veröffentlicht und somit für alle Nutzenden einsehbar. Bitte beachten Sie, dass die Metadaten nur veröffentlicht werden können, wenn:",
+    "approved": "die Metadaten genehmigt wurden:",
+    "editor": "die Metadaten einem Redakteur zugewiesen sind:",
+    "alreadyPublished": "Die Metadaten wurden bereits freigegeben. Wollen Sie diese aktualisieren?",
+    "publish": "Wollen Sie die Metadaten freigeben?",
+    "action": "Freigabe durchführen",
+    "running": "Die Veröffentlichung läuft. Bitte warten Sie…",
+    "success": "Die Metadaten wurden erfolgreich veröffentlicht.",
+    "uuids": "Die veröffentlichten Metadaten sind unter den folgenden UUIDs verfügbar:",
+    "preconditionFailed": "Die Metadaten konnten aufgrund fehlender Vorbedingungen nicht veröffentlicht werden.",
+    "error": "Ein interner Serverfehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+    "fetchError": "Fehler beim Veröffentlichen der Metadaten: {statusText}"
+  },
+  "fieldtools": {
+    "checkingHelp": "Es wird geprüft ob eine Hilfe konfiguriert wurde.",
+    "helpError": "Fehler beim Prüfen der Hilfe.",
+    "checkingOriginal": "Es wird geprüft, ob der Wert im Vorlagedatensatz gesetzt ist.",
+    "originalError": "Fehler beim Prüfen des Vorlagedatensatzes.",
+    "copyConfirm": "Möchten Sie den Wert wirklich aus der Vorlage übernehmen? Änderungen gehen verloren.",
+    "copy": "Übernehmen",
+    "copyFromOriginal": "Wert aus Vorlagedatensatz übernehmen",
+    "copyError": "Kein Wert im Vorlagedatensatz gefunden",
+    "fetchOriginalError": "Fehler beim Abrufen des Vorlagedatensatzes"
+  },
+  "progress": {
+    "allValid": "Alle Felder wurde ausgefüllt und sind valide.",
+    "invalidFields": "Von insgesamt {total} Feldern sind {invalid} ungültig bzw leer. Darunter {required} Pflichtfeld(er)."
+  },
+  "formfooter": {
+    "comments": "Kommentare",
+    "download": "Download",
+    "validate": "Validieren",
+    "assign": "Zuweisen",
+    "publish": "Freigabe",
+    "back": "Zurück",
+    "next": "Weiter",
+    "downloadError": "Fehler beim Herunterladen der Metadaten. Bitte versuchen Sie es später erneut."
+  },
+  "helpbutton": {
+    "title": "Hilfe zum Feld anzeigen"
+  },
+  "form": {
+    "basedata": "1. Basisangaben",
+    "classification": "2. Einordnung",
+    "temp_and_spatial": "3. Zeitliche und Räumliche Angaben",
+    "additional": "4. Weitere Angaben",
+    "services": "5. Dienste",
+    "inspireLegend": "Angaben zu INSPIRE",
+    "back": "Zurück",
+    "next": "Weiter",
+    "progress": "Fortschritt: {percent} %",
+    "progressAria": "{label} Fortschritt"
+  },
+  "serviceform": {
+    "layer_update_error": "Fehler beim aktualisieren der Layer: {statusText}"
+  },
+  "featuretypeform": {
+    "unknown": "Unbekannter Featuretype",
+    "delete_confirm": "Sind sie sicher, dass sie diesen FeatureType löschen möchten?",
+    "delete_button": "Löschen",
+    "remove_button": "Featuretype entfernen",
+    "add_button": "Featuretype hinzufügen"
+  },
+  "layersform": {
+    "unknown": "Unbekannter Layer",
+    "legend": "Layers",
+    "delete_confirm": "Sind sie sicher, dass sie diesen Layer löschen möchten?",
+    "delete_button": "Löschen",
+    "remove_button": "Layer entfernen",
+    "add_button": "Layer hinzufügen"
+  },
+  "servicessection": {
+    "new_service": "Neuer Dienst",
+    "delete_confirm": "Sind sie sicher, dass sie diesen Dienst löschen möchten? Alle dazugehörigen Daten gehen verloren.",
+    "delete_button": "Löschen",
+    "remove_button": "Dienst entfernen",
+    "add_button": "Dienst hinzufügen"
+  },
+  "columnsform": {
+    "unknown": "Unbekanntes Attribut",
+    "new_attribute": "Neues Attribut",
+    "delete_confirm": "Sind sie sicher, dass sie dieses Attribut löschen möchten?",
+    "delete_button": "Löschen",
+    "remove_button": "Attribut entfernen",
+    "add_button": "Attribut hinzufügen"
+  },
+  "copybutton": {
+    "title": "Wert in Zwischenablage kopieren",
+    "copyError": "Fehler beim Abrufen des Wertes für die Zwischenablage.",
+    "copied": "Kopiert"
+  },
+  "helppanel": {
+    "noHelp": "Für dieses Eingabefeld ist keine Hilfe verfügbar.",
+    "fetchError": "Fehler beim Abrufen der Hilfe"
+  },
+  "multiselectinput": {
+    "noOptions": "Keine weiteren Optionen verfügbar"
+  }
+}

@@ -8,6 +8,9 @@
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   type Tab = {
     name: string;
@@ -26,7 +29,7 @@
   let tabs = $derived<Tab[]>(
     columns.map((column) => {
       return {
-        name: column.name || 'Unbekanntes Attribut'
+        name: column.name || t('columnsform.unknown')
       };
     })
   );
@@ -50,7 +53,7 @@
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
   function addColumn() {
-    const name = 'Neues Attribut' + columns.length;
+    const name = t('columnsform.new_attribute') + columns.length;
     columns = [
       ...columns,
       {
@@ -75,8 +78,8 @@
         activeTabIndex = columns.length > 0 ? activeTabIndex : undefined;
       },
       {
-        text: 'Sind sie sicher, dass sie dieses Attribut löschen möchten?',
-        confirmButtonText: 'Löschen'
+        text: t('columnsform.delete_confirm'),
+        confirmButtonText: t('columnsform.delete_button')
       }
     );
   }
@@ -111,7 +114,7 @@
           class="material-icons"
           onclick={(evt) => removeColumn(i, evt)}
           size="button"
-          title="Attribut entfernen"
+          title={t('columnsform.remove_button')}
         >
           delete
         </IconButton>
@@ -124,7 +127,7 @@
         addColumn();
       }}
       size="button"
-      title="Attribut hinzufügen"
+      title={t('columnsform.add_button')}
     >
       add
     </IconButton>

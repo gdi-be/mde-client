@@ -9,6 +9,7 @@
   import Card, { Content } from '@smui/card';
   import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
 
+  const t = $derived(page.data.t);
   let title = $state<string>('');
   let metadataProfile = $state<MetadataProfile>('ISO');
   let cloneMetadataId = $state<Option>();
@@ -45,19 +46,16 @@
 <div class="create-metadata">
   <Card>
     <Content>
-      <h1>Neuerfassung</h1>
-      <p>Hier erfassen Sie zu Ihrem Datensatz neue Metadaten. Tragen Sie einen Titel ein.</p>
-      <Textfield bind:value={title} label="Titel" required />
-      <p>
-        Zusätzlich können Sie einen existierenden Metadatensatz auswählen, den Sie als Vorlage
-        nutzen möchten, bspw. wenn es ein neuer Jahresstand ist.
-      </p>
+      <h1>{t('metadata_create.title')}</h1>
+      <p>{t('metadata_create.intro')}</p>
+      <Textfield bind:value={title} label={t('metadata_create.fieldTitle')} required />
+      <p>{t('metadata_create.templateHint')}</p>
       <MetadataSearchField
         bind:value={cloneMetadataId}
-        label="Bestehende Metadaten als Vorlage verwenden"
+        label={t('metadata_create.templateLabel')}
       />
       <Button variant="raised" onclick={onCreateClick} disabled={!allFieldsValid}>
-        Metadaten anlegen
+        {t('metadata_create.createButton')}
       </Button>
     </Content>
   </Card>

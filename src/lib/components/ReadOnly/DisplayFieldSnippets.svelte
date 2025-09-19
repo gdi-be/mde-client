@@ -1,4 +1,5 @@
 <script module lang="ts">
+  import { page } from '$app/state';
   import type {
     Keywords,
     Contacts,
@@ -53,13 +54,15 @@
     technicalMetadataCategories as 'technicalMetadata.categories'
   };
 
-  const DEFAULT_NULL_STRING = 'Keine Angabe';
+  const t = $derived(page.data.t);
+
+  const DEFAULT_NULL_STRING = $derived(t('displayfield.noValue'));
 
   const getInspireThemes = async (): Promise<Option[]> => {
     const response = await fetch('/data/inspire_themes');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der INSPIRE Themen');
+      toast.error(t('displayfieldsnippets.errorFetchInspireThemes'));
       return [];
     }
 
@@ -70,7 +73,7 @@
     const response = await fetch('/data/iso_themes');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der ISO Themen');
+      toast.error(t('displayfieldsnippets.errorFetchIsoThemes'));
       return [];
     }
 
@@ -96,13 +99,13 @@
     const metadata = getFormContext()?.metadata;
     const metadataId = metadata?.metadataId;
     if (!metadataId) {
-      toast.error('Metadaten-ID ist nicht verfügbar');
+      toast.error(t('displayfieldsnippets.errorNoMetadataId'));
       return [];
     }
     const response = await fetch(`/metadata/${metadataId}/autokeywords`);
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der automatisch generierten Schlagwörter');
+      toast.error(t('displayfieldsnippets.errorFetchAutoKeywords'));
       return [];
     }
 
@@ -114,7 +117,7 @@
     const response = await fetch('/data/terms_of_use');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Nutzungsbedingungen');
+      toast.error(t('displayfieldsnippets.errorFetchTermsOfUse'));
       return [];
     }
 
@@ -125,7 +128,7 @@
     const response = await fetch('/data/privacy');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Datenschutzoptionen');
+      toast.error(t('displayfieldsnippets.errorFetchPrivacy'));
       return [];
     }
 
@@ -136,7 +139,7 @@
     const response = await fetch('/data/crs');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Koordinatensysteme');
+      toast.error(t('displayfieldsnippets.errorFetchCrs'));
       return [];
     }
 
@@ -159,7 +162,7 @@
     const response = await fetch('/data/hvd_categories');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der HVD Kategorien');
+      toast.error(t('displayfieldsnippets.errorFetchHvdCategories'));
       return [];
     }
 
@@ -178,7 +181,7 @@
       body: JSON.stringify({ value })
     });
     if (!response.ok) {
-      toast.error('Fehler beim Ersetzen der Variablen');
+      toast.error(t('displayfieldsnippets.errorReplaceVariable'));
       return value;
     }
     const data = await response.json();
@@ -204,7 +207,7 @@
   {:else}
     {value?.default?.map(({ keyword }) => keyword)?.join(', ') + ','}
     {#await getAutoKeywords()}
-      Lädt ...
+      {t('general.loading')}
     {:then autoKeywords}
       {autoKeywords.join(', ')}
     {/await}
@@ -213,7 +216,7 @@
 
 {#snippet isoMetadataPreview(value: string)}
   {#await replaceVariable(value)}
-    Lädt ...
+    {t('general.loading')}
   {:then value}
     {value || DEFAULT_NULL_STRING}
   {:catch}
@@ -259,7 +262,7 @@
 
 {#snippet clientMetadataPrivacy(value: string)}
   {#await getPrivacy()}
-    Lädt ...
+    {t('general.loading')}
   {:then data}
     {(data as Option[]).find((option) => option.key === value)?.label || DEFAULT_NULL_STRING}
   {/await}
@@ -267,7 +270,7 @@
 
 {#snippet isoMetadataTermsOfUse(value: string)}
   {#await getTermsOfUse()}
-    Lädt ...
+    {t('general.loading')}
   {:then data}
     {(data as TermsOfUse[]).find((entry: TermsOfUse) => entry.id === Number(value))?.shortname ||
       DEFAULT_NULL_STRING}
@@ -276,7 +279,7 @@
 
 {#snippet isoMetadataInspireTheme(value: string[])}
   {#await getInspireThemes()}
-    Lädt ...
+    {t('general.loading')}
   {:then data}
     {#if Array.isArray(value) && value.length === 0}
       {DEFAULT_NULL_STRING}
@@ -304,7 +307,7 @@
     {DEFAULT_NULL_STRING}
   {:else}
     {#await getIsoThemes()}
-      Lädt ...
+      {t('general.loading')}
     {:then data}
       {value
         .map((themeId) => {
@@ -334,9 +337,9 @@
 
 {#snippet isoMetadataValid(value: boolean)}
   {#if value === true}
-    {'Ja'}
+    {t('general.yes')}
   {:else if value === false}
-    {'Nein'}
+    {t('general.no')}
   {:else}
     {DEFAULT_NULL_STRING}
   {/if}
@@ -356,7 +359,7 @@
 
 {#snippet isoMetadataCrs(value: string)}
   {#await getCrs()}
-    Lädt ...
+    {t('general.loading')}
   {:then data}
     {(data as Option[]).find((option) => option.key === value)?.label || DEFAULT_NULL_STRING}
   {/await}
@@ -374,7 +377,7 @@
 
 {#snippet isoMetadataContentDescription(value: string)}
   {#await replaceVariable(value)}
-    Lädt ...
+    {t('general.loading')}
   {:then value}
     {value || DEFAULT_NULL_STRING}
   {:catch}
@@ -384,7 +387,7 @@
 
 {#snippet isoMetadataTechnicalDescription(value: string)}
   {#await replaceVariable(value)}
-    Lädt ...
+    {t('general.loading')}
   {:then value}
     {value || DEFAULT_NULL_STRING}
   {:catch}
@@ -400,15 +403,15 @@
       {#each value as lineage}
         <div class="list-item">
           <div class="list-item-field">
-            <strong>Title</strong>
+            <strong>{t('displayfieldsnippets.title')}</strong>
             <span class="list-item-value">{lineage.title || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
-            <strong>Veröffentlichungsdatum</strong>
+            <strong>{t('displayfieldsnippets.published')}</strong>
             <span class="list-item-value">{lineage.date || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
-            <strong>Identifier</strong>
+            <strong>{t('displayfieldsnippets.identifier')}</strong>
             <span class="list-item-value">{lineage.identifier || DEFAULT_NULL_STRING}</span>
           </div>
         </div>
@@ -457,15 +460,15 @@
         {@const layers = getLayers(service, metadata)}
         <div class="list-item">
           <div class="list-item-field">
-            <strong>Titel</strong>
+            <strong>{t('displayfieldsnippets.serviceTitle')}</strong>
             <span class="list-item-value">{service.title}</span>
           </div>
           <div class="list-item-field">
-            <strong>Typ</strong>
+            <strong>{t('displayfieldsnippets.serviceType')}</strong>
             <span class="list-item-value">{service.serviceType}</span>
           </div>
           <div class="list-item-field">
-            <strong>Kurzbeschreibung</strong>
+            <strong>{t('displayfieldsnippets.serviceShortDescription')}</strong>
             <span class="list-item-value">{service.shortDescription}</span>
           </div>
           {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
@@ -476,10 +479,10 @@
           {/if}
           {#if service.serviceType !== 'ATOM'}
             <div class="list-item-field">
-              <strong>Vorschau</strong>
+              <strong>{t('displayfieldsnippets.preview')}</strong>
               <span class="list-item-value">
                 {#await replaceVariable(service.preview)}
-                  Lädt ...
+                  {t('general.loading')}
                 {:then url}
                   {url || DEFAULT_NULL_STRING}
                 {:catch}
@@ -490,13 +493,13 @@
           {/if}
           {#if service.serviceType !== 'ATOM'}
             <div class="list-item-field">
-              <strong>Gesamtlegende</strong>
+              <strong>{t('displayfieldsnippets.legend')}</strong>
               <div class="list">
                 <div class="list-item-field">
-                  <strong>Url</strong>
+                  <strong>{t('displayfieldsnippets.legendUrl')}</strong>
                   <span class="list-item-value">
                     {#await replaceVariable(service.legendImage?.url)}
-                      Lädt ...
+                      {t('general.loading')}
                     {:then url}
                       {url || DEFAULT_NULL_STRING}
                     {:catch}
@@ -505,7 +508,7 @@
                   </span>
                 </div>
                 <div class="list-item-field">
-                  <strong>Format</strong>
+                  <strong>{t('displayfieldsnippets.legendFormat')}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.format}
                       {service.legendImage.format}
@@ -515,7 +518,7 @@
                   </span>
                 </div>
                 <div class="list-item-field">
-                  <strong>Breite</strong>
+                  <strong>{t('displayfieldsnippets.legendWidth')}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.width}
                       {service.legendImage.width}
@@ -525,7 +528,7 @@
                   </span>
                 </div>
                 <div class="list-item-field">
-                  <strong>Höhe</strong>
+                  <strong>{t('displayfieldsnippets.legendHeight')}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.height}
                       {service.legendImage.height}
@@ -538,45 +541,47 @@
             </div>
           {/if}
           <div class="list-item-field">
-            <strong>Service Identifier</strong>
+            <strong>{t('displayfieldsnippets.serviceIdentifier')}</strong>
             <span class="list-item-value">{service.serviceIdentification}</span>
           </div>
           {#if service.serviceType !== 'ATOM'}
             <div class="list-item-field">
-              <strong>File Identifier</strong>
+              <strong>{t('displayfieldsnippets.fileIdentifierField')}</strong>
               <span class="list-item-value">{service.fileIdentifier}</span>
             </div>
           {/if}
           {#if service.serviceType === 'WFS' && service.featureTypes?.length}
             <div class="list-item-field">
-              <strong>Feature-Typen ({service.featureTypes?.length})</strong>
+              <strong
+                >{t('displayfieldsnippets.featureType')} ({service.featureTypes?.length})</strong
+              >
               <div class="list">
                 {#each service?.featureTypes || [] as featureType}
                   <div class="list-item">
                     <div class="list-item-field">
-                      <strong>Feature-Typ</strong>
+                      <strong>{t('displayfieldsnippets.featureType')}</strong>
                       <span class="list-item-value">{featureType.name}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Feature-Typ-Alias</strong>
+                      <strong>{t('displayfieldsnippets.featureTypeAlias')}</strong>
                       <span class="list-item-value">{featureType.title}</span>
                     </div>
                     {#if featureType?.columns}
                       <div class="list-item-field">
-                        <strong>Attribute</strong>
+                        <strong>{t('displayfieldsnippets.attribute')}</strong>
                         <div class="list">
                           {#each featureType?.columns || [] as columnInfo}
                             <div class="list-item">
                               <div class="list-item-field">
-                                <strong>Attribut-Name</strong>
+                                <strong>{t('displayfieldsnippets.attributeName')}</strong>
                                 <span class="list-item-value">{columnInfo.name}</span>
                               </div>
                               <div class="list-item-field">
-                                <strong>Attribut-Alias</strong>
+                                <strong>{t('displayfieldsnippets.attributeAlias')}</strong>
                                 <span class="list-item-value">{columnInfo.alias}</span>
                               </div>
                               <div class="list-item-field">
-                                <strong>Attribut-Typ</strong>
+                                <strong>{t('displayfieldsnippets.attributeType')}</strong>
                                 <span class="list-item-value">{columnInfo.type}</span>
                               </div>
                             </div>
@@ -592,31 +597,31 @@
 
           {#if (service.serviceType === 'WMS' || service.serviceType === 'WMTS') && layers?.length}
             <div class="list-item-field">
-              <strong>Kartenebenen ({layers?.length})</strong>
+              <strong>{t('displayfieldsnippets.layerTitle')} ({layers?.length})</strong>
               <div class="list">
                 {#each layers || [] as layer}
                   <div class="list-item">
                     <div class="list-item-field">
-                      <strong>Titel der Kartenebene</strong>
+                      <strong>{t('displayfieldsnippets.layerTitle')}</strong>
                       <span class="list-item-value">{layer.title}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Name der Kartenebene</strong>
+                      <strong>{t('displayfieldsnippets.layerName')}</strong>
                       <span class="list-item-value">{layer.name}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Titel des Styles</strong>
+                      <strong>{t('displayfieldsnippets.styleTitle')}</strong>
                       <span class="list-item-value">{layer.styleTitle}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Name des Styles</strong>
+                      <strong>{t('displayfieldsnippets.styleName')}</strong>
                       <span class="list-item-value">{layer.styleName}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Legende</strong>
+                      <strong>{t('displayfieldsnippets.legend')}</strong>
                       <span class="list-item-value">
                         {#await replaceVariable(layer.legendImage)}
-                          Lädt ...
+                          {t('general.loading')}
                         {:then url}
                           {url || DEFAULT_NULL_STRING}
                         {:catch}
@@ -625,15 +630,15 @@
                       </span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Kurzbeschreibung</strong>
+                      <strong>{t('displayfieldsnippets.layerShortDescription')}</strong>
                       <span class="list-item-value">{layer.shortDescription}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Ablageort der Daten</strong>
+                      <strong>{t('displayfieldsnippets.layerDatasource')}</strong>
                       <span class="list-item-value">{layer.datasource}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>sekundäre Datenhaltung</strong>
+                      <strong>{t('displayfieldsnippets.layerSecondaryDatasource')}</strong>
                       <span class="list-item-value">{layer.secondaryDatasource}</span>
                     </div>
                   </div>
