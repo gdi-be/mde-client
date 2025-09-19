@@ -63,6 +63,41 @@
     "editor": "Redakteur",
     "sessionExpires": "Sitzung läuft ab in:"
   },
+  "metadatatoolbar": {
+    "newEntry": "Neuerfassung"
+  },
+  "metadatacard": {
+    "assignManage": "Zuweisung verwalten",
+    "assignAssignedToMe": "Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.",
+    "assignToMe": "Mir zuweisen",
+    "errorAssign": "Fehler beim Zuweisen des Metadatensatzes. Bitte versuchen Sie es später erneut.",
+    "errorUnassign": "Fehler beim Entfernen der Zuweisung des Metadatensatzes. Bitte versuchen Sie es später erneut.",
+    "errorDelete": "Fehler beim Löschen des Metadatensatzes. Bitte versuchen Sie es später erneut.",
+    "deleteConfirmText": "Möchten Sie diesen Metadatensatz wirklich löschen?",
+    "deleteConfirmButton": "Ok",
+    "publishedAt": "Veröffentlicht am {date}",
+    "previewNotAvailable": "Vorschau nicht erreichbar",
+    "preview": "Vorschau",
+    "delete": "Metadatensatz Löschen",
+    "comments": "Kommentare anzeigen",
+    "print": "Drucken",
+    "edit": "Bearbeiten"
+  },
+  "searchpagination": {
+    "pageLabel": "Seite",
+    "pageSizeLabel": "Datensätze pro Seite"
+  },
+  "pagination": {
+    "pageLabel": "Seite",
+    "pageSizeLabel": "Datensätze pro Seite"
+  },
+  "textfilterfield": {
+    "searchLabel": "Suche",
+    "searchHelper": "Titel durchsuchen"
+  },
+  "statusfilterfield": {
+    "statusFilter": "Statusfilter:"
+  },
   "assignment": {
     "assignRoleError": "Fehler beim Zuweisen der Metadaten an die Rolle.",
     "assignUserError": "Fehler beim Zuweisen der Metadaten an den User.",
