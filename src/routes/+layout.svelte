@@ -7,7 +7,9 @@
   import ValidationPopup from '$lib/components/ValidationPopup.svelte';
   import { Toaster } from 'svelte-french-toast';
   import { initializeTokenContext } from '../lib/context/TokenContext.svelte.js';
+  import { page } from '$app/state';
 
+  const t = $derived(page.data.t);
   let { children, data } = $props();
 
   initializeTokenContext(data.token, data.refreshToken);
@@ -26,7 +28,7 @@
 </script>
 
 <svelte:head>
-  <title>GDI Berlin - Metadateneditor</title>
+  <title>{t('general.htmlTitle')}</title>
 </svelte:head>
 
 <PopConfirm />
@@ -39,7 +41,7 @@
     {#if children}
       {@render children()}
     {:else}
-      <p>fallback content</p>
+      <p>{t('layout.fallback')}</p>
     {/if}
   </main>
 </div>

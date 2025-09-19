@@ -1,22 +1,25 @@
 <script>
   import Button, { Label } from '@smui/button';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const token = $derived(getAccessToken());
 </script>
 
 <div class="welcome">
   {#if !token}
-    <h2>Metadateneditor der GDI-Berlin</h2>
-    <p>Anmelden, um Metadaten zu bearbeiten.</p>
+    <h2>{t('welcome.welcomeTitle')}</h2>
+    <p>{t('welcome.loginText')}</p>
     <Button variant="outlined" href="/login" type="button">
-      <Label>Anmeldung</Label>
+      <Label>{t('welcome.loginButtonText')}</Label>
     </Button>
   {:else}
     <h1>{`Hallo ${token?.given_name || token?.preferred_username}`}</h1>
-    <p>Willkommen beim Metadateneditor</p>
+    <p>{t('welcome.welcomeText')}</p>
     <p>
-      <a href="/metadata">Zur Metadaten Übersicht</a>
+      <a href="/metadata">{t('welcome.overviewLinkText')}</a>
     </p>
   {/if}
 </div>
