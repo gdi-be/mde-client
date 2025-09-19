@@ -12,6 +12,9 @@
   import FieldHint from '../FieldHint.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   type Tab = {
     name: string;
@@ -30,7 +33,7 @@
   let tabs = $derived<Tab[]>(
     layers.map((layer) => {
       return {
-        name: layer.title || 'Unbekannter Layer'
+        name: layer.title || t('layersform.unknown')
       };
     })
   );
@@ -86,8 +89,8 @@
         }
       },
       {
-        text: 'Sind sie sicher, dass sie diesen Layer löschen möchten?',
-        confirmButtonText: 'Löschen'
+        text: t('layersform.delete_confirm'),
+        confirmButtonText: t('layersform.delete_button')
       }
     );
   }
@@ -107,7 +110,7 @@
 </script>
 
 <fieldset class="layers-form">
-  <legend>{fieldConfig?.label || 'Layers'} </legend>
+  <legend>{fieldConfig?.label || t('layersform.legend')} </legend>
   <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
@@ -127,7 +130,7 @@
           class="material-icons"
           onclick={(evt) => removeLayer(i, evt)}
           size="button"
-          title="Layer entfernen"
+          title={t('layersform.remove_button')}
         >
           delete
         </IconButton>
@@ -140,7 +143,7 @@
         addLayer();
       }}
       size="button"
-      title="Layer hinzufügen"
+      title={t('layersform.add_button')}
     >
       add
     </IconButton>
