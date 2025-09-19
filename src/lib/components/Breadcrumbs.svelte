@@ -5,10 +5,12 @@
     metadata: string;
   };
 
-  const m = {
-    metadata: 'Metadaten',
-    create: 'Neuerfassung'
-  };
+  const t = $derived(page.data.t);
+
+  const labels = $derived({
+    metadata: t('breadcrumbs.metadata'),
+    create: t('breadcrumbs.create')
+  });
 
   const breadcrumbs = $derived.by(() => {
     const parts = page.url.pathname.split('/').filter((a) => a !== '');
@@ -20,7 +22,7 @@
     });
   });
 
-  const getUrlPartName = (part: keyof TranslatedParts) => (m[part] ? m[part] : part);
+  const getUrlPartName = (part: keyof TranslatedParts) => (labels[part] ? labels[part] : part);
 </script>
 
 <nav>
