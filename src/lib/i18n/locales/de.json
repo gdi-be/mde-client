@@ -343,5 +343,8 @@
   "helppanel": {
     "noHelp": "Für dieses Eingabefeld ist keine Hilfe verfügbar.",
     "fetchError": "Fehler beim Abrufen der Hilfe"
+  },
+  "multiselectinput": {
+    "noOptions": "Keine weiteren Optionen verfügbar"
   }
 }
