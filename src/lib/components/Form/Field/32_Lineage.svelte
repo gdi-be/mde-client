@@ -8,6 +8,9 @@
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { toast } from 'svelte-french-toast';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   type LineageListEntry = Lineage & { listId: string };
 
@@ -69,7 +72,7 @@
     const response = await fetch(url);
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Metadaten');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
@@ -117,8 +120,8 @@
         persistLineages();
       },
       {
-        text: 'Möchten Sie diese Datengrundlage wirklich löschen?',
-        confirmButtonText: 'Löschen'
+        text: t('32_lineage.delete_confirm'),
+        confirmButtonText: t('32_lineage.delete_button')
       }
     );
   };
@@ -166,7 +169,7 @@
         class="material-icons"
         onclick={(evt) => addItem(evt)}
         size="button"
-        title="Daten hinzufügen"
+        title={t('32_lineage.add')}
       >
         add
       </IconButton>
@@ -179,7 +182,7 @@
             class="material-icons"
             onclick={(evt) => removeItem(lineage.listId, evt)}
             size="button"
-            title="Daten entfernen"
+            title={t('32_lineage.remove')}
           >
             delete
           </IconButton>
@@ -188,7 +191,7 @@
           <div class="wrap">
             <TextInput
               bind:value={lineage.title}
-              label="Titel"
+              label={t('32_lineage.title')}
               onblur={onTitleBlur}
               onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
               fieldConfig={getFieldConfig(33)}
@@ -213,7 +216,7 @@
             <DateInput
               bind:value={lineage.date}
               key={KEY}
-              label="Veröffentlichungsdatum"
+              label={t('32_lineage.publish_date')}
               onblur={persistLineages}
               fieldConfig={getFieldConfig(34)}
               validationResult={getFieldConfig(34)?.validator(lineage.date)}
@@ -223,7 +226,7 @@
           <div class="lineage-source-field">
             <TextInput
               bind:value={lineage.identifier}
-              label="Identifier"
+              label={t('32_lineage.identifier')}
               onblur={persistLineages}
               fieldConfig={getFieldConfig(35)}
               validationResult={getFieldConfig(35)?.validator(lineage.identifier)}

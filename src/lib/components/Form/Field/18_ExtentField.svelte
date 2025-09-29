@@ -10,6 +10,9 @@
   import { onMount } from 'svelte';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   type ExtentOption = {
     title: string;
@@ -91,7 +94,7 @@
     const crsResponse = await fetch('/data/crs');
 
     if (!crsResponse.ok) {
-      toast.error('Fehler beim Abrufen der CRS Optionen');
+      toast.error(t('general.error_fetch_options'));
     } else {
       crsOptions = await crsResponse.json();
       if (!crsKey && crsOptions[0].key) {
@@ -101,7 +104,7 @@
 
     const extentResponse = await fetch('/data/extents');
     if (!extentResponse.ok) {
-      toast.error('Fehler beim Abrufen der Extent Optionen');
+      toast.error(t('general.error_fetch_options'));
       return;
     }
 

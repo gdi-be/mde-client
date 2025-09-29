@@ -11,6 +11,6 @@ type TranslationKeysNested = {
 type StringKeyof<T> = Extract<keyof T, string>;
 type Flatten<T> = T extends infer U
   ? { [K in keyof U]: U[K] } extends Record<keyof U, infer V>
-  ? V
-  : never
+    ? V
+    : never
   : never;

@@ -8,6 +8,9 @@
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { toast } from 'svelte-french-toast';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.pointsOfContact';
 
@@ -56,8 +59,8 @@
     });
 
     if (!response.ok) {
-      toast.error('Fehler beim automatischen Abrufen der Kontaktdaten. Bitte manuell eingeben.');
-      return Promise.reject('Fehler beim Abrufen der Kontaktdaten. Bitte manuell eingeben.');
+      toast.error(t('19_contacts.error_fetch'));
+      return Promise.reject(t('19_contacts.error_fetch'));
     }
 
     const json = await response.json();
@@ -115,8 +118,8 @@
         persistContacts();
       },
       {
-        text: 'Möchten Sie diesen Kontakt wirklich löschen?',
-        confirmButtonText: 'Löschen'
+        text: t('19_contacts.delete_confirm'),
+        confirmButtonText: t('19_contacts.delete')
       }
     );
   };
@@ -130,7 +133,7 @@
         class="material-icons"
         onclick={(evt) => addItem(evt)}
         size="button"
-        title="Kontakt hinzufügen"
+        title={t('19_contacts.add')}
       >
         add
       </IconButton>
@@ -143,7 +146,7 @@
             class="material-icons"
             onclick={(evt) => removeItem(contact.listId, evt)}
             size="button"
-            title="Kontakt entfernen"
+            title={t('19_contacts.delete')}
           >
             delete
           </IconButton>
@@ -151,7 +154,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.name}
-            label="Name"
+            label={t('19_contacts.name')}
             onblur={persistContacts}
             fieldConfig={getFieldConfig(20)}
             validationResult={getFieldConfig(20)?.validator(contact.name)}
@@ -162,7 +165,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.organisation}
-            label="Organisation"
+            label={t('19_contacts.organisation')}
             onblur={persistContacts}
             fieldConfig={getFieldConfig(21)}
             validationResult={getFieldConfig(21)?.validator(contact.organisation)}
@@ -178,7 +181,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.phone}
-            label="Telefon"
+            label={t('19_contacts.phone')}
             onblur={persistContacts}
             fieldConfig={getFieldConfig(23)}
             validationResult={getFieldConfig(23)?.validator(contact.phone)}
@@ -189,7 +192,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.email}
-            label="E-Mail"
+            label={t('19_contacts.email')}
             onblur={persistContacts}
             fieldConfig={getFieldConfig(22)}
             validationResult={getFieldConfig(22)?.validator(contact.email)}
@@ -201,7 +204,7 @@
     {/each}
   </fieldset>
   <FieldTools noCopyButton key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
-    <AutoFillButton title="Eigene Kontaktdaten übernehmen" onclick={autoFillUserDetails} />
+    <AutoFillButton title={t('19_contacts.autofill')} onclick={autoFillUserDetails} />
   </FieldTools>
 </div>
 
