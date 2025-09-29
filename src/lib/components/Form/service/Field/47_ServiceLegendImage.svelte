@@ -5,6 +5,9 @@
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.services.legendImage';
 
@@ -32,13 +35,13 @@
 
 <div class="legend-fieldset">
   <fieldset>
-    <legend>{fieldConfig?.label || 'Gesamtlegende'}</legend>
+    <legend>{fieldConfig?.label}</legend>
     <FieldHint {fieldConfig} {validationResult} />
     <div class="inputs">
       <div class="legend-text-fields">
         <div class="field-wrapper">
           <TextInput
-            label="Url"
+            label={t('47_service_legend_image.url')}
             value={value?.url}
             onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
             fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.url')}
@@ -47,7 +50,7 @@
         </div>
         <div class="field-wrapper">
           <TextInput
-            label="Format"
+            label={t('47_service_legend_image.format')}
             value={value?.format}
             onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
             fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.format')}
@@ -58,7 +61,7 @@
       <div class="legend-size-fields">
         <div class="field-wrapper">
           <NumberInput
-            label="Breite"
+            label={t('47_service_legend_image.width')}
             value={value?.width}
             onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
             fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.width')}
@@ -67,7 +70,7 @@
         </div>
         <div class="field-wrapper">
           <NumberInput
-            label="Höhe"
+            label={t('47_service_legend_image.height')}
             value={value?.height}
             onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
             fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.height')}

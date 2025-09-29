@@ -19,7 +19,7 @@
 
 <div class="featuretype-title-field">
   <TextInput
-    label={fieldConfig?.label || 'Titel des Objekttyps'}
+    label={fieldConfig?.label}
     {value}
     maxlength={100}
     {fieldConfig}

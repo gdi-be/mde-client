@@ -31,7 +31,7 @@
 {#if fieldVisible}
   <div class="service-id-field">
     <TextInput
-      label={fieldConfig?.label || 'Identifikator des Kartendienstes'}
+      label={fieldConfig?.label}
       {value}
       {fieldConfig}
       {validationResult}

@@ -19,7 +19,7 @@
 
 <div class="attribute-name-field">
   <TextInput
-    label={fieldConfig?.label || 'Attribut-Name'}
+    label={fieldConfig?.label}
     {value}
     {fieldConfig}
     {validationResult}

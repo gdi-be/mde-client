@@ -32,7 +32,7 @@
 {#if fieldVisible}
   <div class="layer-style-title-field">
     <TextInput
-      label={fieldConfig?.label || 'Titel des Styles'}
+      label={fieldConfig?.label}
       {value}
       maxlength={250}
       {fieldConfig}

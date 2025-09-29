@@ -1,5 +1,6 @@
 {
   "general": {
+    "autofill": "Wert aus Vorlage übernehmen",
     "htmlTitle": "GDI Berlin - Metadateneditor",
     "appTitle": "Metadaten Editor",
     "add": "Hinzufügen",
@@ -406,5 +407,18 @@
     "order": "Bestellung",
     "search": "Suche",
     "url": "Url"
+  },
+  "47_service_legend_image": {
+    "url": "Url",
+    "format": "Format",
+    "width": "Breite",
+    "height": "Höhe"
+  },
+  "58_service_type": {
+    "label": "Typ",
+    "wms": "WMS",
+    "wmts": "WMTS",
+    "wfs": "WFS",
+    "atom": "ATOM"
   }
 }
