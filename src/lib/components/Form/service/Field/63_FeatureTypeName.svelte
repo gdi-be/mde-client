@@ -26,7 +26,7 @@
 {#if fieldVisible}
   <div class="featuretype-name-field">
     <TextInput
-      label={fieldConfig?.label || 'Titel des Objekttyps'}
+      label={fieldConfig?.label}
       {value}
       maxlength={100}
       {fieldConfig}

@@ -5,6 +5,9 @@
   import type { ValidationResult } from '../FieldsConfig';
   import type { Option } from '$lib/models/form';
   import { toast } from 'svelte-french-toast';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const KEY = 'clientMetadata.privacy';
 
@@ -28,7 +31,7 @@
     const response = await fetch('/data/privacy');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Datenschutzoptionen');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
@@ -39,7 +42,7 @@
 
 <div class="data-protection-field">
   {#await fetchOptions()}
-    <p>Lade Datenschutz Optionen</p>
+    <p>{t('general.loading_options')}</p>
   {:then OPTIONS}
     <RadioInput
       key={KEY}

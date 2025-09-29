@@ -14,6 +14,9 @@
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
   import { toast } from 'svelte-french-toast';
   import type { InspireThemeConfig } from '$lib/models/inspire';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireTheme';
@@ -51,7 +54,7 @@
     const response = await fetch(`/data/iso_themes`);
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der ISO Themen');
+      toast.error(t('general.error_fetch_options'));
       return;
     }
 
@@ -63,7 +66,7 @@
       const uniqueValues = Array.from(new Set(matches));
       return persistValue(TOPIC_KEY, uniqueValues);
     } catch {
-      toast.error('Fehler beim Verarbeiten der ISO Themen');
+      toast.error(t('general.error_fetch_options'));
     }
   };
 
@@ -71,7 +74,7 @@
     const response = await fetch('/data/inspire_themes');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Annex Themen');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
@@ -83,7 +86,7 @@
 {#if metadataProfile === 'INSPIRE_HARMONISED'}
   <div class="annex-theme-field">
     {#await fetchOptions()}
-      <p>Lade Annex Themen</p>
+      <p>{t('general.loading_options')}</p>
     {:then OPTIONS}
       <SelectInput
         label={fieldConfig?.label}
@@ -101,7 +104,7 @@
 {#if metadataProfile === 'INSPIRE_IDENTIFIED'}
   <div class="annex-theme-field">
     {#await fetchOptions()}
-      <p>Lade Annex Themen</p>
+      <p>{t('general.loading_options')}</p>
     {:then OPTIONS}
       <MultiSelectInput
         label={fieldConfig?.label}

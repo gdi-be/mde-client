@@ -20,7 +20,7 @@
 
 <div class="layer-legend-image-field">
   <TextInput
-    label={fieldConfig?.label || 'Legende'}
+    label={fieldConfig?.label}
     {value}
     {fieldConfig}
     {validationResult}

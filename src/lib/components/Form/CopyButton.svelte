@@ -5,6 +5,7 @@
   import type { FieldKey } from '$lib/models/form';
   import type { FullFieldConfig } from './FieldsConfig';
   import toast from 'svelte-french-toast';
+  import { page } from '$app/state';
 
   export type CopyButtonProps = {
     value?: unknown;
@@ -14,6 +15,7 @@
 
   let { key, fieldConfig, value: valueFromProps }: CopyButtonProps = $props();
 
+  const t = $derived(page.data.t);
   const value = $derived(valueFromProps ?? getValue(key));
   let copied = $state(false);
   let copyFailed = $state(false);
@@ -26,7 +28,7 @@
         try {
           text = await fieldConfig.getCopyValue(value);
         } catch {
-          toast.error('Fehler beim Abrufen des Wertes für die Zwischenablage.');
+          toast.error(t('copybutton.copyError'));
           return;
         }
       } else if (value != null && value !== undefined) {
@@ -35,7 +37,7 @@
         } else if (typeof value === 'number') {
           text = value.toString();
         } else if (typeof value === 'boolean') {
-          text = value ? 'Ja' : 'Nein';
+          text = value ? t('general.yes') : t('general.no');
         } else {
           // Fallback for other types, e.g., objects
           text = JSON.stringify(value);
@@ -57,7 +59,7 @@
   };
 </script>
 
-<IconButton title="Wert in Zwischenablage kopieren" type="button" size="button" onclick={copyValue}>
+<IconButton title={t('copybutton.title')} type="button" size="button" onclick={copyValue}>
   <div class:pop={copied} class:shake={copyFailed}>
     <Icon class="material-icons">content_copy</Icon>
   </div>

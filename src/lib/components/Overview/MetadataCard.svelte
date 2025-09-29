@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/state';
   import { goto, invalidateAll } from '$app/navigation';
   import Card, { ActionIcons, Media, MediaContent, PrimaryAction } from '@smui/card';
   import IconButton, { Icon } from '@smui/icon-button';
@@ -15,6 +16,8 @@
   export type MetadataCardProps = {
     metadata: MetadataCollection;
   };
+
+  const t = $derived(page.data.t);
   let { metadata }: MetadataCardProps = $props();
 
   const token = $derived(getAccessToken());
@@ -57,11 +60,11 @@
 
   const assignButtonLabeL = $derived.by(() => {
     if (highestRole === 'MdeAdministrator') {
-      return 'Zuweisung verwalten.';
+      return t('metadatacard.assignManage');
     } else if (assignedToMe) {
-      return 'Mir zugewiesen.\nKlicken um Zuordnung zu entfernen.';
+      return t('metadatacard.assignAssignedToMe');
     } else if (isTeamMember) {
-      return 'Mir zuweisen';
+      return t('metadatacard.assignToMe');
     }
   });
 
@@ -101,9 +104,7 @@
     });
 
     if (!response.ok) {
-      toast.error(
-        'Fehler beim Zuweisen des Metadatensatzes. Bitte versuchen Sie es später erneut.'
-      );
+      toast.error(t('metadatacard.errorAssign'));
     }
     invalidateAll();
   };
@@ -118,9 +119,7 @@
     });
 
     if (!response.ok) {
-      toast.error(
-        'Fehler beim Entfernen der Zuweisung des Metadatensatzes. Bitte versuchen Sie es später erneut.'
-      );
+      toast.error(t('metadatacard.errorUnassign'));
     }
 
     invalidateAll();
@@ -139,9 +138,7 @@
           });
 
           if (!response.ok) {
-            toast.error(
-              'Fehler beim Löschen des Metadatensatzes. Bitte versuchen Sie es später erneut.'
-            );
+            toast.error(t('metadatacard.errorDelete'));
             return;
           }
 
@@ -151,8 +148,8 @@
         }
       },
       {
-        text: 'Möchten Sie diesen Metadatensatz wirklich löschen?',
-        confirmButtonText: 'Ok'
+        text: t('metadatacard.deleteConfirmText'),
+        confirmButtonText: t('metadatacard.deleteConfirmButton')
       }
     );
   }
@@ -200,7 +197,7 @@
       <MediaContent>
         {#if metadata.isoMetadata.published}
           {@const formatedDate = formatDate(metadata.isoMetadata.published)}
-          <div class="ribbon" title={`Veröffentlicht am ${formatedDate}`}>
+          <div class="ribbon" title={t('metadatacard.publishedAt', { date: formatedDate })}>
             {formatedDate}
           </div>
         {/if}
@@ -208,7 +205,7 @@
           <img
             class={['preview-image not-available']}
             src={FALLBACK_IMAGE}
-            alt="Vorschau nicht erreichbar"
+            alt={t('metadatacard.previewNotAvailable')}
           />
         {:then asyncSource}
           <img
@@ -218,7 +215,7 @@
             ]}
             src={previewNotAvailable ? FALLBACK_IMAGE : asyncSource.src}
             onerror={() => (previewNotAvailable = true)}
-            alt="Vorschau"
+            alt={t('metadatacard.preview')}
           />
         {/await}
       </MediaContent>
@@ -232,8 +229,8 @@
   <ActionIcons class="metadata-card-actions">
     {#if showDeleteAction}
       <IconButton
-        aria-label={'Metadatensatz Löschen'}
-        title={'Metadatensatz Löschen'}
+        aria-label={t('metadatacard.delete')}
+        title={t('metadatacard.delete')}
         onclick={onDelete}
       >
         <Icon class="material-icons">delete</Icon>
@@ -241,20 +238,28 @@
     {/if}
     {#if showCommentsAction}
       <IconButton
-        aria-label={'Kommentare anzeigen'}
-        title={'Kommentare anzeigen'}
+        aria-label={t('metadatacard.comments')}
+        title={t('metadatacard.comments')}
         onclick={onComments}
       >
         <Icon class="material-icons">chat</Icon>
       </IconButton>
     {/if}
     {#if showPrintAction}
-      <IconButton aria-label={'Drucken'} title={'Drucken'} onclick={onPrint}>
+      <IconButton
+        aria-label={t('metadatacard.print')}
+        title={t('metadatacard.print')}
+        onclick={onPrint}
+      >
         <Icon class="material-icons">print</Icon>
       </IconButton>
     {/if}
     {#if showEditAction}
-      <IconButton aria-label={'Bearbeiten'} title={'Bearbeiten'} onclick={onEdit}>
+      <IconButton
+        aria-label={t('metadatacard.edit')}
+        title={t('metadatacard.edit')}
+        onclick={onEdit}
+      >
         <Icon class="material-icons">edit</Icon>
       </IconButton>
     {/if}

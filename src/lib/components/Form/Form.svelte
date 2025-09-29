@@ -49,6 +49,7 @@
   import { getHighestRole } from '$lib/util';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
+  const t = $derived(page.data.t);
   let activeSection = $state(page.url.hash.slice(1) || 'basedata');
 
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
@@ -66,33 +67,33 @@
   let commentsPanelVisible = $state(false);
   let publishPanelVisible = $state(false);
 
-  const SECTIONS: SectionConfig[] = [
+  const SECTIONS: SectionConfig[] = $derived([
     {
       section: 'basedata',
-      label: '1. Basisangaben',
+      label: t('form.basedata'),
       disabledCheck: () => false
     },
     {
       section: 'classification',
-      label: '2. Einordnung',
+      label: t('form.classification'),
       disabledCheck: () => false
     },
     {
       section: 'temp_and_spatial',
-      label: '3. Zeitliche und Räumliche Angaben',
+      label: t('form.temp_and_spatial'),
       disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
     },
     {
       section: 'additional',
-      label: '4. Weitere Angaben',
+      label: t('form.additional'),
       disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
     },
     {
       section: 'services',
-      label: '5. Dienste',
+      label: t('form.services'),
       disabledCheck: (metadata) => !metadata?.isoMetadata?.metadataProfile
     }
-  ];
+  ]);
 
   let tabs = $state<HTMLElement>();
   let formWrapper = $state<HTMLDivElement>();
@@ -178,7 +179,7 @@
       {#if activeSection === 'classification'}
         <section id="classification" transition:fade>
           <fieldset class="inspire-fieldset">
-            <legend>Angaben zu INSPIRE</legend>
+            <legend>{t('form.inspireLegend')}</legend>
             <F05_MetadataProfileField />
             <F07_AnnexThemeField />
             <F70_InspireFormatNameField />
@@ -227,7 +228,7 @@
   <FormFooter {commentsPanelVisible} {publishPanelVisible}>
     <Button
       class="previous-button"
-      title="Zurück"
+      title={t('form.back')}
       disabled={activeSection === 'basedata'}
       onclick={() =>
         onSectionClick(
@@ -235,18 +236,18 @@
         )}
     >
       <Icon class="material-icons">chevron_left</Icon>
-      <Label>Zurück</Label>
+      <Label>{t('form.back')}</Label>
     </Button>
     <Button
       class="next-button"
-      title="Weiter"
+      title={t('form.next')}
       disabled={activeSection === 'services'}
       onclick={() =>
         onSectionClick(
           SECTIONS[SECTIONS.findIndex((s) => s.section === activeSection) + 1].section
         )}
     >
-      <Label>Weiter</Label>
+      <Label>{t('form.next')}</Label>
       <Icon class="material-icons">chevron_right</Icon>
     </Button>
   </FormFooter>

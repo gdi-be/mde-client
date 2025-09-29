@@ -14,6 +14,9 @@
   import type { MetadataProfile } from '$lib/models/metadata';
   import type { InspireThemeConfig } from '$lib/models/inspire';
   import { toast } from 'svelte-french-toast';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireFormatName';
@@ -56,7 +59,7 @@
     const response = await fetch('/data/inspire_themes');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Inspire Format Namen');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
