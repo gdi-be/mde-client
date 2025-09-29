@@ -3,6 +3,9 @@
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import SelectInput from '$lib/components/Form/Inputs/SelectInput.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   export type ServiceTypeProps = {
     value: Service['serviceType'];
@@ -18,26 +21,26 @@
 
 <div class="service-type-field">
   <SelectInput
-    label="Typ"
+    label={t('58_service_type.label')}
     {value}
     {fieldConfig}
     {validationResult}
     options={[
       {
         key: 'ATOM',
-        label: '📥 ATOM'
+        label: '📥 ' + t('58_service_type.atom')
       },
       {
         key: 'WFS',
-        label: '📥 WFS'
+        label: '📥 ' + t('58_service_type.wfs')
       },
       {
         key: 'WMS',
-        label: '🌎 WMS'
+        label: '🌎 ' + t('58_service_type.wms')
       },
       {
         key: 'WMTS',
-        label: '🌎 WMTS'
+        label: '🌎 ' + t('58_service_type.wmts')
       }
     ]}
     onChange={async (value) => {

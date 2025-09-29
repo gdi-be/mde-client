@@ -5,6 +5,9 @@
   import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { getContext } from 'svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   export type ServiceTypeProps = {
     value: Service['title'];
@@ -49,7 +52,7 @@
   />
   <FieldTools {value} key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
     {#if metadataTitle}
-      <AutoFillButton title="Wert aus Vorlage übernehmen" onclick={getAutoFillValues} />
+      <AutoFillButton title={t('general.autofill')} onclick={getAutoFillValues} />
     {/if}
   </FieldTools>
 </div>

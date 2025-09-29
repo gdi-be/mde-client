@@ -19,7 +19,7 @@
 
 <div class="attribute-alias-field">
   <TextInput
-    label={fieldConfig?.label || 'Attribut-Alias'}
+    label={fieldConfig?.label}
     {value}
     {fieldConfig}
     {validationResult}

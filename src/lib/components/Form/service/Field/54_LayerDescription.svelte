@@ -20,7 +20,7 @@
 
 <div class="layer-short-description-field">
   <TextAreaInput
-    label={fieldConfig?.label || 'Kurzbeschreibung'}
+    label={fieldConfig?.label}
     {value}
     maxlength={500}
     {fieldConfig}

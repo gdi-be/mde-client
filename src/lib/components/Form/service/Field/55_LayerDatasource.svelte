@@ -20,7 +20,7 @@
 
 <div class="layer-short-description-field">
   <TextInput
-    label={fieldConfig?.label || 'Ablageort der Daten'}
+    label={fieldConfig?.label}
     {value}
     {fieldConfig}
     {validationResult}

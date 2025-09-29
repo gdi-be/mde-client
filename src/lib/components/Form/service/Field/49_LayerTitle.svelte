@@ -19,7 +19,7 @@
 
 <div class="layer-title-field">
   <TextInput
-    label={fieldConfig?.label || 'Titel der Kartenebene'}
+    label={fieldConfig?.label}
     {value}
     {fieldConfig}
     {validationResult}

@@ -34,7 +34,7 @@
 {#if fieldVisible}
   <div class="layer-name-field">
     <TextInput
-      label={fieldConfig?.label || 'Name der Kartenebene'}
+      label={fieldConfig?.label}
       {value}
       maxlength={100}
       {fieldConfig}

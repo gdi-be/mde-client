@@ -5,6 +5,9 @@
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { getContext } from 'svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: Service['preview'];
@@ -40,7 +43,7 @@
 
 <div class="service-preview-field">
   <TextInput
-    label={fieldConfig?.label || 'Vorschau des Kartendienstes'}
+    label={fieldConfig?.label}
     {value}
     {fieldConfig}
     {validationResult}
@@ -53,7 +56,7 @@
   />
   <FieldTools {value} key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
     {#if metadataPreview}
-      <AutoFillButton title="Wert aus Vorlage übernehmen" onclick={getAutoFillValues} />
+      <AutoFillButton title={t('general.autofill')} onclick={getAutoFillValues} />
     {/if}
   </FieldTools>
 </div>

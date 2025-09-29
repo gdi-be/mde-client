@@ -27,7 +27,7 @@
 {#if fieldVisible}
   <div class="layer-short-description-field">
     <TextInput
-      label={fieldConfig?.label || 'sekundäre Datenhaltung'}
+      label={fieldConfig?.label}
       {value}
       {fieldConfig}
       {validationResult}
