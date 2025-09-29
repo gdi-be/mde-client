@@ -27,7 +27,7 @@ export async function getTranslator({
     const [section, item] = key.split('.') as [string, string];
     const localeResult = loadedTranslations[locale][section]?.[item];
     if (localeResult) return interpolate(localeResult, values);
-    console.warn(`Missing ${locale} translation for ${key}`);
+    console.warn(`Missing ${locale} translation for ${key}. Falling back to default.`);
 
     // @ts-expect-error - we already typecheck the key argument and types don't
     // know how to properly distinguish the allowed items for a chosen section
@@ -35,7 +35,7 @@ export async function getTranslator({
     const fallbackResult = fallBackTranslations[section]?.[item];
     if (fallbackResult) return interpolate(fallbackResult, values);
 
-    const error = `Missing German translation for: ${key}`;
+    const error = `Missing default translation for: ${key}`;
     if (dev) throw new Error(error);
 
     console.error(error);

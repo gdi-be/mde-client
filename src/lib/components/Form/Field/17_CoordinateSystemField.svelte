@@ -7,6 +7,9 @@
   import { getHighestRole } from '$lib/util';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.crs';
 
@@ -34,7 +37,7 @@
     const response = await fetch('/data/crs');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der CRS Optionen');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
@@ -46,7 +49,7 @@
 {#if highestRole !== 'MdeDataOwner'}
   <div class="title-field">
     {#await fetchOptions()}
-      <p>Lade CRS Optionen</p>
+      <p>{t('general.loading_options')}</p>
     {:then OPTIONS}
       <SelectInput
         {value}

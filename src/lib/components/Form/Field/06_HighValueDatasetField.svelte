@@ -7,6 +7,9 @@
   import MultiSelectInput from '$lib/components/Form/Inputs/MultiSelectInput.svelte';
   import { toast } from 'svelte-french-toast';
   import type { ValidationResult } from '../FieldsConfig';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const CHECKED_KEY = 'isoMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
@@ -50,7 +53,7 @@
     const response = await fetch('/data/hvd_categories');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der HVD Kategorien');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
@@ -68,7 +71,7 @@
     <FieldHint fieldConfig={checkedFieldConfig} />
     {#if checkedValue}
       {#await fetchOptions()}
-        <p>Lade HVD Kategorien</p>
+        <p>{t('general.loading_options')}</p>
       {:then OPTIONS}
         <MultiSelectInput
           label={LABEL}

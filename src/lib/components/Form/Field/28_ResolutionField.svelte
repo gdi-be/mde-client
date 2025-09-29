@@ -6,6 +6,10 @@
   import FormField from '@smui/form-field';
   import Radio from '@smui/radio';
 
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
+
   const RESOLUTION_KEY = 'isoMetadata.resolutions';
   const SCALE_KEY = 'isoMetadata.scale';
 
@@ -76,7 +80,7 @@
 
 <div class="title-field">
   <fieldset>
-    <legend>Räumliche Auflösung</legend>
+    <legend>{t('28_resolution.label')}</legend>
     <FormField>
       <Radio bind:group={selected} value={RESOLUTION_KEY} onchange={clearAllValues} />
       {#snippet label()}

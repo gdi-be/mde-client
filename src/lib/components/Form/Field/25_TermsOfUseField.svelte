@@ -6,6 +6,9 @@
   import type { Option } from '$lib/models/form';
   import type { FullFieldConfig } from '../FieldsConfig';
   import { toast } from 'svelte-french-toast';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.termsOfUseId';
   const PRIVACY_KEY = 'isoMetadata.privacy';
@@ -22,7 +25,7 @@
     const response = await fetch(url);
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Nutzungsbedingungen');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
@@ -46,7 +49,7 @@
 
 <div class="terms-of-use-field">
   {#await fetchOptions()}
-    <p>Lade Nutzungsbedingungen</p>
+    <p>{t('general.loading_options')}</p>
   {:then OPTIONS}
     <div class="input-wrapper">
       <SelectInput
@@ -65,10 +68,7 @@
         {validationResult}
       />
       {#if value !== 1}
-        <p class="not-standard">
-          Die Nutzungsbedingungen weichen von den Standardnutzungsbedingungen ab. Dies sollte nur in
-          Ausnahmefällen und in Absprache mit einem Redakteur geschehen.
-        </p>
+        <p class="none-default">{t('25_termsofuse.none_default')}</p>
       {/if}
     </div>
   {/await}
@@ -89,7 +89,7 @@
       flex: 1;
     }
 
-    .not-standard {
+    .none-default {
       font-size: 0.75rem;
       color: var(--error-color);
       margin: 1em;

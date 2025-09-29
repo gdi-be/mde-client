@@ -7,6 +7,9 @@
   import type { CI_OnLineFunctionCode, ContentDescription } from '$lib/models/metadata';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   type ContentDescriptionListEntry = ContentDescription & { listId: string };
 
@@ -96,8 +99,8 @@
         persistContentDescriptions();
       },
       {
-        text: 'Möchten Sie diese Datengrundlage wirklich löschen?',
-        confirmButtonText: 'Löschen'
+        text: t('39_additional_information.delete_confirm'),
+        confirmButtonText: t('39_additional_information.delete_button')
       }
     );
   };
@@ -112,7 +115,7 @@
         disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
-        title="Informationen hinzufügen"
+        title={t('39_additional_information.add')}
         type="button"
       >
         add
@@ -127,8 +130,8 @@
             disabled={isEditing}
             onclick={(evt) => removeItem(contentDescription.listId, evt)}
             size="button"
-            title="Informationen entfernen"
             type="button"
+            title={t('39_additional_information.remove')}
           >
             delete
           </IconButton>
@@ -136,7 +139,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contentDescription.description}
-            label={titleFieldConfig?.label}
+            label={t('39_additional_information.title')}
             onblur={onBlur}
             onfocus={onFocus}
             fieldConfig={titleFieldConfig}
@@ -156,11 +159,11 @@
               fieldConfig={codeFieldConfig}
               validationResult={codeFieldConfig?.validator(contentDescription.code)}
               options={[
-                { label: 'Herunterladen', key: 'download' },
-                { label: 'Information', key: 'information' },
-                { label: 'Offline-Zugriff', key: 'offlineAccess' },
-                { label: 'Bestellung', key: 'order' },
-                { label: 'Suche', key: 'search' }
+                { label: t('39_additional_information.download'), key: 'download' },
+                { label: t('39_additional_information.information'), key: 'information' },
+                { label: t('39_additional_information.offlineAccess'), key: 'offlineAccess' },
+                { label: t('39_additional_information.order'), key: 'order' },
+                { label: t('39_additional_information.search'), key: 'search' }
               ]}
             />
             <FieldTools key={`${KEY}[${index}].code`} fieldConfig={codeFieldConfig} />
@@ -168,7 +171,7 @@
           <div class="subfield-wrapper url-field">
             <TextInput
               bind:value={contentDescription.url}
-              label={urlFieldConfig?.label}
+              label={t('39_additional_information.url')}
               onblur={onBlur}
               onfocus={onFocus}
               fieldConfig={urlFieldConfig}
