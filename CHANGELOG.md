@@ -1,3 +1,17 @@
+# [4.1.0](https://github.com/gdi-be/mde-client/compare/v4.0.0...v4.1.0) (2025-09-30)
+
+
+### Bug Fixes
+
+* autosave new FeatureTypes ([0daa0b2](https://github.com/gdi-be/mde-client/commit/0daa0b2b49caf5970536e8571d8a75239603b0a6))
+
+
+### Features
+
+* add copybutton to all service inputs ([875d5fb](https://github.com/gdi-be/mde-client/commit/875d5fbb75a7075db6e2393062c77c3e0d2e7d28))
+* add getCopyValue for HVD ([9dc8493](https://github.com/gdi-be/mde-client/commit/9dc8493322b2c7f3eedd5d16ce864698fd2db431))
+* add help button to CommentsPanel ([35fbd0b](https://github.com/gdi-be/mde-client/commit/35fbd0b059caddc2e425a2c028aab85b72e6e56a))
+
 # [4.0.0](https://github.com/gdi-be/mde-client/compare/v3.21.1...v4.0.0) (2025-09-10)
 
 
