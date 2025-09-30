@@ -61,6 +61,7 @@
       }
     ];
     activeTabIndex = featureTypes.length - 1;
+    onChange(featureTypes);
   }
 
   function removeFeatureType(index: number, evt: MouseEvent) {
