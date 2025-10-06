@@ -1,6 +1,10 @@
 <script lang="ts">
+  import { getValue } from '../../context/FormContext.svelte';
   import CommentsDisplay from './CommentsDisplay.svelte';
   import DisplayField from './DisplayField.svelte';
+
+  const metadataProfile = $derived(getValue('isoMetadata.metadataProfile'));
+  const highValueDataset = $derived(getValue('isoMetadata.highValueDataset'));
 </script>
 
 <div class="metadata-display">
@@ -21,11 +25,20 @@
       <DisplayField key="clientMetadata.privacy" profileId={4} />
       <DisplayField key="isoMetadata.termsOfUseId" profileId={25} />
       <DisplayField key="isoMetadata.termsOfUseSource" profileId={26} />
-      <DisplayField key="isoMetadata.inspireTheme" profileId={7} />
-      <DisplayField key="isoMetadata.inspireAnnexVersion" profileId={38} />
+      {#if metadataProfile === 'INSPIRE_HARMONISED' || metadataProfile === 'INSPIRE_IDENTIFIED'}
+        <DisplayField key="isoMetadata.inspireTheme" profileId={7} />
+      {/if}
+      {#if metadataProfile === 'INSPIRE_HARMONISED'}
+        <DisplayField key="isoMetadata.inspireFormatName" profileId={70} />
+      {/if}
+      {#if metadataProfile === 'INSPIRE_HARMONISED'}
+        <DisplayField key="isoMetadata.inspireAnnexVersion" profileId={38} />
+      {/if}
       <DisplayField key="isoMetadata.valid" profileId={37} />
       <DisplayField key="isoMetadata.highValueDataset" profileId={6} />
-      <DisplayField key="isoMetadata.highValueDataCategory" profileId={8} />
+      {#if highValueDataset === true}
+        <DisplayField key="isoMetadata.highValueDataCategory" profileId={8} />
+      {/if}
       <DisplayField key="isoMetadata.topicCategory" profileId={13} />
     </section>
     <section id="temp_and_spatial">

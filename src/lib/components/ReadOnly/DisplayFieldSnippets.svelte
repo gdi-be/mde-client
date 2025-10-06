@@ -20,36 +20,38 @@
 
   export {
     defaultSnippet,
-    isoMetadataTitle as 'isoMetadata.title',
-    isoMetadataDescription as 'isoMetadata.description',
-    isoMetadataKeywords as 'isoMetadata.keywords',
-    isoMetadataPreview as 'isoMetadata.preview',
-    isoMetadataContacts as 'isoMetadata.pointsOfContact',
-    isoMetadataMetadataProfile as 'isoMetadata.metadataProfile',
-    isoMetadataTermsOfUse as 'isoMetadata.termsOfUseId',
-    isoMetadataInspireTheme as 'isoMetadata.inspireTheme',
+    clientMetadataPrivacy as 'clientMetadata.privacy',
     isoMetadataAnnexTheme as 'isoMetadata.annexTheme',
-    isoMetadataQualityReportCheck as 'isoMetadata.qualityReportCheck',
-    isoMetadataTopicCategory as 'isoMetadata.topicCategory',
+    isoMetadataContacts as 'isoMetadata.pointsOfContact',
+    isoMetadataContentDescription as 'isoMetadata.contentDescription',
+    isoMetadataContentDescriptions as 'isoMetadata.contentDescriptions',
     isoMetadataCreated as 'isoMetadata.created',
-    isoMetadataPublished as 'isoMetadata.published',
+    isoMetadataCrs as 'isoMetadata.crs',
+    isoMetadataDescription as 'isoMetadata.description',
+    isoMetadataExtent as 'isoMetadata.extent',
+    isoMetadataHighValueDataCategory as 'isoMetadata.highValueDataCategory',
+    isoMetadataHighValueDataset as 'isoMetadata.highValueDataset',
+    isoMetadataInspireAnnexVersion as 'isoMetadata.inspireAnnexVersion',
+    isoMetadataInspireFormatName as 'isoMetadata.inspireFormatName',
+    isoMetadataInspireTheme as 'isoMetadata.inspireTheme',
+    isoMetadataKeywords as 'isoMetadata.keywords',
+    isoMetadataLineage as 'isoMetadata.lineage',
     isoMetadataMaintenanceFrequency as 'isoMetadata.maintenanceFrequency',
+    isoMetadataMetadataProfile as 'isoMetadata.metadataProfile',
     isoMetadataModified as 'isoMetadata.modified',
+    isoMetadataPreview as 'isoMetadata.preview',
+    isoMetadataPublished as 'isoMetadata.published',
+    isoMetadataQualityReportCheck as 'isoMetadata.qualityReportCheck',
+    isoMetadataResolutions as 'isoMetadata.resolutions',
+    isoMetadataServices as 'isoMetadata.services',
+    isoMetadataTechnicalDescription as 'isoMetadata.technicalDescription',
+    isoMetadataTermsOfUse as 'isoMetadata.termsOfUseId',
+    isoMetadataTitle as 'isoMetadata.title',
+    isoMetadataTopicCategory as 'isoMetadata.topicCategory',
+    isoMetadataValid as 'isoMetadata.valid',
     isoMetadataValidFrom as 'isoMetadata.validFrom',
     isoMetadataValidTo as 'isoMetadata.validTo',
-    isoMetadataValid as 'isoMetadata.valid',
-    technialMetadataDeliveredCrs as 'isoMetadata.deliveredCoordinateSystem',
-    isoMetadataCrs as 'isoMetadata.crs',
-    isoMetadataExtent as 'isoMetadata.extent',
-    isoMetadataResolutions as 'isoMetadata.resolutions',
-    isoMetadataContentDescription as 'isoMetadata.contentDescription',
-    isoMetadataTechnicalDescription as 'isoMetadata.technicalDescription',
-    isoMetadataLineage as 'isoMetadata.lineage',
-    isoMetadataContentDescriptions as 'isoMetadata.contentDescriptions',
-    isoMetadataServices as 'isoMetadata.services',
-    clientMetadataPrivacy as 'clientMetadata.privacy',
-    isoMetadataHighValueDataset as 'isoMetadata.highValueDataset',
-    isoMetadataHighValueDataCategory as 'isoMetadata.highValueDataCategory',
+    technicalMetadataDeliveredCrs as 'technicalMetadata.deliveredCrs',
     technicalMetadataCategories as 'technicalMetadata.categories'
   };
 
@@ -292,11 +294,19 @@
 {/snippet}
 
 {#snippet isoMetadataAnnexTheme(value: string)}
-  {value ? JSON.stringify(value) : DEFAULT_NULL_STRING}
+  {value ? value.toString() : DEFAULT_NULL_STRING}
+{/snippet}
+
+{#snippet isoMetadataInspireFormatName(value: string)}
+  {value ? value.toString() : DEFAULT_NULL_STRING}
+{/snippet}
+
+{#snippet isoMetadataInspireAnnexVersion(value: string)}
+  {value ? value.toString() : DEFAULT_NULL_STRING}
 {/snippet}
 
 {#snippet isoMetadataQualityReportCheck(value: string)}
-  {value ? JSON.stringify(value) : DEFAULT_NULL_STRING}
+  {value ? 'Ja' : 'Nein'}
 {/snippet}
 
 {#snippet isoMetadataTopicCategory(value: string[])}
@@ -350,7 +360,7 @@
   {value ? new Date(value).toLocaleDateString() : DEFAULT_NULL_STRING}
 {/snippet}
 
-{#snippet technialMetadataDeliveredCrs(value: string)}
+{#snippet technicalMetadataDeliveredCrs(value: string)}
   {value || DEFAULT_NULL_STRING}
 {/snippet}
 
@@ -446,7 +456,6 @@
   {/if}
 {/snippet}
 
-// TODO: get labels from fieldconfigs
 {#snippet isoMetadataServices(services: Service[], metadata: MetadataCollection)}
   {#if !services?.length}
     {DEFAULT_NULL_STRING}

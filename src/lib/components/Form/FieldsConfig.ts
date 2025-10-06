@@ -1276,7 +1276,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     validatorExtraParams: ['isoMetadata.metadataProfile'],
     validator: (val: string[], extraParams) => {
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
-      if (metadataProfile === 'ISO') {
+      if (metadataProfile !== 'INSPIRE_HARMONISED') {
         return { valid: true };
       }
       if (!isDefined(val)) {
