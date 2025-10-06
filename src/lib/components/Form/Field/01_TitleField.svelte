@@ -52,7 +52,7 @@
     &.long-text {
       :global(.text-input .field-footer .character-counter) {
         font-weight: bold;
-        color: red;
+        color: var(--mdc-theme-error);
       }
     }
   }
