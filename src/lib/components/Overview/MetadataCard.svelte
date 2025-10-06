@@ -195,7 +195,9 @@
 
 <Card class="metadata-card">
   <PrimaryAction class="metadata-card-content" onclick={onRead} padded title={metadata.title}>
-    <span class="title">{metadata.title}</span>
+    <div class="header">
+      <span class="title">{metadata.title}</span>
+    </div>
     <Media aspectRatio="16x9">
       <MediaContent>
         {#if metadata.isoMetadata.published}
@@ -297,9 +299,19 @@
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     }
 
-    .title {
-      min-height: 2.5em;
+    .header {
       text-align: center;
+      padding: 0 1em 1em 1em;
+      overflow: hidden;
+      height: 3em;
+
+      .title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        line-clamp: 3;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+      }
     }
 
     .preview-image {
@@ -315,6 +327,9 @@
     }
 
     :global(.status-chipset) {
+      height: 40px;
+      min-height: 40px;
+      max-height: 40px;
       flex: 1 1 auto;
     }
 

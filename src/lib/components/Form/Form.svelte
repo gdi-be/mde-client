@@ -351,6 +351,7 @@
       form {
         flex: 2;
         padding-left: 2em;
+        max-width: 67%;
 
         section {
           width: 100%;
