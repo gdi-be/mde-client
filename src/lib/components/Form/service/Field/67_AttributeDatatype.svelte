@@ -40,7 +40,7 @@
 {#if fieldVisible}
   <div class="attribute-type-field">
     <SelectInput
-      label={fieldConfig?.label || 'Attribut-Datentyp'}
+      label={fieldConfig?.label}
       {fieldConfig}
       {validationResult}
       {value}

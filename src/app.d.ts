@@ -11,7 +11,10 @@ declare global {
       tokenUnparsed?: string;
       refreshToken?: RefreshToken;
     }
-    // interface PageData {}
+    interface PageData {
+      locale: import('$lib/i18n/locales').LocaleCode;
+      t: Awaited<ReturnType<typeof import('$lib/i18n').getTranslator>>;
+    }
     // interface PageState {}
     // interface Platform {}
   }

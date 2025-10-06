@@ -6,13 +6,16 @@
   import Textfield from '@smui/textfield';
   import type { MetadataCollection } from '$lib/models/metadata';
   import { toast } from 'svelte-french-toast';
+  import { page } from '$app/state';
 
   export type MetadataSearchFieldProps = {
     value: Option | undefined;
     label?: string;
   };
 
-  let { value = $bindable(), label = 'Suche nach Metadaten' }: MetadataSearchFieldProps = $props();
+  const t = $derived(page.data.t);
+  let { value = $bindable(), label }: MetadataSearchFieldProps = $props();
+  const defaultLabel = $derived(t('metadatasearch.searchLabel'));
 
   let text = $state('');
 
@@ -27,7 +30,7 @@
     const response = await fetch(url);
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Metadaten');
+      toast.error(t('metadatasearch.fetchError'));
       return [];
     }
 
@@ -58,7 +61,7 @@
     if (!option) return '';
     return (option.label as string) || '';
   }}
-  {label}
+  label={label || defaultLabel}
 >
   {#snippet loading()}
     <Text>Lädt...</Text>

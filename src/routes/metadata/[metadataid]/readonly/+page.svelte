@@ -13,6 +13,7 @@
   import toast from 'svelte-french-toast';
   import { setRefreshToken } from '$lib/context/TokenContext.svelte.js';
 
+  const t = $derived(page.data.t);
   const { data } = $props();
   let commentsPanelVisible = $state(false);
   let publishPanelVisible = $state(false);
@@ -44,7 +45,7 @@
 
     if (action?.includes('print')) {
       // delay the print action to ensure the async data is loaded
-      toast('Druck wird vorbereitet...', {
+      toast(t('metadata_readonly.toastPrint'), {
         icon: '\u{1F5A8}\uFE0F',
         duration: 3000,
         position: 'top-center'
@@ -69,7 +70,7 @@
 </script>
 
 <div class="readonly-metadata">
-  <Fab title="Drucken" class="print-button" onclick={print}>
+  <Fab title={t('metadata_readonly.print')} class="print-button" onclick={print}>
     <Icon class="material-icons">print</Icon>
   </Fab>
   <h1>{metadata?.isoMetadata?.title}</h1>

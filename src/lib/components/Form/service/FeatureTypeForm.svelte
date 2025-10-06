@@ -8,6 +8,9 @@
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   type Tab = {
     name: string;
@@ -26,7 +29,7 @@
   let tabs = $derived<Tab[]>(
     featureTypes.map((featureType) => {
       return {
-        name: featureType.title || 'Unbekannter Featuretype'
+        name: featureType.title || t('featuretypeform.unknown')
       };
     })
   );
@@ -81,8 +84,8 @@
         }
       },
       {
-        text: 'Sind sie sicher, dass sie diesen FeatureType löschen möchten?',
-        confirmButtonText: 'Löschen'
+        text: t('featuretypeform.delete_confirm'),
+        confirmButtonText: t('featuretypeform.delete_button')
       }
     );
   }
@@ -124,7 +127,7 @@
           class="material-icons"
           onclick={(evt) => removeFeatureType(i, evt)}
           size="button"
-          title="Featuretype entfernen"
+          title={t('featuretypeform.remove_button')}
         >
           delete
         </IconButton>
@@ -137,7 +140,7 @@
         addFeatureType();
       }}
       size="button"
-      title="Featuretype hinzufügen"
+      title={t('featuretypeform.add_button')}
     >
       add
     </IconButton>

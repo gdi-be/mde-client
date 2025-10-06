@@ -3,9 +3,10 @@
   import MetadataToolbar from '$lib/components/Overview/MetadataToolbar.svelte';
   import Pagination from '$lib/components/Overview/Pagination.svelte';
   import { setRefreshToken } from '$lib/context/TokenContext.svelte.js';
+  import { page } from '$app/state';
 
-  let { data } = $props();
-
+  const t = $derived(page.data.t);
+  const { data } = $props();
   const metadata = $derived(data.queryResponse.content);
   const pageable = $derived(data.queryResponse);
 
@@ -21,7 +22,7 @@
   <MetadataToolbar />
   {#if metadata.length === 0}
     <div class="no-data">
-      <p>Keine Metadaten gefunden. Bitte Filter anpassen.</p>
+      <p>{t('metadata_overview.noData')}</p>
     </div>
   {:else}
     <div class="metadata-list">
