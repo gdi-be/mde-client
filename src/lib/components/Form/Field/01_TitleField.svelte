@@ -23,7 +23,7 @@
   };
 </script>
 
-<div class="title-field">
+<div class={['title-field', value.length > 100 ? 'long-text' : '']}>
   <TextInput
     bind:value
     maxlength={250}
@@ -49,8 +49,11 @@
       display: flex;
     }
 
-    :global(.text-input .field-footer .character-counter) {
-      display: none;
+    &.long-text {
+      :global(.text-input .field-footer .character-counter) {
+        font-weight: bold;
+        color: red;
+      }
     }
   }
 </style>
