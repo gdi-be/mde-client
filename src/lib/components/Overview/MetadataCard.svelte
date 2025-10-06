@@ -327,9 +327,6 @@
     }
 
     :global(.status-chipset) {
-      height: 40px;
-      min-height: 40px;
-      max-height: 40px;
       flex: 1 1 auto;
     }
 
