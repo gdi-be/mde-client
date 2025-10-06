@@ -16,7 +16,7 @@
 
   import type { Option } from '$lib/models/form';
   import { toast } from 'svelte-french-toast';
-  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext } from '$lib/context/FormContext.svelte';
 
   export {
     defaultSnippet,
@@ -457,26 +457,31 @@
         {@const layers = getLayers(service, metadata)}
         <div class="list-item">
           <div class="list-item-field">
-            <strong>Titel</strong>
+            <!-- ServiceTitle -->
+            <strong>{getFieldConfig(59)?.label}</strong>
             <span class="list-item-value">{service.title}</span>
           </div>
           <div class="list-item-field">
-            <strong>Typ</strong>
+            <!-- Service-Type -->
+            <strong>{getFieldConfig(58)?.label}</strong>
             <span class="list-item-value">{service.serviceType}</span>
           </div>
           <div class="list-item-field">
-            <strong>Kurzbeschreibung</strong>
+            <!-- Service-ShortDescription -->
+            <strong>{getFieldConfig(60)?.label}</strong>
             <span class="list-item-value">{service.shortDescription}</span>
           </div>
           {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
             <div class="list-item-field">
-              <strong>Identifikator des Kartendienstes</strong>
+              <!-- Service-Workspace -->
+              <strong>{getFieldConfig(45)?.label}</strong>
               <span class="list-item-value">{service.workspace}</span>
             </div>
           {/if}
-          {#if service.serviceType !== 'ATOM'}
+          {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
             <div class="list-item-field">
-              <strong>Vorschau</strong>
+              <!-- Service-Preview -->
+              <strong>{getFieldConfig(46)?.label}</strong>
               <span class="list-item-value">
                 {#await replaceVariable(service.preview)}
                   Lädt ...
@@ -488,12 +493,14 @@
               </span>
             </div>
           {/if}
-          {#if service.serviceType !== 'ATOM'}
+          {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
             <div class="list-item-field">
-              <strong>Gesamtlegende</strong>
+              <!-- Service-LegendImage -->
+              <strong>{getFieldConfig(53)?.label}</strong>
               <div class="list">
                 <div class="list-item-field">
-                  <strong>Url</strong>
+                  <!-- Service-LegendImage-Url -->
+                  <strong>{getFieldConfig(75)?.label}</strong>
                   <span class="list-item-value">
                     {#await replaceVariable(service.legendImage?.url)}
                       Lädt ...
@@ -505,7 +512,8 @@
                   </span>
                 </div>
                 <div class="list-item-field">
-                  <strong>Format</strong>
+                  <!-- Service-LegendImage-Format -->
+                  <strong>{getFieldConfig(76)?.label}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.format}
                       {service.legendImage.format}
@@ -515,7 +523,8 @@
                   </span>
                 </div>
                 <div class="list-item-field">
-                  <strong>Breite</strong>
+                  <!-- Service-LegendImage-Width -->
+                  <strong>{getFieldConfig(77)?.label}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.width}
                       {service.legendImage.width}
@@ -525,7 +534,8 @@
                   </span>
                 </div>
                 <div class="list-item-field">
-                  <strong>Höhe</strong>
+                  <!-- Service-LegendImage-Height -->
+                  <strong>{getFieldConfig(78)?.label}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.height}
                       {service.legendImage.height}
@@ -554,12 +564,19 @@
                 {#each service?.featureTypes || [] as featureType}
                   <div class="list-item">
                     <div class="list-item-field">
-                      <strong>Feature-Typ</strong>
+                      <!-- FeatureType-Name -->
+                      <strong>{getFieldConfig(62)?.label}</strong>
                       <span class="list-item-value">{featureType.name}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Feature-Typ-Alias</strong>
+                      <!-- FeatureType-Title -->
+                      <strong>{getFieldConfig(63)?.label}</strong>
                       <span class="list-item-value">{featureType.title}</span>
+                    </div>
+                    <div class="list-item-field">
+                      <!-- FeatureType-ShortDescription -->
+                      <strong>{getFieldConfig(69)?.label}</strong>
+                      <span class="list-item-value">{featureType.shortDescription}</span>
                     </div>
                     {#if featureType?.columns}
                       <div class="list-item-field">
@@ -568,15 +585,18 @@
                           {#each featureType?.columns || [] as columnInfo}
                             <div class="list-item">
                               <div class="list-item-field">
-                                <strong>Attribut-Name</strong>
+                                <!-- Attribute-Name -->
+                                <strong>{getFieldConfig(65)?.label}</strong>
                                 <span class="list-item-value">{columnInfo.name}</span>
                               </div>
                               <div class="list-item-field">
-                                <strong>Attribut-Alias</strong>
+                                <!-- Attribute-Alias -->
+                                <strong>{getFieldConfig(66)?.label}</strong>
                                 <span class="list-item-value">{columnInfo.alias}</span>
                               </div>
                               <div class="list-item-field">
-                                <strong>Attribut-Typ</strong>
+                                <!-- Attribute-DataType -->
+                                <strong>{getFieldConfig(67)?.label}</strong>
                                 <span class="list-item-value">{columnInfo.type}</span>
                               </div>
                             </div>
@@ -597,23 +617,28 @@
                 {#each layers || [] as layer}
                   <div class="list-item">
                     <div class="list-item-field">
-                      <strong>Titel der Kartenebene</strong>
+                      <!-- Layer-Title -->
+                      <strong>{getFieldConfig(49)?.label}</strong>
                       <span class="list-item-value">{layer.title}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Name der Kartenebene</strong>
+                      <!-- Layer-Name -->
+                      <strong>{getFieldConfig(50)?.label}</strong>
                       <span class="list-item-value">{layer.name}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Titel des Styles</strong>
-                      <span class="list-item-value">{layer.styleTitle}</span>
-                    </div>
-                    <div class="list-item-field">
-                      <strong>Name des Styles</strong>
+                      <!-- Layer-StyleName -->
+                      <strong>{getFieldConfig(52)?.label}</strong>
                       <span class="list-item-value">{layer.styleName}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Legende</strong>
+                      <!-- Layer-StyleTitle -->
+                      <strong>{getFieldConfig(51)?.label}</strong>
+                      <span class="list-item-value">{layer.styleTitle}</span>
+                    </div>
+                    <div class="list-item-field">
+                      <!-- Layer-LegendImage -->
+                      <strong>{getFieldConfig(53)?.label}</strong>
                       <span class="list-item-value">
                         {#await replaceVariable(layer.legendImage)}
                           Lädt ...
@@ -625,15 +650,18 @@
                       </span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Kurzbeschreibung</strong>
+                      <!-- Layer-ShortDescription -->
+                      <strong>{getFieldConfig(54)?.label}</strong>
                       <span class="list-item-value">{layer.shortDescription}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>Ablageort der Daten</strong>
+                      <!-- Layer-DataSource -->
+                      <strong>{getFieldConfig(55)?.label}</strong>
                       <span class="list-item-value">{layer.datasource}</span>
                     </div>
                     <div class="list-item-field">
-                      <strong>sekundäre Datenhaltung</strong>
+                      <!-- Layer-SecondaryDataSource -->
+                      <strong>{getFieldConfig(56)?.label}</strong>
                       <span class="list-item-value">{layer.secondaryDatasource}</span>
                     </div>
                   </div>
