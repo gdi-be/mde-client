@@ -1,3 +1,15 @@
+## [4.1.1](https://github.com/gdi-be/mde-client/compare/v4.1.0...v4.1.1) (2025-10-06)
+
+
+### Bug Fixes
+
+* add conditional readonly fields ([d48a8e7](https://github.com/gdi-be/mde-client/commit/d48a8e716a5f0c9b372adcbe0600c92e1b1e5c1f))
+* add missing fields/labels to readonly-view ([22ba924](https://github.com/gdi-be/mde-client/commit/22ba92405b05db1c96c7a3652f009915ae09ea9a))
+* improve layout for long metadata titles ([eb79062](https://github.com/gdi-be/mde-client/commit/eb79062741400b5108937cdf51347f72bbd9bad7))
+* prevent form growing to big ([2f5847b](https://github.com/gdi-be/mde-client/commit/2f5847b8250a64eb5c308d78f30fe85fee06dd30))
+* readd QualityReportCheckField for editor ([fef21a3](https://github.com/gdi-be/mde-client/commit/fef21a36c8dc860f55b7345357f5d1b1824fb93f))
+* update section of inspireFormatName ([b26d0d4](https://github.com/gdi-be/mde-client/commit/b26d0d4e04537a5b740f2f64ccfaecfa206d1bb3))
+
 # [4.1.0](https://github.com/gdi-be/mde-client/compare/v4.0.0...v4.1.0) (2025-09-30)
 
 
