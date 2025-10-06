@@ -716,7 +716,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 32,
-    label: 'Herkunft der Daten',
     key: 'isoMetadata.lineage',
     isCollection: true,
     validator: (val: any) => {
@@ -733,7 +732,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 33,
-    label: 'Herkunft der Daten',
     key: 'isoMetadata.lineage.title',
     collectionKey: 'isoMetadata.lineage',
     validator: (val: any) => {
@@ -750,7 +748,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 34,
-    label: 'Herkunft der Daten',
     key: 'isoMetadata.lineage.date',
     collectionKey: 'isoMetadata.lineage',
     validator: optionalValidator,
@@ -765,7 +762,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 35,
-    label: 'Herkunft der Daten',
     key: 'isoMetadata.lineage.identifier',
     collectionKey: 'isoMetadata.lineage',
     validator: () => {
@@ -1287,7 +1283,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
-    section: 'services',
+    section: 'classification',
     required: true
   }
 ];
