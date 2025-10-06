@@ -16,6 +16,10 @@
   let { value, onChange }: ServiceTypeProps = $props();
 
   const fieldConfig = getFieldConfig(47);
+  const fieldConfigUrl = getFieldConfig(75);
+  const fieldConfigFormat = getFieldConfig(76);
+  const fieldConfigWidth = getFieldConfig(77);
+  const fieldConfigHeight = getFieldConfig(78);
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 
@@ -38,19 +42,19 @@
       <div class="legend-text-fields">
         <div class="field-wrapper">
           <TextInput
-            label="Url"
+            label={fieldConfigUrl?.label}
             value={value?.url}
             onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
-            fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.url')}
+            fieldConfig={fieldConfigUrl}
           />
           <FieldTools value={value?.url} key={KEY} noCheckmark noHelpButton />
         </div>
         <div class="field-wrapper">
           <TextInput
-            label="Format"
+            label={fieldConfigFormat?.label}
             value={value?.format}
             onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
-            fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.format')}
+            fieldConfig={fieldConfigFormat}
           />
           <FieldTools value={value?.format} key={KEY} noCheckmark noHelpButton />
         </div>
@@ -58,19 +62,19 @@
       <div class="legend-size-fields">
         <div class="field-wrapper">
           <NumberInput
-            label="Breite"
+            label={fieldConfigWidth?.label}
             value={value?.width}
             onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
-            fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.width')}
+            fieldConfig={fieldConfigWidth}
           />
           <FieldTools value={value?.width} key={KEY} noCheckmark noHelpButton />
         </div>
         <div class="field-wrapper">
           <NumberInput
-            label="Höhe"
+            label={fieldConfigHeight?.label}
             value={value?.height}
             onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
-            fieldConfig={getFieldConfig(47, 'isoMetadata.services.legendImage.height')}
+            fieldConfig={fieldConfigHeight}
           />
           <FieldTools value={value?.height} key={KEY} noCheckmark noHelpButton />
         </div>

@@ -919,28 +919,28 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: false
   },
   {
-    profileId: 47,
+    profileId: 75,
     key: 'isoMetadata.services.legendImage.url',
     validator: optionalValidator,
     section: 'services',
     required: false
   },
   {
-    profileId: 47,
+    profileId: 76,
     key: 'isoMetadata.services.legendImage.format',
     validator: optionalValidator,
     section: 'services',
     required: false
   },
   {
-    profileId: 47,
+    profileId: 77,
     key: 'isoMetadata.services.legendImage.width',
     validator: optionalValidator,
     section: 'services',
     required: false
   },
   {
-    profileId: 47,
+    profileId: 78,
     key: 'isoMetadata.services.legendImage.height',
     validator: optionalValidator,
     section: 'services',
@@ -1276,7 +1276,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     validatorExtraParams: ['isoMetadata.metadataProfile'],
     validator: (val: string[], extraParams) => {
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
-      if (metadataProfile === 'ISO') {
+      if (metadataProfile !== 'INSPIRE_HARMONISED') {
         return { valid: true };
       }
       if (!isDefined(val)) {
