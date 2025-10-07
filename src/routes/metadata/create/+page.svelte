@@ -9,6 +9,7 @@
   import Card, { Content } from '@smui/card';
   import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
   import CharacterCounter from '@smui/textfield/character-counter';
+  import toast from 'svelte-french-toast';
 
   let title = $state<string>('');
   let metadataProfile = $state<MetadataProfile>('ISO');
@@ -39,6 +40,11 @@
       } else {
         log.error('No metadataId in response');
       }
+    } else if (response.status === 409) {
+      toast.error('Ein Datensatz mit diesem Titel existiert bereits.');
+    } else {
+      toast.error('Fehler beim Anlegen der Metadaten.');
+      log.error('Error creating metadata', await response.text());
     }
   };
 </script>
