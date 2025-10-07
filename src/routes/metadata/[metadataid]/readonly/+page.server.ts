@@ -14,8 +14,8 @@ export async function load({ params, cookies }) {
 
   try {
     const file = Bun.file('/data/codelists/field_labels.yaml');
-    const themes = await file.text();
-    const fieldLabels = parse(themes) as YamlFieldConfig[];
+    const fileContent = await file.text();
+    const fieldLabels = parse(fileContent) as YamlFieldConfig[];
     return {
       metadata,
       fieldLabels
