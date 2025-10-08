@@ -22,9 +22,6 @@
     <section id="classification">
       <h2>2. Einordnung</h2>
       <DisplayField key="isoMetadata.metadataProfile" profileId={5} />
-      <DisplayField key="clientMetadata.privacy" profileId={4} />
-      <DisplayField key="isoMetadata.termsOfUseId" profileId={25} />
-      <DisplayField key="isoMetadata.termsOfUseSource" profileId={26} />
       {#if metadataProfile === 'INSPIRE_HARMONISED' || metadataProfile === 'INSPIRE_IDENTIFIED'}
         <DisplayField key="isoMetadata.inspireTheme" profileId={7} />
       {/if}
@@ -34,7 +31,12 @@
       {#if metadataProfile === 'INSPIRE_HARMONISED'}
         <DisplayField key="isoMetadata.inspireAnnexVersion" profileId={38} />
       {/if}
-      <DisplayField key="isoMetadata.valid" profileId={37} />
+      {#if metadataProfile === 'INSPIRE_HARMONISED'}
+        <DisplayField key="isoMetadata.valid" profileId={37} />
+      {/if}
+      <DisplayField key="clientMetadata.privacy" profileId={4} />
+      <DisplayField key="isoMetadata.termsOfUseId" profileId={25} />
+      <DisplayField key="isoMetadata.termsOfUseSource" profileId={26} />
       <DisplayField key="isoMetadata.highValueDataset" profileId={6} />
       {#if highValueDataset === true}
         <DisplayField key="isoMetadata.highValueDataCategory" profileId={8} />
