@@ -16,8 +16,6 @@ import type { Role } from '$lib/models/keycloak';
 export type FormState = {
   metadata?: MetadataCollection;
   activeHelpKey?: FieldKey;
-  assignedUser?: string;
-  assignedRole?: string;
   fieldConfigs?: YamlFieldConfig[];
 };
 
