@@ -34,7 +34,9 @@
       {#if metadataProfile === 'INSPIRE_HARMONISED'}
         <DisplayField key="isoMetadata.inspireAnnexVersion" profileId={38} />
       {/if}
-      <DisplayField key="isoMetadata.valid" profileId={37} />
+      {#if metadataProfile === 'INSPIRE_HARMONISED'}
+        <DisplayField key="isoMetadata.valid" profileId={37} />
+      {/if}
       <DisplayField key="isoMetadata.highValueDataset" profileId={6} />
       {#if highValueDataset === true}
         <DisplayField key="isoMetadata.highValueDataCategory" profileId={8} />
