@@ -1,3 +1,16 @@
+## [4.1.2](https://github.com/gdi-be/mde-client/compare/v4.1.1...v4.1.2) (2025-10-08)
+
+
+### Bug Fixes
+
+* add error feedback ([7a9bc43](https://github.com/gdi-be/mde-client/commit/7a9bc43e8f6ae628d0a4bd345b7221baa1441c40))
+* get lineage subfield labels from config ([2f315d2](https://github.com/gdi-be/mde-client/commit/2f315d2de48fed59596b267cbfd68cd7fcbe48f5))
+* hide schema name field for DHS ([059e7dc](https://github.com/gdi-be/mde-client/commit/059e7dc7d758d8a11a837c9dd94cf2bdfd30aaac))
+* limit title on creation to 255 chars ([dd966a5](https://github.com/gdi-be/mde-client/commit/dd966a5a21ebbd5e04f3a204e02223e15ad119a8))
+* only show valid field for INSPIRE_HARMONISED ([d872029](https://github.com/gdi-be/mde-client/commit/d8720290c17d505b30b624b491e148767d442a97))
+* remove maxlength on KeywordsField ([e78a594](https://github.com/gdi-be/mde-client/commit/e78a594b905cd9cdf231fc254918a6e804858c97))
+* show alle ids for all service types ([292f7f6](https://github.com/gdi-be/mde-client/commit/292f7f6d18608d4bf91ae829ec7ce300aa73a30d))
+
 ## [4.1.1](https://github.com/gdi-be/mde-client/compare/v4.1.0...v4.1.1) (2025-10-06)
 
 
