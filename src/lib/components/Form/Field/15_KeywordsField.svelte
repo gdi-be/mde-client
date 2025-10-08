@@ -186,7 +186,6 @@
       class="custom-keywords-input"
       textarea
       label="Schlagwörter"
-      input$maxlength={100}
       bind:value={newKeyword}
     />
   </Content>
