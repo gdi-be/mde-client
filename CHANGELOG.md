@@ -1,3 +1,10 @@
+## [4.1.3](https://github.com/gdi-be/mde-client/compare/v4.1.2...v4.1.3) (2025-10-08)
+
+
+### Bug Fixes
+
+* set editingRoles for inspireFormatName (70) ([c2934fb](https://github.com/gdi-be/mde-client/commit/c2934fbe714f8c056f4b9d07d0ba2aa8b6482d4c))
+
 ## [4.1.2](https://github.com/gdi-be/mde-client/compare/v4.1.1...v4.1.2) (2025-10-08)
 
 
