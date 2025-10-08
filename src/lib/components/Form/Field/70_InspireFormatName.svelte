@@ -14,6 +14,11 @@
   import type { MetadataProfile } from '$lib/models/metadata';
   import type { InspireThemeConfig } from '$lib/models/inspire';
   import { toast } from 'svelte-french-toast';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
+
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireFormatName';
@@ -67,7 +72,7 @@
   };
 </script>
 
-{#if metadataProfile === 'INSPIRE_HARMONISED' && options.length > 0}
+{#if highestRole !== 'MdeDataOwner' && metadataProfile === 'INSPIRE_HARMONISED' && options.length > 0}
   <div class="inspire-format-name-field">
     <SelectInput
       label={fieldConfig?.label}
