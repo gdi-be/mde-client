@@ -8,6 +8,7 @@
   import type { Option } from '$lib/models/form';
   import Card, { Content } from '@smui/card';
   import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
+  import CharacterCounter from '@smui/textfield/character-counter';
 
   let title = $state<string>('');
   let metadataProfile = $state<MetadataProfile>('ISO');
@@ -47,7 +48,13 @@
     <Content>
       <h1>Neuerfassung</h1>
       <p>Hier erfassen Sie zu Ihrem Datensatz neue Metadaten. Tragen Sie einen Titel ein.</p>
-      <Textfield bind:value={title} label="Titel" required />
+      <div class={[title.length > 100 ? 'long-text' : '']}>
+        <Textfield bind:value={title} label="Titel" required input$maxlength={255}>
+          {#snippet helper()}
+            <CharacterCounter>0 / 255</CharacterCounter>
+          {/snippet}
+        </Textfield>
+      </div>
       <p>
         Zusätzlich können Sie einen existierenden Metadatensatz auswählen, den Sie als Vorlage
         nutzen möchten, bspw. wenn es ein neuer Jahresstand ist.
@@ -72,6 +79,13 @@
     height: 100%;
     text-align: center;
     gap: 1em;
+
+    div.long-text {
+      :global(.mdc-text-field-character-counter) {
+        font-weight: bold;
+        color: var(--mdc-theme-error);
+      }
+    }
 
     p {
       width: 80%;
