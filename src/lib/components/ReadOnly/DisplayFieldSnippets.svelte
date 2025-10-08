@@ -480,13 +480,21 @@
             <strong>{getFieldConfig(60)?.label}</strong>
             <span class="list-item-value">{service.shortDescription}</span>
           </div>
-          {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
-            <div class="list-item-field">
-              <!-- Service-Workspace -->
-              <strong>{getFieldConfig(45)?.label}</strong>
-              <span class="list-item-value">{service.workspace}</span>
-            </div>
-          {/if}
+          <div class="list-item-field">
+            <!-- Service-Workspace -->
+            <strong>{getFieldConfig(45)?.label}</strong>
+            <span class="list-item-value">{service.workspace}</span>
+          </div>
+          <div class="list-item-field">
+            <!-- Service-Identifier -->
+            <strong>Service Identifier</strong>
+            <span class="list-item-value">{service.serviceIdentification}</span>
+          </div>
+          <div class="list-item-field">
+            <!-- File-Identifier -->
+            <strong>File Identifier</strong>
+            <span class="list-item-value">{service.fileIdentifier}</span>
+          </div>
           {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
             <div class="list-item-field">
               <!-- Service-Preview -->
@@ -554,16 +562,6 @@
                   </span>
                 </div>
               </div>
-            </div>
-          {/if}
-          <div class="list-item-field">
-            <strong>Service Identifier</strong>
-            <span class="list-item-value">{service.serviceIdentification}</span>
-          </div>
-          {#if service.serviceType !== 'ATOM'}
-            <div class="list-item-field">
-              <strong>File Identifier</strong>
-              <span class="list-item-value">{service.fileIdentifier}</span>
             </div>
           {/if}
           {#if service.serviceType === 'WFS' && service.featureTypes?.length}
