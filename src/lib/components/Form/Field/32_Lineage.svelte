@@ -21,6 +21,12 @@
   let metadataCollections = $state<MetadataCollection[]>([]);
   let titleSearchListId = $state<string>();
 
+  let showCheckmark = $state(false);
+  const fieldConfig = getFieldConfig<Lineage[]>(32);
+  const titleFieldConfig = getFieldConfig<string>(33);
+  const dateFieldConfig = getFieldConfig<string>(34);
+  const identifierFieldConfig = getFieldConfig<string>(35);
+
   $effect(() => {
     if (valueFromData && valueFromData.length > 0) {
       lineages = valueFromData?.map((lineage) => {
@@ -67,7 +73,6 @@
     url.searchParams.append('query', searchTerm);
 
     const response = await fetch(url);
-
     if (!response.ok) {
       toast.error('Fehler beim Abrufen der Metadaten');
       return [];
@@ -77,9 +82,6 @@
 
     return data?.content || [];
   };
-
-  let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<Lineage[]>(32);
 
   const persistLineages = async () => {
     const value = lineages.map((lineage) => ({
@@ -188,13 +190,13 @@
           <div class="wrap">
             <TextInput
               bind:value={lineage.title}
-              label="Titel"
+              label={titleFieldConfig?.label}
               onblur={onTitleBlur}
               onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
-              fieldConfig={getFieldConfig(33)}
-              validationResult={getFieldConfig(33)?.validator(lineage.title)}
+              fieldConfig={titleFieldConfig}
+              validationResult={titleFieldConfig?.validator(lineage.title)}
             />
-            <FieldTools key={`${KEY}[${index}].title`} fieldConfig={getFieldConfig(33)} />
+            <FieldTools key={`${KEY}[${index}].title`} fieldConfig={titleFieldConfig} />
           </div>
           {#if metadataCollections.length > 0 && titleSearchListId === lineage.listId}
             <ul class="search-results" bind:this={searchResultsElement}>
@@ -213,22 +215,22 @@
             <DateInput
               bind:value={lineage.date}
               key={KEY}
-              label="Veröffentlichungsdatum"
+              label={dateFieldConfig?.label}
               onblur={persistLineages}
-              fieldConfig={getFieldConfig(34)}
-              validationResult={getFieldConfig(34)?.validator(lineage.date)}
+              fieldConfig={dateFieldConfig}
+              validationResult={dateFieldConfig?.validator(lineage.date)}
             />
-            <FieldTools key={`${KEY}[${index}].date`} fieldConfig={getFieldConfig(34)} />
+            <FieldTools key={`${KEY}[${index}].date`} fieldConfig={dateFieldConfig} />
           </div>
           <div class="lineage-source-field">
             <TextInput
               bind:value={lineage.identifier}
-              label="Identifier"
+              label={identifierFieldConfig?.label}
               onblur={persistLineages}
-              fieldConfig={getFieldConfig(35)}
-              validationResult={getFieldConfig(35)?.validator(lineage.identifier)}
+              fieldConfig={identifierFieldConfig}
+              validationResult={identifierFieldConfig?.validator(lineage.identifier)}
             />
-            <FieldTools key={`${KEY}[${index}].identifier`} fieldConfig={getFieldConfig(35)} />
+            <FieldTools key={`${KEY}[${index}].identifier`} fieldConfig={identifierFieldConfig} />
           </div>
         </div>
       </fieldset>
