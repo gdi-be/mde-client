@@ -1283,6 +1283,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
+    editingRoles: ['MdeEditor'],
     section: 'classification',
     required: true
   }
