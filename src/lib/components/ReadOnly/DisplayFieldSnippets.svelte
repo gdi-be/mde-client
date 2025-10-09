@@ -594,7 +594,7 @@
                     </div>
                     <div class="list-item-field">
                       <!-- FeatureType-Title -->
-                      <strong>{getFieldConfig(63)?.label}</strong>
+                      <strong>{getFieldConfig(61)?.label}</strong>
                       <span class="list-item-value">{featureType.title}</span>
                     </div>
                     <div class="list-item-field">
@@ -685,7 +685,7 @@
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-SecondaryDataSource -->
-                      <strong>{getFieldConfig(56)?.label}</strong>
+                      <strong>{getFieldConfig(68)?.label}</strong>
                       <span class="list-item-value">{layer.secondaryDatasource}</span>
                     </div>
                   </div>
