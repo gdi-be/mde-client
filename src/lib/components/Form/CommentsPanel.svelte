@@ -8,7 +8,7 @@
   import { page } from '$app/state';
   import { invalidateAll } from '$app/navigation';
   import { getContext, onMount } from 'svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';

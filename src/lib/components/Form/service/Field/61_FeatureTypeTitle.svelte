@@ -1,26 +1,27 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import type { ColumnInfo } from '$lib/models/metadata';
+  import type { FeatureType } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
 
   export type ComponentProps = {
-    value?: ColumnInfo['alias'];
+    value?: FeatureType['title'];
     onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
-  const HELP_KEY = 'isoMetadata.services.featureTypes.columns.alias';
-  const fieldConfig = getFieldConfig(66);
+  const HELP_KEY = 'isoMetadata.services.featureTypes.title';
+  const fieldConfig = getFieldConfig(61);
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 </script>
 
-<div class="attribute-alias-field">
+<div class="featuretype-title-field">
   <TextInput
-    label={fieldConfig?.label || 'Attribut-Alias'}
+    label={fieldConfig?.label || 'Titel des Objekttyps'}
     {value}
+    maxlength={100}
     {fieldConfig}
     {validationResult}
     onchange={async (e: Event) => {
@@ -34,7 +35,7 @@
 </div>
 
 <style lang="scss">
-  .attribute-alias-field {
+  .featuretype-title-field {
     position: relative;
     display: flex;
     gap: 0.25em;

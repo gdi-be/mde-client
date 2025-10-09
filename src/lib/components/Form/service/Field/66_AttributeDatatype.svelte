@@ -18,7 +18,7 @@
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.columns.type';
-  const fieldConfig = getFieldConfig(67);
+  const fieldConfig = getFieldConfig(66);
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 

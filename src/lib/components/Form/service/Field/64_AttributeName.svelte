@@ -12,7 +12,7 @@
   let { value, onChange }: ComponentProps = $props();
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.columns.name';
-  const fieldConfig = getFieldConfig(65);
+  const fieldConfig = getFieldConfig(64);
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 </script>

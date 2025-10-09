@@ -410,15 +410,18 @@
       {#each value as lineage}
         <div class="list-item">
           <div class="list-item-field">
-            <strong>Title</strong>
+            <!-- Lineage-Title -->
+            <strong>{getFieldConfig(33)?.label}</strong>
             <span class="list-item-value">{lineage.title || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
-            <strong>Veröffentlichungsdatum</strong>
+            <!-- Lineage-Date -->
+            <strong>{getFieldConfig(34)?.label}</strong>
             <span class="list-item-value">{lineage.date || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
-            <strong>Identifier</strong>
+            <!-- Lineage-Identifier -->
+            <strong>{getFieldConfig(35)?.label}</strong>
             <span class="list-item-value">{lineage.identifier || DEFAULT_NULL_STRING}</span>
           </div>
         </div>

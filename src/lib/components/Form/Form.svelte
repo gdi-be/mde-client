@@ -36,10 +36,10 @@
   import F30_ContentDescription from './Field/30_ContentDescription.svelte';
   import F31_TechnicalDescription from './Field/31_TechnicalDescription.svelte';
   import F32_Lineage from './Field/32_Lineage.svelte';
-  import F39_AdditionalInformation from './Field/39_AdditionalInformation.svelte';
   import F38_InspireAnnexVersionField from './Field/38_InspireAnnexVersionField.svelte';
+  import F41_AdditionalInformation from './Field/41_AdditionalInformation.svelte';
   import F70_InspireFormatNameField from './Field/70_InspireFormatName.svelte';
-  import ServicesSection from './service/ServicesSection.svelte';
+  import F40_ServicesSection from './service/40_ServicesSection.svelte';
   import FormFooter from './FormFooter.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
   import Button, { Icon, Label } from '@smui/button';
@@ -212,13 +212,13 @@
           <F30_ContentDescription />
           <F31_TechnicalDescription />
           <F32_Lineage />
-          <F39_AdditionalInformation />
+          <F41_AdditionalInformation />
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}
       {#if activeSection === 'services'}
         <section id="services" transition:fade>
-          <ServicesSection />
+          <F40_ServicesSection />
         </section>
       {/if}
     </form>

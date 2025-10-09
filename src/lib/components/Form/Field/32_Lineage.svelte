@@ -5,7 +5,7 @@
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { toast } from 'svelte-french-toast';
 

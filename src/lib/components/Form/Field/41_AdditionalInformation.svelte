@@ -3,7 +3,7 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import type { CI_OnLineFunctionCode, ContentDescription } from '$lib/models/metadata';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
@@ -40,7 +40,10 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<ContentDescription[]>(39);
+  const fieldConfig = getFieldConfig<ContentDescription[]>(41);
+  const titleFieldConfig = getFieldConfig<string>(42);
+  const codeFieldConfig = getFieldConfig<string>(43);
+  const urlFieldConfig = getFieldConfig<string>(44);
 
   const persistContentDescriptions = async () => {
     const value = contentDescriptions.map((contentDescription) => ({
@@ -118,16 +121,10 @@
             bind:value={contentDescription.description}
             label="Titel"
             onblur={persistContentDescriptions}
-            fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.title')}
-            validationResult={getFieldConfig(
-              39,
-              'isoMetadata.contentDescriptions.title'
-            )?.validator(contentDescription.description)}
+            fieldConfig={titleFieldConfig}
+            validationResult={titleFieldConfig?.validator(contentDescription.description)}
           />
-          <FieldTools
-            key={`${KEY}[${index}].description`}
-            fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.description.title')}
-          />
+          <FieldTools key={`${KEY}[${index}].description`} fieldConfig={titleFieldConfig} />
         </div>
         <div class="inline-fields">
           <div class="subfield-wrapper code-select-field">
@@ -138,11 +135,8 @@
                 persistContentDescriptions();
               }}
               label="Code"
-              fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.code')}
-              validationResult={getFieldConfig(
-                39,
-                'isoMetadata.contentDescriptions.code'
-              )?.validator(contentDescription.code)}
+              fieldConfig={codeFieldConfig}
+              validationResult={codeFieldConfig?.validator(contentDescription.code)}
               options={[
                 { label: 'Herunterladen', key: 'download' },
                 { label: 'Information', key: 'information' },
@@ -151,26 +145,17 @@
                 { label: 'Suche', key: 'search' }
               ]}
             />
-            <FieldTools
-              key={`${KEY}[${index}].code`}
-              fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.code')}
-            />
+            <FieldTools key={`${KEY}[${index}].code`} fieldConfig={codeFieldConfig} />
           </div>
           <div class="subfield-wrapper url-field">
             <TextInput
               bind:value={contentDescription.url}
               label="Url"
               onblur={persistContentDescriptions}
-              fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.url')}
-              validationResult={getFieldConfig(
-                39,
-                'isoMetadata.contentDescriptions.url'
-              )?.validator(contentDescription.url)}
+              fieldConfig={urlFieldConfig}
+              validationResult={urlFieldConfig?.validator(contentDescription.url)}
             />
-            <FieldTools
-              key={`${KEY}[${index}].url`}
-              fieldConfig={getFieldConfig(39, 'isoMetadata.contentDescriptions.url')}
-            />
+            <FieldTools key={`${KEY}[${index}].url`} fieldConfig={urlFieldConfig} />
           </div>
         </div>
       </fieldset>

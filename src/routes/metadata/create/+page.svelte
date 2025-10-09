@@ -55,9 +55,9 @@
       <h1>Neuerfassung</h1>
       <p>Hier erfassen Sie zu Ihrem Datensatz neue Metadaten. Tragen Sie einen Titel ein.</p>
       <div class={[title.length > 100 ? 'long-text' : '']}>
-        <Textfield bind:value={title} label="Titel" required input$maxlength={255}>
+        <Textfield bind:value={title} label="Titel" required input$maxlength={250}>
           {#snippet helper()}
-            <CharacterCounter>0 / 255</CharacterCounter>
+            <CharacterCounter>0 / 250</CharacterCounter>
           {/snippet}
         </Textfield>
       </div>

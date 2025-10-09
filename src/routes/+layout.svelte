@@ -2,7 +2,7 @@
   import Header from '$lib/components/Header.svelte';
   import { onMount } from 'svelte';
   import PopConfirm from '$lib/components/Popconfirm.svelte';
-  import { initializePopconfimContext } from '$lib/context/PopConfirmContex.svelte.js';
+  import { initializePopconfimContext } from '$lib/context/PopConfirmContext.svelte.js';
   import { sseContext } from '$lib/context/ServerEventContext.svelte.js';
   import ValidationPopup from '$lib/components/ValidationPopup.svelte';
   import { Toaster } from 'svelte-french-toast';

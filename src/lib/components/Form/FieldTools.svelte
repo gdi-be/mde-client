@@ -7,7 +7,7 @@
   import { getFormContext, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import IconButton from '@smui/icon-button';
   import { toast } from 'svelte-french-toast';
-  import { popconfirm } from '../../context/PopConfirmContex.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import type { FieldKey } from '$lib/models/form';
   import type { FullFieldConfig } from './FieldsConfig';
 

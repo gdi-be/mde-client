@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { closePopconfirm, getPopconfirmState } from '$lib/context/PopConfirmContex.svelte';
+  import { closePopconfirm, getPopconfirmState } from '$lib/context/PopConfirmContext.svelte';
   import Button from '@smui/button';
   import Spinner from './Spinner.svelte';
 

@@ -19,10 +19,6 @@
   const KEY = 'isoMetadata.extent';
   const CRS_KEY = 'isoMetadata.crs';
   const CRS_LABEL = 'Koordinatensystem';
-  const LABEL_MAX_X = 'Maximaler X-Wert';
-  const LABEL_MIN_X = 'Minimaler X-Wert';
-  const LABEL_MAX_Y = 'Maximaler Y-Wert';
-  const LABEL_MIN_Y = 'Minimaler Y-Wert';
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -62,10 +58,10 @@
   );
 
   const fieldConfig = getFieldConfig<Extent>(18);
-  const minXFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.minx');
-  const minYFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.miny');
-  const maxXFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.maxx');
-  const maxYFieldConfig = getFieldConfig<number>(18, 'isoMetadata.extent.maxy');
+  const minXFieldConfig = getFieldConfig<number>(71);
+  const maxXFieldConfig = getFieldConfig<number>(72);
+  const minYFieldConfig = getFieldConfig<number>(73);
+  const maxYFieldConfig = getFieldConfig<number>(74);
 
   let validationResultMinX = $derived(minXFieldConfig?.validator(transformedValue.minx));
   let validationResultMinY = $derived(minYFieldConfig?.validator(transformedValue.miny));
@@ -134,7 +130,7 @@
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.minx}
-            label={minXFieldConfig?.label || LABEL_MIN_X}
+            label={minXFieldConfig?.label}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
@@ -145,7 +141,7 @@
           />
           <NumberInput
             value={transformedValue.maxx}
-            label={maxXFieldConfig?.label || LABEL_MAX_X}
+            label={maxXFieldConfig?.label}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
@@ -158,7 +154,7 @@
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.miny}
-            label={minYFieldConfig?.label || LABEL_MIN_Y}
+            label={minYFieldConfig?.label}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
@@ -169,7 +165,7 @@
           />
           <NumberInput
             value={transformedValue.maxy}
-            label={maxYFieldConfig?.label || LABEL_MAX_Y}
+            label={maxYFieldConfig?.label}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;

@@ -38,6 +38,8 @@
   let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined));
 
   const clearAllValues = async () => {
+    scaleValue = null;
+    resolutionValue = null;
     await updateResolution(null);
     await updateScale(null);
   };
