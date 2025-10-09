@@ -389,8 +389,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return val.default.map((kw) => kw.keyword).join(', ');
     },
     section: 'basedata',
-    required: true,
-    editingRoles: ['MdeEditor']
+    required: true
   },
   {
     profileId: 16,
@@ -398,8 +397,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     placeholder: 'EPSG:25833',
     validator: optionalValidator,
     section: 'temp_and_spatial',
-    required: false,
-    editingRoles: ['MdeDataOwner']
+    required: false
   },
   {
     profileId: 17,
@@ -422,7 +420,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.extent.minx',
     section: 'temp_and_spatial',
     required: true,
-    editingRoles: ['MdeEditor'],
     validator: (val?: number) => {
       if (!val || val < 1) {
         return {
@@ -431,14 +428,14 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
-    }
+    },
+    editingRoles: ['MdeEditor'],
   },
   {
     profileId: 72,
     key: 'isoMetadata.extent.maxx',
     section: 'temp_and_spatial',
     required: true,
-    editingRoles: ['MdeEditor'],
     validator: (val?: number) => {
       if (!val || val < 1) {
         return {
@@ -447,14 +444,14 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
-    }
+    },
+    editingRoles: ['MdeEditor']
   },
   {
     profileId: 73,
     key: 'isoMetadata.extent.miny',
     section: 'temp_and_spatial',
     required: true,
-    editingRoles: ['MdeEditor'],
     validator: (val?: number) => {
       if (!val || val < 1) {
         return {
@@ -463,14 +460,14 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
-    }
+    },
+    editingRoles: ['MdeEditor']
   },
   {
     profileId: 74,
     key: 'isoMetadata.extent.maxy',
     section: 'temp_and_spatial',
     required: true,
-    editingRoles: ['MdeEditor'],
     validator: (val?: number) => {
       if (!val || val < 1) {
         return {
@@ -479,7 +476,8 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         };
       }
       return { valid: true };
-    }
+    },
+    editingRoles: ['MdeEditor']
   },
   {
     profileId: 19,
@@ -585,8 +583,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return termsOfUseList.find((tou) => tou.id === val)?.shortname || '';
     },
     section: 'classification',
-    required: true,
-    editingRoles: ['MdeDataOwner']
+    required: true
   },
   {
     profileId: 26,
@@ -595,8 +592,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'classification',
-    required: true,
-    editingRoles: ['MdeDataOwner']
+    required: true
   },
   {
     profileId: 27,
@@ -744,7 +740,8 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return val ? 'Überprüft' : 'Nicht überprüft';
     },
     section: 'classification',
-    required: false
+    required: false,
+    editingRoles: ['MdeEditor']
   },
   {
     profileId: 38,
