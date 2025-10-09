@@ -119,7 +119,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contentDescription.description}
-            label="Titel"
+            label={titleFieldConfig?.label}
             onblur={persistContentDescriptions}
             fieldConfig={titleFieldConfig}
             validationResult={titleFieldConfig?.validator(contentDescription.description)}
@@ -134,7 +134,7 @@
                 contentDescription.code = code as CI_OnLineFunctionCode;
                 persistContentDescriptions();
               }}
-              label="Code"
+              label={codeFieldConfig?.label}
               fieldConfig={codeFieldConfig}
               validationResult={codeFieldConfig?.validator(contentDescription.code)}
               options={[
@@ -150,7 +150,7 @@
           <div class="subfield-wrapper url-field">
             <TextInput
               bind:value={contentDescription.url}
-              label="Url"
+              label={urlFieldConfig?.label}
               onblur={persistContentDescriptions}
               fieldConfig={urlFieldConfig}
               validationResult={urlFieldConfig?.validator(contentDescription.url)}
