@@ -1,3 +1,15 @@
+# [4.2.0](https://github.com/gdi-be/mde-client/compare/v4.1.3...v4.2.0) (2025-10-09)
+
+
+### Bug Fixes
+
+* update read-only view ([351c33b](https://github.com/gdi-be/mde-client/commit/351c33bdd5d7fc108a7522040e7c0888ca584d30))
+
+
+### Features
+
+* update fieldconfigs / labels to new IDs ([5629de0](https://github.com/gdi-be/mde-client/commit/5629de0d5f950049d678354d49e368ba5f8e143f))
+
 ## [4.1.3](https://github.com/gdi-be/mde-client/compare/v4.1.2...v4.1.3) (2025-10-08)
 
 
