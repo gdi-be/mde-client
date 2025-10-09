@@ -610,17 +610,17 @@
                             <div class="list-item">
                               <div class="list-item-field">
                                 <!-- Attribute-Name -->
-                                <strong>{getFieldConfig(65)?.label}</strong>
+                                <strong>{getFieldConfig(64)?.label}</strong>
                                 <span class="list-item-value">{columnInfo.name}</span>
                               </div>
                               <div class="list-item-field">
                                 <!-- Attribute-Alias -->
-                                <strong>{getFieldConfig(66)?.label}</strong>
+                                <strong>{getFieldConfig(65)?.label}</strong>
                                 <span class="list-item-value">{columnInfo.alias}</span>
                               </div>
                               <div class="list-item-field">
                                 <!-- Attribute-DataType -->
-                                <strong>{getFieldConfig(67)?.label}</strong>
+                                <strong>{getFieldConfig(66)?.label}</strong>
                                 <span class="list-item-value">{columnInfo.type}</span>
                               </div>
                             </div>
