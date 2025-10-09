@@ -429,7 +429,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
-    editingRoles: ['MdeEditor'],
+    editingRoles: ['MdeEditor']
   },
   {
     profileId: 72,
