@@ -1,41 +1,47 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import ColumnsForm from './ColumnsForm.svelte';
-  import type { FeatureType, Service } from '$lib/models/metadata';
-  import FeatureTypeTitle_61 from './Field/62_FeatureTypeTitle.svelte';
-  import FeatureTypeName_62 from './Field/63_FeatureTypeName.svelte';
-  import FeatureTypeDescription_69 from './Field/69_FeatureTypeDescription.svelte';
-  import FieldHint from '$lib/components/Form/FieldHint.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import type { Layer, Service } from '$lib/models/metadata';
+  import LayerName_50 from './Field/50_LayerName.svelte';
+  import LayerTitle_49 from './Field/49_LayerTitle.svelte';
+  import LayerStyleName_51 from './Field/51_LayerStyleName.svelte';
+  import LayerStyleTitle_52 from './Field/52_LayerStyleTitle.svelte';
+  import LayerLegendImage_53 from './Field/53_LayerLegendImage.svelte';
+  import LayerDescription_54 from './Field/54_LayerDescription.svelte';
+  import LayerDatasource_55 from './Field/55_LayerDatasource.svelte';
+  import LayerSecondaryDatasource_68 from './Field/68_LayerSecondaryDatasource.svelte';
+  import FieldHint from '../FieldHint.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   type Tab = {
     name: string;
   };
 
-  export type FeatureTypeFormProps = {
-    value?: FeatureType[];
-    service: Service;
-    onChange: (featureTypes: FeatureType[]) => Promise<Response>;
+  export type LayersFormProps = {
+    value?: Layer[];
+    service?: Service;
+    onChange: (layers: Layer[]) => Promise<Response>;
   };
 
-  let { value: initialFeatureTypes, onChange, service }: FeatureTypeFormProps = $props();
+  let { value: initialLayers, service, onChange }: LayersFormProps = $props();
   const serviceId = $derived(service?.serviceIdentification);
 
-  let featureTypes = $state<FeatureType[]>([]);
+  let layers = $state<Layer[]>([]);
   let tabs = $derived<Tab[]>(
-    featureTypes.map((featureType) => {
+    layers.map((layer) => {
       return {
-        name: featureType.title || 'Unbekannter Featuretype'
+        name: layer.title || 'Unbekannter Layer'
       };
     })
   );
   let activeTabIndex: number | undefined = $state();
-  let activeFeatureType = $derived(activeTabIndex ? featureTypes[activeTabIndex] : featureTypes[0]);
+  let activeLayer = $derived(activeTabIndex ? layers[activeTabIndex] : layers[0]);
 
-  const fieldConfig = getFieldConfig(61);
+  const fieldConfig = getFieldConfig(48);
   const validationResult = $derived(
-    fieldConfig?.validator(featureTypes, { PARENT_VALUE: service })
+    fieldConfig?.validator(layers, {
+      PARENT_VALUE: service
+    })
   );
 
   $effect(() => {
@@ -46,49 +52,48 @@
   });
 
   $effect(() => {
-    featureTypes = initialFeatureTypes || [];
+    layers = initialLayers || [];
   });
 
-  function addFeatureType() {
-    const name = String.fromCharCode(97 + featureTypes.length);
-    featureTypes = [
-      ...featureTypes,
+  function addLayer() {
+    const name = String.fromCharCode(97 + layers.length);
+    layers = [
+      ...layers,
       {
         name,
         title: name,
-        shortDescription: '',
-        columns: []
+        styleName: name + '_DefaultStyle'
       }
     ];
-    activeTabIndex = featureTypes.length - 1;
-    onChange(featureTypes);
+    activeTabIndex = layers.length - 1;
+    onChange(layers);
   }
 
-  function removeFeatureType(index: number, evt: MouseEvent) {
+  function removeLayer(index: number, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
     popconfirm(
       targetEl,
       async () => {
-        featureTypes = featureTypes.filter((_, i) => i !== index);
+        layers = layers.filter((_, i) => i !== index);
         if (activeTabIndex === index) {
-          activeTabIndex = featureTypes.length - 1;
+          activeTabIndex = layers.length - 1;
         }
-        onChange(featureTypes);
-        activeTabIndex = featureTypes.length > 0 ? activeTabIndex : undefined;
-        if (activeTabIndex && activeTabIndex > featureTypes.length - 1) {
+        onChange(layers);
+        activeTabIndex = layers.length > 0 ? activeTabIndex : undefined;
+        if (activeTabIndex && activeTabIndex > layers.length - 1) {
           activeTabIndex = 0;
         }
       },
       {
-        text: 'Sind sie sicher, dass sie diesen FeatureType löschen möchten?',
+        text: 'Sind sie sicher, dass sie diesen Layer löschen möchten?',
         confirmButtonText: 'Löschen'
       }
     );
   }
 
-  function set(key: string, value: FeatureType[keyof FeatureType]) {
-    featureTypes = featureTypes.map((column, i) => {
+  function set(key: string, value: Layer[keyof Layer]) {
+    layers = layers.map((column, i) => {
       if (i === activeTabIndex) {
         return {
           ...column,
@@ -97,14 +102,12 @@
       }
       return column;
     });
-    return onChange(featureTypes);
+    return onChange(layers);
   }
 </script>
 
-<fieldset class="featuretypes-form">
-  <legend>
-    {fieldConfig?.label}
-  </legend>
+<fieldset class="layers-form">
+  <legend>{fieldConfig?.label || 'Layers'} </legend>
   <FieldHint {fieldConfig} {validationResult} />
   <nav>
     {#each tabs as tab, i}
@@ -122,9 +125,9 @@
         </button>
         <IconButton
           class="material-icons"
-          onclick={(evt) => removeFeatureType(i, evt)}
+          onclick={(evt) => removeLayer(i, evt)}
           size="button"
-          title="Featuretype entfernen"
+          title="Layer entfernen"
         >
           delete
         </IconButton>
@@ -134,36 +137,48 @@
       class="material-icons"
       onclick={(evt) => {
         evt.preventDefault();
-        addFeatureType();
+        addLayer();
       }}
       size="button"
-      title="Featuretype hinzufügen"
+      title="Layer hinzufügen"
     >
       add
     </IconButton>
   </nav>
   <div class="content">
     {#if activeTabIndex !== undefined}
-      <FeatureTypeTitle_61
-        value={activeFeatureType?.title}
-        onChange={(title) => set('title', title)}
+      <LayerTitle_49 value={activeLayer?.title} onChange={(title) => set('title', title)} />
+      <LayerName_50 value={activeLayer?.name} onChange={(name) => set('name', name)} />
+      <LayerStyleName_51
+        value={activeLayer?.styleName}
+        onChange={(styleName) => set('styleName', styleName)}
       />
-      <FeatureTypeName_62 value={activeFeatureType?.name} onChange={(name) => set('name', name)} />
-      <FeatureTypeDescription_69
-        value={activeFeatureType?.shortDescription}
+      <LayerStyleTitle_52
+        value={activeLayer?.styleTitle}
+        onChange={(styleTitle) => set('styleTitle', styleTitle)}
+      />
+      <LayerLegendImage_53
+        value={activeLayer?.legendImage}
+        onChange={(legendImage) => set('legendImage', legendImage)}
+      />
+      <LayerDescription_54
+        value={activeLayer?.shortDescription}
         onChange={(shortDescription) => set('shortDescription', shortDescription)}
       />
-      <ColumnsForm
-        featureType={activeFeatureType}
-        value={activeFeatureType?.columns}
-        onChange={(columns) => set('columns', columns)}
+      <LayerDatasource_55
+        value={activeLayer?.datasource}
+        onChange={(datasource) => set('datasource', datasource)}
+      />
+      <LayerSecondaryDatasource_68
+        value={activeLayer?.secondaryDatasource}
+        onChange={(secondaryDatasource) => set('secondaryDatasource', secondaryDatasource)}
       />
     {/if}
   </div>
 </fieldset>
 
 <style lang="scss">
-  fieldset.featuretypes-form {
+  fieldset.layers-form {
     flex: 1;
     border-radius: 0.25em;
 
@@ -189,7 +204,8 @@
       gap: 1em;
 
       :global(.text-input),
-      :global(.select-input) {
+      :global(.select-input),
+      :global(.text-area-input) {
         border: none;
         background-color: rgba(244, 244, 244, 0.7);
       }
@@ -199,8 +215,8 @@
       }
 
       :global(.text-input > legend),
-      :global(.text-area-input > legend),
-      :global(.select-input > legend) {
+      :global(.select-input > legend),
+      :global(.text-area-input > legend) {
         font-size: 1.2em;
         background-color: white;
         border-radius: 0.25em;

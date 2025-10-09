@@ -2,11 +2,11 @@
   import IconButton from '@smui/icon-button';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import type { Service } from '$lib/models/metadata';
-  import ServiceForm from './ServiceForm.svelte';
+  import ServiceForm_40 from './40_ServiceForm.svelte';
   import Checkmark from '../Checkmark.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { page } from '$app/state';
-  import { popconfirm } from '../../../context/PopConfirmContex.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
 
   type Tab = {
     title: string;
@@ -177,7 +177,7 @@
 <div class="content">
   {#if activeService}
     <span>
-      <ServiceForm
+      <ServiceForm_40
         service={activeService}
         onChange={(newService) => {
           return updateService(activeService?.serviceIdentification, newService);

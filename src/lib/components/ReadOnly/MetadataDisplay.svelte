@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getValue } from '../../context/FormContext.svelte';
+  import { getValue } from '$lib/context/FormContext.svelte';
   import CommentsDisplay from './CommentsDisplay.svelte';
   import DisplayField from './DisplayField.svelte';
 
@@ -50,7 +50,7 @@
       <DisplayField key="isoMetadata.maintenanceFrequency" profileId={14} />
       <DisplayField key="isoMetadata.modified" profileId={11} />
       <DisplayField key="isoMetadata.validFrom" profileId={12} />
-      <DisplayField key="isoMetadata.validTo" profileId={12} />
+      <DisplayField key="isoMetadata.validTo" profileId={24} />
       <DisplayField key="technicalMetadata.deliveredCrs" profileId={16} />
       <DisplayField key="isoMetadata.crs" profileId={17} />
       <DisplayField key="isoMetadata.extent" profileId={18} />
@@ -63,7 +63,7 @@
       <DisplayField key="isoMetadata.technicalDescription" profileId={31} />
       <DisplayField key="isoMetadata.lineage" profileId={32} />
       <DisplayField key="clientMetadata.relatedTopics" profileId={36} />
-      <DisplayField key="isoMetadata.contentDescriptions" profileId={39} />
+      <DisplayField key="isoMetadata.contentDescriptions" profileId={41} />
     </section>
     <section id="services">
       <h2>5. Dienste</h2>

@@ -81,7 +81,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 1,
     key: 'isoMetadata.title',
-    label: 'Titel des Datenbestandes',
     validator: (val) => {
       if (!isDefined(val)) {
         return {
@@ -97,7 +96,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 2,
     key: 'isoMetadata.description',
-    label: 'Kurzbeschreibung des Datenbestandes',
     validator: (val) => {
       if (!isDefined(val)) {
         return {
@@ -112,7 +110,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 4,
-    label: 'Datenschutz-Einstellungen',
     key: 'clientMetadata.privacy',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -133,7 +130,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 5,
-    label: 'Metadaten-Typ',
     key: 'isoMetadata.metadataProfile',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -160,7 +156,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 6,
-    label: 'High Value Datensatz',
     key: 'isoMetadata.highValueDataset',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -176,7 +171,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 7,
-    label: 'INSPIRE Annex Thema',
     key: 'isoMetadata.inspireTheme',
     validatorExtraParams: ['isoMetadata.metadataProfile'],
     validator: (val: string[], extraParams) => {
@@ -203,7 +197,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 8,
-    label: 'HVD Kategorie',
     key: 'isoMetadata.highValueDataCategory',
     validator: (val: any) => {
       const isHighValueDataset = getValue('isoMetadata.highValueDataset');
@@ -227,7 +220,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 9,
-    label: 'Erstellungsdatum',
     key: 'isoMetadata.created',
     validator: optionalValidator,
     getCopyValue: (val?: string) => {
@@ -241,7 +233,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 10,
-    label: 'Veröffentlichungsdatum',
     key: 'isoMetadata.published',
     validator: (val: any) => {
       if (!isDefined(val) || val.length === 0) {
@@ -263,7 +254,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 11,
-    label: 'letzte Aktualisierung',
     key: 'isoMetadata.modified',
     validator: optionalValidator,
     getCopyValue: (val?: string) => {
@@ -276,8 +266,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: true
   },
   {
-    profileId: 12, // duplication with "isoMetadata.validTo"
-    label: 'gültig ab',
+    profileId: 12,
     key: 'isoMetadata.validFrom',
     validatorExtraParams: ['isoMetadata.validTo'],
     validator: (startValue: string, extraParams) => {
@@ -310,8 +299,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: false
   },
   {
-    profileId: 12, // duplication with "isoMetadata.validFrom"
-    label: 'gültig bis',
+    profileId: 24,
     key: 'isoMetadata.validTo',
     validatorExtraParams: ['isoMetadata.validFrom'],
     validator: (endValue: string, extraParams) => {
@@ -329,7 +317,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 13,
-    label: 'Themenkategorie',
     key: 'isoMetadata.topicCategory',
     validator: (val: any[]) => {
       if (!val?.length) {
@@ -353,7 +340,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 14,
-    label: 'Pflegeintervall',
     key: 'isoMetadata.maintenanceFrequency',
     validator: (val: string) => {
       if (!isDefined(val)) {
@@ -386,7 +372,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 15,
-    label: 'Schlagwörter',
     key: 'isoMetadata.keywords',
     validator: (val?: Keywords) => {
       if (!val || !val.default || val.default.length < 1) {
@@ -409,7 +394,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 16,
-    label: 'geliefertes Koordinatensystem',
     key: 'technicalMetadata.deliveredCrs',
     placeholder: 'EPSG:25833',
     validator: optionalValidator,
@@ -419,7 +403,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 17,
-    label: 'abzugebendes Koordinatensystem',
     key: 'isoMetadata.crs',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -435,8 +418,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profileId: 18, // multiple entries for extent
-    label: 'Räumliche Ausdehnung',
+    profileId: 71,
     key: 'isoMetadata.extent.minx',
     section: 'temp_and_spatial',
     required: true,
@@ -452,25 +434,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     }
   },
   {
-    profileId: 18, // multiple entries for extent
-    label: 'Räumliche Ausdehnung',
-    key: 'isoMetadata.extent.miny',
-    section: 'temp_and_spatial',
-    required: true,
-    editingRoles: ['MdeEditor'],
-    validator: (val?: number) => {
-      if (!val || val < 1) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie den minimalen y-Wert an.'
-        };
-      }
-      return { valid: true };
-    }
-  },
-  {
-    profileId: 18, // multiple entries for extent
-    label: 'Räumliche Ausdehnung',
+    profileId: 72,
     key: 'isoMetadata.extent.maxx',
     section: 'temp_and_spatial',
     required: true,
@@ -486,8 +450,23 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     }
   },
   {
-    profileId: 18, // multiple entries for extent
-    label: 'Räumliche Ausdehnung',
+    profileId: 73,
+    key: 'isoMetadata.extent.miny',
+    section: 'temp_and_spatial',
+    required: true,
+    editingRoles: ['MdeEditor'],
+    validator: (val?: number) => {
+      if (!val || val < 1) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie den minimalen y-Wert an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 74,
     key: 'isoMetadata.extent.maxy',
     section: 'temp_and_spatial',
     required: true,
@@ -504,7 +483,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 19,
-    label: 'Kontaktangaben',
     key: 'isoMetadata.pointsOfContact',
     isCollection: true,
     section: 'basedata',
@@ -521,7 +499,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 20,
-    label: 'Name',
     key: 'isoMetadata.pointsOfContact.name',
     section: 'basedata',
     required: true,
@@ -538,7 +515,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 21,
-    label: 'Organisation',
     key: 'isoMetadata.pointsOfContact.organisation',
     section: 'basedata',
     required: true,
@@ -555,7 +531,22 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 22,
-    label: 'E-Mail',
+    key: 'isoMetadata.pointsOfContact.phone',
+    section: 'basedata',
+    required: true,
+    collectionKey: 'isoMetadata.pointsOfContact',
+    validator: (val: string) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie die Telefonnummer des Kontakts an.'
+        };
+      }
+      return { valid: true };
+    }
+  },
+  {
+    profileId: 23,
     key: 'isoMetadata.pointsOfContact.email',
     section: 'basedata',
     required: true,
@@ -577,26 +568,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     }
   },
   {
-    profileId: 23,
-    label: 'Telefonnummer',
-    key: 'isoMetadata.pointsOfContact.phone',
-    section: 'basedata',
-    required: true,
-    collectionKey: 'isoMetadata.pointsOfContact',
-    validator: (val: string) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie die Telefonnummer des Kontakts an.'
-        };
-      }
-      return { valid: true };
-    }
-  },
-  // profileId: 24 is not used anymore
-  {
     profileId: 25,
-    label: 'Nutzungsbestimmungen',
     key: 'isoMetadata.termsOfUseId',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -618,7 +590,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 26,
-    label: 'Nutzungsbestimmungen Quellenangabe',
     key: 'isoMetadata.termsOfUseSource',
     validator: () => {
       return { valid: true };
@@ -629,7 +600,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 27,
-    label: 'Vergleichsmaßstab',
     key: 'isoMetadata.scale',
     validatorExtraParams: ['isoMetadata.resolutions'],
     validator: (val: any, extraParams) => {
@@ -647,7 +617,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 28,
-    label: 'Bodenauflösung',
     key: 'isoMetadata.resolutions',
     validatorExtraParams: ['isoMetadata.scale'],
     validator: (val: any, extraParams) => {
@@ -668,7 +637,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 29,
-    label: 'Vorschaubild',
     key: 'isoMetadata.preview',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -684,7 +652,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 30,
-    label: 'Inhaltliche Beschreibung',
     key: 'isoMetadata.contentDescription',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -700,7 +667,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 31,
-    label: 'Technische Beschreibung',
     key: 'isoMetadata.technicalDescription',
     validator: (val: any) => {
       if (!isDefined(val)) {
@@ -772,7 +738,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 37,
-    label: 'Überprüfung des Qualitätsberichts',
     key: 'isoMetadata.valid',
     validator: () => ({ valid: true }),
     getCopyValue: (val?: boolean) => {
@@ -783,7 +748,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 38,
-    label: 'Schema-Version des INSPIRE Themas',
     key: 'isoMetadata.inspireAnnexVersion',
     validatorExtraParams: ['isoMetadata.metadataProfile'],
     validator: (val: any, extraParams) => {
@@ -801,8 +765,15 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profileId: 39,
-    label: 'Weitere Informationen',
+    profileId: 40,
+    key: 'isoMetadata.services',
+    isCollection: true,
+    validator: () => ({ valid: true }),
+    section: 'services',
+    required: false
+  },
+  {
+    profileId: 41,
     key: 'isoMetadata.contentDescriptions',
     isCollection: true,
     validator: optionalValidator,
@@ -810,7 +781,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: false
   },
   {
-    profileId: 39,
+    profileId: 42,
     key: 'isoMetadata.contentDescriptions.title',
     collectionKey: 'isoMetadata.contentDescriptions',
     validator: (val: string) => {
@@ -826,7 +797,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: false
   },
   {
-    profileId: 39,
+    profileId: 43,
     key: 'isoMetadata.contentDescriptions.code',
     collectionKey: 'isoMetadata.contentDescriptions',
     validator: optionalValidator,
@@ -844,23 +815,13 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: false
   },
   {
-    profileId: 39,
+    profileId: 44,
     key: 'isoMetadata.contentDescriptions.url',
     collectionKey: 'isoMetadata.contentDescriptions',
     validator: optionalValidator,
     section: 'additional',
     required: false
   },
-  {
-    profileId: 40,
-    key: 'isoMetadata.services',
-    isCollection: true,
-    validator: () => ({ valid: true }),
-    section: 'services',
-    required: false
-  },
-  // profileId: 41 and 42 are not used anymore (WMTS special handling)
-  // profiledId: 43 and 44 are superseeded by (58 and 59) service title and short description
   {
     profileId: 45,
     key: 'isoMetadata.services.workspace',
@@ -943,7 +904,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: false
   },
   {
-    // This is used in the LayersForm
     profileId: 48,
     key: 'clientMetadata.layers',
     collectionKey: 'isoMetadata.services',
@@ -1069,7 +1029,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: false
   },
   {
-    profileId: 56,
+    profileId: 68,
     key: 'clientMetadata.layers.secondaryDatasource',
     collectionKey: 'clientMetadata.layers',
     validator: optionalValidator,
@@ -1077,7 +1037,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: false,
     editingRoles: ['MdeEditor']
   },
-  // profileId: 57 is not used anymore (service count)
   {
     profileId: 58,
     key: 'isoMetadata.services.serviceType',
@@ -1130,7 +1089,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: true
   },
   {
-    profileId: 61,
+    profileId: 56,
     key: 'isoMetadata.services.featureTypes',
     collectionKey: 'isoMetadata.services',
     isCollection: true,
@@ -1154,7 +1113,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: true
   },
   {
-    profileId: 62,
+    profileId: 61,
     key: 'isoMetadata.services.featureTypes.title',
     collectionKey: 'isoMetadata.services.featureTypes',
     validator: (title: FeatureType['title']) => {
@@ -1171,7 +1130,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: true
   },
   {
-    profileId: 63,
+    profileId: 62,
     key: 'isoMetadata.services.featureTypes.name',
     collectionKey: 'isoMetadata.services.featureTypes',
     validator: (name: FeatureType['name']) => {
@@ -1189,7 +1148,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
-    profileId: 64,
+    profileId: 63,
     key: 'isoMetadata.services.featureTypes.columns',
     collectionKey: 'isoMetadata.services.featureTypes',
     isCollection: true,
@@ -1207,7 +1166,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: true
   },
   {
-    profileId: 65,
+    profileId: 64,
     key: 'isoMetadata.services.featureTypes.columns.name',
     collectionKey: 'isoMetadata.services.featureTypes.columns',
     validator: (name: ColumnInfo['name']) => {
@@ -1224,7 +1183,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: true
   },
   {
-    profileId: 66,
+    profileId: 65,
     key: 'isoMetadata.services.featureTypes.columns.alias',
     collectionKey: 'isoMetadata.services.featureTypes.columns',
     validator: (alias: ColumnInfo['alias']) => {
@@ -1241,7 +1200,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     required: true
   },
   {
-    profileId: 67,
+    profileId: 66,
     key: 'isoMetadata.services.featureTypes.columns.type',
     collectionKey: 'isoMetadata.services.featureTypes.columns',
     validator: optionalValidator,

@@ -2,10 +2,10 @@
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
-  import TextInput from '../Inputs/TextInput.svelte';
-  import FieldTools from '../FieldTools.svelte';
-  import FieldHint from '../FieldHint.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
+  import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import FieldHint from '$lib/components/Form/FieldHint.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { toast } from 'svelte-french-toast';
 
@@ -44,6 +44,11 @@
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<Contacts>(19);
   let validationResult = $derived(fieldConfig?.validator(contacts));
+
+  const nameConfig = getFieldConfig<string>(20);
+  const organisationConfig = getFieldConfig<string>(21);
+  const phoneConfig = getFieldConfig<string>(22);
+  const emailConfig = getFieldConfig<string>(23);
 
   const autoFillUserDetails = async () => {
     addItem();
@@ -151,10 +156,10 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.name}
-            label="Name"
+            label={nameConfig?.label}
             onblur={persistContacts}
-            fieldConfig={getFieldConfig(20)}
-            validationResult={getFieldConfig(20)?.validator(contact.name)}
+            fieldConfig={nameConfig}
+            validationResult={nameConfig?.validator(contact.name)}
             id={`${KEY}-${index}-name`}
           />
           <FieldTools key={`${KEY}[${index}].name`} noHelpButton noCheckmark {fieldConfig} />
@@ -162,10 +167,10 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.organisation}
-            label="Organisation"
+            label={organisationConfig?.label}
             onblur={persistContacts}
-            fieldConfig={getFieldConfig(21)}
-            validationResult={getFieldConfig(21)?.validator(contact.organisation)}
+            fieldConfig={organisationConfig}
+            validationResult={organisationConfig?.validator(contact.organisation)}
             id={`${KEY}-${index}-organisation`}
           />
           <FieldTools
@@ -178,10 +183,10 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.phone}
-            label="Telefon"
+            label={phoneConfig?.label}
             onblur={persistContacts}
-            fieldConfig={getFieldConfig(23)}
-            validationResult={getFieldConfig(23)?.validator(contact.phone)}
+            fieldConfig={phoneConfig}
+            validationResult={phoneConfig?.validator(contact.phone)}
             id={`${KEY}-${index}-phone`}
           />
           <FieldTools key={`${KEY}[${index}].phone`} noHelpButton noCheckmark {fieldConfig} />
@@ -189,10 +194,10 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.email}
-            label="E-Mail"
+            label={emailConfig?.label}
             onblur={persistContacts}
-            fieldConfig={getFieldConfig(22)}
-            validationResult={getFieldConfig(22)?.validator(contact.email)}
+            fieldConfig={emailConfig}
+            validationResult={emailConfig?.validator(contact.email)}
             id={`${KEY}-${index}-email`}
           />
           <FieldTools key={`${KEY}[${index}].email`} noHelpButton noCheckmark {fieldConfig} />

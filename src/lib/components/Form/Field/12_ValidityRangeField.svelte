@@ -25,10 +25,10 @@
   });
 
   let showCheckmark = $state(false);
-  const fromFieldConfig = getFieldConfig<string>(12, 'isoMetadata.validFrom');
+  const fromFieldConfig = getFieldConfig<string>(12);
   let fromValidationResult = $derived(fromFieldConfig?.validator(startValue, [endValue]));
 
-  const toFieldConfig = getFieldConfig<string>(12, 'isoMetadata.validTo');
+  const toFieldConfig = getFieldConfig<string>(24);
   let toValidationResult = $derived(toFieldConfig?.validator(endValue, [startValue]));
 
   const onChange = async (key: string) => {

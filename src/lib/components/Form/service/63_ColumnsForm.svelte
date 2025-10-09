@@ -2,11 +2,11 @@
   import type { ColumnInfo, FeatureType } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import Checkmark from '$lib/components/Form/Checkmark.svelte';
-  import AttributeName_64 from './Field/65_AttributeName.svelte';
-  import AttributeAlias_65 from './Field/66_AttributeAlias.svelte';
-  import AttributeDatatype_66 from './Field/67_AttributeDatatype.svelte';
+  import AttributeName_64 from './Field/64_AttributeName.svelte';
+  import AttributeAlias_65 from './Field/65_AttributeAlias.svelte';
+  import AttributeDatatype_66 from './Field/66_AttributeDatatype.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContex.svelte';
+  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
   type Tab = {
@@ -33,7 +33,7 @@
   let activeTabIndex: number | undefined = $state(undefined);
   let activeColumn = $derived(activeTabIndex ? columns[activeTabIndex] : columns[0]);
 
-  const fieldConfig = getFieldConfig(64, 'isoMetadata.services.featureTypes.attributes');
+  const fieldConfig = getFieldConfig(63);
   const validationResult = $derived(fieldConfig?.validator(columns));
 
   $effect(() => {

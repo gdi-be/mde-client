@@ -1,22 +1,23 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import type { FeatureType } from '$lib/models/metadata';
+  import type { Layer } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   export type ComponentProps = {
-    value?: FeatureType['name'];
+    value?: Layer['secondaryDatasource'];
     onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
 
-  const HELP_KEY = 'isoMetadata.services.featureTypes.name';
-  const fieldConfig = getFieldConfig(63);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const HELP_KEY = 'clientMetadata.layers.secondaryDatasource';
   let showCheckmark = $state(false);
+
+  const fieldConfig = getFieldConfig(68);
+  const validationResult = $derived(fieldConfig?.validator(value));
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -24,11 +25,10 @@
 </script>
 
 {#if fieldVisible}
-  <div class="featuretype-name-field">
+  <div class="layer-short-description-field">
     <TextInput
-      label={fieldConfig?.label || 'Titel des Objekttyps'}
+      label={fieldConfig?.label || 'sekundäre Datenhaltung'}
       {value}
-      maxlength={100}
       {fieldConfig}
       {validationResult}
       onchange={async (e: Event) => {
@@ -43,7 +43,7 @@
 {/if}
 
 <style lang="scss">
-  .featuretype-name-field {
+  .layer-short-description-field {
     position: relative;
     display: flex;
     gap: 0.25em;

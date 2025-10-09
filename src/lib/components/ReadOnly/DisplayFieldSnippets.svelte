@@ -94,6 +94,14 @@
     unknown: 'unbekannt'
   };
 
+  const contentDescriptionsCodeMap: Record<string, string> = {
+    download: 'Herunterladen',
+    information: 'Information',
+    offlineAccess: 'Offline-Zugriff',
+    order: 'Bestellung',
+    search: 'Suche'
+  };
+
   const getAutoKeywords = async () => {
     const metadata = getFormContext()?.metadata;
     const metadataId = metadata?.metadataId;
@@ -410,15 +418,18 @@
       {#each value as lineage}
         <div class="list-item">
           <div class="list-item-field">
-            <strong>Title</strong>
+            <!-- Lineage-Title -->
+            <strong>{getFieldConfig(33)?.label}</strong>
             <span class="list-item-value">{lineage.title || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
-            <strong>Veröffentlichungsdatum</strong>
+            <!-- Lineage-Date -->
+            <strong>{getFieldConfig(34)?.label}</strong>
             <span class="list-item-value">{lineage.date || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
-            <strong>Identifier</strong>
+            <!-- Lineage-Identifier -->
+            <strong>{getFieldConfig(35)?.label}</strong>
             <span class="list-item-value">{lineage.identifier || DEFAULT_NULL_STRING}</span>
           </div>
         </div>
@@ -435,11 +446,17 @@
       {#each value as contentDescription}
         <div class="list-item">
           <div class="list-item-field">
-            <strong>Title</strong>
+            <strong>{getFieldConfig(42)?.label}</strong>
             <span class="list-item-value">{contentDescription.description}</span>
           </div>
           <div class="list-item-field">
-            <strong>Url</strong>
+            <strong>{getFieldConfig(43)?.label}</strong>
+            <span class="list-item-value">
+              {contentDescriptionsCodeMap[contentDescription.code]}
+            </span>
+          </div>
+          <div class="list-item-field">
+            <strong>{getFieldConfig(44)?.label}</strong>
             <span class="list-item-value">
               {#await replaceVariable(contentDescription.url)}
                 Lädt ...
@@ -566,7 +583,7 @@
           {/if}
           {#if service.serviceType === 'WFS' && service.featureTypes?.length}
             <div class="list-item-field">
-              <strong>Feature-Typen ({service.featureTypes?.length})</strong>
+              <strong>{getFieldConfig(56)?.label} ({service.featureTypes?.length})</strong>
               <div class="list">
                 {#each service?.featureTypes || [] as featureType}
                   <div class="list-item">
@@ -587,7 +604,7 @@
                     </div>
                     {#if featureType?.columns}
                       <div class="list-item-field">
-                        <strong>Attribute</strong>
+                        <strong>{getFieldConfig(63)?.label}</strong>
                         <div class="list">
                           {#each featureType?.columns || [] as columnInfo}
                             <div class="list-item">

@@ -7,7 +7,7 @@
   import ServiceType_58 from './Field/58_ServiceType.svelte';
   import ServiceTitle_59 from './Field/59_ServiceTitle.svelte';
   import ServiceShortDescription_60 from './Field/60_ServiceShortDescription.svelte';
-  import FeatureTypeForm from './FeatureTypeForm.svelte';
+  import FeatureTypeForm_56 from './56_FeatureTypeForm.svelte';
   import { getContext } from 'svelte';
   import {
     FORMSTATE_CONTEXT,
@@ -15,7 +15,7 @@
     persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
-  import LayersForm from './LayersForm.svelte';
+  import LayersForm from './48_LayersForm.svelte';
   import { page } from '$app/state';
   import { toast } from 'svelte-french-toast';
   import { invalidateAll } from '$app/navigation';
@@ -132,7 +132,7 @@
     <LayersForm {service} value={layers} onChange={onLayersChange} />
   {/if}
   {#if isWFSService}
-    <FeatureTypeForm
+    <FeatureTypeForm_56
       {service}
       value={service.featureTypes}
       onChange={(featureTypes) => set('featureTypes', featureTypes)}
