@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import FieldHint from '../FieldHint.svelte';
   import FieldTools from '../FieldTools.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
   import FormField from '@smui/form-field';
@@ -82,6 +83,17 @@
         {scaleFieldConfig?.label}
       {/snippet}
     </FormField>
+    {#if selected === undefined}
+      <div>
+        <FieldHint
+          validationResult={{
+            valid: false,
+            helpText: 'Bitte geben Sie die räumliche Auflösung an.'
+          }}
+          required
+        />
+      </div>
+    {/if}
     {#if selected === RESOLUTION_KEY}
       <NumberInput
         bind:value={resolutionValue as number}
@@ -92,8 +104,7 @@
         validationResult={resolutionValidationResult}
         step="any"
       />
-    {/if}
-    {#if selected === SCALE_KEY}
+    {:else if selected === SCALE_KEY}
       <NumberInput
         bind:value={
           () => scaleValue as number,

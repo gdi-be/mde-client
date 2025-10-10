@@ -28,16 +28,6 @@
             email: contact.email || ''
           };
         }) || [];
-    } else {
-      contacts = [
-        {
-          listId: crypto.randomUUID(),
-          name: '',
-          organisation: '',
-          phone: '',
-          email: ''
-        }
-      ];
     }
   });
 
@@ -108,6 +98,7 @@
       },
       ...contacts
     ];
+    persistContacts();
   };
 
   const removeItem = (listId: string, evt: MouseEvent) => {

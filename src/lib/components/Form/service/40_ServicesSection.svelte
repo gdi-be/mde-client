@@ -62,6 +62,7 @@
       }
     ];
     activeTab = serviceIdentification;
+    persistServices(serviceIdentification);
   }
 
   function removeService(id: string, evt: MouseEvent) {
@@ -96,7 +97,7 @@
           await persistValue(LAYERS_KEY, layers);
         }
 
-        if (activeTab === id) {
+        if (activeTab === id && services.length > 0) {
           activeTab = services[0].serviceIdentification || '';
         }
       },

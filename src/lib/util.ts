@@ -94,11 +94,13 @@ export function transformExtent(extent: Extent, fromEPSG: CRS, toEPSG: CRS = 'EP
   const max: [number, number] = [extent.maxx, extent.maxy];
   const transformedMin = transformCoordinate(min, fromEPSG, toEPSG);
   const transformedMax = transformCoordinate(max, fromEPSG, toEPSG);
+
+  // If the original extent had a 0 value, keep it as 0
   return {
-    minx: transformedMin[0],
-    miny: transformedMin[1],
-    maxx: transformedMax[0],
-    maxy: transformedMax[1]
+    minx: extent.minx === 0 ? 0 : transformedMin[0],
+    miny: extent.miny === 0 ? 0 : transformedMin[1],
+    maxx: extent.maxx === 0 ? 0 : transformedMax[0],
+    maxy: extent.maxy === 0 ? 0 : transformedMax[1]
   };
 }
 

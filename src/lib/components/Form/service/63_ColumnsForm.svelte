@@ -59,6 +59,7 @@
       }
     ];
     activeTabIndex = columns.length - 1;
+    onChange(columns);
   }
 
   function removeColumn(index: number, evt: MouseEvent) {

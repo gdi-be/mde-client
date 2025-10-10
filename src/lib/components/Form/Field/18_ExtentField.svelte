@@ -131,6 +131,7 @@
           <NumberInput
             value={transformedValue.minx}
             label={minXFieldConfig?.label}
+            fieldConfig={minXFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
@@ -142,6 +143,7 @@
           <NumberInput
             value={transformedValue.maxx}
             label={maxXFieldConfig?.label}
+            fieldConfig={maxXFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
@@ -155,6 +157,7 @@
           <NumberInput
             value={transformedValue.miny}
             label={minYFieldConfig?.label}
+            fieldConfig={minYFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
@@ -166,6 +169,7 @@
           <NumberInput
             value={transformedValue.maxy}
             label={maxYFieldConfig?.label}
+            fieldConfig={maxYFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;

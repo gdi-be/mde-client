@@ -27,15 +27,6 @@
           url
         };
       });
-    } else {
-      contentDescriptions = [
-        {
-          listId: crypto.randomUUID(),
-          code: 'information',
-          description: '',
-          url: ''
-        }
-      ];
     }
   });
 
@@ -69,6 +60,7 @@
       },
       ...contentDescriptions
     ];
+    persistContentDescriptions();
   };
 
   const removeItem = (listId: string, evt: MouseEvent) => {
