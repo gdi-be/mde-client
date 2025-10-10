@@ -1,3 +1,12 @@
+## [4.2.2](https://github.com/gdi-be/mde-client/compare/v4.2.1...v4.2.2) (2025-10-10)
+
+
+### Bug Fixes
+
+* prevent scrolling on tab switch ([4dea1b9](https://github.com/gdi-be/mde-client/commit/4dea1b968a169b60f6d6f99e2b1790ad266732b4))
+* update list behaviour (initial empty & add = persist) ([d01145e](https://github.com/gdi-be/mde-client/commit/d01145e12059525ce22b72888a66798507142762))
+* validation/progress improvments for temp_spatial section ([f0ffd2d](https://github.com/gdi-be/mde-client/commit/f0ffd2dc930dc02835576f01713ca729c48a5e38))
+
 ## [4.2.1](https://github.com/gdi-be/mde-client/compare/v4.2.0...v4.2.1) (2025-10-10)
 
 
