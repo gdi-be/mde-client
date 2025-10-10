@@ -1,3 +1,12 @@
+## [4.2.1](https://github.com/gdi-be/mde-client/compare/v4.2.0...v4.2.1) (2025-10-10)
+
+
+### Bug Fixes
+
+* update editingRoles in FieldsConfig ([3d163ad](https://github.com/gdi-be/mde-client/commit/3d163ad4686d668a38df219cbc34c4f439464bb1))
+* update ids of attributes ([9309914](https://github.com/gdi-be/mde-client/commit/9309914c4815299af4573a6515823c4b78a20795))
+* update more ids in readonly view ([da04d23](https://github.com/gdi-be/mde-client/commit/da04d230d26d5edfbbe48c2f9ed229569489efa4))
+
 # [4.2.0](https://github.com/gdi-be/mde-client/compare/v4.1.3...v4.2.0) (2025-10-09)
 
 
