@@ -101,7 +101,15 @@
   <nav>
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
-        <button id={tab.name} class="tab" title={tab.name} onclick={() => (activeTabIndex = i)}>
+        <button
+          id={tab.name}
+          class="tab"
+          title={tab.name}
+          onclick={(evt) => {
+            evt.preventDefault();
+            activeTabIndex = i;
+          }}
+        >
           {tab.name}
         </button>
         {#if visibleCheckmarks[tab.name]}
