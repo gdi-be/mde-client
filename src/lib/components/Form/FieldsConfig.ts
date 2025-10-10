@@ -263,7 +263,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return formatDate(val);
     },
     section: 'temp_and_spatial',
-    required: true
+    required: false
   },
   {
     profileId: 12,
@@ -421,7 +421,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     section: 'temp_and_spatial',
     required: true,
     validator: (val?: number) => {
-      if (!val || val < 1) {
+      if (!val) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie den minimalen x-Wert an.'
@@ -437,7 +437,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     section: 'temp_and_spatial',
     required: true,
     validator: (val?: number) => {
-      if (!val || val < 1) {
+      if (!val) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie den maximalen x-Wert an.'
@@ -453,7 +453,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     section: 'temp_and_spatial',
     required: true,
     validator: (val?: number) => {
-      if (!val || val < 1) {
+      if (!val) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie den minimalen y-Wert an.'
@@ -469,7 +469,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     section: 'temp_and_spatial',
     required: true,
     validator: (val?: number) => {
-      if (!val || val < 1) {
+      if (!val) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie den maximalen y-Wert an.'

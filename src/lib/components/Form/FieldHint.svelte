@@ -8,9 +8,15 @@
     fieldConfig?: FullFieldConfig<any>;
     validationResult?: ValidationResult;
     showHint?: boolean;
+    required?: boolean;
   };
 
-  const { validationResult, fieldConfig, showHint = false }: FieldBottomTextProps = $props();
+  const {
+    validationResult,
+    fieldConfig,
+    showHint = false,
+    required = false
+  }: FieldBottomTextProps = $props();
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -35,7 +41,7 @@
     'field-hint',
     highestRole.toLowerCase(),
     isValid ? 'valid' : 'invalid',
-    fieldConfig?.required ? 'required' : ''
+    required || fieldConfig?.required ? 'required' : ''
   ]}
 >
   {text}
