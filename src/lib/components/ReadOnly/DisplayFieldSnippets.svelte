@@ -594,7 +594,7 @@
                     </div>
                     <div class="list-item-field">
                       <!-- FeatureType-Title -->
-                      <strong>{getFieldConfig(63)?.label}</strong>
+                      <strong>{getFieldConfig(61)?.label}</strong>
                       <span class="list-item-value">{featureType.title}</span>
                     </div>
                     <div class="list-item-field">
@@ -610,17 +610,17 @@
                             <div class="list-item">
                               <div class="list-item-field">
                                 <!-- Attribute-Name -->
-                                <strong>{getFieldConfig(65)?.label}</strong>
+                                <strong>{getFieldConfig(64)?.label}</strong>
                                 <span class="list-item-value">{columnInfo.name}</span>
                               </div>
                               <div class="list-item-field">
                                 <!-- Attribute-Alias -->
-                                <strong>{getFieldConfig(66)?.label}</strong>
+                                <strong>{getFieldConfig(65)?.label}</strong>
                                 <span class="list-item-value">{columnInfo.alias}</span>
                               </div>
                               <div class="list-item-field">
                                 <!-- Attribute-DataType -->
-                                <strong>{getFieldConfig(67)?.label}</strong>
+                                <strong>{getFieldConfig(66)?.label}</strong>
                                 <span class="list-item-value">{columnInfo.type}</span>
                               </div>
                             </div>
@@ -685,7 +685,7 @@
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-SecondaryDataSource -->
-                      <strong>{getFieldConfig(56)?.label}</strong>
+                      <strong>{getFieldConfig(68)?.label}</strong>
                       <span class="list-item-value">{layer.secondaryDatasource}</span>
                     </div>
                   </div>
