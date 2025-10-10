@@ -38,15 +38,6 @@
           date: lineage.date ? new Date(lineage.date).toISOString().split('T')[0] : ''
         };
       });
-    } else {
-      lineages = [
-        {
-          listId: crypto.randomUUID(),
-          title: '',
-          identifier: '',
-          date: ''
-        }
-      ];
     }
   });
 
@@ -107,6 +98,7 @@
       },
       ...lineages
     ];
+    persistLineages();
   };
 
   const removeItem = (listId: string, evt: MouseEvent) => {
