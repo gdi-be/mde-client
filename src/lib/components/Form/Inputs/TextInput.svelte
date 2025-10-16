@@ -18,7 +18,7 @@
     maxlength,
     label,
     fieldConfig,
-    value = $bindable(''),
+    value = $bindable(),
     class: wrapperClass,
     validationResult,
     onblur,
@@ -27,6 +27,9 @@
   }: InputProps = $props();
 
   let showHint = $state(false);
+  if (value === undefined) {
+    value = '';
+  }
 </script>
 
 <fieldset class={['text-input', wrapperClass]}>
