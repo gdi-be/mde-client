@@ -1,3 +1,10 @@
+## [4.2.3](https://github.com/gdi-be/mde-client/compare/v4.2.2...v4.2.3) (2025-10-17)
+
+
+### Bug Fixes
+
+* handle undefined values in additional section ([0277529](https://github.com/gdi-be/mde-client/commit/02775298b8bde57e2298737cb576dab4a7cfcd49))
+
 ## [4.2.2](https://github.com/gdi-be/mde-client/compare/v4.2.1...v4.2.2) (2025-10-10)
 
 
