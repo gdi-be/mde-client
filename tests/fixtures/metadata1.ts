@@ -65,6 +65,7 @@ export default {
         ]
       },
       {
+        workspace: 'ewfewf',
         title: 'WFS Titel',
         shortDescription: 'WFS Kurzbeschreibung',
         serviceIdentification: '284332a8-a765-4fd6-8ac8-66b49fb01794',
