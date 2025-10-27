@@ -405,6 +405,8 @@ export async function persistValue(key: string, value: unknown) {
       // If unauthorized, redirect to login
       log('warning', 'Unauthorized access, redirecting to login');
       goto('/login');
+    } else if (response.status === 409) {
+      toast.error('Konflikt beim Speichern eines eindeutigen Werts.');
     } else {
       toast.error(message);
     }
