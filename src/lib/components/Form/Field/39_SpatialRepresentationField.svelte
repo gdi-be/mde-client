@@ -1,18 +1,11 @@
 <script lang="ts">
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import toast from 'svelte-french-toast';
   import FieldTools from '../FieldTools.svelte';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
+  import type { Option } from '$lib/models/form';
 
   const KEY = 'isoMetadata.spatialRepresentationTypes';
-
-  const OPTIONS = [
-    { key: 'vector', label: 'Vektor' },
-    { key: 'grid', label: 'Raster' },
-    { key: 'textTable', label: 'Text/Tabelle' },
-    { key: 'tin', label: 'TIN' },
-    { key: 'stereoModel', label: 'Stereomodell' },
-    { key: 'video', label: 'Video' }
-  ];
 
   const valueFromData = $derived(getValue<string[]>(KEY));
   let value = $state<string[]>();
@@ -30,18 +23,34 @@
       showCheckmark = true;
     }
   };
+
+  const fetchOptions = async () => {
+    const response = await fetch('/data/spatial_representation_types');
+
+    if (!response.ok) {
+      toast.error('Fehler beim Abrufen der räumlichen Darstellungsarten');
+      return [];
+    }
+
+    const data: Option[] = await response.json();
+    return data;
+  };
 </script>
 
 <div class="spatial-representation-field">
-  <MultiSelectInput
-    label={fieldConfig?.label}
-    {fieldConfig}
-    options={OPTIONS}
-    {value}
-    {onChange}
-    {validationResult}
-  />
-  <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  {#await fetchOptions()}
+    <p>Lade räumliche Darstellungsarten</p>
+  {:then OPTIONS}
+    <MultiSelectInput
+      label={fieldConfig?.label}
+      {fieldConfig}
+      options={OPTIONS}
+      {value}
+      {onChange}
+      {validationResult}
+    />
+    <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+  {/await}
 </div>
 
 <style lang="scss">
