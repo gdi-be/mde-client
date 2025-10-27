@@ -119,12 +119,12 @@
     {service}
     onChange={(workspace) => set('workspace', workspace)}
   />
+  <ServicePreview_46
+    value={service.preview}
+    {service}
+    onChange={(preview) => set('preview', preview)}
+  />
   {#if isMappingService}
-    <ServicePreview_46
-      value={service.preview}
-      {service}
-      onChange={(preview) => set('preview', preview)}
-    />
     <ServiceLegendImage_47
       value={service.legendImage}
       onChange={(legendImage) => set('legendImage', legendImage)}

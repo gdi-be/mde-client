@@ -512,21 +512,19 @@
             <strong>File Identifier</strong>
             <span class="list-item-value">{service.fileIdentifier}</span>
           </div>
-          {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
-            <div class="list-item-field">
-              <!-- Service-Preview -->
-              <strong>{getFieldConfig(46)?.label}</strong>
-              <span class="list-item-value">
-                {#await replaceVariable(service.preview)}
-                  Lädt ...
-                {:then url}
-                  {url || DEFAULT_NULL_STRING}
-                {:catch}
-                  {service.preview || DEFAULT_NULL_STRING}
-                {/await}
-              </span>
-            </div>
-          {/if}
+          <div class="list-item-field">
+            <!-- Service-Preview -->
+            <strong>{getFieldConfig(46)?.label}</strong>
+            <span class="list-item-value">
+              {#await replaceVariable(service.preview)}
+                Lädt ...
+              {:then url}
+                {url || DEFAULT_NULL_STRING}
+              {:catch}
+                {service.preview || DEFAULT_NULL_STRING}
+              {/await}
+            </span>
+          </div>
           {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
             <div class="list-item-field">
               <!-- Service-LegendImage -->
