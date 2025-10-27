@@ -144,7 +144,8 @@ export default {
     ],
     valid: false,
     topicCategory: ['location'],
-    termsOfUseId: 1
+    termsOfUseId: 1,
+    spatialRepresentationTypes: ['vector']
   },
   technicalMetadata: {
     deliveredCrs: 'EPSG:25833'
