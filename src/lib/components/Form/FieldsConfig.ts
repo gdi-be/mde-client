@@ -826,7 +826,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     validatorExtraParams: ['PARENT_VALUE'],
     validator: (workspace: Service['workspace'], extraParams) => {
       const service = extraParams?.['PARENT_VALUE'];
-      if (service?.serviceType !== 'WMTS' && service?.serviceType !== 'WMS') {
+      if (service?.serviceType === 'ATOM' && !isDefined(workspace)) {
         return { valid: true };
       }
       const valid = !!(isDefined(workspace) && /^[a-zA-Z0-9_]+$/.test(workspace));
