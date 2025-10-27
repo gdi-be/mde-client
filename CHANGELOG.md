@@ -1,3 +1,12 @@
+## [4.2.4](https://github.com/gdi-be/mde-client/compare/v4.2.3...v4.2.4) (2025-10-27)
+
+
+### Bug Fixes
+
+* add german error message for conflicts ([8c8f3c6](https://github.com/gdi-be/mde-client/commit/8c8f3c676ec1ceb062b6c7420a84379f44ec5814))
+* require workspace for WFS service ([6613426](https://github.com/gdi-be/mde-client/commit/66134263e78fe8e6c61bcc828b266a447f22bade))
+* show service preview (46) for WFS and ATOM ([732abb3](https://github.com/gdi-be/mde-client/commit/732abb39dcfc54bddaaabba5e2e9f36de427d155))
+
 ## [4.2.3](https://github.com/gdi-be/mde-client/compare/v4.2.2...v4.2.3) (2025-10-17)
 
 
