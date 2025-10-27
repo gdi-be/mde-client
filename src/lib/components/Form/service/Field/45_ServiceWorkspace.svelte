@@ -16,11 +16,18 @@
 
   const HELP_KEY = 'isoMetadata.services.workspace';
   const fieldConfig = getFieldConfig(45);
-  const validationResult = $derived(
-    fieldConfig?.validator(value, {
+  let hasDuplicatedValue = $state<boolean>(false);
+  const validationResult = $derived.by(() => {
+    if (hasDuplicatedValue) {
+      return {
+        valid: false,
+        helpText: 'Der angegebene Identifikator ist bereits vergeben.'
+      };
+    }
+    return fieldConfig?.validator(value, {
       ['PARENT_VALUE']: service
-    })
-  );
+    });
+  });
   let showCheckmark = $state(false);
 
   const token = $derived(getAccessToken());
@@ -31,14 +38,17 @@
 {#if fieldVisible}
   <div class="service-id-field">
     <TextInput
-      label={fieldConfig?.label || 'Identifikator des Kartendienstes'}
+      label={fieldConfig?.label}
       {value}
       {fieldConfig}
       {validationResult}
       onchange={async (e: Event) => {
+        hasDuplicatedValue = false;
         const response = await onChange((e.target as HTMLInputElement).value);
         if (response.ok) {
           showCheckmark = true;
+        } else if (response.status === 409) {
+          hasDuplicatedValue = true;
         }
       }}
     />
