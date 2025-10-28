@@ -1,4 +1,4 @@
-import type { Option } from "./form";
+import type { Option } from './form';
 
 type QueryConfig = {
   searchTerm: string;
