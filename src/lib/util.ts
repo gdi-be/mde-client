@@ -4,6 +4,7 @@ import proj4 from 'proj4';
 import type { CRS, Extent, MaintenanceFrequency, MetadataCollection } from '$lib/models/metadata';
 import { log } from 'loggisch';
 import type { Role, Token } from '$lib/models/keycloak';
+import type { CRSOption } from './models/api';
 
 /**
  * Set a nested value in an object using a dot-separated path. This is similiar
@@ -65,24 +66,11 @@ export function getNestedValue(obj: any, path: string | string[]) {
   }, obj);
 }
 
-proj4.defs('EPSG:4326', '+proj=longlat +datum=WGS84 +no_defs +type=crs');
-proj4.defs(
-  'EPSG:3857',
-  '+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs'
-);
-proj4.defs(
-  'EPSG:25832',
-  '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
-);
-proj4.defs(
-  'EPSG:25833',
-  '+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
-);
-proj4.defs('EPSG:4258', '+proj=longlat +ellps=GRS80 +no_defs +type=crs');
-proj4.defs(
-  'EPSG:3035',
-  '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs'
-);
+export function registerCRSCodes(crsOptions: CRSOption[]) {
+  crsOptions.forEach((crs) => {
+    proj4.defs(crs.label, crs.definition);
+  });
+}
 
 export function transformExtent(extent: Extent, fromEPSG: CRS, toEPSG: CRS = 'EPSG:4326') {
   if (!fromEPSG || !toEPSG) {
