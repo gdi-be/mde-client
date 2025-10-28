@@ -1,3 +1,15 @@
+# [4.3.0](https://github.com/gdi-be/mde-client/compare/v4.2.4...v4.3.0) (2025-10-28)
+
+
+### Bug Fixes
+
+* load spatial representation types from codelists ([d27aa16](https://github.com/gdi-be/mde-client/commit/d27aa16da94e0356d7e3f162ea42f3cfefd77bec))
+
+
+### Features
+
+* introduces field for spatialRepresentationTypes ([0687849](https://github.com/gdi-be/mde-client/commit/06878498b2739b13d2dae055f80db77fd12dbdfb))
+
 ## [4.2.4](https://github.com/gdi-be/mde-client/compare/v4.2.3...v4.2.4) (2025-10-27)
 
 
