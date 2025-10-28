@@ -187,6 +187,8 @@ export function getLastUpdateValue(published: string, maintenanceFrequency: Main
     return lastUpdate;
   }
 
+  const todayDayOfWeek = todayDate.getUTCDay();
+  const publishedDayOfWeek = publishedDate.getUTCDay();
   switch (maintenanceFrequency) {
     case 'continual':
       updateDate = todayDate;
@@ -197,8 +199,6 @@ export function getLastUpdateValue(published: string, maintenanceFrequency: Main
       break;
     case 'weekly':
       updateDate = new Date(todayDate);
-      const todayDayOfWeek = todayDate.getUTCDay();
-      const publishedDayOfWeek = publishedDate.getUTCDay();
 
       if (todayDayOfWeek >= publishedDayOfWeek) {
         updateDate.setUTCDate(todayDate.getUTCDate() - (todayDayOfWeek - publishedDayOfWeek));
