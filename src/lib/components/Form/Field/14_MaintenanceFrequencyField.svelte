@@ -50,7 +50,7 @@
     const response = await persistValue(KEY, newValue);
     const maintenanceFrequency = newValue as MaintenanceFrequency;
 
-    if (isAutomatedValue(published, maintenanceFrequency) && published) {
+    if (isAutomatedValue(maintenanceFrequency) && published) {
       const lastUpdatedValue = getLastUpdateValue(published, maintenanceFrequency);
       if (lastUpdatedValue) {
         await persistValue('isoMetadata.modified', lastUpdatedValue.toISOString());

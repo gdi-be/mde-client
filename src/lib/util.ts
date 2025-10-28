@@ -121,10 +121,8 @@ export function transformCoordinate(
  * @param maintenanceFrequency
  * @returns
  */
-export function isAutomatedValue(published?: string, maintenanceFrequency?: MaintenanceFrequency) {
-  if (!published || !maintenanceFrequency) {
-    return false;
-  }
+export function isAutomatedValue(maintenanceFrequency?: MaintenanceFrequency) {
+  if (!maintenanceFrequency) return false;
   return [
     'continual',
     'daily',
@@ -138,6 +136,16 @@ export function isAutomatedValue(published?: string, maintenanceFrequency?: Main
 }
 
 /**
+ * Get today's date normalized to UTC midnight
+ *
+ * @returns Today's date at UTC midnight
+ */
+function getTodayDate(): Date {
+  const today = new Date();
+  return new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+}
+
+/**
  * Function to determine the last Update Date based on the published date and the maintenance frequency
  *
  * @param published
@@ -145,36 +153,37 @@ export function isAutomatedValue(published?: string, maintenanceFrequency?: Main
  * @returns
  */
 export function getLastUpdateValue(published: string, maintenanceFrequency: MaintenanceFrequency) {
+  // Normalize all dates to UTC midnight to avoid timezone issues
   const publishedDate = new Date(published);
-  const todayDate = new Date();
-  let updateDate = new Date(published);
+  const todayDate = getTodayDate();
+  let updateDate = new Date(publishedDate);
 
   function dayInYearIsGreater(dateA: Date, dateB: Date): boolean {
-    const todayYearDay = dateB.getMonth() * 31 + dateB.getDate();
-    const publishedYearDay = dateA.getMonth() * 31 + dateA.getDate();
+    const todayYearDay = dateB.getUTCMonth() * 31 + dateB.getUTCDate();
+    const publishedYearDay = dateA.getUTCMonth() * 31 + dateA.getUTCDate();
     return todayYearDay > publishedYearDay;
   }
 
   function getLastUpdateDateMonthly(publishedDate: Date, cycleMonths: number) {
-    const today = new Date();
+    const todayNormalized = getTodayDate();
     const diffInMonths =
-      (today.getFullYear() - publishedDate.getFullYear()) * 12 +
-      (today.getMonth() - publishedDate.getMonth());
+      (todayNormalized.getUTCFullYear() - publishedDate.getUTCFullYear()) * 12 +
+      (todayNormalized.getUTCMonth() - publishedDate.getUTCMonth());
     const cycles = Math.floor(diffInMonths / cycleMonths);
 
     const lastUpdate = new Date(publishedDate);
-    lastUpdate.setMonth(lastUpdate.getMonth() + cycles * cycleMonths);
+    lastUpdate.setUTCMonth(lastUpdate.getUTCMonth() + cycles * cycleMonths);
     return lastUpdate;
   }
 
   function getLastUpdateDateDaily(publishedDate: Date, days: number = 14) {
-    const today = new Date();
-    const diffInTime = today.getTime() - publishedDate.getTime();
+    const todayNormalized = getTodayDate();
+    const diffInTime = todayNormalized.getTime() - publishedDate.getTime();
     const diffInDays = Math.floor(diffInTime / (1000 * 60 * 60 * 24));
     const cycles = Math.floor(diffInDays / days);
 
     const lastUpdate = new Date(publishedDate);
-    lastUpdate.setDate(lastUpdate.getDate() + cycles * days);
+    lastUpdate.setUTCDate(lastUpdate.getUTCDate() + cycles * days);
     return lastUpdate;
   }
 
@@ -183,29 +192,30 @@ export function getLastUpdateValue(published: string, maintenanceFrequency: Main
       updateDate = todayDate;
       break;
     case 'daily':
-      updateDate = todayDate;
-      updateDate.setDate(updateDate.getDate() - 1);
+      updateDate = new Date(todayDate);
+      updateDate.setUTCDate(updateDate.getUTCDate() - 1);
       break;
     case 'weekly':
-      updateDate = todayDate;
-      if (todayDate.getDay() > publishedDate.getDay()) {
-        updateDate.setDate(todayDate.getDate() - (todayDate.getDay() - publishedDate.getDay()));
+      updateDate = new Date(todayDate);
+      const todayDayOfWeek = todayDate.getUTCDay();
+      const publishedDayOfWeek = publishedDate.getUTCDay();
+
+      if (todayDayOfWeek >= publishedDayOfWeek) {
+        updateDate.setUTCDate(todayDate.getUTCDate() - (todayDayOfWeek - publishedDayOfWeek));
       } else {
-        updateDate.setDate(
-          todayDate.getDate() - (7 - (publishedDate.getDay() - todayDate.getDay()))
-        );
+        updateDate.setUTCDate(todayDate.getUTCDate() - (7 - (publishedDayOfWeek - todayDayOfWeek)));
       }
       break;
     case 'fortnightly':
       updateDate = getLastUpdateDateDaily(publishedDate, 14);
       break;
     case 'monthly':
-      updateDate = todayDate;
-      if (todayDate.getDate() > publishedDate.getDate()) {
-        updateDate.setDate(publishedDate.getDate());
+      updateDate = new Date(todayDate);
+      if (todayDate.getUTCDate() >= publishedDate.getUTCDate()) {
+        updateDate.setUTCDate(publishedDate.getUTCDate());
       } else {
-        updateDate.setMonth(updateDate.getMonth() - 1);
-        updateDate.setDate(publishedDate.getDate());
+        updateDate.setUTCMonth(updateDate.getUTCMonth() - 1);
+        updateDate.setUTCDate(publishedDate.getUTCDate());
       }
       break;
     case 'quarterly':
@@ -215,11 +225,11 @@ export function getLastUpdateValue(published: string, maintenanceFrequency: Main
       updateDate = getLastUpdateDateMonthly(publishedDate, 6);
       break;
     case 'annually':
-      updateDate = publishedDate;
+      updateDate = new Date(publishedDate);
       if (dayInYearIsGreater(publishedDate, todayDate)) {
-        updateDate.setFullYear(todayDate.getFullYear());
+        updateDate.setUTCFullYear(todayDate.getUTCFullYear());
       } else {
-        updateDate.setFullYear(todayDate.getFullYear() - 1);
+        updateDate.setUTCFullYear(todayDate.getUTCFullYear() - 1);
       }
       break;
     case 'asNeeded':
@@ -230,6 +240,10 @@ export function getLastUpdateValue(published: string, maintenanceFrequency: Main
       return undefined;
   }
 
+  // If updateDate is before publishedDate, use publishedDate instead
+  if (updateDate < publishedDate) {
+    updateDate = publishedDate;
+  }
   return updateDate;
 }
 

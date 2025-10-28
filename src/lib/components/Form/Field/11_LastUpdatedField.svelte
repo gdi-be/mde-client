@@ -18,7 +18,6 @@
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
 
-  let publishedValue = $derived(getValue<string>('isoMetadata.published', metadata));
   let maintenanceFrequencyValue = $derived(
     getValue<MaintenanceFrequency>('isoMetadata.maintenanceFrequency', metadata)
   );
@@ -34,7 +33,7 @@
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   let showCheckmark = $state(false);
-  let automated = $derived(isAutomatedValue(publishedValue, maintenanceFrequencyValue));
+  let automated = $derived(isAutomatedValue(maintenanceFrequencyValue));
 
   const onChange = async () => {
     const response = await persistValue(KEY, new Date(value!).toISOString());
