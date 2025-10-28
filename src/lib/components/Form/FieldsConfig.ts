@@ -762,6 +762,22 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     editingRoles: ['MdeEditor']
   },
   {
+    profileId: 39,
+    key: 'isoMetadata.spatialRepresentationTypes',
+    validator: (val: any) => {
+      if (!isDefined(val) || val.length === 0) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben sie mindestens eine gültige räumliche Darstellungsart an.'
+        };
+      }
+      return { valid: true };
+    },
+    section: 'temp_and_spatial',
+    required: true,
+    editingRoles: ['MdeEditor']
+  },
+  {
     profileId: 40,
     key: 'isoMetadata.services',
     isCollection: true,

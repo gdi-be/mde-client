@@ -37,6 +37,7 @@
   import F31_TechnicalDescription from './Field/31_TechnicalDescription.svelte';
   import F32_Lineage from './Field/32_Lineage.svelte';
   import F38_InspireAnnexVersionField from './Field/38_InspireAnnexVersionField.svelte';
+  import F39_SpatialRepresentationField from './Field/39_SpatialRepresentationField.svelte';
   import F41_AdditionalInformation from './Field/41_AdditionalInformation.svelte';
   import F70_InspireFormatNameField from './Field/70_InspireFormatName.svelte';
   import F40_ServicesSection from './service/40_ServicesSection.svelte';
@@ -204,6 +205,7 @@
           <F17_CoordinateSystemField />
           <F18_ExtentField />
           <F28_ResolutionField />
+          <F39_SpatialRepresentationField />
           <ScrollToTopButton target={formWrapper} />
         </section>
       {/if}

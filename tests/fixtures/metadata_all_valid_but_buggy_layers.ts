@@ -412,7 +412,8 @@ export default {
     topicCategory: ['location'],
     termsOfUseId: 2,
     termsOfUseSource: '[Quelle] / [Titel des Datensatzes]',
-    dataBases: []
+    dataBases: [],
+    spatialRepresentationTypes: ['vector']
   },
   technicalMetadata: {
     categories: [
