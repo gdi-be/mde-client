@@ -16,7 +16,7 @@ describe('util functions', () => {
         'annually'
       ];
 
-      automatedFrequencies.forEach(frequency => {
+      automatedFrequencies.forEach((frequency) => {
         expect(isAutomatedValue(frequency)).toBe(true);
       });
     });
@@ -29,7 +29,7 @@ describe('util functions', () => {
         'unknown'
       ];
 
-      nonAutomatedFrequencies.forEach(frequency => {
+      nonAutomatedFrequencies.forEach((frequency) => {
         expect(isAutomatedValue(frequency)).toBe(false);
       });
     });
@@ -110,7 +110,8 @@ describe('util functions', () => {
         published: '2025-10-29', // Morgen
         frequency: 'daily',
         expected: '2025-10-29', // Sollte das published date zurückgeben, da es nicht vor diesem liegen darf
-        description: 'edge case: published date in future should return published date, not go before it'
+        description:
+          'edge case: published date in future should return published date, not go before it'
       }
     ];
 
@@ -131,7 +132,8 @@ describe('util functions', () => {
           }
         });
       });
-    }); describe('non-automated frequencies should return undefined', () => {
+    });
+    describe('non-automated frequencies should return undefined', () => {
       const nonAutomatedCases = [
         { published: '2024-01-01', frequency: 'asNeeded' },
         { published: '2024-01-01', frequency: 'irregular' },
@@ -188,7 +190,9 @@ describe('util functions', () => {
 
         // Verify the calculation: should be publishedDate + (cycles * 14 days)
         const publishedDate = new Date(published);
-        const daysDiff = Math.floor((result!.getTime() - publishedDate.getTime()) / (1000 * 60 * 60 * 24));
+        const daysDiff = Math.floor(
+          (result!.getTime() - publishedDate.getTime()) / (1000 * 60 * 60 * 24)
+        );
         expect(daysDiff % 14).toBe(0); // Should be exact multiple of 14 days
       });
     });
