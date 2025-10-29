@@ -1,3 +1,5 @@
+import type { Option } from './form';
+
 type QueryConfig = {
   searchTerm: string;
   isAssignedToMe?: boolean;
@@ -15,6 +17,10 @@ type UserData = {
 type PageableProps = {
   page: number;
   size: number;
+};
+
+export type CRSOption = Option & {
+  definition: string;
 };
 
 export type PageableResponse<T> = {

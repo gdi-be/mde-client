@@ -5,11 +5,11 @@
   import type { CRS, Extent } from '$lib/models/metadata';
   import Button, { Icon, Label } from '@smui/button';
   import SelectInput from '../Inputs/SelectInput.svelte';
-  import { getHighestRole, transformExtent } from '$lib/util';
-  import type { Option } from '$lib/models/form';
+  import { getHighestRole, registerCRSCodes, transformExtent } from '$lib/util';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import type { CRSOption } from '$lib/models/api';
 
   type ExtentOption = {
     title: string;
@@ -39,7 +39,7 @@
   });
 
   let extentOptions = $state<ExtentOption[]>([]);
-  let crsOptions = $state<Option[]>([]);
+  let crsOptions = $state<CRSOption[]>([]);
   let crsKey = $state(initialCRSKey);
   let crs = $derived(crsOptions.find((option) => option.key === crsKey));
   let showCheckmark = $state(false);
@@ -90,6 +90,7 @@
       toast.error('Fehler beim Abrufen der CRS Optionen');
     } else {
       crsOptions = await crsResponse.json();
+      registerCRSCodes(crsOptions);
       if (!crsKey && crsOptions[0].key) {
         crsKey = crsOptions[0].key as CRS;
       }
