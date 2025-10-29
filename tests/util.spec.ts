@@ -58,7 +58,7 @@ describe('util functions', () => {
         static now() {
           return mockDate.getTime();
         }
-      } as any;
+      } as unknown as typeof Date;
     });
 
     afterEach(() => {

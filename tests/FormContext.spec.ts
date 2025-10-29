@@ -3,7 +3,6 @@ import { getProgress, getValue, getAllValues } from '$lib/context/FormContext.sv
 import type { Role } from '$lib/models/keycloak';
 import metadata1 from './fixtures/metadata1';
 import metadata2 from './fixtures/metadata2';
-import metadata_all_valid_but_buggy_layers from './fixtures/metadata_all_valid_but_buggy_layers';
 import type { Contact } from '$lib/models/metadata';
 
 describe('FormContext', () => {
