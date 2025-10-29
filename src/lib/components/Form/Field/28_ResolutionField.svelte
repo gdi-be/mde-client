@@ -101,6 +101,7 @@
         label={resolutionFieldConfig?.label}
         fieldConfig={resolutionFieldConfig}
         onblur={onBlur}
+        min={0.001}
         validationResult={resolutionValidationResult}
         step="any"
       />
@@ -113,6 +114,7 @@
           }
         }
         key={SCALE_KEY}
+        min={1}
         label={scaleFieldConfig?.label}
         fieldConfig={scaleFieldConfig}
         onblur={onBlur}
