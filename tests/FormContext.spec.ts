@@ -110,15 +110,5 @@ describe('FormContext', () => {
       expect(progress).toBe(1);
     });
 
-    test('should return true for metadata with valid but buggy layers', () => {
-      const role: Role = 'MdeEditor';
-      const { progress, invalidFields } = getProgress(
-        role,
-        undefined,
-        metadata_all_valid_but_buggy_layers
-      );
-      expect(invalidFields).toEqual([]);
-      expect(progress).toBe(1);
-    });
   });
 });

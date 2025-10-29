@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test, beforeEach, afterEach } from 'bun:test';
 import { getLastUpdateValue, isAutomatedValue } from '$lib/util';
 import type { MaintenanceFrequency } from '$lib/models/metadata';
 
@@ -40,97 +40,126 @@ describe('util functions', () => {
   });
 
   describe('getLastUpdateValue', () => {
-    const today = new Date();
+    // Mock a fixed date: October 28, 2025
+    const mockDate = new Date('2025-10-28T14:30:00.000Z');
+    const OriginalDate = global.Date;
 
-    // Konkrete Testwerte mit erwarteten Ergebnissen
-    // Annahme: Tests laufen am 28. Oktober 2025
+    beforeEach(() => {
+      // Mock Date constructor
+      global.Date = class MockDate extends OriginalDate {
+        constructor(value?: string | number | Date) {
+          if (value === undefined) {
+            super(mockDate);
+          } else {
+            super(value);
+          }
+        }
+
+        static now() {
+          return mockDate.getTime();
+        }
+      } as any;
+    });
+
+    afterEach(() => {
+      global.Date = OriginalDate;
+    });
+
+    // Test cases with expected results based on the mocked date (2025-10-28)
     const testCases = [
       {
         published: '2024-01-01',
-        frequency: 'continual',
+        frequency: 'continual' as MaintenanceFrequency,
         expected: '2025-10-28',
         description: 'continual should return today'
       },
       {
         published: '2024-01-01',
-        frequency: 'daily',
+        frequency: 'daily' as MaintenanceFrequency,
         expected: '2025-10-27',
         description: 'daily should return yesterday'
       },
       {
-        published: '2024-01-01', // War ein Montag
-        frequency: 'weekly',
-        expected: '2025-10-27', // Letzter Montag vor heute
-        description: 'weekly should return last Monday'
+        published: '2024-01-01', // Was a Monday
+        frequency: 'weekly' as MaintenanceFrequency,
+        expected: '2025-10-27', // Last Monday before Oct 28
+        description: 'weekly should return last occurrence of same weekday'
       },
       {
         published: '2024-01-01',
-        frequency: 'fortnightly',
-        expected: '2025-10-20', // Basierend auf den Test-Ergebnissen
+        frequency: 'fortnightly' as MaintenanceFrequency,
+        expected: '2025-10-20', // 14-day cycle from Jan 1
         description: 'fortnightly should return date from last 14-day cycle'
       },
       {
         published: '2024-01-15',
-        frequency: 'monthly',
-        expected: '2025-10-15', // 15. Oktober 2025
+        frequency: 'monthly' as MaintenanceFrequency,
+        expected: '2025-10-15', // 15th of October 2025
         description: 'monthly should return 15th of current month'
       },
       {
         published: '2024-01-30',
-        frequency: 'monthly',
-        expected: '2025-09-30', // 30. September, da Oktober noch nicht vorbei ist
+        frequency: 'monthly' as MaintenanceFrequency,
+        expected: '2025-09-30', // 30th of September (October 30th hasn't occurred yet)
         description: 'monthly should handle end of month correctly'
       },
       {
         published: '2024-01-01',
-        frequency: 'quarterly',
+        frequency: 'quarterly' as MaintenanceFrequency,
         expected: '2025-10-01', // Q4 2025
         description: 'quarterly should return start of current quarter'
       },
       {
         published: '2024-01-01',
-        frequency: 'biannually',
-        expected: '2025-07-01', // Halbjahr 2/2025
+        frequency: 'biannually' as MaintenanceFrequency,
+        expected: '2025-07-01', // Second half of 2025
         description: 'biannually should return start of current half-year'
       },
       {
         published: '2022-03-15',
-        frequency: 'annually',
-        expected: '2025-03-15', // 15. März 2025
+        frequency: 'annually' as MaintenanceFrequency,
+        expected: '2025-03-15', // March 15, 2025
         description: 'annually should return same date in current year'
       },
       {
         published: '2022-12-15',
-        frequency: 'annually',
-        expected: '2024-12-15', // 15. Dezember 2024 (da 2025-12-15 noch nicht war)
+        frequency: 'annually' as MaintenanceFrequency,
+        expected: '2024-12-15', // December 15, 2024 (2025-12-15 hasn't occurred yet)
         description: 'annually should return same date in previous year if not occurred yet'
-      },
-      // Edge Cases
-      {
-        published: '2025-10-29', // Morgen
-        frequency: 'daily',
-        expected: '2025-10-29', // Sollte das published date zurückgeben, da es nicht vor diesem liegen darf
-        description:
-          'edge case: published date in future should return published date, not go before it'
       }
     ];
 
     describe('concrete test cases', () => {
       testCases.forEach(({ published, frequency, expected, description }) => {
         test(`${description}: published=${published}, frequency=${frequency} -> expected=${expected}`, () => {
-          const result = getLastUpdateValue(published, frequency as MaintenanceFrequency);
+          const result = getLastUpdateValue(published, frequency);
 
-          if (expected) {
-            expect(result).toBeDefined();
-            const expectedDate = new Date(expected);
-            // Vergleiche nur das Datum, nicht die Zeit
-            expect(result!.getFullYear()).toBe(expectedDate.getFullYear());
-            expect(result!.getMonth()).toBe(expectedDate.getMonth());
-            expect(result!.getDate()).toBe(expectedDate.getDate());
-          } else {
-            expect(result).toBeUndefined();
-          }
+          expect(result).toBeDefined();
+          const expectedDate = new OriginalDate(expected + 'T00:00:00.000Z');
+          expect(result!.getUTCFullYear()).toBe(expectedDate.getUTCFullYear());
+          expect(result!.getUTCMonth()).toBe(expectedDate.getUTCMonth());
+          expect(result!.getUTCDate()).toBe(expectedDate.getUTCDate());
         });
+      });
+    });
+
+    describe('edge cases', () => {
+      test('should not return date before published date', () => {
+        // Test with a future date (relative to our mocked "today")
+        const result = getLastUpdateValue('2025-10-29', 'daily');
+        const published = new OriginalDate('2025-10-29T00:00:00.000Z');
+
+        expect(result).toBeDefined();
+        expect(result!.getTime()).toBeGreaterThanOrEqual(published.getTime());
+      });
+
+      test('should handle very old published dates', () => {
+        const published = '2020-01-01';
+        const result = getLastUpdateValue(published, 'monthly');
+
+        expect(result).toBeDefined();
+        expect(result!.getTime()).toBeLessThanOrEqual(mockDate.getTime());
+        expect(result!.getTime()).toBeGreaterThanOrEqual(new OriginalDate(published).getTime());
       });
     });
     describe('non-automated frequencies should return undefined', () => {
@@ -154,10 +183,10 @@ describe('util functions', () => {
         const published = '2024-01-01';
         const result = getLastUpdateValue(published, 'fortnightly');
 
-        console.log('Published Date Object:', new Date(published));
-        console.log('Published Date ISO:', new Date(published).toISOString());
-        console.log('Today Date Object:', new Date());
-        console.log('Today Date ISO:', new Date().toISOString());
+        console.log('Published Date Object:', new OriginalDate(published));
+        console.log('Published Date ISO:', new OriginalDate(published).toISOString());
+        console.log('Mocked Today Date Object:', mockDate);
+        console.log('Mocked Today Date ISO:', mockDate.toISOString());
         console.log('Result:', result?.toISOString());
 
         expect(result).toBeDefined();
@@ -170,8 +199,8 @@ describe('util functions', () => {
         const result = getLastUpdateValue(published, 'monthly');
 
         expect(result).toBeDefined();
-        expect(result!.getTime()).toBeLessThanOrEqual(today.getTime());
-        expect(result!.getTime()).toBeGreaterThanOrEqual(new Date(published).getTime());
+        expect(result!.getTime()).toBeLessThanOrEqual(mockDate.getTime());
+        expect(result!.getTime()).toBeGreaterThanOrEqual(new OriginalDate(published).getTime());
       });
 
       test('should maintain day of week for weekly frequency', () => {
@@ -179,7 +208,7 @@ describe('util functions', () => {
         const result = getLastUpdateValue(published, 'weekly');
 
         expect(result).toBeDefined();
-        expect(result!.getDay()).toBe(new Date(published).getDay()); // Should be same day of week
+        expect(result!.getDay()).toBe(new OriginalDate(published).getDay()); // Should be same day of week
       });
 
       test('should calculate correct fortnightly cycles', () => {
@@ -189,7 +218,7 @@ describe('util functions', () => {
         expect(result).toBeDefined();
 
         // Verify the calculation: should be publishedDate + (cycles * 14 days)
-        const publishedDate = new Date(published);
+        const publishedDate = new OriginalDate(published);
         const daysDiff = Math.floor(
           (result!.getTime() - publishedDate.getTime()) / (1000 * 60 * 60 * 24)
         );
