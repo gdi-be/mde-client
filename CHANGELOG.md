@@ -1,3 +1,20 @@
+# [4.4.0](https://github.com/gdi-be/mde-client/compare/v4.3.0...v4.4.0) (2025-10-29)
+
+
+### Bug Fixes
+
+* filter autokeywords when persisting keywords ([6788b93](https://github.com/gdi-be/mde-client/commit/6788b936bc8a8f86d94981df2090cde52bc4f070))
+* hide toast when printing ([1283b8c](https://github.com/gdi-be/mde-client/commit/1283b8c035caf7cb716025a90512fb7a8800c576))
+* register crs dynamicaly ([2a2dac4](https://github.com/gdi-be/mde-client/commit/2a2dac4f05eed5a1b14a23cfb4f664b1f05514fb))
+* remove unneede check for service type ([d64feb5](https://github.com/gdi-be/mde-client/commit/d64feb525e956addd50773331a7183af2104f92d))
+* update `getLastUpdateValue` util ([62dd1b2](https://github.com/gdi-be/mde-client/commit/62dd1b2e641bc84fc7755e74761106232465666c))
+* update ids of style name and title and reorder ([bd2b6ea](https://github.com/gdi-be/mde-client/commit/bd2b6ea8c49837033e75fd659b04d25dda2a1ec3))
+
+
+### Features
+
+* add min values for scale and resolution ([27034d4](https://github.com/gdi-be/mde-client/commit/27034d4ea89b02ecd288b3692eddf159682ca243))
+
 # [4.3.0](https://github.com/gdi-be/mde-client/compare/v4.2.4...v4.3.0) (2025-10-28)
 
 
