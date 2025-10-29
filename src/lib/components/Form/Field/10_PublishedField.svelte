@@ -37,7 +37,7 @@
   const onChange = async () => {
     const response = await persistValue(KEY, value ? new Date(value!).toISOString() : '');
 
-    if (isAutomatedValue(value, maintenanceFrequency) && maintenanceFrequency) {
+    if (isAutomatedValue(maintenanceFrequency) && maintenanceFrequency) {
       const lastUpdatedValue = getLastUpdateValue(value, maintenanceFrequency);
       if (lastUpdatedValue) {
         await persistValue('isoMetadata.modified', lastUpdatedValue.toISOString());
