@@ -109,6 +109,5 @@ describe('FormContext', () => {
       expect(invalidFields).toEqual([]);
       expect(progress).toBe(1);
     });
-
   });
 });
