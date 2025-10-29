@@ -101,7 +101,8 @@
 
     :global(header.application-header),
     :global(footer.form-footer),
-    :global(.print-button) {
+    :global(.print-button),
+    :global(.toaster) {
       display: none !important;
     }
 
