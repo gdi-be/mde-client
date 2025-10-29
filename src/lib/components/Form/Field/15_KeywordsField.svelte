@@ -93,7 +93,10 @@
     const keywords: Keywords = valueFromData || {
       default: []
     };
-    keywords.default = value.map((entry) => ({ keyword: entry }));
+    keywords.default = value
+      // filter autokeywords from value to avoid duplicates
+      .filter((kw) => !autoKeywords.includes(kw))
+      .map((entry) => ({ keyword: entry }));
 
     const response = await persistValue(KEY, keywords);
     if (response.ok) {
