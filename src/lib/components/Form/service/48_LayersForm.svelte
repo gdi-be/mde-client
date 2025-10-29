@@ -149,13 +149,13 @@
     {#if activeTabIndex !== undefined}
       <LayerTitle_49 value={activeLayer?.title} onChange={(title) => set('title', title)} />
       <LayerName_50 value={activeLayer?.name} onChange={(name) => set('name', name)} />
-      <LayerStyleName_51
-        value={activeLayer?.styleName}
-        onChange={(styleName) => set('styleName', styleName)}
-      />
       <LayerStyleTitle_52
         value={activeLayer?.styleTitle}
         onChange={(styleTitle) => set('styleTitle', styleTitle)}
+      />
+      <LayerStyleName_51
+        value={activeLayer?.styleName}
+        onChange={(styleName) => set('styleName', styleName)}
       />
       <LayerLegendImage_53
         value={activeLayer?.legendImage}

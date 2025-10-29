@@ -649,14 +649,14 @@
                       <span class="list-item-value">{layer.name}</span>
                     </div>
                     <div class="list-item-field">
-                      <!-- Layer-StyleName -->
+                      <!-- Layer-StyleTitle -->
                       <strong>{getFieldConfig(52)?.label}</strong>
-                      <span class="list-item-value">{layer.styleName}</span>
+                      <span class="list-item-value">{layer.styleTitle}</span>
                     </div>
                     <div class="list-item-field">
-                      <!-- Layer-StyleTitle -->
+                      <!-- Layer-StyleName -->
                       <strong>{getFieldConfig(51)?.label}</strong>
-                      <span class="list-item-value">{layer.styleTitle}</span>
+                      <span class="list-item-value">{layer.styleName}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-LegendImage -->
