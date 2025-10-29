@@ -290,7 +290,7 @@ export function getProgress(
           for (const [serviceId, layers] of Object.entries(layersMap)) {
             const services = getValue<Service[]>('isoMetadata.services', metadata);
             const layerService = services?.find((s) => s.serviceIdentification === serviceId);
-            if (!layerService || layerService.serviceType !== 'WMS') {
+            if (!layerService) {
               // No service found for this layer, skip it
               continue;
             }
