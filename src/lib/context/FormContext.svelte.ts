@@ -279,7 +279,8 @@ export function getProgress(
 
         // layers need special handling
         if (field.profileId === 48 || field.collectionKey === 'clientMetadata.layers') {
-          const layersMap = getValue<Record<string, Layer>>('clientMetadata.layers', metadata) || {};
+          const layersMap =
+            getValue<Record<string, Layer>>('clientMetadata.layers', metadata) || {};
 
           for (const [serviceId, layers] of Object.entries(layersMap)) {
             const services = getValue<Service[]>('isoMetadata.services', metadata);
