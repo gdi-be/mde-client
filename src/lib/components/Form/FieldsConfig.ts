@@ -606,6 +606,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
           helpText: 'Bitte geben Sie den Vergleichsmaßstab an.'
         };
       }
+      if (val < 0.001) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen gültigen Vergleichsmaßstab an.'
+        };
+      }
       return { valid: true };
     },
     section: 'temp_and_spatial',
@@ -621,6 +627,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         return {
           valid: false,
           helpText: 'Bitte geben Sie die Bodenauflösung an.'
+        };
+      }
+      if (val < 1) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen gültigen Vergleichsmaßstab an.'
         };
       }
       return { valid: true };
