@@ -1,3 +1,11 @@
+## [4.4.1](https://github.com/gdi-be/mde-client/compare/v4.4.0...v4.4.1) (2025-10-31)
+
+
+### Bug Fixes
+
+* initialize empty layers for mapping service ([6565c85](https://github.com/gdi-be/mde-client/commit/6565c859321475c3528cc639dc256ecf3744346b))
+* prevent manual input of negativ scale/resolution ([564371a](https://github.com/gdi-be/mde-client/commit/564371a08d6fe3d14c2a7a5df1db2e597f9d31ac))
+
 # [4.4.0](https://github.com/gdi-be/mde-client/compare/v4.3.0...v4.4.0) (2025-10-29)
 
 
