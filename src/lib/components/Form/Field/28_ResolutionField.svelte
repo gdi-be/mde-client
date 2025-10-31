@@ -45,7 +45,13 @@
     await updateScale(null);
   };
 
-  const onBlur = async () => {
+  const onBlur = async (event: FocusEvent) => {
+    const target = event.target as HTMLInputElement;
+    const minValue = target.getAttribute('min');
+    const min = Number(minValue);
+    if (!Number.isNaN(min) && Number(target.value) < min) {
+      return;
+    }
     if (selected === RESOLUTION_KEY) {
       await updateResolution(resolutionValue ? [resolutionValue] : null);
     } else {

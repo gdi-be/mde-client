@@ -44,14 +44,21 @@
 
   async function onServiceTypeChange(serviceType: ServiceType): Promise<Response> {
     service = setNestedValue(service, 'serviceType', serviceType);
+    let layers = getValue<Record<string, Service[]>>('clientMetadata.layers');
     if (serviceType !== 'WMS' && serviceType !== 'WMTS') {
       // Remove layers associated with the service
       const id = service.serviceIdentification;
-      const layers = getValue<Record<string, Service[]>>('clientMetadata.layers');
       if (layers && layers[id]) {
         delete layers[id];
         await persistValue('clientMetadata.layers', layers);
       }
+    } else if (layers?.[service.serviceIdentification] === undefined) {
+      // Initialize layers array for the service to allow correct validation / progress calculation
+      if (!layers) {
+        layers = {};
+      }
+      layers[service.serviceIdentification] = [];
+      await persistValue('clientMetadata.layers', layers);
     }
     if (serviceType !== 'WFS') {
       // Remove feature types associated with the service
