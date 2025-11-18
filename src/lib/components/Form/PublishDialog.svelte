@@ -108,7 +108,7 @@
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${env.PUBLIC_GNOS_URL}/srv/eng/catalog.search#/metadata/${uuid}`}>{uuid}</a
+                  href={`${env.PUBLIC_GNOS_URL}/srv/ger/catalog.search#/metadata/${uuid}`}>{uuid}</a
                 >
               </li>
             {/each}
