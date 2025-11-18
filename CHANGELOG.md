@@ -1,3 +1,10 @@
+## [4.4.2](https://github.com/gdi-be/mde-client/compare/v4.4.1...v4.4.2) (2025-11-18)
+
+
+### Bug Fixes
+
+* use link in german language ([845ed49](https://github.com/gdi-be/mde-client/commit/845ed49d926eabd1c559985647ad00f06bff4539))
+
 ## [4.4.1](https://github.com/gdi-be/mde-client/compare/v4.4.0...v4.4.1) (2025-10-31)
 
 
