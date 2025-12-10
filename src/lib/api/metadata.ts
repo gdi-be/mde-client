@@ -325,6 +325,10 @@ export const assignUser = async ({
   });
 
   if (!response.ok) {
+    if (response.status === 409) {
+      log.error('Conflict error: User is already assigned to this metadata.');
+      throw new ConflictError('User is already assigned to this metadata.');
+    }
     throw new Error(`HTTP error status: ${response.status}`);
   }
 

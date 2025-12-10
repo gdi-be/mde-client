@@ -101,11 +101,21 @@
     });
 
     if (!response.ok) {
-      toast.error(
-        'Fehler beim Zuweisen des Metadatensatzes. Bitte versuchen Sie es später erneut.'
-      );
+      if (response.status === 409) {
+        toast.error(
+          'Der Metadatensatz ist bereits einem anderen Benutzer zugewiesen. Die Ansicht wird neu geladen.'
+        );
+        setTimeout(() => {
+          invalidateAll();
+        }, 3000);
+      } else {
+        toast.error(
+          'Fehler beim Zuweisen des Metadatensatzes. Bitte versuchen Sie es später erneut.'
+        );
+      }
+    } else {
+      invalidateAll();
     }
-    invalidateAll();
   };
 
   const removeAssignment = async () => {

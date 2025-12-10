@@ -1,6 +1,7 @@
 import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
 import { assignUser, unassignUser } from '$lib/api/metadata.js';
+import { ConflictError } from '$lib/error/error';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ cookies, request, params }) {
@@ -13,11 +14,18 @@ export async function POST({ cookies, request, params }) {
     return error(400, 'Bad Request');
   }
 
-  await assignUser({
-    userId: userId,
-    metadataid: params.metadataid,
-    token
-  });
+  try {
+    await assignUser({
+      userId: userId,
+      metadataid: params.metadataid,
+      token
+    });
+  } catch (e) {
+    if (e instanceof ConflictError) {
+      return error(409, 'Metadata already assigned to another user.');
+    }
+    return error(500, 'Internal Server Error');
+  }
 
   return new Response(null, { status: 204 });
 }
