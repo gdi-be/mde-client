@@ -1,3 +1,10 @@
+## [4.4.3](https://github.com/gdi-be/mde-client/compare/v4.4.2...v4.4.3) (2025-12-10)
+
+
+### Bug Fixes
+
+* handle user assignment conflicts with appropriate error messages ([fb451d0](https://github.com/gdi-be/mde-client/commit/fb451d051a88f761b861d91a6d383f7d2ec5b570))
+
 ## [4.4.2](https://github.com/gdi-be/mde-client/compare/v4.4.1...v4.4.2) (2025-11-18)
 
 
