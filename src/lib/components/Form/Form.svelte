@@ -149,6 +149,7 @@
           onclick={() => onSectionClick(section)}
           disabled={disabledCheck(metadata)}
           title={label}
+          type="button"
         >
           <Label>{label}</Label>
         </button>
@@ -235,6 +236,7 @@
         onSectionClick(
           SECTIONS[SECTIONS.findIndex((s) => s.section === activeSection) - 1].section
         )}
+      type="button"
     >
       <Icon class="material-icons">chevron_left</Icon>
       <Label>Zurück</Label>
@@ -247,6 +249,7 @@
         onSectionClick(
           SECTIONS[SECTIONS.findIndex((s) => s.section === activeSection) + 1].section
         )}
+      type="button"
     >
       <Label>Weiter</Label>
       <Icon class="material-icons">chevron_right</Icon>

@@ -141,6 +141,7 @@
   {#each tabs as tab}
     <div class="tab-container" class:active={activeTab === tab.id}>
       <button
+        type="button"
         id={tab.id}
         class="tab"
         title={tab.title}
@@ -160,6 +161,7 @@
           onclick={(evt) => removeService(tab.id, evt)}
           size="button"
           title="Dienst entfernen"
+          type="button"
         >
           delete
         </IconButton>
@@ -171,6 +173,7 @@
     onclick={() => addService()}
     size="button"
     title="Dienst hinzufügen"
+    type="button"
   >
     add
   </IconButton>

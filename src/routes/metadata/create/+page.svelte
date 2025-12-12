@@ -69,7 +69,7 @@
         bind:value={cloneMetadataId}
         label="Bestehende Metadaten als Vorlage verwenden"
       />
-      <Button variant="raised" onclick={onCreateClick} disabled={!allFieldsValid}>
+      <Button variant="raised" onclick={onCreateClick} disabled={!allFieldsValid} type="button">
         Metadaten anlegen
       </Button>
     </Content>

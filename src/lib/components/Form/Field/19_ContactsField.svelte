@@ -127,6 +127,7 @@
         onclick={(evt) => addItem(evt)}
         size="button"
         title="Kontakt hinzufügen"
+        type="button"
       >
         add
       </IconButton>
@@ -140,6 +141,7 @@
             onclick={(evt) => removeItem(contact.listId, evt)}
             size="button"
             title="Kontakt entfernen"
+            type="button"
           >
             delete
           </IconButton>

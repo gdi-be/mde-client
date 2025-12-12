@@ -113,6 +113,7 @@
     {#each tabs as tab, i}
       <div class="tab-container" class:active={activeTabIndex === i}>
         <button
+          type="button"
           id={tab.name}
           class="tab"
           title={tab.name}
@@ -128,6 +129,7 @@
           onclick={(evt) => removeLayer(i, evt)}
           size="button"
           title="Layer entfernen"
+          type="button"
         >
           delete
         </IconButton>
@@ -141,6 +143,7 @@
       }}
       size="button"
       title="Layer hinzufügen"
+      type="button"
     >
       add
     </IconButton>

@@ -201,12 +201,12 @@
     <div class="actions">
       {#if users?.length > 0 && highestRole !== 'MdeDataOwner'}
         {#each users as user}
-          <Button variant="raised" onclick={() => assignToUser(user.keycloakId)}>
+          <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
             <Label>An "{user.displayName}" übergeben</Label>
           </Button>
         {/each}
       {/if}
-      <Button variant="outlined" onclick={() => assignToRole('MdeEditor')}>
+      <Button variant="outlined" onclick={() => assignToRole('MdeEditor')} type="button">
         <Label>An Redaktion übergeben</Label>
       </Button>
     </div>
@@ -219,7 +219,7 @@
     <div class="actions">
       {#if users.length === 1}
         {@const user = users[0]}
-        <Button variant="raised" onclick={() => assignToUser(user.keycloakId)}>
+        <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
           <Label>An "{user.displayName}" übergeben</Label>
         </Button>
       {:else}
@@ -237,12 +237,12 @@
     <div class="actions">
       {#if users?.length > 0}
         {#each users as user}
-          <Button variant="raised" onclick={() => assignToUser(user.keycloakId)}>
+          <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
             <Label>An "{user.displayName}" übergeben</Label>
           </Button>
         {/each}
       {/if}
-      <Button variant="outlined" onclick={() => assignToRole('MdeQualityAssurance')}>
+      <Button variant="outlined" onclick={() => assignToRole('MdeQualityAssurance')} type="button">
         <Label>An Qualitätssicherung übergeben</Label>
       </Button>
     </div>
@@ -254,7 +254,7 @@
     <div class="assign-section assign-self">
       <h4>Selbst zuweisen</h4>
       <div class="actions">
-        <Button variant="raised" onclick={() => assignToUser(userId)}>
+        <Button variant="raised" onclick={() => assignToUser(userId)} type="button">
           <Label>Mir zuweisen</Label>
         </Button>
       </div>
@@ -266,7 +266,7 @@
   <div class="assign-section unassign">
     <h4>Mir zugewiesen</h4>
     <div class="actions">
-      <Button variant="raised" onclick={() => unassignUser()}>
+      <Button variant="raised" onclick={() => unassignUser()} type="button">
         <Label>Zuordnung entfernen</Label>
       </Button>
     </div>

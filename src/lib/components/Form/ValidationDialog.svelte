@@ -138,7 +138,7 @@
         Möchten Sie die Validierung jetzt starten?
       </p>
       <div class="validation-actions">
-        <Button variant="raised" onclick={runValidation} disabled={isLoading}>
+        <Button variant="raised" onclick={runValidation} disabled={isLoading} type="button">
           <Label>Validierung starten</Label>
           <Icon class="material-icons">assignment_turned_in</Icon>
           {#if isLoading}

@@ -36,6 +36,7 @@
     <button
       onclick={() => (isVisible = false)}
       style="margin-left: 1rem; background: none; border: none; color: #fff; cursor: pointer;"
+      type="button"
     >
       ✖
     </button>

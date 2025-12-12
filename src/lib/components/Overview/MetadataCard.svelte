@@ -247,6 +247,7 @@
         aria-label={'Metadatensatz Löschen'}
         title={'Metadatensatz Löschen'}
         onclick={onDelete}
+        type="button"
       >
         <Icon class="material-icons">delete</Icon>
       </IconButton>
@@ -256,17 +257,18 @@
         aria-label={'Kommentare anzeigen'}
         title={'Kommentare anzeigen'}
         onclick={onComments}
+        type="button"
       >
         <Icon class="material-icons">chat</Icon>
       </IconButton>
     {/if}
     {#if showPrintAction}
-      <IconButton aria-label={'Drucken'} title={'Drucken'} onclick={onPrint}>
+      <IconButton aria-label={'Drucken'} title={'Drucken'} onclick={onPrint} type="button">
         <Icon class="material-icons">print</Icon>
       </IconButton>
     {/if}
     {#if showEditAction}
-      <IconButton aria-label={'Bearbeiten'} title={'Bearbeiten'} onclick={onEdit}>
+      <IconButton aria-label={'Bearbeiten'} title={'Bearbeiten'} onclick={onEdit} type="button">
         <Icon class="material-icons">edit</Icon>
       </IconButton>
     {/if}
@@ -278,6 +280,7 @@
         title={assignButtonLabeL}
         onclick={onAssign}
         pressed={assignedToMe && highestRole !== 'MdeAdministrator'}
+        type="button"
       >
         <Icon class="material-icons-filled assigned-to-me" on>person_remove</Icon>
         <Icon class="material-icons-filled">

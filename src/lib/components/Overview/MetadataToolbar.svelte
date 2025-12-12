@@ -12,7 +12,7 @@
 
 <div class="toolbar-inner">
   {#if highestRole !== 'MdeQualityAssurance'}
-    <Button variant="raised" onclick={() => goto('/metadata/create')}>
+    <Button variant="raised" onclick={() => goto('/metadata/create')} type="button">
       <Label>Neuerfassung</Label>
     </Button>
   {/if}

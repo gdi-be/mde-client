@@ -132,6 +132,7 @@
         variant="raised"
         class="comments-panel-toggle-button"
         onclick={() => (commentsPanelVisible = true)}
+        type="button"
       >
         <Icon class="material-icons">chat</Icon>
         <Label>Kommentare</Label>
@@ -143,7 +144,13 @@
   </div>
   <div class="container right-container">
     {#if !hideDownloadButton}
-      <Button class="submit-button" title="Download" variant="raised" onclick={onDownloadClick}>
+      <Button
+        class="submit-button"
+        title="Download"
+        variant="raised"
+        onclick={onDownloadClick}
+        type="button"
+      >
         <Label>Download</Label>
         <Icon class="material-icons">download</Icon>
       </Button>
@@ -152,6 +159,7 @@
       class="submit-button"
       title="Validieren"
       variant="raised"
+      type="button"
       onclick={() => (validationPanelVisible = !validationPanelVisible)}
     >
       <Label>Validieren</Label>
@@ -166,6 +174,7 @@
         title="Zuweisen"
         variant="raised"
         onclick={() => (assignmentPanelVisible = !assignmentPanelVisible)}
+        type="button"
       >
         <Label>Zuweisen</Label>
         <Icon class="material-icons">partner_exchange</Icon>
@@ -177,6 +186,7 @@
         title="Freigabe"
         variant="raised"
         onclick={() => (publishPanelVisible = !publishPanelVisible)}
+        type="button"
       >
         <Label>Freigabe</Label>
         <Icon class="material-icons">rocket_launch</Icon>
