@@ -11,7 +11,7 @@
 
 <div class="user-menu-wrapper">
   {#if token}
-    <Button class="user-menu-button" onclick={() => (visible = !visible)}>
+    <Button class="user-menu-button" onclick={() => (visible = !visible)} type="button">
       <Icon class="material-icons">account_circle</Icon>
       <Label>Mein Account</Label>
     </Button>
@@ -19,14 +19,14 @@
       <div in:fly={{ y: -10, duration: 150 }} out:fly={{ y: -10, duration: 150 }}>
         <Paper class="user-menu">
           <UserProfilePanel {token} />
-          <Button variant="outlined" href="/logout">
+          <Button variant="outlined" href="/logout" type="button">
             <Label>Logout</Label>
           </Button>
         </Paper>
       </div>
     {/if}
   {:else}
-    <Button variant="outlined" href="/login">
+    <Button variant="outlined" href="/login" type="button">
       <Label>Anmeldung</Label>
     </Button>
   {/if}

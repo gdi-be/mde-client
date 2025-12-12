@@ -161,6 +161,7 @@
         onclick={(evt) => addItem(evt)}
         size="button"
         title="Daten hinzufügen"
+        type="button"
       >
         add
       </IconButton>
@@ -174,6 +175,7 @@
             onclick={(evt) => removeItem(lineage.listId, evt)}
             size="button"
             title="Daten entfernen"
+            type="button"
           >
             delete
           </IconButton>
@@ -194,7 +196,10 @@
             <ul class="search-results" bind:this={searchResultsElement}>
               {#each metadataCollections as metadataCollection}
                 <li class="search-result">
-                  <button onclick={() => onSelectMetadataCollection(metadataCollection, lineage)}>
+                  <button
+                    type="button"
+                    onclick={() => onSelectMetadataCollection(metadataCollection, lineage)}
+                  >
                     {metadataCollection.title}
                   </button>
                 </li>

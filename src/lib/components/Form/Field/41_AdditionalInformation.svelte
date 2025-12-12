@@ -91,6 +91,7 @@
         onclick={(evt) => addItem(evt)}
         size="button"
         title="Informationen hinzufügen"
+        type="button"
       >
         add
       </IconButton>
@@ -104,6 +105,7 @@
             onclick={(evt) => removeItem(contentDescription.listId, evt)}
             size="button"
             title="Informationen entfernen"
+            type="button"
           >
             delete
           </IconButton>

@@ -193,10 +193,10 @@
     />
   </Content>
   <Actions>
-    <Button>
+    <Button type="button" onclick={() => (dialogOpen = false)}>
       <Label>Abbrechen</Label>
     </Button>
-    <Button variant="raised" onclick={addCustomKeywords}>
+    <Button variant="raised" onclick={addCustomKeywords} type="button">
       <Label>Hinzufügen</Label>
     </Button>
   </Actions>

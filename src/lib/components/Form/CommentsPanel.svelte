@@ -174,7 +174,7 @@
             {/snippet}
           </Textfield>
         </div>
-        <IconButton class="material-icons" title="Absenden">send</IconButton>
+        <IconButton class="material-icons" title="Absenden" type="button">send</IconButton>
       </form>
     </div>
   </Paper>
@@ -196,7 +196,7 @@
     {/await}
   </Content>
   <Actions>
-    <Button onclick={() => (helpActive = false)}>
+    <Button type="button" onclick={() => (helpActive = false)}>
       <Label>Schließen</Label>
     </Button>
   </Actions>

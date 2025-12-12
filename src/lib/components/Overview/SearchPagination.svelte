@@ -47,6 +47,7 @@
     class="material-icons"
     onclick={() => updatePage(currentPage - 1)}
     size="button"
+    type="button"
   >
     chevron_left
   </IconButton>
@@ -67,6 +68,7 @@
     class="material-icons"
     onclick={() => updatePage(currentPage + 1)}
     size="button"
+    type="button"
   >
     chevron_right
   </IconButton>

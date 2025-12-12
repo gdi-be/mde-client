@@ -9,7 +9,7 @@
   {#if !token}
     <h2>Metadateneditor der GDI-Berlin</h2>
     <p>Anmelden, um Metadaten zu bearbeiten.</p>
-    <Button variant="outlined" href="/login">
+    <Button variant="outlined" href="/login" type="button">
       <Label>Anmeldung</Label>
     </Button>
   {:else}

@@ -87,6 +87,7 @@
             variant="raised"
             onclick={onPublishClick}
             disabled={isLoading || !isAllowedToPublish()}
+            type="button"
           >
             <Label>Freigabe durchführen</Label>
             <Icon class="material-icons">rocket_launch</Icon>
