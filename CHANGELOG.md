@@ -1,3 +1,11 @@
+## [4.4.5](https://github.com/gdi-be/mde-client/compare/v4.4.4...v4.4.5) (2025-12-12)
+
+
+### Bug Fixes
+
+* add type attribute to button elements ([b557b72](https://github.com/gdi-be/mde-client/commit/b557b7234fadf4f677dcf2a8ebef6af273f834c1))
+* update smui version to 8.0.3 ([333c621](https://github.com/gdi-be/mde-client/commit/333c6213361f6c704e906083ca718cf2650fe92a))
+
 ## [4.4.4](https://github.com/gdi-be/mde-client/compare/v4.4.3...v4.4.4) (2025-12-12)
 
 
