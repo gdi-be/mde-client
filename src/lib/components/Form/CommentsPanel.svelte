@@ -174,7 +174,7 @@
             {/snippet}
           </Textfield>
         </div>
-        <IconButton class="material-icons" title="Absenden" type="button">send</IconButton>
+        <IconButton class="material-icons" title="Absenden">send</IconButton>
       </form>
     </div>
   </Paper>
