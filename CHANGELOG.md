@@ -1,3 +1,10 @@
+## [4.4.6](https://github.com/gdi-be/mde-client/compare/v4.4.5...v4.4.6) (2025-12-19)
+
+
+### Bug Fixes
+
+* remove type attribute from send button ([b965b9d](https://github.com/gdi-be/mde-client/commit/b965b9d4b5e76ca1814d805a4852a7249c4381c2))
+
 ## [4.4.5](https://github.com/gdi-be/mde-client/compare/v4.4.4...v4.4.5) (2025-12-12)
 
 
