@@ -14,6 +14,7 @@
 
   const valueFromData = $derived(getValue<ContentDescription[]>(KEY));
   let contentDescriptions = $state<ContentDescriptionListEntry[]>([]);
+  let isEditing = $state<boolean>(false);
 
   $effect(() => {
     if (valueFromData && valueFromData.length > 0) {
@@ -35,6 +36,15 @@
   const titleFieldConfig = getFieldConfig<string>(42);
   const codeFieldConfig = getFieldConfig<string>(43);
   const urlFieldConfig = getFieldConfig<string>(44);
+
+  const onBlur = async () => {
+    await persistContentDescriptions();
+    isEditing = false;
+  };
+
+  const onFocus = () => {
+    isEditing = true;
+  };
 
   const persistContentDescriptions = async () => {
     const value = contentDescriptions.map((contentDescription) => ({
@@ -84,10 +94,11 @@
 
 <div class="contentDescriptions-field">
   <fieldset>
-    <legend
-      >{fieldConfig?.label}
+    <legend>
+      {fieldConfig?.label}
       <IconButton
         class="material-icons"
+        disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
         title="Informationen hinzufügen"
@@ -102,6 +113,7 @@
         <legend>
           <IconButton
             class="material-icons"
+            disabled={isEditing}
             onclick={(evt) => removeItem(contentDescription.listId, evt)}
             size="button"
             title="Informationen entfernen"
@@ -114,7 +126,8 @@
           <TextInput
             bind:value={contentDescription.description}
             label={titleFieldConfig?.label}
-            onblur={persistContentDescriptions}
+            onblur={onBlur}
+            onfocus={onFocus}
             fieldConfig={titleFieldConfig}
             validationResult={titleFieldConfig?.validator(contentDescription.description)}
           />
@@ -145,7 +158,8 @@
             <TextInput
               bind:value={contentDescription.url}
               label={urlFieldConfig?.label}
-              onblur={persistContentDescriptions}
+              onblur={onBlur}
+              onfocus={onFocus}
               fieldConfig={urlFieldConfig}
               validationResult={urlFieldConfig?.validator(contentDescription.url)}
             />

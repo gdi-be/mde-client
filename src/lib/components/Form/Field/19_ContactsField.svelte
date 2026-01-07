@@ -15,6 +15,8 @@
 
   let contacts = $state<ContactListEntry[]>([]);
   const valueFromData = $derived(getValue<Contacts>(KEY));
+  let isEditing = $state<boolean>(false);
+
   $effect(() => {
     if (valueFromData && valueFromData.length > 0) {
       contacts =
@@ -60,6 +62,15 @@
     contact.phone = json.phone;
     contact.email = json.email;
     persistContacts();
+  };
+
+  const onBlur = async () => {
+    await persistContacts();
+    isEditing = false;
+  };
+
+  const onFocus = () => {
+    isEditing = true;
   };
 
   const persistContacts = async (evt?: FocusEvent) => {
@@ -124,6 +135,7 @@
       <span>{fieldConfig?.label}</span>
       <IconButton
         class="material-icons"
+        disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
         title="Kontakt hinzufügen"
@@ -138,6 +150,7 @@
         <legend>
           <IconButton
             class="material-icons"
+            disabled={isEditing}
             onclick={(evt) => removeItem(contact.listId, evt)}
             size="button"
             title="Kontakt entfernen"
@@ -150,7 +163,8 @@
           <TextInput
             bind:value={contact.name}
             label={nameConfig?.label}
-            onblur={persistContacts}
+            onblur={onBlur}
+            onfocus={onFocus}
             fieldConfig={nameConfig}
             validationResult={nameConfig?.validator(contact.name)}
             id={`${KEY}-${index}-name`}
@@ -161,7 +175,8 @@
           <TextInput
             bind:value={contact.organisation}
             label={organisationConfig?.label}
-            onblur={persistContacts}
+            onblur={onBlur}
+            onfocus={onFocus}
             fieldConfig={organisationConfig}
             validationResult={organisationConfig?.validator(contact.organisation)}
             id={`${KEY}-${index}-organisation`}
@@ -177,7 +192,8 @@
           <TextInput
             bind:value={contact.phone}
             label={phoneConfig?.label}
-            onblur={persistContacts}
+            onblur={onBlur}
+            onfocus={onFocus}
             fieldConfig={phoneConfig}
             validationResult={phoneConfig?.validator(contact.phone)}
             id={`${KEY}-${index}-phone`}
@@ -188,7 +204,8 @@
           <TextInput
             bind:value={contact.email}
             label={emailConfig?.label}
-            onblur={persistContacts}
+            onblur={onBlur}
+            onfocus={onFocus}
             fieldConfig={emailConfig}
             validationResult={emailConfig?.validator(contact.email)}
             id={`${KEY}-${index}-email`}
