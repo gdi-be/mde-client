@@ -1,3 +1,10 @@
+## [4.4.7](https://github.com/gdi-be/mde-client/compare/v4.4.6...v4.4.7) (2026-01-07)
+
+
+### Bug Fixes
+
+* disable add-/delete-item on lists when editing ([27e4d56](https://github.com/gdi-be/mde-client/commit/27e4d569d04b4241a115621057cf9750ba38b364))
+
 ## [4.4.6](https://github.com/gdi-be/mde-client/compare/v4.4.5...v4.4.6) (2025-12-19)
 
 
