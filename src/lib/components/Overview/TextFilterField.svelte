@@ -14,6 +14,7 @@
     } else {
       url.searchParams.delete('query');
     }
+    url.searchParams.set('page', '1');
     goto(url, {
       keepFocus: true
     });
