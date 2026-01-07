@@ -22,6 +22,8 @@
   let titleSearchListId = $state<string>();
 
   let showCheckmark = $state(false);
+  let isEditing = $state<boolean>(false);
+
   const fieldConfig = getFieldConfig<Lineage[]>(32);
   const titleFieldConfig = getFieldConfig<string>(33);
   const dateFieldConfig = getFieldConfig<string>(34);
@@ -72,6 +74,15 @@
     const data = await response.json();
 
     return data?.content || [];
+  };
+
+  const onBlur = async () => {
+    await persistLineages();
+    isEditing = false;
+  };
+
+  const onFocus = () => {
+    isEditing = true;
   };
 
   const persistLineages = async () => {
@@ -148,7 +159,8 @@
     if (searchResultsElement && relatedTarget && searchResultsElement.contains(relatedTarget)) {
       return;
     }
-    persistLineages();
+    await persistLineages();
+    isEditing = false;
   };
 </script>
 
@@ -158,6 +170,7 @@
       {fieldConfig?.label}
       <IconButton
         class="material-icons"
+        disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
         title="Daten hinzufügen"
@@ -172,6 +185,7 @@
         <legend>
           <IconButton
             class="material-icons"
+            disabled={isEditing}
             onclick={(evt) => removeItem(lineage.listId, evt)}
             size="button"
             title="Daten entfernen"
@@ -186,6 +200,7 @@
               bind:value={lineage.title}
               label={titleFieldConfig?.label}
               onblur={onTitleBlur}
+              onfocus={onFocus}
               onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
               fieldConfig={titleFieldConfig}
               validationResult={titleFieldConfig?.validator(lineage.title)}
@@ -213,7 +228,8 @@
               bind:value={lineage.date}
               key={KEY}
               label={dateFieldConfig?.label}
-              onblur={persistLineages}
+              onblur={onBlur}
+              onfocus={onFocus}
               fieldConfig={dateFieldConfig}
               validationResult={dateFieldConfig?.validator(lineage.date)}
             />
@@ -223,7 +239,8 @@
             <TextInput
               bind:value={lineage.identifier}
               label={identifierFieldConfig?.label}
-              onblur={persistLineages}
+              onblur={onBlur}
+              onfocus={onFocus}
               fieldConfig={identifierFieldConfig}
               validationResult={identifierFieldConfig?.validator(lineage.identifier)}
             />
