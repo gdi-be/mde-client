@@ -18,6 +18,7 @@
     } else {
       url.searchParams.delete('statusfilter');
     }
+    url.searchParams.set('page', '1');
     goto(url, {
       keepFocus: true
     });
