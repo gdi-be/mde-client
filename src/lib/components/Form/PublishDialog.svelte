@@ -6,6 +6,7 @@
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import Dialog, { Content, Header, Title } from '@smui/dialog';
   import { toast } from 'svelte-french-toast';
+  import { invalidateAll } from '$app/navigation';
 
   type MetadataPublishResponse = {
     publishedCatalogRecords: string[];
@@ -49,6 +50,7 @@
       const uuids = (await response.json()) as MetadataPublishResponse;
 
       responseUuids = uuids;
+      invalidateAll();
     } catch (error) {
       console.error('Error during publishing: ', error);
     } finally {
@@ -63,40 +65,43 @@
   </Header>
   <Content>
     <div class="publish-content">
-      <div>
-        <p>
-          In diesem Schritt wird die Freigabe der Metadaten durchgeführt. Hierdurch wird der
-          aktuelle Stand der Metadaten im Geonetwork veröffentlicht und somit für alle Nutzenden
-          einsehbar. Bitte beachten Sie, dass die Metadaten nur veröffentlicht werden können, wenn:
-        </p>
-        <ul>
-          <li class={[metadata?.approved === true ? 'check' : 'missing']}>
-            die Metadaten genehmigt wurden:
-          </li>
-          <li class={[metadata?.responsibleRole === 'MdeEditor' ? 'check' : 'missing']}>
-            die Metadaten einem Redakteur zugewiesen sind:
-          </li>
-        </ul>
-        {#if metadata?.status === 'PUBLISHED'}
-          <p>Die Metadaten wurden bereits freigegeben. Wollen Sie diese aktualisieren?</p>
-        {:else}
-          <p>Wollen Sie die Metadaten freigeben?</p>
-        {/if}
-        <div class="publish-actions">
-          <Button
-            variant="raised"
-            onclick={onPublishClick}
-            disabled={isLoading || !isAllowedToPublish()}
-            type="button"
-          >
-            <Label>Freigabe durchführen</Label>
-            <Icon class="material-icons">rocket_launch</Icon>
-            {#if isLoading}
-              <Spinner />
-            {/if}
-          </Button>
+      {#if responseStatus !== 200}
+        <div>
+          <p>
+            In diesem Schritt wird die Freigabe der Metadaten durchgeführt. Hierdurch wird der
+            aktuelle Stand der Metadaten im Geonetwork veröffentlicht und somit für alle Nutzenden
+            einsehbar. Bitte beachten Sie, dass die Metadaten nur veröffentlicht werden können,
+            wenn:
+          </p>
+          <ul>
+            <li class={[metadata?.approved === true ? 'check' : 'missing']}>
+              die Metadaten genehmigt wurden:
+            </li>
+            <li class={[metadata?.responsibleRole === 'MdeEditor' ? 'check' : 'missing']}>
+              die Metadaten einem Redakteur zugewiesen sind:
+            </li>
+          </ul>
+          {#if metadata?.status === 'PUBLISHED'}
+            <p>Die Metadaten wurden bereits freigegeben. Wollen Sie diese aktualisieren?</p>
+          {:else}
+            <p>Wollen Sie die Metadaten freigeben?</p>
+          {/if}
+          <div class="publish-actions">
+            <Button
+              variant="raised"
+              onclick={onPublishClick}
+              disabled={isLoading || !isAllowedToPublish()}
+              type="button"
+            >
+              <Label>Freigabe durchführen</Label>
+              <Icon class="material-icons">rocket_launch</Icon>
+              {#if isLoading}
+                <Spinner />
+              {/if}
+            </Button>
+          </div>
         </div>
-      </div>
+      {/if}
       <div class="publish-results">
         {#if isLoading}
           <p class="loading">Die Veröffentlichung läuft. Bitte warten Sie…</p>
