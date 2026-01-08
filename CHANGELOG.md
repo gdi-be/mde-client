@@ -1,3 +1,11 @@
+## [4.4.8](https://github.com/gdi-be/mde-client/compare/v4.4.7...v4.4.8) (2026-01-08)
+
+
+### Bug Fixes
+
+* hide publish text on succesful publication ([b7d98f1](https://github.com/gdi-be/mde-client/commit/b7d98f13fefd130f27f4eb3cd75601de1ef09654))
+* reset paging on filter change ([01991f7](https://github.com/gdi-be/mde-client/commit/01991f79c3635d49bbd8090213d19debeb9cccf1))
+
 ## [4.4.7](https://github.com/gdi-be/mde-client/compare/v4.4.6...v4.4.7) (2026-01-07)
 
 
