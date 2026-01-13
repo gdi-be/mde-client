@@ -29,18 +29,29 @@
   const dateFieldConfig = getFieldConfig<string>(34);
   const identifierFieldConfig = getFieldConfig<string>(35);
 
+  // important that this is not a state
+  let previousValueAsString: string;
+
   $effect(() => {
-    if (valueFromData && valueFromData.length > 0) {
-      lineages = valueFromData?.map((lineage) => {
-        const listId = crypto.randomUUID();
-        return {
-          listId,
-          title: lineage.title || '',
-          identifier: lineage.identifier || '',
-          date: lineage.date ? new Date(lineage.date).toISOString().split('T')[0] : ''
-        };
-      });
+    // this check prevents rerendering if nothing has actually changed
+    const newValueAsString = JSON.stringify(valueFromData);
+    if (
+      previousValueAsString === newValueAsString ||
+      !valueFromData ||
+      valueFromData.length === 0
+    ) {
+      return;
     }
+    lineages = valueFromData?.map((lineage) => {
+      const listId = crypto.randomUUID();
+      return {
+        listId,
+        title: lineage.title || '',
+        identifier: lineage.identifier || '',
+        date: lineage.date ? new Date(lineage.date).toISOString().split('T')[0] : ''
+      };
+    });
+    previousValueAsString = JSON.stringify(valueFromData);
   });
 
   // add global click listener if titleSearchResults are open
@@ -145,6 +156,7 @@
     });
 
     persistLineages();
+    isEditing = false;
     metadataCollections = [];
   };
 

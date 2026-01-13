@@ -16,19 +16,30 @@
   let contentDescriptions = $state<ContentDescriptionListEntry[]>([]);
   let isEditing = $state<boolean>(false);
 
+  // important that this is not a state
+  let previousValueAsString: string;
+
   $effect(() => {
-    if (valueFromData && valueFromData.length > 0) {
-      contentDescriptions = valueFromData?.map((contentDescription) => {
-        const { url, description, code } = contentDescription;
-        const listId = crypto.randomUUID();
-        return {
-          listId,
-          code,
-          description,
-          url
-        };
-      });
+    // this check prevents rerendering if nothing has actually changed
+    const newValueAsString = JSON.stringify(valueFromData);
+    if (
+      previousValueAsString === newValueAsString ||
+      !valueFromData ||
+      valueFromData.length === 0
+    ) {
+      return;
     }
+    contentDescriptions = valueFromData?.map((contentDescription) => {
+      const { url, description, code } = contentDescription;
+      const listId = crypto.randomUUID();
+      return {
+        listId,
+        code,
+        description,
+        url
+      };
+    });
+    previousValueAsString = JSON.stringify(valueFromData);
   });
 
   let showCheckmark = $state(false);
