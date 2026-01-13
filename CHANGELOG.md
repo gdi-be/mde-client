@@ -1,3 +1,10 @@
+## [4.4.9](https://github.com/gdi-be/mde-client/compare/v4.4.8...v4.4.9) (2026-01-13)
+
+
+### Bug Fixes
+
+* prevent unnecessary re-renders ([eae2209](https://github.com/gdi-be/mde-client/commit/eae22094047c335687d2ef83c07dc1e0aee72bbb))
+
 ## [4.4.8](https://github.com/gdi-be/mde-client/compare/v4.4.7...v4.4.8) (2026-01-08)
 
 
