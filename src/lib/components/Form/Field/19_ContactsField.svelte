@@ -17,20 +17,31 @@
   const valueFromData = $derived(getValue<Contacts>(KEY));
   let isEditing = $state<boolean>(false);
 
+  // important that this is not a state
+  let previousValueAsString: string;
+
   $effect(() => {
-    if (valueFromData && valueFromData.length > 0) {
-      contacts =
-        valueFromData?.map((contact) => {
-          const listId = crypto.randomUUID();
-          return {
-            listId,
-            name: contact.name || '',
-            organisation: contact.organisation || '',
-            phone: contact.phone || '',
-            email: contact.email || ''
-          };
-        }) || [];
+    // this check prevents rerendering if nothing has actually changed
+    const newValueAsString = JSON.stringify(valueFromData);
+    if (
+      previousValueAsString === newValueAsString ||
+      !valueFromData ||
+      valueFromData.length === 0
+    ) {
+      return;
     }
+    contacts =
+      valueFromData?.map((contact) => {
+        const listId = crypto.randomUUID();
+        return {
+          listId,
+          name: contact.name || '',
+          organisation: contact.organisation || '',
+          phone: contact.phone || '',
+          email: contact.email || ''
+        };
+      }) || [];
+    previousValueAsString = JSON.stringify(valueFromData);
   });
 
   let showCheckmark = $state(false);

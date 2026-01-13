@@ -79,9 +79,7 @@
 
 <div class="field-tools">
   {#await checkIfHasHelp()}
-    <Icon class="material-icons spinner" title="Es wird geprüft ob eine Hilfe konfiguriert wurde.">
-      progress_activity
-    </Icon>
+    <!-- Don't render anything to avoid flickering -->
   {:then hasHelp}
     {#if !noHelpButton && hasHelp}
       <HelpButton {key} />
