@@ -296,6 +296,10 @@
     max-width: 300px;
     max-height: 300px;
 
+    :global(.metadata-card-content) {
+      padding: 16px 16px 4px 16px;
+    }
+
     :global(.mdc-card__media) {
       overflow: hidden;
     }
@@ -313,12 +317,15 @@
     }
 
     .header {
-      text-align: center;
-      padding: 0 1em 1em 1em;
-      overflow: hidden;
-      height: 3em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1em;
+      line-height: 1.2;
+      height: calc(1.2 * 3em);
 
       .title {
+        text-align: center;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         line-clamp: 3;
@@ -340,7 +347,12 @@
     }
 
     :global(.status-chipset) {
+      padding: 0.5em 0.25em;
       flex: 1 1 auto;
+
+      :global(.mdc-chip) {
+        margin: 2px;
+      }
     }
 
     :global(.metadata-card-actions) {
