@@ -24,6 +24,7 @@
 
   const options: Option[] = [
     { key: 'BigDecimal', label: 'BigDecimal' },
+    { key: 'Boolean', label: 'Boolean' },
     { key: 'Date', label: 'Date' },
     { key: 'Double', label: 'Double' },
     { key: 'Float', label: 'Float' },
@@ -31,8 +32,8 @@
     { key: 'Integer', label: 'Integer' },
     { key: 'Link', label: 'Link' },
     { key: 'Long', label: 'Long' },
-    { key: 'Text', label: 'Text' },
     { key: 'Short', label: 'Short' },
+    { key: 'Text', label: 'Text' },
     { key: 'Timestamp', label: 'Timestamp' }
   ];
 </script>
