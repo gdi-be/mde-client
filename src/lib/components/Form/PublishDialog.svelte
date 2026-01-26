@@ -50,16 +50,24 @@
       const uuids = (await response.json()) as MetadataPublishResponse;
 
       responseUuids = uuids;
-      invalidateAll();
     } catch (error) {
       console.error('Error during publishing: ', error);
     } finally {
       isLoading = false;
     }
   };
+
+  const onClose = () => {
+    invalidateAll();
+  };
 </script>
 
-<Dialog bind:open aria-labelledby="Freigabe" aria-describedby="Freigabe">
+<Dialog
+  bind:open
+  aria-labelledby="Freigabe"
+  aria-describedby="Freigabe"
+  onSMUIDialogClosed={onClose}
+>
   <Header>
     <Title>Freigabe {metadata?.isoMetadata?.title}</Title>
   </Header>
