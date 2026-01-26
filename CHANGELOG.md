@@ -1,3 +1,12 @@
+## [4.4.10](https://github.com/gdi-be/mde-client/compare/v4.4.9...v4.4.10) (2026-01-26)
+
+
+### Bug Fixes
+
+* add Boolean option to AttributeDatatype Select ([b3ee430](https://github.com/gdi-be/mde-client/commit/b3ee4306107a2bc80358a43e2b36c1453fe177b7))
+* invalidate state on dialog close ([8ab0d20](https://github.com/gdi-be/mde-client/commit/8ab0d204560a62daf78e70e663b6d21c5528aa64))
+* minor adjustments to MetadataCard layout ([cc433dc](https://github.com/gdi-be/mde-client/commit/cc433dc80dbeed67c2f3ff78378dc7fcbc9cdfb1))
+
 ## [4.4.9](https://github.com/gdi-be/mde-client/compare/v4.4.8...v4.4.9) (2026-01-13)
 
 
