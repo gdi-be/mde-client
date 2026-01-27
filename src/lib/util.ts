@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import proj4 from 'proj4';
-import type { CRS, Extent, MaintenanceFrequency, MetadataCollection } from '$lib/models/metadata';
+import type { CRS, Extent, MetadataCollection } from '$lib/models/metadata';
 import { log } from 'loggisch';
 import type { Role, Token } from '$lib/models/keycloak';
 import type { CRSOption } from './models/api';
@@ -100,139 +100,6 @@ export function transformCoordinate(
   const transformedCoordinate = proj4(fromEPSG, toEPSG, [coordinate[0], coordinate[1]]);
   const decimalPlaces = proj4.defs(toEPSG).units === 'm' ? 0 : 5;
   return transformedCoordinate.map((value: number) => parseFloat(value.toFixed(decimalPlaces)));
-}
-
-/**
- * Function to check if `modified` should be set Automatically
- *
- * @param published
- * @param maintenanceFrequency
- * @returns
- */
-export function isAutomatedValue(maintenanceFrequency?: MaintenanceFrequency) {
-  if (!maintenanceFrequency) return false;
-  return [
-    'continual',
-    'daily',
-    'weekly',
-    'fortnightly',
-    'monthly',
-    'quarterly',
-    'biannually',
-    'annually'
-  ].includes(maintenanceFrequency);
-}
-
-/**
- * Get today's date normalized to UTC midnight
- *
- * @returns Today's date at UTC midnight
- */
-function getTodayDate(): Date {
-  const today = new Date();
-  return new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
-}
-
-/**
- * Function to determine the last Update Date based on the published date and the maintenance frequency
- *
- * @param published
- * @param maintenanceFrequency
- * @returns
- */
-export function getLastUpdateValue(published: string, maintenanceFrequency: MaintenanceFrequency) {
-  // Normalize all dates to UTC midnight to avoid timezone issues
-  const publishedDate = new Date(published);
-  const todayDate = getTodayDate();
-  let updateDate = new Date(publishedDate);
-
-  function dayInYearIsGreater(dateA: Date, dateB: Date): boolean {
-    const todayYearDay = dateB.getUTCMonth() * 31 + dateB.getUTCDate();
-    const publishedYearDay = dateA.getUTCMonth() * 31 + dateA.getUTCDate();
-    return todayYearDay > publishedYearDay;
-  }
-
-  function getLastUpdateDateMonthly(publishedDate: Date, cycleMonths: number) {
-    const todayNormalized = getTodayDate();
-    const diffInMonths =
-      (todayNormalized.getUTCFullYear() - publishedDate.getUTCFullYear()) * 12 +
-      (todayNormalized.getUTCMonth() - publishedDate.getUTCMonth());
-    const cycles = Math.floor(diffInMonths / cycleMonths);
-
-    const lastUpdate = new Date(publishedDate);
-    lastUpdate.setUTCMonth(lastUpdate.getUTCMonth() + cycles * cycleMonths);
-    return lastUpdate;
-  }
-
-  function getLastUpdateDateDaily(publishedDate: Date, days: number = 14) {
-    const todayNormalized = getTodayDate();
-    const diffInTime = todayNormalized.getTime() - publishedDate.getTime();
-    const diffInDays = Math.floor(diffInTime / (1000 * 60 * 60 * 24));
-    const cycles = Math.floor(diffInDays / days);
-
-    const lastUpdate = new Date(publishedDate);
-    lastUpdate.setUTCDate(lastUpdate.getUTCDate() + cycles * days);
-    return lastUpdate;
-  }
-
-  const todayDayOfWeek = todayDate.getUTCDay();
-  const publishedDayOfWeek = publishedDate.getUTCDay();
-  switch (maintenanceFrequency) {
-    case 'continual':
-      updateDate = todayDate;
-      break;
-    case 'daily':
-      updateDate = new Date(todayDate);
-      updateDate.setUTCDate(updateDate.getUTCDate() - 1);
-      break;
-    case 'weekly':
-      updateDate = new Date(todayDate);
-
-      if (todayDayOfWeek >= publishedDayOfWeek) {
-        updateDate.setUTCDate(todayDate.getUTCDate() - (todayDayOfWeek - publishedDayOfWeek));
-      } else {
-        updateDate.setUTCDate(todayDate.getUTCDate() - (7 - (publishedDayOfWeek - todayDayOfWeek)));
-      }
-      break;
-    case 'fortnightly':
-      updateDate = getLastUpdateDateDaily(publishedDate, 14);
-      break;
-    case 'monthly':
-      updateDate = new Date(todayDate);
-      if (todayDate.getUTCDate() >= publishedDate.getUTCDate()) {
-        updateDate.setUTCDate(publishedDate.getUTCDate());
-      } else {
-        updateDate.setUTCMonth(updateDate.getUTCMonth() - 1);
-        updateDate.setUTCDate(publishedDate.getUTCDate());
-      }
-      break;
-    case 'quarterly':
-      updateDate = getLastUpdateDateMonthly(publishedDate, 3);
-      break;
-    case 'biannually':
-      updateDate = getLastUpdateDateMonthly(publishedDate, 6);
-      break;
-    case 'annually':
-      updateDate = new Date(publishedDate);
-      if (dayInYearIsGreater(publishedDate, todayDate)) {
-        updateDate.setUTCFullYear(todayDate.getUTCFullYear());
-      } else {
-        updateDate.setUTCFullYear(todayDate.getUTCFullYear() - 1);
-      }
-      break;
-    case 'asNeeded':
-    case 'irregular':
-    case 'notPlanned':
-    case 'unknown':
-    default:
-      return undefined;
-  }
-
-  // If updateDate is before publishedDate, use publishedDate instead
-  if (updateDate < publishedDate) {
-    updateDate = publishedDate;
-  }
-  return updateDate;
 }
 
 export const getRoleName = (role: Role): string => {
