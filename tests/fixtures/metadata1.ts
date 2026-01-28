@@ -14,7 +14,6 @@ export default {
   assignedUserId: '9282dbab-a97d-44fa-8f06-042ab34f6de6',
   responsibleRole: 'MdeEditor',
   clientMetadata: {
-    privacy: 'NONE',
     layers: {
       '00e19242-8d3c-4617-ad73-d5a6b79ae55f': [
         {
@@ -35,6 +34,7 @@ export default {
     identifier: 'a723e625-815c-4553-93bf-2fb62bb623d4',
     title: '123 Datentest',
     description: 'wergwergergergergergrge',
+    privacy: 'NONE',
     services: [
       {
         workspace: 'ewfewf',
