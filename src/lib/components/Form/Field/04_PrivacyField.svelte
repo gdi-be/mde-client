@@ -6,7 +6,7 @@
   import type { Option } from '$lib/models/form';
   import { toast } from 'svelte-french-toast';
 
-  const KEY = 'clientMetadata.privacy';
+  const KEY = 'isoMetadata.privacy';
   const TERMS_OF_USE_KEY = 'isoMetadata.termsOfUseId';
 
   const valueFromData = $derived(getValue<string>(KEY));

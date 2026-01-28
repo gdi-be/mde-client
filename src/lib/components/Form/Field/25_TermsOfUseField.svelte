@@ -8,7 +8,7 @@
   import { toast } from 'svelte-french-toast';
 
   const KEY = 'isoMetadata.termsOfUseId';
-  const PRIVACY_KEY = 'clientMetadata.privacy';
+  const PRIVACY_KEY = 'isoMetadata.privacy';
 
   const value = $derived(getValue<number>(KEY));
   const privacy = $derived(getValue<Privacy>(PRIVACY_KEY));
