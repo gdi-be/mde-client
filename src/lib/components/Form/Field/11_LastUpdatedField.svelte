@@ -8,9 +8,7 @@
   } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
-  import type { MaintenanceFrequency } from '$lib/models/metadata';
   import type { ValidationResult } from '$lib/components/Form/FieldsConfig';
-  import { isAutomatedValue } from '$lib/util';
   import { getContext } from 'svelte';
 
   const KEY = 'isoMetadata.modified';
@@ -18,9 +16,6 @@
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
 
-  let maintenanceFrequencyValue = $derived(
-    getValue<MaintenanceFrequency>('isoMetadata.maintenanceFrequency', metadata)
-  );
   const valueFromData = $derived(getValue<string>(KEY, metadata));
   let value = $state('');
 
@@ -33,7 +28,6 @@
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   let showCheckmark = $state(false);
-  let automated = $derived(isAutomatedValue(maintenanceFrequencyValue));
 
   const onChange = async () => {
     const response = await persistValue(KEY, new Date(value!).toISOString());
@@ -49,7 +43,6 @@
     key={KEY}
     label={fieldConfig?.label}
     onchange={onChange}
-    disabled={automated}
     {fieldConfig}
     {validationResult}
   />
