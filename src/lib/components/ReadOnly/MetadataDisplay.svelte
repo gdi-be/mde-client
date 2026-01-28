@@ -34,7 +34,7 @@
       {#if metadataProfile === 'INSPIRE_HARMONISED'}
         <DisplayField key="isoMetadata.valid" profileId={37} />
       {/if}
-      <DisplayField key="clientMetadata.privacy" profileId={4} />
+      <DisplayField key="isoMetadata.privacy" profileId={4} />
       <DisplayField key="isoMetadata.termsOfUseId" profileId={25} />
       <DisplayField key="isoMetadata.termsOfUseSource" profileId={26} />
       <DisplayField key="isoMetadata.highValueDataset" profileId={6} />

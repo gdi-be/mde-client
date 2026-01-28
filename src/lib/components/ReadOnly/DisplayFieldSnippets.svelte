@@ -20,7 +20,7 @@
 
   export {
     defaultSnippet,
-    clientMetadataPrivacy as 'clientMetadata.privacy',
+    isoMetadataPrivacy as 'isoMetadata.privacy',
     isoMetadataAnnexTheme as 'isoMetadata.annexTheme',
     isoMetadataContacts as 'isoMetadata.pointsOfContact',
     isoMetadataContentDescription as 'isoMetadata.contentDescription',
@@ -267,7 +267,7 @@
   {#if !value}{DEFAULT_NULL_STRING}{/if}
 {/snippet}
 
-{#snippet clientMetadataPrivacy(value: string)}
+{#snippet isoMetadataPrivacy(value: string)}
   {#await getPrivacy()}
     Lädt ...
   {:then data}

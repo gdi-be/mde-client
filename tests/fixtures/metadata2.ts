@@ -13,14 +13,13 @@ export default {
   ownerId: '813793c7-bc20-48e9-8010-3474eeaa3908',
   assignedUserId: '9282dbab-a97d-44fa-8f06-042ab34f6de6',
   responsibleRole: 'MdeEditor',
-  clientMetadata: {
-    privacy: 'NONE'
-  },
+  clientMetadata: {},
   isoMetadata: {
     metadataProfile: 'INSPIRE_HARMONISED',
     identifier: 'a723e625-815c-4553-93bf-2fb62bb623d4',
     title: '123 Datentest',
     description: 'wergwergergergergergrge',
+    privacy: 'NONE',
     services: [],
     keywords: {
       default: [

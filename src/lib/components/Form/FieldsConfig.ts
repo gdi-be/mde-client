@@ -110,7 +110,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 4,
-    key: 'clientMetadata.privacy',
+    key: 'isoMetadata.privacy',
     validator: (val: any) => {
       if (!isDefined(val)) {
         return {
