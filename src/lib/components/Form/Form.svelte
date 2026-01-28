@@ -95,8 +95,7 @@
     }
   ];
 
-  let tabs = $state<HTMLElement>();
-  let formWrapper = $state<HTMLDivElement>();
+  let formElement = $state<HTMLFormElement>();
 
   const onSectionClick = async (section: string) => {
     activeSection = section;
@@ -140,7 +139,7 @@
 </script>
 
 <div class="metadata-form">
-  <nav class="tabs" bind:this={tabs}>
+  <nav class="tabs">
     {#each SECTIONS as { section, label, disabledCheck }, i}
       {@const progressInfo = getProgress(highestRole, section, metadata)}
       <div class="tab-container" class:active={activeSection === section}>
@@ -165,8 +164,8 @@
       {/if}
     {/each}
   </nav>
-  <div class="form-wrapper" bind:this={formWrapper}>
-    <form>
+  <div class="form-wrapper">
+    <form bind:this={formElement}>
       {#if activeSection === 'basedata'}
         <section id="basedata" transition:fade>
           <F01_TitleField />
@@ -174,7 +173,7 @@
           <F15_KeywordsField />
           <F29_PreviewField />
           <F19_ContactsField />
-          <ScrollToTopButton target={formWrapper} />
+          <ScrollToTopButton target={formElement} />
         </section>
       {/if}
       {#if activeSection === 'classification'}
@@ -192,7 +191,7 @@
           <F26_TermsOfUseSourceField />
           <F06_HighValueDatasetField />
           <F13_TopicCategory />
-          <ScrollToTopButton target={formWrapper} />
+          <ScrollToTopButton target={formElement} />
         </section>
       {/if}
       {#if activeSection === 'temp_and_spatial'}
@@ -207,7 +206,7 @@
           <F18_ExtentField />
           <F28_ResolutionField />
           <F39_SpatialRepresentationField />
-          <ScrollToTopButton target={formWrapper} />
+          <ScrollToTopButton target={formElement} />
         </section>
       {/if}
       {#if activeSection === 'additional'}
@@ -216,7 +215,7 @@
           <F31_TechnicalDescription />
           <F32_Lineage />
           <F41_AdditionalInformation />
-          <ScrollToTopButton target={formWrapper} />
+          <ScrollToTopButton target={formElement} />
         </section>
       {/if}
       {#if activeSection === 'services'}
@@ -349,14 +348,22 @@
 
     .form-wrapper {
       display: flex;
-      overflow-y: scroll;
+      gap: 1rem;
+      overflow: hidden;
       flex: 1;
       align-items: flex-start;
 
       form {
         flex: 2;
-        padding-left: 2em;
+        padding: 0 1rem;
+        overflow-y: auto;
         max-width: 67%;
+        max-height: 100%;
+        direction: rtl;
+
+        * {
+          direction: ltr;
+        }
 
         section {
           width: 100%;

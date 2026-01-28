@@ -29,15 +29,20 @@
 
 <style lang="scss">
   .help-section {
-    overflow-y: hidden;
     flex: 1;
-    padding: 0 3rem;
+    padding-right: 2rem;
+    max-height: 100%;
+    overflow-y: auto;
+    word-break: normal;
+    overflow-wrap: break-word;
 
-    :global(img.thumbnail) {
-      max-width: 100%;
+    :global(img) {
+      max-width: calc(100% - 2rem);
       height: auto;
       padding: 0.5rem;
+    }
 
+    :global(img.thumbnail) {
       &:hover {
         outline: 1px solid var(--primary-color);
       }
