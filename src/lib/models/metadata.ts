@@ -6,10 +6,7 @@ export type JsonClientMetadata = Record<string, any>;
 export type JsonIsoMetadata = Record<string, any>;
 export type JsonTechnialMetadata = Record<string, any>;
 
-export type Privacy = 'NONE' |
-  'CRITICAL_INFRASTRUCTURE' |
-  'PERSONAL_DATA' |
-  'INTERNAL_USE_ONLY';
+export type Privacy = 'NONE' | 'CRITICAL_INFRASTRUCTURE' | 'PERSONAL_DATA' | 'INTERNAL_USE_ONLY';
 
 export type Layer = {
   name: string;
