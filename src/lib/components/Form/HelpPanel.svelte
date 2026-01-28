@@ -29,9 +29,10 @@
 
 <style lang="scss">
   .help-section {
-    overflow-y: hidden;
     flex: 1;
-    padding: 0 3rem;
+    padding: 0 1rem;
+    max-height: 100%;
+    overflow-y: auto;
 
     :global(img.thumbnail) {
       max-width: 100%;

@@ -349,14 +349,22 @@
 
     .form-wrapper {
       display: flex;
-      overflow-y: scroll;
+      gap: 1rem;
+      overflow: hidden;
       flex: 1;
       align-items: flex-start;
 
       form {
         flex: 2;
-        padding-left: 2em;
+        padding: 0 1rem;
+        overflow-y: auto;
         max-width: 67%;
+        max-height: 100%;
+        direction: rtl;
+
+        * {
+          direction: ltr;
+        }
 
         section {
           width: 100%;
