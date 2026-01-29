@@ -2,6 +2,8 @@
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import type { HTMLInputAttributes } from 'svelte/elements';
   import FieldHint from '../FieldHint.svelte';
+  import { getAccessToken } from '../../../context/TokenContext.svelte';
+  import { getHighestRole } from '../../../util';
 
   type InputProps = {
     maxlength?: number;
@@ -28,23 +30,35 @@
     ...restProps
   }: InputProps = $props();
 
-  let showHint = $state(false);
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
+
+  let fieldHasFocus = $state(false);
   if (value === undefined) {
     value = '';
   }
+
+  let requiredButInvalid = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles, required } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    return isEditingRole && required && !validationResult?.valid;
+  });
 </script>
 
-<fieldset class={['text-input', wrapperClass]}>
+<fieldset class={['text-input', wrapperClass, requiredButInvalid ? 'invalid' : '']}>
   <legend>{label}</legend>
   <input
     type="text"
     autocomplete="off"
     onfocus={(evt) => {
-      showHint = true;
+      fieldHasFocus = true;
       onfocus?.(evt);
     }}
     onblur={(evt) => {
-      showHint = false;
+      fieldHasFocus = false;
       onblur?.(evt);
     }}
     bind:value
@@ -52,7 +66,7 @@
     {...restProps}
   />
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} {showHint} {explanation} />
+    <FieldHint {validationResult} {fieldConfig} {fieldHasFocus} {explanation} />
     {#if maxlength}
       <div class="character-counter">
         {value.length} / {maxlength}
@@ -68,6 +82,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    &.invalid {
+      border: 2px solid var(--mdc-theme-error) !important;
+    }
 
     legend {
       font-size: 1.5em;
