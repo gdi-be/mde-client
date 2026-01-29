@@ -502,7 +502,7 @@
           </div>
           <div class="list-item-field">
             <!-- Service-Workspace -->
-            <strong>{t('displayfieldsnippets.serviceWorkspace')}</strong>
+            <strong>{t('displayfieldsnippets.serviceIdentifier')}</strong>
             <span class="list-item-value">{service.workspace}</span>
           </div>
           <div class="list-item-field">
