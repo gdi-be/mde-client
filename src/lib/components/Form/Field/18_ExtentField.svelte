@@ -112,7 +112,7 @@
 {#if highestRole !== 'MdeDataOwner'}
   <div class="extent-field">
     <fieldset>
-      <legend>{fieldConfig?.label}</legend>
+      <legend>{t('18_ExtentField.label')}</legend>
       <div class="tools">
         <SelectInput bind:value={crsKey} label={CRS_LABEL} options={crsOptions} />
         {#each extentOptions as option}
@@ -134,7 +134,7 @@
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.minx}
-            label={minXFieldConfig?.label}
+            label={t('18_ExtentField.label_min_x')}
             fieldConfig={minXFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
@@ -146,7 +146,7 @@
           />
           <NumberInput
             value={transformedValue.maxx}
-            label={maxXFieldConfig?.label}
+            label={t('18_ExtentField.label_max_x')}
             fieldConfig={maxXFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
@@ -160,7 +160,7 @@
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.miny}
-            label={minYFieldConfig?.label}
+            label={t('18_ExtentField.label_min_y')}
             fieldConfig={minYFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
@@ -172,7 +172,7 @@
           />
           <NumberInput
             value={transformedValue.maxy}
-            label={maxYFieldConfig?.label}
+            label={t('18_ExtentField.label_max_y')}
             fieldConfig={maxYFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {

@@ -39,13 +39,13 @@
 
 <div class="legend-fieldset">
   <fieldset>
-    <legend>{fieldConfig?.label}</legend>
+    <legend>{t('47_ServiceLegendImage.label')}</legend>
     <FieldHint {fieldConfig} {validationResult} />
     <div class="inputs">
       <div class="legend-text-fields">
         <div class="field-wrapper">
           <TextInput
-            label={t('47_service_legend_image.url')}
+            label={t('47_ServiceLegendImage.url')}
             value={value?.url}
             onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigUrl}
@@ -54,7 +54,7 @@
         </div>
         <div class="field-wrapper">
           <TextInput
-            label={t('47_service_legend_image.format')}
+            label={t('47_ServiceLegendImage.format')}
             value={value?.format}
             onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigFormat}
@@ -65,7 +65,7 @@
       <div class="legend-size-fields">
         <div class="field-wrapper">
           <NumberInput
-            label={t('47_service_legend_image.width')}
+            label={t('47_ServiceLegendImage.width')}
             value={value?.width}
             onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigWidth}
@@ -74,7 +74,7 @@
         </div>
         <div class="field-wrapper">
           <NumberInput
-            label={t('47_service_legend_image.height')}
+            label={t('47_ServiceLegendImage.height')}
             value={value?.height}
             onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigHeight}

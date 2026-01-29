@@ -136,8 +136,8 @@
         persistLineages();
       },
       {
-        text: t('32_lineage.delete_confirm'),
-        confirmButtonText: t('32_lineage.delete_button')
+        text: t('32_Lineage.delete_confirm'),
+        confirmButtonText: t('32_Lineage.delete_button')
       }
     );
   };
@@ -182,14 +182,14 @@
 <div class="lineages-field">
   <fieldset>
     <legend>
-      {fieldConfig?.label}
+      {t('32_Lineage.label')}
       <IconButton
         class="material-icons"
         disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
         type="button"
-        title={t('32_lineage.add')}
+        title={t('32_Lineage.add')}
       >
         add
       </IconButton>
@@ -204,7 +204,7 @@
             onclick={(evt) => removeItem(lineage.listId, evt)}
             size="button"
             type="button"
-            title={t('32_lineage.remove')}
+            title={t('32_Lineage.remove')}
           >
             delete
           </IconButton>
@@ -213,7 +213,7 @@
           <div class="wrap">
             <TextInput
               bind:value={lineage.title}
-              label={t('32_lineage.title')}
+              label={t('32_Lineage.title')}
               onblur={onTitleBlur}
               onfocus={onFocus}
               onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
@@ -242,7 +242,7 @@
             <DateInput
               bind:value={lineage.date}
               key={KEY}
-              label={t('32_lineage.publish_date')}
+              label={t('32_Lineage.publish_date')}
               onblur={onBlur}
               onfocus={onFocus}
               fieldConfig={dateFieldConfig}
@@ -253,7 +253,7 @@
           <div class="lineage-source-field">
             <TextInput
               bind:value={lineage.identifier}
-              label={t('32_lineage.identifier')}
+              label={t('32_Lineage.identifier')}
               onblur={onBlur}
               onfocus={onFocus}
               fieldConfig={identifierFieldConfig}

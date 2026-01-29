@@ -38,7 +38,7 @@
 
 <div class="service-title-field">
   <TextInput
-    label={fieldConfig?.label}
+    label={t('59_ServiceTitle.label')}
     {value}
     {fieldConfig}
     {validationResult}

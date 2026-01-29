@@ -38,7 +38,7 @@
 <div class="service-description-field">
   <TextAreaInput
     bind:value
-    label={fieldConfig?.label}
+    label={t('60_ServiceShortDescription.label')}
     maxlength={500}
     {fieldConfig}
     {validationResult}

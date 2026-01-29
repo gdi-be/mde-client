@@ -13,7 +13,6 @@
 
   const CHECKED_KEY = 'isoMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
-  const LABEL = 'HVD Kategorie';
 
   const checkedValueFromData = $derived(getValue<boolean>(CHECKED_KEY));
   let checkedValue = $state(false);
@@ -65,7 +64,7 @@
 <div class="high-value-dataset-check-field">
   <fieldset>
     <legend>
-      {checkedFieldConfig?.label}
+      {t('06_HighValueDatasetField.label')}
       <Switch bind:checked={checkedValue} onSMUISwitchChange={onCheckChange} />
     </legend>
     <FieldHint fieldConfig={checkedFieldConfig} />
@@ -74,7 +73,7 @@
         <p>{t('general.loading_options')}</p>
       {:then OPTIONS}
         <MultiSelectInput
-          label={LABEL}
+          label={t('06_HighValueDatasetField.categoryLabel')}
           options={OPTIONS}
           value={selectionValue}
           onChange={onSelectionChange}

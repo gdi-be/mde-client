@@ -17,7 +17,7 @@
 
   import type { Option } from '$lib/models/form';
   import { toast } from 'svelte-french-toast';
-  import { getFieldConfig, getFormContext } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
 
   export {
     defaultSnippet,
@@ -422,17 +422,17 @@
         <div class="list-item">
           <div class="list-item-field">
             <!-- Lineage-Title -->
-            <strong>{t('displayfieldsnippets.title')}</strong>
+            <strong>{t('32_Lineage.label_title')}</strong>
             <span class="list-item-value">{lineage.title || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
             <!-- Lineage-Date -->
-            <strong>{t('displayfieldsnippets.published')}</strong>
+            <strong>{t('32_Lineage.label_date')}</strong>
             <span class="list-item-value">{lineage.date || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
             <!-- Lineage-Identifier -->
-            <strong>{t('displayfieldsnippets.identifier')}</strong>
+            <strong>{t('32_Lineage.label_identifier')}</strong>
             <span class="list-item-value">{lineage.identifier || DEFAULT_NULL_STRING}</span>
           </div>
         </div>
@@ -449,17 +449,17 @@
       {#each value as contentDescription}
         <div class="list-item">
           <div class="list-item-field">
-            <strong>{getFieldConfig(42)?.label}</strong>
+            <strong>{t('displayfieldsnippets.contentDescriptionDescription')}</strong>
             <span class="list-item-value">{contentDescription.description}</span>
           </div>
           <div class="list-item-field">
-            <strong>{getFieldConfig(43)?.label}</strong>
+            <strong>{t('displayfieldsnippets.contentDescriptionCode')}</strong>
             <span class="list-item-value">
               {contentDescriptionsCodeMap[contentDescription.code]}
             </span>
           </div>
           <div class="list-item-field">
-            <strong>{getFieldConfig(44)?.label}</strong>
+            <strong>{t('displayfieldsnippets.contentDescriptionUrl')}</strong>
             <span class="list-item-value">
               {#await replaceVariable(contentDescription.url)}
                 Lädt ...
@@ -487,17 +487,17 @@
         <div class="list-item">
           <div class="list-item-field">
             <!-- ServiceTitle -->
-            <strong>{t('displayfieldsnippets.serviceTitle')}</strong>
+            <strong>{t('59_ServiceTitle.label')}</strong>
             <span class="list-item-value">{service.title}</span>
           </div>
           <div class="list-item-field">
             <!-- Service-Type -->
-            <strong>{t('displayfieldsnippets.serviceType')}</strong>
+            <strong>{t('58_ServiceType.label')}</strong>
             <span class="list-item-value">{service.serviceType}</span>
           </div>
           <div class="list-item-field">
             <!-- Service-ShortDescription -->
-            <strong>{t('displayfieldsnippets.serviceShortDescription')}</strong>
+            <strong>{t('60_ServiceShortDescription.label')}</strong>
             <span class="list-item-value">{service.shortDescription}</span>
           </div>
           <div class="list-item-field">
@@ -507,17 +507,17 @@
           </div>
           <div class="list-item-field">
             <!-- Service-Identifier -->
-            <strong>Service Identifier</strong>
+            <strong>{t('displayfieldsnippets.serviceIdentifier')}</strong>
             <span class="list-item-value">{service.serviceIdentification}</span>
           </div>
           <div class="list-item-field">
             <!-- File-Identifier -->
-            <strong>File Identifier</strong>
+            <strong>{t('displayfieldsnippets.fileIdentifier')}</strong>
             <span class="list-item-value">{service.fileIdentifier}</span>
           </div>
           <div class="list-item-field">
             <!-- Service-Preview -->
-            <strong>{getFieldConfig(46)?.label}</strong>
+            <strong>{t('46_ServicePreview.label')}</strong>
             <span class="list-item-value">
               {#await replaceVariable(service.preview)}
                 Lädt ...
@@ -531,13 +531,13 @@
           {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
             <div class="list-item-field">
               <!-- Service-LegendImage-Url -->
-              <strong>Identifikator des Kartendienstes</strong>
+              <strong>{t('47_ServiceLegendImage.label_url')}</strong>
               <span class="list-item-value">{service.workspace}</span>
             </div>
           {/if}
           {#if service.serviceType !== 'ATOM'}
             <div class="list-item-field">
-              <strong>{t('displayfieldsnippets.preview')}</strong>
+              <strong>{t('46_ServicePreview.label')}</strong>
               <span class="list-item-value">
                 {#await replaceVariable(service.preview)}
                   {t('general.loading')}
@@ -551,10 +551,10 @@
           {/if}
           {#if service.serviceType !== 'ATOM'}
             <div class="list-item-field">
-              <strong>{t('displayfieldsnippets.legend')}</strong>
+              <strong>{t('47_ServiceLegendImage.label')}</strong>
               <div class="list">
                 <div class="list-item-field">
-                  <strong>{t('displayfieldsnippets.legendUrl')}</strong>
+                  <strong>{t('47_ServiceLegendImage.label_url')}</strong>
                   <span class="list-item-value">
                     {#await replaceVariable(service.legendImage?.url)}
                       {t('general.loading')}
@@ -567,7 +567,7 @@
                 </div>
                 <div class="list-item-field">
                   <!-- Service-LegendImage-Format -->
-                  <strong>{t('displayfieldsnippets.legendFormat')}</strong>
+                  <strong>{t('47_ServiceLegendImage.label_format')}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.format}
                       {service.legendImage.format}
@@ -578,7 +578,7 @@
                 </div>
                 <div class="list-item-field">
                   <!-- Service-LegendImage-Width -->
-                  <strong>{t('displayfieldsnippets.legendWidth')}</strong>
+                  <strong>{t('47_ServiceLegendImage.label_width')}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.width}
                       {service.legendImage.width}
@@ -589,7 +589,7 @@
                 </div>
                 <div class="list-item-field">
                   <!-- Service-LegendImage-Height -->
-                  <strong>{t('displayfieldsnippets.legendHeight')}</strong>
+                  <strong>{t('47_ServiceLegendImage.label_height')}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.height}
                       {service.legendImage.height}
@@ -603,46 +603,44 @@
           {/if}
           {#if service.serviceType === 'WFS' && service.featureTypes?.length}
             <div class="list-item-field">
-              <strong
-                >{t('displayfieldsnippets.featureType')} ({service.featureTypes?.length})</strong
-              >
+              <strong>{t('56_FeatureTypeForm.label')} ({service.featureTypes?.length})</strong>
               <div class="list">
                 {#each service?.featureTypes || [] as featureType}
                   <div class="list-item">
                     <div class="list-item-field">
                       <!-- FeatureType-Name -->
-                      <strong>{t('displayfieldsnippets.featureType')}</strong>
+                      <strong>{t('62_FeatureTypeName.label')}</strong>
                       <span class="list-item-value">{featureType.name}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- FeatureType-Title -->
-                      <strong>{t('displayfieldsnippets.featureTypeAlias')}</strong>
+                      <strong>{t('61_FeatureTypeTitle.label')}</strong>
                       <span class="list-item-value">{featureType.title}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- FeatureType-ShortDescription -->
-                      <strong>{getFieldConfig(69)?.label}</strong>
+                      <strong>{t('69_FeatureTypeDescription.label')}</strong>
                       <span class="list-item-value">{featureType.shortDescription}</span>
                     </div>
                     {#if featureType?.columns}
                       <div class="list-item-field">
-                        <strong>{t('displayfieldsnippets.attribute')}</strong>
+                        <strong>{t('63_ColumnsForm.label')}</strong>
                         <div class="list">
                           {#each featureType?.columns || [] as columnInfo}
                             <div class="list-item">
                               <div class="list-item-field">
                                 <!-- Attribute-Name -->
-                                <strong>{t('displayfieldsnippets.attributeName')}</strong>
+                                <strong>{t('64_AttributeName.label')}</strong>
                                 <span class="list-item-value">{columnInfo.name}</span>
                               </div>
                               <div class="list-item-field">
                                 <!-- Attribute-Alias -->
-                                <strong>{t('displayfieldsnippets.attributeAlias')}</strong>
+                                <strong>{t('65_AttributeAlias.label')}</strong>
                                 <span class="list-item-value">{columnInfo.alias}</span>
                               </div>
                               <div class="list-item-field">
                                 <!-- Attribute-DataType -->
-                                <strong>{t('displayfieldsnippets.attributeType')}</strong>
+                                <strong>{t('66_AttributeDatatype.label')}</strong>
                                 <span class="list-item-value">{columnInfo.type}</span>
                               </div>
                             </div>
@@ -658,33 +656,33 @@
 
           {#if (service.serviceType === 'WMS' || service.serviceType === 'WMTS') && layers?.length}
             <div class="list-item-field">
-              <strong>{t('displayfieldsnippets.layerTitle')} ({layers?.length})</strong>
+              <strong>{t('48_LayersForm.label')} ({layers?.length})</strong>
               <div class="list">
                 {#each layers || [] as layer}
                   <div class="list-item">
                     <div class="list-item-field">
                       <!-- Layer-Title -->
-                      <strong>{t('displayfieldsnippets.layerTitle')}</strong>
+                      <strong>{t('49_LayerTitle.label')}</strong>
                       <span class="list-item-value">{layer.title}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-Name -->
-                      <strong>{t('displayfieldsnippets.layerName')}</strong>
+                      <strong>{t('50_LayerName.label')}</strong>
                       <span class="list-item-value">{layer.name}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-StyleTitle -->
-                      <strong>{t('displayfieldsnippets.styleTitle')}</strong>
+                      <strong>{t('52_LayerStyleTitle.label')}</strong>
                       <span class="list-item-value">{layer.styleTitle}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-StyleName -->
-                      <strong>{t('displayfieldsnippets.styleName')}</strong>
+                      <strong>{t('51_LayerStyleName.label')}</strong>
                       <span class="list-item-value">{layer.styleName}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-LegendImage -->
-                      <strong>{t('displayfieldsnippets.legend')}</strong>
+                      <strong>{t('53_LayerLegendImage.label')}</strong>
                       <span class="list-item-value">
                         {#await replaceVariable(layer.legendImage)}
                           {t('general.loading')}
@@ -697,17 +695,17 @@
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-ShortDescription -->
-                      <strong>{t('displayfieldsnippets.layerShortDescription')}</strong>
+                      <strong>{t('54_LayerDescription.label')}</strong>
                       <span class="list-item-value">{layer.shortDescription}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-DataSource -->
-                      <strong>{t('displayfieldsnippets.layerDatasource')}</strong>
+                      <strong>{t('55_LayerDatasource.label')}</strong>
                       <span class="list-item-value">{layer.datasource}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-SecondaryDataSource -->
-                      <strong>{t('displayfieldsnippets.layerSecondaryDatasource')}</strong>
+                      <strong>{t('68_LayerSecondaryDatasource.label')}</strong>
                       <span class="list-item-value">{layer.secondaryDatasource}</span>
                     </div>
                   </div>

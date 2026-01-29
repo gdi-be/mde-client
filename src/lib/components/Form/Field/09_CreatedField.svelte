@@ -2,8 +2,10 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
+  import { page } from '$app/state';
   import type { ValidationResult } from '../FieldsConfig';
 
+  const t = $derived(page.data.t);
   const KEY = 'isoMetadata.created';
 
   const valueFromData = $derived(getValue<string>(KEY));
@@ -30,7 +32,7 @@
   <DateInput
     bind:value
     key={KEY}
-    label={fieldConfig?.label}
+    label={t('09_CreatedField.label')}
     {fieldConfig}
     onchange={onChange}
     {validationResult}

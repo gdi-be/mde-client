@@ -57,7 +57,7 @@
       <p>{t('general.loading_options')}</p>
     {:then OPTIONS}
       <MultiSelectInput
-        label={fieldConfig?.label}
+        label={t('13_TopicCategory.label')}
         {fieldConfig}
         options={OPTIONS}
         {value}

@@ -3,6 +3,8 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { ValidationResult } from '../FieldsConfig';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.termsOfUseSource';
   const TERMS_OF_USE_KEY = 'isoMetadata.termsOfUseId';
@@ -31,7 +33,7 @@
   <div class="terms-of-use-source-field">
     <TextInput
       bind:value
-      label={fieldConfig?.label || KEY}
+      label={t('26_TermsOfUseSourceField.label')}
       {fieldConfig}
       {validationResult}
       onblur={onBlur}

@@ -67,8 +67,8 @@
     });
 
     if (!response.ok) {
-      toast.error(t('19_contacts.error_fetch'));
-      return Promise.reject(t('19_contacts.error_fetch'));
+      toast.error(t('19_ContactsField.error_fetch'));
+      return Promise.reject(t('19_ContactsField.error_fetch'));
     }
 
     const json = await response.json();
@@ -136,8 +136,8 @@
         persistContacts();
       },
       {
-        text: t('19_contacts.delete_confirm'),
-        confirmButtonText: t('19_contacts.delete')
+        text: t('19_ContactsField.delete_confirm'),
+        confirmButtonText: t('19_ContactsField.delete')
       }
     );
   };
@@ -146,14 +146,14 @@
 <div class="contacts-field">
   <fieldset>
     <legend>
-      <span>{fieldConfig?.label}</span>
+      <span>{t('19_ContactsField.label')}</span>
       <IconButton
         class="material-icons"
         disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
         type="button"
-        title={t('19_contacts.add')}
+        title={t('19_ContactsField.add')}
       >
         add
       </IconButton>
@@ -168,7 +168,7 @@
             onclick={(evt) => removeItem(contact.listId, evt)}
             size="button"
             type="button"
-            title={t('19_contacts.delete')}
+            title={t('19_ContactsField.delete')}
           >
             delete
           </IconButton>
@@ -176,7 +176,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.name}
-            label={t('19_contacts.name')}
+            label={t('19_ContactsField.name')}
             onblur={onBlur}
             onfocus={onFocus}
             fieldConfig={nameConfig}
@@ -188,7 +188,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.organisation}
-            label={t('19_contacts.organisation')}
+            label={t('19_ContactsField.organisation')}
             onblur={onBlur}
             onfocus={onFocus}
             fieldConfig={organisationConfig}
@@ -205,7 +205,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.phone}
-            label={t('19_contacts.phone')}
+            label={t('19_ContactsField.phone')}
             onblur={onBlur}
             onfocus={onFocus}
             fieldConfig={phoneConfig}
@@ -217,7 +217,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contact.email}
-            label={t('19_contacts.email')}
+            label={t('19_ContactsField.email')}
             onblur={onBlur}
             onfocus={onFocus}
             fieldConfig={emailConfig}
@@ -230,7 +230,7 @@
     {/each}
   </fieldset>
   <FieldTools noCopyButton key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}>
-    <AutoFillButton title={t('19_contacts.autofill')} onclick={autoFillUserDetails} />
+    <AutoFillButton title={t('19_ContactsField.autofill')} onclick={autoFillUserDetails} />
   </FieldTools>
 </div>
 

@@ -3,8 +3,6 @@ import { getMetadataCollectionByMetadataId } from '$lib/api/metadata.js';
 import { getAccessToken, parseToken } from '$lib/auth/cookies.js';
 import { getHighestRole } from '$lib/util';
 import { redirect } from '@sveltejs/kit';
-import { parse } from 'yaml';
-import type { YamlFieldConfig } from '$lib/components/Form/FieldsConfig.js';
 
 export async function load({ params, cookies, url }) {
   const token = await getAccessToken(cookies);
@@ -25,12 +23,12 @@ export async function load({ params, cookies, url }) {
   }
 
   try {
-    const file = Bun.file('/data/codelists/field_labels.yaml');
-    const themes = await file.text();
-    const fieldLabels = parse(themes) as YamlFieldConfig[];
+    // const file = Bun.file('/data/codelists/field_labels.yaml');
+    // const themes = await file.text();
+    // const fieldLabels = parse(themes) as YamlFieldConfig[];
     return {
       metadata,
-      fieldLabels
+      // fieldLabels
     };
   } catch (e) {
     error(500, `Error loading field labels: ${e}`);

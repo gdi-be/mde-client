@@ -21,26 +21,26 @@
 
 <div class="service-type-field">
   <SelectInput
-    label={t('58_service_type.label')}
+    label={t('58_ServiceType.label')}
     {value}
     {fieldConfig}
     {validationResult}
     options={[
       {
         key: 'ATOM',
-        label: '📥 ' + t('58_service_type.atom')
+        label: '📥 ' + t('58_ServiceType.atom')
       },
       {
         key: 'WFS',
-        label: '📥 ' + t('58_service_type.wfs')
+        label: '📥 ' + t('58_ServiceType.wfs')
       },
       {
         key: 'WMS',
-        label: '🌎 ' + t('58_service_type.wms')
+        label: '🌎 ' + t('58_ServiceType.wms')
       },
       {
         key: 'WMTS',
-        label: '🌎 ' + t('58_service_type.wmts')
+        label: '🌎 ' + t('58_ServiceType.wmts')
       }
     ]}
     onChange={async (value) => {

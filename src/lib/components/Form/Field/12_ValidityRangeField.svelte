@@ -3,10 +3,11 @@
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import { invalidateAll } from '$app/navigation';
+  import { page } from '$app/state';
 
+  const t = $derived(page.data.t);
   const FROM_KEY = 'isoMetadata.validFrom';
   const TO_KEY = 'isoMetadata.validTo';
-  const LABEL = 'Gültigkeitszeitraum';
 
   const startValueFromData = $derived(getValue<string>(FROM_KEY));
   let startValue = $state('');
@@ -44,17 +45,17 @@
 
 <div class="validity-range-field">
   <fieldset>
-    <legend>{LABEL}</legend>
+    <legend>{t('12_ValidityRangeField.label')}</legend>
     <DateInput
       bind:value={startValue}
-      label={fromFieldConfig?.label}
+      label={t('12_ValidityRangeField.label_from')}
       onchange={() => onChange(FROM_KEY)}
       fieldConfig={fromFieldConfig}
       validationResult={fromValidationResult}
     />
     <DateInput
       bind:value={endValue}
-      label={toFieldConfig?.label}
+      label={t('12_ValidityRangeField.label_to')}
       onchange={() => onChange(TO_KEY)}
       fieldConfig={toFieldConfig}
       validationResult={toValidationResult}

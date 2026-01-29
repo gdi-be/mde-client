@@ -99,8 +99,8 @@
         persistContentDescriptions();
       },
       {
-        text: t('39_additional_information.delete_confirm'),
-        confirmButtonText: t('39_additional_information.delete_button')
+        text: t('41_AdditionalInformation.delete_confirm'),
+        confirmButtonText: t('41_AdditionalInformation.delete_button')
       }
     );
   };
@@ -109,13 +109,13 @@
 <div class="contentDescriptions-field">
   <fieldset>
     <legend>
-      {fieldConfig?.label}
+      {t('41_AdditionalInformation.label')}
       <IconButton
         class="material-icons"
         disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
-        title={t('39_additional_information.add')}
+        title={t('41_AdditionalInformation.add')}
         type="button"
       >
         add
@@ -131,7 +131,7 @@
             onclick={(evt) => removeItem(contentDescription.listId, evt)}
             size="button"
             type="button"
-            title={t('39_additional_information.remove')}
+            title={t('41_AdditionalInformation.remove')}
           >
             delete
           </IconButton>
@@ -139,7 +139,7 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contentDescription.description}
-            label={t('39_additional_information.title')}
+            label={t('42_AdditionalInformationTitle.label')}
             onblur={onBlur}
             onfocus={onFocus}
             fieldConfig={titleFieldConfig}
@@ -155,15 +155,15 @@
                 contentDescription.code = code as CI_OnLineFunctionCode;
                 persistContentDescriptions();
               }}
-              label={codeFieldConfig?.label}
+              label={t('43_AdditionalInformationCode.label')}
               fieldConfig={codeFieldConfig}
               validationResult={codeFieldConfig?.validator(contentDescription.code)}
               options={[
-                { label: t('39_additional_information.download'), key: 'download' },
-                { label: t('39_additional_information.information'), key: 'information' },
-                { label: t('39_additional_information.offlineAccess'), key: 'offlineAccess' },
-                { label: t('39_additional_information.order'), key: 'order' },
-                { label: t('39_additional_information.search'), key: 'search' }
+                { label: t('43_AdditionalInformationCode.download'), key: 'download' },
+                { label: t('43_AdditionalInformationCode.information'), key: 'information' },
+                { label: t('43_AdditionalInformationCode.offlineAccess'), key: 'offlineAccess' },
+                { label: t('43_AdditionalInformationCode.order'), key: 'order' },
+                { label: t('43_AdditionalInformationCode.search'), key: 'search' }
               ]}
             />
             <FieldTools key={`${KEY}[${index}].code`} fieldConfig={codeFieldConfig} />
@@ -171,7 +171,7 @@
           <div class="subfield-wrapper url-field">
             <TextInput
               bind:value={contentDescription.url}
-              label={t('39_additional_information.url')}
+              label={t('44_AdditionalInformationUrl.label')}
               onblur={onBlur}
               onfocus={onFocus}
               fieldConfig={urlFieldConfig}

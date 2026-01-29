@@ -43,7 +43,7 @@
 
 <div class="service-preview-field">
   <TextInput
-    label={fieldConfig?.label}
+    label={t('46_ServicePreview.label')}
     {value}
     {fieldConfig}
     {validationResult}

@@ -3,6 +3,8 @@
   import type { Layer } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: Layer['shortDescription'];
@@ -20,7 +22,7 @@
 
 <div class="layer-short-description-field">
   <TextAreaInput
-    label={fieldConfig?.label}
+    label={t('54_LayerDescription.label')}
     {value}
     maxlength={500}
     {fieldConfig}

@@ -53,7 +53,7 @@
   {:then OPTIONS}
     <div class="input-wrapper">
       <SelectInput
-        label={fieldConfig?.label || KEY}
+        label={t('25_TermsOfUseField.label')}
         fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
         options={OPTIONS.map(
           (item: TermsOfUse): Option => ({
@@ -68,7 +68,7 @@
         {validationResult}
       />
       {#if value !== 1}
-        <p class="none-default">{t('25_termsofuse.none_default')}</p>
+        <p class="none-default">{t('25_TermsOfUseField.none_default')}</p>
       {/if}
     </div>
   {/await}

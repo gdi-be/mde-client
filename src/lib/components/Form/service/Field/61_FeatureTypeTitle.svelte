@@ -3,6 +3,8 @@
   import type { FeatureType } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: FeatureType['title'];
@@ -19,7 +21,7 @@
 
 <div class="featuretype-title-field">
   <TextInput
-    label={fieldConfig?.label}
+    label={t('61_FeatureTypeTitle.label')}
     {value}
     maxlength={100}
     {fieldConfig}

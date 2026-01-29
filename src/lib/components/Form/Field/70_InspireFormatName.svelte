@@ -78,7 +78,7 @@
 {#if highestRole !== 'MdeDataOwner' && metadataProfile === 'INSPIRE_HARMONISED' && options.length > 0}
   <div class="inspire-format-name-field">
     <SelectInput
-      label={fieldConfig?.label}
+      label={t('70_InspireFormatName.label')}
       fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
       {options}
       {value}

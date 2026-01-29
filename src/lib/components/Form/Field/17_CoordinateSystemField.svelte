@@ -53,7 +53,7 @@
     {:then OPTIONS}
       <SelectInput
         {value}
-        label={fieldConfig?.label}
+        label={t('17_CoordinateSystemField.label')}
         options={OPTIONS}
         onChange={onSelectionChange}
         {validationResult}

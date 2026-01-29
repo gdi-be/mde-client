@@ -5,8 +5,7 @@ import type { FieldKey } from '$lib/models/form';
 import { log } from 'loggisch';
 import {
   FieldConfigs,
-  type FullFieldConfig,
-  type YamlFieldConfig
+  type FullFieldConfig
 } from '$lib/components/Form/FieldsConfig';
 import { goto, invalidateAll } from '$app/navigation';
 import { type Layer, type MetadataCollection, type Service } from '$lib/models/metadata';
@@ -16,7 +15,6 @@ import type { Role } from '$lib/models/keycloak';
 export type FormState = {
   metadata?: MetadataCollection;
   activeHelpKey?: FieldKey;
-  fieldConfigs?: YamlFieldConfig[];
 };
 
 const formState = $state<FormState>({
@@ -27,10 +25,8 @@ export const FORMSTATE_CONTEXT = Symbol('formState');
 
 export async function initializeFormContext(
   metadata: MetadataCollection,
-  fieldConfigs?: YamlFieldConfig[]
 ) {
   formState.metadata = metadata;
-  formState.fieldConfigs = fieldConfigs;
   setContext(FORMSTATE_CONTEXT, formState);
 }
 

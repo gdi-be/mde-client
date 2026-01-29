@@ -15,15 +15,15 @@
   }[] = $derived([
     {
       key: 'ISO',
-      label: t('05_metadata_profile.iso')
+      label: t('05_MetadataProfileField.iso')
     },
     {
       key: 'INSPIRE_HARMONISED',
-      label: t('05_metadata_profile.inspire_harmonised')
+      label: t('05_MetadataProfileField.inspire_harmonised')
     },
     {
       key: 'INSPIRE_IDENTIFIED',
-      label: t('05_metadata_profile.inspire_identified')
+      label: t('05_MetadataProfileField.inspire_identified')
     }
   ]);
 
@@ -46,7 +46,7 @@
 
 <div class="metadata-type-field">
   <SelectInput
-    label={fieldConfig?.label}
+    label={t('05_MetadataProfileField.label')}
     options={MetadataProfileOptions}
     {fieldConfig}
     {value}

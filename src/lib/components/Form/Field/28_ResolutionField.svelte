@@ -80,17 +80,17 @@
 
 <div class="title-field">
   <fieldset>
-    <legend>{t('28_resolution.label')}</legend>
+    <legend>{t('28_ResolutionField.label')}</legend>
     <FormField>
       <Radio bind:group={selected} value={RESOLUTION_KEY} onchange={clearAllValues} />
       {#snippet label()}
-        {resolutionFieldConfig?.label}
+        {t('28_ResolutionField.label_ground')}
       {/snippet}
     </FormField>
     <FormField>
       <Radio bind:group={selected} value={SCALE_KEY} onchange={clearAllValues} />
       {#snippet label()}
-        {scaleFieldConfig?.label}
+        {t('28_ResolutionField.label_scale')}
       {/snippet}
     </FormField>
     {#if selected === undefined}
@@ -108,7 +108,7 @@
       <NumberInput
         bind:value={resolutionValue as number}
         key={RESOLUTION_KEY}
-        label={resolutionFieldConfig?.label}
+        label={t('28_ResolutionField.label_ground')}
         fieldConfig={resolutionFieldConfig}
         onblur={onBlur}
         min={0.001}
@@ -125,7 +125,7 @@
         }
         key={SCALE_KEY}
         min={1}
-        label={scaleFieldConfig?.label}
+        label={t('28_ResolutionField.label_scale')}
         fieldConfig={scaleFieldConfig}
         onblur={onBlur}
         validationResult={scaleValidationResult}

@@ -50,7 +50,7 @@
   {:then OPTIONS}
     <RadioInput
       key={KEY}
-      label={fieldConfig?.label}
+      label={t('04_PrivacyField.label')}
       {fieldConfig}
       options={OPTIONS}
       {validationResult}

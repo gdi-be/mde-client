@@ -4,7 +4,9 @@
   import FieldTools from '../FieldTools.svelte';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
   import type { Option } from '$lib/models/form';
+  import { page } from '$app/state';
 
+  const t = $derived(page.data.t);
   const KEY = 'isoMetadata.spatialRepresentationTypes';
 
   const valueFromData = $derived(getValue<string[]>(KEY));
@@ -42,7 +44,7 @@
     <p>Lade räumliche Darstellungsarten</p>
   {:then OPTIONS}
     <MultiSelectInput
-      label={fieldConfig?.label}
+      label={t('39_SpatialRepresentationField.label')}
       {fieldConfig}
       options={OPTIONS}
       {value}

@@ -9,6 +9,8 @@
   import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   type Tab = {
     name: string;
@@ -105,7 +107,7 @@
 <div class="featuretypes-form">
   <fieldset>
     <legend>
-      {fieldConfig?.label}
+      {t('56_FeatureTypeForm.label')}
     </legend>
     <FieldHint {fieldConfig} {validationResult} />
     <nav>

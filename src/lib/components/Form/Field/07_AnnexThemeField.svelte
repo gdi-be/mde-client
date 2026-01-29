@@ -89,7 +89,7 @@
       <p>{t('general.loading_options')}</p>
     {:then OPTIONS}
       <SelectInput
-        label={fieldConfig?.label}
+        label={t('07_AnnexThemeField.label')}
         fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
         options={OPTIONS}
         value={Array.isArray(value) && value.length > 0 ? value[0] : undefined}
@@ -107,7 +107,7 @@
       <p>{t('general.loading_options')}</p>
     {:then OPTIONS}
       <MultiSelectInput
-        label={fieldConfig?.label}
+        label={t('07_AnnexThemeField.label')}
         {fieldConfig}
         options={OPTIONS}
         {value}

@@ -3,6 +3,8 @@
   import type { Layer } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: Layer['title'];
@@ -19,7 +21,7 @@
 
 <div class="layer-title-field">
   <TextInput
-    label={fieldConfig?.label}
+    label={t('49_LayerTitle.label')}
     {value}
     {fieldConfig}
     {validationResult}

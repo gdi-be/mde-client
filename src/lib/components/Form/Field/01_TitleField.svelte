@@ -2,6 +2,8 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.title';
 
@@ -27,7 +29,7 @@
   <TextInput
     bind:value
     maxlength={250}
-    label={fieldConfig?.label || KEY}
+    label={t('01_TitleField.label')}
     {fieldConfig}
     {validationResult}
     onblur={onBlur}

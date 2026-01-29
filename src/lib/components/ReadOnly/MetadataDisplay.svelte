@@ -19,61 +19,88 @@
     />
     <section id="basedata">
       <h2>{t('metadatadisplay.sectionBase')}</h2>
-      <DisplayField key="isoMetadata.title" profileId={1} />
-      <DisplayField key="isoMetadata.description" profileId={2} />
-      <DisplayField key="isoMetadata.keywords" profileId={15} />
-      <DisplayField key="isoMetadata.preview" profileId={29} />
-      <DisplayField key="isoMetadata.pointsOfContact" profileId={19} />
+      <DisplayField key="isoMetadata.title" label={t('01_TitleField.label')} />
+      <DisplayField key="isoMetadata.description" label={t('02_DescriptionField.label')} />
+      <DisplayField key="isoMetadata.keywords" label={t('15_KeywordsField.label')} />
+      <DisplayField key="isoMetadata.preview" label={t('29_PreviewField.label')} />
+      <DisplayField key="isoMetadata.pointsOfContact" label={t('19_ContactsField.label')} />
     </section>
     <section id="classification">
       <h2>{t('metadatadisplay.sectionClassification')}</h2>
-      <DisplayField key="isoMetadata.metadataProfile" profileId={5} />
+      <DisplayField key="isoMetadata.metadataProfile" label={t('05_MetadataProfileField.label')} />
       {#if metadataProfile === 'INSPIRE_HARMONISED' || metadataProfile === 'INSPIRE_IDENTIFIED'}
-        <DisplayField key="isoMetadata.inspireTheme" profileId={7} />
+        <DisplayField key="isoMetadata.inspireTheme" label={t('07_AnnexThemeField.label')} />
       {/if}
       {#if metadataProfile === 'INSPIRE_HARMONISED'}
-        <DisplayField key="isoMetadata.inspireFormatName" profileId={70} />
+        <DisplayField key="isoMetadata.inspireFormatName" label={t('70_InspireFormatName.label')} />
       {/if}
       {#if metadataProfile === 'INSPIRE_HARMONISED'}
-        <DisplayField key="isoMetadata.inspireAnnexVersion" profileId={38} />
+        <DisplayField
+          key="isoMetadata.inspireAnnexVersion"
+          label={t('38_InspireAnnexVersionField.label')}
+        />
       {/if}
       {#if metadataProfile === 'INSPIRE_HARMONISED'}
-        <DisplayField key="isoMetadata.valid" profileId={37} />
+        <DisplayField key="isoMetadata.valid" label={t('37_QualityReportCheckField.label')} />
       {/if}
-      <DisplayField key="isoMetadata.privacy" profileId={4} />
-      <DisplayField key="isoMetadata.termsOfUseId" profileId={25} />
-      <DisplayField key="isoMetadata.termsOfUseSource" profileId={26} />
-      <DisplayField key="isoMetadata.highValueDataset" profileId={6} />
+      <DisplayField key="isoMetadata.privacy" label={t('04_PrivacyField.label')} />
+      <DisplayField key="isoMetadata.termsOfUseId" label={t('25_TermsOfUseField.label')} />
+      <DisplayField
+        key="isoMetadata.termsOfUseSource"
+        label={t('26_TermsOfUseSourceField.label')}
+      />
+      <DisplayField
+        key="isoMetadata.highValueDataset"
+        label={t('06_HighValueDatasetField.label')}
+      />
       {#if highValueDataset === true}
-        <DisplayField key="isoMetadata.highValueDataCategory" profileId={8} />
+        <DisplayField
+          key="isoMetadata.highValueDataCategory"
+          label={t('06_HighValueDatasetField.categoryLabel')}
+        />
       {/if}
-      <DisplayField key="isoMetadata.topicCategory" profileId={13} />
+      <DisplayField key="isoMetadata.topicCategory" label={t('13_TopicCategory.label')} />
     </section>
     <section id="temp_and_spatial">
       <h2>{t('metadatadisplay.sectionTemporalSpatial')}</h2>
-      <DisplayField key="isoMetadata.created" profileId={9} />
-      <DisplayField key="isoMetadata.published" profileId={10} />
-      <DisplayField key="isoMetadata.maintenanceFrequency" profileId={14} />
-      <DisplayField key="isoMetadata.modified" profileId={11} />
-      <DisplayField key="isoMetadata.validFrom" profileId={12} />
-      <DisplayField key="isoMetadata.validTo" profileId={24} />
-      <DisplayField key="technicalMetadata.deliveredCrs" profileId={16} />
-      <DisplayField key="isoMetadata.crs" profileId={17} />
-      <DisplayField key="isoMetadata.extent" profileId={18} />
-      <DisplayField key="isoMetadata.resolutions" profileId={28} />
-      <DisplayField key="isoMetadata.scale" profileId={27} />
+      <DisplayField key="isoMetadata.created" label={t('09_CreatedField.label')} />
+      <DisplayField key="isoMetadata.published" label={t('10_PublishedField.label')} />
+      <DisplayField
+        key="isoMetadata.maintenanceFrequency"
+        label={t('14_MaintenanceFrequencyField.label')}
+      />
+      <DisplayField key="isoMetadata.modified" label={t('11_LastUpdatedField.label')} />
+      <DisplayField key="isoMetadata.validFrom" label={t('12_ValidityRangeField.label_from')} />
+      <DisplayField key="isoMetadata.validTo" label={t('12_ValidityRangeField.label_to')} />
+      <DisplayField
+        key="technicalMetadata.deliveredCrs"
+        label={t('16_DeliveredCoordinateSystemField.label')}
+      />
+      <DisplayField key="isoMetadata.crs" label={t('17_CoordinateSystemField.label')} />
+      <DisplayField key="isoMetadata.extent" label={t('18_ExtentField.label')} />
+      <DisplayField key="isoMetadata.resolutions" label={t('28_ResolutionField.label')} />
+      <DisplayField key="isoMetadata.scale" label={t('28_ResolutionField.label_scale')} />
     </section>
     <section id="additional">
       <h2>{t('metadatadisplay.sectionAdditional')}</h2>
-      <DisplayField key="isoMetadata.contentDescription" profileId={30} />
-      <DisplayField key="isoMetadata.technicalDescription" profileId={31} />
-      <DisplayField key="isoMetadata.lineage" profileId={32} />
-      <DisplayField key="clientMetadata.relatedTopics" profileId={36} />
-      <DisplayField key="isoMetadata.contentDescriptions" profileId={41} />
+      <DisplayField key="isoMetadata.contentDescription" label={t('30_ContentDescription.label')} />
+      <DisplayField
+        key="isoMetadata.technicalDescription"
+        label={t('31_TechnicalDescription.label')}
+      />
+      <DisplayField key="isoMetadata.lineage" label={t('32_Lineage.label')} />
+      <DisplayField
+        key="clientMetadata.relatedTopics"
+        label={t('displayfieldsnippets.relatedTopics')}
+      />
+      <DisplayField
+        key="isoMetadata.contentDescriptions"
+        label={t('41_AdditionalInformation.label')}
+      />
     </section>
     <section id="services">
       <h2>{t('metadatadisplay.sectionServices')}</h2>
-      <DisplayField key="isoMetadata.services" profileId={40} label="" />
+      <DisplayField key="isoMetadata.services" label={t('40_ServicesSection.label')} />
     </section>
     <section id="comments">
       <h2>{t('metadatadisplay.sectionComments')}</h2>

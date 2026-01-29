@@ -51,7 +51,7 @@
 {#if fieldVisible}
   <div class="quality-report-check-field">
     <fieldset>
-      <legend>{fieldConfig?.label}</legend>
+      <legend>{t('37_QualityReportCheckField.label')}</legend>
       <FormField align="end">
         {#snippet label()}{t('general.checked')}{/snippet}
         <Switch bind:checked={value} onSMUISwitchChange={onCheckChange} />

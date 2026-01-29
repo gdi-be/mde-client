@@ -3,6 +3,8 @@
   import FieldTools from '../FieldTools.svelte';
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import TextAreaInput from '../Inputs/TextAreaInput.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.description';
 
@@ -29,7 +31,7 @@
     bind:value
     maxlength={500}
     onblur={onBlur}
-    label={fieldConfig?.label || KEY}
+    label={t('02_DescriptionField.label')}
     rows={5}
     {fieldConfig}
     {validationResult}
