@@ -5,9 +5,13 @@
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
   import type { Option } from '$lib/models/form';
   import { page } from '$app/state';
+  import { getAccessToken } from '../../../context/TokenContext.svelte';
+  import { getHighestRole } from '../../../util';
 
   const t = $derived(page.data.t);
   const KEY = 'isoMetadata.spatialRepresentationTypes';
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   const valueFromData = $derived(getValue<string[]>(KEY));
   let value = $state<string[]>();
@@ -39,21 +43,23 @@
   };
 </script>
 
-<div class="spatial-representation-field">
-  {#await fetchOptions()}
-    <p>Lade räumliche Darstellungsarten</p>
-  {:then OPTIONS}
-    <MultiSelectInput
-      label={t('39_SpatialRepresentationField.label')}
-      {fieldConfig}
-      options={OPTIONS}
-      {value}
-      {onChange}
-      {validationResult}
-    />
-    <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
-  {/await}
-</div>
+{#if highestRole !== 'MdeDataOwner'}
+  <div class="spatial-representation-field">
+    {#await fetchOptions()}
+      <p>Lade räumliche Darstellungsarten</p>
+    {:then OPTIONS}
+      <MultiSelectInput
+        label={t('39_SpatialRepresentationField.label')}
+        {fieldConfig}
+        options={OPTIONS}
+        {value}
+        {onChange}
+        {validationResult}
+      />
+      <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
+    {/await}
+  </div>
+{/if}
 
 <style lang="scss">
   .spatial-representation-field {
