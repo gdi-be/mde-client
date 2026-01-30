@@ -158,7 +158,7 @@
         add
       </IconButton>
     </legend>
-    <FieldHint {validationResult} {fieldConfig} />
+    <FieldHint {validationResult} {fieldConfig} explanation={t('19_ContactsField.explanation')} />
     {#each contacts as contact, index (contact.listId)}
       <fieldset class="contact">
         <legend>

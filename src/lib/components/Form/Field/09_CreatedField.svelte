@@ -33,6 +33,7 @@
     bind:value
     key={KEY}
     label={t('09_CreatedField.label')}
+    explanation={t('09_CreatedField.explanation')}
     {fieldConfig}
     onchange={onChange}
     {validationResult}

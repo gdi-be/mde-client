@@ -34,6 +34,7 @@
     <TextInput
       bind:value
       label={t('26_TermsOfUseSourceField.label')}
+      explanation={t('26_TermsOfUseSourceField.explanation')}
       {fieldConfig}
       {validationResult}
       onblur={onBlur}

@@ -30,6 +30,7 @@
   <TextInput
     bind:value
     label={t('16_DeliveredCoordinateSystemField.label')}
+    explanation={t('16_DeliveredCoordinateSystemField.explanation')}
     {fieldConfig}
     onblur={onBlur}
     {validationResult}

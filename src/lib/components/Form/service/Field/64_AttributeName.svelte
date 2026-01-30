@@ -22,6 +22,7 @@
 <div class="attribute-name-field">
   <TextInput
     label={t('64_AttributeName.label')}
+    explanation={t('64_AttributeName.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

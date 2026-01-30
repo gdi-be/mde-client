@@ -54,6 +54,7 @@
     <div class="input-wrapper">
       <SelectInput
         label={t('25_TermsOfUseField.label')}
+        explanation={t('25_TermsOfUseField.explanation')}
         fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
         options={OPTIONS.map(
           (item: TermsOfUse): Option => ({

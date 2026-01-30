@@ -44,6 +44,7 @@
     bind:value
     key={KEY}
     label={t('11_LastUpdatedField.label')}
+    explanation={t('11_LastUpdatedField.explanation')}
     onchange={onChange}
     {fieldConfig}
     {validationResult}

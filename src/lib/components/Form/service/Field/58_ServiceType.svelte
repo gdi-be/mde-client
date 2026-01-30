@@ -22,6 +22,7 @@
 <div class="service-type-field">
   <SelectInput
     label={t('58_ServiceType.label')}
+    explanation={t('58_ServiceType.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

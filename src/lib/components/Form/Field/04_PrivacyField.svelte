@@ -51,6 +51,7 @@
     <RadioInput
       key={KEY}
       label={t('04_PrivacyField.label')}
+      explanation={t('04_PrivacyField.explanation')}
       {fieldConfig}
       options={OPTIONS}
       {validationResult}

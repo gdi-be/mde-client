@@ -96,6 +96,7 @@
     {#if selected === undefined}
       <div>
         <FieldHint
+          explanation={t('28_ResolutionField.explanation')}
           validationResult={{
             valid: false,
             helpText: 'Bitte geben Sie die räumliche Auflösung an.'

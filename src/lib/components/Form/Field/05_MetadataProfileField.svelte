@@ -47,6 +47,7 @@
 <div class="metadata-type-field">
   <SelectInput
     label={t('05_MetadataProfileField.label')}
+    explanation={t('05_MetadataProfileField.explanation')}
     options={MetadataProfileOptions}
     {fieldConfig}
     {value}

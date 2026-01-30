@@ -47,6 +47,7 @@
 <div class="metadata-type-field">
   <SelectInput
     label={t('14_MaintenanceFrequencyField.label')}
+    explanation={t('14_MaintenanceFrequencyField.explanation')}
     {fieldConfig}
     options={OPTIONS}
     {value}

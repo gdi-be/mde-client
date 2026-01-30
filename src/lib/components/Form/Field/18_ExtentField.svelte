@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
+  import FieldHint from '../FieldHint.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
   import type { CRS, Extent } from '$lib/models/metadata';
   import Button, { Icon, Label } from '@smui/button';
@@ -183,6 +184,7 @@
           />
         </div>
       </div>
+      <FieldHint fieldConfig={minXFieldConfig} explanation={t('18_ExtentField.explanation')} />
     </fieldset>
     <FieldTools noCopyButton key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>

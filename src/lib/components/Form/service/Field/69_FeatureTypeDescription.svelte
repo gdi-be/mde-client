@@ -24,6 +24,7 @@
 <div class="featuretype-short-description-field">
   <TextAreaInput
     label={t('69_FeatureTypeDescription.label')}
+    explanation={t('69_FeatureTypeDescription.explanation')}
     {value}
     maxlength={500}
     {fieldConfig}

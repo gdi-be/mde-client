@@ -35,6 +35,7 @@
     bind:value
     key={KEY}
     label={t('10_PublishedField.label')}
+    explanation={t('10_PublishedField.explanation')}
     {fieldConfig}
     onchange={onChange}
     {validationResult}

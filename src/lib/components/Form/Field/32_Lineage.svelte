@@ -194,7 +194,7 @@
         add
       </IconButton>
     </legend>
-    <FieldHint {fieldConfig} />
+    <FieldHint {fieldConfig} explanation={t('32_Lineage.explanation')} />
     {#each lineages as lineage, index (lineage.listId)}
       <fieldset class="lineage">
         <legend>

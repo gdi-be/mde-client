@@ -23,6 +23,7 @@
 <div class="layer-short-description-field">
   <TextAreaInput
     label={t('54_LayerDescription.label')}
+    explanation={t('54_LayerDescription.explanation')}
     {value}
     maxlength={500}
     {fieldConfig}

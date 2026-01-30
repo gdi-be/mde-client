@@ -54,6 +54,7 @@
       <SelectInput
         {value}
         label={t('17_CoordinateSystemField.label')}
+        explanation={t('17_CoordinateSystemField.explanation')}
         options={OPTIONS}
         onChange={onSelectionChange}
         {validationResult}

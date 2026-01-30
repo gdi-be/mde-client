@@ -22,6 +22,7 @@
 <div class="featuretype-title-field">
   <TextInput
     label={t('61_FeatureTypeTitle.label')}
+    explanation={t('61_FeatureTypeTitle.explanation')}
     {value}
     maxlength={100}
     {fieldConfig}

@@ -23,6 +23,7 @@
 <div class="layer-short-description-field">
   <TextInput
     label={t('55_LayerDatasource.label')}
+    explanation={t('55_LayerDatasource.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

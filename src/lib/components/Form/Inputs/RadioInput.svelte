@@ -9,6 +9,7 @@
     onChange?: (value: string) => void;
     key: string;
     label?: string;
+    explanation?: string;
     value?: string;
     fieldConfig?: FullFieldConfig<string>;
     options: Option[];
@@ -20,6 +21,7 @@
     value = $bindable<string>(),
     key,
     label,
+    explanation,
     fieldConfig,
     options,
     validationResult
@@ -43,7 +45,7 @@
     {/each}
   </div>
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} />
+    <FieldHint {validationResult} {fieldConfig} {explanation} />
   </div>
 </fieldset>
 

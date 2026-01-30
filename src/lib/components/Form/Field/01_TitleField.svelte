@@ -30,6 +30,7 @@
     bind:value
     maxlength={250}
     label={t('01_TitleField.label')}
+    explanation={t('01_TitleField.explanation')}
     {fieldConfig}
     {validationResult}
     onblur={onBlur}

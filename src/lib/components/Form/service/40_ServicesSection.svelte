@@ -138,7 +138,7 @@
   });
 </script>
 
-<FieldHint {fieldConfig} {validationResult} />
+<FieldHint {fieldConfig} {validationResult} explanation={t('40_ServicesSection.explanation')} />
 <nav class="tabs">
   {#each tabs as tab}
     <div class="tab-container" class:active={activeTab === tab.id}>

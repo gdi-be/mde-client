@@ -9,7 +9,7 @@
   },
   "04_PrivacyField": {
     "label": "Datenschutz-Einstellungen",
-    "explanation": "z.B. was wurde geändert oder was soll korrigiert werden."
+    "explanation": "Unterliegt Ihr Datenbestand einer der folgenden Datenschutzregeln?"
   },
   "05_MetadataProfileField": {
     "inspire_harmonised": "INSPIRE harmonisiert",
@@ -47,7 +47,8 @@
     "explanation": "Haben ihre Daten eine zeitlich begrenzte Gültigkeit?"
   },
   "13_TopicCategory": {
-    "label": "Themenkategorie"
+    "label": "Themenkategorie",
+    "explanation": "Welcher ISO Themenkategorie lässt sich Ihr Datenbestand zuordnen?"
   },
   "14_MaintenanceFrequencyField": {
     "label": "Pflegeintervall",
@@ -69,14 +70,16 @@
     "explanation": "In welchem Koordinatensystem liegen die räumlichen Informationen ihres Datenbestandes vor?"
   },
   "17_CoordinateSystemField": {
-    "label": "abzugebendes Koordinatensystem"
+    "label": "abzugebendes Koordinatensystem",
+    "explanation": "In welchem Koordinatensystem sollen die räumlichen Informationen abgegeben werden?"
   },
   "18_ExtentField": {
     "label": "Räumliche Ausdehnung",
     "label_min_x": "Minimaler X-Wert",
     "label_max_x": "Maximaler X-Wert",
     "label_min_y": "Minimaler Y-Wert",
-    "label_max_y": "Maximaler Y-Wert"
+    "label_max_y": "Maximaler Y-Wert",
+    "explanation": "Welchen räumlichen Bereich deckt Ihr Datenbestand ab?"
   },
   "19_ContactsField": {
     "add": "Kontakt hinzufügen",
@@ -107,13 +110,13 @@
   },
   "26_TermsOfUseSourceField": {
     "label": "Nutzungsbestimmungen Quellenangabe",
-    "explanation": "Bitte ändern sie die Quellenangabe der Nutzungsbestimmungen, wenn das für ihren Datenbestandnotwendig ist."
+    "explanation": "Sie verwenden nicht die Datenlizenz Deutschland Zero? Dann geben Sie hier eine Vorlage für die Quellenangabe an."
   },
   "28_ResolutionField": {
     "label": "Räumliche Auflösung",
     "label_scale": "Vergleichsmaßstab",
-    "explanation_scale": "In welchem Maßstab wurden ihre Daten erfasst oder in welcher räumlichen Auflösung liegen ihre Daten vor?",
-    "label_ground": "Bodenauflösung in Metern"
+    "label_ground": "Bodenauflösung in Metern",
+    "explanation": "In welchem Maßstab wurden ihre Daten erfasst oder in welcher räumlichen Auflösung liegen ihre Daten vor?"
   },
   "29_PreviewField": {
     "label": "Vorschaubild",
@@ -124,7 +127,8 @@
     "explanation": "Hier können Sie Ihre Daten noch ausführlicher beschreiben, indem Sie hier direkt unformatierten Text eintragen oder eine URL zu einem bestehenden Dokument hinzufügen."
   },
   "31_TechnicalDescription": {
-    "label": "Technische Beschreibung"
+    "label": "Technische Beschreibung",
+    "explanation": "Bitte beschreiben Sie hier Ihre Daten selbst. Wie sind Ihre Daten strukturiert? Wieviele Objekte gibt es? Welche Attribute haben die Objekte? Welche Datentypen und Anzeigenamen haben die Attribute?"
   },
   "32_Lineage": {
     "add": "Daten hinzufügen",
@@ -189,7 +193,7 @@
     "label": "Identifikator des Dienstes"
   },
   "46_ServicePreview": {
-    "label": "Vorschau des Kartendienstes",
+    "label": "Vorschau des Dienstes",
     "explanation": "Soll die Vorschau des Kartendienstes von der Vorschau des Datenbestandes abweichen? Wenn ja, laden Sie ein neues Vorschaubild hoch oder tragen Sie einen Link zu einem Bild ein"
   },
   "47_ServiceLegendImage": {
@@ -214,7 +218,7 @@
   },
   "49_LayerTitle": {
     "label": "Titel der Kartenebene",
-    "explanation": "Wie heißt die Informationsquelle?"
+    "explanation": "Wie heißt die Kartenebene?"
   },
   "50_LayerName": {
     "label": "Name der Kartenebene"
@@ -251,15 +255,15 @@
   },
   "59_ServiceTitle": {
     "label": "Titel",
-    "explanation": "Soll der Titel des Kartendienstes vom Titel des Datenbestandes abweichen? Wenn ja, tragen Sie hier einen anderen Titel ein."
+    "explanation": "Wie soll der Titel des Dienstes lauten?"
   },
   "60_ServiceShortDescription": {
     "label": "Kurzbeschreibung des Dienstes",
-    "explanation": "Soll die Kurzbeschreibung des Kartendienstes von der Kurzbeschreibung des Datenbestandes abweichen? Wenn ja, tragen Sie eine andere Kurzbeschreibung ein."
+    "explanation": "Was ist der Inhalt und der Zweck des Dienstes? Beschreiben sie kurz."
   },
   "61_FeatureTypeTitle": {
     "label": "Titel des FeatureTypes",
-    "explanation": "Soll sich der Titel des FeatureType vom Titel der Kartenebene unterscheiden? Wenn ja, dann geben Sie hier einen abweichenden Titel an"
+    "explanation": "Wie soll der Titel dieses FeatureType lauten? Passen Sie die Vorlage an."
   },
   "62_FeatureTypeName": {
     "label": "Name des FeatureTypes"
@@ -269,22 +273,26 @@
     "explanation": "Über welche Attribute verfügt ihr FeatureType?"
   },
   "64_AttributeName": {
-    "label": "Attribut-Name"
+    "label": "Attribut-Name",
+    "explanation": "Wie lautet die technische Bezeichnung des Attributes?"
   },
   "65_AttributeAlias": {
-    "label": "Attribut-Alias"
+    "label": "Attribut-Alias",
+    "explanation": "Welche Bezeichnung soll das Attribut tragen, z.B. im Geoportal?"
   },
   "66_AttributeDatatype": {
     "label": "Attribut-Datentyp"
   },
   "68_LayerSecondaryDatasource": {
-    "label": "sekundäre Datenhaltung"
+    "label": "sekundäre Datenhaltung",
+    "explanation": "Gibt es eine sekundäre Datenhaltung für diese Ebene?"
   },
   "69_FeatureTypeDescription": {
-    "label": "Beschreibung des FeatureTypes"
+    "label": "Kurzbeschreibung des FeatureTypes",
+    "explanation": "Beschreiben Sie den Inhalt der FeatureTypes kurz und prägnant in 500 Zeichen."
   },
   "70_InspireFormatName": {
-    "label": "INSPIRE Format Name"
+    "label": "INSPIRE Schema Name"
   },
   "assignment": {
     "approvalError": "Fehler beim Freigeben/Zurückziehen der Freigabe der Metadaten. Bitte versuchen Sie es später erneut.",

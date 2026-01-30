@@ -22,6 +22,7 @@
 <div class="attribute-alias-field">
   <TextInput
     label={t('65_AttributeAlias.label')}
+    explanation={t('65_AttributeAlias.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

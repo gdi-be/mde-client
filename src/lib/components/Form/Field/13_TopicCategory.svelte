@@ -58,6 +58,7 @@
     {:then OPTIONS}
       <MultiSelectInput
         label={t('13_TopicCategory.label')}
+        explanation={t('13_TopicCategory.explanation')}
         {fieldConfig}
         options={OPTIONS}
         {value}

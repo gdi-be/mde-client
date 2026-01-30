@@ -30,6 +30,7 @@
   <TextInput
     bind:value
     label={t('30_ContentDescription.label')}
+    explanation={t('30_ContentDescription.explanation')}
     {fieldConfig}
     {validationResult}
     onblur={onBlur}

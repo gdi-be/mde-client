@@ -170,7 +170,7 @@
         <Text>{t('15_KeywordsField.no_matches')}</Text>
       {/snippet}
     </Autocomplete>
-    <FieldHint {validationResult} {fieldConfig} />
+    <FieldHint {validationResult} {fieldConfig} explanation={t('15_KeywordsField.explanation')} />
   </fieldset>
   <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark}></FieldTools>
 </div>

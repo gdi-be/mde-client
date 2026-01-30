@@ -39,6 +39,7 @@
   <TextAreaInput
     bind:value
     label={t('60_ServiceShortDescription.label')}
+    explanation={t('60_ServiceShortDescription.explanation')}
     maxlength={500}
     {fieldConfig}
     {validationResult}

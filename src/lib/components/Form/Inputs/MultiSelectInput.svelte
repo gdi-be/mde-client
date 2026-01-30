@@ -11,6 +11,7 @@
     value?: string[];
     class?: string;
     label?: string;
+    explanation?: string;
     fieldConfig?: FullFieldConfig<string[]>;
     options: Option[];
     validationResult?: ValidationResult;
@@ -23,6 +24,7 @@
     value = [],
     label,
     class: wrapperClass,
+    explanation,
     fieldConfig,
     disabled = false,
     options,
@@ -105,7 +107,7 @@
     </Autocomplete>
   {/if}
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} />
+    <FieldHint {validationResult} {fieldConfig} {explanation} />
   </div>
 </fieldset>
 

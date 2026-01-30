@@ -40,7 +40,11 @@
 <div class="legend-fieldset">
   <fieldset>
     <legend>{t('47_ServiceLegendImage.label')}</legend>
-    <FieldHint {fieldConfig} {validationResult} />
+    <FieldHint
+      explanation={t('47_ServiceLegendImage.explanation')}
+      {fieldConfig}
+      {validationResult}
+    />
     <div class="inputs">
       <div class="legend-text-fields">
         <div class="field-wrapper">

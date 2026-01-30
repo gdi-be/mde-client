@@ -22,6 +22,7 @@
 <div class="layer-title-field">
   <TextInput
     label={t('49_LayerTitle.label')}
+    explanation={t('49_LayerTitle.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

@@ -90,6 +90,7 @@
     {:then OPTIONS}
       <SelectInput
         label={t('07_AnnexThemeField.label')}
+        explanation={t('07_AnnexThemeField.explanation')}
         fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
         options={OPTIONS}
         value={Array.isArray(value) && value.length > 0 ? value[0] : undefined}
@@ -108,6 +109,7 @@
     {:then OPTIONS}
       <MultiSelectInput
         label={t('07_AnnexThemeField.label')}
+        explanation={t('07_AnnexThemeField.explanation')}
         {fieldConfig}
         options={OPTIONS}
         {value}

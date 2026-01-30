@@ -44,6 +44,7 @@
 <div class="service-preview-field">
   <TextInput
     label={t('46_ServicePreview.label')}
+    explanation={t('46_ServicePreview.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

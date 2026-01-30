@@ -23,6 +23,7 @@
 <div class="layer-legend-image-field">
   <TextInput
     label={t('53_LayerLegendImage.label')}
+    explanation={t('53_LayerLegendImage.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

@@ -32,6 +32,7 @@
     maxlength={500}
     onblur={onBlur}
     label={t('02_DescriptionField.label')}
+    explanation={t('02_DescriptionField.explanation')}
     rows={5}
     {fieldConfig}
     {validationResult}

@@ -102,7 +102,7 @@
 <div class="columns-form">
   <fieldset>
     <legend>{t('63_ColumnsForm.label')}</legend>
-    <FieldHint {fieldConfig} {validationResult} />
+    <FieldHint {fieldConfig} {validationResult} explanation={t('63_ColumnsForm.explanation')} />
     <nav>
       {#each tabs as tab, i}
         <div class="tab-container" class:active={activeTabIndex === i}>

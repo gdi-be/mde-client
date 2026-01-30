@@ -121,7 +121,7 @@
         add
       </IconButton>
     </legend>
-    <FieldHint {fieldConfig} />
+    <FieldHint {fieldConfig} explanation={t('41_AdditionalInformation.explanation')} />
     {#each contentDescriptions as contentDescription, index (contentDescription.listId)}
       <fieldset class="contentDescription">
         <legend>

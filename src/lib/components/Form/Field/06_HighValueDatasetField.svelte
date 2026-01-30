@@ -67,7 +67,10 @@
       {t('06_HighValueDatasetField.label')}
       <Switch bind:checked={checkedValue} onSMUISwitchChange={onCheckChange} />
     </legend>
-    <FieldHint fieldConfig={checkedFieldConfig} />
+    <FieldHint
+      fieldConfig={checkedFieldConfig}
+      explanation={t('06_HighValueDatasetField.explanation')}
+    />
     {#if checkedValue}
       {#await fetchOptions()}
         <p>{t('general.loading_options')}</p>

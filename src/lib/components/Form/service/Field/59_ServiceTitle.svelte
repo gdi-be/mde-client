@@ -39,6 +39,7 @@
 <div class="service-title-field">
   <TextInput
     label={t('59_ServiceTitle.label')}
+    explanation={t('59_ServiceTitle.explanation')}
     {value}
     {fieldConfig}
     {validationResult}
