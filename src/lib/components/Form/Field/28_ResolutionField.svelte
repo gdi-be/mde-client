@@ -81,57 +81,60 @@
 <div class="title-field">
   <fieldset>
     <legend>{t('28_ResolutionField.label')}</legend>
-    <FormField>
-      <Radio bind:group={selected} value={RESOLUTION_KEY} onchange={clearAllValues} />
-      {#snippet label()}
-        {t('28_ResolutionField.label_ground')}
-      {/snippet}
-    </FormField>
-    <FormField>
-      <Radio bind:group={selected} value={SCALE_KEY} onchange={clearAllValues} />
-      {#snippet label()}
-        {t('28_ResolutionField.label_scale')}
-      {/snippet}
-    </FormField>
-    {#if selected === undefined}
-      <div>
-        <FieldHint
-          explanation={t('28_ResolutionField.explanation')}
-          validationResult={{
-            valid: false,
-            helpText: 'Bitte geben Sie die räumliche Auflösung an.'
-          }}
-          required
+    <FieldHint explanation={t('28_ResolutionField.explanation')} />
+    <div class="input-container">
+      <FormField>
+        <Radio bind:group={selected} value={RESOLUTION_KEY} onchange={clearAllValues} />
+        {#snippet label()}
+          {t('28_ResolutionField.label_ground')}
+        {/snippet}
+      </FormField>
+      <FormField>
+        <Radio bind:group={selected} value={SCALE_KEY} onchange={clearAllValues} />
+        {#snippet label()}
+          {t('28_ResolutionField.label_scale')}
+        {/snippet}
+      </FormField>
+      {#if selected === undefined}
+        <div>
+          <FieldHint
+            explanation={t('28_ResolutionField.explanation')}
+            validationResult={{
+              valid: false,
+              helpText: 'Bitte geben Sie die räumliche Auflösung an.'
+            }}
+            required
+          />
+        </div>
+      {/if}
+      {#if selected === RESOLUTION_KEY}
+        <NumberInput
+          bind:value={resolutionValue as number}
+          key={RESOLUTION_KEY}
+          label={t('28_ResolutionField.label_ground')}
+          fieldConfig={resolutionFieldConfig}
+          onblur={onBlur}
+          min={0.001}
+          validationResult={resolutionValidationResult}
+          step="any"
         />
-      </div>
-    {/if}
-    {#if selected === RESOLUTION_KEY}
-      <NumberInput
-        bind:value={resolutionValue as number}
-        key={RESOLUTION_KEY}
-        label={t('28_ResolutionField.label_ground')}
-        fieldConfig={resolutionFieldConfig}
-        onblur={onBlur}
-        min={0.001}
-        validationResult={resolutionValidationResult}
-        step="any"
-      />
-    {:else if selected === SCALE_KEY}
-      <NumberInput
-        bind:value={
-          () => scaleValue as number,
-          (val: number) => {
-            scaleValue = val ? Math.round(Number(val)) : null;
+      {:else if selected === SCALE_KEY}
+        <NumberInput
+          bind:value={
+            () => scaleValue as number,
+            (val: number) => {
+              scaleValue = val ? Math.round(Number(val)) : null;
+            }
           }
-        }
-        key={SCALE_KEY}
-        min={1}
-        label={t('28_ResolutionField.label_scale')}
-        fieldConfig={scaleFieldConfig}
-        onblur={onBlur}
-        validationResult={scaleValidationResult}
-      />
-    {/if}
+          key={SCALE_KEY}
+          min={1}
+          label={t('28_ResolutionField.label_scale')}
+          fieldConfig={scaleFieldConfig}
+          onblur={onBlur}
+          validationResult={scaleValidationResult}
+        />
+      {/if}
+    </div>
   </fieldset>
   <FieldTools
     fieldConfig={selected === SCALE_KEY ? scaleFieldConfig : resolutionFieldConfig}
@@ -145,6 +148,10 @@
     position: relative;
     display: flex;
     gap: 0.25em;
+
+    :global(.field-hint) {
+      margin: 0.5em 0;
+    }
 
     fieldset {
       flex: 1;

@@ -14,6 +14,7 @@
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import Dialog, { Actions, Content, Title } from '@smui/dialog';
   import Button, { Label } from '@smui/button';
+  import FieldHint from './FieldHint.svelte';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
@@ -129,6 +130,7 @@
           <Icon class="material-icons-filled" on>help</Icon>
         </IconButton>
       </div>
+      <FieldHint explanation={t('commentspanel.explanation')} />
       {#if comments?.length > 0}
         <ul class="comments">
           {#each comments as comment, index}
