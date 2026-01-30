@@ -3,6 +3,8 @@
   import type { Option } from '$lib/models/form';
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
+  import { getAccessToken } from '../../../context/TokenContext.svelte';
+  import { getHighestRole } from '../../../util';
 
   type InputProps = {
     onChange?: (value: string) => void;
@@ -14,6 +16,9 @@
     validationResult?: ValidationResult;
     disabled?: boolean;
   };
+
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   let {
     onChange,
@@ -36,9 +41,18 @@
   };
 
   const selectedDescription = $derived(options.find((item) => item.key === value)?.description);
+
+  let requiredButInvalid = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles, required } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    return isEditingRole && required && !validationResult?.valid;
+  });
 </script>
 
-<fieldset class={['select-input', wrapperClass]}>
+<fieldset class={['select-input', wrapperClass, requiredButInvalid ? 'invalid' : '']}>
   <legend>{label}</legend>
   <Select bind:this={element} {disabled} menu$anchorElement={document.body} bind:value>
     {#each options as option}
@@ -70,6 +84,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    &.invalid {
+      border: 2px solid var(--mdc-theme-error) !important;
+    }
 
     legend {
       font-size: 1.5em;

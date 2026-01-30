@@ -26,7 +26,7 @@
     ...restProps
   }: InputProps = $props();
 
-  let showHint = $state(false);
+  let fieldHasFocus = $state(false);
 </script>
 
 <fieldset class={['number-input', wrapperClass]}>
@@ -35,18 +35,18 @@
     type="number"
     id={key}
     onfocus={(evt) => {
-      showHint = true;
+      fieldHasFocus = true;
       onfocus?.(evt);
     }}
     onblur={(evt) => {
-      showHint = false;
+      fieldHasFocus = false;
       onblur?.(evt);
     }}
     bind:value
     {...restProps}
   />
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} {showHint} />
+    <FieldHint {validationResult} {fieldConfig} {fieldHasFocus} />
   </div>
 </fieldset>
 
