@@ -4,7 +4,10 @@ import { interpolate } from './interpolate';
 import { dev } from '$app/environment';
 import type { TranslationKeys } from './types';
 
-const loadedTranslations: Record<string, any> = {};
+const loadedTranslations: Record<LocaleCode, typeof fallBackTranslations> = {
+  de: fallBackTranslations
+};
+type SectionKey = keyof typeof fallBackTranslations;
 
 export async function getTranslator({
   locale,
@@ -24,15 +27,15 @@ export async function getTranslator({
     if (!key.includes('.'))
       throw new Error('Incorrect i18n key. Must be nested 1 level (contain 1 period).');
 
-    const [section, item] = key.split('.') as [string, string];
-    const localeResult = loadedTranslations[locale][section]?.[item];
+    const [sectionKey, item] = key.split('.') as [SectionKey, string];
+    const section = loadedTranslations[locale][sectionKey] as Record<string, string>;
+    const localeResult = section?.[item];
     if (localeResult) return interpolate(localeResult, values);
     console.warn(`Missing ${locale} translation for ${key}. Falling back to default.`);
 
-    // @ts-expect-error - we already typecheck the key argument and types don't
     // know how to properly distinguish the allowed items for a chosen section
     // if we do type the line above properly so we ignore here
-    const fallbackResult = fallBackTranslations[section]?.[item];
+    const fallbackResult = section?.[item];
     if (fallbackResult) return interpolate(fallbackResult, values);
 
     const error = `Missing default translation for: ${key}`;

@@ -9,13 +9,14 @@
     validationResult?: ValidationResult;
     showHint?: boolean;
     required?: boolean;
+    explanation?: string;
   };
 
   const {
     validationResult,
     fieldConfig,
-    showHint = false,
-    required = false
+    required = false,
+    explanation
   }: FieldBottomTextProps = $props();
 
   const token = $derived(getAccessToken());
@@ -27,11 +28,7 @@
       return validationResult?.helpText;
     }
     if (highestRole === 'MdeDataOwner') {
-      if (showHint) {
-        return fieldConfig?.hint || fieldConfig?.explanation;
-      } else {
-        return fieldConfig?.explanation;
-      }
+      return explanation;
     }
   });
 </script>

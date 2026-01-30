@@ -60,7 +60,6 @@
     })
   );
 
-  const fieldConfig = getFieldConfig<Extent>(18);
   const minXFieldConfig = getFieldConfig<number>(71);
   const maxXFieldConfig = getFieldConfig<number>(72);
   const minYFieldConfig = getFieldConfig<number>(73);

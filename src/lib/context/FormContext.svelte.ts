@@ -3,10 +3,7 @@ import { getContext, setContext } from 'svelte';
 import { page } from '$app/state';
 import type { FieldKey } from '$lib/models/form';
 import { log } from 'loggisch';
-import {
-  FieldConfigs,
-  type FullFieldConfig
-} from '$lib/components/Form/FieldsConfig';
+import { FieldConfigs, type FullFieldConfig } from '$lib/components/Form/FieldsConfig';
 import { goto, invalidateAll } from '$app/navigation';
 import { type Layer, type MetadataCollection, type Service } from '$lib/models/metadata';
 import { toast } from 'svelte-french-toast';
@@ -23,9 +20,7 @@ const formState = $state<FormState>({
 
 export const FORMSTATE_CONTEXT = Symbol('formState');
 
-export async function initializeFormContext(
-  metadata: MetadataCollection,
-) {
+export async function initializeFormContext(metadata: MetadataCollection) {
   formState.metadata = metadata;
   setContext(FORMSTATE_CONTEXT, formState);
 }
@@ -133,14 +128,7 @@ export function getFieldConfig<T>(profileId: number, key?: string): FullFieldCon
       ? staticFieldConfigs[0]
       : staticFieldConfigs.find(({ key: k }) => k === key);
 
-  const yamlConfigs = formState.fieldConfigs?.filter(({ profileId: id }) => id === profileId) || [];
-  const dynamicFieldConfig =
-    yamlConfigs.length === 1 ? yamlConfigs[0] : yamlConfigs.find(({ key: k }) => k === key);
-
-  return {
-    ...staticFieldConfig,
-    ...dynamicFieldConfig
-  } as FullFieldConfig<T>;
+  return staticFieldConfig as FullFieldConfig<T>;
 }
 
 export function clearActiveHelp() {

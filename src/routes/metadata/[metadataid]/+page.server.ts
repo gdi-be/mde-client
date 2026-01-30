@@ -27,7 +27,7 @@ export async function load({ params, cookies, url }) {
     // const themes = await file.text();
     // const fieldLabels = parse(themes) as YamlFieldConfig[];
     return {
-      metadata,
+      metadata
       // fieldLabels
     };
   } catch (e) {
