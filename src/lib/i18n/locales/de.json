@@ -341,6 +341,7 @@
     "delete": "Löschen",
     "deleteConfirm": "Möchten Sie diesen Kommentar wirklich löschen?",
     "deleteError": "Fehler beim Löschen des Kommentars",
+    "explanation": "Wollen Sie uns etwas mitteilen, dann schreiben Sie es hier in das Kommentarfeld, z.B. was wurde geändert oder was soll korrigiert werden.",
     "fetchHelpError": "Fehler beim Abrufen der Hilfe",
     "header": "Kommentare",
     "help": "Hilfe zu Kommentaren anzeigen",
