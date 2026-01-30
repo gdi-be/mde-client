@@ -7,6 +7,7 @@
   import { getContext } from 'svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import { toast } from 'svelte-french-toast';
+  import { page } from '$app/state';
 
   type MessageGroup = {
     'gdi-inspire': string[][][];
@@ -15,6 +16,7 @@
     'internal-etf-errors': string[];
   };
 
+  const t = $derived(page.data.t);
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
 
   let isLoading = $state(false);
@@ -58,7 +60,7 @@
       });
 
       if (!response.ok) {
-        toast.error(`Fehler beim Starten der Validierung: ${response.statusText}`);
+        toast.error(t('validationdialog.errorStart', { statusText: response.statusText }));
         validationStartError = true;
         return;
       }
@@ -123,23 +125,14 @@
 
 <Dialog bind:open aria-labelledby="Validierung" aria-describedby="Validierung">
   <Header>
-    <Title>Validierung {metadata?.isoMetadata?.title}</Title>
+    <Title>{t('validationdialog.title', { title: metadata?.isoMetadata?.title })}</Title>
   </Header>
   <Content>
     <div class="validation-content">
-      <p>
-        In diesem Schritt wird die Validierung der Metadaten durchgeführt. Bitte beachten Sie, dass
-        dies einige Zeit in Anspruch nehmen kann, abhängig von der Größe und Komplexität der
-        Metadaten. Sie können die Validierung über den Button <code>Validierung starten</code>
-        beginnen. Die Validierung wird im Hintergrund durchgeführt und Sie werden benachrichtigt, sobald
-        sie abgeschlossen ist.
-        <br />
-        <br />
-        Möchten Sie die Validierung jetzt starten?
-      </p>
+      <p>{t('validationdialog.description')}</p>
       <div class="validation-actions">
         <Button variant="raised" onclick={runValidation} disabled={isLoading} type="button">
-          <Label>Validierung starten</Label>
+          <Label>{t('validationdialog.start')}</Label>
           <Icon class="material-icons">assignment_turned_in</Icon>
           {#if isLoading}
             <Spinner />
@@ -148,16 +141,16 @@
       </div>
       <div class="validation-results">
         {#if isLoading}
-          <p>Die Validierung läuft. Bitte warten Sie…</p>
+          <p>{t('validationdialog.running')}</p>
         {:else if validationResult}
-          <p>Ergebnisse der Validierung:</p>
+          <p>{t('validationdialog.results')}</p>
           <div class="validation-results">
             {#if validationResult?.['gdi-inspire'].length}
-              <h3>Ergebnisse GDI-DE für INSPIRE:</h3>
+              <h3>{t('validationdialog.gdiInspire')}</h3>
               <ol>
                 {#each validationResult?.['gdi-inspire'] as message}
                   {#each message as entry}
-                    <li>Fehler</li>
+                    <li>{t('general.error')}</li>
                     <ul>
                       {#each entry as e}
                         <li
@@ -175,11 +168,11 @@
               </ol>
             {/if}
             {#if validationResult?.['gdi-de'].length}
-              <h3>Ergebnisse GDI-DE:</h3>
+              <h3>{t('validationdialog.gdiDe')}</h3>
               <ol>
                 {#each validationResult?.['gdi-de'] as message}
                   {#each message as entry}
-                    <li>Fehler</li>
+                    <li>{t('general.error')}</li>
                     <ul>
                       {#each entry as e}
                         <li
@@ -197,11 +190,11 @@
               </ol>
             {/if}
             {#if validationResult?.['inspire-validator'].length}
-              <h3>Ergebnisse INSPIRE-Validator:</h3>
+              <h3>{t('validationdialog.inspireValidator')}</h3>
               <ol>
                 {#each validationResult?.['inspire-validator'] as message}
                   {#each message as entry}
-                    <li>Fehler</li>
+                    <li>{t('general.error')}</li>
                     <ul>
                       {#each entry as e}
                         <li
@@ -224,7 +217,7 @@
               </ol>
             {/if}
             {#if validationResult?.['internal-etf-errors'].length}
-              <h3>Interne ETF-Fehler:</h3>
+              <h3>{t('validationdialog.internalEtfErrors')}</h3>
               <ul>
                 {#each validationResult?.['internal-etf-errors'] as message}
                   <li class="error">
@@ -234,13 +227,13 @@
               </ul>
             {/if}
             {#if validationResult?.['gdi-inspire'].length === 0 && validationResult?.['gdi-de'].length === 0 && validationResult?.['inspire-validator'].length === 0 && validationResult?.['internal-etf-errors'].length === 0}
-              <p class="success">Keine Fehler oder Warnungen gefunden.</p>
+              <p class="success">{t('validationdialog.noErrors')}</p>
             {/if}
           </div>
         {:else if validationError}
-          <p>Die Validierung konnte nicht erfolgreich durchgeführt werden.</p>
+          <p>{t('validationdialog.failed')}</p>
         {:else if validationStartError}
-          <p>Die Validierung konnte nicht gestartet werden.</p>
+          <p>{t('validationdialog.startFailed')}</p>
         {/if}
       </div>
     </div>

@@ -8,6 +8,8 @@
   import { page } from '$app/state';
   import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
 
+  const t = $derived(page.data.t);
+
   type Tab = {
     title: string;
     id: string;
@@ -58,7 +60,7 @@
       ...services,
       {
         serviceIdentification: serviceIdentification,
-        title: 'Neuer Dienst' + services.length
+        title: t('servicessection.new_service') + services.length
       }
     ];
     activeTab = serviceIdentification;
@@ -102,8 +104,8 @@
         }
       },
       {
-        text: 'Sind sie sicher, dass sie diesen Dienst löschen möchten? Alle dazugehörigen Daten gehen verloren.',
-        confirmButtonText: 'Löschen'
+        text: t('servicessection.delete_confirm'),
+        confirmButtonText: t('servicessection.delete_button')
       }
     );
   }
@@ -136,7 +138,7 @@
   });
 </script>
 
-<FieldHint {fieldConfig} {validationResult} />
+<FieldHint {fieldConfig} {validationResult} explanation={t('40_ServicesSection.explanation')} />
 <nav class="tabs">
   {#each tabs as tab}
     <div class="tab-container" class:active={activeTab === tab.id}>
@@ -160,7 +162,7 @@
           class="material-icons"
           onclick={(evt) => removeService(tab.id, evt)}
           size="button"
-          title="Dienst entfernen"
+          title={t('servicessection.remove_button')}
           type="button"
         >
           delete
@@ -172,7 +174,7 @@
     class="material-icons"
     onclick={() => addService()}
     size="button"
-    title="Dienst hinzufügen"
+    title={t('servicessection.add_button')}
     type="button"
   >
     add

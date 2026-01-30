@@ -11,6 +11,8 @@
   import FieldTools from '../FieldTools.svelte';
   import { getHighestRole } from '$lib/util';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.inspireAnnexVersion';
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
@@ -54,7 +56,7 @@
   <div class="inspire-annex-version-field">
     <TextInput
       bind:value
-      label={fieldConfig?.label}
+      label={t('38_InspireAnnexVersionField.label')}
       {fieldConfig}
       onblur={onBlur}
       {validationResult}

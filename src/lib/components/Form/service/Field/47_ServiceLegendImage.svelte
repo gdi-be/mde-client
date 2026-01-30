@@ -5,6 +5,9 @@
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.services.legendImage';
 
@@ -36,13 +39,17 @@
 
 <div class="legend-fieldset">
   <fieldset>
-    <legend>{fieldConfig?.label || 'Gesamtlegende'}</legend>
-    <FieldHint {fieldConfig} {validationResult} />
+    <legend>{t('47_ServiceLegendImage.label')}</legend>
+    <FieldHint
+      explanation={t('47_ServiceLegendImage.explanation')}
+      {fieldConfig}
+      {validationResult}
+    />
     <div class="inputs">
       <div class="legend-text-fields">
         <div class="field-wrapper">
           <TextInput
-            label={fieldConfigUrl?.label}
+            label={t('47_ServiceLegendImage.url')}
             value={value?.url}
             onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigUrl}
@@ -51,7 +58,7 @@
         </div>
         <div class="field-wrapper">
           <TextInput
-            label={fieldConfigFormat?.label}
+            label={t('47_ServiceLegendImage.format')}
             value={value?.format}
             onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigFormat}
@@ -62,7 +69,7 @@
       <div class="legend-size-fields">
         <div class="field-wrapper">
           <NumberInput
-            label={fieldConfigWidth?.label}
+            label={t('47_ServiceLegendImage.width')}
             value={value?.width}
             onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigWidth}
@@ -71,7 +78,7 @@
         </div>
         <div class="field-wrapper">
           <NumberInput
-            label={fieldConfigHeight?.label}
+            label={t('47_ServiceLegendImage.height')}
             value={value?.height}
             onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigHeight}

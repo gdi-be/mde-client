@@ -7,6 +7,7 @@
     maxlength?: number;
     value?: string;
     class?: string;
+    explanation?: string;
     label?: string;
     fieldConfig?: FullFieldConfig<string>;
     onfocus?: (evt: FocusEvent) => void;
@@ -23,6 +24,7 @@
     validationResult,
     onblur,
     onfocus,
+    explanation,
     ...restProps
   }: InputProps = $props();
 
@@ -47,11 +49,10 @@
     }}
     bind:value
     {maxlength}
-    placeholder={fieldConfig?.placeholder}
     {...restProps}
   />
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} {showHint} />
+    <FieldHint {validationResult} {fieldConfig} {showHint} {explanation} />
     {#if maxlength}
       <div class="character-counter">
         {value.length} / {maxlength}

@@ -3,6 +3,9 @@
   import type { FeatureType } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: FeatureType['shortDescription'];
@@ -20,7 +23,8 @@
 
 <div class="featuretype-short-description-field">
   <TextAreaInput
-    label={fieldConfig?.label}
+    label={t('69_FeatureTypeDescription.label')}
+    explanation={t('69_FeatureTypeDescription.explanation')}
     {value}
     maxlength={500}
     {fieldConfig}

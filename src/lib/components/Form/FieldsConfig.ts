@@ -20,16 +20,8 @@ export type ValidationResult = {
   helpText?: string;
 };
 
-export interface YamlFieldConfig {
-  key?: FieldKey;
+export interface FullFieldConfig<T = any> {
   profileId: number;
-  label?: string;
-  explanation?: string;
-  placeholder?: string;
-  hint?: string;
-}
-
-export interface FullFieldConfig<T = any> extends YamlFieldConfig {
   // the key in the json structure
   key: FieldKey;
   // if the field is required
@@ -394,7 +386,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 16,
     key: 'technicalMetadata.deliveredCrs',
-    placeholder: 'EPSG:25833',
     validator: optionalValidator,
     section: 'temp_and_spatial',
     required: false

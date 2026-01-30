@@ -1,4 +1,5 @@
 <script module lang="ts">
+  import { page } from '$app/state';
   import type {
     Keywords,
     Contacts,
@@ -16,7 +17,7 @@
 
   import type { Option } from '$lib/models/form';
   import { toast } from 'svelte-french-toast';
-  import { getFieldConfig, getFormContext } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
 
   export {
     defaultSnippet,
@@ -55,13 +56,15 @@
     technicalMetadataCategories as 'technicalMetadata.categories'
   };
 
-  const DEFAULT_NULL_STRING = 'Keine Angabe';
+  const t = $derived(page.data.t);
+
+  const DEFAULT_NULL_STRING = $derived(t('displayfield.noValue'));
 
   const getInspireThemes = async (): Promise<Option[]> => {
     const response = await fetch('/data/inspire_themes');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der INSPIRE Themen');
+      toast.error(t('displayfieldsnippets.errorFetchInspireThemes'));
       return [];
     }
 
@@ -72,7 +75,7 @@
     const response = await fetch('/data/iso_themes');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der ISO Themen');
+      toast.error(t('displayfieldsnippets.errorFetchIsoThemes'));
       return [];
     }
 
@@ -106,13 +109,13 @@
     const metadata = getFormContext()?.metadata;
     const metadataId = metadata?.metadataId;
     if (!metadataId) {
-      toast.error('Metadaten-ID ist nicht verfügbar');
+      toast.error(t('displayfieldsnippets.errorNoMetadataId'));
       return [];
     }
     const response = await fetch(`/metadata/${metadataId}/autokeywords`);
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der automatisch generierten Schlagwörter');
+      toast.error(t('displayfieldsnippets.errorFetchAutoKeywords'));
       return [];
     }
 
@@ -124,7 +127,7 @@
     const response = await fetch('/data/terms_of_use');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Nutzungsbedingungen');
+      toast.error(t('displayfieldsnippets.errorFetchTermsOfUse'));
       return [];
     }
 
@@ -135,7 +138,7 @@
     const response = await fetch('/data/privacy');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Datenschutzoptionen');
+      toast.error(t('displayfieldsnippets.errorFetchPrivacy'));
       return [];
     }
 
@@ -146,7 +149,7 @@
     const response = await fetch('/data/crs');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Koordinatensysteme');
+      toast.error(t('displayfieldsnippets.errorFetchCrs'));
       return [];
     }
 
@@ -169,7 +172,7 @@
     const response = await fetch('/data/hvd_categories');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der HVD Kategorien');
+      toast.error(t('displayfieldsnippets.errorFetchHvdCategories'));
       return [];
     }
 
@@ -188,7 +191,7 @@
       body: JSON.stringify({ value })
     });
     if (!response.ok) {
-      toast.error('Fehler beim Ersetzen der Variablen');
+      toast.error(t('displayfieldsnippets.errorReplaceVariable'));
       return value;
     }
     const data = await response.json();
@@ -214,7 +217,7 @@
   {:else}
     {value?.default?.map(({ keyword }) => keyword)?.join(', ') + ','}
     {#await getAutoKeywords()}
-      Lädt ...
+      {t('general.loading')}
     {:then autoKeywords}
       {autoKeywords.join(', ')}
     {/await}
@@ -223,7 +226,7 @@
 
 {#snippet isoMetadataPreview(value: string)}
   {#await replaceVariable(value)}
-    Lädt ...
+    {t('general.loading')}
   {:then value}
     {value || DEFAULT_NULL_STRING}
   {:catch}
@@ -269,7 +272,7 @@
 
 {#snippet isoMetadataPrivacy(value: string)}
   {#await getPrivacy()}
-    Lädt ...
+    {t('general.loading')}
   {:then data}
     {(data as Option[]).find((option) => option.key === value)?.label || DEFAULT_NULL_STRING}
   {/await}
@@ -277,7 +280,7 @@
 
 {#snippet isoMetadataTermsOfUse(value: string)}
   {#await getTermsOfUse()}
-    Lädt ...
+    {t('general.loading')}
   {:then data}
     {(data as TermsOfUse[]).find((entry: TermsOfUse) => entry.id === Number(value))?.shortname ||
       DEFAULT_NULL_STRING}
@@ -286,7 +289,7 @@
 
 {#snippet isoMetadataInspireTheme(value: string[])}
   {#await getInspireThemes()}
-    Lädt ...
+    {t('general.loading')}
   {:then data}
     {#if Array.isArray(value) && value.length === 0}
       {DEFAULT_NULL_STRING}
@@ -322,7 +325,7 @@
     {DEFAULT_NULL_STRING}
   {:else}
     {#await getIsoThemes()}
-      Lädt ...
+      {t('general.loading')}
     {:then data}
       {value
         .map((themeId) => {
@@ -352,9 +355,9 @@
 
 {#snippet isoMetadataValid(value: boolean)}
   {#if value === true}
-    {'Ja'}
+    {t('general.yes')}
   {:else if value === false}
-    {'Nein'}
+    {t('general.no')}
   {:else}
     {DEFAULT_NULL_STRING}
   {/if}
@@ -374,7 +377,7 @@
 
 {#snippet isoMetadataCrs(value: string)}
   {#await getCrs()}
-    Lädt ...
+    {t('general.loading')}
   {:then data}
     {(data as Option[]).find((option) => option.key === value)?.label || DEFAULT_NULL_STRING}
   {/await}
@@ -392,7 +395,7 @@
 
 {#snippet isoMetadataContentDescription(value: string)}
   {#await replaceVariable(value)}
-    Lädt ...
+    {t('general.loading')}
   {:then value}
     {value || DEFAULT_NULL_STRING}
   {:catch}
@@ -402,7 +405,7 @@
 
 {#snippet isoMetadataTechnicalDescription(value: string)}
   {#await replaceVariable(value)}
-    Lädt ...
+    {t('general.loading')}
   {:then value}
     {value || DEFAULT_NULL_STRING}
   {:catch}
@@ -419,17 +422,17 @@
         <div class="list-item">
           <div class="list-item-field">
             <!-- Lineage-Title -->
-            <strong>{getFieldConfig(33)?.label}</strong>
+            <strong>{t('32_Lineage.label_title')}</strong>
             <span class="list-item-value">{lineage.title || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
             <!-- Lineage-Date -->
-            <strong>{getFieldConfig(34)?.label}</strong>
+            <strong>{t('32_Lineage.label_date')}</strong>
             <span class="list-item-value">{lineage.date || DEFAULT_NULL_STRING}</span>
           </div>
           <div class="list-item-field">
             <!-- Lineage-Identifier -->
-            <strong>{getFieldConfig(35)?.label}</strong>
+            <strong>{t('32_Lineage.label_identifier')}</strong>
             <span class="list-item-value">{lineage.identifier || DEFAULT_NULL_STRING}</span>
           </div>
         </div>
@@ -446,17 +449,17 @@
       {#each value as contentDescription}
         <div class="list-item">
           <div class="list-item-field">
-            <strong>{getFieldConfig(42)?.label}</strong>
+            <strong>{t('displayfieldsnippets.contentDescriptionDescription')}</strong>
             <span class="list-item-value">{contentDescription.description}</span>
           </div>
           <div class="list-item-field">
-            <strong>{getFieldConfig(43)?.label}</strong>
+            <strong>{t('displayfieldsnippets.contentDescriptionCode')}</strong>
             <span class="list-item-value">
               {contentDescriptionsCodeMap[contentDescription.code]}
             </span>
           </div>
           <div class="list-item-field">
-            <strong>{getFieldConfig(44)?.label}</strong>
+            <strong>{t('displayfieldsnippets.contentDescriptionUrl')}</strong>
             <span class="list-item-value">
               {#await replaceVariable(contentDescription.url)}
                 Lädt ...
@@ -484,37 +487,37 @@
         <div class="list-item">
           <div class="list-item-field">
             <!-- ServiceTitle -->
-            <strong>{getFieldConfig(59)?.label}</strong>
+            <strong>{t('59_ServiceTitle.label')}</strong>
             <span class="list-item-value">{service.title}</span>
           </div>
           <div class="list-item-field">
             <!-- Service-Type -->
-            <strong>{getFieldConfig(58)?.label}</strong>
+            <strong>{t('58_ServiceType.label')}</strong>
             <span class="list-item-value">{service.serviceType}</span>
           </div>
           <div class="list-item-field">
             <!-- Service-ShortDescription -->
-            <strong>{getFieldConfig(60)?.label}</strong>
+            <strong>{t('60_ServiceShortDescription.label')}</strong>
             <span class="list-item-value">{service.shortDescription}</span>
           </div>
           <div class="list-item-field">
             <!-- Service-Workspace -->
-            <strong>{getFieldConfig(45)?.label}</strong>
+            <strong>{t('displayfieldsnippets.serviceIdentifier')}</strong>
             <span class="list-item-value">{service.workspace}</span>
           </div>
           <div class="list-item-field">
             <!-- Service-Identifier -->
-            <strong>Service Identifier</strong>
+            <strong>{t('displayfieldsnippets.serviceIdentifier')}</strong>
             <span class="list-item-value">{service.serviceIdentification}</span>
           </div>
           <div class="list-item-field">
             <!-- File-Identifier -->
-            <strong>File Identifier</strong>
+            <strong>{t('displayfieldsnippets.fileIdentifier')}</strong>
             <span class="list-item-value">{service.fileIdentifier}</span>
           </div>
           <div class="list-item-field">
             <!-- Service-Preview -->
-            <strong>{getFieldConfig(46)?.label}</strong>
+            <strong>{t('46_ServicePreview.label')}</strong>
             <span class="list-item-value">
               {#await replaceVariable(service.preview)}
                 Lädt ...
@@ -527,15 +530,34 @@
           </div>
           {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
             <div class="list-item-field">
-              <!-- Service-LegendImage -->
-              <strong>{getFieldConfig(53)?.label}</strong>
+              <!-- Service-LegendImage-Url -->
+              <strong>{t('47_ServiceLegendImage.label_url')}</strong>
+              <span class="list-item-value">{service.workspace}</span>
+            </div>
+          {/if}
+          {#if service.serviceType !== 'ATOM'}
+            <div class="list-item-field">
+              <strong>{t('46_ServicePreview.label')}</strong>
+              <span class="list-item-value">
+                {#await replaceVariable(service.preview)}
+                  {t('general.loading')}
+                {:then url}
+                  {url || DEFAULT_NULL_STRING}
+                {:catch}
+                  {service.preview || DEFAULT_NULL_STRING}
+                {/await}
+              </span>
+            </div>
+          {/if}
+          {#if service.serviceType !== 'ATOM'}
+            <div class="list-item-field">
+              <strong>{t('47_ServiceLegendImage.label')}</strong>
               <div class="list">
                 <div class="list-item-field">
-                  <!-- Service-LegendImage-Url -->
-                  <strong>{getFieldConfig(75)?.label}</strong>
+                  <strong>{t('47_ServiceLegendImage.label_url')}</strong>
                   <span class="list-item-value">
                     {#await replaceVariable(service.legendImage?.url)}
-                      Lädt ...
+                      {t('general.loading')}
                     {:then url}
                       {url || DEFAULT_NULL_STRING}
                     {:catch}
@@ -545,7 +567,7 @@
                 </div>
                 <div class="list-item-field">
                   <!-- Service-LegendImage-Format -->
-                  <strong>{getFieldConfig(76)?.label}</strong>
+                  <strong>{t('47_ServiceLegendImage.label_format')}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.format}
                       {service.legendImage.format}
@@ -556,7 +578,7 @@
                 </div>
                 <div class="list-item-field">
                   <!-- Service-LegendImage-Width -->
-                  <strong>{getFieldConfig(77)?.label}</strong>
+                  <strong>{t('47_ServiceLegendImage.label_width')}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.width}
                       {service.legendImage.width}
@@ -567,7 +589,7 @@
                 </div>
                 <div class="list-item-field">
                   <!-- Service-LegendImage-Height -->
-                  <strong>{getFieldConfig(78)?.label}</strong>
+                  <strong>{t('47_ServiceLegendImage.label_height')}</strong>
                   <span class="list-item-value">
                     {#if service.legendImage?.height}
                       {service.legendImage.height}
@@ -581,44 +603,44 @@
           {/if}
           {#if service.serviceType === 'WFS' && service.featureTypes?.length}
             <div class="list-item-field">
-              <strong>{getFieldConfig(56)?.label} ({service.featureTypes?.length})</strong>
+              <strong>{t('56_FeatureTypeForm.label')} ({service.featureTypes?.length})</strong>
               <div class="list">
                 {#each service?.featureTypes || [] as featureType}
                   <div class="list-item">
                     <div class="list-item-field">
                       <!-- FeatureType-Name -->
-                      <strong>{getFieldConfig(62)?.label}</strong>
+                      <strong>{t('62_FeatureTypeName.label')}</strong>
                       <span class="list-item-value">{featureType.name}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- FeatureType-Title -->
-                      <strong>{getFieldConfig(61)?.label}</strong>
+                      <strong>{t('61_FeatureTypeTitle.label')}</strong>
                       <span class="list-item-value">{featureType.title}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- FeatureType-ShortDescription -->
-                      <strong>{getFieldConfig(69)?.label}</strong>
+                      <strong>{t('69_FeatureTypeDescription.label')}</strong>
                       <span class="list-item-value">{featureType.shortDescription}</span>
                     </div>
                     {#if featureType?.columns}
                       <div class="list-item-field">
-                        <strong>{getFieldConfig(63)?.label}</strong>
+                        <strong>{t('63_ColumnsForm.label')}</strong>
                         <div class="list">
                           {#each featureType?.columns || [] as columnInfo}
                             <div class="list-item">
                               <div class="list-item-field">
                                 <!-- Attribute-Name -->
-                                <strong>{getFieldConfig(64)?.label}</strong>
+                                <strong>{t('64_AttributeName.label')}</strong>
                                 <span class="list-item-value">{columnInfo.name}</span>
                               </div>
                               <div class="list-item-field">
                                 <!-- Attribute-Alias -->
-                                <strong>{getFieldConfig(65)?.label}</strong>
+                                <strong>{t('65_AttributeAlias.label')}</strong>
                                 <span class="list-item-value">{columnInfo.alias}</span>
                               </div>
                               <div class="list-item-field">
                                 <!-- Attribute-DataType -->
-                                <strong>{getFieldConfig(66)?.label}</strong>
+                                <strong>{t('66_AttributeDatatype.label')}</strong>
                                 <span class="list-item-value">{columnInfo.type}</span>
                               </div>
                             </div>
@@ -634,36 +656,36 @@
 
           {#if (service.serviceType === 'WMS' || service.serviceType === 'WMTS') && layers?.length}
             <div class="list-item-field">
-              <strong>Kartenebenen ({layers?.length})</strong>
+              <strong>{t('48_LayersForm.label')} ({layers?.length})</strong>
               <div class="list">
                 {#each layers || [] as layer}
                   <div class="list-item">
                     <div class="list-item-field">
                       <!-- Layer-Title -->
-                      <strong>{getFieldConfig(49)?.label}</strong>
+                      <strong>{t('49_LayerTitle.label')}</strong>
                       <span class="list-item-value">{layer.title}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-Name -->
-                      <strong>{getFieldConfig(50)?.label}</strong>
+                      <strong>{t('50_LayerName.label')}</strong>
                       <span class="list-item-value">{layer.name}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-StyleTitle -->
-                      <strong>{getFieldConfig(52)?.label}</strong>
+                      <strong>{t('52_LayerStyleTitle.label')}</strong>
                       <span class="list-item-value">{layer.styleTitle}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-StyleName -->
-                      <strong>{getFieldConfig(51)?.label}</strong>
+                      <strong>{t('51_LayerStyleName.label')}</strong>
                       <span class="list-item-value">{layer.styleName}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-LegendImage -->
-                      <strong>{getFieldConfig(53)?.label}</strong>
+                      <strong>{t('53_LayerLegendImage.label')}</strong>
                       <span class="list-item-value">
                         {#await replaceVariable(layer.legendImage)}
-                          Lädt ...
+                          {t('general.loading')}
                         {:then url}
                           {url || DEFAULT_NULL_STRING}
                         {:catch}
@@ -673,17 +695,17 @@
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-ShortDescription -->
-                      <strong>{getFieldConfig(54)?.label}</strong>
+                      <strong>{t('54_LayerDescription.label')}</strong>
                       <span class="list-item-value">{layer.shortDescription}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-DataSource -->
-                      <strong>{getFieldConfig(55)?.label}</strong>
+                      <strong>{t('55_LayerDatasource.label')}</strong>
                       <span class="list-item-value">{layer.datasource}</span>
                     </div>
                     <div class="list-item-field">
                       <!-- Layer-SecondaryDataSource -->
-                      <strong>{getFieldConfig(68)?.label}</strong>
+                      <strong>{t('68_LayerSecondaryDatasource.label')}</strong>
                       <span class="list-item-value">{layer.secondaryDatasource}</span>
                     </div>
                   </div>

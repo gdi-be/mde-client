@@ -20,6 +20,8 @@
   import { toast } from 'svelte-french-toast';
   import { invalidateAll } from '$app/navigation';
 
+  const t = $derived(page.data.t);
+
   export type ServiceFormProps = {
     service: Service;
     onChange: (service: Service) => Promise<Response>;
@@ -107,7 +109,7 @@
     );
 
     if (!response.ok) {
-      toast.error(`Fehler beim aktualisieren der Layer: ${response.statusText}`);
+      toast.error(t('serviceform.layer_update_error', { statusText: response.statusText }));
     }
     invalidateAll();
     return response;

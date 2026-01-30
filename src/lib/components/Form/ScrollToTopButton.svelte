@@ -1,11 +1,13 @@
 <script lang="ts">
   import Button, { Icon, Label } from '@smui/button';
   import { onDestroy, onMount } from 'svelte';
+  import { page } from '$app/state';
 
   type ScrollToTopButtonProps = {
     target?: HTMLElement;
   };
 
+  const t = $derived(page.data.t);
   const { target }: ScrollToTopButtonProps = $props();
 
   const scrollToTop = () => {
@@ -50,11 +52,11 @@
   <Button
     type="button"
     class="scroll-to-top-button"
-    title="Nach oben scrollen"
+    title={t('scrolltotopbutton.title')}
     onclick={scrollToTop}
   >
     <Icon class="material-icons">stat_1</Icon>
-    <Label>Nach oben</Label>
+    <Label>{t('scrolltotopbutton.label')}</Label>
     <Icon class="material-icons">stat_1</Icon>
   </Button>
 {/if}

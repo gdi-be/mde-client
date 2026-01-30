@@ -4,25 +4,28 @@
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { MetadataProfile } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.metadataProfile';
-  export const MetadataProfileOptions: {
+  const MetadataProfileOptions: {
     key: MetadataProfile;
     label: string;
-  }[] = [
+  }[] = $derived([
     {
       key: 'ISO',
-      label: 'ISO'
+      label: t('05_MetadataProfileField.iso')
     },
     {
       key: 'INSPIRE_HARMONISED',
-      label: 'INSPIRE harmonisiert'
+      label: t('05_MetadataProfileField.inspire_harmonised')
     },
     {
       key: 'INSPIRE_IDENTIFIED',
-      label: 'INSPIRE identifiziert'
+      label: t('05_MetadataProfileField.inspire_identified')
     }
-  ];
+  ]);
 
   const valueFromData = $derived(getValue<MetadataProfile>(KEY));
   let value = $state('');
@@ -43,7 +46,8 @@
 
 <div class="metadata-type-field">
   <SelectInput
-    label={fieldConfig?.label}
+    label={t('05_MetadataProfileField.label')}
+    explanation={t('05_MetadataProfileField.explanation')}
     options={MetadataProfileOptions}
     {fieldConfig}
     {value}

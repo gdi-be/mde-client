@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
+  import FieldHint from '../FieldHint.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
   import type { CRS, Extent } from '$lib/models/metadata';
   import Button, { Icon, Label } from '@smui/button';
@@ -10,6 +11,9 @@
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import type { CRSOption } from '$lib/models/api';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   type ExtentOption = {
     title: string;
@@ -57,7 +61,6 @@
     })
   );
 
-  const fieldConfig = getFieldConfig<Extent>(18);
   const minXFieldConfig = getFieldConfig<number>(71);
   const maxXFieldConfig = getFieldConfig<number>(72);
   const minYFieldConfig = getFieldConfig<number>(73);
@@ -87,7 +90,7 @@
     const crsResponse = await fetch('/data/crs');
 
     if (!crsResponse.ok) {
-      toast.error('Fehler beim Abrufen der CRS Optionen');
+      toast.error(t('general.error_fetch_options'));
     } else {
       crsOptions = await crsResponse.json();
       registerCRSCodes(crsOptions);
@@ -98,7 +101,7 @@
 
     const extentResponse = await fetch('/data/extents');
     if (!extentResponse.ok) {
-      toast.error('Fehler beim Abrufen der Extent Optionen');
+      toast.error(t('general.error_fetch_options'));
       return;
     }
 
@@ -109,7 +112,7 @@
 {#if highestRole !== 'MdeDataOwner'}
   <div class="extent-field">
     <fieldset>
-      <legend>{fieldConfig?.label}</legend>
+      <legend>{t('18_ExtentField.label')}</legend>
       <div class="tools">
         <SelectInput bind:value={crsKey} label={CRS_LABEL} options={crsOptions} />
         {#each extentOptions as option}
@@ -131,7 +134,7 @@
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.minx}
-            label={minXFieldConfig?.label}
+            label={t('18_ExtentField.label_min_x')}
             fieldConfig={minXFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
@@ -143,7 +146,7 @@
           />
           <NumberInput
             value={transformedValue.maxx}
-            label={maxXFieldConfig?.label}
+            label={t('18_ExtentField.label_max_x')}
             fieldConfig={maxXFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
@@ -157,7 +160,7 @@
         <div class="inline-fields">
           <NumberInput
             value={transformedValue.miny}
-            label={minYFieldConfig?.label}
+            label={t('18_ExtentField.label_min_y')}
             fieldConfig={minYFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
@@ -169,7 +172,7 @@
           />
           <NumberInput
             value={transformedValue.maxy}
-            label={maxYFieldConfig?.label}
+            label={t('18_ExtentField.label_max_y')}
             fieldConfig={maxYFieldConfig}
             onblur={sendValue}
             onchange={(evt) => {
@@ -181,6 +184,7 @@
           />
         </div>
       </div>
+      <FieldHint fieldConfig={minXFieldConfig} explanation={t('18_ExtentField.explanation')} />
     </fieldset>
     <FieldTools noCopyButton key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>

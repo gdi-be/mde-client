@@ -3,7 +3,9 @@
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
+  import { page } from '$app/state';
 
+  const t = $derived(page.data.t);
   const KEY = 'isoMetadata.published';
 
   const valueFromData = $derived(getValue<string>(KEY));
@@ -32,7 +34,8 @@
   <DateInput
     bind:value
     key={KEY}
-    label={fieldConfig?.label}
+    label={t('10_PublishedField.label')}
+    explanation={t('10_PublishedField.explanation')}
     {fieldConfig}
     onchange={onChange}
     {validationResult}

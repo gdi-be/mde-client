@@ -3,10 +3,12 @@
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import { invalidateAll } from '$app/navigation';
+  import { page } from '$app/state';
+  import FieldHint from '../FieldHint.svelte';
 
+  const t = $derived(page.data.t);
   const FROM_KEY = 'isoMetadata.validFrom';
   const TO_KEY = 'isoMetadata.validTo';
-  const LABEL = 'Gültigkeitszeitraum';
 
   const startValueFromData = $derived(getValue<string>(FROM_KEY));
   let startValue = $state('');
@@ -44,21 +46,24 @@
 
 <div class="validity-range-field">
   <fieldset>
-    <legend>{LABEL}</legend>
-    <DateInput
-      bind:value={startValue}
-      label={fromFieldConfig?.label}
-      onchange={() => onChange(FROM_KEY)}
-      fieldConfig={fromFieldConfig}
-      validationResult={fromValidationResult}
-    />
-    <DateInput
-      bind:value={endValue}
-      label={toFieldConfig?.label}
-      onchange={() => onChange(TO_KEY)}
-      fieldConfig={toFieldConfig}
-      validationResult={toValidationResult}
-    />
+    <legend>{t('12_ValidityRangeField.label')}</legend>
+    <FieldHint explanation={t('12_ValidityRangeField.explanation')} />
+    <div class="input-container">
+      <DateInput
+        bind:value={startValue}
+        label={t('12_ValidityRangeField.label_from')}
+        onchange={() => onChange(FROM_KEY)}
+        fieldConfig={fromFieldConfig}
+        validationResult={fromValidationResult}
+      />
+      <DateInput
+        bind:value={endValue}
+        label={t('12_ValidityRangeField.label_to')}
+        onchange={() => onChange(TO_KEY)}
+        fieldConfig={toFieldConfig}
+        validationResult={toValidationResult}
+      />
+    </div>
   </fieldset>
   <FieldTools
     fieldConfig={fromFieldConfig}
@@ -73,27 +78,38 @@
     display: flex;
     gap: 0.25em;
 
+    :global(.field-hint) {
+      margin: 0.5em 0;
+    }
+
     fieldset {
       flex: 1;
-      flex-wrap: wrap;
       border-radius: 0.25em;
       display: flex;
+      flex-direction: column;
 
       > legend {
         font-size: 1.5em;
       }
 
-      :global(.date-input) {
+      .input-container {
         flex: 1;
-        border: none;
-        background-color: rgba(244, 244, 244, 0.7);
-      }
-
-      :global(.date-input > legend) {
-        font-size: 1.2em;
-        background-color: white;
+        flex-wrap: wrap;
         border-radius: 0.25em;
-        padding: 0 0.25em;
+        display: flex;
+
+        :global(.date-input) {
+          flex: 1;
+          border: none;
+          background-color: rgba(244, 244, 244, 0.7);
+        }
+
+        :global(.date-input > legend) {
+          font-size: 1.2em;
+          background-color: white;
+          border-radius: 0.25em;
+          padding: 0 0.25em;
+        }
       }
     }
   }

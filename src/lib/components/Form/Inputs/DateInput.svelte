@@ -7,6 +7,7 @@
     value?: string;
     key?: string;
     label?: string;
+    explanation?: string;
     fieldConfig?: FullFieldConfig<string>;
     class?: string;
     validationResult?: ValidationResult;
@@ -17,6 +18,7 @@
     label,
     value = $bindable(''),
     class: wrapperClass,
+    explanation,
     fieldConfig,
     validationResult,
     ...restProps
@@ -33,7 +35,7 @@
     {...restProps}
   />
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} />
+    <FieldHint {validationResult} {fieldConfig} {explanation} />
   </div>
 </fieldset>
 

@@ -4,6 +4,8 @@
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { MaintenanceFrequency } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.maintenanceFrequency';
   const OPTIONS: {
@@ -44,7 +46,8 @@
 
 <div class="metadata-type-field">
   <SelectInput
-    label={fieldConfig?.label}
+    label={t('14_MaintenanceFrequencyField.label')}
+    explanation={t('14_MaintenanceFrequencyField.explanation')}
     {fieldConfig}
     options={OPTIONS}
     {value}

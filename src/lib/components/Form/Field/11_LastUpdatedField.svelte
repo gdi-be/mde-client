@@ -10,6 +10,8 @@
   import DateInput from '../Inputs/DateInput.svelte';
   import type { ValidationResult } from '$lib/components/Form/FieldsConfig';
   import { getContext } from 'svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.modified';
 
@@ -41,7 +43,8 @@
   <DateInput
     bind:value
     key={KEY}
-    label={fieldConfig?.label}
+    label={t('11_LastUpdatedField.label')}
+    explanation={t('11_LastUpdatedField.explanation')}
     onchange={onChange}
     {fieldConfig}
     {validationResult}

@@ -11,6 +11,7 @@
   import CharacterCounter from '@smui/textfield/character-counter';
   import toast from 'svelte-french-toast';
 
+  const t = $derived(page.data.t);
   let title = $state<string>('');
   let metadataProfile = $state<MetadataProfile>('ISO');
   let cloneMetadataId = $state<Option>();
@@ -52,25 +53,27 @@
 <div class="create-metadata">
   <Card>
     <Content>
-      <h1>Neuerfassung</h1>
-      <p>Hier erfassen Sie zu Ihrem Datensatz neue Metadaten. Tragen Sie einen Titel ein.</p>
+      <h1>{t('metadata_create.title')}</h1>
+      <p>{t('metadata_create.intro')}</p>
       <div class={[title.length > 100 ? 'long-text' : '']}>
-        <Textfield bind:value={title} label="Titel" required input$maxlength={250}>
+        <Textfield
+          bind:value={title}
+          label={t('metadata_create.fieldTitle')}
+          required
+          input$maxlength={250}
+        >
           {#snippet helper()}
-            <CharacterCounter>0 / 250</CharacterCounter>
+            <CharacterCounter>{title.length} / 250</CharacterCounter>
           {/snippet}
         </Textfield>
       </div>
-      <p>
-        Zusätzlich können Sie einen existierenden Metadatensatz auswählen, den Sie als Vorlage
-        nutzen möchten, bspw. wenn es ein neuer Jahresstand ist.
-      </p>
+      <p>{t('metadata_create.templateHint')}</p>
       <MetadataSearchField
         bind:value={cloneMetadataId}
-        label="Bestehende Metadaten als Vorlage verwenden"
+        label={t('metadata_create.templateLabel')}
       />
       <Button variant="raised" onclick={onCreateClick} disabled={!allFieldsValid} type="button">
-        Metadaten anlegen
+        {t('metadata_create.createButton')}
       </Button>
     </Content>
   </Card>

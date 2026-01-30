@@ -8,6 +8,7 @@
     onChange?: (value: string) => void;
     value?: string;
     class?: string;
+    explanation?: string;
     label?: string;
     fieldConfig?: FullFieldConfig<string>;
     options: Option[];
@@ -20,6 +21,7 @@
     value = $bindable<string | undefined>(undefined),
     label,
     class: wrapperClass,
+    explanation,
     fieldConfig,
     options,
     disabled = false,
@@ -59,7 +61,7 @@
   </Select>
   <div class="selected-description">{selectedDescription}</div>
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} />
+    <FieldHint {validationResult} {fieldConfig} {explanation} />
   </div>
 </fieldset>
 

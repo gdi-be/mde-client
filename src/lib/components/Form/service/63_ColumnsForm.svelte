@@ -9,6 +9,8 @@
   import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   type Tab = {
     name: string;
@@ -99,8 +101,8 @@
 
 <div class="columns-form">
   <fieldset>
-    <legend>{fieldConfig?.label}</legend>
-    <FieldHint {fieldConfig} {validationResult} />
+    <legend>{t('63_ColumnsForm.label')}</legend>
+    <FieldHint {fieldConfig} {validationResult} explanation={t('63_ColumnsForm.explanation')} />
     <nav>
       {#each tabs as tab, i}
         <div class="tab-container" class:active={activeTabIndex === i}>

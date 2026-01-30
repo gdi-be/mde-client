@@ -1,8 +1,11 @@
 <script lang="ts">
   /* eslint-disable svelte/no-at-html-tags */
+
   import { getFormContext } from '$lib/context/FormContext.svelte';
   import { toast } from 'svelte-french-toast';
+  import { page } from '$app/state';
 
+  const t = $derived(page.data.t);
   const activeHelpKey = $derived(getFormContext().activeHelpKey);
 
   const getHelpMarkdown = async (key: string) => {
@@ -18,11 +21,11 @@
 <div class="help-section">
   {#if activeHelpKey}
     {#await getHelpMarkdown(activeHelpKey)}
-      <p>Loading...</p>
+      <p>{t('general.loading')}</p>
     {:then parsed}
       {@html parsed}
     {:catch}
-      <h2>Für dieses Eingabefeld ist keine Hilfe verfügbar.</h2>
+      <h2>{t('helppanel.noHelp')}</h2>
     {/await}
   {/if}
 </div>

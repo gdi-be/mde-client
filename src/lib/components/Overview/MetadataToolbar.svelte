@@ -3,9 +3,11 @@
   import StatusFilterField from './StatusFilterField.svelte';
   import TextFilterField from './TextFilterField.svelte';
   import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import { getHighestRole } from '$lib/util';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
+  const t = $derived(page.data.t);
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 </script>
@@ -13,7 +15,7 @@
 <div class="toolbar-inner">
   {#if highestRole !== 'MdeQualityAssurance'}
     <Button variant="raised" onclick={() => goto('/metadata/create')} type="button">
-      <Label>Neuerfassung</Label>
+      <Label>{t('metadatatoolbar.newEntry')}</Label>
     </Button>
   {/if}
   <div class="search-container">

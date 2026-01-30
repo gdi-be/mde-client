@@ -8,6 +8,7 @@
     key?: string;
     label?: string;
     class?: string;
+    explanation?: string;
     fieldConfig?: FullFieldConfig<number>;
     onfocus?: (evt: FocusEvent) => void;
     onblur?: (evt: FocusEvent) => void;
@@ -19,6 +20,7 @@
     key,
     label,
     class: wrapperClass,
+    explanation,
     validationResult,
     onblur,
     fieldConfig,
@@ -46,7 +48,7 @@
     {...restProps}
   />
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} {showHint} />
+    <FieldHint {validationResult} {fieldConfig} {showHint} {explanation} />
   </div>
 </fieldset>
 

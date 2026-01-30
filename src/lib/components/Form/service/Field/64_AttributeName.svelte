@@ -3,6 +3,8 @@
   import type { ColumnInfo } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: ColumnInfo['name'];
@@ -19,7 +21,8 @@
 
 <div class="attribute-name-field">
   <TextInput
-    label={fieldConfig?.label || 'Attribut-Name'}
+    label={t('64_AttributeName.label')}
+    explanation={t('64_AttributeName.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

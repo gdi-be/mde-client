@@ -5,6 +5,8 @@
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: FeatureType['name'];
@@ -26,7 +28,7 @@
 {#if fieldVisible}
   <div class="featuretype-name-field">
     <TextInput
-      label={fieldConfig?.label || 'Titel des Objekttyps'}
+      label={t('62_FeatureTypeName.label')}
       {value}
       maxlength={100}
       {fieldConfig}

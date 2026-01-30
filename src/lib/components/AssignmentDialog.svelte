@@ -10,7 +10,11 @@
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import { toast } from 'svelte-french-toast';
   import { getContext } from 'svelte';
+
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   let { open = $bindable(false) } = $props();
 
@@ -65,9 +69,7 @@
     });
 
     if (!response.ok) {
-      toast.error(
-        `Fehler beim Zuweisen der Metadaten an die Rolle "${role}". Bitte versuchen Sie es später erneut.`
-      );
+      toast.error(t('assignment.assignRoleError', { role }));
       return Promise.reject('Failed to assign metadata to role');
     }
 
@@ -90,9 +92,7 @@
     });
 
     if (!response.ok) {
-      toast.error(
-        `Fehler beim Zuweisen der Metadaten an den User "${keycloakId}". Bitte versuchen Sie es später erneut.`
-      );
+      toast.error(t('assignment.assignUserError', { user: keycloakId }));
       return Promise.reject('Failed to assign metadata to user');
     }
 
@@ -115,9 +115,7 @@
     });
 
     if (!response.ok) {
-      toast.error(
-        'Fehler beim Entfernen der Zuweisung des Metadatensatzes. Bitte versuchen Sie es später erneut.'
-      );
+      toast.error(t('assignment.unassignError'));
     }
 
     goto('/metadata', {
@@ -132,7 +130,7 @@
     const response = await fetch(`/metadata/${metadata.metadataId}/team`);
 
     if (!response.ok) {
-      toast.error('Fehler beim Laden des Teams. Bitte versuchen Sie es später erneut.');
+      toast.error(t('assignment.teamLoadError'));
       return Promise.reject('Failed to fetch team members');
     }
 
@@ -165,9 +163,7 @@
     });
 
     if (!response.ok) {
-      toast.error(
-        `Fehler beim ${approved ? 'Freigeben' : 'Zurückziehen der Freigabe'} der Metadaten. Bitte versuchen Sie es später erneut.`
-      );
+      toast.error(t('assignment.approvalError', { action: approved ? 'approve' : 'revoke' }));
       return Promise.reject(`Failed to ${approved ? 'approve' : 'revoke approval'} metadata`);
     }
   };
@@ -175,14 +171,11 @@
 
 {#snippet approve()}
   <fieldset class="approve">
-    <legend>Prüfung</legend>
-    <p>
-      Wählen sie den Überprüfungsstatus der Metadaten aus. Wenn sie den Status ändern denken sie
-      daran einen Kommentar zu hinterlassen.
-    </p>
+    <legend>{t('assignment.review')}</legend>
+    <p>{t('assignment.reviewStatusHint')}</p>
     <FormField align="end">
       {#snippet label()}
-        <Label>Metadaten Prüfung erfolgreich?</Label>
+        <Label>{t('assignment.reviewStatus')}</Label>
       {/snippet}
       <Switch
         checked={metadata?.approved}
@@ -197,17 +190,17 @@
 
 {#snippet assignToEditor(users: UserData[] = [])}
   <div class="assign-section assign-editor">
-    <h4>Redaktion</h4>
+    <h4>{t('assignment.assignEditor')}</h4>
     <div class="actions">
       {#if users?.length > 0 && highestRole !== 'MdeDataOwner'}
         {#each users as user}
           <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
-            <Label>An "{user.displayName}" übergeben</Label>
+            <Label>{t('assignment.handoverTo', { name: user.displayName })}</Label>
           </Button>
         {/each}
       {/if}
       <Button variant="outlined" onclick={() => assignToRole('MdeEditor')} type="button">
-        <Label>An Redaktion übergeben</Label>
+        <Label>{t('assignment.handoverToRole', { role: t('assignment.assignEditor') })}</Label>
       </Button>
     </div>
   </div>
@@ -215,16 +208,16 @@
 
 {#snippet assignToDataOwner(users: UserData[] = [])}
   <div class="assign-section assign-data-owner">
-    <h4>Datenhaltende Stelle</h4>
+    <h4>{t('assignment.assignDataOwner')}</h4>
     <div class="actions">
       {#if users.length === 1}
         {@const user = users[0]}
         <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
-          <Label>An "{user.displayName}" übergeben</Label>
+          <Label>{t('assignment.handoverTo', { name: user.displayName })}</Label>
         </Button>
       {:else}
         <span class="failure">
-          Der User der datenhaltende Stelle konnte nicht ermittelt werden.
+          {t('assignment.dataOwnerUserNotFound')}
         </span>
       {/if}
     </div>
@@ -233,17 +226,17 @@
 
 {#snippet assignToQualityAssurance(users: UserData[] = [])}
   <div class="assign-section assign-quality-assurance">
-    <h4>Qualitätssicherung</h4>
+    <h4>{t('assignment.assignQuality')}</h4>
     <div class="actions">
       {#if users?.length > 0}
         {#each users as user}
           <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
-            <Label>An "{user.displayName}" übergeben</Label>
+            <Label>{t('assignment.handoverTo', { name: user.displayName })}</Label>
           </Button>
         {/each}
       {/if}
       <Button variant="outlined" onclick={() => assignToRole('MdeQualityAssurance')} type="button">
-        <Label>An Qualitätssicherung übergeben</Label>
+        <Label>{t('assignment.handoverToRole', { role: t('assignment.assignQuality') })}</Label>
       </Button>
     </div>
   </div>
@@ -252,10 +245,10 @@
 {#snippet assignToMe(userId?: string)}
   {#if userId}
     <div class="assign-section assign-self">
-      <h4>Selbst zuweisen</h4>
+      <h4>{t('assignment.assignSelf')}</h4>
       <div class="actions">
         <Button variant="raised" onclick={() => assignToUser(userId)} type="button">
-          <Label>Mir zuweisen</Label>
+          <Label>{t('assignment.assignToMe')}</Label>
         </Button>
       </div>
     </div>
@@ -264,10 +257,10 @@
 
 {#snippet unassign()}
   <div class="assign-section unassign">
-    <h4>Mir zugewiesen</h4>
+    <h4>{t('assignment.assignedToMe')}</h4>
     <div class="actions">
       <Button variant="raised" onclick={() => unassignUser()} type="button">
-        <Label>Zuordnung entfernen</Label>
+        <Label>{t('assignment.unassign')}</Label>
       </Button>
     </div>
   </div>
@@ -275,19 +268,19 @@
 
 <Dialog bind:open aria-labelledby="Zuweisung" aria-describedby="Zuweisung">
   <Header>
-    <Title>Zuweisung</Title>
+    <Title>{t('assignment.assignDialog')}</Title>
   </Header>
   <Content>
     <div class="assignment-panel">
       {#if !canAssignToEditor && !canAssignToDataOwner && !canAssignToQualityAssurance && !canAssignToMe}
-        <p>Sie haben keine Berechtigung um die Metadaten zuzuweisen.</p>
+        <p>{t('assignment.noPermission')}</p>
       {:else}
         {#if canApproveMetadata}
           {@render approve()}
         {/if}
-        <p>Wählen Sie eine Rolle oder einen User an die Sie die Metadaten übergeben wollen.</p>
+        <p>{t('assignment.chooseRoleOrUser')}</p>
         {#await fetchTeamAndGroupByRole()}
-          <p>Lade Team</p>
+          <p>{t('assignment.loadingTeam')}</p>
         {:then groups}
           {#if canAssignToMe}
             {@render assignToMe(userId)}
