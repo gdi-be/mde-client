@@ -1,6 +1,6 @@
 import { type Cookies } from '@sveltejs/kit';
 import { updateTokens } from './keycloak';
-import log from 'loggisch';
+import { logger } from 'loggisch';
 
 export const setAccessToken = (cookies: Cookies, accessToken: string): void => {
   const parsedToken = parseToken(accessToken);
@@ -46,15 +46,15 @@ export const getAccessToken = async (cookies: Cookies): Promise<string | undefin
     if (accessToken) {
       return accessToken;
     } else {
-      log.warning('Failed to refresh access token');
+      logger.warning('Failed to refresh access token');
       return undefined;
     }
   }
 
-  log.info('Access token missing, trying to refresh');
+  logger.info('Access token missing, trying to refresh');
   const { accessToken } = await updateTokens(cookies);
   if (!accessToken) {
-    log.warning('Failed to refresh access token');
+    logger.warning('Failed to refresh access token');
     return Promise.reject('Failed to refresh access token');
   }
 

@@ -2,7 +2,7 @@
 
 import proj4 from 'proj4';
 import type { CRS, Extent, MetadataCollection } from '$lib/models/metadata';
-import { log } from 'loggisch';
+import { logger } from 'loggisch';
 import type { Role, Token } from '$lib/models/keycloak';
 import type { CRSOption } from './models/api';
 
@@ -38,7 +38,7 @@ export function setNestedValue(obj: any, path: string | string[], value: any) {
 
     return current;
   } catch {
-    log('error', 'setNestedValue: Error setting value');
+    logger.error('setNestedValue: Error setting value');
     return obj;
   }
 }
@@ -74,7 +74,7 @@ export function registerCRSCodes(crsOptions: CRSOption[]) {
 
 export function transformExtent(extent: Extent, fromEPSG: CRS, toEPSG: CRS = 'EPSG:4326') {
   if (!fromEPSG || !toEPSG) {
-    log('warning', 'transformExtent: fromEPSG or toEPSG is not defined');
+    logger.warning('transformExtent: fromEPSG or toEPSG is not defined');
     return extent;
   }
 
@@ -200,7 +200,7 @@ export const canAssignSelf = (token?: Token, metadata?: MetadataCollection): boo
   }
 
   // Fallback, we should never reach this point
-  log('warning', `Unexpected role: ${highestRole}. Cannot determine assign action.`);
+  logger.warning(`Unexpected role: ${highestRole}. Cannot determine assign action.`);
   return false;
 };
 

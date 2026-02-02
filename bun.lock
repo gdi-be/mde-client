@@ -26,7 +26,7 @@
         "cookie": "^1.0.1",
         "eventsource": "^3.0.6",
         "jsonwebtoken": "^9.0.2",
-        "loggisch": "^0.1.0",
+        "loggisch": "^1.0.0",
         "marked": "^15.0.2",
         "proj4": "^2.15.0",
         "smui-theme": "^8.0.3",
@@ -586,7 +586,7 @@
 
     "lodash.once": ["lodash.once@4.1.1", "", {}, "sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg=="],
 
-    "loggisch": ["loggisch@0.1.0", "", {}, "sha512-zazVaWfszxe9+ZeEqccPG27BhpQFpNQKiEEAqAggthn8hw61vAjz861HD8UFKTK5OTSUNj3PqAeorP2xUsWG2w=="],
+    "loggisch": ["loggisch@1.0.0", "", {}, "sha512-mwAI3ph5+ot6XYU/zFfgeRO41rZHZhdj+vhbEdexnVHAdJUZ1X41zIuegh76yBZ6TzwoxsCc5ORw+FJ9uEZ9bw=="],
 
     "magic-string": ["magic-string@0.30.17", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0" } }, "sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA=="],
 

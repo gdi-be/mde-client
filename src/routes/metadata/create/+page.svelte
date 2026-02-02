@@ -4,7 +4,7 @@
   import { type MetadataProfile } from '$lib/models/metadata';
   import Button from '@smui/button';
   import Textfield from '@smui/textfield';
-  import log from 'loggisch';
+  import { logger } from 'loggisch';
   import type { Option } from '$lib/models/form';
   import Card, { Content } from '@smui/card';
   import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
@@ -39,13 +39,13 @@
       if (metadataId) {
         goto(`/metadata/${metadataId}`);
       } else {
-        log.error('No metadataId in response');
+        logger.error('No metadataId in response');
       }
     } else if (response.status === 409) {
       toast.error('Ein Datensatz mit diesem Titel existiert bereits.');
     } else {
       toast.error('Fehler beim Anlegen der Metadaten.');
-      log.error('Error creating metadata', await response.text());
+      logger.error('Error creating metadata', await response.text());
     }
   };
 </script>
