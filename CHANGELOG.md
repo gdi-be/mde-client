@@ -1,3 +1,42 @@
+# [5.0.0](https://github.com/gdi-be/mde-client/compare/v4.4.10...v5.0.0) (2026-02-02)
+
+
+### Bug Fixes
+
+* add explanation to CommentsPanel ([9cb026b](https://github.com/gdi-be/mde-client/commit/9cb026b252f764f137306d59513bb83fd2fde324))
+* add i18n explanations ([f6c41d3](https://github.com/gdi-be/mde-client/commit/f6c41d313901f8513890cfceaa062d513670b66a))
+* add missing explanations ([ce67f71](https://github.com/gdi-be/mde-client/commit/ce67f715f90e77b3bf4ca924864a958ec7c6366e))
+* hide SpatialRepresentationField for DHS ([0a708ba](https://github.com/gdi-be/mde-client/commit/0a708bacecc4f0a79046241bf82ac2df876ce3e2))
+* seperate form and help scrolling ([4be1dec](https://github.com/gdi-be/mde-client/commit/4be1dec96d01c7c4cb33f00f2119e138b6ecb966))
+* update key of privacy regarding to backend changes ([f828ada](https://github.com/gdi-be/mde-client/commit/f828ada5c1c8337faed3f34d1192f60d1922c112))
+* update layout of help section ([a34a504](https://github.com/gdi-be/mde-client/commit/a34a504526435fa580b95c1c7df5be4b522c64b0))
+* update path to terms_of_use_on_privacy.yaml ([f8e5651](https://github.com/gdi-be/mde-client/commit/f8e5651a8a93a6b8d5ba307b3d59c2c94ab9d1c4))
+* update target of scroll-to-top button ([19561fd](https://github.com/gdi-be/mde-client/commit/19561fdfef0f9e659f3ed70f1e19e12fa081a4e3))
+* update translation keys ([21927ed](https://github.com/gdi-be/mde-client/commit/21927ed6631a9a84c5a3369e7a0a920453b5f574))
+
+
+### Features
+
+* add FieldTools component to LayersForm, FeatureTypeForm, and ColumnsForm ([21e1bbf](https://github.com/gdi-be/mde-client/commit/21e1bbfc07eb23dbae6485056401b36a99086fbc))
+* add i18n for components/* ([d81a16e](https://github.com/gdi-be/mde-client/commit/d81a16e491afa7778dffd83768d3d6de50e89574))
+* add i18n for components/Form/*.svelte ([6a06269](https://github.com/gdi-be/mde-client/commit/6a062697178e655b46a0d4dddddeba8c6a17bf48))
+* add i18n for components/Form/Field/*.svelte ([27e0135](https://github.com/gdi-be/mde-client/commit/27e01358318b9ade562081a0d52c9f9d1be7c5ec))
+* add i18n for components/Form/Inputs/*.svelte ([56be9c7](https://github.com/gdi-be/mde-client/commit/56be9c77e19f0e9d9b4dac52fa4d9f18243219db))
+* add i18n for components/Form/service/*.svelte ([b09d5fd](https://github.com/gdi-be/mde-client/commit/b09d5fd5af8ee383835b9dd4a6a73c6458c591c1))
+* add i18n for components/Form/service/Field/*.svelte ([2bdb2e9](https://github.com/gdi-be/mde-client/commit/2bdb2e93ad1d3191bc0f09fbedde976ce1f88cb7))
+* add i18n for components/Overview/* ([e2ef56c](https://github.com/gdi-be/mde-client/commit/e2ef56cf3b8fe5176020b71bf871347d3ca17def))
+* add i18n for components/ReadOnly/* ([49bf76e](https://github.com/gdi-be/mde-client/commit/49bf76e03592666e2b61929ae80c1eca476e436d))
+* add i18n for routes ([09fb7c3](https://github.com/gdi-be/mde-client/commit/09fb7c36f0f886549ffa9a886e14ab66684c2a87))
+* add secondary terms of use list ([a5daa5a](https://github.com/gdi-be/mde-client/commit/a5daa5afbe0152b1a8b9522d899551e69f443250))
+* add translation for fields ([9d47928](https://github.com/gdi-be/mde-client/commit/9d479288d12b9d46100282d4bdd7c2aa789702ec))
+* prepare i18n setup ([e1620bc](https://github.com/gdi-be/mde-client/commit/e1620bc0fcc4fc3a5be621fd18428bcffb63a6fd))
+* remove automated calculation of LastUpdatedField ([2dc9297](https://github.com/gdi-be/mde-client/commit/2dc9297498405be5fd1663d5424ecd59e4c6b4a5))
+
+
+### BREAKING CHANGES
+
+* use of field_labels.yaml was removed, translations have been merged into de.yaml
+
 ## [4.4.10](https://github.com/gdi-be/mde-client/compare/v4.4.9...v4.4.10) (2026-01-26)
 
 
