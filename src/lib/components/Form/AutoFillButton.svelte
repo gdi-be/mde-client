@@ -1,11 +1,14 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
   import { Icon } from '@smui/button';
+  import { page } from '$app/state';
 
-  let { onclick, title = 'Feld automatisch ausfüllen/ergänzen' } = $props();
+  const t = $derived(page.data.t);
+  const defaultTitle = $derived(t('autofillbutton.title'));
+  let { onclick, title } = $props();
 </script>
 
-<IconButton {title} type="button" size="button" {onclick}>
+<IconButton title={title || defaultTitle} type="button" size="button" {onclick}>
   <Icon class="material-icons">brightness_auto</Icon>
 </IconButton>
 

@@ -1,8 +1,11 @@
 <script lang="ts">
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 </script>
 
 <div>
-  <p>Seite nicht gefunden</p>
+  <p>{t('error.notFound')}</p>
 </div>
 
 <style lang="scss">

@@ -13,6 +13,8 @@
   import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   type Tab = {
     name: string;
@@ -109,7 +111,7 @@
 
 <div class="layers-form">
   <fieldset>
-    <legend>{fieldConfig?.label || 'Layers'} </legend>
+    <legend>{t('48_LayersForm.label')} </legend>
     <FieldHint {fieldConfig} {validationResult} />
     <nav>
       {#each tabs as tab, i}

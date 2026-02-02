@@ -3,6 +3,8 @@
   import type { Layer } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: Layer['legendImage'];
@@ -20,7 +22,8 @@
 
 <div class="layer-legend-image-field">
   <TextInput
-    label={fieldConfig?.label || 'Legende'}
+    label={t('53_LayerLegendImage.label')}
+    explanation={t('53_LayerLegendImage.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

@@ -10,7 +10,7 @@
 
   let { data } = $props();
 
-  initializeFormContext(data.metadata, data.fieldLabels);
+  initializeFormContext(data.metadata);
 
   const metadata = $derived(data.metadata);
 

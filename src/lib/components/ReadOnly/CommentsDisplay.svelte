@@ -1,7 +1,9 @@
 <script lang="ts">
   import { getValue } from '$lib/context/FormContext.svelte';
+  import { page } from '$app/state';
   import type { Comment } from '$lib/models/metadata';
 
+  const t = $derived(page.data.t);
   const comments = $derived(getValue<Comment[]>('clientMetadata.comments'));
 </script>
 
@@ -18,7 +20,7 @@
       {/each}
     </ul>
   {:else}
-    <span class="comments">Keine Kommentare</span>
+    <span class="comments">{t('commentsdisplay.noComments')}</span>
   {/if}
 </div>
 

@@ -12,6 +12,9 @@
   import Switch from '@smui/switch';
   import { getHighestRole } from '$lib/util';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
@@ -48,9 +51,9 @@
 {#if fieldVisible}
   <div class="quality-report-check-field">
     <fieldset>
-      <legend>{fieldConfig?.label}</legend>
+      <legend>{t('37_QualityReportCheckField.label')}</legend>
       <FormField align="end">
-        {#snippet label()}Überprüft{/snippet}
+        {#snippet label()}{t('general.checked')}{/snippet}
         <Switch bind:checked={value} onSMUISwitchChange={onCheckChange} />
       </FormField>
     </fieldset>

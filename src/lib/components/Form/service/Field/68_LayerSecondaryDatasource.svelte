@@ -5,6 +5,8 @@
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: Layer['secondaryDatasource'];
@@ -27,7 +29,7 @@
 {#if fieldVisible}
   <div class="layer-short-description-field">
     <TextInput
-      label={fieldConfig?.label || 'sekundäre Datenhaltung'}
+      label={t('68_LayerSecondaryDatasource.label')}
       {value}
       {fieldConfig}
       {validationResult}

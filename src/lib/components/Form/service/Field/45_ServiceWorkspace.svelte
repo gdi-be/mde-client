@@ -5,6 +5,8 @@
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: Service['workspace'];
@@ -38,7 +40,7 @@
 {#if fieldVisible}
   <div class="service-id-field">
     <TextInput
-      label={fieldConfig?.label}
+      label={t('45_ServiceWorkspace.label')}
       {value}
       {fieldConfig}
       {validationResult}

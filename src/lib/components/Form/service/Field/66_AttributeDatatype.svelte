@@ -6,6 +6,8 @@
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ServiceTypeProps = {
     value?: ColumnInfo['type'];
@@ -41,7 +43,7 @@
 {#if fieldVisible}
   <div class="attribute-type-field">
     <SelectInput
-      label={fieldConfig?.label || 'Attribut-Datentyp'}
+      label={t('66_AttributeDatatype.label')}
       {fieldConfig}
       {validationResult}
       {value}

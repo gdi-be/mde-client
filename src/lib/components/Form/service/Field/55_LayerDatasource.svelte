@@ -3,6 +3,8 @@
   import type { Layer } from '$lib/models/metadata';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { page } from '$app/state';
+  const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: Layer['datasource'];
@@ -20,7 +22,8 @@
 
 <div class="layer-short-description-field">
   <TextInput
-    label={fieldConfig?.label || 'Ablageort der Daten'}
+    label={t('55_LayerDatasource.label')}
+    explanation={t('55_LayerDatasource.explanation')}
     {value}
     {fieldConfig}
     {validationResult}

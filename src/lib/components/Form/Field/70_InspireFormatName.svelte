@@ -16,9 +16,12 @@
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
+  import { page } from '$app/state';
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
+
+  const t = $derived(page.data.t);
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const KEY = 'isoMetadata.inspireFormatName';
@@ -61,7 +64,7 @@
     const response = await fetch('/data/inspire_themes');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Inspire Format Namen');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
@@ -75,7 +78,7 @@
 {#if highestRole !== 'MdeDataOwner' && metadataProfile === 'INSPIRE_HARMONISED' && options.length > 0}
   <div class="inspire-format-name-field">
     <SelectInput
-      label={fieldConfig?.label}
+      label={t('70_InspireFormatName.label')}
       fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
       {options}
       {value}

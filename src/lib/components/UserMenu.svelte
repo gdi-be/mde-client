@@ -4,7 +4,9 @@
   import UserProfilePanel from './UserProfilePanel.svelte';
   import { fly } from 'svelte/transition';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
 
+  const t = $derived(page.data.t);
   const token = $derived(getAccessToken());
   let visible = $state(false);
 </script>
@@ -13,21 +15,21 @@
   {#if token}
     <Button class="user-menu-button" onclick={() => (visible = !visible)} type="button">
       <Icon class="material-icons">account_circle</Icon>
-      <Label>Mein Account</Label>
+      <Label>{t('usermenu.account')}</Label>
     </Button>
     {#if visible}
       <div in:fly={{ y: -10, duration: 150 }} out:fly={{ y: -10, duration: 150 }}>
         <Paper class="user-menu">
           <UserProfilePanel {token} />
           <Button variant="outlined" href="/logout" type="button">
-            <Label>Logout</Label>
+            <Label>{t('usermenu.logout')}</Label>
           </Button>
         </Paper>
       </div>
     {/if}
   {:else}
     <Button variant="outlined" href="/login" type="button">
-      <Label>Anmeldung</Label>
+      <Label>{t('usermenu.login')}</Label>
     </Button>
   {/if}
 </div>

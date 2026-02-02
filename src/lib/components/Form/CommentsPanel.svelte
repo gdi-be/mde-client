@@ -14,12 +14,14 @@
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import Dialog, { Actions, Content, Title } from '@smui/dialog';
   import Button, { Label } from '@smui/button';
+  import FieldHint from './FieldHint.svelte';
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
 
   const token = $derived(getAccessToken());
 
+  const t = $derived(page.data.t);
   let value = $state('');
   let comments = $derived<Comment[]>(metadata?.clientMetadata?.comments as Comment[]);
   let myUserId = $derived(token?.sub);
@@ -33,7 +35,7 @@
   const getHelpMarkdown = async () => {
     const response = await fetch(`/help/clientMetadata.comments`);
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Hilfe');
+      toast.error(t('commentspanel.fetchHelpError'));
       return Promise.reject('Failed to fetch help markdown');
     }
     return response.text();
@@ -53,7 +55,7 @@
     });
 
     if (!response.ok) {
-      toast.error('Fehler beim Senden des Kommentars');
+      toast.error(t('commentspanel.sendError'));
       return;
     }
 
@@ -81,15 +83,15 @@
         });
 
         if (!response.ok) {
-          toast.error('Fehler beim Löschen des Kommentars');
+          toast.error(t('commentspanel.deleteError'));
           return;
         }
 
         invalidateAll();
       },
       {
-        text: 'Möchten Sie diesen Kommentar wirklich löschen?',
-        confirmButtonText: 'Löschen'
+        text: t('commentspanel.deleteConfirm'),
+        confirmButtonText: t('commentspanel.delete')
       }
     );
   }
@@ -115,9 +117,9 @@
   <Paper elevation={6} class="comments-panel">
     <div class="comments-panel-content">
       <div class="comments-panel-header">
-        <h2>Kommentare</h2>
+        <h2>{t('commentspanel.header')}</h2>
         <IconButton
-          title="Hilfe zu Kommentaren anzeigen"
+          title={t('commentspanel.help')}
           type="button"
           toggle
           size="button"
@@ -128,6 +130,7 @@
           <Icon class="material-icons-filled" on>help</Icon>
         </IconButton>
       </div>
+      <FieldHint explanation={t('commentspanel.explanation')} />
       {#if comments?.length > 0}
         <ul class="comments">
           {#each comments as comment, index}
@@ -156,7 +159,7 @@
           {/each}
         </ul>
       {:else}
-        <p>Bisher keine Kommentare vorhanden.</p>
+        <p>{t('commentspanel.noComments')}</p>
       {/if}
       <form onsubmit={sendComment}>
         <div class="comment-input">
@@ -167,14 +170,14 @@
             input$rows={inputRows}
             input$resizable={false}
             bind:value
-            label="Neuer Kommentar"
+            label={t('commentspanel.newComment')}
           >
             {#snippet helper()}
               <CharacterCounter />
             {/snippet}
           </Textfield>
         </div>
-        <IconButton class="material-icons" title="Absenden">send</IconButton>
+        <IconButton class="material-icons" title={t('commentspanel.send')}>send</IconButton>
       </form>
     </div>
   </Paper>
@@ -185,19 +188,19 @@
   aria-labelledby="comments-help-title"
   aria-describedby="comments-help-content"
 >
-  <Title id="comments-help-title">Hilfe zu Kommentaren</Title>
+  <Title id="comments-help-title">{t('commentspanel.helpDialogTitle')}</Title>
   <Content id="comments-help-content">
     {#await getHelpMarkdown()}
-      <p>Loading...</p>
+      <p>{t('commentspanel.helpDialogLoading')}</p>
     {:then parsed}
       {@html parsed}
     {:catch}
-      <h2>Die Hilfe konnte nicht geladen werden.</h2>
+      <h2>{t('commentspanel.helpDialogError')}</h2>
     {/await}
   </Content>
   <Actions>
     <Button type="button" onclick={() => (helpActive = false)}>
-      <Label>Schließen</Label>
+      <Label>{t('commentspanel.close')}</Label>
     </Button>
   </Actions>
 </Dialog>

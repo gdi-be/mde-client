@@ -7,6 +7,9 @@
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -36,7 +39,7 @@
     const response = await fetch('/data/iso_themes');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der ISO Themen');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
@@ -51,10 +54,11 @@
 {#if highestRole !== 'MdeDataOwner'}
   <div class="topic-category-field">
     {#await fetchOptions()}
-      <p>Lade Themen Kategorien</p>
+      <p>{t('general.loading_options')}</p>
     {:then OPTIONS}
       <MultiSelectInput
-        label={fieldConfig?.label}
+        label={t('13_TopicCategory.label')}
+        explanation={t('13_TopicCategory.explanation')}
         {fieldConfig}
         options={OPTIONS}
         {value}

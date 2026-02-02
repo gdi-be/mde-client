@@ -8,6 +8,9 @@
   import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { toast } from 'svelte-french-toast';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   type LineageListEntry = Lineage & { listId: string };
 
@@ -78,7 +81,7 @@
 
     const response = await fetch(url);
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der Metadaten');
+      toast.error(t('general.error_fetch_options'));
       return [];
     }
 
@@ -133,8 +136,8 @@
         persistLineages();
       },
       {
-        text: 'Möchten Sie diese Datengrundlage wirklich löschen?',
-        confirmButtonText: 'Löschen'
+        text: t('32_Lineage.delete_confirm'),
+        confirmButtonText: t('32_Lineage.delete_button')
       }
     );
   };
@@ -179,19 +182,19 @@
 <div class="lineages-field">
   <fieldset>
     <legend>
-      {fieldConfig?.label}
+      {t('32_Lineage.label')}
       <IconButton
         class="material-icons"
         disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
-        title="Daten hinzufügen"
         type="button"
+        title={t('32_Lineage.add')}
       >
         add
       </IconButton>
     </legend>
-    <FieldHint {fieldConfig} />
+    <FieldHint {fieldConfig} explanation={t('32_Lineage.explanation')} />
     {#each lineages as lineage, index (lineage.listId)}
       <fieldset class="lineage">
         <legend>
@@ -200,8 +203,8 @@
             disabled={isEditing}
             onclick={(evt) => removeItem(lineage.listId, evt)}
             size="button"
-            title="Daten entfernen"
             type="button"
+            title={t('32_Lineage.remove')}
           >
             delete
           </IconButton>
@@ -210,7 +213,7 @@
           <div class="wrap">
             <TextInput
               bind:value={lineage.title}
-              label={titleFieldConfig?.label}
+              label={t('32_Lineage.title')}
               onblur={onTitleBlur}
               onfocus={onFocus}
               onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
@@ -239,7 +242,7 @@
             <DateInput
               bind:value={lineage.date}
               key={KEY}
-              label={dateFieldConfig?.label}
+              label={t('32_Lineage.publish_date')}
               onblur={onBlur}
               onfocus={onFocus}
               fieldConfig={dateFieldConfig}
@@ -250,7 +253,7 @@
           <div class="lineage-source-field">
             <TextInput
               bind:value={lineage.identifier}
-              label={identifierFieldConfig?.label}
+              label={t('32_Lineage.identifier')}
               onblur={onBlur}
               onfocus={onFocus}
               fieldConfig={identifierFieldConfig}

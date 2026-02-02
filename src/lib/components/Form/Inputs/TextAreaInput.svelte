@@ -7,6 +7,7 @@
     maxlength?: number;
     value?: string;
     class?: string;
+    explanation?: string;
     label?: string;
     fieldConfig?: FullFieldConfig<string>;
     onfocus?: (evt: FocusEvent) => void;
@@ -20,6 +21,7 @@
     label,
     value = $bindable(),
     class: wrapperClass,
+    explanation,
     validationResult,
     onblur,
     onfocus,
@@ -42,11 +44,10 @@
       showHint = false;
       onblur?.(evt);
     }}
-    placeholder={fieldConfig?.placeholder}
     {...restProps}
   ></textarea>
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} {showHint} />
+    <FieldHint {validationResult} {fieldConfig} {showHint} {explanation} />
     {#if maxlength}
       <div class="character-counter">
         {value ? value.length : 0} / {maxlength}

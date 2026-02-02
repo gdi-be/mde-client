@@ -4,6 +4,7 @@
   import Textfield from '@smui/textfield';
   import HelperText from '@smui/textfield/helper-text';
 
+  const t = $derived(page.data.t);
   let value = $state(page.url.searchParams.get('query') || '');
 
   let onchange = (e: Event) => {
@@ -21,9 +22,14 @@
   };
 </script>
 
-<Textfield class="text-filter-field" label="Suche" bind:value onkeyup={onchange}>
+<Textfield
+  class="text-filter-field"
+  label={t('textfilterfield.searchLabel')}
+  bind:value
+  onkeyup={onchange}
+>
   {#snippet helper()}
-    <HelperText>Titel durchsuchen</HelperText>
+    <HelperText>{t('textfilterfield.searchHelper')}</HelperText>
   {/snippet}
 </Textfield>
 

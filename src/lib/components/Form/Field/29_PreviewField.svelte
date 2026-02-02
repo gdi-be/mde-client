@@ -3,7 +3,9 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { ValidationResult } from '../FieldsConfig';
+  import { page } from '$app/state';
 
+  const t = $derived(page.data.t);
   const KEY = 'isoMetadata.preview';
 
   const valueFromData = $derived(getValue<string>(KEY));
@@ -27,7 +29,8 @@
 <div class="preview-field">
   <TextInput
     bind:value
-    label={fieldConfig?.label}
+    label={t('29_PreviewField.label')}
+    explanation={t('29_PreviewField.explanation')}
     {fieldConfig}
     onblur={onBlur}
     {validationResult}
