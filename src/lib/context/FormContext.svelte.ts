@@ -14,13 +14,13 @@ export type FormState = {
   activeHelpKey?: FieldKey;
 };
 
-const formState = $state<FormState>({
-  activeHelpKey: undefined
-});
-
 export const FORMSTATE_CONTEXT = Symbol('formState');
 
 export async function initializeFormContext(metadata: MetadataCollection) {
+  const formState = $state<FormState>({
+    activeHelpKey: undefined
+  });
+
   formState.metadata = metadata;
   setContext(FORMSTATE_CONTEXT, formState);
 }
@@ -44,7 +44,8 @@ export function getFormContext() {
  * @returns The value at the specified path or undefined if the path does not exist
  */
 export function getValue<T>(key: string, metadata?: MetadataCollection): T | undefined {
-  const data = metadata || formState.metadata;
+  const formState = getFormContext();
+  const data = metadata || formState?.metadata;
   if (!data) return undefined;
 
   return key.split('.').reduce(
@@ -84,6 +85,7 @@ export function getValue<T>(key: string, metadata?: MetadataCollection): T | und
  * @returns Array of all values found at the specified path
  */
 export function getAllValues<T>(key: string, metadata?: MetadataCollection): T[] {
+  const formState = getFormContext();
   const data = metadata || formState.metadata;
   if (!data) return [];
 
@@ -132,10 +134,12 @@ export function getFieldConfig<T>(profileId: number, key?: string): FullFieldCon
 }
 
 export function clearActiveHelp() {
+  const formState = getFormContext();
   formState.activeHelpKey = undefined;
 }
 
 export function toggleActiveHelp(key: FieldKey) {
+  const formState = getFormContext();
   if (formState.activeHelpKey === key) {
     formState.activeHelpKey = undefined;
   } else {

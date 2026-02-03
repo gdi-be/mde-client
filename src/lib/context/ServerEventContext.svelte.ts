@@ -38,13 +38,13 @@ export type EventData<T = SseEvent> = T extends 'validation'
     ? HeartbeatData
     : SseEventData;
 
-export const eventState = $state<EventState>({
-  generic: [],
-  heartbeat: [],
-  validation: []
-});
-
 const createSseListener = () => {
+  const eventState = $state<EventState>({
+    generic: [],
+    heartbeat: [],
+    validation: []
+  });
+
   let eventSource: EventSource | null = null;
   let isConnected = false;
 

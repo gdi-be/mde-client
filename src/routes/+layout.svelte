@@ -8,12 +8,14 @@
   import { Toaster } from 'svelte-french-toast';
   import { initializeTokenContext } from '../lib/context/TokenContext.svelte.js';
   import { page } from '$app/state';
+  import { initializeStatusesContext } from '../lib/context/StatusesContext.svelte.js';
 
   const t = $derived(page.data.t);
   let { children, data } = $props();
 
   initializeTokenContext(data.token, data.refreshToken);
   initializePopconfimContext();
+  initializeStatusesContext();
 
   sseContext.setSseContext();
 

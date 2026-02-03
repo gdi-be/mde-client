@@ -4,12 +4,7 @@
   import MetadataDisplay from '$lib/components/ReadOnly/MetadataDisplay.svelte';
   import { page } from '$app/state';
   import FormFooter from '$lib/components/Form/FormFooter.svelte';
-  import {
-    FORMSTATE_CONTEXT,
-    initializeFormContext,
-    type FormState
-  } from '$lib/context/FormContext.svelte';
-  import { getContext } from 'svelte';
+  import { getFormContext, initializeFormContext } from '$lib/context/FormContext.svelte';
   import toast from 'svelte-french-toast';
   import { setRefreshToken } from '$lib/context/TokenContext.svelte.js';
 
@@ -22,7 +17,7 @@
   const metadata = $derived(data.metadata);
   initializeFormContext(data.metadata);
 
-  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  const formState = getFormContext();
   $effect(() => {
     formState.metadata = data.metadata;
   });

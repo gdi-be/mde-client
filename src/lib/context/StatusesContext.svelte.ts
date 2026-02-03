@@ -1,4 +1,4 @@
-import { setContext } from 'svelte';
+import { getContext, setContext } from 'svelte';
 import type { Token } from '$lib/models/keycloak';
 import type { Option } from '$lib/models/form';
 import { getHighestRole } from '$lib/util';
@@ -38,17 +38,19 @@ const defaultState = {
   ]
 };
 
-const statutesState = $state<{ state: StatusesState }>({ state: defaultState });
-
-export function initializePopconfimContext() {
+export function initializeStatusesContext() {
+  const statutesState = $state<{ state: StatusesState }>({ state: defaultState });
   setContext(STATUSES_CONTEXT, statutesState);
 }
 
 export function getStatusesState() {
+  const statutesState = getContext<{ state: StatusesState }>(STATUSES_CONTEXT);
   return statutesState;
 }
 
 export function getAvailableStatuses(token: Token) {
+  const statutesState = getContext<{ state: StatusesState }>(STATUSES_CONTEXT);
+  if (!token || !statutesState) return [];
   const highestRole = getHighestRole(token);
   return statutesState.state.statuses.filter((status) => {
     if (highestRole === 'MdeAdministrator') {
@@ -69,5 +71,7 @@ export function getAvailableStatuses(token: Token) {
 }
 
 export function getStatusName(key: string) {
+  const statutesState = getContext<{ state: StatusesState }>(STATUSES_CONTEXT);
+  if (!key || !statutesState) return [];
   return statutesState.state.statuses.find((status) => status.key === key)?.label;
 }
