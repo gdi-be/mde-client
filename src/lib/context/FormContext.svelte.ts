@@ -2,7 +2,7 @@
 import { getContext, setContext } from 'svelte';
 import { page } from '$app/state';
 import type { FieldKey } from '$lib/models/form';
-import { log } from 'loggisch';
+import { logger } from 'loggisch';
 import { FieldConfigs, type FullFieldConfig } from '$lib/components/Form/FieldsConfig';
 import { goto, invalidateAll } from '$app/navigation';
 import { type Layer, type MetadataCollection, type Service } from '$lib/models/metadata';
@@ -173,7 +173,7 @@ export function getExtraParams(
   for (const param of field.validatorExtraParams) {
     if (param === 'PARENT_VALUE') {
       if (parentValue === undefined) {
-        log('error', 'parent_value is undefined, but requested in validatorExtraParams');
+        logger.error('parent_value is undefined, but requested in validatorExtraParams');
         continue;
       }
       extraParams['PARENT_VALUE'] = parentValue;
@@ -352,7 +352,7 @@ export function getProgress(
 export function allFieldsValid(highestRole: Role, metadata?: MetadataCollection): boolean {
   if (!metadata) return false;
   const progress = getProgress(highestRole, undefined, metadata);
-  log('warning', 'Invalid fields: ' + progress.invalidFields?.map((f) => f.field));
+  logger.warning('Invalid fields: ' + progress.invalidFields?.map((f) => f.field));
   // Check if progress is 1 (100%)
   return progress.progress === 1;
 }
@@ -382,7 +382,7 @@ export async function persistValue(key: string, value: unknown) {
     }
     if (response.status === 401) {
       // If unauthorized, redirect to login
-      log('warning', 'Unauthorized access, redirecting to login');
+      logger.warning('Unauthorized access, redirecting to login');
       goto('/login');
     } else if (response.status === 409) {
       toast.error('Konflikt beim Speichern eines eindeutigen Werts.');

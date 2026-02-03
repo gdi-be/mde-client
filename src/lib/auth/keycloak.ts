@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '$env/dynamic/private';
 import { getRefreshToken, isTokenExpired, setAccessToken, setRefreshToken } from './cookies';
 import { type Cookies } from '@sveltejs/kit';
-import log from 'loggisch';
+import { logger } from 'loggisch';
 
 export const verifyToken = async (token: string) => {
   const publicKey = await fetchPublicKey();
@@ -40,7 +40,7 @@ export const updateTokens = async (
   const refreshToken = getRefreshToken(cookies);
 
   if (!refreshToken || isTokenExpired(refreshToken)) {
-    log.warning('No valid refresh token found or it is expired');
+    logger.warning('No valid refresh token found or it is expired');
     return Promise.reject('No valid refresh token found');
   }
 
@@ -62,7 +62,7 @@ export const updateTokens = async (
     );
 
     if (!response.ok) {
-      log.warning('Could not refresh tokens: ' + response.status);
+      logger.warning('Could not refresh tokens: ' + response.status);
       return Promise.reject('Could not refresh tokens: ' + response.status);
     }
 
@@ -80,7 +80,7 @@ export const updateTokens = async (
       refreshToken: data.refresh_token
     };
   } catch (error) {
-    log.warning('Error refreshing tokens: ' + error);
+    logger.warning('Error refreshing tokens: ' + error);
     return Promise.reject('Error refreshing tokens: ' + error);
   }
 };

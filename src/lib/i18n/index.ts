@@ -1,13 +1,13 @@
-import fallBackTranslations from './locales/de.json';
+import defaultTranslations from './locales/de.json';
 import type { LocaleCode } from './locales';
 import { interpolate } from './interpolate';
 import { dev } from '$app/environment';
 import type { TranslationKeys } from './types';
+import { logger } from 'loggisch';
 
-const loadedTranslations: Record<LocaleCode, typeof fallBackTranslations> = {
-  de: fallBackTranslations
-};
-type SectionKey = keyof typeof fallBackTranslations;
+type Translations = Record<LocaleCode, typeof defaultTranslations>;
+type SectionKey = keyof typeof defaultTranslations;
+const loadedTranslations: Translations = {} as Translations;
 
 export async function getTranslator({
   locale,
@@ -31,17 +31,16 @@ export async function getTranslator({
     const section = loadedTranslations[locale][sectionKey] as Record<string, string>;
     const localeResult = section?.[item];
     if (localeResult) return interpolate(localeResult, values);
-    console.warn(`Missing ${locale} translation for ${key}. Falling back to default.`);
 
-    // know how to properly distinguish the allowed items for a chosen section
-    // if we do type the line above properly so we ignore here
-    const fallbackResult = section?.[item];
-    if (fallbackResult) return interpolate(fallbackResult, values);
+    logger.warning(`Missing ${locale} translation for ${key}. Falling back to default.`);
+    const defaultSection = defaultTranslations[sectionKey] as Record<string, string>;
+    const defaultResult = defaultSection?.[item];
+    if (defaultResult) return interpolate(defaultResult, values);
 
     const error = `Missing default translation for: ${key}`;
     if (dev) throw new Error(error);
 
-    console.error(error);
+    logger.error(error);
     return key;
   };
 }
