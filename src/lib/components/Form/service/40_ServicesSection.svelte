@@ -6,7 +6,7 @@
   import Checkmark from '../Checkmark.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { page } from '$app/state';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
 
   const t = $derived(page.data.t);
 
@@ -17,6 +17,8 @@
 
   const KEY = 'isoMetadata.services';
   const LAYERS_KEY = 'clientMetadata.layers';
+
+  const popconfirm = $derived(getPopconfirm());
 
   let initialServices = getValue<Service[]>(KEY);
   let services = $state<Service[]>([]);
@@ -70,7 +72,7 @@
   function removeService(id: string, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         const removedService = services.find((service) => service.serviceIdentification === id);

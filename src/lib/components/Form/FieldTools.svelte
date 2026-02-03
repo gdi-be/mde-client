@@ -7,7 +7,7 @@
   import { getFormContext, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import IconButton from '@smui/icon-button';
   import { toast } from 'svelte-french-toast';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import type { FieldKey } from '$lib/models/form';
   import type { FullFieldConfig } from './FieldsConfig';
   import { page } from '$app/state';
@@ -36,6 +36,8 @@
   const t = $derived(page.data.t);
   const metadata = $derived(getFormContext()?.metadata);
 
+  const popconfirm = $derived(getPopconfirm());
+
   const checkIfHasHelp = async () => {
     const response = await fetch(`/help/${key}`);
     if (!response.ok || response.status === 204) return false;
@@ -62,7 +64,7 @@
     if (valueFromOriginal) {
       const targetEl = evt.currentTarget as HTMLElement;
       evt.preventDefault();
-      popconfirm(
+      popconfirm.open(
         targetEl,
         async () => {
           await persistValue(k, valueFromOriginal);

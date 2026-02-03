@@ -68,9 +68,6 @@
         {onChange}
         {validationResult}
       />
-      {#if value !== 1}
-        <p class="none-default">{t('25_TermsOfUseField.none_default')}</p>
-      {/if}
     </div>
   {/await}
   <FieldTools key={KEY} {fieldConfig} bind:checkMarkAnmiationRunning={showCheckmark} />

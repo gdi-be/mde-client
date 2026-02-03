@@ -3,7 +3,7 @@
   import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import type { CI_OnLineFunctionCode, ContentDescription } from '$lib/models/metadata';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
@@ -18,6 +18,8 @@
   const valueFromData = $derived(getValue<ContentDescription[]>(KEY));
   let contentDescriptions = $state<ContentDescriptionListEntry[]>([]);
   let isEditing = $state<boolean>(false);
+
+  const popconfirm = $derived(getPopconfirm());
 
   // important that this is not a state
   let previousValueAsString: string;
@@ -90,7 +92,7 @@
   const removeItem = (listId: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         contentDescriptions = contentDescriptions.filter(

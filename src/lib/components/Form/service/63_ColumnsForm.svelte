@@ -6,7 +6,7 @@
   import AttributeAlias_65 from './Field/65_AttributeAlias.svelte';
   import AttributeDatatype_66 from './Field/66_AttributeDatatype.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
@@ -24,6 +24,8 @@
 
   let { value: initialColumns, onChange, featureType }: ColumnsFormProps = $props();
   const featureTypeName = $derived(featureType?.name);
+
+  const popconfirm = $derived(getPopconfirm());
 
   let columns = $state<ColumnInfo[]>([]);
   let tabs = $derived<Tab[]>(
@@ -67,7 +69,7 @@
   function removeColumn(index: number, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         columns = columns.filter((_, i) => i !== index);

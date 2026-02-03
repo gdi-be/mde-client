@@ -8,7 +8,7 @@
   import { page } from '$app/state';
   import { invalidateAll } from '$app/navigation';
   import { getContext, onMount } from 'svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
@@ -27,6 +27,8 @@
   let myUserId = $derived(token?.sub);
   let inputRows = $derived(Math.min(value.split('\n').length, 4));
   let helpActive = $state(false);
+
+  const popconfirm = $derived(getPopconfirm());
 
   onMount(() => {
     scrollToBottom();
@@ -67,7 +69,7 @@
   async function onDelete(id: string, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         const metadataId = metadata?.metadataId;

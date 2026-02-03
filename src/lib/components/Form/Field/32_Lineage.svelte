@@ -5,10 +5,10 @@
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { toast } from 'svelte-french-toast';
   import { page } from '$app/state';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
 
   const t = $derived(page.data.t);
 
@@ -31,6 +31,8 @@
   const titleFieldConfig = getFieldConfig<string>(33);
   const dateFieldConfig = getFieldConfig<string>(34);
   const identifierFieldConfig = getFieldConfig<string>(35);
+
+  const popconfirm = $derived(getPopconfirm());
 
   // important that this is not a state
   let previousValueAsString: string;
@@ -129,7 +131,7 @@
   const removeItem = (listId: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         lineages = lineages.filter((lineage) => lineage.listId !== listId);

@@ -10,7 +10,7 @@
   import LayerDatasource_55 from './Field/55_LayerDatasource.svelte';
   import LayerSecondaryDatasource_68 from './Field/68_LayerSecondaryDatasource.svelte';
   import FieldHint from '../FieldHint.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
@@ -28,6 +28,8 @@
 
   let { value: initialLayers, service, onChange }: LayersFormProps = $props();
   const serviceId = $derived(service?.serviceIdentification);
+
+  const popconfirm = $derived(getPopconfirm());
 
   let layers = $state<Layer[]>([]);
   let tabs = $derived<Tab[]>(
@@ -74,7 +76,7 @@
   function removeLayer(index: number, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         layers = layers.filter((_, i) => i !== index);

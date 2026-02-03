@@ -5,10 +5,12 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { toast } from 'svelte-french-toast';
   import { page } from '$app/state';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   const t = $derived(page.data.t);
 
@@ -22,6 +24,11 @@
 
   // important that this is not a state
   let previousValueAsString: string;
+
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
+
+  const popconfirm = $derived(getPopconfirm());
 
   $effect(() => {
     // this check prevents rerendering if nothing has actually changed
@@ -129,7 +136,7 @@
   const removeItem = (listId: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         contacts = contacts.filter((contact) => contact.listId !== listId);
@@ -141,10 +148,28 @@
       }
     );
   };
+
+  let requiredButInvalid = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles, required } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    const hasInvalidFields = contacts.some((contact) => {
+      const nameValid = nameConfig?.validator(contact.name).valid ?? true;
+      const organisationValid = organisationConfig
+        ? organisationConfig?.validator(contact.organisation).valid
+        : true;
+      const phoneValid = phoneConfig ? phoneConfig?.validator(contact.phone).valid : true;
+      const emailValid = emailConfig ? emailConfig?.validator(contact.email).valid : true;
+      return !nameValid || !organisationValid || !phoneValid || !emailValid;
+    });
+    return isEditingRole && required && (!validationResult?.valid || hasInvalidFields);
+  });
 </script>
 
 <div class="contacts-field">
-  <fieldset>
+  <fieldset class={[requiredButInvalid ? 'invalid' : '']}>
     <legend>
       <span>{t('19_ContactsField.label')}</span>
       <IconButton
@@ -243,6 +268,10 @@
     fieldset {
       flex: 1;
       border-radius: 4px;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       > legend {
         display: flex;

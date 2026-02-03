@@ -6,7 +6,7 @@
   import FeatureTypeName_62 from './Field/62_FeatureTypeName.svelte';
   import FeatureTypeDescription_69 from './Field/69_FeatureTypeDescription.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
@@ -24,6 +24,8 @@
 
   let { value: initialFeatureTypes, onChange, service }: FeatureTypeFormProps = $props();
   const serviceId = $derived(service?.serviceIdentification);
+
+  const popconfirm = $derived(getPopconfirm());
 
   let featureTypes = $state<FeatureType[]>([]);
   let tabs = $derived<Tab[]>(
@@ -69,7 +71,7 @@
   function removeFeatureType(index: number, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         featureTypes = featureTypes.filter((_, i) => i !== index);

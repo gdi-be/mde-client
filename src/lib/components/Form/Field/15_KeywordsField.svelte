@@ -11,6 +11,8 @@
   import FieldHint from '../FieldHint.svelte';
   import type { Keywords } from '$lib/models/metadata';
   import { toast } from 'svelte-french-toast';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   const t = $derived(page.data.t);
 
@@ -35,6 +37,9 @@
 
   let dialogOpen = $state(false);
   let newKeyword = $state('');
+
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   const getAutoKeywords = async () => {
     const response = await fetch(`/metadata/${metadataid}/autokeywords`);
@@ -126,10 +131,19 @@
       });
     }
   });
+
+  let requiredButInvalid = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles, required } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    return isEditingRole && required && !validationResult?.valid;
+  });
 </script>
 
 <div class="keywords-field" bind:this={containerElement}>
-  <fieldset>
+  <fieldset class={[requiredButInvalid ? 'invalid' : '']}>
     <legend>{t('15_KeywordsField.label')}</legend>
     <ChipSet class="keywords-chipset" chips={uniqueKeywords} nonInteractive>
       {#snippet chip(chip)}
@@ -210,6 +224,10 @@
     fieldset {
       flex: 1;
       border-radius: 4px;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       > legend {
         font-size: 1.5em;

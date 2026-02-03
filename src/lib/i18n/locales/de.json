@@ -104,7 +104,6 @@
     "explanation_email": "Unter welcher E-Mail-Adresse kann die Person erreicht werden?"
   },
   "25_TermsOfUseField": {
-    "none_default": "Die Nutzungsbedingungen weichen von den Standardnutzungsbedingungen ab. Dies sollte nur in Ausnahmefällen und in Absprache mit einem Redakteur geschehen.",
     "label": "Nutzungsbestimmungen",
     "explanation": "Soll ihr Datenbestand unter der üblichen Nutzungsbestimmung der Datenlizenz Deutschland Version 2 Zero veröffentlicht werden? Falls nicht, wählen sie eine andere Nutzungsbestimmung für ihren Datenbestand."
   },

@@ -1,13 +1,15 @@
 <script lang="ts">
-  import { closePopconfirm, getPopconfirmState } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm, getPopconfirmState } from '$lib/context/PopConfirmContext.svelte';
   import Button from '@smui/button';
   import Spinner from './Spinner.svelte';
 
-  const { anchorElement, confirmButtonText, open, onConfirm, onCancel, text } =
+  const { anchorElement, confirmButtonText, open, onConfirm, text } =
     $derived(getPopconfirmState());
 
   let dialog = $state<HTMLDialogElement>();
   let loading = $state(false);
+
+  const popconfirm = $derived(getPopconfirm());
 
   const anchorRect = $derived(anchorElement?.getBoundingClientRect());
 
@@ -17,7 +19,7 @@
       await onConfirm();
     } finally {
       loading = false;
-      closePopconfirm();
+      popconfirm.close();
     }
   };
 </script>
@@ -47,8 +49,8 @@
 {#if open}
   <div
     class="mask"
-    onclick={!loading ? onCancel : undefined}
-    onkeydown={!loading ? onCancel : undefined}
+    onclick={!loading ? () => popconfirm.close() : undefined}
+    onkeydown={!loading ? () => popconfirm.close() : undefined}
     role="button"
     tabindex="0"
   ></div>
