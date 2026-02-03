@@ -59,13 +59,12 @@
   });
 
   function addLayer() {
-    const name = String.fromCharCode(97 + layers.length);
     layers = [
       ...layers,
       {
-        name,
-        title: name,
-        styleName: name + '_DefaultStyle'
+        name: '',
+        title: '',
+        styleName: ''
       }
     ];
     activeTabIndex = layers.length - 1;

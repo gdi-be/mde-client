@@ -53,12 +53,11 @@
   });
 
   function addFeatureType() {
-    const name = String.fromCharCode(97 + featureTypes.length);
     featureTypes = [
       ...featureTypes,
       {
-        name,
-        title: name,
+        name: '',
+        title: '',
         shortDescription: '',
         columns: []
       }

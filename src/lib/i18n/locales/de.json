@@ -554,7 +554,6 @@
     "add_button": "Dienst hinzufügen",
     "delete_button": "Löschen",
     "delete_confirm": "Sind sie sicher, dass sie diesen Dienst löschen möchten? Alle dazugehörigen Daten gehen verloren.",
-    "new_service": "Neuer Dienst",
     "remove_button": "Dienst entfernen"
   },
   "statusfilterfield": {
