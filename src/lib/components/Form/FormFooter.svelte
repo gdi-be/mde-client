@@ -152,6 +152,7 @@
         onclick={onDownloadClick}
         type="button"
       >
+        <Label>{t('formfooter.download')}</Label>
         <Icon class="material-icons">download</Icon>
       </Button>
     {/if}

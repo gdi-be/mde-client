@@ -60,7 +60,7 @@
       ...services,
       {
         serviceIdentification: serviceIdentification,
-        title: t('servicessection.new_service') + services.length
+        title: ''
       }
     ];
     activeTab = serviceIdentification;

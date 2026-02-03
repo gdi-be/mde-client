@@ -53,12 +53,11 @@
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
   function addColumn() {
-    const name = 'Neues Attribut' + columns.length;
     columns = [
       ...columns,
       {
-        name,
-        alias: name
+        name: '',
+        alias: ''
       }
     ];
     activeTabIndex = columns.length - 1;

@@ -21,9 +21,8 @@ const defaultState = {
   onCancel: closePopconfirm
 };
 
-const popConfirmState = $state<{ state: PopconfirmState }>({ state: defaultState });
-
 export function initializePopconfimContext() {
+  const popConfirmState = $state<{ state: PopconfirmState }>({ state: defaultState });
   setContext(POPCONFIRM_CONTEXT, popConfirmState);
 }
 
@@ -32,6 +31,7 @@ export function popconfirm(
   onConfirm: () => Promise<void>,
   options?: ConfirmOptions
 ) {
+  const popConfirmState = getContext<{ state: PopconfirmState }>(POPCONFIRM_CONTEXT);
   popConfirmState.state = {
     ...defaultState,
     ...options,
@@ -42,6 +42,7 @@ export function popconfirm(
 }
 
 export function closePopconfirm() {
+  const popConfirmState = getContext<{ state: PopconfirmState }>(POPCONFIRM_CONTEXT);
   popConfirmState.state.open = false;
 }
 
