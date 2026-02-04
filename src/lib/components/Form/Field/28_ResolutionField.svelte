@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldHint from '../FieldHint.svelte';
   import FieldTools from '../FieldTools.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
@@ -13,6 +13,7 @@
   const RESOLUTION_KEY = 'isoMetadata.resolutions';
   const SCALE_KEY = 'isoMetadata.scale';
 
+  const { getValue } = getFormContext();
   let selected = $state<typeof RESOLUTION_KEY | typeof SCALE_KEY>();
 
   // TODO: check why this is a List
@@ -41,6 +42,9 @@
   );
   const scaleFieldConfig = getFieldConfig<number>(27);
   let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined));
+  let hasInvalidFields = $derived(
+    !resolutionValidationResult?.valid && !scaleValidationResult?.valid
+  );
 
   const clearAllValues = async () => {
     scaleValue = null;
@@ -79,7 +83,7 @@
 </script>
 
 <div class="title-field">
-  <fieldset>
+  <fieldset class={[hasInvalidFields ? 'invalid' : '']}>
     <legend>{t('28_ResolutionField.label')}</legend>
     <FieldHint explanation={t('28_ResolutionField.explanation')} />
     <div class="input-container">
@@ -156,6 +160,10 @@
     fieldset {
       flex: 1;
       border-radius: 4px;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       > legend {
         font-size: 1.5em;

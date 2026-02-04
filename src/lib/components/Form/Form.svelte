@@ -6,7 +6,7 @@
   import {
     getProgress,
     type Section,
-    clearActiveHelp,
+    getFormContext,
     type FormState,
     FORMSTATE_CONTEXT,
     type ProgressInfo
@@ -53,9 +53,10 @@
   const t = $derived(page.data.t);
   let activeSection = $state(page.url.hash.slice(1) || 'basedata');
 
-  const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
-  const metadata = $derived(formContext.metadata);
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formState.metadata);
 
+  const formContext = getFormContext();
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
@@ -100,7 +101,7 @@
 
   const onSectionClick = async (section: string) => {
     activeSection = section;
-    clearActiveHelp();
+    formContext.clearActiveHelp();
 
     goto(`#${section}`, {
       replaceState: true,
@@ -129,14 +130,6 @@
     let baseText = `Fortschritt: ${Math.floor(progressInfo.progress * 100)} %`;
     return baseText;
   };
-
-  const getProgressStyle = (progress: number) => {
-    if (progress < 1) {
-      return `--progress-color: var(--mdc-theme-primary);`;
-    } else {
-      return `--progress-color: var(--ready-for-release-color);`;
-    }
-  };
 </script>
 
 <div class="metadata-form">
@@ -157,7 +150,6 @@
           progress={progressInfo.progress}
           aria-label={label + ' Fortschritt'}
           title={getPropgressTitle(progressInfo)}
-          style={getProgressStyle(progressInfo.progress)}
         />
       </div>
       {#if i + 1 < SECTIONS.length}
@@ -315,7 +307,11 @@
       }
 
       :global(.mdc-linear-progress__bar-inner) {
-        border-color: var(--progress-color, var(--mdc-theme-secondary));
+        border-color: var(--ready-for-release-color, var(--mdc-theme-secondary));
+      }
+
+      :global(.mdc-linear-progress__buffer-bar) {
+        background-color: var(--mdc-theme-error);
       }
 
       &:hover {

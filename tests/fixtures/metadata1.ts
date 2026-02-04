@@ -62,7 +62,8 @@ export default {
             href: 'ewfwefew',
             fileSize: 123
           }
-        ]
+        ],
+        preview: 'eeeee'
       },
       {
         workspace: 'ewfewf',
@@ -88,7 +89,8 @@ export default {
             shortDescription: 'Kurzbeschreibung des FeatureTypes',
             title: 'Titel des FeatureTypes'
           }
-        ]
+        ],
+        preview: 'eeeee'
       }
     ],
     keywords: {
@@ -128,8 +130,8 @@ export default {
     maintenanceFrequency: 'annually',
     contentDescriptions: [
       {
+        title: 'wef',
         url: '',
-        description: 'wef',
         code: 'information'
       }
     ],

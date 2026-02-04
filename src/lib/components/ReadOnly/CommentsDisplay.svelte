@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { getValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import { page } from '$app/state';
   import type { Comment } from '$lib/models/metadata';
 
   const t = $derived(page.data.t);
+  const { getValue } = getFormContext();
   const comments = $derived(getValue<Comment[]>('clientMetadata.comments'));
 </script>
 

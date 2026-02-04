@@ -7,7 +7,7 @@
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fieldConfig?: FullFieldConfig<any>;
     validationResult?: ValidationResult;
-    showHint?: boolean;
+    fieldHasFocus?: boolean;
     required?: boolean;
     explanation?: string;
   };
@@ -16,20 +16,24 @@
     validationResult,
     fieldConfig,
     required = false,
-    explanation
+    explanation,
+    fieldHasFocus = false
   }: FieldBottomTextProps = $props();
-
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
   const isValid = $derived(validationResult?.valid !== false);
 
-  let text = $derived.by(() => {
-    if (!isValid) {
+  let validationText = $derived.by(() => {
+    if (!isValid && fieldHasFocus) {
       return validationResult?.helpText;
     }
+    return null;
+  });
+  let explanationText = $derived.by(() => {
     if (highestRole === 'MdeDataOwner') {
       return explanation;
     }
+    return null;
   });
 </script>
 
@@ -37,23 +41,23 @@
   class={[
     'field-hint',
     highestRole.toLowerCase(),
-    isValid ? 'valid' : 'invalid',
     required || fieldConfig?.required ? 'required' : ''
   ]}
 >
-  {text}
+  {#if explanationText}
+    <div class="explanation-text">{explanationText}</div>
+  {/if}
+  {#if validationText}
+    <div class="validation-help-text">{validationText}</div>
+  {/if}
 </span>
 
 <style lang="scss">
   .field-hint {
     font-size: var(--mdc-typography-caption-font-size, 0.75rem);
 
-    &.invalid {
-      color: var(--mdc-theme-secondary);
-
-      &.required {
-        color: var(--mdc-theme-error);
-      }
+    .validation-help-text {
+      color: var(--mdc-theme-error);
     }
   }
 </style>

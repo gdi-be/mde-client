@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { getValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import CommentsDisplay from './CommentsDisplay.svelte';
   import DisplayField from './DisplayField.svelte';
   import { page } from '$app/state';
 
+  const { getValue } = getFormContext();
   const metadataProfile = $derived(getValue('isoMetadata.metadataProfile'));
   const highValueDataset = $derived(getValue('isoMetadata.highValueDataset'));
 

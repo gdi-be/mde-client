@@ -2,6 +2,8 @@
   import type { HTMLInputAttributes } from 'svelte/elements';
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
+  import { getAccessToken } from '../../../context/TokenContext.svelte';
+  import { getHighestRole } from '../../../util';
 
   type InputProps = {
     value?: string;
@@ -23,9 +25,21 @@
     validationResult,
     ...restProps
   }: InputProps = $props();
+
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
+
+  let invalid = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    return isEditingRole && !validationResult?.valid;
+  });
 </script>
 
-<fieldset class={['date-input', wrapperClass]}>
+<fieldset class={['date-input', wrapperClass, invalid && 'invalid']}>
   <legend>{label}</legend>
   <input
     type="date"
@@ -46,6 +60,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    &.invalid {
+      border: 2px solid var(--mdc-theme-error) !important;
+    }
 
     legend {
       font-size: 1.5em;

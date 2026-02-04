@@ -1,21 +1,27 @@
 <script lang="ts">
   import type { Lineage, MetadataCollection } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { toast } from 'svelte-french-toast';
   import { page } from '$app/state';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   const t = $derived(page.data.t);
+
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   type LineageListEntry = Lineage & { listId: string };
 
   const KEY = 'isoMetadata.lineage';
 
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<Lineage[]>(KEY));
   let lineages = $state<LineageListEntry[]>([]);
 
@@ -32,6 +38,8 @@
   const dateFieldConfig = getFieldConfig<string>(34);
   const identifierFieldConfig = getFieldConfig<string>(35);
 
+  const popconfirm = $derived(getPopconfirm());
+
   // important that this is not a state
   let previousValueAsString: string;
 
@@ -45,7 +53,7 @@
     ) {
       return;
     }
-    lineages = valueFromData?.map((lineage) => {
+    lineages = valueFromData?.map((lineage: Lineage) => {
       const listId = crypto.randomUUID();
       return {
         listId,
@@ -129,7 +137,7 @@
   const removeItem = (listId: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         lineages = lineages.filter((lineage) => lineage.listId !== listId);
@@ -177,10 +185,26 @@
     await persistLineages();
     isEditing = false;
   };
+
+  let hasInvalidFields = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    const hasInvalidFields = lineages.some((lineage) => {
+      const titleValid = titleFieldConfig?.validator(lineage.title).valid ?? true;
+      console.log('title valid', titleValid);
+      const dateValid = dateFieldConfig?.validator(lineage.date).valid ?? true;
+      const identifierValid = identifierFieldConfig?.validator(lineage.identifier).valid ?? true;
+      return !titleValid || !dateValid || !identifierValid;
+    });
+    return isEditingRole && hasInvalidFields;
+  });
 </script>
 
 <div class="lineages-field">
-  <fieldset>
+  <fieldset class={[hasInvalidFields ? 'invalid' : '']}>
     <legend>
       {t('32_Lineage.label')}
       <IconButton
@@ -327,6 +351,10 @@
     fieldset {
       flex: 1;
       border-radius: 0.25em;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       > legend {
         display: flex;

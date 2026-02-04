@@ -4,10 +4,10 @@
   import CopyButton from './CopyButton.svelte';
   import { type Snippet } from 'svelte';
   import { Icon } from '@smui/button';
-  import { getFormContext, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import IconButton from '@smui/icon-button';
   import { toast } from 'svelte-french-toast';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import type { FieldKey } from '$lib/models/form';
   import type { FullFieldConfig } from './FieldsConfig';
   import { page } from '$app/state';
@@ -34,7 +34,10 @@
   }: FieldToolsProps = $props();
 
   const t = $derived(page.data.t);
-  const metadata = $derived(getFormContext()?.metadata);
+  const metadata = $derived(getFormContext()?.formState.metadata);
+
+  const { getValue } = getFormContext();
+  const popconfirm = $derived(getPopconfirm());
 
   const checkIfHasHelp = async () => {
     const response = await fetch(`/help/${key}`);
@@ -62,7 +65,7 @@
     if (valueFromOriginal) {
       const targetEl = evt.currentTarget as HTMLElement;
       evt.preventDefault();
-      popconfirm(
+      popconfirm.open(
         targetEl,
         async () => {
           await persistValue(k, valueFromOriginal);

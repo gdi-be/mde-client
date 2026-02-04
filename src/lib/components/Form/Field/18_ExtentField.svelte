@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
@@ -27,6 +27,7 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
+  const { getValue } = getFormContext();
   let initialCRSKey = getValue<CRS>(CRS_KEY);
   const valueFromData = $derived(getValue<Extent>(KEY));
   let value4326 = $state({
@@ -71,6 +72,13 @@
   let validationResultMaxX = $derived(maxXFieldConfig?.validator(transformedValue.maxx));
   let validationResultMaxY = $derived(maxYFieldConfig?.validator(transformedValue.maxy));
 
+  let hasInvalidFields = $derived(
+    validationResultMinX?.valid === false ||
+      validationResultMinY?.valid === false ||
+      validationResultMaxX?.valid === false ||
+      validationResultMaxY?.valid === false
+  );
+
   const onChange = (newValue: number, key: keyof Extent) => {
     const newTransformedValue = {
       ...transformedValue,
@@ -111,7 +119,7 @@
 
 {#if highestRole !== 'MdeDataOwner'}
   <div class="extent-field">
-    <fieldset>
+    <fieldset class={[hasInvalidFields ? 'invalid' : '']}>
       <legend>{t('18_ExtentField.label')}</legend>
       <div class="tools">
         <SelectInput bind:value={crsKey} label={CRS_LABEL} options={crsOptions} />
@@ -206,6 +214,10 @@
       flex-wrap: wrap;
       border-radius: 0.25em;
       justify-content: space-between;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       :global(.select-input),
       :global(.number-input) {

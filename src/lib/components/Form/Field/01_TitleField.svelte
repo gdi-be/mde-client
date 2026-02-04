@@ -1,13 +1,14 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
   const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.title';
 
-  const valueFromData = $derived(getValue<string>(KEY));
+  const formContext = $derived(getFormContext());
+  const valueFromData = $derived(formContext.getValue<string>(KEY));
   let value = $state('');
   $effect(() => {
     value = valueFromData || '';

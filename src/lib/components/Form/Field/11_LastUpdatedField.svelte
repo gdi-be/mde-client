@@ -2,7 +2,7 @@
   import {
     FORMSTATE_CONTEXT,
     getFieldConfig,
-    getValue,
+    getFormContext,
     persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
@@ -18,6 +18,7 @@
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
 
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY, metadata));
   let value = $state('');
 

@@ -10,10 +10,11 @@
   import LayerDatasource_55 from './Field/55_LayerDatasource.svelte';
   import LayerSecondaryDatasource_68 from './Field/68_LayerSecondaryDatasource.svelte';
   import FieldHint from '../FieldHint.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
+  import { validateLayers } from './validation';
   const t = $derived(page.data.t);
 
   type Tab = {
@@ -28,6 +29,8 @@
 
   let { value: initialLayers, service, onChange }: LayersFormProps = $props();
   const serviceId = $derived(service?.serviceIdentification);
+
+  const popconfirm = $derived(getPopconfirm());
 
   let layers = $state<Layer[]>([]);
   let tabs = $derived<Tab[]>(
@@ -46,6 +49,8 @@
       PARENT_VALUE: service
     })
   );
+
+  const invalidTabIndices = $derived(validateLayers(layers));
 
   $effect(() => {
     // if the serviceId changes set activeTabIndex to undefined
@@ -74,7 +79,7 @@
   function removeLayer(index: number, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         layers = layers.filter((_, i) => i !== index);
@@ -109,12 +114,18 @@
 </script>
 
 <div class="layers-form">
-  <fieldset>
+  <fieldset class={[invalidTabIndices.size > 0 && 'invalid']}>
     <legend>{t('48_LayersForm.label')} </legend>
     <FieldHint {fieldConfig} {validationResult} />
     <nav>
       {#each tabs as tab, i}
-        <div class="tab-container" class:active={activeTabIndex === i}>
+        <div
+          class={[
+            'tab-container',
+            activeTabIndex === i && 'active',
+            invalidTabIndices.has(i) && 'invalid'
+          ]}
+        >
           <button
             type="button"
             id={tab.name}
@@ -197,6 +208,10 @@
       flex: 1;
       border-radius: 0.25em;
 
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error);
+      }
+
       > legend {
         display: flex;
         align-items: center;
@@ -258,6 +273,10 @@
         &.active {
           font-weight: bold;
           background-color: var(--primary-90);
+        }
+
+        &.invalid {
+          box-shadow: inset 0 -2px 0 0 var(--mdc-theme-error);
         }
       }
 

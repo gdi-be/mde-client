@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { onMount } from 'svelte';
   import Chip, { Set as ChipSet, Text, TrailingIcon } from '@smui/chips';
@@ -11,6 +11,8 @@
   import FieldHint from '../FieldHint.svelte';
   import type { Keywords } from '$lib/models/metadata';
   import { toast } from 'svelte-french-toast';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   const t = $derived(page.data.t);
 
@@ -19,10 +21,11 @@
   let containerElement = $state<HTMLDivElement>();
   let { metadataid } = page.params;
 
+  const { getValue } = getFormContext();
   let value = $state<string[]>([]);
   const valueFromData = $derived(getValue<Keywords>(KEY));
   $effect(() => {
-    value = valueFromData?.default?.map((entry) => entry.keyword) || [];
+    value = valueFromData?.default?.map((entry: { keyword: string }) => entry.keyword) || [];
   });
 
   let showCheckmark = $state(false);
@@ -35,6 +38,9 @@
 
   let dialogOpen = $state(false);
   let newKeyword = $state('');
+
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   const getAutoKeywords = async () => {
     const response = await fetch(`/metadata/${metadataid}/autokeywords`);
@@ -126,10 +132,19 @@
       });
     }
   });
+
+  let isInvalid = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    return isEditingRole && !validationResult?.valid;
+  });
 </script>
 
 <div class="keywords-field" bind:this={containerElement}>
-  <fieldset>
+  <fieldset class={[isInvalid && 'invalid']}>
     <legend>{t('15_KeywordsField.label')}</legend>
     <ChipSet class="keywords-chipset" chips={uniqueKeywords} nonInteractive>
       {#snippet chip(chip)}
@@ -210,6 +225,10 @@
     fieldset {
       flex: 1;
       border-radius: 4px;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       > legend {
         font-size: 1.5em;

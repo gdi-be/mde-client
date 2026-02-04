@@ -1,27 +1,35 @@
 <script lang="ts">
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { toast } from 'svelte-french-toast';
   import { page } from '$app/state';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   const t = $derived(page.data.t);
+
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   const KEY = 'isoMetadata.pointsOfContact';
 
   type ContactListEntry = Contact & { listId: string };
 
+  const { getValue } = getFormContext();
   let contacts = $state<ContactListEntry[]>([]);
   const valueFromData = $derived(getValue<Contacts>(KEY));
   let isEditing = $state<boolean>(false);
 
   // important that this is not a state
   let previousValueAsString: string;
+
+  const popconfirm = $derived(getPopconfirm());
 
   $effect(() => {
     // this check prevents rerendering if nothing has actually changed
@@ -34,7 +42,7 @@
       return;
     }
     contacts =
-      valueFromData?.map((contact) => {
+      valueFromData?.map((contact: Contact) => {
         const listId = crypto.randomUUID();
         return {
           listId,
@@ -129,7 +137,7 @@
   const removeItem = (listId: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         contacts = contacts.filter((contact) => contact.listId !== listId);
@@ -141,10 +149,28 @@
       }
     );
   };
+
+  let hasInvalidFields = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    const hasInvalidFields = contacts.some((contact) => {
+      const nameValid = nameConfig?.validator(contact.name).valid ?? true;
+      const organisationValid = organisationConfig
+        ? organisationConfig?.validator(contact.organisation).valid
+        : true;
+      const phoneValid = phoneConfig ? phoneConfig?.validator(contact.phone).valid : true;
+      const emailValid = emailConfig ? emailConfig?.validator(contact.email).valid : true;
+      return !nameValid || !organisationValid || !phoneValid || !emailValid;
+    });
+    return isEditingRole && (!validationResult?.valid || hasInvalidFields);
+  });
 </script>
 
 <div class="contacts-field">
-  <fieldset>
+  <fieldset class={[hasInvalidFields ? 'invalid' : '']}>
     <legend>
       <span>{t('19_ContactsField.label')}</span>
       <IconButton
@@ -243,6 +269,10 @@
     fieldset {
       flex: 1;
       border-radius: 4px;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       > legend {
         display: flex;

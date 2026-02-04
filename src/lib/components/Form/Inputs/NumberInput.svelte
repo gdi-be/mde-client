@@ -2,6 +2,8 @@
   import FieldHint from '../FieldHint.svelte';
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import type { HTMLInputAttributes } from 'svelte/elements';
+  import { getHighestRole } from '$lib/util';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
 
   type InputProps = {
     value?: number;
@@ -28,27 +30,39 @@
     ...restProps
   }: InputProps = $props();
 
-  let showHint = $state(false);
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
+
+  let fieldHasFocus = $state(false);
+
+  let isInvalid = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    return isEditingRole && !validationResult?.valid;
+  });
 </script>
 
-<fieldset class={['number-input', wrapperClass]}>
+<fieldset class={['number-input', wrapperClass, isInvalid && 'invalid']}>
   <legend>{label}</legend>
   <input
     type="number"
     id={key}
     onfocus={(evt) => {
-      showHint = true;
+      fieldHasFocus = true;
       onfocus?.(evt);
     }}
     onblur={(evt) => {
-      showHint = false;
+      fieldHasFocus = false;
       onblur?.(evt);
     }}
     bind:value
     {...restProps}
   />
   <div class="field-footer">
-    <FieldHint {validationResult} {fieldConfig} {showHint} {explanation} />
+    <FieldHint {validationResult} {fieldConfig} {explanation} {fieldHasFocus} />
   </div>
 </fieldset>
 
@@ -59,6 +73,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    &.invalid {
+      border: 2px solid var(--mdc-theme-error) !important;
+    }
 
     legend {
       font-size: 1.5em;

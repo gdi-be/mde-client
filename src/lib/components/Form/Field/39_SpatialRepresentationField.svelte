@@ -1,18 +1,19 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import toast from 'svelte-french-toast';
   import FieldTools from '../FieldTools.svelte';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
   import type { Option } from '$lib/models/form';
   import { page } from '$app/state';
-  import { getAccessToken } from '../../../context/TokenContext.svelte';
-  import { getHighestRole } from '../../../util';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   const t = $derived(page.data.t);
   const KEY = 'isoMetadata.spatialRepresentationTypes';
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string[]>(KEY));
   let value = $state<string[]>();
   $effect(() => {

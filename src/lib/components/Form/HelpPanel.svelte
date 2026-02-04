@@ -6,7 +6,7 @@
   import { page } from '$app/state';
 
   const t = $derived(page.data.t);
-  const activeHelpKey = $derived(getFormContext().activeHelpKey);
+  const activeHelpKey = $derived(getFormContext().formState?.activeHelpKey);
 
   const getHelpMarkdown = async (key: string) => {
     const response = await fetch(`/help/${key}`);

@@ -1,9 +1,11 @@
 import { describe, expect, test } from 'bun:test';
-import { getProgress, getValue, getAllValues } from '$lib/context/FormContext.svelte';
+import { getFormContext, getProgress } from '$lib/context/FormContext.svelte';
 import type { Role } from '$lib/models/keycloak';
 import metadata1 from './fixtures/metadata1';
 import metadata2 from './fixtures/metadata2';
 import type { Contact } from '$lib/models/metadata';
+
+const { getValue, getAllValues } = getFormContext();
 
 describe('FormContext', () => {
   describe('getValue', () => {

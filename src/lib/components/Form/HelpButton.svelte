@@ -2,14 +2,14 @@
   import { page } from '$app/state';
   import IconButton from '@smui/icon-button';
   import { Icon } from '@smui/button';
-  import { getFormContext, toggleActiveHelp } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
 
   const t = $derived(page.data.t);
   let { key } = $props();
 
-  const { activeHelpKey } = $derived(getFormContext());
+  const formContext = $derived(getFormContext());
 
-  const pressed = $derived(key === activeHelpKey);
+  const pressed = $derived(key === formContext?.formState?.activeHelpKey);
 </script>
 
 <IconButton
@@ -18,7 +18,7 @@
   toggle
   size="button"
   {pressed}
-  onclick={() => toggleActiveHelp(key)}
+  onclick={() => formContext.toggleActiveHelp(key)}
 >
   <Icon class="material-icons">help</Icon>
   <Icon class="material-icons-filled" on>help</Icon>

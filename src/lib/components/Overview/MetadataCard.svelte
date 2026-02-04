@@ -4,7 +4,7 @@
   import Card, { ActionIcons, Media, MediaContent, PrimaryAction } from '@smui/card';
   import IconButton, { Icon } from '@smui/icon-button';
   import type { MetadataCollection } from '$lib/models/metadata';
-  import { popconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { Set } from '@smui/chips';
   import StatusChip from '$lib/components/StatusChip.svelte';
   import { canAssignSelf, canUnassignSelf, getHighestRole } from '$lib/util';
@@ -38,6 +38,7 @@
   const showAssignAction = $derived(
     canAssignSelf(token, metadata) || canUnassignSelf(token, metadata)
   );
+  const popconfirm = $derived(getPopconfirm());
 
   const statuses = $derived.by(() => {
     const chips = [];
@@ -137,7 +138,7 @@
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
 
-    popconfirm(
+    popconfirm.open(
       targetEl,
       async () => {
         try {
