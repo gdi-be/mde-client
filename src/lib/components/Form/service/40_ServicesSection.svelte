@@ -1,12 +1,13 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
   import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
-  import type { Service } from '$lib/models/metadata';
+  import type { Layer, Service } from '$lib/models/metadata';
   import ServiceForm_40 from './40_ServiceForm.svelte';
   import Checkmark from '../Checkmark.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { page } from '$app/state';
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
+  import { validateService } from './validation';
 
   const t = $derived(page.data.t);
 
@@ -41,6 +42,23 @@
 
   const fieldConfig = getFieldConfig(40);
   let validationResult = $derived(fieldConfig?.validator(services));
+
+  // Track which services have invalid fields - validate all services
+  const invalidServiceIds = $derived.by(() => {
+    const invalidIds = new Set<string>();
+    const allLayers = getValue<Record<string, Layer[]>>(LAYERS_KEY) || {};
+
+    services.forEach((service) => {
+      const serviceLayers = allLayers[service.serviceIdentification] || [];
+      const validation = validateService(service, serviceLayers);
+
+      if (validation.hasInvalidLayers || validation.hasInvalidFeatureTypes) {
+        invalidIds.add(service.serviceIdentification);
+      }
+    });
+
+    return invalidIds;
+  });
 
   $effect(() => {
     services = initialServices || [];
@@ -144,7 +162,13 @@
 <FieldHint {fieldConfig} {validationResult} explanation={t('40_ServicesSection.explanation')} />
 <nav class="tabs">
   {#each tabs as tab}
-    <div class="tab-container" class:active={activeTab === tab.id}>
+    <div
+      class={[
+        'tab-container',
+        activeTab === tab.id ? 'active' : '',
+        invalidServiceIds.has(tab.id) ? 'invalid' : ''
+      ]}
+    >
       <button
         type="button"
         id={tab.id}
@@ -223,6 +247,10 @@
     &.active {
       font-weight: bold;
       background-color: var(--primary-90);
+    }
+
+    &.invalid {
+      box-shadow: inset 0 -2px 0 0 var(--mdc-theme-error);
     }
   }
 

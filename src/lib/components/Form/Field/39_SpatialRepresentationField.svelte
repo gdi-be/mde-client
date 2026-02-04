@@ -5,8 +5,8 @@
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
   import type { Option } from '$lib/models/form';
   import { page } from '$app/state';
-  import { getAccessToken } from '../../../context/TokenContext.svelte';
-  import { getHighestRole } from '../../../util';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   const t = $derived(page.data.t);
   const KEY = 'isoMetadata.spatialRepresentationTypes';

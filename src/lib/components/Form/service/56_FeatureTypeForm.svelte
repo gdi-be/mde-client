@@ -10,6 +10,7 @@
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
+  import { validateFeatureTypes } from './validation';
   const t = $derived(page.data.t);
 
   type Tab = {
@@ -42,6 +43,8 @@
   const validationResult = $derived(
     fieldConfig?.validator(featureTypes, { PARENT_VALUE: service })
   );
+
+  const invalidTabIndices = $derived(validateFeatureTypes(featureTypes));
 
   $effect(() => {
     // if the serviceId changes set activeTabIndex to undefined
@@ -106,14 +109,20 @@
 </script>
 
 <div class="featuretypes-form">
-  <fieldset>
+  <fieldset class={[invalidTabIndices.size > 0 && 'invalid']}>
     <legend>
       {t('56_FeatureTypeForm.label')}
     </legend>
     <FieldHint {fieldConfig} {validationResult} />
     <nav>
       {#each tabs as tab, i}
-        <div class="tab-container" class:active={activeTabIndex === i}>
+        <div
+          class={[
+            'tab-container',
+            activeTabIndex === i && 'active',
+            invalidTabIndices.has(i) && 'invalid'
+          ]}
+        >
           <button
             type="button"
             id={tab.name}
@@ -187,6 +196,10 @@
       flex: 1;
       border-radius: 0.25em;
 
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error);
+      }
+
       > legend {
         display: flex;
         align-items: center;
@@ -247,6 +260,10 @@
         &.active {
           font-weight: bold;
           background-color: var(--primary-90);
+        }
+
+        &.invalid {
+          box-shadow: inset 0 -2px 0 0 var(--mdc-theme-error);
         }
       }
 

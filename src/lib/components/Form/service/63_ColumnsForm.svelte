@@ -10,6 +10,7 @@
   import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
+  import { validateColumns } from './validation';
   const t = $derived(page.data.t);
 
   type Tab = {
@@ -40,6 +41,8 @@
 
   const fieldConfig = getFieldConfig(63);
   const validationResult = $derived(fieldConfig?.validator(columns));
+
+  const invalidTabIndices = $derived(validateColumns(columns));
 
   $effect(() => {
     // if the featureType changes set activeTabIndex to undefined
@@ -101,12 +104,18 @@
 </script>
 
 <div class="columns-form">
-  <fieldset>
+  <fieldset class={[invalidTabIndices.size > 0 && 'invalid']}>
     <legend>{t('63_ColumnsForm.label')}</legend>
     <FieldHint {fieldConfig} {validationResult} explanation={t('63_ColumnsForm.explanation')} />
     <nav>
       {#each tabs as tab, i}
-        <div class="tab-container" class:active={activeTabIndex === i}>
+        <div
+          class={[
+            'tab-container',
+            activeTabIndex === i && 'active',
+            invalidTabIndices.has(i) && 'invalid'
+          ]}
+        >
           <button
             type="button"
             id={tab.name}
@@ -169,6 +178,10 @@
       flex: 1;
       border-radius: 0.25em;
 
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error);
+      }
+
       > legend {
         font-size: 1.5em;
       }
@@ -225,6 +238,10 @@
         &.active {
           font-weight: bold;
           background-color: var(--primary-90);
+        }
+
+        &.invalid {
+          box-shadow: inset 0 -2px 0 0 var(--mdc-theme-error);
         }
       }
 

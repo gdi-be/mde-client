@@ -24,6 +24,10 @@
   const fieldConfigWidth = getFieldConfig(77);
   const fieldConfigHeight = getFieldConfig(78);
   const validationResult = $derived(fieldConfig?.validator(value));
+  const validationResultUrl = $derived(fieldConfigUrl?.validator(value?.url));
+  const validationResultFormat = $derived(fieldConfigFormat?.validator(value?.format));
+  const validationResultWidth = $derived(fieldConfigWidth?.validator(value?.width));
+  const validationResultHeight = $derived(fieldConfigHeight?.validator(value?.height));
   let showCheckmark = $state(false);
 
   const update = async (key: string, val: string) => {
@@ -53,6 +57,7 @@
             value={value?.url}
             onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigUrl}
+            validationResult={validationResultUrl}
           />
           <FieldTools value={value?.url} key={KEY} noCheckmark noHelpButton />
         </div>
@@ -62,6 +67,7 @@
             value={value?.format}
             onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigFormat}
+            validationResult={validationResultFormat}
           />
           <FieldTools value={value?.format} key={KEY} noCheckmark noHelpButton />
         </div>
@@ -73,6 +79,7 @@
             value={value?.width}
             onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigWidth}
+            validationResult={validationResultWidth}
           />
           <FieldTools value={value?.width} key={KEY} noCheckmark noHelpButton />
         </div>
@@ -82,6 +89,7 @@
             value={value?.height}
             onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigHeight}
+            validationResult={validationResultHeight}
           />
           <FieldTools value={value?.height} key={KEY} noCheckmark noHelpButton />
         </div>
