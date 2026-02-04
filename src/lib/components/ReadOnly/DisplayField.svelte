@@ -2,9 +2,7 @@
   import { getFormContext } from '$lib/context/FormContext.svelte';
   import { page } from '$app/state';
   import type { FieldKey } from '$lib/models/form';
-  import type { Snippet } from 'svelte';
-  import * as DisplayFieldSnippets from './DisplayFieldSnippets.svelte';
-  import type { MetadataCollection } from '$lib/models/metadata';
+  import DisplayFieldSnippets from './DisplayFieldSnippets.svelte';
 
   type DisplayFieldProps = {
     key: FieldKey;
@@ -17,11 +15,6 @@
   const { getValue } = getFormContext();
   const value = $derived(getValue(key));
 
-  const valueSnippet: Snippet<[unknown, MetadataCollection | undefined]> = $derived.by(() => {
-    const renderer = DisplayFieldSnippets[key as keyof typeof DisplayFieldSnippets] as Snippet;
-    return renderer || DisplayFieldSnippets.defaultSnippet;
-  });
-
   const metadata = $derived(getFormContext()?.formState?.metadata);
 </script>
 
@@ -29,7 +22,7 @@
   <strong class="title">{label}</strong>
   {#if value}
     <span class="value">
-      {@render valueSnippet(value, metadata)}
+      <DisplayFieldSnippets {t} {key} {value} {metadata} />
     </span>
   {:else}
     <span class="value">{t('displayfield.noValue')}</span>
