@@ -59,8 +59,8 @@
   const codeFieldConfig = getFieldConfig<string>(43);
   const urlFieldConfig = getFieldConfig<string>(44);
 
-  const onBlur = async () => {
-    await persistContentDescriptions();
+  const onBlur = async (evt: FocusEvent) => {
+    await persistContentDescriptions(evt);
     isEditing = false;
   };
 
@@ -68,7 +68,11 @@
     isEditing = true;
   };
 
-  const persistContentDescriptions = async () => {
+  const persistContentDescriptions = async (evt?: FocusEvent) => {
+    // Due to the SvelteKit lifecycle the blur effect gets trigger twice
+    // this leads to a loss of focus on the input field. This need to be fixed.
+    const focusedElement = evt?.relatedTarget as HTMLElement | null;
+
     const value = contentDescriptions.map((contentDescription) => ({
       description: contentDescription.description,
       url: contentDescription.url,
@@ -78,6 +82,13 @@
     if (response.ok) {
       showCheckmark = true;
     }
+
+    if (!focusedElement) return;
+    setTimeout(() => {
+      const elementToFocus = document.getElementById(focusedElement.id);
+      elementToFocus?.focus();
+      isEditing = true;
+    }, 10);
   };
 
   const addItem = (evt: MouseEvent) => {
@@ -167,6 +178,7 @@
             onfocus={onFocus}
             fieldConfig={titleFieldConfig}
             validationResult={titleFieldConfig?.validator(contentDescription.description)}
+            id={`${KEY}-${index}-description`}
           />
           <FieldTools key={`${KEY}[${index}].description`} fieldConfig={titleFieldConfig} />
         </div>
@@ -188,6 +200,7 @@
                 { label: t('43_AdditionalInformationCode.order'), key: 'order' },
                 { label: t('43_AdditionalInformationCode.search'), key: 'search' }
               ]}
+              id={`${KEY}-${index}-code`}
             />
             <FieldTools key={`${KEY}[${index}].code`} fieldConfig={codeFieldConfig} />
           </div>
@@ -199,6 +212,7 @@
               onfocus={onFocus}
               fieldConfig={urlFieldConfig}
               validationResult={urlFieldConfig?.validator(contentDescription.url)}
+              id={`${KEY}-${index}-url`}
             />
             <FieldTools key={`${KEY}[${index}].url`} fieldConfig={urlFieldConfig} />
           </div>
