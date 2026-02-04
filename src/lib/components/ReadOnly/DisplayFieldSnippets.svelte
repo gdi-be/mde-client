@@ -106,7 +106,7 @@
   };
 
   const getAutoKeywords = async () => {
-    const metadata = getFormContext()?.metadata;
+    const metadata = getFormContext()?.formState?.metadata;
     const metadataId = metadata?.metadataId;
     if (!metadataId) {
       toast.error(t('displayfieldsnippets.errorNoMetadataId'));

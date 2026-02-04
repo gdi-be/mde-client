@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
@@ -27,6 +27,7 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
+  const { getValue } = getFormContext();
   let initialCRSKey = getValue<CRS>(CRS_KEY);
   const valueFromData = $derived(getValue<Extent>(KEY));
   let value4326 = $state({

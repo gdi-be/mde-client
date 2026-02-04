@@ -2,7 +2,7 @@
   import {
     FORMSTATE_CONTEXT,
     getFieldConfig,
-    getValue,
+    getFormContext,
     persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
@@ -27,6 +27,7 @@
   const KEY = 'isoMetadata.inspireFormatName';
   const ANNEX_THEME_KEY = 'isoMetadata.inspireTheme';
 
+  const { getValue } = getFormContext();
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const annexValue = $derived(getValue<string[]>(ANNEX_THEME_KEY));
   const metadata = $derived(formState.metadata);

@@ -1,7 +1,7 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { Layer, MetadataProfile } from '$lib/models/metadata';
-  import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext } from '$lib/context/FormContext.svelte';
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
@@ -19,6 +19,7 @@
   let { value, onChange }: ComponentProps = $props();
   let showCheckmark = $state(false);
 
+  const { getValue } = getFormContext();
   let metadataProfile = $derived(getValue<MetadataProfile>(PROFILE_KEY));
   const fieldConfig = getFieldConfig(52);
   const validationResult = $derived(fieldConfig?.validator(value));

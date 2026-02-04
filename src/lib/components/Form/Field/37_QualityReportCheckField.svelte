@@ -2,7 +2,7 @@
   import {
     FORMSTATE_CONTEXT,
     getFieldConfig,
-    getValue,
+    getFormContext,
     persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
@@ -24,6 +24,7 @@
 
   const KEY = 'isoMetadata.valid';
 
+  const { getValue } = getFormContext();
   const metadataProfile = $derived(getValue<string>('isoMetadata.metadataProfile', metadata));
 
   const valueFromData = $derived(getValue<boolean>(KEY));

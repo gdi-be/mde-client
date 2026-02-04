@@ -1,13 +1,14 @@
 <script lang="ts">
   import type { ValidationResult } from '../FieldsConfig';
   import FieldTools from '../FieldTools.svelte';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import TextAreaInput from '../Inputs/TextAreaInput.svelte';
   import { page } from '$app/state';
   const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.description';
 
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   $effect(() => {

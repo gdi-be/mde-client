@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import { invalidateAll } from '$app/navigation';
@@ -10,6 +10,7 @@
   const FROM_KEY = 'isoMetadata.validFrom';
   const TO_KEY = 'isoMetadata.validTo';
 
+  const { getValue } = getFormContext();
   const startValueFromData = $derived(getValue<string>(FROM_KEY));
   let startValue = $state('');
   $effect(() => {

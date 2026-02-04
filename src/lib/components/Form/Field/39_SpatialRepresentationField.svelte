@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import toast from 'svelte-french-toast';
   import FieldTools from '../FieldTools.svelte';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
@@ -13,6 +13,7 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string[]>(KEY));
   let value = $state<string[]>();
   $effect(() => {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import type { Service } from '$lib/models/metadata';
   import ServiceForm_40 from './40_ServiceForm.svelte';
   import Checkmark from '../Checkmark.svelte';
@@ -20,6 +20,7 @@
 
   const popconfirm = $derived(getPopconfirm());
 
+  const { getValue } = getFormContext();
   let initialServices = getValue<Service[]>(KEY);
   let services = $state<Service[]>([]);
   let tabs = $derived<Tab[]>(

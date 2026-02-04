@@ -17,7 +17,7 @@
   const metadata = $derived(data.metadata);
   initializeFormContext(data.metadata);
 
-  const formState = getFormContext();
+  const formState = $derived(getFormContext().formState);
   $effect(() => {
     formState.metadata = data.metadata;
   });

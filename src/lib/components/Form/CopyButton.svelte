@@ -1,7 +1,7 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
   import { Icon } from '@smui/button';
-  import { getValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext, getExtraParams } from '$lib/context/FormContext.svelte';
   import type { FieldKey } from '$lib/models/form';
   import type { FullFieldConfig } from './FieldsConfig';
   import toast from 'svelte-french-toast';
@@ -16,6 +16,7 @@
   let { key, fieldConfig, value: valueFromProps }: CopyButtonProps = $props();
 
   const t = $derived(page.data.t);
+  const { formState, getValue } = getFormContext();
   const value = $derived(valueFromProps ?? getValue(key));
   let copied = $state(false);
   let copyFailed = $state(false);
@@ -26,7 +27,10 @@
 
       if (fieldConfig?.getCopyValue) {
         try {
-          text = await fieldConfig.getCopyValue(value);
+          const extraParams = formState.metadata
+            ? getExtraParams(fieldConfig, formState.metadata)
+            : undefined;
+          text = await fieldConfig.getCopyValue(value, extraParams);
         } catch {
           toast.error(t('copybutton.copyError'));
           return;

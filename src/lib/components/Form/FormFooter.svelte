@@ -54,6 +54,7 @@
   let showPublishButton = $derived(
     highestRole === 'MdeAdministrator' ||
       (assignedToMe &&
+        metadata &&
         allFieldsValid(highestRole, metadata) &&
         highestRole === 'MdeEditor' &&
         metadata?.approved === true)

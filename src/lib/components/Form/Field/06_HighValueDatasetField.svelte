@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import Switch from '@smui/switch';
   import type { Option } from '$lib/models/form';
@@ -13,6 +13,8 @@
 
   const CHECKED_KEY = 'isoMetadata.highValueDataset';
   const CATEGORY_KEY = 'isoMetadata.highValueDataCategory';
+
+  const { getValue } = getFormContext();
 
   const checkedValueFromData = $derived(getValue<boolean>(CHECKED_KEY));
   let checkedValue = $state(false);

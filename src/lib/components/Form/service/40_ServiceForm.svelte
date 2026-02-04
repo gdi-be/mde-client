@@ -11,7 +11,7 @@
   import { getContext } from 'svelte';
   import {
     FORMSTATE_CONTEXT,
-    getValue,
+    getFormContext,
     persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
@@ -29,6 +29,7 @@
 
   let { service, onChange }: ServiceFormProps = $props();
 
+  const { getValue } = getFormContext();
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { Privacy, TermsOfUse } from '$lib/models/metadata';
@@ -13,6 +13,7 @@
   const KEY = 'isoMetadata.termsOfUseId';
   const PRIVACY_KEY = 'isoMetadata.privacy';
 
+  const { getValue } = getFormContext();
   const value = $derived(getValue<number>(KEY));
   const privacy = $derived(getValue<Privacy>(PRIVACY_KEY));
 
@@ -85,12 +86,6 @@
 
     :global(.input-wrapper) {
       flex: 1;
-    }
-
-    .none-default {
-      font-size: 0.75rem;
-      color: var(--error-color);
-      margin: 1em;
     }
   }
 </style>

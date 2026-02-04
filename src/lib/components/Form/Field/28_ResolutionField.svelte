@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldHint from '../FieldHint.svelte';
   import FieldTools from '../FieldTools.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
@@ -13,6 +13,7 @@
   const RESOLUTION_KEY = 'isoMetadata.resolutions';
   const SCALE_KEY = 'isoMetadata.scale';
 
+  const { getValue } = getFormContext();
   let selected = $state<typeof RESOLUTION_KEY | typeof SCALE_KEY>();
 
   // TODO: check why this is a List

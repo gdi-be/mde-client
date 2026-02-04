@@ -1,6 +1,6 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { ValidationResult } from '../FieldsConfig';
   import { page } from '$app/state';
@@ -8,6 +8,7 @@
   const t = $derived(page.data.t);
   const KEY = 'technicalMetadata.deliveredCrs';
 
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   $effect(() => {

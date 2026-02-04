@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { onMount } from 'svelte';
   import Chip, { Set as ChipSet, Text, TrailingIcon } from '@smui/chips';
@@ -21,10 +21,11 @@
   let containerElement = $state<HTMLDivElement>();
   let { metadataid } = page.params;
 
+  const { getValue } = getFormContext();
   let value = $state<string[]>([]);
   const valueFromData = $derived(getValue<Keywords>(KEY));
   $effect(() => {
-    value = valueFromData?.default?.map((entry) => entry.keyword) || [];
+    value = valueFromData?.default?.map((entry: { keyword: string }) => entry.keyword) || [];
   });
 
   let showCheckmark = $state(false);

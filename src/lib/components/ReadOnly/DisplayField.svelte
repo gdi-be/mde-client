@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFormContext, getValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import { page } from '$app/state';
   import type { FieldKey } from '$lib/models/form';
   import type { Snippet } from 'svelte';
@@ -14,6 +14,7 @@
   const t = $derived(page.data.t);
   const { key, label }: DisplayFieldProps = $props();
 
+  const { getValue } = getFormContext();
   const value = $derived(getValue(key));
 
   const valueSnippet: Snippet<[unknown, MetadataCollection | undefined]> = $derived.by(() => {
@@ -21,7 +22,7 @@
     return renderer || DisplayFieldSnippets.defaultSnippet;
   });
 
-  const metadata = $derived(getFormContext()?.metadata);
+  const metadata = $derived(getFormContext()?.formState?.metadata);
 </script>
 
 <div class="display-field">

@@ -2,7 +2,7 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { MetadataCollection, Service } from '$lib/models/metadata';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
-  import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext } from '$lib/context/FormContext.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { getContext } from 'svelte';
   import { page } from '$app/state';
@@ -20,6 +20,7 @@
 
   const METADATA_TITLE_KEY = 'isoMetadata.title';
 
+  const { getValue } = getFormContext();
   const metadata = getContext<MetadataCollection>('metadata');
   const metadataTitle = $derived(getValue<string>(METADATA_TITLE_KEY, metadata));
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
@@ -15,6 +15,7 @@
 
   const KEY = 'isoMetadata.contentDescriptions';
 
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<ContentDescription[]>(KEY));
   let contentDescriptions = $state<ContentDescriptionListEntry[]>([]);
   let isEditing = $state<boolean>(false);
@@ -34,7 +35,7 @@
     ) {
       return;
     }
-    contentDescriptions = valueFromData?.map((contentDescription) => {
+    contentDescriptions = valueFromData?.map((contentDescription: ContentDescription) => {
       const { url, description, code } = contentDescription;
       const listId = crypto.randomUUID();
       return {

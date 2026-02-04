@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Lineage, MetadataCollection } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
@@ -16,6 +16,7 @@
 
   const KEY = 'isoMetadata.lineage';
 
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<Lineage[]>(KEY));
   let lineages = $state<LineageListEntry[]>([]);
 
@@ -47,7 +48,7 @@
     ) {
       return;
     }
-    lineages = valueFromData?.map((lineage) => {
+    lineages = valueFromData?.map((lineage: Lineage) => {
       const listId = crypto.randomUUID();
       return {
         listId,

@@ -1,7 +1,7 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { MetadataCollection, Service } from '$lib/models/metadata';
-  import { getFieldConfig, getValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { getContext } from 'svelte';
@@ -26,6 +26,7 @@
 
   const METADATA_PREVIEW_KEY = 'isoMetadata.preview';
 
+  const { getValue } = getFormContext();
   const metadata = getContext<MetadataCollection>('metadata');
   const metadataPreview = $derived(getValue<string>(METADATA_PREVIEW_KEY, metadata));
 

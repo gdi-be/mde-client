@@ -43,11 +43,6 @@ export function initializeStatusesContext() {
   setContext(STATUSES_CONTEXT, statutesState);
 }
 
-export function getStatusesState() {
-  const statutesState = getContext<{ state: StatusesState }>(STATUSES_CONTEXT);
-  return statutesState;
-}
-
 export function getAvailableStatuses(token: Token) {
   const statutesState = getContext<{ state: StatusesState }>(STATUSES_CONTEXT);
   if (!token || !statutesState) return [];

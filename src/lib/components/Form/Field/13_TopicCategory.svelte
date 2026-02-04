@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { IsoTheme, MetadataProfile } from '$lib/models/metadata';
   import type { ValidationResult } from '../FieldsConfig';
@@ -18,6 +18,7 @@
   const TYPE_KEY = 'isoMetadata.metadataProfile';
   const ANNEX_THEME_KEY = 'isoMetadata.inspireTheme';
 
+  const { getValue } = getFormContext();
   const value = $derived(getValue<string[]>(KEY));
   const annexValue = $derived(getValue<string[]>(ANNEX_THEME_KEY));
   const profileValue = $derived(getValue<MetadataProfile>(TYPE_KEY));

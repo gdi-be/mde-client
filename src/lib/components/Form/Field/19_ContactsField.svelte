@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getValue, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
@@ -18,6 +18,7 @@
 
   type ContactListEntry = Contact & { listId: string };
 
+  const { getValue } = getFormContext();
   let contacts = $state<ContactListEntry[]>([]);
   const valueFromData = $derived(getValue<Contacts>(KEY));
   let isEditing = $state<boolean>(false);
@@ -41,7 +42,7 @@
       return;
     }
     contacts =
-      valueFromData?.map((contact) => {
+      valueFromData?.map((contact: Contact) => {
         const listId = crypto.randomUUID();
         return {
           listId,

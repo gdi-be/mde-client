@@ -6,7 +6,7 @@
   import {
     getProgress,
     type Section,
-    clearActiveHelp,
+    getFormContext,
     type FormState,
     FORMSTATE_CONTEXT,
     type ProgressInfo
@@ -53,9 +53,10 @@
   const t = $derived(page.data.t);
   let activeSection = $state(page.url.hash.slice(1) || 'basedata');
 
-  const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
-  const metadata = $derived(formContext.metadata);
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formState.metadata);
 
+  const formContext = getFormContext();
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
@@ -100,7 +101,7 @@
 
   const onSectionClick = async (section: string) => {
     activeSection = section;
-    clearActiveHelp();
+    formContext.clearActiveHelp();
 
     goto(`#${section}`, {
       replaceState: true,

@@ -12,7 +12,7 @@ import {
   type Service,
   type TermsOfUse
 } from '$lib/models/metadata';
-import { getValue, type Section } from '$lib/context/FormContext.svelte';
+import { type Section } from '$lib/context/FormContext.svelte';
 import type { Role } from '$lib/models/keycloak';
 
 export type ValidationResult = {
@@ -35,11 +35,11 @@ export interface FullFieldConfig<T = any> {
   // the section this field belongs to
   section: Section;
   // the validator function for this field
-  validator: (val: T | undefined, extra?: Record<string, any>) => ValidationResult;
+  validator: (val: T | undefined, extraParams?: Record<string, any>) => ValidationResult;
   // additional parameters for the validator function
-  validatorExtraParams?: Array<FieldKey | 'PARENT_VALUE'>;
+  extraParams?: Array<FieldKey | 'PARENT_VALUE'>;
   // this function is used to get the value for the copy button
-  getCopyValue?: (val: T | undefined) => string | Promise<string>;
+  getCopyValue?: (val: T | undefined, extraParams?: Record<string, any>) => string | Promise<string>;
 }
 
 const isDefined = <T>(val: T): val is NonNullable<T> => {
@@ -164,7 +164,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 7,
     key: 'isoMetadata.inspireTheme',
-    validatorExtraParams: ['isoMetadata.metadataProfile'],
+    extraParams: ['isoMetadata.metadataProfile'],
     validator: (val: string[], extraParams) => {
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
       if (metadataProfile === 'ISO') {
@@ -190,8 +190,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 8,
     key: 'isoMetadata.highValueDataCategory',
-    validator: (val: any) => {
-      const isHighValueDataset = getValue('isoMetadata.highValueDataset');
+    extraParams: ['isoMetadata.highValueDataset'],
+    validator: (val: any, extraParams) => {
+      const isHighValueDataset = extraParams?.['isoMetadata.highValueDataset'];
       if (isHighValueDataset === true && !isDefined(val)) {
         return {
           valid: false,
@@ -260,10 +261,10 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 12,
     key: 'isoMetadata.validFrom',
-    validatorExtraParams: ['isoMetadata.validTo'],
-    validator: (startValue: string, extraParams) => {
-      const endValue = extraParams?.[0];
-      if (startValue && endValue && new Date(startValue) > new Date(endValue)) {
+    extraParams: ['isoMetadata.validTo'],
+    validator: (validFrom: string, extraParams) => {
+      const validTo = extraParams?.['isoMetadata.validTo'];
+      if (validFrom && validTo && new Date(validFrom) > new Date(validTo)) {
         return {
           valid: false,
           helpText: 'Das Startdatum muss vor dem Enddatum liegen.'
@@ -271,9 +272,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       }
       return { valid: true };
     },
-    getCopyValue: (val?: string) => {
-      const validTo = getValue<string>('isoMetadata.validTo');
-      const fromDate = val && formatDate(val);
+    getCopyValue: (validFrom?: string, extraParams?: Record<string, any>) => {
+      const validTo = extraParams?.['isoMetadata.validTo'];
+      const fromDate = validFrom && formatDate(validFrom);
       const toDate = validTo && formatDate(validTo);
 
       if (fromDate && toDate) {
@@ -293,7 +294,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 24,
     key: 'isoMetadata.validTo',
-    validatorExtraParams: ['isoMetadata.validFrom'],
+    extraParams: ['isoMetadata.validFrom'],
     validator: (endValue: string, extraParams) => {
       const startValue = extraParams?.[0];
       if (endValue && startValue && new Date(startValue) > new Date(endValue)) {
@@ -588,7 +589,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 27,
     key: 'isoMetadata.scale',
-    validatorExtraParams: ['isoMetadata.resolutions'],
+    extraParams: ['isoMetadata.resolutions'],
     validator: (val: any, extraParams) => {
       const resolutions = extraParams?.['isoMetadata.resolutions'];
       if (!isDefined(val) && !isDefined(resolutions)) {
@@ -611,7 +612,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 28,
     key: 'isoMetadata.resolutions',
-    validatorExtraParams: ['isoMetadata.scale'],
+    extraParams: ['isoMetadata.scale'],
     validator: (val: any, extraParams) => {
       const scale = extraParams?.['isoMetadata.scale'];
       if (!isDefined(val) && !isDefined(scale)) {
@@ -749,7 +750,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 38,
     key: 'isoMetadata.inspireAnnexVersion',
-    validatorExtraParams: ['isoMetadata.metadataProfile'],
+    extraParams: ['isoMetadata.metadataProfile'],
     validator: (val: any, extraParams) => {
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
       if (metadataProfile === 'INSPIRE_HARMONISED' && !isDefined(val)) {
@@ -842,7 +843,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 45,
     key: 'isoMetadata.services.workspace',
     collectionKey: 'isoMetadata.services',
-    validatorExtraParams: ['PARENT_VALUE'],
+    extraParams: ['PARENT_VALUE'],
     validator: (workspace: Service['workspace'], extraParams) => {
       const service = extraParams?.['PARENT_VALUE'];
       if (service?.serviceType === 'ATOM' && !isDefined(workspace)) {
@@ -866,7 +867,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 46,
     key: 'isoMetadata.services.preview',
     collectionKey: 'isoMetadata.services',
-    validatorExtraParams: ['PARENT_VALUE'],
+    extraParams: ['PARENT_VALUE'],
     validator: (preview: Service['preview'], extraParams) => {
       const service = extraParams?.['PARENT_VALUE'];
       if (service?.serviceType !== 'WMS' && service?.serviceType !== 'WMTS') {
@@ -923,7 +924,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 48,
     key: 'clientMetadata.layers',
     collectionKey: 'isoMetadata.services',
-    validatorExtraParams: ['PARENT_VALUE'],
+    extraParams: ['PARENT_VALUE'],
     validator: (layers: Layer[], extraParams) => {
       const service = extraParams?.['PARENT_VALUE'];
       // only needs layers if type is WMS or WMTS
@@ -996,9 +997,10 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 52,
     key: 'clientMetadata.layers.styleTitle',
     collectionKey: 'clientMetadata.layers',
-    validator: (styleTitle: Layer['styleTitle']) => {
-      const isInspireHarmonized =
-        getValue<MetadataProfile>('isoMetadata.metadataProfile') === 'INSPIRE_HARMONISED';
+    extraParams: ['isoMetadata.metadataProfile'],
+    validator: (styleTitle: Layer['styleTitle'], extraParams) => {
+      const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
+      const isInspireHarmonized = metadataProfile === 'INSPIRE_HARMONISED';
       if (isInspireHarmonized && !isDefined(styleTitle)) {
         return {
           valid: false,
@@ -1109,7 +1111,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.services.featureTypes',
     collectionKey: 'isoMetadata.services',
     isCollection: true,
-    validatorExtraParams: ['PARENT_VALUE'],
+    extraParams: ['PARENT_VALUE'],
     validator: (featureTypes: FeatureType[], extraParams) => {
       const service = extraParams?.['PARENT_VALUE'];
       // only needs featureTypes if type is WFS
@@ -1244,7 +1246,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 70,
     key: 'isoMetadata.inspireFormatName',
-    validatorExtraParams: ['isoMetadata.metadataProfile'],
+    extraParams: ['isoMetadata.metadataProfile'],
     validator: (val: string[], extraParams) => {
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
       if (metadataProfile !== 'INSPIRE_HARMONISED') {

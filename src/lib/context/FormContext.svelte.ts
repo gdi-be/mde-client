@@ -25,10 +25,6 @@ export async function initializeFormContext(metadata: MetadataCollection) {
   setContext(FORMSTATE_CONTEXT, formState);
 }
 
-export function getFormContext() {
-  return getContext<FormState>(FORMSTATE_CONTEXT);
-}
-
 /**
  * Gets a value from the metadata collection.
  * Supports both simple paths (e.g. 'isoMetadata.title') and array access (e.g. 'services[0].featureTypes[1]').
@@ -43,9 +39,7 @@ export function getFormContext() {
  * @param metadata - Optional: Alternative metadata collection. If not provided, formState.metadata is used
  * @returns The value at the specified path or undefined if the path does not exist
  */
-export function getValue<T>(key: string, metadata?: MetadataCollection): T | undefined {
-  const formState = getFormContext();
-  const data = metadata || formState?.metadata;
+function getValue<T>(key: string, data: MetadataCollection): T | undefined {
   if (!data) return undefined;
 
   return key.split('.').reduce(
@@ -84,9 +78,7 @@ export function getValue<T>(key: string, metadata?: MetadataCollection): T | und
  * @param metadata - Optional: Alternative metadata collection. If not provided, formState.metadata is used
  * @returns Array of all values found at the specified path
  */
-export function getAllValues<T>(key: string, metadata?: MetadataCollection): T[] {
-  const formState = getFormContext();
-  const data = metadata || formState.metadata;
+function getAllValues<T>(key: string, data?: MetadataCollection): T[] {
   if (!data) return [];
 
   const pathParts = key.split('.');
@@ -123,6 +115,30 @@ export function getAllValues<T>(key: string, metadata?: MetadataCollection): T[]
   return collectValues(data, pathParts, []);
 }
 
+function clearActiveHelp(formState: FormState) {
+  formState.activeHelpKey = undefined;
+}
+
+function toggleActiveHelp(key: FieldKey, formState: FormState) {
+  if (formState.activeHelpKey === key) {
+    formState.activeHelpKey = undefined;
+  } else {
+    formState.activeHelpKey = key;
+  }
+}
+
+export function getFormContext() {
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  return {
+    formState,
+    getValue: <T>(key: string, metadata?: MetadataCollection) => getValue<T>(key, metadata || formState.metadata!),
+    getAllValues: <T>(key: string, metadata?: MetadataCollection) =>
+      getAllValues<T>(key, metadata || formState.metadata),
+    clearActiveHelp: () => clearActiveHelp(formState),
+    toggleActiveHelp: (key: FieldKey) => toggleActiveHelp(key, formState)
+  }
+}
+
 export function getFieldConfig<T>(profileId: number, key?: string): FullFieldConfig<T> | undefined {
   const staticFieldConfigs = FieldConfigs.filter(({ profileId: id }) => id === profileId) || [];
   const staticFieldConfig =
@@ -131,20 +147,6 @@ export function getFieldConfig<T>(profileId: number, key?: string): FullFieldCon
       : staticFieldConfigs.find(({ key: k }) => k === key);
 
   return staticFieldConfig as FullFieldConfig<T>;
-}
-
-export function clearActiveHelp() {
-  const formState = getFormContext();
-  formState.activeHelpKey = undefined;
-}
-
-export function toggleActiveHelp(key: FieldKey) {
-  const formState = getFormContext();
-  if (formState.activeHelpKey === key) {
-    formState.activeHelpKey = undefined;
-  } else {
-    formState.activeHelpKey = key;
-  }
 }
 
 export type Section =
@@ -168,13 +170,13 @@ export type ProgressInfo = {
 
 export function getExtraParams(
   field: FullFieldConfig<any>,
-  metadata?: MetadataCollection,
+  metadata: MetadataCollection,
   parentValue?: any
 ): Record<string, any> | undefined {
-  if (!field.validatorExtraParams) return undefined;
+  if (!field.extraParams || !metadata) return undefined;
 
   const extraParams: Record<string, any> = {};
-  for (const param of field.validatorExtraParams) {
+  for (const param of field.extraParams) {
     if (param === 'PARENT_VALUE') {
       if (parentValue === undefined) {
         logger.error('parent_value is undefined, but requested in validatorExtraParams');
@@ -353,7 +355,7 @@ export function getProgress(
   };
 }
 
-export function allFieldsValid(highestRole: Role, metadata?: MetadataCollection): boolean {
+export function allFieldsValid(highestRole: Role, metadata: MetadataCollection): boolean {
   if (!metadata) return false;
   const progress = getProgress(highestRole, undefined, metadata);
   logger.warning('Invalid fields: ' + progress.invalidFields?.map((f) => f.field));
