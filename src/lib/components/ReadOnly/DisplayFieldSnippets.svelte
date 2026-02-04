@@ -1,5 +1,4 @@
-<script module lang="ts">
-  import { page } from '$app/state';
+<script lang="ts">
   import type {
     Keywords,
     Contacts,
@@ -14,49 +13,20 @@
     MetadataCollection,
     Layer
   } from '$lib/models/metadata';
+  import type { FieldKey } from '$lib/models/form';
 
   import type { Option } from '$lib/models/form';
   import { toast } from 'svelte-french-toast';
   import { getFormContext } from '$lib/context/FormContext.svelte';
 
-  export {
-    defaultSnippet,
-    isoMetadataPrivacy as 'isoMetadata.privacy',
-    isoMetadataAnnexTheme as 'isoMetadata.annexTheme',
-    isoMetadataContacts as 'isoMetadata.pointsOfContact',
-    isoMetadataContentDescription as 'isoMetadata.contentDescription',
-    isoMetadataContentDescriptions as 'isoMetadata.contentDescriptions',
-    isoMetadataCreated as 'isoMetadata.created',
-    isoMetadataCrs as 'isoMetadata.crs',
-    isoMetadataDescription as 'isoMetadata.description',
-    isoMetadataExtent as 'isoMetadata.extent',
-    isoMetadataHighValueDataCategory as 'isoMetadata.highValueDataCategory',
-    isoMetadataHighValueDataset as 'isoMetadata.highValueDataset',
-    isoMetadataInspireAnnexVersion as 'isoMetadata.inspireAnnexVersion',
-    isoMetadataInspireFormatName as 'isoMetadata.inspireFormatName',
-    isoMetadataInspireTheme as 'isoMetadata.inspireTheme',
-    isoMetadataKeywords as 'isoMetadata.keywords',
-    isoMetadataLineage as 'isoMetadata.lineage',
-    isoMetadataMaintenanceFrequency as 'isoMetadata.maintenanceFrequency',
-    isoMetadataMetadataProfile as 'isoMetadata.metadataProfile',
-    isoMetadataModified as 'isoMetadata.modified',
-    isoMetadataPreview as 'isoMetadata.preview',
-    isoMetadataPublished as 'isoMetadata.published',
-    isoMetadataQualityReportCheck as 'isoMetadata.qualityReportCheck',
-    isoMetadataResolutions as 'isoMetadata.resolutions',
-    isoMetadataServices as 'isoMetadata.services',
-    isoMetadataTechnicalDescription as 'isoMetadata.technicalDescription',
-    isoMetadataTermsOfUse as 'isoMetadata.termsOfUseId',
-    isoMetadataTitle as 'isoMetadata.title',
-    isoMetadataTopicCategory as 'isoMetadata.topicCategory',
-    isoMetadataValid as 'isoMetadata.valid',
-    isoMetadataValidFrom as 'isoMetadata.validFrom',
-    isoMetadataValidTo as 'isoMetadata.validTo',
-    technicalMetadataDeliveredCrs as 'technicalMetadata.deliveredCrs',
-    technicalMetadataCategories as 'technicalMetadata.categories'
-  };
+  interface Props {
+    t: Awaited<ReturnType<typeof import('$lib/i18n').getTranslator>>;
+    key: FieldKey;
+    value: unknown;
+    metadata: MetadataCollection | undefined;
+  }
 
-  const t = $derived(page.data.t);
+  let { t, key, value, metadata }: Props = $props();
 
   const DEFAULT_NULL_STRING = $derived(t('displayfield.noValue'));
 
@@ -476,8 +446,10 @@
   {/if}
 {/snippet}
 
-{#snippet isoMetadataServices(services: Service[], metadata: MetadataCollection)}
+{#snippet isoMetadataServices(services: Service[], metadata?: MetadataCollection)}
   {#if !services?.length}
+    {DEFAULT_NULL_STRING}
+  {:else if !metadata}
     {DEFAULT_NULL_STRING}
   {:else}
     <strong>Anzahl: {services.length}</strong>
@@ -747,6 +719,76 @@
     {value.join(', ')}
   {/if}
 {/snippet}
+
+{#if key === 'isoMetadata.privacy'}
+  {@render isoMetadataPrivacy(value as string)}
+{:else if key === 'isoMetadata.annexTheme'}
+  {@render isoMetadataAnnexTheme(value as string)}
+{:else if key === 'isoMetadata.pointsOfContact'}
+  {@render isoMetadataContacts(value as Contacts)}
+{:else if key === 'isoMetadata.contentDescription'}
+  {@render isoMetadataContentDescription(value as string)}
+{:else if key === 'isoMetadata.contentDescriptions'}
+  {@render isoMetadataContentDescriptions(value as ContentDescription[])}
+{:else if key === 'isoMetadata.created'}
+  {@render isoMetadataCreated(value as string)}
+{:else if key === 'isoMetadata.crs'}
+  {@render isoMetadataCrs(value as string)}
+{:else if key === 'isoMetadata.description'}
+  {@render isoMetadataDescription(value as string)}
+{:else if key === 'isoMetadata.extent'}
+  {@render isoMetadataExtent(value as Extent)}
+{:else if key === 'isoMetadata.highValueDataCategory'}
+  {@render isoMetadataHighValueDataCategory(value as string[])}
+{:else if key === 'isoMetadata.highValueDataset'}
+  {@render isoMetadataHighValueDataset(value as boolean)}
+{:else if key === 'isoMetadata.inspireAnnexVersion'}
+  {@render isoMetadataInspireAnnexVersion(value as string)}
+{:else if key === 'isoMetadata.inspireFormatName'}
+  {@render isoMetadataInspireFormatName(value as string)}
+{:else if key === 'isoMetadata.inspireTheme'}
+  {@render isoMetadataInspireTheme(value as string[])}
+{:else if key === 'isoMetadata.keywords'}
+  {@render isoMetadataKeywords(value as Keywords)}
+{:else if key === 'isoMetadata.lineage'}
+  {@render isoMetadataLineage(value as Lineage[])}
+{:else if key === 'isoMetadata.maintenanceFrequency'}
+  {@render isoMetadataMaintenanceFrequency(value as MaintenanceFrequency)}
+{:else if key === 'isoMetadata.metadataProfile'}
+  {@render isoMetadataMetadataProfile(value as MetadataProfile)}
+{:else if key === 'isoMetadata.modified'}
+  {@render isoMetadataModified(value as string)}
+{:else if key === 'isoMetadata.preview'}
+  {@render isoMetadataPreview(value as string)}
+{:else if key === 'isoMetadata.published'}
+  {@render isoMetadataPublished(value as string)}
+{:else if key === 'isoMetadata.qualityReportCheck'}
+  {@render isoMetadataQualityReportCheck(value as string)}
+{:else if key === 'isoMetadata.resolutions'}
+  {@render isoMetadataResolutions(value as string)}
+{:else if key === 'isoMetadata.services'}
+  {@render isoMetadataServices(value as Service[], metadata)}
+{:else if key === 'isoMetadata.technicalDescription'}
+  {@render isoMetadataTechnicalDescription(value as string)}
+{:else if key === 'isoMetadata.termsOfUseId'}
+  {@render isoMetadataTermsOfUse(value as string)}
+{:else if key === 'isoMetadata.title'}
+  {@render isoMetadataTitle(value as string)}
+{:else if key === 'isoMetadata.topicCategory'}
+  {@render isoMetadataTopicCategory(value as string[])}
+{:else if key === 'isoMetadata.valid'}
+  {@render isoMetadataValid(value as boolean)}
+{:else if key === 'isoMetadata.validFrom'}
+  {@render isoMetadataValidFrom(value as string)}
+{:else if key === 'isoMetadata.validTo'}
+  {@render isoMetadataValidTo(value as string)}
+{:else if key === 'technicalMetadata.deliveredCrs'}
+  {@render technicalMetadataDeliveredCrs(value as string)}
+{:else if key === 'technicalMetadata.categories'}
+  {@render technicalMetadataCategories(value as string[])}
+{:else}
+  {@render defaultSnippet(value as string)}
+{/if}
 
 <style lang="scss">
   .list {
