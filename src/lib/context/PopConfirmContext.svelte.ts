@@ -1,5 +1,4 @@
 import { getContext, setContext } from 'svelte';
-import { on } from 'svelte/events';
 
 export const POPCONFIRM_CONTEXT = Symbol('popconfirm');
 
@@ -17,7 +16,7 @@ const defaultState = {
   open: false,
   text: 'Sind sie sicher?',
   confirmButtonText: 'Bestätigen',
-  onConfirm: async () => { }
+  onConfirm: async () => {}
 };
 
 export function initializePopconfirmContext() {

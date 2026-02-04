@@ -2,22 +2,22 @@ import type { ColumnInfo, FeatureType, Layer, Service } from '$lib/models/metada
 import { getFieldConfig } from '$lib/context/FormContext.svelte';
 
 /**
+ * Generic validator helper that checks if all field validations are valid
+ */
+function validateFields(validations: Array<{ valid?: boolean } | undefined>): boolean {
+  return validations.every((v) => v?.valid !== false);
+}
+
+/**
  * Validates a single column and returns whether it's valid
  */
 export function validateColumn(column: ColumnInfo): boolean {
-  const nameFieldConfig = getFieldConfig(64);
-  const aliasFieldConfig = getFieldConfig(65);
-  const typeFieldConfig = getFieldConfig(66);
-
-  const nameValidation = nameFieldConfig?.validator(column.name);
-  const aliasValidation = aliasFieldConfig?.validator(column.alias);
-  const typeValidation = typeFieldConfig?.validator(column.type);
-
-  return (
-    nameValidation?.valid !== false &&
-    aliasValidation?.valid !== false &&
-    typeValidation?.valid !== false
-  );
+  const validations = [
+    getFieldConfig(64)?.validator(column.name),
+    getFieldConfig(65)?.validator(column.alias),
+    getFieldConfig(66)?.validator(column.type)
+  ];
+  return validateFields(validations);
 }
 
 /**
@@ -46,23 +46,14 @@ export function hasInvalidColumns(columns: ColumnInfo[]): boolean {
  * Validates a single feature type including its columns
  */
 export function validateFeatureType(featureType: FeatureType): boolean {
-  const titleFieldConfig = getFieldConfig(61);
-  const nameFieldConfig = getFieldConfig(62);
-  const descriptionFieldConfig = getFieldConfig(69);
-  const columnsFieldConfig = getFieldConfig(63);
+  const validations = [
+    getFieldConfig(61)?.validator(featureType.title),
+    getFieldConfig(62)?.validator(featureType.name),
+    getFieldConfig(69)?.validator(featureType.shortDescription),
+    getFieldConfig(63)?.validator(featureType.columns)
+  ];
 
-  const titleValidation = titleFieldConfig?.validator(featureType.title);
-  const nameValidation = nameFieldConfig?.validator(featureType.name);
-  const descriptionValidation = descriptionFieldConfig?.validator(featureType.shortDescription);
-  const columnsValidation = columnsFieldConfig?.validator(featureType.columns);
-
-  const fieldsValid =
-    titleValidation?.valid !== false &&
-    nameValidation?.valid !== false &&
-    descriptionValidation?.valid !== false &&
-    columnsValidation?.valid !== false;
-
-  // Also check if columns have invalid tabs
+  const fieldsValid = validateFields(validations);
   const columnsValid = !hasInvalidColumns(featureType.columns || []);
 
   return fieldsValid && columnsValid;
@@ -94,36 +85,17 @@ export function hasInvalidFeatureTypes(featureTypes: FeatureType[]): boolean {
  * Validates a single layer
  */
 export function validateLayer(layer: Layer): boolean {
-  const titleFieldConfig = getFieldConfig(49);
-  const nameFieldConfig = getFieldConfig(50);
-  const styleNameFieldConfig = getFieldConfig(51);
-  const styleTitleFieldConfig = getFieldConfig(52);
-  const legendImageFieldConfig = getFieldConfig(53);
-  const descriptionFieldConfig = getFieldConfig(54);
-  const datasourceFieldConfig = getFieldConfig(55);
-  const secondaryDatasourceFieldConfig = getFieldConfig(68);
-
-  const titleValidation = titleFieldConfig?.validator(layer.title);
-  const nameValidation = nameFieldConfig?.validator(layer.name);
-  const styleNameValidation = styleNameFieldConfig?.validator(layer.styleName);
-  const styleTitleValidation = styleTitleFieldConfig?.validator(layer.styleTitle);
-  const legendImageValidation = legendImageFieldConfig?.validator(layer.legendImage);
-  const descriptionValidation = descriptionFieldConfig?.validator(layer.shortDescription);
-  const datasourceValidation = datasourceFieldConfig?.validator(layer.datasource);
-  const secondaryDatasourceValidation = secondaryDatasourceFieldConfig?.validator(
-    layer.secondaryDatasource
-  );
-
-  return (
-    titleValidation?.valid !== false &&
-    nameValidation?.valid !== false &&
-    styleNameValidation?.valid !== false &&
-    styleTitleValidation?.valid !== false &&
-    legendImageValidation?.valid !== false &&
-    descriptionValidation?.valid !== false &&
-    datasourceValidation?.valid !== false &&
-    secondaryDatasourceValidation?.valid !== false
-  );
+  const validations = [
+    getFieldConfig(49)?.validator(layer.title),
+    getFieldConfig(50)?.validator(layer.name),
+    getFieldConfig(51)?.validator(layer.styleName),
+    getFieldConfig(52)?.validator(layer.styleTitle),
+    getFieldConfig(53)?.validator(layer.legendImage),
+    getFieldConfig(54)?.validator(layer.shortDescription),
+    getFieldConfig(55)?.validator(layer.datasource),
+    getFieldConfig(68)?.validator(layer.secondaryDatasource)
+  ];
+  return validateFields(validations);
 }
 
 /**

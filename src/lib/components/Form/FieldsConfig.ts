@@ -39,7 +39,10 @@ export interface FullFieldConfig<T = any> {
   // additional parameters for the validator function
   extraParams?: Array<FieldKey | 'PARENT_VALUE'>;
   // this function is used to get the value for the copy button
-  getCopyValue?: (val: T | undefined, extraParams?: Record<string, any>) => string | Promise<string>;
+  getCopyValue?: (
+    val: T | undefined,
+    extraParams?: Record<string, any>
+  ) => string | Promise<string>;
 }
 
 const isDefined = <T>(val: T): val is NonNullable<T> => {
@@ -653,18 +656,14 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 30,
     key: 'isoMetadata.contentDescription',
-    validator: (val: any) => {
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'additional',
     required: false
   },
   {
     profileId: 31,
     key: 'isoMetadata.technicalDescription',
-    validator: (val: any) => {
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'additional',
     required: false
   },

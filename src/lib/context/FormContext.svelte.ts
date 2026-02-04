@@ -131,12 +131,13 @@ export function getFormContext() {
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   return {
     formState,
-    getValue: <T>(key: string, metadata?: MetadataCollection) => getValue<T>(key, metadata || formState.metadata!),
+    getValue: <T>(key: string, metadata?: MetadataCollection) =>
+      getValue<T>(key, metadata || formState.metadata!),
     getAllValues: <T>(key: string, metadata?: MetadataCollection) =>
       getAllValues<T>(key, metadata || formState.metadata),
     clearActiveHelp: () => clearActiveHelp(formState),
     toggleActiveHelp: (key: FieldKey) => toggleActiveHelp(key, formState)
-  }
+  };
 }
 
 export function getFieldConfig<T>(profileId: number, key?: string): FullFieldConfig<T> | undefined {
