@@ -42,6 +42,9 @@
   );
   const scaleFieldConfig = getFieldConfig<number>(27);
   let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined));
+  let hasInvalidFields = $derived(
+    !resolutionValidationResult?.valid && !scaleValidationResult?.valid
+  );
 
   const clearAllValues = async () => {
     scaleValue = null;
@@ -80,7 +83,7 @@
 </script>
 
 <div class="title-field">
-  <fieldset>
+  <fieldset class={[hasInvalidFields ? 'invalid' : '']}>
     <legend>{t('28_ResolutionField.label')}</legend>
     <FieldHint explanation={t('28_ResolutionField.explanation')} />
     <div class="input-container">
@@ -157,6 +160,10 @@
     fieldset {
       flex: 1;
       border-radius: 4px;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       > legend {
         font-size: 1.5em;

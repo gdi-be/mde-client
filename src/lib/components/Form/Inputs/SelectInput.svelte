@@ -44,17 +44,17 @@
 
   const selectedDescription = $derived(options.find((item) => item.key === value)?.description);
 
-  let requiredButInvalid = $derived.by(() => {
+  let isInvalid = $derived.by(() => {
     if (!fieldConfig) return false;
-    const { editingRoles, required } = fieldConfig;
+    const { editingRoles } = fieldConfig;
     const isEditingRole =
       highestRole === 'MdeAdministrator' ||
       (editingRoles ? editingRoles?.includes(highestRole) : true);
-    return isEditingRole && required && !validationResult?.valid;
+    return isEditingRole && !validationResult?.valid;
   });
 </script>
 
-<fieldset class={['select-input', wrapperClass, requiredButInvalid ? 'invalid' : '']}>
+<fieldset class={['select-input', wrapperClass, isInvalid && 'invalid']}>
   <legend>{label}</legend>
   <Select bind:this={element} {disabled} menu$anchorElement={document.body} bind:value>
     {#each options as option}

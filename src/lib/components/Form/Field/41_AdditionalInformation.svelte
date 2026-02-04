@@ -8,8 +8,13 @@
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import { page } from '$app/state';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   const t = $derived(page.data.t);
+
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   type ContentDescriptionListEntry = ContentDescription & { listId: string };
 
@@ -107,10 +112,25 @@
       }
     );
   };
+
+  let hasInvalidFields = $derived.by(() => {
+    if (!fieldConfig) return false;
+    const { editingRoles } = fieldConfig;
+    const isEditingRole =
+      highestRole === 'MdeAdministrator' ||
+      (editingRoles ? editingRoles?.includes(highestRole) : true);
+    const hasInvalidFields = contentDescriptions.some((contentDescription) => {
+      const titleValid = titleFieldConfig?.validator(contentDescription.description).valid ?? true;
+      const urlValid = urlFieldConfig?.validator(contentDescription.url).valid ?? true;
+      const codeValid = codeFieldConfig?.validator(contentDescription.code).valid ?? true;
+      return !titleValid || !urlValid || !codeValid;
+    });
+    return isEditingRole && hasInvalidFields;
+  });
 </script>
 
 <div class="contentDescriptions-field">
-  <fieldset>
+  <fieldset class={[hasInvalidFields ? 'invalid' : '']}>
     <legend>
       {t('41_AdditionalInformation.label')}
       <IconButton
@@ -198,6 +218,10 @@
     fieldset {
       flex: 1;
       border-radius: 0.25em;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       > legend {
         display: flex;

@@ -133,18 +133,18 @@
     }
   });
 
-  let requiredButInvalid = $derived.by(() => {
+  let isInvalid = $derived.by(() => {
     if (!fieldConfig) return false;
-    const { editingRoles, required } = fieldConfig;
+    const { editingRoles } = fieldConfig;
     const isEditingRole =
       highestRole === 'MdeAdministrator' ||
       (editingRoles ? editingRoles?.includes(highestRole) : true);
-    return isEditingRole && required && !validationResult?.valid;
+    return isEditingRole && !validationResult?.valid;
   });
 </script>
 
 <div class="keywords-field" bind:this={containerElement}>
-  <fieldset class={[requiredButInvalid ? 'invalid' : '']}>
+  <fieldset class={[isInvalid && 'invalid']}>
     <legend>{t('15_KeywordsField.label')}</legend>
     <ChipSet class="keywords-chipset" chips={uniqueKeywords} nonInteractive>
       {#snippet chip(chip)}

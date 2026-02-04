@@ -2,8 +2,8 @@
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import type { HTMLInputAttributes } from 'svelte/elements';
   import FieldHint from '../FieldHint.svelte';
-  import { getAccessToken } from '../../../context/TokenContext.svelte';
-  import { getHighestRole } from '../../../util';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   type InputProps = {
     maxlength?: number;
@@ -38,17 +38,17 @@
     value = '';
   }
 
-  let requiredButInvalid = $derived.by(() => {
+  let isInvalid = $derived.by(() => {
     if (!fieldConfig) return false;
-    const { editingRoles, required } = fieldConfig;
+    const { editingRoles } = fieldConfig;
     const isEditingRole =
       highestRole === 'MdeAdministrator' ||
       (editingRoles ? editingRoles?.includes(highestRole) : true);
-    return isEditingRole && required && !validationResult?.valid;
+    return isEditingRole && !validationResult?.valid;
   });
 </script>
 
-<fieldset class={['text-input', wrapperClass, requiredButInvalid ? 'invalid' : '']}>
+<fieldset class={['text-input', wrapperClass, isInvalid && 'invalid']}>
   <legend>{label}</legend>
   <input
     type="text"

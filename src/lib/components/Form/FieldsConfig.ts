@@ -295,9 +295,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 24,
     key: 'isoMetadata.validTo',
     extraParams: ['isoMetadata.validFrom'],
-    validator: (endValue: string, extraParams) => {
-      const startValue = extraParams?.[0];
-      if (endValue && startValue && new Date(startValue) > new Date(endValue)) {
+    validator: (validTo: string, extraParams) => {
+      const validFrom = extraParams?.['isoMetadata.validFrom'];
+      if (validTo && validFrom && new Date(validFrom) > new Date(validTo)) {
         return {
           valid: false,
           helpText: 'Das Startdatum muss vor dem Enddatum liegen.'
@@ -654,12 +654,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 30,
     key: 'isoMetadata.contentDescription',
     validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine inhaltliche Beschreibung an.'
-        };
-      }
       return { valid: true };
     },
     section: 'additional',
@@ -669,12 +663,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 31,
     key: 'isoMetadata.technicalDescription',
     validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine technische Beschreibung an.'
-        };
-      }
       return { valid: true };
     },
     section: 'additional',
@@ -684,15 +672,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 32,
     key: 'isoMetadata.lineage',
     isCollection: true,
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine Herkunft an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'additional',
     required: false
   },
@@ -811,13 +791,21 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return { valid: true };
     },
     section: 'additional',
-    required: false
+    required: true
   },
   {
     profileId: 43,
     key: 'isoMetadata.contentDescriptions.code',
     collectionKey: 'isoMetadata.contentDescriptions',
-    validator: optionalValidator,
+    validator: (val: string) => {
+      if (!isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Code an.'
+        };
+      }
+      return { valid: true };
+    },
     getCopyValue: (val?: string) => {
       const codeLabels: Record<string, string> = {
         download: 'Herunterladen',
@@ -829,7 +817,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return val ? codeLabels[val] || '' : '';
     },
     section: 'additional',
-    required: false
+    required: true
   },
   {
     profileId: 44,
@@ -867,12 +855,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 46,
     key: 'isoMetadata.services.preview',
     collectionKey: 'isoMetadata.services',
-    extraParams: ['PARENT_VALUE'],
-    validator: (preview: Service['preview'], extraParams) => {
-      const service = extraParams?.['PARENT_VALUE'];
-      if (service?.serviceType !== 'WMS' && service?.serviceType !== 'WMTS') {
-        return { valid: true };
-      }
+    validator: (preview: Service['preview']) => {
       const valid = isDefined(preview);
       if (!valid) {
         return {

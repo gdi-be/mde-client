@@ -35,17 +35,17 @@
 
   let fieldHasFocus = $state(false);
 
-  let requiredButInvalid = $derived.by(() => {
+  let isInvalid = $derived.by(() => {
     if (!fieldConfig) return false;
-    const { editingRoles, required } = fieldConfig;
+    const { editingRoles } = fieldConfig;
     const isEditingRole =
       highestRole === 'MdeAdministrator' ||
       (editingRoles ? editingRoles?.includes(highestRole) : true);
-    return isEditingRole && required && !validationResult?.valid;
+    return isEditingRole && !validationResult?.valid;
   });
 </script>
 
-<fieldset class={['text-area-input', wrapperClass, requiredButInvalid ? 'invalid' : '']}>
+<fieldset class={['text-area-input', wrapperClass, isInvalid ? 'invalid' : '']}>
   <legend>{label}</legend>
   <textarea
     {maxlength}

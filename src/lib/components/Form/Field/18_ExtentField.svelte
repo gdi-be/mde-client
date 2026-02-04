@@ -72,6 +72,13 @@
   let validationResultMaxX = $derived(maxXFieldConfig?.validator(transformedValue.maxx));
   let validationResultMaxY = $derived(maxYFieldConfig?.validator(transformedValue.maxy));
 
+  let hasInvalidFields = $derived(
+    validationResultMinX?.valid === false ||
+      validationResultMinY?.valid === false ||
+      validationResultMaxX?.valid === false ||
+      validationResultMaxY?.valid === false
+  );
+
   const onChange = (newValue: number, key: keyof Extent) => {
     const newTransformedValue = {
       ...transformedValue,
@@ -112,7 +119,7 @@
 
 {#if highestRole !== 'MdeDataOwner'}
   <div class="extent-field">
-    <fieldset>
+    <fieldset class={[hasInvalidFields ? 'invalid' : '']}>
       <legend>{t('18_ExtentField.label')}</legend>
       <div class="tools">
         <SelectInput bind:value={crsKey} label={CRS_LABEL} options={crsOptions} />
@@ -207,6 +214,10 @@
       flex-wrap: wrap;
       border-radius: 0.25em;
       justify-content: space-between;
+
+      &.invalid {
+        border: 2px solid var(--mdc-theme-error) !important;
+      }
 
       :global(.select-input),
       :global(.number-input) {

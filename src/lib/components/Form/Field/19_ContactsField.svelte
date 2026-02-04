@@ -14,6 +14,9 @@
 
   const t = $derived(page.data.t);
 
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
+
   const KEY = 'isoMetadata.pointsOfContact';
 
   type ContactListEntry = Contact & { listId: string };
@@ -25,9 +28,6 @@
 
   // important that this is not a state
   let previousValueAsString: string;
-
-  const token = $derived(getAccessToken());
-  const highestRole = $derived(getHighestRole(token));
 
   const popconfirm = $derived(getPopconfirm());
 
@@ -150,9 +150,9 @@
     );
   };
 
-  let requiredButInvalid = $derived.by(() => {
+  let hasInvalidFields = $derived.by(() => {
     if (!fieldConfig) return false;
-    const { editingRoles, required } = fieldConfig;
+    const { editingRoles } = fieldConfig;
     const isEditingRole =
       highestRole === 'MdeAdministrator' ||
       (editingRoles ? editingRoles?.includes(highestRole) : true);
@@ -165,12 +165,12 @@
       const emailValid = emailConfig ? emailConfig?.validator(contact.email).valid : true;
       return !nameValid || !organisationValid || !phoneValid || !emailValid;
     });
-    return isEditingRole && required && (!validationResult?.valid || hasInvalidFields);
+    return isEditingRole && (!validationResult?.valid || hasInvalidFields);
   });
 </script>
 
 <div class="contacts-field">
-  <fieldset class={[requiredButInvalid ? 'invalid' : '']}>
+  <fieldset class={[hasInvalidFields ? 'invalid' : '']}>
     <legend>
       <span>{t('19_ContactsField.label')}</span>
       <IconButton

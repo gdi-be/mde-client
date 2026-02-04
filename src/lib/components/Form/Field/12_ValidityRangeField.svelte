@@ -43,9 +43,23 @@
     }
     invalidateAll();
   };
+
+  let hasInvalidFields = $derived.by(() => {
+    const fromConfig = fromFieldConfig;
+    const toConfig = toFieldConfig;
+    if (!fromConfig || !toConfig) return false;
+
+    const fromRequired = fromConfig.required;
+    const toRequired = toConfig.required;
+
+    const fromValid = fromValidationResult?.valid;
+    const toValid = toValidationResult?.valid;
+
+    return (fromRequired && !fromValid) || (toRequired && !toValid);
+  });
 </script>
 
-<div class="validity-range-field">
+<div class={['validity-range-field', hasInvalidFields ? 'invalid' : '']}>
   <fieldset>
     <legend>{t('12_ValidityRangeField.label')}</legend>
     <FieldHint explanation={t('12_ValidityRangeField.explanation')} />
@@ -78,6 +92,10 @@
     position: relative;
     display: flex;
     gap: 0.25em;
+
+    &.invalid {
+      border: 2px solid var(--mdc-theme-error) !important;
+    }
 
     :global(.field-hint) {
       margin: 0.5em 0;
