@@ -205,7 +205,6 @@
       (editingRoles ? editingRoles?.includes(highestRole) : true);
     const hasInvalidFields = lineages.some((lineage) => {
       const titleValid = titleFieldConfig?.validator(lineage.title).valid ?? true;
-      console.log('title valid', titleValid);
       const dateValid = dateFieldConfig?.validator(lineage.date).valid ?? true;
       const identifierValid = identifierFieldConfig?.validator(lineage.identifier).valid ?? true;
       return !titleValid || !dateValid || !identifierValid;
