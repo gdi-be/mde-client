@@ -1,3 +1,10 @@
+## [5.1.1](https://github.com/gdi-be/mde-client/compare/v5.1.0...v5.1.1) (2026-02-04)
+
+
+### Bug Fixes
+
+* refactor DisplayFieldSnippets ([f7958b7](https://github.com/gdi-be/mde-client/commit/f7958b79c6b409d169390b1a233935a52df74d0f))
+
 # [5.1.0](https://github.com/gdi-be/mde-client/compare/v5.0.0...v5.1.0) (2026-02-04)
 
 
