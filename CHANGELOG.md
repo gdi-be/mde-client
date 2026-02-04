@@ -1,3 +1,21 @@
+# [5.1.0](https://github.com/gdi-be/mde-client/compare/v5.0.0...v5.1.0) (2026-02-04)
+
+
+### Bug Fixes
+
+* add missing label ([fe2e3bf](https://github.com/gdi-be/mde-client/commit/fe2e3bfb1b0bf4f31983996fb17553598a69b9b8))
+* load mounted translations correctly ([3a2772f](https://github.com/gdi-be/mde-client/commit/3a2772f35538d92a70bdecb01f3166dff2af1b0e))
+* remove all default values in services form ([55add40](https://github.com/gdi-be/mde-client/commit/55add40d32220489057dc0603e273fcdbd27f1ce))
+* update app state handling ([0d6b490](https://github.com/gdi-be/mde-client/commit/0d6b49009c928ec15ad616f292a3afcf62bb4f7d))
+* update popconfirm context ([4e3f3f9](https://github.com/gdi-be/mde-client/commit/4e3f3f90b8136c4343b000d1978699346c587bf5))
+
+
+### Features
+
+* update field layout ([790dc6c](https://github.com/gdi-be/mde-client/commit/790dc6cb0196fd93996535538b9938a90951e263))
+* update layout for more fields ([81a065e](https://github.com/gdi-be/mde-client/commit/81a065e0667448298635c71868717b53f13b959e))
+* validation layout for service fields ([a70716d](https://github.com/gdi-be/mde-client/commit/a70716d2f97e4a2428ede42f6dca0af3722029f6))
+
 # [5.0.0](https://github.com/gdi-be/mde-client/compare/v4.4.10...v5.0.0) (2026-02-02)
 
 
