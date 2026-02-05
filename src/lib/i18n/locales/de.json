@@ -428,6 +428,8 @@
     "add": "Hinzufügen",
     "appTitle": "Metadaten Editor",
     "autofill": "Wert aus Vorlage übernehmen",
+    "broken_metadata_title": "Metadaten konnten nicht korrekt geladen werden",
+    "broken_metadata_message": "Die Metadaten konnten nicht korrekt geladen werden. Es könnte sein, dass die Metadaten unvollständig oder beschädigt sind. Bitte wenden Sie sich an den Administrator.",
     "cancel": "Abbrechen",
     "checked": "Überprüft",
     "error": "Fehler",

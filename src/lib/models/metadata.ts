@@ -9,6 +9,7 @@ export type JsonTechnialMetadata = Record<string, any>;
 export type Privacy = 'NONE' | 'CRITICAL_INFRASTRUCTURE' | 'PERSONAL_DATA' | 'INTERNAL_USE_ONLY';
 
 export type Layer = {
+  id: string;
   name: string;
   title?: string;
   styleName?: string;
@@ -53,6 +54,7 @@ export type CRS = `EPSG:${number}`;
 export type ServiceType = 'WFS' | 'WMS' | 'ATOM' | 'WMTS';
 
 export type FeatureType = {
+  id: string;
   name: string;
   title: string;
   shortDescription: string;
@@ -73,6 +75,7 @@ export type ColumnType =
   | 'Timestamp';
 
 export type ColumnInfo = {
+  id: string;
   name: string;
   alias: string;
   type?: ColumnType;
@@ -106,6 +109,7 @@ export type ServiceDescription = {
 };
 
 export type Service = {
+  id: string;
   title?: string;
   shortDescription?: string;
   contentDescription?: string;
@@ -163,6 +167,7 @@ export type PreviewMap = {
 };
 
 export type ContentDescription = {
+  id: string;
   url: string;
   description: string;
   code: CI_OnLineFunctionCode;
@@ -176,6 +181,7 @@ export type Extent = {
 };
 
 export type Lineage = {
+  id: string;
   title?: string;
   identifier?: string;
   date?: string;
@@ -197,6 +203,7 @@ export type Previews = {
 }[];
 
 export type Contact = {
+  id: string;
   name?: string;
   code?: string;
   email?: string;

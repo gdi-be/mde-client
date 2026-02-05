@@ -19,6 +19,7 @@
 
   type Tab = {
     name: string;
+    id: string;
   };
 
   export type LayersFormProps = {
@@ -36,12 +37,13 @@
   let tabs = $derived<Tab[]>(
     layers.map((layer) => {
       return {
+        id: layer.id,
         name: layer.title || 'Unbekannter Layer'
       };
     })
   );
-  let activeTabIndex: number | undefined = $state();
-  let activeLayer = $derived(activeTabIndex ? layers[activeTabIndex] : layers[0]);
+  let activeTabId: string | undefined = $state();
+  let activeLayer = $derived(layers.find((layer) => layer.id === activeTabId));
 
   const fieldConfig = getFieldConfig(48);
   const validationResult = $derived(
@@ -50,12 +52,12 @@
     })
   );
 
-  const invalidTabIndices = $derived(validateLayers(layers));
+  const invalidTabIds = $derived(validateLayers(layers));
 
   $effect(() => {
     // if the serviceId changes set activeTabIndex to undefined
     if (serviceId) {
-      activeTabIndex = undefined;
+      activeTabId = undefined;
     }
   });
 
@@ -64,32 +66,34 @@
   });
 
   function addLayer() {
+    const id = crypto.randomUUID();
     layers = [
       ...layers,
       {
+        id,
         name: '',
         title: '',
         styleName: ''
       }
     ];
-    activeTabIndex = layers.length - 1;
+    activeTabId = id;
     onChange(layers);
   }
 
-  function removeLayer(index: number, evt: MouseEvent) {
+  function removeLayer(layerId: string, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
     popconfirm.open(
       targetEl,
       async () => {
-        layers = layers.filter((_, i) => i !== index);
-        if (activeTabIndex === index) {
-          activeTabIndex = layers.length - 1;
+        layers = layers.filter((layer) => layer.id !== layerId);
+        if (activeTabId === layerId) {
+          activeTabId = layers.length > 0 ? layers[layers.length - 1]?.id : undefined;
         }
         onChange(layers);
-        activeTabIndex = layers.length > 0 ? activeTabIndex : undefined;
-        if (activeTabIndex && activeTabIndex > layers.length - 1) {
-          activeTabIndex = 0;
+        activeTabId = layers.length > 0 ? activeTabId : undefined;
+        if (activeTabId && !layers.find((layer) => layer.id === activeTabId)) {
+          activeTabId = layers[0]?.id;
         }
       },
       {
@@ -100,30 +104,30 @@
   }
 
   function set(key: string, value: Layer[keyof Layer]) {
-    layers = layers.map((column, i) => {
-      if (i === activeTabIndex) {
+    layers = layers.map((layer) => {
+      if (layer.id === activeTabId) {
         return {
-          ...column,
+          ...layer,
           [key]: value
         };
       }
-      return column;
+      return layer;
     });
     return onChange(layers);
   }
 </script>
 
 <div class="layers-form">
-  <fieldset class={[invalidTabIndices.size > 0 && 'invalid']}>
+  <fieldset class={[invalidTabIds.size > 0 && 'invalid']}>
     <legend>{t('48_LayersForm.label')} </legend>
     <FieldHint {fieldConfig} {validationResult} />
     <nav>
-      {#each tabs as tab, i}
+      {#each tabs as tab}
         <div
           class={[
             'tab-container',
-            activeTabIndex === i && 'active',
-            invalidTabIndices.has(i) && 'invalid'
+            activeTabId === tab.id && 'active',
+            invalidTabIds.has(tab.id) && 'invalid'
           ]}
         >
           <button
@@ -133,14 +137,14 @@
             title={tab.name}
             onclick={(evt) => {
               evt.preventDefault();
-              activeTabIndex = i;
+              activeTabId = tab.id;
             }}
           >
             {tab.name}
           </button>
           <IconButton
             class="material-icons"
-            onclick={(evt) => removeLayer(i, evt)}
+            onclick={(evt) => removeLayer(tab.id, evt)}
             size="button"
             title="Layer entfernen"
             type="button"
@@ -163,7 +167,7 @@
       </IconButton>
     </nav>
     <div class="content">
-      {#if activeTabIndex !== undefined}
+      {#if activeTabId && activeLayer}
         <LayerTitle_49 value={activeLayer?.title} onChange={(title) => set('title', title)} />
         <LayerName_50 value={activeLayer?.name} onChange={(name) => set('name', name)} />
         <LayerStyleTitle_52
