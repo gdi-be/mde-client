@@ -7,6 +7,9 @@
   } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
   import { setRefreshToken } from '$lib/context/TokenContext.svelte.js';
+  import { page } from '$app/state';
+
+  const t = $derived(page.data.t);
 
   let { data } = $props();
 
@@ -28,8 +31,13 @@
 </script>
 
 <div class="metadata">
-  <h1>{metadata.isoMetadata.title}</h1>
-  <Form />
+  {#if !metadata?.isoMetadata?.title}
+    <h1>{t('general.broken_metadata_title')}</h1>
+    <p>{t('general.broken_metadata_message')}</p>
+  {:else}
+    <h1>{metadata.isoMetadata.title}</h1>
+    <Form />
+  {/if}
 </div>
 
 <style lang="scss">
