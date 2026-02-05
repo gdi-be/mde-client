@@ -1,10 +1,11 @@
 <script lang="ts">
+  import type { ComponentProps } from 'svelte';
   import Select, { Option as SelectOption } from '@smui/select';
   import type { Option } from '$lib/models/form';
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
-  import { getAccessToken } from '../../../context/TokenContext.svelte';
-  import { getHighestRole } from '../../../util';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   type InputProps = {
     onChange?: (value: string) => void;
@@ -16,7 +17,7 @@
     options: Option[];
     validationResult?: ValidationResult;
     disabled?: boolean;
-  };
+  } & ComponentProps<typeof Select>;
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -30,10 +31,9 @@
     fieldConfig,
     options,
     disabled = false,
-    validationResult
+    validationResult,
+    ...restProps
   }: InputProps = $props();
-
-  let element = $state();
 
   // Remove duplicates
   options = Array.from(new Map(options.map((item) => [item.key, item])).values());
@@ -56,7 +56,7 @@
 
 <fieldset class={['select-input', wrapperClass, isInvalid && 'invalid']}>
   <legend>{label}</legend>
-  <Select bind:this={element} {disabled} menu$anchorElement={document.body} bind:value>
+  <Select bind:value {disabled} menu$anchorElement={document.body} {...restProps}>
     {#each options as option}
       <SelectOption
         onSMUIAction={() => {

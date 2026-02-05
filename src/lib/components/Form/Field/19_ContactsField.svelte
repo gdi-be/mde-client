@@ -86,8 +86,8 @@
     persistContacts();
   };
 
-  const onBlur = async () => {
-    await persistContacts();
+  const onBlur = async (evt?: FocusEvent) => {
+    await persistContacts(evt);
     isEditing = false;
   };
 
@@ -99,7 +99,6 @@
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
     const focusedElement = evt?.relatedTarget as HTMLElement | null;
-
     const value = contacts.map((contact) => ({
       name: contact.name,
       organisation: contact.organisation,
@@ -115,7 +114,8 @@
     setTimeout(() => {
       const elementToFocus = document.getElementById(focusedElement.id);
       elementToFocus?.focus();
-    }, 300);
+      isEditing = true;
+    }, 10);
   };
 
   const addItem = (evt?: MouseEvent) => {

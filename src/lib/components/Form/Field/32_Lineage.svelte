@@ -98,8 +98,8 @@
     return data?.content || [];
   };
 
-  const onBlur = async () => {
-    await persistLineages();
+  const onBlur = async (evt?: FocusEvent) => {
+    await persistLineages(evt);
     isEditing = false;
   };
 
@@ -107,7 +107,11 @@
     isEditing = true;
   };
 
-  const persistLineages = async () => {
+  const persistLineages = async (evt?: FocusEvent) => {
+    // Due to the SvelteKit lifecycle the blur effect gets trigger twice
+    // this leads to a loss of focus on the input field. This need to be fixed.
+    const focusedElement = evt?.relatedTarget as HTMLElement | null;
+
     const value = lineages.map((lineage) => ({
       title: lineage.title,
       identifier: lineage.identifier,
@@ -117,6 +121,13 @@
     if (response.ok) {
       showCheckmark = true;
     }
+
+    if (!focusedElement) return;
+    setTimeout(() => {
+      const elementToFocus = document.getElementById(focusedElement.id);
+      elementToFocus?.focus();
+      isEditing = true;
+    }, 10);
   };
 
   const addItem = (evt: MouseEvent) => {
@@ -178,11 +189,11 @@
   };
 
   const onTitleBlur = async (evt: FocusEvent) => {
-    const relatedTarget = evt.relatedTarget as HTMLElement;
-    if (searchResultsElement && relatedTarget && searchResultsElement.contains(relatedTarget)) {
+    const focusedElement = evt.relatedTarget as HTMLElement;
+    if (searchResultsElement && focusedElement && searchResultsElement.contains(focusedElement)) {
       return;
     }
-    await persistLineages();
+    await persistLineages(evt);
     isEditing = false;
   };
 
@@ -194,7 +205,6 @@
       (editingRoles ? editingRoles?.includes(highestRole) : true);
     const hasInvalidFields = lineages.some((lineage) => {
       const titleValid = titleFieldConfig?.validator(lineage.title).valid ?? true;
-      console.log('title valid', titleValid);
       const dateValid = dateFieldConfig?.validator(lineage.date).valid ?? true;
       const identifierValid = identifierFieldConfig?.validator(lineage.identifier).valid ?? true;
       return !titleValid || !dateValid || !identifierValid;
@@ -243,6 +253,7 @@
               onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
               fieldConfig={titleFieldConfig}
               validationResult={titleFieldConfig?.validator(lineage.title)}
+              id={`${KEY}-${index}-title`}
             />
             <FieldTools key={`${KEY}[${index}].title`} fieldConfig={titleFieldConfig} />
           </div>
@@ -271,6 +282,7 @@
               onfocus={onFocus}
               fieldConfig={dateFieldConfig}
               validationResult={dateFieldConfig?.validator(lineage.date)}
+              id={`${KEY}-${index}-date`}
             />
             <FieldTools key={`${KEY}[${index}].date`} fieldConfig={dateFieldConfig} />
           </div>
@@ -282,6 +294,7 @@
               onfocus={onFocus}
               fieldConfig={identifierFieldConfig}
               validationResult={identifierFieldConfig?.validator(lineage.identifier)}
+              id={`${KEY}-${index}-identifier`}
             />
             <FieldTools key={`${KEY}[${index}].identifier`} fieldConfig={identifierFieldConfig} />
           </div>
