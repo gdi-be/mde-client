@@ -16,13 +16,11 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
-  type ContentDescriptionListEntry = ContentDescription & { listId: string };
-
   const KEY = 'isoMetadata.contentDescriptions';
 
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<ContentDescription[]>(KEY));
-  let contentDescriptions = $state<ContentDescriptionListEntry[]>([]);
+  let contentDescriptions = $state<ContentDescription[]>([]);
   let isEditing = $state<boolean>(false);
 
   const popconfirm = $derived(getPopconfirm());
@@ -41,10 +39,9 @@
       return;
     }
     contentDescriptions = valueFromData?.map((contentDescription: ContentDescription) => {
-      const { url, description, code } = contentDescription;
-      const listId = crypto.randomUUID();
+      const { url, description, code, id } = contentDescription;
       return {
-        listId,
+        id,
         code,
         description,
         url
@@ -93,10 +90,10 @@
 
   const addItem = (evt: MouseEvent) => {
     evt.preventDefault();
-    const listId = crypto.randomUUID();
+    const id = crypto.randomUUID();
     contentDescriptions = [
       {
-        listId,
+        id,
         code: 'information',
         description: '',
         url: ''
@@ -106,14 +103,14 @@
     persistContentDescriptions();
   };
 
-  const removeItem = (listId: string, evt: MouseEvent) => {
+  const removeItem = (id: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
     popconfirm.open(
       targetEl,
       async () => {
         contentDescriptions = contentDescriptions.filter(
-          (contentDescription) => contentDescription.listId !== listId
+          (contentDescription) => contentDescription.id !== id
         );
         persistContentDescriptions();
       },
@@ -156,13 +153,13 @@
       </IconButton>
     </legend>
     <FieldHint {fieldConfig} explanation={t('41_AdditionalInformation.explanation')} />
-    {#each contentDescriptions as contentDescription, index (contentDescription.listId)}
+    {#each contentDescriptions as contentDescription, index (contentDescription.id)}
       <fieldset class="contentDescription">
         <legend>
           <IconButton
             class="material-icons"
             disabled={isEditing}
-            onclick={(evt) => removeItem(contentDescription.listId, evt)}
+            onclick={(evt) => removeItem(contentDescription.id, evt)}
             size="button"
             type="button"
             title={t('41_AdditionalInformation.remove')}

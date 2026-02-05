@@ -50,9 +50,8 @@
     let layers = getValue<Record<string, Service[]>>('clientMetadata.layers');
     if (serviceType !== 'WMS' && serviceType !== 'WMTS') {
       // Remove layers associated with the service
-      const id = service.serviceIdentification;
-      if (layers && layers[id]) {
-        delete layers[id];
+      if (layers && layers[service.serviceIdentification]) {
+        delete layers[service.serviceIdentification];
         await persistValue('clientMetadata.layers', layers);
       }
     } else if (layers?.[service.serviceIdentification] === undefined) {

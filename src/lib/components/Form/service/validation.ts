@@ -23,16 +23,16 @@ export function validateColumn(column: ColumnInfo): boolean {
 /**
  * Validates all columns and returns a Set of invalid column indices
  */
-export function validateColumns(columns: ColumnInfo[]): Set<number> {
-  const invalidIndices = new Set<number>();
+export function validateColumns(columns: ColumnInfo[]): Set<string> {
+  const invalidIds = new Set<string>();
 
   columns.forEach((column, index) => {
     if (!validateColumn(column)) {
-      invalidIndices.add(index);
+      invalidIds.add(column.id);
     }
   });
 
-  return invalidIndices;
+  return invalidIds;
 }
 
 /**
@@ -62,16 +62,16 @@ export function validateFeatureType(featureType: FeatureType): boolean {
 /**
  * Validates all feature types and returns a Set of invalid feature type indices
  */
-export function validateFeatureTypes(featureTypes: FeatureType[]): Set<number> {
-  const invalidIndices = new Set<number>();
+export function validateFeatureTypes(featureTypes: FeatureType[]): Set<string> {
+  const invalidIds = new Set<string>();
 
-  featureTypes.forEach((featureType, index) => {
+  featureTypes.forEach((featureType) => {
     if (!validateFeatureType(featureType)) {
-      invalidIndices.add(index);
+      invalidIds.add(featureType.id);
     }
   });
 
-  return invalidIndices;
+  return invalidIds;
 }
 
 /**
@@ -101,16 +101,16 @@ export function validateLayer(layer: Layer): boolean {
 /**
  * Validates all layers and returns a Set of invalid layer indices
  */
-export function validateLayers(layers: Layer[]): Set<number> {
-  const invalidIndices = new Set<number>();
+export function validateLayers(layers: Layer[]): Set<string> {
+  const invalidIds = new Set<string>();
 
-  layers.forEach((layer, index) => {
+  layers.forEach((layer) => {
     if (!validateLayer(layer)) {
-      invalidIndices.add(index);
+      invalidIds.add(layer.id);
     }
   });
 
-  return invalidIndices;
+  return invalidIds;
 }
 
 /**

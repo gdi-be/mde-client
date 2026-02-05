@@ -19,10 +19,8 @@
 
   const KEY = 'isoMetadata.pointsOfContact';
 
-  type ContactListEntry = Contact & { listId: string };
-
   const { getValue } = getFormContext();
-  let contacts = $state<ContactListEntry[]>([]);
+  let contacts = $state<Contact[]>([]);
   const valueFromData = $derived(getValue<Contacts>(KEY));
   let isEditing = $state<boolean>(false);
 
@@ -43,9 +41,8 @@
     }
     contacts =
       valueFromData?.map((contact: Contact) => {
-        const listId = crypto.randomUUID();
         return {
-          listId,
+          id: contact.id,
           name: contact.name || '',
           organisation: contact.organisation || '',
           phone: contact.phone || '',
@@ -120,10 +117,10 @@
 
   const addItem = (evt?: MouseEvent) => {
     if (evt) evt.preventDefault();
-    const listId = crypto.randomUUID();
+    const id = crypto.randomUUID();
     contacts = [
       {
-        listId,
+        id,
         name: '',
         organisation: '',
         phone: '',
@@ -134,13 +131,13 @@
     persistContacts();
   };
 
-  const removeItem = (listId: string, evt: MouseEvent) => {
+  const removeItem = (id: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
     popconfirm.open(
       targetEl,
       async () => {
-        contacts = contacts.filter((contact) => contact.listId !== listId);
+        contacts = contacts.filter((contact) => contact.id !== id);
         persistContacts();
       },
       {
@@ -185,13 +182,13 @@
       </IconButton>
     </legend>
     <FieldHint {validationResult} {fieldConfig} explanation={t('19_ContactsField.explanation')} />
-    {#each contacts as contact, index (contact.listId)}
+    {#each contacts as contact, index (contact.id)}
       <fieldset class="contact">
         <legend>
           <IconButton
             class="material-icons"
             disabled={isEditing}
-            onclick={(evt) => removeItem(contact.listId, evt)}
+            onclick={(evt) => removeItem(contact.id, evt)}
             size="button"
             type="button"
             title={t('19_ContactsField.delete')}

@@ -206,7 +206,7 @@
     </div>
     <Media aspectRatio="16x9">
       <MediaContent>
-        {#if metadata.isoMetadata.published}
+        {#if metadata.isoMetadata?.published}
           {@const formatedDate = formatDate(metadata.isoMetadata.published)}
           <div class="ribbon" title={t('metadatacard.publishedAt', { date: formatedDate })}>
             {formatedDate}

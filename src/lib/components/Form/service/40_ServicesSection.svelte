@@ -31,14 +31,12 @@
 
       return {
         title: titlePrefix + (service.title || service.serviceIdentification),
-        id: service.serviceIdentification
+        id: service.id
       };
     })
   );
   let activeTab: string | undefined = $state();
-  let activeService = $derived(
-    services.find((service) => service.serviceIdentification === activeTab)
-  );
+  let activeService = $derived(services.find((service) => service.id === activeTab));
 
   const fieldConfig = getFieldConfig(40);
   let validationResult = $derived(fieldConfig?.validator(services));
@@ -53,7 +51,7 @@
       const validation = validateService(service, serviceLayers);
 
       if (validation.hasInvalidLayers || validation.hasInvalidFeatureTypes) {
-        invalidIds.add(service.serviceIdentification);
+        invalidIds.add(service.id);
       }
     });
 
@@ -62,7 +60,7 @@
 
   $effect(() => {
     services = initialServices || [];
-    activeTab = initialServices?.length ? initialServices[0].serviceIdentification : '';
+    activeTab = initialServices?.length ? initialServices[0].id : '';
   });
 
   let visibleCheckmarks = $state<Record<string, boolean>>({});
@@ -77,15 +75,17 @@
 
   function addService() {
     const serviceIdentification = crypto.randomUUID();
+    const id = crypto.randomUUID();
     services = [
       ...services,
       {
-        serviceIdentification: serviceIdentification,
+        id,
+        serviceIdentification,
         title: ''
       }
     ];
-    activeTab = serviceIdentification;
-    persistServices(serviceIdentification);
+    activeTab = id;
+    persistServices(id);
   }
 
   function removeService(id: string, evt: MouseEvent) {
@@ -94,11 +94,11 @@
     popconfirm.open(
       targetEl,
       async () => {
-        const removedService = services.find((service) => service.serviceIdentification === id);
+        const removedService = services.find((service) => service.id === id);
         if (!removedService) {
           return;
         }
-        services = services.filter((service) => service.serviceIdentification !== id);
+        services = services.filter((service) => service.id !== id);
 
         await persistValue(KEY, services);
         if (removedService.fileIdentifier) {
@@ -115,13 +115,13 @@
 
         // Remove layers associated with the service
         const layers = getValue<Record<string, Service[]>>(LAYERS_KEY);
-        if (layers && layers[id]) {
-          delete layers[id];
+        if (layers && layers[removedService.serviceIdentification]) {
+          delete layers[removedService.serviceIdentification];
           await persistValue(LAYERS_KEY, layers);
         }
 
         if (activeTab === id && services.length > 0) {
-          activeTab = services[0].serviceIdentification || '';
+          activeTab = services[0].id || '';
         }
       },
       {
@@ -136,7 +136,7 @@
       return Promise.reject('Invalid parameters');
     }
     services = services.map((service) => {
-      if (service.serviceIdentification === id) {
+      if (service.id === id) {
         return newService;
       }
       return service;
@@ -146,7 +146,7 @@
 
   $effect(() => {
     if (!activeTab) {
-      activeTab = services.length ? services[0].serviceIdentification : '';
+      activeTab = services.length ? services[0].id : '';
     }
     const el = document.getElementById(activeTab);
     if (el) {
@@ -213,7 +213,7 @@
       <ServiceForm_40
         service={activeService}
         onChange={(newService) => {
-          return updateService(activeService?.serviceIdentification, newService);
+          return updateService(activeService?.id, newService);
         }}
       />
     </span>

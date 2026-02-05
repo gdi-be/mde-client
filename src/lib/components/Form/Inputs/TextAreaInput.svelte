@@ -94,6 +94,7 @@
       border: none;
       border-radius: 0.125em;
       outline: 1px solid rgba(0, 0, 0, 0.42);
+      resize: vertical;
 
       &:focus {
         outline-color: var(--mdc-theme-primary);

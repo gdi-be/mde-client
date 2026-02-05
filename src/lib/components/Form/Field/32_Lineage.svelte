@@ -17,13 +17,11 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
-  type LineageListEntry = Lineage & { listId: string };
-
   const KEY = 'isoMetadata.lineage';
 
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<Lineage[]>(KEY));
-  let lineages = $state<LineageListEntry[]>([]);
+  let lineages = $state<Lineage[]>([]);
 
   let searchResultsElement = $state<HTMLElement>();
 
@@ -54,9 +52,8 @@
       return;
     }
     lineages = valueFromData?.map((lineage: Lineage) => {
-      const listId = crypto.randomUUID();
       return {
-        listId,
+        id: lineage.id,
         title: lineage.title || '',
         identifier: lineage.identifier || '',
         date: lineage.date ? new Date(lineage.date).toISOString().split('T')[0] : ''
@@ -132,10 +129,10 @@
 
   const addItem = (evt: MouseEvent) => {
     evt.preventDefault();
-    const listId = crypto.randomUUID();
+    const id = crypto.randomUUID();
     lineages = [
       {
-        listId,
+        id,
         title: '',
         identifier: '',
         date: ''
@@ -145,13 +142,13 @@
     persistLineages();
   };
 
-  const removeItem = (listId: string, evt: MouseEvent) => {
+  const removeItem = (id: string, evt: MouseEvent) => {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
     popconfirm.open(
       targetEl,
       async () => {
-        lineages = lineages.filter((lineage) => lineage.listId !== listId);
+        lineages = lineages.filter((lineage) => lineage.id !== id);
         persistLineages();
       },
       {
@@ -163,10 +160,10 @@
 
   const onSelectMetadataCollection = (
     metadataCollection: MetadataCollection,
-    targetLineage: LineageListEntry
+    targetLineage: Lineage
   ) => {
     lineages = lineages.map((lineage) => {
-      if (lineage.listId === targetLineage.listId) {
+      if (lineage.id === targetLineage.id) {
         return {
           ...lineage,
           title: metadataCollection.title!,
@@ -182,10 +179,10 @@
     metadataCollections = [];
   };
 
-  const onTitleKeyUp = async (evt: KeyboardEvent, lineage: LineageListEntry) => {
+  const onTitleKeyUp = async (evt: KeyboardEvent, lineage: Lineage) => {
     const value = (evt.target as HTMLInputElement)?.value;
     metadataCollections = await searchMetadataCollections(value);
-    titleSearchListId = lineage.listId;
+    titleSearchListId = lineage.id;
   };
 
   const onTitleBlur = async (evt: FocusEvent) => {
@@ -229,13 +226,13 @@
       </IconButton>
     </legend>
     <FieldHint {fieldConfig} explanation={t('32_Lineage.explanation')} />
-    {#each lineages as lineage, index (lineage.listId)}
+    {#each lineages as lineage, index (lineage.id)}
       <fieldset class="lineage">
         <legend>
           <IconButton
             class="material-icons"
             disabled={isEditing}
-            onclick={(evt) => removeItem(lineage.listId, evt)}
+            onclick={(evt) => removeItem(lineage.id, evt)}
             size="button"
             type="button"
             title={t('32_Lineage.remove')}
@@ -257,7 +254,7 @@
             />
             <FieldTools key={`${KEY}[${index}].title`} fieldConfig={titleFieldConfig} />
           </div>
-          {#if metadataCollections.length > 0 && titleSearchListId === lineage.listId}
+          {#if metadataCollections.length > 0 && titleSearchListId === lineage.id}
             <ul class="search-results" bind:this={searchResultsElement}>
               {#each metadataCollections as metadataCollection}
                 <li class="search-result">
