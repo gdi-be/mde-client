@@ -26,7 +26,7 @@ export function validateColumn(column: ColumnInfo): boolean {
 export function validateColumns(columns: ColumnInfo[]): Set<string> {
   const invalidIds = new Set<string>();
 
-  columns.forEach((column, index) => {
+  columns.forEach((column) => {
     if (!validateColumn(column)) {
       invalidIds.add(column.id);
     }
