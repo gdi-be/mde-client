@@ -11,10 +11,13 @@
   import LayerSecondaryDatasource_68 from './Field/68_LayerSecondaryDatasource.svelte';
   import FieldHint from '../FieldHint.svelte';
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
   import { validateLayers } from './validation';
+  import { MetadataService } from '$lib/services/MetadataService';
   const t = $derived(page.data.t);
 
   type Tab = {
@@ -32,6 +35,10 @@
   const serviceId = $derived(service?.serviceIdentification);
 
   const popconfirm = $derived(getPopconfirm());
+  const { formState } = getFormContext();
+  const metadata = $derived(formState.metadata!);
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   let layers = $state<Layer[]>([]);
   let tabs = $derived<Tab[]>(
@@ -45,14 +52,14 @@
   let activeTabId: string | undefined = $state();
   let activeLayer = $derived(layers.find((layer) => layer.id === activeTabId));
 
-  const fieldConfig = getFieldConfig(48);
+  const fieldConfig = MetadataService.getFieldConfig(48);
   const validationResult = $derived(
     fieldConfig?.validator(layers, {
       PARENT_VALUE: service
     })
   );
 
-  const invalidTabIds = $derived(validateLayers(layers));
+  const invalidTabIds = $derived(validateLayers(layers, { metadata, HIGHEST_ROLE: highestRole }));
 
   $effect(() => {
     // if the serviceId changes set activeTabIndex to undefined

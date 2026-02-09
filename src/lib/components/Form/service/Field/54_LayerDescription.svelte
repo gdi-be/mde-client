@@ -1,7 +1,7 @@
 <script lang="ts">
   import TextAreaInput from '$lib/components/Form/Inputs/TextAreaInput.svelte';
   import type { Layer } from '$lib/models/metadata';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { page } from '$app/state';
   const t = $derived(page.data.t);
@@ -16,7 +16,7 @@
   const HELP_KEY = 'clientMetadata.layers.shortDescription';
   let showCheckmark = $state(false);
 
-  const fieldConfig = getFieldConfig(54);
+  const fieldConfig = MetadataService.getFieldConfig(54);
   const validationResult = $derived(fieldConfig?.validator(value));
 </script>
 

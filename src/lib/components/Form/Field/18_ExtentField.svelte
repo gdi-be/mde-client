@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
   import type { CRS, Extent } from '$lib/models/metadata';
+  import { MetadataService } from '$lib/services/MetadataService';
   import Button, { Icon, Label } from '@smui/button';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import { getHighestRole, registerCRSCodes, transformExtent } from '$lib/util';
@@ -62,10 +63,10 @@
     })
   );
 
-  const minXFieldConfig = getFieldConfig<number>(71);
-  const maxXFieldConfig = getFieldConfig<number>(72);
-  const minYFieldConfig = getFieldConfig<number>(73);
-  const maxYFieldConfig = getFieldConfig<number>(74);
+  const minXFieldConfig = MetadataService.getFieldConfig<number>(71);
+  const maxXFieldConfig = MetadataService.getFieldConfig<number>(72);
+  const minYFieldConfig = MetadataService.getFieldConfig<number>(73);
+  const maxYFieldConfig = MetadataService.getFieldConfig<number>(74);
 
   let validationResultMinX = $derived(minXFieldConfig?.validator(transformedValue.minx));
   let validationResultMinY = $derived(minYFieldConfig?.validator(transformedValue.miny));
@@ -88,7 +89,7 @@
   };
 
   const sendValue = async () => {
-    const response = await persistValue(KEY, value4326);
+    const response = await MetadataService.persistValue(KEY, value4326);
     if (response.ok) {
       showCheckmark = true;
     }

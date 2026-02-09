@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import RadioInput from '../Inputs/RadioInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
+  import { MetadataService } from '$lib/services/MetadataService';
   import type { Option } from '$lib/models/form';
   import { toast } from 'svelte-french-toast';
   import { page } from '$app/state';
@@ -19,16 +20,16 @@
     value = valueFromData || '';
   });
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(4);
+  const fieldConfig = MetadataService.getFieldConfig<string>(4);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue: string) => {
-    const response = await persistValue(KEY, newValue);
+    const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
 
       // delete terms of use value if privacy is changed
-      await persistValue(TERMS_OF_USE_KEY, null);
+      await MetadataService.persistValue(TERMS_OF_USE_KEY, null);
     }
   };
 

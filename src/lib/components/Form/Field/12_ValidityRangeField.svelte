@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import { invalidateAll } from '$app/navigation';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { page } from '$app/state';
   import FieldHint from '../FieldHint.svelte';
 
@@ -28,16 +29,16 @@
   });
 
   let showCheckmark = $state(false);
-  const fromFieldConfig = getFieldConfig<string>(12);
+  const fromFieldConfig = MetadataService.getFieldConfig<string>(12);
   let fromValidationResult = $derived(fromFieldConfig?.validator(startValue, [endValue]));
 
-  const toFieldConfig = getFieldConfig<string>(24);
+  const toFieldConfig = MetadataService.getFieldConfig<string>(24);
   let toValidationResult = $derived(toFieldConfig?.validator(endValue, [startValue]));
 
   const onChange = async (key: string) => {
     const value = key === FROM_KEY ? startValue : endValue!;
     const valueToPersist = value ? new Date(value).toISOString() : null;
-    const response = await persistValue(key, valueToPersist);
+    const response = await MetadataService.persistValue(key, valueToPersist);
     if (response.ok) {
       showCheckmark = true;
     }

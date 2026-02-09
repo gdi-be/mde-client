@@ -1,10 +1,6 @@
 <script lang="ts">
   import { sseContext } from '$lib/context/ServerEventContext.svelte';
-  import {
-    allFieldsValid,
-    FORMSTATE_CONTEXT,
-    type FormState
-  } from '$lib/context/FormContext.svelte';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import { getHighestRole } from '$lib/util';
   import CommentsPanel from './CommentsPanel.svelte';
   import Button, { Icon, Label } from '@smui/button';
@@ -16,6 +12,7 @@
   import PublishDialog from '$lib/components/Form/PublishDialog.svelte';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { ValidationService } from '$lib/services/ValidationService';
 
   type FormFooterProps = {
     text?: string;
@@ -55,7 +52,7 @@
     highestRole === 'MdeAdministrator' ||
       (assignedToMe &&
         metadata &&
-        allFieldsValid(highestRole, metadata) &&
+        ValidationService.allFieldsValid(metadata, highestRole) &&
         highestRole === 'MdeEditor' &&
         metadata?.approved === true)
   );

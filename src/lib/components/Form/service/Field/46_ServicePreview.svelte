@@ -1,11 +1,12 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { MetadataCollection, Service } from '$lib/models/metadata';
-  import { getFieldConfig, getFormContext } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { getContext } from 'svelte';
   import { page } from '$app/state';
+  import { MetadataService } from '$lib/services/MetadataService';
 
   const t = $derived(page.data.t);
 
@@ -17,7 +18,7 @@
 
   let { value, service, onChange }: ComponentProps = $props();
 
-  const fieldConfig = getFieldConfig(46);
+  const fieldConfig = MetadataService.getFieldConfig(46);
   const validationResult = $derived(
     fieldConfig?.validator(value, {
       ['PARENT_VALUE']: service

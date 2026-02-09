@@ -1,7 +1,7 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { Layer } from '$lib/models/metadata';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
@@ -16,7 +16,7 @@
   let { value, onChange }: ComponentProps = $props();
 
   const HELP_KEY = 'clientMetadata.layers.name';
-  const fieldConfig = getFieldConfig(50);
+  const fieldConfig = MetadataService.getFieldConfig(50);
   const validationResult = $derived(fieldConfig?.validator(value));
 
   const token = $derived(getAccessToken());

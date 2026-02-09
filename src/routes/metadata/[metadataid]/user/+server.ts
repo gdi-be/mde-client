@@ -2,13 +2,20 @@ import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
 import { assignUser, unassignUser } from '$lib/api/metadata.js';
 import { ConflictError } from '$lib/error/error';
+import { logger } from 'loggisch';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ cookies, request, params }) {
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 
-  const { userId } = await request.json();
+  let userId;
+  try {
+    ({ userId } = await request.json());
+  } catch (e) {
+    logger.error('Failed to parse user assignment request JSON:', e);
+    return error(400, 'Invalid JSON in request body');
+  }
 
   if (!userId) {
     return error(400, 'Bad Request');
@@ -34,7 +41,13 @@ export async function DELETE({ cookies, request, params }) {
   const token = await getAccessToken(cookies);
   if (!token) return error(401, 'Unauthorized');
 
-  const { userId } = await request.json();
+  let userId;
+  try {
+    ({ userId } = await request.json());
+  } catch (e) {
+    logger.error('Failed to parse user unassignment request JSON:', e);
+    return error(400, 'Invalid JSON in request body');
+  }
 
   if (!userId) {
     return error(400, 'Bad Request');

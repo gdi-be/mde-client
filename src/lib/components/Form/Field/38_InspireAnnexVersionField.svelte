@@ -2,9 +2,7 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import {
     FORMSTATE_CONTEXT,
-    getFieldConfig,
     getFormContext,
-    persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
@@ -12,6 +10,7 @@
   import { getHighestRole } from '$lib/util';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { page } from '$app/state';
+  import { MetadataService } from '$lib/services/MetadataService';
   const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.inspireAnnexVersion';
@@ -33,7 +32,7 @@
   let metadataProfile = $derived(getValue<string>(PROFILE_KEY, metadata));
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(38);
+  const fieldConfig = MetadataService.getFieldConfig<string>(38);
   let validationResult = $derived(
     fieldConfig?.validator(value, {
       'isoMetadata.metadataProfile': metadataProfile
@@ -41,7 +40,7 @@
   );
 
   const onBlur = async () => {
-    const response = await persistValue(KEY, value);
+    const response = await MetadataService.persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
     }

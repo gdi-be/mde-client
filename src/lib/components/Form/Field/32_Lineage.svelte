@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Lineage, MetadataCollection } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '../FieldTools.svelte';
   import DateInput from '../Inputs/DateInput.svelte';
   import FieldHint from '../FieldHint.svelte';
@@ -31,10 +32,10 @@
   let showCheckmark = $state(false);
   let isEditing = $state<boolean>(false);
 
-  const fieldConfig = getFieldConfig<Lineage[]>(32);
-  const titleFieldConfig = getFieldConfig<string>(33);
-  const dateFieldConfig = getFieldConfig<string>(34);
-  const identifierFieldConfig = getFieldConfig<string>(35);
+  const fieldConfig = MetadataService.getFieldConfig<Lineage[]>(32);
+  const titleFieldConfig = MetadataService.getFieldConfig<string>(33);
+  const dateFieldConfig = MetadataService.getFieldConfig<string>(34);
+  const identifierFieldConfig = MetadataService.getFieldConfig<string>(35);
 
   const popconfirm = $derived(getPopconfirm());
 
@@ -113,7 +114,7 @@
       ...lineage,
       date: lineage.date ? new Date(lineage.date).toISOString() : ''
     }));
-    const response = await persistValue(KEY, value);
+    const response = await MetadataService.persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
     }

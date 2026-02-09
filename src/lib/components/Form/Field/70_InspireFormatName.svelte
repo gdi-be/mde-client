@@ -1,9 +1,7 @@
 <script lang="ts">
   import {
     FORMSTATE_CONTEXT,
-    getFieldConfig,
     getFormContext,
-    persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
@@ -16,6 +14,7 @@
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { page } from '$app/state';
 
   const token = $derived(getAccessToken());
@@ -41,12 +40,12 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(70);
+  const fieldConfig = MetadataService.getFieldConfig<string>(70);
   let validationResult = $derived(fieldConfig?.validator(value));
   let options: Option[] = $state([]);
 
   const onChange = async (newValue?: string) => {
-    const response = await persistValue(KEY, newValue);
+    const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }

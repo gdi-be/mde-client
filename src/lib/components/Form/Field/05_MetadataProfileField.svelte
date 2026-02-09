@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { MetadataProfile } from '$lib/models/metadata';
+  import { MetadataService } from '$lib/services/MetadataService';
   import type { ValidationResult } from '../FieldsConfig';
   import { page } from '$app/state';
 
@@ -34,11 +35,11 @@
     value = valueFromData || '';
   });
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(5);
+  const fieldConfig = MetadataService.getFieldConfig<string>(5);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue?: string) => {
-    const response = await persistValue(KEY, newValue);
+    const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }

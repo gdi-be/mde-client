@@ -18,9 +18,20 @@ export async function getTranslator({
 }): Promise<(key: TranslationKeys, values?: Record<string, string | number>) => string> {
   if (!loadedTranslations[locale]) {
     const localeResponse = await eventFetch('/data/i18n/' + locale);
-    const data = await localeResponse.json();
-    if (!data) throw new Error('Could not load locale ' + locale);
-    loadedTranslations[locale] = data;
+    if (!localeResponse.ok) {
+      logger.warning(`Failed to fetch locale: ${localeResponse.status}. Falling back to default.`);
+      loadedTranslations[locale] = defaultTranslations;
+    } else {
+      let data;
+      try {
+        data = await localeResponse.json();
+      } catch (e) {
+        logger.error('Failed to parse locale response:', e);
+        throw new Error('Invalid response when loading locale ' + locale);
+      }
+      if (!data) throw new Error('Could not load locale ' + locale);
+      loadedTranslations[locale] = data;
+    }
   }
 
   return (key: TranslationKeys, values?: Record<string, string | number>): string => {

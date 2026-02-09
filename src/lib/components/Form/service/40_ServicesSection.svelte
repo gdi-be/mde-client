@@ -1,6 +1,8 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
   import type { Layer, Service } from '$lib/models/metadata';
   import ServiceForm_40 from './40_ServiceForm.svelte';
   import Checkmark from '../Checkmark.svelte';
@@ -8,6 +10,7 @@
   import { page } from '$app/state';
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { validateService } from './validation';
+  import { MetadataService } from '$lib/services/MetadataService';
 
   const t = $derived(page.data.t);
 
@@ -21,7 +24,11 @@
 
   const popconfirm = $derived(getPopconfirm());
 
-  const { getValue } = getFormContext();
+  const { getValue, formState } = getFormContext();
+  const metadata = $derived(formState.metadata!);
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
+
   let initialServices = getValue<Service[]>(KEY);
   let services = $state<Service[]>([]);
   let tabs = $derived<Tab[]>(
@@ -38,7 +45,7 @@
   let activeTab: string | undefined = $state();
   let activeService = $derived(services.find((service) => service.id === activeTab));
 
-  const fieldConfig = getFieldConfig(40);
+  const fieldConfig = MetadataService.getFieldConfig(40);
   let validationResult = $derived(fieldConfig?.validator(services));
 
   // Track which services have invalid fields - validate all services
@@ -48,9 +55,16 @@
 
     services.forEach((service) => {
       const serviceLayers = allLayers[service.serviceIdentification] || [];
-      const validation = validateService(service, serviceLayers);
+      const validation = validateService(service, serviceLayers, {
+        metadata,
+        HIGHEST_ROLE: highestRole
+      });
 
-      if (validation.hasInvalidLayers || validation.hasInvalidFeatureTypes) {
+      if (
+        validation.hasInvalidFields ||
+        validation.hasInvalidLayers ||
+        validation.hasInvalidFeatureTypes
+      ) {
         invalidIds.add(service.id);
       }
     });
@@ -66,7 +80,7 @@
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
   const persistServices = async (id: string) => {
-    const response = await persistValue(KEY, services);
+    const response = await MetadataService.persistValue(KEY, services);
     if (response.ok) {
       visibleCheckmarks[id] = true;
     }
@@ -100,7 +114,7 @@
         }
         services = services.filter((service) => service.id !== id);
 
-        await persistValue(KEY, services);
+        await MetadataService.persistValue(KEY, services);
         if (removedService.fileIdentifier) {
           await fetch(
             `${page.url.origin}${page.url.pathname}/delete/${removedService.fileIdentifier}`,
@@ -117,7 +131,7 @@
         const layers = getValue<Record<string, Service[]>>(LAYERS_KEY);
         if (layers && layers[removedService.serviceIdentification]) {
           delete layers[removedService.serviceIdentification];
-          await persistValue(LAYERS_KEY, layers);
+          await MetadataService.persistValue(LAYERS_KEY, layers);
         }
 
         if (activeTab === id && services.length > 0) {

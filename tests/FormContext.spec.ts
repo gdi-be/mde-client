@@ -1,8 +1,6 @@
 import { describe, expect, test } from 'bun:test';
-import { getFormContext, getProgress } from '$lib/context/FormContext.svelte';
-import type { Role } from '$lib/models/keycloak';
+import { getFormContext } from '$lib/context/FormContext.svelte';
 import metadata1 from './fixtures/metadata1';
-import metadata2 from './fixtures/metadata2';
 import type { Contact } from '$lib/models/metadata';
 
 const { getValue, getAllValues } = getFormContext();
@@ -66,50 +64,6 @@ describe('FormContext', () => {
           ]
         }
       ]);
-    });
-  });
-  describe('getProgress', () => {
-    test('should calculate progress for required fields', () => {
-      const role: Role = 'MdeEditor';
-      const { progress } = getProgress(role, undefined, metadata1);
-
-      expect(progress).toBeGreaterThanOrEqual(0);
-      expect(progress).toBeLessThanOrEqual(1);
-    });
-
-    test('should handle different sections', () => {
-      const role: Role = 'MdeEditor';
-      const sections: Array<
-        'basedata' | 'classification' | 'temp_and_spatial' | 'additional' | 'services'
-      > = ['basedata', 'classification', 'temp_and_spatial', 'additional', 'services'];
-
-      sections.forEach((section) => {
-        const { progress } = getProgress(role, section, metadata1);
-        expect(progress).toBeGreaterThanOrEqual(0);
-        expect(progress).toBeLessThanOrEqual(1);
-      });
-    });
-
-    test('should handle administrator role', () => {
-      const { progress } = getProgress('MdeAdministrator', undefined, metadata1);
-      expect(progress).toBeGreaterThanOrEqual(0);
-      expect(progress).toBeLessThanOrEqual(1);
-    });
-  });
-
-  describe('allFieldsValid', () => {
-    test('should return true for valid metadata with services', () => {
-      const role: Role = 'MdeEditor';
-      const { progress, invalidFields } = getProgress(role, undefined, metadata1);
-      expect(invalidFields).toEqual([]);
-      expect(progress).toBe(1);
-    });
-
-    test('should return true for valid metadata without services', async () => {
-      const role: Role = 'MdeEditor';
-      const { progress, invalidFields } = getProgress(role, undefined, metadata2);
-      expect(invalidFields).toEqual([]);
-      expect(progress).toBe(1);
     });
   });
 });

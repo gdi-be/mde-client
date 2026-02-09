@@ -2,7 +2,7 @@
   import type { ColumnInfo } from '$lib/models/metadata';
   import SelectInput from '$lib/components/Form/Inputs/SelectInput.svelte';
   import type { Option } from '$lib/models/form';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
@@ -20,7 +20,7 @@
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.columns.type';
-  const fieldConfig = getFieldConfig(66);
+  const fieldConfig = MetadataService.getFieldConfig(66);
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 

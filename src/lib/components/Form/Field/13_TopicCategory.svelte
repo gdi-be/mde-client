@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import type { IsoTheme, MetadataProfile } from '$lib/models/metadata';
+  import { MetadataService } from '$lib/services/MetadataService';
   import type { ValidationResult } from '../FieldsConfig';
   import { getHighestRole } from '$lib/util';
   import MultiSelectInput from '../Inputs/MultiSelectInput.svelte';
@@ -24,13 +25,13 @@
   const profileValue = $derived(getValue<MetadataProfile>(TYPE_KEY));
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string[]>(13);
+  const fieldConfig = MetadataService.getFieldConfig<string[]>(13);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   let disabled = $derived(!!annexValue?.length && profileValue !== 'ISO');
 
   const onChange = async (newValue?: string[]) => {
-    const response = await persistValue(KEY, newValue);
+    const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }

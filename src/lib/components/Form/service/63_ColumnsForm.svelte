@@ -6,10 +6,13 @@
   import AttributeDatatype_66 from './Field/66_AttributeDatatype.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
   import { validateColumns } from './validation';
+  import { MetadataService } from '$lib/services/MetadataService';
   const t = $derived(page.data.t);
 
   type Tab = {
@@ -27,6 +30,10 @@
   const featureTypeName = $derived(featureType?.name);
 
   const popconfirm = $derived(getPopconfirm());
+  const { formState } = getFormContext();
+  const metadata = $derived(formState.metadata!);
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   let columns = $state<ColumnInfo[]>([]);
   let tabs = $derived<Tab[]>(
@@ -40,10 +47,11 @@
   let activeTabId: string | undefined = $state(undefined);
   let activeColumn = $derived(columns.find((column) => column.id === activeTabId));
 
-  const fieldConfig = getFieldConfig(63);
+  const fieldConfig = MetadataService.getFieldConfig(63);
   const validationResult = $derived(fieldConfig?.validator(columns));
 
-  const invalidTabIds = $derived(validateColumns(columns));
+  const invalidTabIds = $derived(validateColumns(columns, { metadata, HIGHEST_ROLE: highestRole }));
+  const isInvalid = $derived(columns.length === 0 || invalidTabIds.size > 0);
 
   $effect(() => {
     // if the featureType changes set activeTabIndex to undefined
@@ -108,7 +116,7 @@
 </script>
 
 <div class="columns-form">
-  <fieldset class={[invalidTabIds.size > 0 && 'invalid']}>
+  <fieldset class={[isInvalid && 'invalid']}>
     <legend>{t('63_ColumnsForm.label')}</legend>
     <FieldHint {fieldConfig} {validationResult} explanation={t('63_ColumnsForm.explanation')} />
     <nav>

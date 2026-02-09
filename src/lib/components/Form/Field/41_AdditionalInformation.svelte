@@ -1,8 +1,9 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import type { CI_OnLineFunctionCode, ContentDescription } from '$lib/models/metadata';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
@@ -51,10 +52,10 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<ContentDescription[]>(41);
-  const descriptionFieldConfig = getFieldConfig<string>(42);
-  const codeFieldConfig = getFieldConfig<string>(43);
-  const urlFieldConfig = getFieldConfig<string>(44);
+  const fieldConfig = MetadataService.getFieldConfig<ContentDescription[]>(41);
+  const descriptionFieldConfig = MetadataService.getFieldConfig<string>(42);
+  const codeFieldConfig = MetadataService.getFieldConfig<string>(43);
+  const urlFieldConfig = MetadataService.getFieldConfig<string>(44);
 
   const onBlur = async (evt: FocusEvent) => {
     await persistContentDescriptions(evt);
@@ -69,7 +70,7 @@
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
     const focusedElement = evt?.relatedTarget as HTMLElement | null;
-    const response = await persistValue(KEY, contentDescriptions);
+    const response = await MetadataService.persistValue(KEY, contentDescriptions);
     if (response.ok) {
       showCheckmark = true;
     }

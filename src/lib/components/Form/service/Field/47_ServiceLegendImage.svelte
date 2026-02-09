@@ -4,7 +4,7 @@
   import NumberInput from '$lib/components/Form/Inputs/NumberInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { page } from '$app/state';
 
   const t = $derived(page.data.t);
@@ -18,11 +18,11 @@
 
   let { value, onChange }: ServiceTypeProps = $props();
 
-  const fieldConfig = getFieldConfig(47);
-  const fieldConfigUrl = getFieldConfig(75);
-  const fieldConfigFormat = getFieldConfig(76);
-  const fieldConfigWidth = getFieldConfig(77);
-  const fieldConfigHeight = getFieldConfig(78);
+  const fieldConfig = MetadataService.getFieldConfig(47);
+  const fieldConfigUrl = MetadataService.getFieldConfig(75);
+  const fieldConfigFormat = MetadataService.getFieldConfig(76);
+  const fieldConfigWidth = MetadataService.getFieldConfig(77);
+  const fieldConfigHeight = MetadataService.getFieldConfig(78);
   const validationResult = $derived(fieldConfig?.validator(value));
   const validationResultUrl = $derived(fieldConfigUrl?.validator(value?.url));
   const validationResultFormat = $derived(fieldConfigFormat?.validator(value?.format));

@@ -1,9 +1,9 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { Service } from '$lib/models/metadata';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { page } from '$app/state';
   const t = $derived(page.data.t);
@@ -17,7 +17,7 @@
   let { value, service, onChange }: ComponentProps = $props();
 
   const HELP_KEY = 'isoMetadata.services.workspace';
-  const fieldConfig = getFieldConfig(45);
+  const fieldConfig = MetadataService.getFieldConfig(45);
   let hasDuplicatedValue = $state<boolean>(false);
   const validationResult = $derived.by(() => {
     if (hasDuplicatedValue) {

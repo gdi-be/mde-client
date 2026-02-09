@@ -1,6 +1,7 @@
 import { env } from '$env/dynamic/private';
 import { error, json } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
+import { logger } from 'loggisch';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ cookies, fetch, params }) {
@@ -15,6 +16,16 @@ export async function GET({ cookies, fetch, params }) {
     headers
   });
 
-  // we cant return response directly because it is a stream
-  return json(await response.json());
+  if (!response.ok) {
+    logger.error('Failed to fetch autokeywords: ' + response.status);
+    return error(response.status, 'Failed to fetch autokeywords');
+  }
+
+  try {
+    // we cant return response directly because it is a stream
+    return json(await response.json());
+  } catch (e) {
+    logger.error('Failed to parse autokeywords response:', e);
+    return error(500, 'Invalid response from server');
+  }
 }

@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
+  import { MetadataService } from '$lib/services/MetadataService';
   import type { Option } from '$lib/models/form';
   import { getHighestRole } from '$lib/util';
   import { toast } from 'svelte-french-toast';
@@ -24,11 +25,11 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(17);
+  const fieldConfig = MetadataService.getFieldConfig<string>(17);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onSelectionChange = async (newValue?: string) => {
-    const response = await persistValue(KEY, newValue);
+    const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }

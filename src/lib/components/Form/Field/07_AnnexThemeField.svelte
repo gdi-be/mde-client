@@ -1,11 +1,10 @@
 <script lang="ts">
   import {
     FORMSTATE_CONTEXT,
-    getFieldConfig,
     getFormContext,
-    persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import type { FullFieldConfig } from '../FieldsConfig';
@@ -36,18 +35,18 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string[]>(7);
+  const fieldConfig = MetadataService.getFieldConfig<string[]>(7);
   let validationResult = $derived(fieldConfig?.validator(value));
 
   const onChange = async (newValue?: string[]) => {
-    const response = await persistValue(KEY, newValue);
+    const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }
     await updateTopicCategory(newValue);
 
     // reset format name
-    await persistValue(FORMAT_KEY, null);
+    await MetadataService.persistValue(FORMAT_KEY, null);
   };
 
   const updateTopicCategory = async (inspireIDs?: string[]) => {
@@ -65,7 +64,7 @@
         .map((inspireId) => data.find((entry) => entry.inspireID === inspireId)?.isoID)
         .filter(Boolean) as string[];
       const uniqueValues = Array.from(new Set(matches));
-      return persistValue(TOPIC_KEY, uniqueValues);
+      return MetadataService.persistValue(TOPIC_KEY, uniqueValues);
     } catch {
       toast.error(t('general.error_fetch_options'));
     }
