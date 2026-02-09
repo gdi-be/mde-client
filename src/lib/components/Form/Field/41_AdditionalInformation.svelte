@@ -172,7 +172,11 @@
             validationResult={descriptionFieldConfig?.validator(contentDescription.description)}
             id={`${KEY}-${index}-description`}
           />
-          <FieldTools key={`${KEY}[${index}].description`} fieldConfig={descriptionFieldConfig} />
+          <FieldTools
+            noCloneButton
+            key={`${KEY}[${index}].description`}
+            fieldConfig={descriptionFieldConfig}
+          />
         </div>
         <div class="inline-fields">
           <div class="subfield-wrapper code-select-field">
@@ -194,7 +198,7 @@
               ]}
               id={`${KEY}-${index}-code`}
             />
-            <FieldTools key={`${KEY}[${index}].code`} fieldConfig={codeFieldConfig} />
+            <FieldTools noCloneButton key={`${KEY}[${index}].code`} fieldConfig={codeFieldConfig} />
           </div>
           <div class="subfield-wrapper url-field">
             <TextInput
@@ -206,7 +210,7 @@
               validationResult={urlFieldConfig?.validator(contentDescription.url)}
               id={`${KEY}-${index}-url`}
             />
-            <FieldTools key={`${KEY}[${index}].url`} fieldConfig={urlFieldConfig} />
+            <FieldTools noCloneButton key={`${KEY}[${index}].url`} fieldConfig={urlFieldConfig} />
           </div>
         </div>
       </fieldset>

@@ -20,6 +20,7 @@
     noCheckmark?: boolean;
     noHelpButton?: boolean;
     noCopyButton?: boolean;
+    noCloneButton?: boolean;
   };
 
   let {
@@ -30,6 +31,7 @@
     noCheckmark = false,
     noHelpButton = false,
     noCopyButton = false,
+    noCloneButton = false,
     value
   }: FieldToolsProps = $props();
 
@@ -94,7 +96,7 @@
   {#if !noCopyButton}
     <CopyButton {value} {key} {fieldConfig} />
   {/if}
-  {#if metadata?.clonedFromId}
+  {#if metadata?.clonedFromId && !noCloneButton}
     {#await getValueFromOriginal()}
       <Icon class="material-icons spinner" title={t('fieldtools.checkingOriginal')}>
         progress_activity

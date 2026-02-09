@@ -200,7 +200,13 @@
             validationResult={nameConfig?.validator(contact.name)}
             id={`${KEY}-${index}-name`}
           />
-          <FieldTools key={`${KEY}[${index}].name`} noHelpButton noCheckmark {fieldConfig} />
+          <FieldTools
+            key={`${KEY}[${index}].name`}
+            noHelpButton
+            noCheckmark
+            noCloneButton
+            {fieldConfig}
+          />
         </div>
         <div class="subfield-wrapper">
           <TextInput
@@ -216,6 +222,7 @@
             key={`${KEY}[${index}].organisation`}
             noHelpButton
             noCheckmark
+            noCloneButton
             {fieldConfig}
           />
         </div>
@@ -229,7 +236,13 @@
             validationResult={phoneConfig?.validator(contact.phone)}
             id={`${KEY}-${index}-phone`}
           />
-          <FieldTools key={`${KEY}[${index}].phone`} noHelpButton noCheckmark {fieldConfig} />
+          <FieldTools
+            key={`${KEY}[${index}].phone`}
+            noHelpButton
+            noCheckmark
+            noCloneButton
+            {fieldConfig}
+          />
         </div>
         <div class="subfield-wrapper">
           <TextInput
@@ -241,7 +254,13 @@
             validationResult={emailConfig?.validator(contact.email)}
             id={`${KEY}-${index}-email`}
           />
-          <FieldTools key={`${KEY}[${index}].email`} noHelpButton noCheckmark {fieldConfig} />
+          <FieldTools
+            key={`${KEY}[${index}].email`}
+            noHelpButton
+            noCheckmark
+            noCloneButton
+            {fieldConfig}
+          />
         </div>
       </fieldset>
     {/each}
