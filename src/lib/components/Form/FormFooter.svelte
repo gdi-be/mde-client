@@ -95,6 +95,11 @@
   const onDownloadClick = async () => {
     const metadataId = metadata?.metadataId;
     const url = `${page.url.origin}/metadata/${metadataId}/download`;
+
+    // timeout for 3 seconds to conflicts with blur-event-saving
+    // and to ensure that the latest changes are included in the download
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     const response = await fetch(url, {
       method: 'GET'
     });

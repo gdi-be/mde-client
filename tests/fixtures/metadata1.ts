@@ -131,7 +131,7 @@ export default {
     maintenanceFrequency: 'annually',
     contentDescriptions: [
       {
-        title: 'wef',
+        description: 'wef',
         url: '',
         code: 'information'
       }

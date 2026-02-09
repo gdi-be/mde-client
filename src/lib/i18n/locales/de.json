@@ -167,14 +167,10 @@
     "delete_button": "Löschen",
     "delete_confirm": "Möchten Sie diese Information wirklich löschen?",
     "remove": "Information entfernen",
-    "title": "Titel",
+    "description": "Titel",
     "url": "Url",
     "label": "Weitere Informationen",
     "explanation": "Gibt es weitere Informationsquellen zu Ihrem Datenbestand im Internet?"
-  },
-  "42_AdditionalInformationTitle": {
-    "label": "Titel",
-    "explanation": "Wie heißt die Informationsquelle?"
   },
   "43_AdditionalInformationCode": {
     "label": "Code",

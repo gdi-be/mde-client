@@ -60,7 +60,7 @@ export default {
     contentDescriptions: [
       {
         url: '',
-        title: 'wef',
+        description: 'wef',
         code: 'information'
       }
     ],

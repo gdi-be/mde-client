@@ -52,7 +52,7 @@
 
   let showCheckmark = $state(false);
   const fieldConfig = getFieldConfig<ContentDescription[]>(41);
-  const titleFieldConfig = getFieldConfig<string>(42);
+  const descriptionFieldConfig = getFieldConfig<string>(42);
   const codeFieldConfig = getFieldConfig<string>(43);
   const urlFieldConfig = getFieldConfig<string>(44);
 
@@ -122,10 +122,11 @@
       highestRole === 'MdeAdministrator' ||
       (editingRoles ? editingRoles?.includes(highestRole) : true);
     const hasInvalidFields = contentDescriptions.some((contentDescription) => {
-      const titleValid = titleFieldConfig?.validator(contentDescription.description).valid ?? true;
+      const descriptionValid =
+        descriptionFieldConfig?.validator(contentDescription.description).valid ?? true;
       const urlValid = urlFieldConfig?.validator(contentDescription.url).valid ?? true;
       const codeValid = codeFieldConfig?.validator(contentDescription.code).valid ?? true;
-      return !titleValid || !urlValid || !codeValid;
+      return !descriptionValid || !urlValid || !codeValid;
     });
     return isEditingRole && hasInvalidFields;
   });
@@ -164,14 +165,14 @@
         <div class="subfield-wrapper">
           <TextInput
             bind:value={contentDescription.description}
-            label={t('42_AdditionalInformationTitle.label')}
+            label={t('41_AdditionalInformation.description')}
             onblur={onBlur}
             onfocus={onFocus}
-            fieldConfig={titleFieldConfig}
-            validationResult={titleFieldConfig?.validator(contentDescription.description)}
+            fieldConfig={descriptionFieldConfig}
+            validationResult={descriptionFieldConfig?.validator(contentDescription.description)}
             id={`${KEY}-${index}-description`}
           />
-          <FieldTools key={`${KEY}[${index}].description`} fieldConfig={titleFieldConfig} />
+          <FieldTools key={`${KEY}[${index}].description`} fieldConfig={descriptionFieldConfig} />
         </div>
         <div class="inline-fields">
           <div class="subfield-wrapper code-select-field">
