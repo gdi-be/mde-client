@@ -17,10 +17,11 @@ describe('FormContext', () => {
       );
       expect(getValue<Contact[]>('isoMetadata.pointsOfContact', metadata1)).toEqual([
         {
+          id: 'b3e1c2d4-5f6a-4e7b-8c9d-0a1b2c3d4e5f',
           name: 'Peter Klose',
           organisation: 'terrestris GmbH & Co Kg',
           phone: '123123123',
-          email: 'kaivol@wefewf.de'
+          email: 'klose@wefewf.de'
         }
       ]);
     });

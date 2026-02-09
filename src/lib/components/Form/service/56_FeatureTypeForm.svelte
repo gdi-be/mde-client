@@ -15,6 +15,7 @@
 
   type Tab = {
     name: string;
+    id: string;
   };
 
   export type FeatureTypeFormProps = {
@@ -32,24 +33,25 @@
   let tabs = $derived<Tab[]>(
     featureTypes.map((featureType) => {
       return {
+        id: featureType.id,
         name: featureType.title || 'Unbekannter Featuretype'
       };
     })
   );
-  let activeTabIndex: number | undefined = $state();
-  let activeFeatureType = $derived(activeTabIndex ? featureTypes[activeTabIndex] : featureTypes[0]);
+  let activeTabId: string | undefined = $state();
+  let activeFeatureType = $derived(featureTypes.find((ft) => ft.id === activeTabId));
 
   const fieldConfig = getFieldConfig(56);
   const validationResult = $derived(
     fieldConfig?.validator(featureTypes, { PARENT_VALUE: service })
   );
 
-  const invalidTabIndices = $derived(validateFeatureTypes(featureTypes));
+  const invalidTabIds = $derived(validateFeatureTypes(featureTypes));
 
   $effect(() => {
     // if the serviceId changes set activeTabIndex to undefined
     if (serviceId) {
-      activeTabIndex = undefined;
+      activeTabId = undefined;
     }
   });
 
@@ -58,33 +60,35 @@
   });
 
   function addFeatureType() {
+    const id = crypto.randomUUID();
     featureTypes = [
       ...featureTypes,
       {
+        id,
         name: '',
         title: '',
         shortDescription: '',
         columns: []
       }
     ];
-    activeTabIndex = featureTypes.length - 1;
+    activeTabId = id;
     onChange(featureTypes);
   }
 
-  function removeFeatureType(index: number, evt: MouseEvent) {
+  function removeFeatureType(id: string, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
     popconfirm.open(
       targetEl,
       async () => {
-        featureTypes = featureTypes.filter((_, i) => i !== index);
-        if (activeTabIndex === index) {
-          activeTabIndex = featureTypes.length - 1;
+        featureTypes = featureTypes.filter((featureType) => featureType.id !== id);
+        if (activeTabId === id) {
+          activeTabId = featureTypes.length > 1 ? featureTypes[0].id : undefined;
         }
         onChange(featureTypes);
-        activeTabIndex = featureTypes.length > 0 ? activeTabIndex : undefined;
-        if (activeTabIndex && activeTabIndex > featureTypes.length - 1) {
-          activeTabIndex = 0;
+        activeTabId = featureTypes.length > 0 ? activeTabId : undefined;
+        if (activeTabId && !featureTypes.find((ft) => ft.id === activeTabId)) {
+          activeTabId = featureTypes[0]?.id;
         }
       },
       {
@@ -95,32 +99,32 @@
   }
 
   function set(key: string, value: FeatureType[keyof FeatureType]) {
-    featureTypes = featureTypes.map((column, i) => {
-      if (i === activeTabIndex) {
+    featureTypes = featureTypes.map((featureType) => {
+      if (featureType.id === activeTabId) {
         return {
-          ...column,
+          ...featureType,
           [key]: value
         };
       }
-      return column;
+      return featureType;
     });
     return onChange(featureTypes);
   }
 </script>
 
 <div class="featuretypes-form">
-  <fieldset class={[invalidTabIndices.size > 0 && 'invalid']}>
+  <fieldset class={[invalidTabIds.size > 0 && 'invalid']}>
     <legend>
       {t('56_FeatureTypeForm.label')}
     </legend>
     <FieldHint {fieldConfig} {validationResult} />
     <nav>
-      {#each tabs as tab, i}
+      {#each tabs as tab}
         <div
           class={[
             'tab-container',
-            activeTabIndex === i && 'active',
-            invalidTabIndices.has(i) && 'invalid'
+            activeTabId === tab.id && 'active',
+            invalidTabIds.has(tab.id) && 'invalid'
           ]}
         >
           <button
@@ -130,14 +134,14 @@
             title={tab.name}
             onclick={(evt) => {
               evt.preventDefault();
-              activeTabIndex = i;
+              activeTabId = tab.id;
             }}
           >
             {tab.name}
           </button>
           <IconButton
             class="material-icons"
-            onclick={(evt) => removeFeatureType(i, evt)}
+            onclick={(evt) => removeFeatureType(tab.id, evt)}
             size="button"
             title="Featuretype entfernen"
             type="button"
@@ -160,7 +164,7 @@
       </IconButton>
     </nav>
     <div class="content">
-      {#if activeTabIndex !== undefined}
+      {#if activeTabId && activeFeatureType}
         <FeatureTypeTitle_61
           value={activeFeatureType?.title}
           onChange={(title) => set('title', title)}

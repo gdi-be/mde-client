@@ -30,7 +30,7 @@
   const validationResultHeight = $derived(fieldConfigHeight?.validator(value?.height));
   let showCheckmark = $state(false);
 
-  const update = async (key: string, val: string) => {
+  const update = async (key: string, val: string | number) => {
     const response = await onChange({
       ...value,
       [key]: val
@@ -77,7 +77,7 @@
           <NumberInput
             label={t('47_ServiceLegendImage.width')}
             value={value?.width}
-            onchange={(e: Event) => update('width', (e.target as HTMLInputElement).value)}
+            onblur={(e: Event) => update('width', Number((e.target as HTMLInputElement).value))}
             fieldConfig={fieldConfigWidth}
             validationResult={validationResultWidth}
           />
@@ -87,7 +87,7 @@
           <NumberInput
             label={t('47_ServiceLegendImage.height')}
             value={value?.height}
-            onchange={(e: Event) => update('height', (e.target as HTMLInputElement).value)}
+            onblur={(e: Event) => update('height', Number((e.target as HTMLInputElement).value))}
             fieldConfig={fieldConfigHeight}
             validationResult={validationResultHeight}
           />

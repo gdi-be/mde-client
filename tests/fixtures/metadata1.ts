@@ -112,10 +112,11 @@ export default {
     validTo: '2025-06-11T00:00:00Z',
     pointsOfContact: [
       {
+        id: 'b3e1c2d4-5f6a-4e7b-8c9d-0a1b2c3d4e5f',
         name: 'Peter Klose',
         organisation: 'terrestris GmbH & Co Kg',
         phone: '123123123',
-        email: 'kaivol@wefewf.de'
+        email: 'klose@wefewf.de'
       }
     ],
     resolutions: [222],

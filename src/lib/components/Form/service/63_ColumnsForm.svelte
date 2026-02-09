@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { ColumnInfo, FeatureType } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import Checkmark from '$lib/components/Form/Checkmark.svelte';
   import AttributeName_64 from './Field/64_AttributeName.svelte';
   import AttributeAlias_65 from './Field/65_AttributeAlias.svelte';
   import AttributeDatatype_66 from './Field/66_AttributeDatatype.svelte';
@@ -14,6 +13,7 @@
   const t = $derived(page.data.t);
 
   type Tab = {
+    id: string;
     name: string;
   };
 
@@ -32,22 +32,23 @@
   let tabs = $derived<Tab[]>(
     columns.map((column) => {
       return {
+        id: column.id,
         name: column.name || 'Unbekanntes Attribut'
       };
     })
   );
-  let activeTabIndex: number | undefined = $state(undefined);
-  let activeColumn = $derived(activeTabIndex ? columns[activeTabIndex] : columns[0]);
+  let activeTabId: string | undefined = $state(undefined);
+  let activeColumn = $derived(columns.find((column) => column.id === activeTabId));
 
   const fieldConfig = getFieldConfig(63);
   const validationResult = $derived(fieldConfig?.validator(columns));
 
-  const invalidTabIndices = $derived(validateColumns(columns));
+  const invalidTabIds = $derived(validateColumns(columns));
 
   $effect(() => {
     // if the featureType changes set activeTabIndex to undefined
     if (featureTypeName) {
-      activeTabIndex = undefined;
+      activeTabId = undefined;
     }
   });
 
@@ -55,32 +56,35 @@
     columns = initialColumns || [];
   });
 
-  let visibleCheckmarks = $state<Record<string, boolean>>({});
-
   function addColumn() {
+    const id = crypto.randomUUID();
     columns = [
       ...columns,
       {
+        id,
         name: '',
         alias: ''
       }
     ];
-    activeTabIndex = columns.length - 1;
+    activeTabId = id;
     onChange(columns);
   }
 
-  function removeColumn(index: number, evt: MouseEvent) {
+  function removeColumn(id: string, evt: MouseEvent) {
     const targetEl = evt.currentTarget as HTMLElement;
     evt.preventDefault();
     popconfirm.open(
       targetEl,
       async () => {
-        columns = columns.filter((_, i) => i !== index);
-        if (activeTabIndex === index) {
-          activeTabIndex = columns.length - 1;
+        columns = columns.filter((column) => column.id !== id);
+        if (activeTabId === id) {
+          activeTabId = columns.length > 0 ? columns[0].id : undefined;
         }
         onChange(columns);
-        activeTabIndex = columns.length > 0 ? activeTabIndex : undefined;
+        activeTabId = columns.length > 0 ? activeTabId : undefined;
+        if (activeTabId && !columns.find((column) => column.id === activeTabId)) {
+          activeTabId = columns[0]?.id;
+        }
       },
       {
         text: 'Sind sie sicher, dass sie dieses Attribut löschen möchten?',
@@ -90,8 +94,8 @@
   }
 
   function set(key: string, value: ColumnInfo[keyof ColumnInfo]) {
-    columns = columns.map((column, i) => {
-      if (i === activeTabIndex) {
+    columns = columns.map((column) => {
+      if (column.id === activeTabId) {
         return {
           ...column,
           [key]: value
@@ -104,36 +108,33 @@
 </script>
 
 <div class="columns-form">
-  <fieldset class={[invalidTabIndices.size > 0 && 'invalid']}>
+  <fieldset class={[invalidTabIds.size > 0 && 'invalid']}>
     <legend>{t('63_ColumnsForm.label')}</legend>
     <FieldHint {fieldConfig} {validationResult} explanation={t('63_ColumnsForm.explanation')} />
     <nav>
-      {#each tabs as tab, i}
+      {#each tabs as tab}
         <div
           class={[
             'tab-container',
-            activeTabIndex === i && 'active',
-            invalidTabIndices.has(i) && 'invalid'
+            activeTabId === tab.id && 'active',
+            invalidTabIds.has(tab.id) && 'invalid'
           ]}
         >
           <button
             type="button"
-            id={tab.name}
+            id={tab.id}
             class="tab"
             title={tab.name}
             onclick={(evt) => {
               evt.preventDefault();
-              activeTabIndex = i;
+              activeTabId = tab.id;
             }}
           >
             {tab.name}
           </button>
-          {#if visibleCheckmarks[tab.name]}
-            <Checkmark bind:running={visibleCheckmarks[tab.name]} />
-          {/if}
           <IconButton
             class="material-icons"
-            onclick={(evt) => removeColumn(i, evt)}
+            onclick={(evt) => removeColumn(tab.id, evt)}
             size="button"
             title="Attribut entfernen"
             type="button"
@@ -156,7 +157,7 @@
       </IconButton>
     </nav>
     <div class="content">
-      {#if activeTabIndex !== undefined}
+      {#if activeTabId && activeColumn}
         <AttributeName_64 value={activeColumn?.name} onChange={(name) => set('name', name)} />
         <AttributeAlias_65 value={activeColumn?.alias} onChange={(alias) => set('alias', alias)} />
         <AttributeDatatype_66 value={activeColumn?.type} onChange={(type) => set('type', type)} />
