@@ -778,7 +778,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   },
   {
     profileId: 42,
-    key: 'isoMetadata.contentDescriptions.title',
+    key: 'isoMetadata.contentDescriptions.description',
     collectionKey: 'isoMetadata.contentDescriptions',
     validator: (val: string) => {
       if (!isDefined(val)) {
