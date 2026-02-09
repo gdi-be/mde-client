@@ -96,13 +96,7 @@
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
     const focusedElement = evt?.relatedTarget as HTMLElement | null;
-    const value = contacts.map((contact) => ({
-      name: contact.name,
-      organisation: contact.organisation,
-      phone: contact.phone,
-      email: contact.email
-    }));
-    const response = await persistValue(KEY, value);
+    const response = await persistValue(KEY, contacts);
     if (response.ok) {
       showCheckmark = true;
     }

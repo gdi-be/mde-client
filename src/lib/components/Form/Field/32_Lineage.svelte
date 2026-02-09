@@ -110,8 +110,7 @@
     const focusedElement = evt?.relatedTarget as HTMLElement | null;
 
     const value = lineages.map((lineage) => ({
-      title: lineage.title,
-      identifier: lineage.identifier,
+      ...lineage,
       date: lineage.date ? new Date(lineage.date).toISOString() : ''
     }));
     const response = await persistValue(KEY, value);
