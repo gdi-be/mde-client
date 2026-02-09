@@ -251,7 +251,11 @@
               validationResult={titleFieldConfig?.validator(lineage.title)}
               id={`${KEY}-${index}-title`}
             />
-            <FieldTools key={`${KEY}[${index}].title`} fieldConfig={titleFieldConfig} />
+            <FieldTools
+              noCloneButton
+              key={`${KEY}[${index}].title`}
+              fieldConfig={titleFieldConfig}
+            />
           </div>
           {#if metadataCollections.length > 0 && titleSearchListId === lineage.id}
             <ul class="search-results" bind:this={searchResultsElement}>
@@ -280,7 +284,7 @@
               validationResult={dateFieldConfig?.validator(lineage.date)}
               id={`${KEY}-${index}-date`}
             />
-            <FieldTools key={`${KEY}[${index}].date`} fieldConfig={dateFieldConfig} />
+            <FieldTools noCloneButton key={`${KEY}[${index}].date`} fieldConfig={dateFieldConfig} />
           </div>
           <div class="lineage-source-field">
             <TextInput
@@ -292,7 +296,11 @@
               validationResult={identifierFieldConfig?.validator(lineage.identifier)}
               id={`${KEY}-${index}-identifier`}
             />
-            <FieldTools key={`${KEY}[${index}].identifier`} fieldConfig={identifierFieldConfig} />
+            <FieldTools
+              noCloneButton
+              key={`${KEY}[${index}].identifier`}
+              fieldConfig={identifierFieldConfig}
+            />
           </div>
         </div>
       </fieldset>
