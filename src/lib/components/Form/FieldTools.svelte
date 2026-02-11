@@ -98,9 +98,7 @@
   {/if}
   {#if metadata?.clonedFromId && !noCloneButton}
     {#await getValueFromOriginal()}
-      <Icon class="material-icons spinner" title={t('fieldtools.checkingOriginal')}>
-        progress_activity
-      </Icon>
+      <!-- Don't render anything to avoid flickering -->
     {:then valueFromOriginal}
       {#if valueFromOriginal}
         <IconButton
