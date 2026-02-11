@@ -1,3 +1,27 @@
+# [6.0.0](https://github.com/gdi-be/mde-client/compare/v5.1.1...v6.0.0) (2026-02-11)
+
+
+### Bug Fixes
+
+* add noCloneButton option ([dbcd763](https://github.com/gdi-be/mde-client/commit/dbcd7630c8c053ed0fbb34691005ba57273259de))
+* enhance onBlur handling to keep focus ([a90e99b](https://github.com/gdi-be/mde-client/commit/a90e99b8b535a386b6a9bb0650f3d768b5f482d7))
+* pass ids when persisting lists ([a3e9ac9](https://github.com/gdi-be/mde-client/commit/a3e9ac984d0e481c0727433fde735635ef6602e5))
+* remove clone loading indicator ([f340e64](https://github.com/gdi-be/mde-client/commit/f340e640dd7eeb5fdd748371b62266aff84f01e8))
+* update key for field 42 ([42333f8](https://github.com/gdi-be/mde-client/commit/42333f835fc24fbc3edb969427cd7e480574ec05))
+* update validation context handling ([6c78770](https://github.com/gdi-be/mde-client/commit/6c78770a24983554fb7fe93c212bf76e147cec67))
+* use entity ids for list identification ([02db5ce](https://github.com/gdi-be/mde-client/commit/02db5cee024db2048a82d7f5eef560f0a5bd0574))
+
+
+### Features
+
+* add MetadataService and ValidationService ([6019f98](https://github.com/gdi-be/mde-client/commit/6019f9881be4d0624cd932e1fd24cfc873c44240))
+* add renovate ([6e67d09](https://github.com/gdi-be/mde-client/commit/6e67d09dbf343bf7a3d99bef536878fef2f3d8b1))
+
+
+### BREAKING CHANGES
+
+* moves several functions from FormContext to either
+
 ## [5.1.1](https://github.com/gdi-be/mde-client/compare/v5.1.0...v5.1.1) (2026-02-04)
 
 
