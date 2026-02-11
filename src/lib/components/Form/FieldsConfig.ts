@@ -223,7 +223,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 8,
     key: 'isoMetadata.highValueDataCategory',
     extraParams: ['isoMetadata.highValueDataset'],
-    validator: (val: any, extraParams) => {
+    validator: (val: any, extraParams?: ValidationContext) => {
       const isHighValueDataset = extraParams?.['isoMetadata.highValueDataset'];
       if (isHighValueDataset === true && !isDefined(val)) {
         return {
@@ -729,10 +729,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 45,
     key: 'isoMetadata.services.workspace',
     collectionKey: 'isoMetadata.services',
-    extraParams: ['PARENT_VALUE'],
+    extraParams: ['PARENT_VALUE', 'HIGHEST_ROLE'],
     validator: (workspace: Service['workspace'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
       const service = extraParams?.['PARENT_VALUE'];
-      if (service?.serviceType === 'ATOM' && !isDefined(workspace)) {
+      if (!required || (service?.serviceType === 'ATOM' && !isDefined(workspace))) {
         return { valid: true };
       }
       const valid = !!(isDefined(workspace) && /^[a-zA-Z0-9_]+$/.test(workspace));
@@ -827,7 +829,18 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 50,
     key: 'clientMetadata.layers.name',
     collectionKey: 'clientMetadata.layers',
-    validator: requiredValidator('Bitte geben Sie einen Namen für die Kartenebene an.'),
+    extraParams: ['HIGHEST_ROLE'],
+    validator: (name: Layer['name'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
+      if (required && !isDefined(name)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Namen für die Kartenebene an.'
+        };
+      }
+      return { valid: true };
+    },
     section: 'services',
     required: true,
     editingRoles: ['MdeEditor']
@@ -836,7 +849,18 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 51,
     key: 'clientMetadata.layers.styleName',
     collectionKey: 'clientMetadata.layers',
-    validator: requiredValidator('Bitte geben Sie einen Style-Namen für die Kartenebene an.'),
+    extraParams: ['HIGHEST_ROLE'],
+    validator: (styleName: Layer['styleName'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
+      if (required && !isDefined(styleName)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Style-Namen für die Kartenebene an.'
+        };
+      }
+      return { valid: true };
+    },
     section: 'services',
     required: true,
     editingRoles: ['MdeEditor']
@@ -845,11 +869,13 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 52,
     key: 'clientMetadata.layers.styleTitle',
     collectionKey: 'clientMetadata.layers',
-    extraParams: ['isoMetadata.metadataProfile'],
+    extraParams: ['isoMetadata.metadataProfile', 'HIGHEST_ROLE'],
     validator: (styleTitle: Layer['styleTitle'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
       const isInspireHarmonized = metadataProfile === 'INSPIRE_HARMONISED';
-      if (isInspireHarmonized && !isDefined(styleTitle)) {
+      if (required && isInspireHarmonized && !isDefined(styleTitle)) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie einen Style-Titel für den Layer an.'
@@ -954,7 +980,28 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 62,
     key: 'isoMetadata.services.featureTypes.name',
     collectionKey: 'isoMetadata.services.featureTypes',
-    validator: requiredValidator('Bitte geben Sie einen Namen für den FeatureType an.'),
+    extraParams: ['PARENT_VALUE', 'HIGHEST_ROLE'],
+    validator: (name: FeatureType['name'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
+      const service = extraParams?.['PARENT_VALUE'];
+      if (service?.serviceType === 'WFS') {
+        if (required && !isDefined(name)) {
+          return {
+            valid: false,
+            helpText: 'Bitte geben Sie einen Namen für den FeatureType an.'
+          };
+        }
+        if (isDefined(name) && !/^[a-zA-Z0-9_]+$/.test(name)) {
+          return {
+            valid: false,
+            helpText:
+              'Bitte geben Sie einen gültigen Namen für den FeatureType an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.'
+          };
+        }
+      }
+      return { valid: true };
+    },
     section: 'services',
     required: true,
     editingRoles: ['MdeEditor']

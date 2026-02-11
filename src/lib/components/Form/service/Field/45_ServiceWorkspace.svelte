@@ -16,6 +16,9 @@
 
   let { value, service, onChange }: ComponentProps = $props();
 
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
+
   const HELP_KEY = 'isoMetadata.services.workspace';
   const fieldConfig = MetadataService.getFieldConfig(45);
   let hasDuplicatedValue = $state<boolean>(false);
@@ -27,13 +30,11 @@
       };
     }
     return fieldConfig?.validator(value, {
-      ['PARENT_VALUE']: service
+      ['PARENT_VALUE']: service,
+      ['HIGHEST_ROLE']: highestRole
     });
   });
   let showCheckmark = $state(false);
-
-  const token = $derived(getAccessToken());
-  const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 </script>
 

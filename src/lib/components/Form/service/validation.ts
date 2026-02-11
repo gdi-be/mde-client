@@ -55,11 +55,16 @@ export function validateFeatureType(featureType: FeatureType, context: Validatio
   const field69 = MetadataService.getFieldConfig(69);
   const field63 = MetadataService.getFieldConfig(63);
 
+  const featureTypeContext = {
+    ...context,
+    PARENT_VALUE: featureType
+  };
+
   const validations = [
-    ValidationService.validateField(field61, featureType.title, context),
-    ValidationService.validateField(field62, featureType.name, context),
-    ValidationService.validateField(field69, featureType.shortDescription, context),
-    ValidationService.validateField(field63, featureType.columns, context)
+    ValidationService.validateField(field61, featureType.title, featureTypeContext),
+    ValidationService.validateField(field62, featureType.name, featureTypeContext),
+    ValidationService.validateField(field69, featureType.shortDescription, featureTypeContext),
+    ValidationService.validateField(field63, featureType.columns, featureTypeContext)
   ];
 
   const fieldsValid = validateFields(validations);
@@ -109,16 +114,22 @@ export function validateLayer(layer: Layer, context: ValidationContext): boolean
   const field55 = MetadataService.getFieldConfig(55);
   const field68 = MetadataService.getFieldConfig(68);
 
+  const layerContext = {
+    ...context,
+    PARENT_VALUE: layer
+  };
+
   const validations = [
-    ValidationService.validateField(field49, layer.title, context),
-    ValidationService.validateField(field50, layer.name, context),
-    ValidationService.validateField(field51, layer.styleName, context),
-    ValidationService.validateField(field52, layer.styleTitle, context),
-    ValidationService.validateField(field53, layer.legendImage, context),
-    ValidationService.validateField(field54, layer.shortDescription, context),
-    ValidationService.validateField(field55, layer.datasource, context),
-    ValidationService.validateField(field68, layer.secondaryDatasource, context)
+    ValidationService.validateField(field49, layer.title, layerContext),
+    ValidationService.validateField(field50, layer.name, layerContext),
+    ValidationService.validateField(field51, layer.styleName, layerContext),
+    ValidationService.validateField(field52, layer.styleTitle, layerContext),
+    ValidationService.validateField(field53, layer.legendImage, layerContext),
+    ValidationService.validateField(field54, layer.shortDescription, layerContext),
+    ValidationService.validateField(field55, layer.datasource, layerContext),
+    ValidationService.validateField(field68, layer.secondaryDatasource, layerContext)
   ];
+
   return validateFields(validations);
 }
 
@@ -161,22 +172,34 @@ export function validateService(
   const field59 = MetadataService.getFieldConfig(59);
   const field60 = MetadataService.getFieldConfig(60);
 
+  const serviceContext = {
+    ...context,
+    PARENT_VALUE: service
+  };
+
   const validations = [
-    ValidationService.validateField(field45, service.workspace, context),
-    ValidationService.validateField(field46, service.preview, context),
-    ValidationService.validateField(field47, service.legendImage, context),
-    ValidationService.validateField(field48, layers, context),
-    ValidationService.validateField(field56, service.featureTypes, context),
-    ValidationService.validateField(field58, service.serviceType, context),
-    ValidationService.validateField(field59, service.title, context),
-    ValidationService.validateField(field60, service.shortDescription, context)
+    ValidationService.validateField(field45, service.workspace, serviceContext),
+    ValidationService.validateField(field46, service.preview, serviceContext),
+    ValidationService.validateField(field47, service.legendImage, serviceContext),
+    ValidationService.validateField(field48, layers, serviceContext),
+    ValidationService.validateField(field56, service.featureTypes, serviceContext),
+    ValidationService.validateField(field58, service.serviceType, serviceContext),
+    ValidationService.validateField(field59, service.title, serviceContext),
+    ValidationService.validateField(field60, service.shortDescription, serviceContext)
   ];
 
   const fieldsValid = validateFields(validations);
-  const hasInvalidLayersFlag = layers ? hasInvalidLayers(layers, context) : false;
-  const hasInvalidFeatureTypesFlag = service.featureTypes
-    ? hasInvalidFeatureTypes(service.featureTypes, context)
-    : false;
+  const featureTypesRequired = service.serviceType === 'WFS';
+  const layersRequired = ['WMS', 'WMTS'].includes(service?.serviceType || '');
+  let hasInvalidLayersFlag = false;
+  if (layersRequired) {
+    hasInvalidLayersFlag = !layers?.length || hasInvalidLayers(layers, context);
+  }
+  let hasInvalidFeatureTypesFlag = false;
+  if (featureTypesRequired) {
+    hasInvalidFeatureTypesFlag =
+      !service?.featureTypes?.length || hasInvalidFeatureTypes(service.featureTypes || [], context);
+  }
 
   return {
     hasInvalidFields: !fieldsValid,

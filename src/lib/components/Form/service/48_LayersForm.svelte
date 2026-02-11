@@ -60,6 +60,7 @@
   );
 
   const invalidTabIds = $derived(validateLayers(layers, { metadata, HIGHEST_ROLE: highestRole }));
+  const isInvalid = $derived(layers.length === 0 || invalidTabIds.size > 0);
 
   $effect(() => {
     // if the serviceId changes set activeTabIndex to undefined
@@ -125,7 +126,7 @@
 </script>
 
 <div class="layers-form">
-  <fieldset class={[invalidTabIds.size > 0 && 'invalid']}>
+  <fieldset class={[isInvalid && 'invalid']}>
     <legend>{t('48_LayersForm.label')} </legend>
     <FieldHint {fieldConfig} {validationResult} />
     <nav>

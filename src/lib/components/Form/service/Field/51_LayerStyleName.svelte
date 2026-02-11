@@ -18,11 +18,15 @@
   const HELP_KEY = 'clientMetadata.layers.styleName';
   let showCheckmark = $state(false);
 
-  const fieldConfig = MetadataService.getFieldConfig(51);
-  const validationResult = $derived(fieldConfig?.validator(value));
-
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
+
+  const fieldConfig = MetadataService.getFieldConfig(51);
+  const validationResult = $derived(
+    fieldConfig?.validator(value, {
+      ['HIGHEST_ROLE']: highestRole
+    })
+  );
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 
   const onChangeInternal = async (e: Event) => {

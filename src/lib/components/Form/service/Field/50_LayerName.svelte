@@ -16,11 +16,15 @@
   let { value, onChange }: ComponentProps = $props();
 
   const HELP_KEY = 'clientMetadata.layers.name';
-  const fieldConfig = MetadataService.getFieldConfig(50);
-  const validationResult = $derived(fieldConfig?.validator(value));
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
+  const fieldConfig = MetadataService.getFieldConfig(50);
+  const validationResult = $derived(
+    fieldConfig?.validator(value, {
+      ['HIGHEST_ROLE']: highestRole
+    })
+  );
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
   let showCheckmark = $state(false);
 

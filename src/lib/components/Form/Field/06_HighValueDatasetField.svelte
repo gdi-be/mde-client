@@ -31,7 +31,9 @@
   const checkedFieldConfig = MetadataService.getFieldConfig<boolean>(6);
   const categoryFieldConfig = MetadataService.getFieldConfig<string[]>(8);
   let categoryValidationResult = $derived(
-    categoryFieldConfig?.validator(selectionValue)
+    categoryFieldConfig?.validator(selectionValue, {
+      'isoMetadata.highValueDataset': checkedValue
+    })
   ) as ValidationResult;
 
   let showCheckmark = $state(false);
