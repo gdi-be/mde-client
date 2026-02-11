@@ -87,6 +87,9 @@
     flex-direction: column;
     justify-content: center;
 
+    --selected-color: var(--primary-90);
+    --hover-color: var(--mdc-theme-primary);
+
     &.invalid {
       border: 2px solid var(--mdc-theme-error) !important;
     }
@@ -113,13 +116,19 @@
       }
     }
 
-    :global(li:hover + .option-description) {
-      background-color: #f5f5f5;
+    :global(.mdc-deprecated-list-item__ripple) {
+      display: none;
     }
 
-    :global(li[aria-selected='true'] + .option-description) {
-      background-color: #d6d6d6;
+    :global(li.mdc-deprecated-list-item:hover),
+    :global(li.mdc-deprecated-list-item:hover + .option-description) {
+      background-color: var(--hover-color);
       color: black;
+    }
+
+    :global(li.mdc-deprecated-list-item[aria-selected='true']:not(:hover)),
+    :global(li.mdc-deprecated-list-item[aria-selected='true']:not(:hover) + .option-description) {
+      background-color: var(--selected-color);
     }
 
     .option-description {

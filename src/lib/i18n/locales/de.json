@@ -154,7 +154,8 @@
     "label": "Schema-Version des INSPIRE Themas"
   },
   "39_SpatialRepresentationField": {
-    "label": "Räumliche Darstellungsart"
+    "label": "Räumliche Darstellungsart",
+    "errorFetching": "Fehler beim Abrufen der räumlichen Darstellungsarten"
   },
   "40_ServiceForm": {
     "label": "Dienst"
