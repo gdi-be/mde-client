@@ -2,7 +2,7 @@
   import type { Service, ServiceType } from '$lib/models/metadata';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import SelectInput from '$lib/components/Form/Inputs/SelectInput.svelte';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { page } from '$app/state';
 
   const t = $derived(page.data.t);
@@ -13,7 +13,7 @@
   };
   let { value, onChange }: ServiceTypeProps = $props();
 
-  const fieldConfig = getFieldConfig(58);
+  const fieldConfig = MetadataService.getFieldConfig(58);
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
   const HELP_KEY = 'isoMetadata.services.type';

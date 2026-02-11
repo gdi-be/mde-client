@@ -1,9 +1,7 @@
 <script lang="ts">
   import {
     FORMSTATE_CONTEXT,
-    getFieldConfig,
     getFormContext,
-    persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
   import { getContext } from 'svelte';
@@ -12,6 +10,7 @@
   import Switch from '@smui/switch';
   import { getHighestRole } from '$lib/util';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { page } from '$app/state';
 
   const t = $derived(page.data.t);
@@ -34,10 +33,10 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<boolean>(37);
+  const fieldConfig = MetadataService.getFieldConfig<boolean>(37);
 
   const onCheckChange = async (event: CustomEvent<{ selected: boolean }>) => {
-    const response = await persistValue(KEY, event.detail.selected);
+    const response = await MetadataService.persistValue(KEY, event.detail.selected);
     if (response.ok) {
       showCheckmark = true;
     }

@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { getAccessToken } from '$lib/auth/cookies.js';
 import { env } from '$env/dynamic/private';
+import { logger } from 'loggisch';
 
 /** @type {import('./$types').RequestHandler} */
 export async function PATCH({ cookies, request, params }) {
@@ -13,7 +14,13 @@ export async function PATCH({ cookies, request, params }) {
   if (!metadataId) return error(404, 'Not Found');
   if (!serviceIdentification) return error(404, 'Not Found');
 
-  const data = await request.json();
+  let data;
+  try {
+    data = await request.json();
+  } catch (e) {
+    logger.error('Failed to parse updateLayers request JSON:', e);
+    return error(400, 'Invalid JSON in request body');
+  }
 
   if (!data.layers) {
     return error(400, 'Bad Request');

@@ -1,7 +1,8 @@
 {
   "01_TitleField": {
     "label": "Titel",
-    "explanation": "Unter welchem Titel soll Ihr Datenbestand gefunden werden?"
+    "explanation": "Unter welchem Titel soll Ihr Datenbestand gefunden werden?",
+    "required": "Der Titel darf nicht leer sein."
   },
   "02_DescriptionField": {
     "label": "Kurzbeschreibung des Datenbestandes",

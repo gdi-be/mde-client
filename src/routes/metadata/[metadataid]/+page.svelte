@@ -31,7 +31,7 @@
 </script>
 
 <div class="metadata">
-  {#if !metadata?.isoMetadata?.title}
+  {#if !metadata?.isoMetadata}
     <h1>{t('general.broken_metadata_title')}</h1>
     <p>{t('general.broken_metadata_message')}</p>
   {:else}

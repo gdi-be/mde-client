@@ -1,7 +1,7 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { FeatureType } from '$lib/models/metadata';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { getHighestRole } from '$lib/util';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
@@ -16,7 +16,7 @@
   let { value, onChange }: ComponentProps = $props();
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.name';
-  const fieldConfig = getFieldConfig(62);
+  const fieldConfig = MetadataService.getFieldConfig(62);
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 

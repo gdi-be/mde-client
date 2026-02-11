@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldHint from '../FieldHint.svelte';
   import FieldTools from '../FieldTools.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import FormField from '@smui/form-field';
   import Radio from '@smui/radio';
 
@@ -36,11 +37,11 @@
   });
 
   let showCheckmark = $state(false);
-  const resolutionFieldConfig = getFieldConfig<number>(28);
+  const resolutionFieldConfig = MetadataService.getFieldConfig<number>(28);
   let resolutionValidationResult = $derived(
     resolutionFieldConfig?.validator(resolutionValue || undefined)
   );
-  const scaleFieldConfig = getFieldConfig<number>(27);
+  const scaleFieldConfig = MetadataService.getFieldConfig<number>(27);
   let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined));
   let hasInvalidFields = $derived(
     !resolutionValidationResult?.valid && !scaleValidationResult?.valid
@@ -68,14 +69,14 @@
   };
 
   const updateResolution = async (newValue: [number] | null) => {
-    const response = await persistValue(RESOLUTION_KEY, newValue);
+    const response = await MetadataService.persistValue(RESOLUTION_KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }
   };
 
   const updateScale = async (newValue: number | null) => {
-    const response = await persistValue(SCALE_KEY, newValue);
+    const response = await MetadataService.persistValue(SCALE_KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }

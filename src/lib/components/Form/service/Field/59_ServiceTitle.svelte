@@ -2,7 +2,8 @@
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { MetadataCollection, Service } from '$lib/models/metadata';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
-  import { getFieldConfig, getFormContext } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import AutoFillButton from '$lib/components/Form/AutoFillButton.svelte';
   import { getContext } from 'svelte';
   import { page } from '$app/state';
@@ -24,7 +25,7 @@
   const metadata = getContext<MetadataCollection>('metadata');
   const metadataTitle = $derived(getValue<string>(METADATA_TITLE_KEY, metadata));
 
-  const fieldConfig = getFieldConfig(59);
+  const fieldConfig = MetadataService.getFieldConfig(59);
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getContext } from 'svelte';
   import type { Layer, Service, ServiceType } from '$lib/models/metadata';
   import { setNestedValue } from '$lib/util';
   import ServiceWorkspace_45 from './Field/45_ServiceWorkspace.svelte';
@@ -8,14 +9,13 @@
   import ServiceTitle_59 from './Field/59_ServiceTitle.svelte';
   import ServiceShortDescription_60 from './Field/60_ServiceShortDescription.svelte';
   import FeatureTypeForm_56 from './56_FeatureTypeForm.svelte';
-  import { getContext } from 'svelte';
+  import LayersForm_48 from './48_LayersForm.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import {
     FORMSTATE_CONTEXT,
     getFormContext,
-    persistValue,
     type FormState
   } from '$lib/context/FormContext.svelte';
-  import LayersForm from './48_LayersForm.svelte';
   import { page } from '$app/state';
   import { toast } from 'svelte-french-toast';
   import { invalidateAll } from '$app/navigation';
@@ -52,7 +52,7 @@
       // Remove layers associated with the service
       if (layers && layers[service.serviceIdentification]) {
         delete layers[service.serviceIdentification];
-        await persistValue('clientMetadata.layers', layers);
+        await MetadataService.persistValue('clientMetadata.layers', layers);
       }
     } else if (layers?.[service.serviceIdentification] === undefined) {
       // Initialize layers array for the service to allow correct validation / progress calculation
@@ -60,7 +60,7 @@
         layers = {};
       }
       layers[service.serviceIdentification] = [];
-      await persistValue('clientMetadata.layers', layers);
+      await MetadataService.persistValue('clientMetadata.layers', layers);
     }
     if (serviceType !== 'WFS') {
       // Remove feature types associated with the service
@@ -138,7 +138,7 @@
       value={service.legendImage}
       onChange={(legendImage) => set('legendImage', legendImage)}
     />
-    <LayersForm {service} value={layers} onChange={onLayersChange} />
+    <LayersForm_48 {service} value={layers} onChange={onLayersChange} />
   {/if}
   {#if isWFSService}
     <FeatureTypeForm_56

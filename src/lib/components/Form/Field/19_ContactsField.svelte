@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
@@ -53,13 +54,13 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<Contacts>(19);
+  const fieldConfig = MetadataService.getFieldConfig<Contacts>(19);
   let validationResult = $derived(fieldConfig?.validator(contacts));
 
-  const nameConfig = getFieldConfig<string>(20);
-  const organisationConfig = getFieldConfig<string>(21);
-  const phoneConfig = getFieldConfig<string>(22);
-  const emailConfig = getFieldConfig<string>(23);
+  const nameConfig = MetadataService.getFieldConfig<string>(20);
+  const organisationConfig = MetadataService.getFieldConfig<string>(21);
+  const phoneConfig = MetadataService.getFieldConfig<string>(22);
+  const emailConfig = MetadataService.getFieldConfig<string>(23);
 
   const autoFillUserDetails = async () => {
     addItem();
@@ -96,7 +97,7 @@
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
     const focusedElement = evt?.relatedTarget as HTMLElement | null;
-    const response = await persistValue(KEY, contacts);
+    const response = await MetadataService.persistValue(KEY, contacts);
     if (response.ok) {
       showCheckmark = true;
     }

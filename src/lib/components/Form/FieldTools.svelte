@@ -4,13 +4,14 @@
   import CopyButton from './CopyButton.svelte';
   import { type Snippet } from 'svelte';
   import { Icon } from '@smui/button';
-  import { getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import IconButton from '@smui/icon-button';
   import { toast } from 'svelte-french-toast';
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import type { FieldKey } from '$lib/models/form';
   import type { FullFieldConfig } from './FieldsConfig';
   import { page } from '$app/state';
+  import { MetadataService } from '$lib/services/MetadataService';
   export type FieldToolsProps = {
     value?: unknown;
     key: FieldKey;
@@ -38,7 +39,6 @@
   const t = $derived(page.data.t);
   const metadata = $derived(getFormContext()?.formState.metadata);
 
-  const { getValue } = getFormContext();
   const popconfirm = $derived(getPopconfirm());
 
   const checkIfHasHelp = async () => {
@@ -60,7 +60,7 @@
     }
 
     const originalMetadata = await response.json();
-    return getValue(key, originalMetadata);
+    return MetadataService.getValue(key, originalMetadata);
   };
 
   const copyFromOriginal = async (k: string, valueFromOriginal: unknown, evt: MouseEvent) => {
@@ -70,7 +70,7 @@
       popconfirm.open(
         targetEl,
         async () => {
-          await persistValue(k, valueFromOriginal);
+          await MetadataService.persistValue(k, valueFromOriginal);
         },
         {
           text: t('fieldtools.copyConfirm'),
@@ -98,9 +98,7 @@
   {/if}
   {#if metadata?.clonedFromId && !noCloneButton}
     {#await getValueFromOriginal()}
-      <Icon class="material-icons spinner" title={t('fieldtools.checkingOriginal')}>
-        progress_activity
-      </Icon>
+      <!-- Don't render anything to avoid flickering -->
     {:then valueFromOriginal}
       {#if valueFromOriginal}
         <IconButton

@@ -1,6 +1,7 @@
-import { json, redirect } from '@sveltejs/kit';
+import { json, redirect, error } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import { setRefreshToken, setAccessToken } from '$lib/auth/cookies';
+import { logger } from 'loggisch';
 
 export async function GET({ url, cookies }) {
   const code = url.searchParams.get('code');
@@ -36,8 +37,17 @@ async function exchangeCodeForTokens(code: string) {
   });
 
   if (!response.ok) {
-    throw new Error('Failed to exchange authorization code for tokens');
+    logger.error('Failed to exchange authorization code for tokens: ' + response.status);
+    throw error(400, 'Failed to exchange authorization code for tokens');
   }
 
-  return await response.json();
+  let tokenData;
+  try {
+    tokenData = await response.json();
+  } catch (e) {
+    logger.error('Failed to parse token exchange response:', e);
+    throw error(400, 'Invalid response from authentication server');
+  }
+
+  return tokenData;
 }

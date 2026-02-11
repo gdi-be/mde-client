@@ -17,6 +17,20 @@ const defaultPage: PageableProps = {
 };
 
 /**
+ * Helper function to safely parse JSON responses with proper error logging.
+ */
+async function parseJSON<T>(response: Response, context: string): Promise<T> {
+  try {
+    return await response.json();
+  } catch (error) {
+    logger.error(`Failed to parse JSON response in ${context}:`, error);
+    throw new Error(
+      `Failed to parse response JSON in ${context}: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
+}
+
+/**
  * Fetches metadata by metadataId from the backend.
  *
  * @param metadataId - The metadataId to fetch.
@@ -44,7 +58,7 @@ export const getMetadataCollectionByMetadataId = async (
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<MetadataCollection>(response, 'getMetadataCollectionByMetadataId');
 };
 
 export const queryMetadata = async (
@@ -76,7 +90,7 @@ export const queryMetadata = async (
   if (!response.ok) {
     throw new Error(`HTTP error status: ${response.status}`);
   }
-  const data = await response.json();
+  const data = await parseJSON<PageableResponse<MetadataCollection>>(response, 'queryMetadata');
   return data;
 };
 
@@ -142,7 +156,7 @@ export const updateDataValue = async ({
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON(response, 'updateDataValue');
 };
 
 export type CreateProps = {
@@ -182,9 +196,10 @@ export const createMetadataCollection = async ({
         new ConflictError('Conflict: Metadata with the same title already exists.')
       );
     }
+    throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<MetadataCollection>(response, 'createMetadataCollection');
 };
 
 export type MetadataDeleteProps = {
@@ -219,7 +234,7 @@ export const deleteMetadataCollection = async ({
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<MetadataDeletionResponse>(response, 'deleteMetadataCollection');
 };
 
 export type AddCommentProps = {
@@ -252,7 +267,7 @@ export const addComment = async ({
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<MetadataCollection>(response, 'addComment');
 };
 
 export type DeleteCommentProps = {
@@ -295,7 +310,7 @@ export const deleteComment = async ({
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<void>(response, 'deleteComment');
 };
 
 type AssignUserProps = {
@@ -332,7 +347,7 @@ export const assignUser = async ({
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<MetadataCollection>(response, 'assignUser');
 };
 
 type UnassignUserProps = {
@@ -365,7 +380,7 @@ export const unassignUser = async ({
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<MetadataCollection>(response, 'unassignUser');
 };
 
 type AssignRoleProps = {
@@ -400,7 +415,7 @@ export const assignRole = async ({
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<MetadataCollection>(response, 'assignRole');
 };
 
 type UnassignRoleProps = {
@@ -430,7 +445,7 @@ export const unassignRole = async ({
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<MetadataCollection>(response, 'unassignRole');
 };
 
 type GetTeamProps = {
@@ -463,7 +478,7 @@ export const getTeam = async ({ token, metadataid }: GetTeamProps): Promise<User
     throw new Error(`HTTP error status: ${response.status}`);
   }
 
-  return await response.json();
+  return await parseJSON<UserData[]>(response, 'getTeam');
 };
 
 type ValidateProps = {

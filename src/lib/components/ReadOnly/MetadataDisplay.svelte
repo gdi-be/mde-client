@@ -3,10 +3,15 @@
   import CommentsDisplay from './CommentsDisplay.svelte';
   import DisplayField from './DisplayField.svelte';
   import { page } from '$app/state';
+  import { MetadataService } from '$lib/services/MetadataService';
 
-  const { getValue } = getFormContext();
-  const metadataProfile = $derived(getValue('isoMetadata.metadataProfile'));
-  const highValueDataset = $derived(getValue('isoMetadata.highValueDataset'));
+  const metadata = $derived(getFormContext()?.formState?.metadata);
+  const metadataProfile = $derived(
+    MetadataService.getValue('isoMetadata.metadataProfile', metadata)
+  );
+  const highValueDataset = $derived(
+    MetadataService.getValue('isoMetadata.highValueDataset', metadata)
+  );
 
   const t = $derived(page.data.t);
 </script>

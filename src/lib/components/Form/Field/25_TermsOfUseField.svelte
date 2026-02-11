@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import type { Privacy, TermsOfUse } from '$lib/models/metadata';
   import type { Option } from '$lib/models/form';
   import type { FullFieldConfig } from '../FieldsConfig';
@@ -18,7 +19,7 @@
   const privacy = $derived(getValue<Privacy>(PRIVACY_KEY));
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<number>(25);
+  const fieldConfig = MetadataService.getFieldConfig<number>(25);
   let validationResult = $derived(fieldConfig?.validator(value));
 
   const fetchOptions = async () => {
@@ -41,7 +42,7 @@
   };
 
   const onChange = async (newValue: string) => {
-    const response = await persistValue(KEY, Number(newValue));
+    const response = await MetadataService.persistValue(KEY, Number(newValue));
     if (response.ok) {
       showCheckmark = true;
     }

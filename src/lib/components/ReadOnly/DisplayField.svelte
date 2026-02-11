@@ -3,6 +3,7 @@
   import { page } from '$app/state';
   import type { FieldKey } from '$lib/models/form';
   import DisplayFieldSnippets from './DisplayFieldSnippets.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
 
   type DisplayFieldProps = {
     key: FieldKey;
@@ -12,10 +13,8 @@
   const t = $derived(page.data.t);
   const { key, label }: DisplayFieldProps = $props();
 
-  const { getValue } = getFormContext();
-  const value = $derived(getValue(key));
-
   const metadata = $derived(getFormContext()?.formState?.metadata);
+  const value = $derived(MetadataService.getValue(key, metadata));
 </script>
 
 <div class="display-field">

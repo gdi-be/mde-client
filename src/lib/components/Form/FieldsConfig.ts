@@ -1,8 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * FieldsConfig contains the configuration for all form fields.
+ *
+ * For validation, there are two approaches:
+ *
+ * 1. Direct validator calls (legacy):
+ *    const result = fieldConfig.validator(value);
+ *
+ * 2. Using ValidationService (recommended):
+ *    const result = ValidationService.validateField(fieldConfig, value, {
+ *      HIGHEST_ROLE: userRole,
+ *      metadata: formData,
+ *      PARENT_VALUE: parentItem // for collection items
+ *    });
+ *
+ * The ValidationService handles parameter resolution, role-based validation,
+ * and provides a centralized API for progress calculation.
+ */
+
 import type { FieldKey, Option } from '$lib/models/form';
 import {
-  type ColumnInfo,
-  type Contacts,
   type FeatureType,
   type IsoTheme,
   type Keywords,
@@ -12,15 +29,25 @@ import {
   type Service,
   type TermsOfUse
 } from '$lib/models/metadata';
-import { type Section } from '$lib/context/FormContext.svelte';
 import type { Role } from '$lib/models/keycloak';
+import type { ValidationContext } from '$lib/services/ValidationService';
 
 export type ValidationResult = {
   valid: boolean;
   helpText?: string;
 };
 
-export interface FullFieldConfig<T = any> {
+/**
+ * The sections of the form, representing the tabs.
+ */
+export type Section =
+  | 'basedata'
+  | 'classification'
+  | 'temp_and_spatial'
+  | 'additional'
+  | 'services';
+
+export type FullFieldConfig<T = any> = {
   profileId: number;
   // the key in the json structure
   key: FieldKey;
@@ -35,15 +62,39 @@ export interface FullFieldConfig<T = any> {
   // the section this field belongs to
   section: Section;
   // the validator function for this field
-  validator: (val: T | undefined, extraParams?: Record<string, any>) => ValidationResult;
-  // additional parameters for the validator function
-  extraParams?: Array<FieldKey | 'PARENT_VALUE'>;
-  // this function is used to get the value for the copy button
   getCopyValue?: (
     val: T | undefined,
     extraParams?: Record<string, any>
   ) => string | Promise<string>;
-}
+  // additional parameters for the validator function
+  // Supported special parameters:
+  // - 'PARENT_VALUE': The parent object in a collection
+  // - 'HIGHEST_ROLE': The highest role of the user (when using ValidationService)
+  extraParams?: Array<FieldKey | 'PARENT_VALUE' | 'HIGHEST_ROLE'>;
+  // the validator function for this field
+  validator: (val: T | undefined, extraParams?: ValidationContext) => ValidationResult;
+};
+
+/**
+ * Optional validator that always returns valid
+ * Use for optional fields that should not fail validation
+ */
+const optionalValidator = (): ValidationResult => ({
+  valid: true
+});
+
+/**
+ * Validates that a value is defined (not null, undefined, or empty)
+ * Returns a custom error message if provided
+ */
+const requiredValidator = (errorMessage: string = 'Dieses Feld ist erforderlich.') => {
+  return (val: any): ValidationResult => {
+    if (!isDefined(val)) {
+      return { valid: false, helpText: errorMessage };
+    }
+    return { valid: true };
+  };
+};
 
 const isDefined = <T>(val: T): val is NonNullable<T> => {
   if (val === undefined || val === null || val === '') return false;
@@ -55,10 +106,6 @@ const isValidEmail = (val: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(val);
 };
-
-const optionalValidator = () => ({
-  valid: true
-});
 
 const formatDate = (date: Date | string): string => {
   if (typeof date === 'string') {
@@ -76,7 +123,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 1,
     key: 'isoMetadata.title',
-    validator: (val) => {
+    validator: (val?: any) => {
       if (!isDefined(val)) {
         return {
           valid: false,
@@ -91,34 +138,24 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 2,
     key: 'isoMetadata.description',
-    validator: (val) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine Beschreibung an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie eine Beschreibung an.'),
     section: 'basedata',
     required: true
   },
   {
     profileId: 4,
     key: 'isoMetadata.privacy',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte wählen sie die passende Datenschutz-Einstellung aus.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte wählen Sie eine Datenschutz-Einstellung aus.'),
     getCopyValue: async (val: string) => {
-      const response = await fetch('/data/privacy');
-      const privacyOptions: Option[] = await response.json();
-      return privacyOptions.find((option) => option.key === val)?.label || '';
+      try {
+        const response = await fetch('/data/privacy');
+        if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+        const privacyOptions: Option[] = await response.json();
+        return privacyOptions.find((option) => option.key === val)?.label || '';
+      } catch (error) {
+        console.error('Failed to fetch privacy options:', error);
+        return '';
+      }
     },
     section: 'classification',
     required: true
@@ -126,15 +163,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 5,
     key: 'isoMetadata.metadataProfile',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Metadaten-Typ an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte wählen Sie einen Metadaten-Typ aus.'),
     getCopyValue(val?: MetadataProfile) {
       if (!val) {
         return '';
@@ -152,15 +181,9 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 6,
     key: 'isoMetadata.highValueDataset',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie an, ob es sich um einen High Value Datensatz handelt.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator(
+      'Bitte geben Sie an, ob es sich um einen High Value Datensatz handelt.'
+    ),
     section: 'classification',
     required: true
   },
@@ -182,10 +205,16 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return { valid: true };
     },
     getCopyValue: async (val?: string[]) => {
-      const response = await fetch('/data/inspire_themes');
-      const themesArray: Option[] = await response.json();
-      const themes = val?.map((v) => themesArray.find((theme) => theme.key === v)?.label) || [];
-      return themes.join(', ');
+      try {
+        const response = await fetch('/data/inspire_themes');
+        if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+        const themesArray: Option[] = await response.json();
+        const themes = val?.map((v) => themesArray.find((theme) => theme.key === v)?.label) || [];
+        return themes.join(', ');
+      } catch (error) {
+        console.error('Failed to fetch inspire themes:', error);
+        return '';
+      }
     },
     section: 'classification',
     required: true
@@ -194,7 +223,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 8,
     key: 'isoMetadata.highValueDataCategory',
     extraParams: ['isoMetadata.highValueDataset'],
-    validator: (val: any, extraParams) => {
+    validator: (val: any, extraParams?: ValidationContext) => {
       const isHighValueDataset = extraParams?.['isoMetadata.highValueDataset'];
       if (isHighValueDataset === true && !isDefined(val)) {
         return {
@@ -205,11 +234,17 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       return { valid: true };
     },
     getCopyValue: async (val?: string[]) => {
-      const response = await fetch('/data/hvd_categories');
-      const categories: Option[] = await response.json();
-      const machtingCategories =
-        val?.map((v) => categories.find((theme) => theme.key === v)?.label) || [];
-      return machtingCategories.join(', ');
+      try {
+        const response = await fetch('/data/hvd_categories');
+        if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+        const categories: Option[] = await response.json();
+        const machtingCategories =
+          val?.map((v) => categories.find((theme) => theme.key === v)?.label) || [];
+        return machtingCategories.join(', ');
+      } catch (error) {
+        console.error('Failed to fetch hvd categories:', error);
+        return '';
+      }
     },
     section: 'classification',
     required: true
@@ -230,15 +265,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 10,
     key: 'isoMetadata.published',
-    validator: (val: any) => {
-      if (!isDefined(val) || val.length === 0) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie ein Veröffentlichungsdatum an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie ein Veröffentlichungsdatum an.'),
     getCopyValue: (val?: string) => {
       if (!isDefined(val)) {
         return '';
@@ -314,21 +341,19 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 13,
     key: 'isoMetadata.topicCategory',
-    validator: (val: any[]) => {
-      if (!val?.length) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine Themenkategorie an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie eine Themenkategorie an.'),
     getCopyValue: async (val?: string[]) => {
-      const response = await fetch('/data/iso_themes');
-      const isoThemes: IsoTheme[] = await response.json();
-      const categories =
-        val?.map((v) => isoThemes.find((category) => category.isoID === v)?.isoName) || [];
-      return categories.join(', ');
+      try {
+        const response = await fetch('/data/iso_themes');
+        if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+        const isoThemes: IsoTheme[] = await response.json();
+        const categories =
+          val?.map((v) => isoThemes.find((category) => category.isoID === v)?.isoName) || [];
+        return categories.join(', ');
+      } catch (error) {
+        console.error('Failed to fetch iso themes:', error);
+        return '';
+      }
     },
     section: 'classification',
     required: true,
@@ -337,15 +362,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 14,
     key: 'isoMetadata.maintenanceFrequency',
-    validator: (val: string) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie ein Pflegeintervall an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie ein Pflegeintervall an.'),
     getCopyValue: async (val?: MaintenanceFrequency) => {
       const maintenanceFrequencyLabels: Record<MaintenanceFrequency, string> = {
         continual: 'kontinuierlich',
@@ -397,15 +414,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 17,
     key: 'isoMetadata.crs',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie das abzugebende Koordinatensystem an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie das abzugebende Koordinatensystem an.'),
     section: 'temp_and_spatial',
     required: true,
     editingRoles: ['MdeEditor']
@@ -415,15 +424,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.extent.minx',
     section: 'temp_and_spatial',
     required: true,
-    validator: (val?: number) => {
-      if (!val) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie den minimalen x-Wert an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie den minimalen x-Wert an.'),
     editingRoles: ['MdeEditor']
   },
   {
@@ -431,15 +432,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.extent.maxx',
     section: 'temp_and_spatial',
     required: true,
-    validator: (val?: number) => {
-      if (!val) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie den maximalen x-Wert an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie den maximalen x-Wert an.'),
     editingRoles: ['MdeEditor']
   },
   {
@@ -447,15 +440,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.extent.miny',
     section: 'temp_and_spatial',
     required: true,
-    validator: (val?: number) => {
-      if (!val) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie den minimalen y-Wert an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie den minimalen y-Wert an.'),
     editingRoles: ['MdeEditor']
   },
   {
@@ -463,15 +448,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.extent.maxy',
     section: 'temp_and_spatial',
     required: true,
-    validator: (val?: number) => {
-      if (!val) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie den maximalen y-Wert an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie den maximalen y-Wert an.'),
     editingRoles: ['MdeEditor']
   },
   {
@@ -480,15 +457,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     isCollection: true,
     section: 'basedata',
     required: true,
-    validator: (contacts?: Contacts) => {
-      if (!contacts || contacts.length < 1) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie mindestens einen Kontakt an.'
-        };
-      }
-      return { valid: true };
-    }
+    validator: requiredValidator('Bitte geben Sie mindestens einen Kontakt an.')
   },
   {
     profileId: 20,
@@ -496,15 +465,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     section: 'basedata',
     required: true,
     collectionKey: 'isoMetadata.pointsOfContact',
-    validator: (val: string) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie den Namen des Kontakts an.'
-        };
-      }
-      return { valid: true };
-    }
+    validator: requiredValidator('Bitte geben Sie den Namen des Kontakts an.')
   },
   {
     profileId: 21,
@@ -512,15 +473,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     section: 'basedata',
     required: true,
     collectionKey: 'isoMetadata.pointsOfContact',
-    validator: (val: string) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie die Organisation des Kontakts an.'
-        };
-      }
-      return { valid: true };
-    }
+    validator: requiredValidator('Bitte geben Sie die Organisation des Kontakts an.')
   },
   {
     profileId: 22,
@@ -528,15 +481,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     section: 'basedata',
     required: true,
     collectionKey: 'isoMetadata.pointsOfContact',
-    validator: (val: string) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie die Telefonnummer des Kontakts an.'
-        };
-      }
-      return { valid: true };
-    }
+    validator: requiredValidator('Bitte geben Sie die Telefonnummer des Kontakts an.')
   },
   {
     profileId: 23,
@@ -563,19 +508,17 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 25,
     key: 'isoMetadata.termsOfUseId',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte wählen sie die passenden Nutzungsbestimmungen.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte wählen Sie die Nutzungsbestimmungen aus.'),
     getCopyValue: async (val: number) => {
-      const response = await fetch('/data/terms_of_use');
-      const termsOfUseList: TermsOfUse[] = await response.json();
-      return termsOfUseList.find((tou) => tou.id === val)?.shortname || '';
+      try {
+        const response = await fetch('/data/terms_of_use');
+        if (!response.ok) throw new Error(`HTTP error status: ${response.status}`);
+        const termsOfUseList: TermsOfUse[] = await response.json();
+        return termsOfUseList.find((tou) => tou.id === val)?.shortname || '';
+      } catch (error) {
+        console.error('Failed to fetch terms of use:', error);
+        return '';
+      }
     },
     section: 'classification',
     required: true
@@ -583,9 +526,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 26,
     key: 'isoMetadata.termsOfUseSource',
-    validator: () => {
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'classification',
     required: true
   },
@@ -641,15 +582,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 29,
     key: 'isoMetadata.preview',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie ein Vorschaubild an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie ein Vorschaubild an.'),
     section: 'basedata',
     required: true
   },
@@ -679,15 +612,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 33,
     key: 'isoMetadata.lineage.title',
     collectionKey: 'isoMetadata.lineage',
-    validator: (val: any) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Titel an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie einen Titel an.'),
     section: 'additional',
     required: true
   },
@@ -709,16 +634,14 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 35,
     key: 'isoMetadata.lineage.identifier',
     collectionKey: 'isoMetadata.lineage',
-    validator: () => {
-      return { valid: true };
-    },
+    validator: optionalValidator,
     section: 'additional',
     required: false
   },
   {
     profileId: 37,
     key: 'isoMetadata.valid',
-    validator: () => ({ valid: true }),
+    validator: optionalValidator,
     getCopyValue: (val?: boolean) => {
       return val ? 'Überprüft' : 'Nicht überprüft';
     },
@@ -747,15 +670,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 39,
     key: 'isoMetadata.spatialRepresentationTypes',
-    validator: (val: any) => {
-      if (!isDefined(val) || val.length === 0) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben sie mindestens eine gültige räumliche Darstellungsart an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie mindestens eine räumliche Darstellungsart an.'),
     section: 'temp_and_spatial',
     required: true,
     editingRoles: ['MdeEditor']
@@ -764,7 +679,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 40,
     key: 'isoMetadata.services',
     isCollection: true,
-    validator: () => ({ valid: true }),
+    validator: optionalValidator,
     section: 'services',
     required: false
   },
@@ -780,15 +695,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 42,
     key: 'isoMetadata.contentDescriptions.description',
     collectionKey: 'isoMetadata.contentDescriptions',
-    validator: (val: string) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Titel an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie einen Titel an.'),
     section: 'additional',
     required: true
   },
@@ -796,15 +703,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 43,
     key: 'isoMetadata.contentDescriptions.code',
     collectionKey: 'isoMetadata.contentDescriptions',
-    validator: (val: string) => {
-      if (!isDefined(val)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Code an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie einen Code an.'),
     getCopyValue: (val?: string) => {
       const codeLabels: Record<string, string> = {
         download: 'Herunterladen',
@@ -830,10 +729,12 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 45,
     key: 'isoMetadata.services.workspace',
     collectionKey: 'isoMetadata.services',
-    extraParams: ['PARENT_VALUE'],
+    extraParams: ['PARENT_VALUE', 'HIGHEST_ROLE'],
     validator: (workspace: Service['workspace'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
       const service = extraParams?.['PARENT_VALUE'];
-      if (service?.serviceType === 'ATOM' && !isDefined(workspace)) {
+      if (!required || (service?.serviceType === 'ATOM' && !isDefined(workspace))) {
         return { valid: true };
       }
       const valid = !!(isDefined(workspace) && /^[a-zA-Z0-9_]+$/.test(workspace));
@@ -854,16 +755,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 46,
     key: 'isoMetadata.services.preview',
     collectionKey: 'isoMetadata.services',
-    validator: (preview: Service['preview']) => {
-      const valid = isDefined(preview);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie ein Vorschaubild für den Service an.'
-        };
-      }
-      return { valid };
-    },
+    validator: requiredValidator('Bitte geben Sie ein Vorschaubild für den Service an.'),
     section: 'services',
     required: true
   },
@@ -929,15 +821,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 49,
     key: 'clientMetadata.layers.title',
     collectionKey: 'clientMetadata.layers',
-    validator: (layerTitle: Layer['title']) => {
-      if (!isDefined(layerTitle)) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Titel für die Kartenebene an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie einen Titel für die Kartenebene an.'),
     section: 'services',
     required: true
   },
@@ -945,8 +829,11 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 50,
     key: 'clientMetadata.layers.name',
     collectionKey: 'clientMetadata.layers',
-    validator: (layerName: Layer['name']) => {
-      if (!isDefined(layerName)) {
+    extraParams: ['HIGHEST_ROLE'],
+    validator: (name: Layer['name'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
+      if (required && !isDefined(name)) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie einen Namen für die Kartenebene an.'
@@ -962,11 +849,14 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 51,
     key: 'clientMetadata.layers.styleName',
     collectionKey: 'clientMetadata.layers',
-    validator: (styleName: Layer['styleName']) => {
-      if (!styleName || !isDefined(styleName)) {
+    extraParams: ['HIGHEST_ROLE'],
+    validator: (styleName: Layer['styleName'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
+      if (required && !isDefined(styleName)) {
         return {
           valid: false,
-          helpText: 'Bitte geben Sie einen Style-Namen für den Layer an.'
+          helpText: 'Bitte geben Sie einen Style-Namen für die Kartenebene an.'
         };
       }
       return { valid: true };
@@ -979,11 +869,13 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 52,
     key: 'clientMetadata.layers.styleTitle',
     collectionKey: 'clientMetadata.layers',
-    extraParams: ['isoMetadata.metadataProfile'],
+    extraParams: ['isoMetadata.metadataProfile', 'HIGHEST_ROLE'],
     validator: (styleTitle: Layer['styleTitle'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
       const metadataProfile = extraParams?.['isoMetadata.metadataProfile'];
       const isInspireHarmonized = metadataProfile === 'INSPIRE_HARMONISED';
-      if (isInspireHarmonized && !isDefined(styleTitle)) {
+      if (required && isInspireHarmonized && !isDefined(styleTitle)) {
         return {
           valid: false,
           helpText: 'Bitte geben Sie einen Style-Titel für den Layer an.'
@@ -1007,16 +899,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 54,
     key: 'clientMetadata.layers.shortDescription',
     collectionKey: 'clientMetadata.layers',
-    validator: (description: Layer['shortDescription']) => {
-      const valid = isDefined(description);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine kurze Beschreibung an.'
-        };
-      }
-      return { valid: true };
-    },
+    validator: requiredValidator('Bitte geben Sie eine kurze Beschreibung an.'),
     section: 'services',
     required: true
   },
@@ -1041,16 +924,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 58,
     key: 'isoMetadata.services.serviceType',
     collectionKey: 'isoMetadata.services',
-    validator: (serviceType: Service['serviceType']) => {
-      const valid = isDefined(serviceType);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Service-Typ an.'
-        };
-      }
-      return { valid };
-    },
+    validator: requiredValidator('Bitte geben Sie einen Service-Typ an.'),
     section: 'services',
     required: true
   },
@@ -1058,16 +932,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 59,
     key: 'isoMetadata.services.title',
     collectionKey: 'isoMetadata.services',
-    validator: (title: Service['title']) => {
-      const valid = isDefined(title);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Titel für den Service an.'
-        };
-      }
-      return { valid };
-    },
+    validator: requiredValidator('Bitte geben Sie einen Titel für den Service an.'),
     section: 'services',
     required: true
   },
@@ -1075,16 +940,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 60,
     key: 'isoMetadata.services.shortDescription',
     collectionKey: 'isoMetadata.services',
-    validator: (shortDescription: Service['shortDescription']) => {
-      const valid = isDefined(shortDescription);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine kurze Beschreibung für den Service an.'
-        };
-      }
-      return { valid };
-    },
+    validator: requiredValidator('Bitte geben Sie eine kurze Beschreibung für den Service an.'),
     section: 'services',
     required: true
   },
@@ -1116,16 +972,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 61,
     key: 'isoMetadata.services.featureTypes.title',
     collectionKey: 'isoMetadata.services.featureTypes',
-    validator: (title: FeatureType['title']) => {
-      const valid = isDefined(title);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Titel für den FeatureType an.'
-        };
-      }
-      return { valid };
-    },
+    validator: requiredValidator('Bitte geben Sie einen Titel für den FeatureType an.'),
     section: 'services',
     required: true
   },
@@ -1133,15 +980,27 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 62,
     key: 'isoMetadata.services.featureTypes.name',
     collectionKey: 'isoMetadata.services.featureTypes',
-    validator: (name: FeatureType['name']) => {
-      const valid = isDefined(name);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Namen für den FeatureType an.'
-        };
+    extraParams: ['PARENT_VALUE', 'HIGHEST_ROLE'],
+    validator: (name: FeatureType['name'], extraParams) => {
+      const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
+      const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
+      const service = extraParams?.['PARENT_VALUE'];
+      if (service?.serviceType === 'WFS') {
+        if (required && !isDefined(name)) {
+          return {
+            valid: false,
+            helpText: 'Bitte geben Sie einen Namen für den FeatureType an.'
+          };
+        }
+        if (isDefined(name) && !/^[a-zA-Z0-9_]+$/.test(name)) {
+          return {
+            valid: false,
+            helpText:
+              'Bitte geben Sie einen gültigen Namen für den FeatureType an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.'
+          };
+        }
       }
-      return { valid };
+      return { valid: true };
     },
     section: 'services',
     required: true,
@@ -1152,16 +1011,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     key: 'isoMetadata.services.featureTypes.columns',
     collectionKey: 'isoMetadata.services.featureTypes',
     isCollection: true,
-    validator: (val: ColumnInfo) => {
-      const valid = isDefined(val);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie mindestens eine Spalte für den FeatureType an.'
-        };
-      }
-      return { valid };
-    },
+    validator: requiredValidator('Bitte geben Sie mindestens eine Spalte für den FeatureType an.'),
     section: 'services',
     required: true
   },
@@ -1169,16 +1019,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 64,
     key: 'isoMetadata.services.featureTypes.columns.name',
     collectionKey: 'isoMetadata.services.featureTypes.columns',
-    validator: (name: ColumnInfo['name']) => {
-      const valid = isDefined(name);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Namen für die Spalte an.'
-        };
-      }
-      return { valid };
-    },
+    validator: requiredValidator('Bitte geben Sie einen Namen für die Spalte an.'),
     section: 'services',
     required: true
   },
@@ -1186,16 +1027,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 65,
     key: 'isoMetadata.services.featureTypes.columns.alias',
     collectionKey: 'isoMetadata.services.featureTypes.columns',
-    validator: (alias: ColumnInfo['alias']) => {
-      const valid = isDefined(alias);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie einen Alias für die Spalte an.'
-        };
-      }
-      return { valid };
-    },
+    validator: requiredValidator('Bitte geben Sie einen Alias für die Spalte an.'),
     section: 'services',
     required: true
   },
@@ -1212,16 +1044,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 69,
     key: 'isoMetadata.services.featureTypes.shortDescription',
     collectionKey: 'isoMetadata.services.featureTypes',
-    validator: (shortDescription: FeatureType['shortDescription']) => {
-      const valid = isDefined(shortDescription);
-      if (!valid) {
-        return {
-          valid: false,
-          helpText: 'Bitte geben Sie eine Kurzbeschreibung für den FeatureType an.'
-        };
-      }
-      return { valid };
-    },
+    validator: requiredValidator('Bitte geben Sie eine Kurzbeschreibung für den FeatureType an.'),
     section: 'services',
     required: true
   },

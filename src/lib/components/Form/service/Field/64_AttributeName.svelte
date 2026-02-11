@@ -1,7 +1,7 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import type { ColumnInfo } from '$lib/models/metadata';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { page } from '$app/state';
   const t = $derived(page.data.t);
@@ -14,7 +14,7 @@
   let { value, onChange }: ComponentProps = $props();
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.columns.name';
-  const fieldConfig = getFieldConfig(64);
+  const fieldConfig = MetadataService.getFieldConfig(64);
   const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 </script>

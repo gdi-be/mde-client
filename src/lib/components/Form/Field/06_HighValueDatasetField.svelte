@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import Switch from '@smui/switch';
   import type { Option } from '$lib/models/form';
+  import { MetadataService } from '$lib/services/MetadataService';
   import FieldHint from '../FieldHint.svelte';
   import MultiSelectInput from '$lib/components/Form/Inputs/MultiSelectInput.svelte';
   import { toast } from 'svelte-french-toast';
@@ -27,24 +28,26 @@
     selectionValue = selectionValueFromData;
   });
 
-  const checkedFieldConfig = getFieldConfig<boolean>(6);
-  const categoryFieldConfig = getFieldConfig<string[]>(8);
+  const checkedFieldConfig = MetadataService.getFieldConfig<boolean>(6);
+  const categoryFieldConfig = MetadataService.getFieldConfig<string[]>(8);
   let categoryValidationResult = $derived(
-    categoryFieldConfig?.validator(selectionValue)
+    categoryFieldConfig?.validator(selectionValue, {
+      'isoMetadata.highValueDataset': checkedValue
+    })
   ) as ValidationResult;
 
   let showCheckmark = $state(false);
 
   const onCheckChange = async (event: CustomEvent<{ selected: boolean }>) => {
     const value = event.detail.selected;
-    const response = await persistValue(CHECKED_KEY, value);
+    const response = await MetadataService.persistValue(CHECKED_KEY, value);
     if (response.ok) {
       showCheckmark = true;
     }
   };
 
   const onSelectionChange = async (newSelection?: string[]) => {
-    const response = await persistValue(CATEGORY_KEY, newSelection);
+    const response = await MetadataService.persistValue(CATEGORY_KEY, newSelection);
     if (response.ok) {
       showCheckmark = true;
     }

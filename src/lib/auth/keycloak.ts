@@ -17,12 +17,19 @@ export const fetchPublicKey = async () => {
     throw new Error('Failed to fetch Keycloak public keys');
   }
 
-  const { keys } = await response.json();
-  if (!keys || keys.length === 0) {
+  let data;
+  try {
+    data = await response.json();
+  } catch (error) {
+    logger.error('Failed to parse Keycloak certs response:', error);
+    throw new Error('Invalid JSON response from Keycloak certs endpoint');
+  }
+
+  if (!data?.keys || data?.keys?.length === 0) {
     throw new Error('No public keys available');
   }
 
-  const { n, e } = keys[0];
+  const { n, e } = data.keys[0];
 
   const modulus = Buffer.from(n, 'base64url').toString('base64');
   const exponent = Buffer.from(e, 'base64url').toString('base64');
@@ -66,7 +73,13 @@ export const updateTokens = async (
       return Promise.reject('Could not refresh tokens: ' + response.status);
     }
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (error) {
+      logger.error('Failed to parse token refresh response:', error);
+      return Promise.reject('Invalid JSON response from token endpoint');
+    }
 
     if (data.access_token) {
       setAccessToken(cookies, data.access_token);

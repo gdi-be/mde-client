@@ -1,6 +1,7 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '../FieldTools.svelte';
   import type { ValidationResult } from '../FieldsConfig';
   import { page } from '$app/state';
@@ -16,11 +17,11 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = getFieldConfig<string>(16);
+  const fieldConfig = MetadataService.getFieldConfig<string>(16);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {
-    const response = await persistValue(KEY, value);
+    const response = await MetadataService.persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;
     }

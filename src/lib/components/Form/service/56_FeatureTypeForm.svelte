@@ -7,10 +7,13 @@
   import FeatureTypeDescription_69 from './Field/69_FeatureTypeDescription.svelte';
   import FieldHint from '$lib/components/Form/FieldHint.svelte';
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
-  import { getFieldConfig } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
   import { validateFeatureTypes } from './validation';
+  import { MetadataService } from '$lib/services/MetadataService';
   const t = $derived(page.data.t);
 
   type Tab = {
@@ -28,6 +31,10 @@
   const serviceId = $derived(service?.serviceIdentification);
 
   const popconfirm = $derived(getPopconfirm());
+  const { formState } = getFormContext();
+  const metadata = $derived(formState.metadata!);
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   let featureTypes = $state<FeatureType[]>([]);
   let tabs = $derived<Tab[]>(
@@ -41,12 +48,15 @@
   let activeTabId: string | undefined = $state();
   let activeFeatureType = $derived(featureTypes.find((ft) => ft.id === activeTabId));
 
-  const fieldConfig = getFieldConfig(56);
+  const fieldConfig = MetadataService.getFieldConfig(56);
   const validationResult = $derived(
     fieldConfig?.validator(featureTypes, { PARENT_VALUE: service })
   );
 
-  const invalidTabIds = $derived(validateFeatureTypes(featureTypes));
+  const invalidTabIds = $derived(
+    validateFeatureTypes(featureTypes, { metadata, HIGHEST_ROLE: highestRole })
+  );
+  const isInvalid = $derived(featureTypes.length === 0 || invalidTabIds.size > 0);
 
   $effect(() => {
     // if the serviceId changes set activeTabIndex to undefined
@@ -113,7 +123,7 @@
 </script>
 
 <div class="featuretypes-form">
-  <fieldset class={[invalidTabIds.size > 0 && 'invalid']}>
+  <fieldset class={[isInvalid && 'invalid']}>
     <legend>
       {t('56_FeatureTypeForm.label')}
     </legend>

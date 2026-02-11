@@ -4,12 +4,9 @@
   import { fade } from 'svelte/transition';
   import LinearProgress from '@smui/linear-progress';
   import {
-    getProgress,
-    type Section,
     getFormContext,
     type FormState,
-    FORMSTATE_CONTEXT,
-    type ProgressInfo
+    FORMSTATE_CONTEXT
   } from '$lib/context/FormContext.svelte';
   import F01_TitleField from './Field/01_TitleField.svelte';
   import F02_DescriptionField from './Field/02_DescriptionField.svelte';
@@ -49,6 +46,8 @@
   import { page } from '$app/state';
   import { getHighestRole } from '$lib/util';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { ValidationService, type ProgressInfo } from '$lib/services/ValidationService';
+  import type { Section } from './FieldsConfig';
 
   const t = $derived(page.data.t);
   let activeSection = $state(page.url.hash.slice(1) || 'basedata');
@@ -126,7 +125,7 @@
     }
   });
 
-  const getPropgressTitle = (progressInfo: ProgressInfo) => {
+  const getProgressTitle = (progressInfo: ProgressInfo) => {
     let baseText = `Fortschritt: ${Math.floor(progressInfo.progress * 100)} %`;
     return baseText;
   };
@@ -135,7 +134,7 @@
 <div class="metadata-form">
   <nav class="tabs">
     {#each SECTIONS as { section, label, disabledCheck }, i}
-      {@const progressInfo = getProgress(highestRole, section, metadata)}
+      {@const progressInfo = ValidationService.getProgress(metadata!, highestRole, section)}
       <div class="tab-container" class:active={activeSection === section}>
         <button
           class="tab"
@@ -149,7 +148,7 @@
         <LinearProgress
           progress={progressInfo.progress}
           aria-label={label + ' Fortschritt'}
-          title={getPropgressTitle(progressInfo)}
+          title={getProgressTitle(progressInfo)}
         />
       </div>
       {#if i + 1 < SECTIONS.length}

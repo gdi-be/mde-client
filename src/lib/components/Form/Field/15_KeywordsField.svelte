@@ -1,7 +1,8 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { getFieldConfig, getFormContext, persistValue } from '$lib/context/FormContext.svelte';
+  import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
+  import { MetadataService } from '$lib/services/MetadataService';
   import { onMount } from 'svelte';
   import Chip, { Set as ChipSet, Text, TrailingIcon } from '@smui/chips';
   import Autocomplete from '@smui-extra/autocomplete';
@@ -33,7 +34,7 @@
 
   let uniqueKeywords = $derived(Array.from(new Set([...autoKeywords, ...value])));
   let searchValue = $state('');
-  const fieldConfig = getFieldConfig<Keywords>(15);
+  const fieldConfig = MetadataService.getFieldConfig<Keywords>(15);
   let validationResult = $derived(fieldConfig?.validator(valueFromData));
 
   let dialogOpen = $state(false);
@@ -106,7 +107,7 @@
       .filter((kw) => !autoKeywords.includes(kw))
       .map((entry) => ({ keyword: entry }));
 
-    const response = await persistValue(KEY, keywords);
+    const response = await MetadataService.persistValue(KEY, keywords);
     if (response.ok) {
       showCheckmark = true;
     }
