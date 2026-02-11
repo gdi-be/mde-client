@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/gdi-be/mde-client/compare/v6.0.0...v6.0.1) (2026-02-11)
+
+
+### Bug Fixes
+
+* update validation of LayerStyleTitle ([aa49932](https://github.com/gdi-be/mde-client/commit/aa49932bb20522d3feda613d59877f00d80f7c8e))
+
 # [6.0.0](https://github.com/gdi-be/mde-client/compare/v5.1.1...v6.0.0) (2026-02-11)
 
 
