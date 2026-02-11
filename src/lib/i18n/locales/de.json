@@ -186,7 +186,7 @@
     "explanation": "Wo kann die Informationsquelle gefunden werden?"
   },
   "45_ServiceWorkspace": {
-    "label": "Identifikator des Dienstes"
+    "label": "Dienst-ID"
   },
   "46_ServicePreview": {
     "label": "Vorschau des Dienstes",
@@ -373,7 +373,7 @@
     "fileIdentifier": "File-Identifier",
     "identifier": "Identifier",
     "relatedTopics": "Verwandte Themen (MTK)",
-    "serviceIdentifier": "Identifikator des Dienstes"
+    "serviceIdentifier": "Service-Identifier"
   },
   "error": {
     "notFound": "Seite nicht gefunden"
