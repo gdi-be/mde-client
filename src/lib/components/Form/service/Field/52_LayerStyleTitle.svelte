@@ -22,11 +22,17 @@
 
   const { getValue } = getFormContext();
   let metadataProfile = $derived(getValue<MetadataProfile>(PROFILE_KEY));
-  const fieldConfig = MetadataService.getFieldConfig(52);
-  const validationResult = $derived(fieldConfig?.validator(value));
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
+  const fieldConfig = MetadataService.getFieldConfig(52);
+  const validationResult = $derived(
+    fieldConfig?.validator(value, {
+      HIGHEST_ROLE: highestRole,
+      'isoMetadata.metadataProfile': metadataProfile
+    })
+  );
+
   const fieldVisible = $derived(
     highestRole === 'MdeAdministrator' ||
       (metadataProfile === 'INSPIRE_HARMONISED' && highestRole === 'MdeEditor')
