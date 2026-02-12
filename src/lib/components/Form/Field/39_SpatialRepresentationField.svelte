@@ -36,7 +36,7 @@
     const response = await fetch('/data/spatial_representation_types');
 
     if (!response.ok) {
-      toast.error('Fehler beim Abrufen der räumlichen Darstellungsarten');
+      toast.error(t('39_SpatialRepresentationField.errorFetching'));
       return [];
     }
 
@@ -48,7 +48,7 @@
 {#if highestRole !== 'MdeDataOwner'}
   <div class="spatial-representation-field">
     {#await fetchOptions()}
-      <p>Lade räumliche Darstellungsarten</p>
+      <p>{t('general.loading')}</p>
     {:then OPTIONS}
       <MultiSelectInput
         label={t('39_SpatialRepresentationField.label')}
