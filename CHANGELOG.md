@@ -1,3 +1,11 @@
+## [6.0.2](https://github.com/gdi-be/mde-client/compare/v6.0.1...v6.0.2) (2026-02-12)
+
+
+### Bug Fixes
+
+* update DisplayFieldSnippets ([815a747](https://github.com/gdi-be/mde-client/commit/815a7475cea7d6384d7bcc4d50f7319dd8af086f))
+* update styling of SelectInput ([e3398ee](https://github.com/gdi-be/mde-client/commit/e3398eea6956a4014bc7dde33f1349c1001d91ac))
+
 ## [6.0.1](https://github.com/gdi-be/mde-client/compare/v6.0.0...v6.0.1) (2026-02-11)
 
 
