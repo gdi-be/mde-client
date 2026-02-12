@@ -474,7 +474,7 @@
           </div>
           <div class="list-item-field">
             <!-- Service-Workspace -->
-            <strong>{t('displayfieldsnippets.serviceIdentifier')}</strong>
+            <strong>{t('45_ServiceWorkspace.label')}</strong>
             <span class="list-item-value">{service.workspace}</span>
           </div>
           <div class="list-item-field">
@@ -488,11 +488,10 @@
             <span class="list-item-value">{service.fileIdentifier}</span>
           </div>
           <div class="list-item-field">
-            <!-- Service-Preview -->
             <strong>{t('46_ServicePreview.label')}</strong>
             <span class="list-item-value">
               {#await replaceVariable(service.preview)}
-                Lädt ...
+                {t('general.loading')}
               {:then url}
                 {url || DEFAULT_NULL_STRING}
               {:catch}
@@ -500,27 +499,6 @@
               {/await}
             </span>
           </div>
-          {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
-            <div class="list-item-field">
-              <!-- Service-LegendImage-Url -->
-              <strong>{t('47_ServiceLegendImage.label_url')}</strong>
-              <span class="list-item-value">{service.workspace}</span>
-            </div>
-          {/if}
-          {#if service.serviceType !== 'ATOM'}
-            <div class="list-item-field">
-              <strong>{t('46_ServicePreview.label')}</strong>
-              <span class="list-item-value">
-                {#await replaceVariable(service.preview)}
-                  {t('general.loading')}
-                {:then url}
-                  {url || DEFAULT_NULL_STRING}
-                {:catch}
-                  {service.preview || DEFAULT_NULL_STRING}
-                {/await}
-              </span>
-            </div>
-          {/if}
           {#if service.serviceType !== 'ATOM'}
             <div class="list-item-field">
               <strong>{t('47_ServiceLegendImage.label')}</strong>
