@@ -526,7 +526,18 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 26,
     key: 'isoMetadata.termsOfUseSource',
-    validator: optionalValidator,
+    extraParams: ['isoMetadata.termsOfUseId'],
+    validator: (val, extraParams) => {
+      const termsOfUseId = extraParams?.['isoMetadata.termsOfUseId'];
+      const isRequired = termsOfUseId !== 1;
+      if (isRequired && !isDefined(val)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie eine Quelle für die Nutzungsbestimmungen an.'
+        };
+      }
+      return { valid: true };
+    },
     section: 'classification',
     required: true
   },
@@ -534,7 +545,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 27,
     key: 'isoMetadata.scale',
     extraParams: ['isoMetadata.resolutions'],
-    validator: (val: any, extraParams) => {
+    validator: (val, extraParams) => {
       const resolutions = extraParams?.['isoMetadata.resolutions'];
       if (!isDefined(val) && !isDefined(resolutions)) {
         return {
@@ -980,11 +991,15 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 62,
     key: 'isoMetadata.services.featureTypes.name',
     collectionKey: 'isoMetadata.services.featureTypes',
-    extraParams: ['PARENT_VALUE', 'HIGHEST_ROLE'],
+    extraParams: ['PARENT_VALUE', 'HIGHEST_ROLE', 'isoMetadata.services'],
     validator: (name: FeatureType['name'], extraParams) => {
       const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
       const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
-      const service = extraParams?.['PARENT_VALUE'];
+      const featureType = extraParams?.['PARENT_VALUE'] as FeatureType;
+      const services = extraParams?.['isoMetadata.services'] as Service[];
+      const service = services?.find(
+        (s) => !!s.featureTypes?.find((ft) => ft.id === featureType.id)
+      );
       if (service?.serviceType === 'WFS') {
         if (required && !isDefined(name)) {
           return {

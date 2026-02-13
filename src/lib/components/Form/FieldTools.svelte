@@ -98,7 +98,9 @@
   {/if}
   {#if metadata?.clonedFromId && !noCloneButton}
     {#await getValueFromOriginal()}
-      <!-- Don't render anything to avoid flickering -->
+      <IconButton type="button" size="button" disabled>
+        <Icon class="material-icons">settings_backup_restore</Icon>
+      </IconButton>
     {:then valueFromOriginal}
       {#if valueFromOriginal}
         <IconButton

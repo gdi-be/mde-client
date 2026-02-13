@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getFormContext,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import FieldHint from '../FieldHint.svelte';
   import FieldTools from '../FieldTools.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
@@ -8,6 +12,8 @@
   import Radio from '@smui/radio';
 
   import { page } from '$app/state';
+  import { ValidationService } from '$lib/services/ValidationService';
+  import { getContext } from 'svelte';
 
   const t = $derived(page.data.t);
 
@@ -16,6 +22,8 @@
 
   const { getValue } = getFormContext();
   let selected = $state<typeof RESOLUTION_KEY | typeof SCALE_KEY>();
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formState.metadata);
 
   // TODO: check why this is a List
   const resolutionValueFromData = $derived(getValue<number[]>(RESOLUTION_KEY)?.[0]);
@@ -39,10 +47,16 @@
   let showCheckmark = $state(false);
   const resolutionFieldConfig = MetadataService.getFieldConfig<number>(28);
   let resolutionValidationResult = $derived(
-    resolutionFieldConfig?.validator(resolutionValue || undefined)
+    ValidationService.validateField(resolutionFieldConfig, resolutionValue, {
+      metadata
+    })
   );
   const scaleFieldConfig = MetadataService.getFieldConfig<number>(27);
-  let scaleValidationResult = $derived(scaleFieldConfig?.validator(scaleValue || undefined));
+  let scaleValidationResult = $derived(
+    ValidationService.validateField(scaleFieldConfig, scaleValue, {
+      metadata
+    })
+  );
   let hasInvalidFields = $derived(
     !resolutionValidationResult?.valid && !scaleValidationResult?.valid
   );
