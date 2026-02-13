@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import proj4 from 'proj4';
-import type { CRS, Extent, MetadataCollection } from '$lib/models/metadata';
+import type {
+  CRS,
+  PartialExtent,
+  MetadataCollection,
+  PartialCoordinate
+} from '$lib/models/metadata';
 import { logger } from 'loggisch';
 import type { Role, Token } from '$lib/models/keycloak';
 import type { CRSOption } from './models/api';
@@ -72,14 +77,14 @@ export function registerCRSCodes(crsOptions: CRSOption[]) {
   });
 }
 
-export function transformExtent(extent: Extent, fromEPSG: CRS, toEPSG: CRS = 'EPSG:4326') {
+export function transformExtent(extent: PartialExtent, fromEPSG: CRS, toEPSG: CRS = 'EPSG:4326') {
   if (!fromEPSG || !toEPSG) {
     logger.warning('transformExtent: fromEPSG or toEPSG is not defined');
     return extent;
   }
 
-  const min: [number, number] = [extent.minx, extent.miny];
-  const max: [number, number] = [extent.maxx, extent.maxy];
+  const min: PartialCoordinate = [extent.minx, extent.miny];
+  const max: PartialCoordinate = [extent.maxx, extent.maxy];
   const transformedMin = transformCoordinate(min, fromEPSG, toEPSG);
   const transformedMax = transformCoordinate(max, fromEPSG, toEPSG);
 
@@ -93,24 +98,20 @@ export function transformExtent(extent: Extent, fromEPSG: CRS, toEPSG: CRS = 'EP
 }
 
 export function transformCoordinate(
-  coordinate: [number, number],
+  coordinate: PartialCoordinate,
   fromEPSG: CRS,
   toEPSG: CRS = 'EPSG:4326'
-) {
+): PartialCoordinate {
+  if (coordinate[0] === undefined || coordinate[1] === undefined) {
+    logger.warning(`Can't apply transformation, coordinate value is undefined: ${coordinate}`);
+    return coordinate;
+  }
   const transformedCoordinate = proj4(fromEPSG, toEPSG, [coordinate[0], coordinate[1]]);
   const decimalPlaces = proj4.defs(toEPSG).units === 'm' ? 0 : 5;
-  return transformedCoordinate.map((value: number) => parseFloat(value.toFixed(decimalPlaces)));
+  return transformedCoordinate.map((value: number) =>
+    parseFloat(value.toFixed(decimalPlaces))
+  ) as PartialCoordinate;
 }
-
-export const getRoleName = (role: Role): string => {
-  const roleMapLong: Record<Role, string> = {
-    MdeDataOwner: 'Datenhaltende Stelle',
-    MdeEditor: 'Redakteur',
-    MdeQualityAssurance: 'Qualitätsmanagment',
-    MdeAdministrator: 'Administrator'
-  };
-  return roleMapLong[role];
-};
 
 export const getHighestRole = (token?: Token): Role => {
   if (!token || !token.realm_access || !token.realm_access.roles) {

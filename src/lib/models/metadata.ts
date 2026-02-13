@@ -173,11 +173,13 @@ export type ContentDescription = {
   code: CI_OnLineFunctionCode;
 };
 
-export type Extent = {
-  maxx: number;
-  maxy: number;
-  minx: number;
-  miny: number;
+export type PartialCoordinate = [number | undefined, number | undefined];
+
+export type PartialExtent = {
+  maxx?: number;
+  maxy?: number;
+  minx?: number;
+  miny?: number;
 };
 
 export type Lineage = {

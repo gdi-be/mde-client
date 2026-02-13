@@ -533,7 +533,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       if (isRequired && !isDefined(val)) {
         return {
           valid: false,
-          helpText: 'Bitte geben sie eine Quelle für die Nutzungsbestimmungen an.'
+          helpText: 'Bitte geben Sie eine Quelle für die Nutzungsbestimmungen an.'
         };
       }
       return { valid: true };

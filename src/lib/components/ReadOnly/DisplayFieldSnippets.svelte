@@ -2,7 +2,7 @@
   import type {
     Keywords,
     Contacts,
-    Extent,
+    PartialExtent,
     Service,
     MetadataProfile,
     IsoTheme,
@@ -353,7 +353,7 @@
   {/await}
 {/snippet}
 
-{#snippet isoMetadataExtent(value: Extent)}
+{#snippet isoMetadataExtent(value: PartialExtent)}
   {value
     ? `${value.minx}, ${value.miny}, ${value.maxx}, ${value.maxy} (EPSG:4326)`
     : DEFAULT_NULL_STRING}
@@ -715,7 +715,7 @@
 {:else if key === 'isoMetadata.description'}
   {@render isoMetadataDescription(value as string)}
 {:else if key === 'isoMetadata.extent'}
-  {@render isoMetadataExtent(value as Extent)}
+  {@render isoMetadataExtent(value as PartialExtent)}
 {:else if key === 'isoMetadata.highValueDataCategory'}
   {@render isoMetadataHighValueDataCategory(value as string[])}
 {:else if key === 'isoMetadata.highValueDataset'}

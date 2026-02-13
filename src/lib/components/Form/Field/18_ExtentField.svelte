@@ -3,7 +3,7 @@
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
-  import type { CRS, Extent } from '$lib/models/metadata';
+  import type { CRS, PartialExtent } from '$lib/models/metadata';
   import { MetadataService } from '$lib/services/MetadataService';
   import Button, { Icon, Label } from '@smui/button';
   import SelectInput from '../Inputs/SelectInput.svelte';
@@ -13,12 +13,13 @@
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import type { CRSOption } from '$lib/models/api';
   import { page } from '$app/state';
+  import { ValidationService } from '$lib/services/ValidationService';
 
   const t = $derived(page.data.t);
 
   type ExtentOption = {
     title: string;
-    value: Extent;
+    value: PartialExtent;
   };
 
   const KEY = 'isoMetadata.extent';
@@ -30,12 +31,12 @@
 
   const { getValue } = getFormContext();
   let initialCRSKey = getValue<CRS>(CRS_KEY);
-  const valueFromData = $derived(getValue<Extent>(KEY));
-  let value4326 = $state({
-    minx: 0,
-    maxx: 0,
-    miny: 0,
-    maxy: 0
+  const valueFromData = $derived(getValue<PartialExtent>(KEY));
+  let value4326 = $state<PartialExtent>({
+    minx: undefined,
+    maxx: undefined,
+    miny: undefined,
+    maxy: undefined
   });
 
   $effect(() => {
@@ -68,10 +69,18 @@
   const minYFieldConfig = MetadataService.getFieldConfig<number>(73);
   const maxYFieldConfig = MetadataService.getFieldConfig<number>(74);
 
-  let validationResultMinX = $derived(minXFieldConfig?.validator(transformedValue.minx));
-  let validationResultMinY = $derived(minYFieldConfig?.validator(transformedValue.miny));
-  let validationResultMaxX = $derived(maxXFieldConfig?.validator(transformedValue.maxx));
-  let validationResultMaxY = $derived(maxYFieldConfig?.validator(transformedValue.maxy));
+  let validationResultMinX = $derived(
+    ValidationService.validateField(minXFieldConfig, transformedValue.minx)
+  );
+  let validationResultMinY = $derived(
+    ValidationService.validateField(minXFieldConfig, transformedValue.miny)
+  );
+  let validationResultMaxX = $derived(
+    ValidationService.validateField(minXFieldConfig, transformedValue.maxx)
+  );
+  let validationResultMaxY = $derived(
+    ValidationService.validateField(minXFieldConfig, transformedValue.maxy)
+  );
 
   let hasInvalidFields = $derived(
     validationResultMinX?.valid === false ||
@@ -80,7 +89,7 @@
       validationResultMaxY?.valid === false
   );
 
-  const onChange = (newValue: number, key: keyof Extent) => {
+  const onChange = (newValue: number, key: keyof PartialExtent) => {
     const newTransformedValue = {
       ...transformedValue,
       [key]: newValue
