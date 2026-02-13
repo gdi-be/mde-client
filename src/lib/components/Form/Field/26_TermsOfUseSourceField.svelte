@@ -3,8 +3,8 @@
   import { getFormContext } from '$lib/context/FormContext.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '../FieldTools.svelte';
-  import type { ValidationResult } from '../FieldsConfig';
   import { page } from '$app/state';
+  import { ValidationService } from '$lib/services/ValidationService';
   const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.termsOfUseSource';
@@ -21,7 +21,7 @@
 
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(26);
-  let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
+  let validationResult = $derived(ValidationService.validateField(fieldConfig, value));
 
   const onBlur = async () => {
     const response = await MetadataService.persistValue(KEY, value);

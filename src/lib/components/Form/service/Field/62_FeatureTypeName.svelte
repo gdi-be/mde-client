@@ -6,22 +6,33 @@
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { page } from '$app/state';
+  import { ValidationService } from '$lib/services/ValidationService';
+  import { getContext } from 'svelte';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   const t = $derived(page.data.t);
 
   export type ComponentProps = {
     value?: FeatureType['name'];
+    featureType: FeatureType;
     onChange: (newValue: string) => Promise<Response>;
   };
 
-  let { value, onChange }: ComponentProps = $props();
+  let { value, featureType, onChange }: ComponentProps = $props();
+  const token = $derived(getAccessToken());
+  const highestRole = $derived(getHighestRole(token));
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.name';
   const fieldConfig = MetadataService.getFieldConfig(62);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  const metadata = $derived(formState.metadata);
+  const validationResult = $derived(
+    ValidationService.validateField(fieldConfig, value, {
+      HIGHEST_ROLE: highestRole,
+      PARENT_VALUE: featureType,
+      metadata
+    })
+  );
   let showCheckmark = $state(false);
-
-  const token = $derived(getAccessToken());
-  const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 </script>
 

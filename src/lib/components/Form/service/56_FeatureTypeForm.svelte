@@ -180,6 +180,7 @@
           onChange={(title) => set('title', title)}
         />
         <FeatureTypeName_62
+          featureType={activeFeatureType}
           value={activeFeatureType?.name}
           onChange={(name) => set('name', name)}
         />

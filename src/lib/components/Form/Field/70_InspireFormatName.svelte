@@ -16,6 +16,7 @@
   import { getHighestRole } from '$lib/util';
   import { MetadataService } from '$lib/services/MetadataService';
   import { page } from '$app/state';
+  import { ValidationService } from '$lib/services/ValidationService';
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -23,6 +24,7 @@
   const t = $derived(page.data.t);
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
+  const PROFILE_ID = 70;
   const KEY = 'isoMetadata.inspireFormatName';
   const ANNEX_THEME_KEY = 'isoMetadata.inspireTheme';
 
@@ -40,8 +42,12 @@
   });
 
   let showCheckmark = $state(false);
-  const fieldConfig = MetadataService.getFieldConfig<string>(70);
-  let validationResult = $derived(fieldConfig?.validator(value));
+  const fieldConfig = MetadataService.getFieldConfig<string>(PROFILE_ID);
+  let validationResult = $derived(
+    ValidationService.validateField(fieldConfig, value, {
+      metadata
+    })
+  );
   let options: Option[] = $state([]);
 
   const onChange = async (newValue?: string) => {

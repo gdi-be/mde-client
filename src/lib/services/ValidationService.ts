@@ -92,29 +92,30 @@ export class ValidationService {
    * - PARENT_VALUE: The parent object in a collection
    * - Other keys: Values from metadata at the specified path
    *
-   * @param field - The field configuration
+   * @param fieldConfig - The field configuration
    * @param context - The validation context
    * @returns The resolved extra parameters or undefined
    */
   static getExtraParams(
-    field: FullFieldConfig<any>,
+    fieldConfig: FullFieldConfig<any>,
     context: ValidationContext
   ): Record<string, any> | undefined {
-    if (!field.extraParams || field.extraParams.length === 0) return undefined;
-
+    if (!fieldConfig.extraParams || fieldConfig.extraParams.length === 0) return undefined;
     const extraParams: Record<string, any> = {};
 
-    for (const param of field.extraParams) {
+    for (const param of fieldConfig.extraParams) {
       if (param === 'PARENT_VALUE') {
-        if (context.PARENT_VALUE === undefined) {
+        if (!context?.PARENT_VALUE) {
           logger.warning('PARENT_VALUE is undefined, but requested in extraParams');
           continue;
         }
         extraParams['PARENT_VALUE'] = context.PARENT_VALUE;
       } else if (param === 'HIGHEST_ROLE') {
-        if (context.HIGHEST_ROLE) {
-          extraParams['HIGHEST_ROLE'] = context.HIGHEST_ROLE;
+        if (!context?.HIGHEST_ROLE) {
+          logger.warning('HIGHEST_ROLE is undefined, but requested in extraParams');
+          continue;
         }
+        extraParams['HIGHEST_ROLE'] = context.HIGHEST_ROLE;
       } else {
         // Treat as metadata path
         if (context.metadata) {
@@ -122,6 +123,10 @@ export class ValidationService {
           if (paramValue !== undefined) {
             extraParams[param] = paramValue;
           }
+        } else {
+          logger.warning(
+            `Validation for field ${fieldConfig.key} (${fieldConfig.profileId}) requires metadata as extraParam but it was undefined.`
+          );
         }
       }
     }
@@ -132,18 +137,18 @@ export class ValidationService {
   /**
    * Validates a single field and returns the validation result with extra params.
    *
-   * @param field - The field configuration
+   * @param fieldConfig - The field configuration
    * @param value - The value to validate
    * @param context - The validation context
    * @returns The validation result
    */
   static validateField(
-    field: FullFieldConfig<any>,
+    fieldConfig: FullFieldConfig<any>,
     value: any,
     context: ValidationContext = {}
   ): ValidationResult {
-    const extraParams = ValidationService.getExtraParams(field, context);
-    return field.validator(value, extraParams);
+    const extraParams = ValidationService.getExtraParams(fieldConfig, context);
+    return fieldConfig.validator(value, extraParams);
   }
 
   /**
