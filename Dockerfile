@@ -10,7 +10,7 @@ RUN bun install --frozen-lockfile
 RUN bun run build
 
 # 2. run the app
-FROM oven/bun:1.1.36-alpine
+FROM oven/bun:1.3.9-alpine
 
 WORKDIR /app
 
