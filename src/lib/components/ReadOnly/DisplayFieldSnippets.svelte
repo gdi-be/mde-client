@@ -499,7 +499,7 @@
               {/await}
             </span>
           </div>
-          {#if service.serviceType !== 'ATOM'}
+          {#if service.serviceType === 'WMS' || service.serviceType === 'WMTS'}
             <div class="list-item-field">
               <strong>{t('47_ServiceLegendImage.label')}</strong>
               <div class="list">
