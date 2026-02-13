@@ -1,3 +1,13 @@
+## [6.0.3](https://github.com/gdi-be/mde-client/compare/v6.0.2...v6.0.3) (2026-02-13)
+
+
+### Bug Fixes
+
+* add loglevel config for browser logs ([d990485](https://github.com/gdi-be/mde-client/commit/d9904856d8ad9f0b464b7a1fdac252f876d7c990))
+* avoid resizing of fieldtools ([cdcc7b6](https://github.com/gdi-be/mde-client/commit/cdcc7b6f8678efd21a758b74e1d571c4e90747d6))
+* update extent transformation to keep undefined values ([154796a](https://github.com/gdi-be/mde-client/commit/154796a5d5167a4be34c81e5ab1f00b1023a6db8))
+* update several validations ([8399663](https://github.com/gdi-be/mde-client/commit/83996639993d05cde3f2f27c5a957b235fed46b9))
+
 ## [6.0.2](https://github.com/gdi-be/mde-client/compare/v6.0.1...v6.0.2) (2026-02-12)
 
 
