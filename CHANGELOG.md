@@ -1,3 +1,10 @@
+## [6.0.4](https://github.com/gdi-be/mde-client/compare/v6.0.3...v6.0.4) (2026-02-13)
+
+
+### Bug Fixes
+
+* **readonly:** only show legend for WMS and WMTS ([95dc540](https://github.com/gdi-be/mde-client/commit/95dc540ac4592158ccbe1c122a8d4f1c38ad827b))
+
 ## [6.0.3](https://github.com/gdi-be/mde-client/compare/v6.0.2...v6.0.3) (2026-02-13)
 
 
