@@ -86,6 +86,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: white;
+
+    :global(.mdc-select) {
+      background-color: white;
+    }
 
     --selected-color: var(--primary-90);
     --hover-color: var(--mdc-theme-primary);
