@@ -10,11 +10,15 @@ export async function GET({ cookies, params }) {
 
   logger.trace('Fetching i18n for lang: ' + params?.lang);
 
-  const lang = params?.lang;
-  if (!lang) return error(404, 'Not Found');
-  const file = Bun.file(`/data/codelists/i18n/${lang}.yaml`);
-  const themes = await file.text();
-  const parsed = parse(themes);
-
-  return json(parsed);
+  try {
+    const lang = params?.lang;
+    if (!lang) return error(404, 'Not Found');
+    const file = Bun.file(`/data/codelists/i18n/${lang}.yaml`);
+    const themes = await file.text();
+    const parsed = parse(themes);
+    return json(parsed);
+  } catch (e) {
+    logger.error('Error reading i18n YAML file for lang ' + params?.lang + ':', e);
+    return error(404, 'i18n data not found');
+  }
 }
