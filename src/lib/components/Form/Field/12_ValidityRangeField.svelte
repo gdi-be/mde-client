@@ -15,7 +15,7 @@
   const startValueFromData = $derived(getValue<string>(FROM_KEY));
   let startValue = $state('');
   $effect(() => {
-    if (startValueFromData) {
+    if (startValueFromData && !startValue) {
       startValue = new Date(startValueFromData).toISOString().split('T')[0];
     }
   });
@@ -23,7 +23,7 @@
   const endValueFromData = $derived(getValue<string>(TO_KEY));
   let endValue = $state('');
   $effect(() => {
-    if (endValueFromData) {
+    if (endValueFromData && !endValue) {
       endValue = new Date(endValueFromData).toISOString().split('T')[0];
     }
   });

@@ -14,7 +14,7 @@
   let value = $state('');
 
   $effect(() => {
-    if (valueFromData) {
+    if (valueFromData && !value) {
       value = new Date(valueFromData).toISOString().split('T')[0];
     }
   });

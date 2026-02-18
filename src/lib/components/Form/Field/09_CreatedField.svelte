@@ -13,7 +13,7 @@
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   $effect(() => {
-    if (valueFromData) {
+    if (valueFromData && !value) {
       value = new Date(valueFromData).toISOString().split('T')[0];
     }
   });
@@ -40,7 +40,7 @@
     label={t('09_CreatedField.label')}
     explanation={t('09_CreatedField.explanation')}
     {fieldConfig}
-    onblur={onBlur}
+    onchange={onBlur}
     {validationResult}
   />
   <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
