@@ -137,7 +137,7 @@ export class MetadataService {
         logger.warning('Unauthorized access, redirecting to login');
         goto('/login');
       } else if (response.status === 409) {
-        toast.error('Konflikt beim Speichern eines eindeutigen Werts.');
+        toast.error(`Konflikt beim Speichern eines eindeutigen Werts: ${key} - ${value}`);
       } else {
         toast.error(message);
       }
