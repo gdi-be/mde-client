@@ -18,7 +18,7 @@
   } & HTMLInputAttributes;
 
   let {
-    value = $bindable(0),
+    value = $bindable(),
     key,
     label,
     class: wrapperClass,
