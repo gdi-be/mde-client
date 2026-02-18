@@ -31,7 +31,7 @@
 
   let showCheckmark = $state(false);
 
-  const onChange = async () => {
+  const onBlur = async () => {
     const response = await MetadataService.persistValue(KEY, new Date(value!).toISOString());
     if (response.ok) {
       showCheckmark = true;
@@ -45,7 +45,7 @@
     key={KEY}
     label={t('11_LastUpdatedField.label')}
     explanation={t('11_LastUpdatedField.explanation')}
-    onchange={onChange}
+    onblur={onBlur}
     {fieldConfig}
     {validationResult}
   />

@@ -23,7 +23,7 @@
   const fieldConfig = MetadataService.getFieldConfig<string>(10);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  const onChange = async () => {
+  const onBlur = async () => {
     const response = await MetadataService.persistValue(
       KEY,
       value ? new Date(value!).toISOString() : ''
@@ -42,7 +42,7 @@
     label={t('10_PublishedField.label')}
     explanation={t('10_PublishedField.explanation')}
     {fieldConfig}
-    onchange={onChange}
+    onblur={onBlur}
     {validationResult}
   />
   <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
