@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@smui/fab": "^8.0.3",
-    "@sveltejs/adapter-auto": "^3.3.1",
+    "@sveltejs/adapter-auto": "^7.0.0",
     "@sveltejs/kit": "^2.9.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@types/bun": "^1.2.0",
