@@ -1,6 +1,16 @@
-import { describe, expect, test, beforeAll } from 'bun:test';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { transformExtent, transformCoordinate, registerCRSCodes } from '$lib/util';
 import type { PartialExtent, PartialCoordinate } from '$lib/models/metadata';
+
+describe('util functions', () => {
+  describe('coordinate transformation', () => {
+    it('should transform coordinate from EPSG:3857 to EPSG:4326', () => {
+      const coord = [840000, 6500000] as [number, number];
+      const transformed = transformCoordinate(coord, 'EPSG:3857', 'EPSG:4326');
+      expect(transformed).toEqual([7.54585, 50.30922]);
+    });
+  });
+});
 
 describe('util - coordinate transformation functions', () => {
   beforeAll(() => {
@@ -27,16 +37,7 @@ describe('util - coordinate transformation functions', () => {
   });
 
   describe('transformCoordinate', () => {
-    test('should transform a coordinate from EPSG:3857 to EPSG:4326', () => {
-      const coordinate: PartialCoordinate = [1489000, 6894000];
-      const result = transformCoordinate(coordinate, 'EPSG:3857', 'EPSG:4326');
-
-      expect(result).toBeDefined();
-      expect(result[0]).toBeCloseTo(13.375, 2);
-      expect(result[1]).toBeCloseTo(52.516, 2);
-    });
-
-    test('should transform a coordinate from EPSG:25833 to EPSG:4326', () => {
+    it('should transform a coordinate from EPSG:25833 to EPSG:4326', () => {
       const coordinate: PartialCoordinate = [389000, 5819000];
       const result = transformCoordinate(coordinate, 'EPSG:25833', 'EPSG:4326');
 
@@ -45,7 +46,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result[1]).toBeCloseTo(52.50981, 2);
     });
 
-    test('should transform a coordinate from EPSG:4326 to EPSG:3857', () => {
+    it('should transform a coordinate from EPSG:4326 to EPSG:3857', () => {
       const coordinate: PartialCoordinate = [13.4, 52.5];
       const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
 
@@ -54,7 +55,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result[1]).toBeCloseTo(6891042, 0);
     });
 
-    test('should use EPSG:4326 as default target CRS', () => {
+    it('should use EPSG:4326 as default target CRS', () => {
       const coordinate: PartialCoordinate = [1489000, 6894000];
       const result = transformCoordinate(coordinate, 'EPSG:3857');
 
@@ -63,28 +64,28 @@ describe('util - coordinate transformation functions', () => {
       expect(result[1]).toBeCloseTo(52.516, 2);
     });
 
-    test('should return original coordinate when x is undefined', () => {
+    it('should return original coordinate when x is undefined', () => {
       const coordinate: PartialCoordinate = [undefined, 52.5];
       const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
 
       expect(result).toEqual(coordinate);
     });
 
-    test('should return original coordinate when y is undefined', () => {
+    it('should return original coordinate when y is undefined', () => {
       const coordinate: PartialCoordinate = [13.4, undefined];
       const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
 
       expect(result).toEqual(coordinate);
     });
 
-    test('should return original coordinate when both values are undefined', () => {
+    it('should return original coordinate when both values are undefined', () => {
       const coordinate: PartialCoordinate = [undefined, undefined];
       const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
 
       expect(result).toEqual(coordinate);
     });
 
-    test('should round to 5 decimal places for degree-based CRS', () => {
+    it('should round to 5 decimal places for degree-based CRS', () => {
       const coordinate: PartialCoordinate = [1489123.456789, 6894567.891234];
       const result = transformCoordinate(coordinate, 'EPSG:3857', 'EPSG:4326');
 
@@ -93,7 +94,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result[1]?.toString().split('.')[1]?.length || 0).toBeLessThanOrEqual(5);
     });
 
-    test('should round to 0 decimal places for meter-based CRS', () => {
+    it('should round to 0 decimal places for meter-based CRS', () => {
       const coordinate: PartialCoordinate = [13.456789, 52.567891];
       const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
 
@@ -102,7 +103,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result[1]! % 1).toBe(0);
     });
 
-    test('should handle zero coordinates', () => {
+    it('should handle zero coordinates', () => {
       const coordinate: PartialCoordinate = [0, 0];
       const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
 
@@ -112,7 +113,7 @@ describe('util - coordinate transformation functions', () => {
       expect(Math.abs(result[1]!)).toBe(0);
     });
 
-    test('should handle negative coordinates', () => {
+    it('should handle negative coordinates', () => {
       const coordinate: PartialCoordinate = [-10.5, -20.3];
       const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
 
@@ -123,7 +124,7 @@ describe('util - coordinate transformation functions', () => {
   });
 
   describe('transformExtent', () => {
-    test('should transform extent from EPSG:3857 to EPSG:4326', () => {
+    it('should transform extent from EPSG:3857 to EPSG:4326', () => {
       const extent: PartialExtent = {
         minx: 1489000,
         miny: 6894000,
@@ -139,7 +140,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.maxy).toBeCloseTo(52.548, 2);
     });
 
-    test('should transform extent from EPSG:4326 to EPSG:3857', () => {
+    it('should transform extent from EPSG:4326 to EPSG:3857', () => {
       const extent: PartialExtent = {
         minx: 13.0,
         miny: 52.0,
@@ -155,7 +156,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.maxy).toBeCloseTo(6891042, 0);
     });
 
-    test('should use EPSG:4326 as default target CRS', () => {
+    it('should use EPSG:4326 as default target CRS', () => {
       const extent: PartialExtent = {
         minx: 1489000,
         miny: 6894000,
@@ -169,7 +170,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.miny).toBeCloseTo(52.516, 2);
     });
 
-    test('should preserve 0 values in minx', () => {
+    it('should preserve 0 values in minx', () => {
       const extent: PartialExtent = {
         minx: 0,
         miny: 6894000,
@@ -182,7 +183,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.miny).not.toBe(0);
     });
 
-    test('should preserve 0 values in miny', () => {
+    it('should preserve 0 values in miny', () => {
       const extent: PartialExtent = {
         minx: 1489000,
         miny: 0,
@@ -195,7 +196,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.minx).not.toBe(0);
     });
 
-    test('should preserve 0 values in maxx', () => {
+    it('should preserve 0 values in maxx', () => {
       const extent: PartialExtent = {
         minx: 1489000,
         miny: 6894000,
@@ -208,7 +209,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.minx).not.toBe(0);
     });
 
-    test('should preserve 0 values in maxy', () => {
+    it('should preserve 0 values in maxy', () => {
       const extent: PartialExtent = {
         minx: 1489000,
         miny: 6894000,
@@ -221,7 +222,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.miny).not.toBe(0);
     });
 
-    test('should preserve all 0 values', () => {
+    it('should preserve all 0 values', () => {
       const extent: PartialExtent = {
         minx: 0,
         miny: 0,
@@ -236,7 +237,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.maxy).toBe(0);
     });
 
-    test('should handle undefined CRS values', () => {
+    it('should handle undefined CRS values', () => {
       const extent: PartialExtent = {
         minx: 1489000,
         miny: 6894000,
@@ -250,7 +251,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result).toEqual(extent);
     });
 
-    test('should use default EPSG:4326 when toEPSG is undefined', () => {
+    it('should use default EPSG:4326 when toEPSG is undefined', () => {
       const extent: PartialExtent = {
         minx: 1489000,
         miny: 6894000,
@@ -265,7 +266,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.miny).toBeCloseTo(52.516, 2);
     });
 
-    test('should handle partial extent with missing coordinates', () => {
+    it('should handle partial extent with missing coordinates', () => {
       const extent: PartialExtent = {
         minx: 1489000,
         miny: 6894000
@@ -278,7 +279,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.maxy).toBeUndefined();
     });
 
-    test('should transform extent between different meter-based CRS', () => {
+    it('should transform extent between different meter-based CRS', () => {
       const extent: PartialExtent = {
         minx: 380000,
         miny: 5810000,
@@ -294,7 +295,7 @@ describe('util - coordinate transformation functions', () => {
       expect(result.maxy).toBeDefined();
     });
 
-    test('should handle extent spanning large area', () => {
+    it('should handle extent spanning large area', () => {
       const extent: PartialExtent = {
         minx: -180,
         miny: -85,

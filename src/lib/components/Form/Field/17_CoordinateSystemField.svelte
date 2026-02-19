@@ -49,7 +49,7 @@
 </script>
 
 {#if highestRole !== 'MdeDataOwner'}
-  <div class="title-field">
+  <div class="crs-field">
     {#await fetchOptions()}
       <p>{t('general.loading_options')}</p>
     {:then OPTIONS}
@@ -67,7 +67,7 @@
 {/if}
 
 <style lang="scss">
-  .title-field {
+  .crs-field {
     position: relative;
     display: flex;
     gap: 0.25em;

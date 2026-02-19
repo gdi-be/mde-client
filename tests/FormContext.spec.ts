@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from 'vitest';
 import { getFormContext } from '$lib/context/FormContext.svelte';
 import metadata1 from './fixtures/metadata1';
 import type { Contact } from '$lib/models/metadata';
@@ -23,6 +23,7 @@ describe('FormContext', () => {
         }
       ]);
     });
+
     test('should get nested array values with index', () => {
       expect(getValue<string>('isoMetadata.services[0].title', metadata1)).toBe('123 Datentest');
       expect(getValue<string>('isoMetadata.services[1].serviceType', metadata1)).toBe('ATOM');
@@ -45,7 +46,7 @@ describe('FormContext', () => {
 
     test('should collect all service titles', () => {
       const titles = getAllValues('isoMetadata.services.title', metadata1);
-      expect(titles).toEqual(['123 Datentest', 'ewfewf', 'WFS Titel']);
+      expect(titles).toEqual(['123 Datentest', 'workspace1', 'WFS Titel']);
     });
 
     test('should handle special case for layers (profileId 48)', () => {
@@ -53,6 +54,7 @@ describe('FormContext', () => {
       expect(layers).toHaveLength(1); // Nach dem Flatten
       expect(layers[0]).toHaveProperty('name', 'ewfwefew');
     });
+
     test('should collect keywords as expected', () => {
       const keywords = getAllValues('isoMetadata.keywords', metadata1);
       expect(keywords).toEqual([

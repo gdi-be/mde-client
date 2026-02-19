@@ -27,7 +27,7 @@
 </script>
 
 {#if fieldVisible}
-  <div class="layer-short-description-field">
+  <div class="layer-secondary-datasource-field">
     <TextInput
       label={t('68_LayerSecondaryDatasource.label')}
       {value}
@@ -45,7 +45,7 @@
 {/if}
 
 <style lang="scss">
-  .layer-short-description-field {
+  .layer-secondary-datasource-field {
     position: relative;
     display: flex;
     gap: 0.25em;

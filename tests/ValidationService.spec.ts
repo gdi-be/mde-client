@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from 'vitest';
 import { ValidationService, type ValidationContext } from '$lib/services/ValidationService';
 import metadata1 from './fixtures/metadata1';
 import type { FullFieldConfig } from '../src/lib/components/Form/FieldsConfig';
@@ -184,8 +184,6 @@ describe('ValidationService', () => {
     });
 
     test('should return true when no role (no fields to validate)', () => {
-      // When no role is provided, no fields are required to be validated
-      // so progress returns 1, meaning all fields are "valid"
       // @ts-expect-error - Testing behavior when no role is provided
       const result = ValidationService.allFieldsValid(metadata1, undefined);
       expect(result).toBe(true);

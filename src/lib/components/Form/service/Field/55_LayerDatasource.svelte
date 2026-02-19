@@ -20,7 +20,7 @@
   const validationResult = $derived(fieldConfig?.validator(value));
 </script>
 
-<div class="layer-short-description-field">
+<div class="layer-datasource-field">
   <TextInput
     label={t('55_LayerDatasource.label')}
     explanation={t('55_LayerDatasource.explanation')}
@@ -38,7 +38,7 @@
 </div>
 
 <style lang="scss">
-  .layer-short-description-field {
+  .layer-datasource-field {
     position: relative;
     display: flex;
     gap: 0.25em;
