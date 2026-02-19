@@ -11,7 +11,7 @@ export const page = {
   form: null,
   state: {},
   data: {
-    locale: 'en', 
+    locale: 'en',
     t
   }
 };

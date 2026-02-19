@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  screen,
-  fireEvent,
-  waitFor,
-  within,
-  prettyDOM
-} from '@testing-library/svelte';
+import { screen, fireEvent, waitFor, within, prettyDOM } from '@testing-library/svelte';
 import { expect, test } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
@@ -13,15 +7,15 @@ import { fetchMock } from '../setup';
 import { FieldConfigs } from '$lib/components/Form/FieldsConfig';
 
 type FieldType =
-  | 'text'           // TextInput.svelte
-  | 'textarea'       // TextAreaInput.svelte
-  | 'number'         // NumberInput.svelte
-  | 'date'           // DateInput.svelte
-  | 'select'         // SelectInput.svelte 
-  | 'radio'          // RadioInput.svelte
-  | 'multiselect'   // MultiSelectInput.svelte 
+  | 'text' // TextInput.svelte
+  | 'textarea' // TextAreaInput.svelte
+  | 'number' // NumberInput.svelte
+  | 'date' // DateInput.svelte
+  | 'select' // SelectInput.svelte
+  | 'radio' // RadioInput.svelte
+  | 'multiselect' // MultiSelectInput.svelte
   | 'switch'
-  | 'collection';    // Multiple fields in a collection item
+  | 'collection'; // Multiple fields in a collection item
 
 interface TestFieldOptions {
   fieldset?: HTMLElement;
@@ -60,7 +54,7 @@ interface TestFieldOptions {
     expectNoChange?: boolean;
   };
 
-  // For collection 
+  // For collection
   addButtonTitle?: string;
   collectionFields?: Array<{
     fieldKey: string;
@@ -130,10 +124,7 @@ async function waitForNewPatchCall(previousCallCount: number): Promise<RequestIn
   return patchCall![1] as RequestInit;
 }
 
-async function testTextInput(
-  fieldKey: string,
-  options: TestFieldOptions
-): Promise<void> {
+async function testTextInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, fieldInput, requiredMessage, maxLength, expectInvalidClass } = options;
 
   const input = within(fieldset!).getByRole('textbox');
@@ -166,7 +157,6 @@ async function testTextInput(
   if (body.key) {
     expect(extractBaseKey(body.key)).toBe(extractBaseKey(fieldKey));
   }
-
 
   let value = body.layers || body.value;
 
@@ -220,27 +210,21 @@ async function testTextInput(
     await fireEvent.blur(input!);
 
     await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith(
-        expect.any(URL),
-        {
-          method: 'PATCH',
-          body: JSON.stringify({
-            key: fieldKey,
-            value: longInput
-          }),
-          headers: {
-            "content-type": "application/json",
-          },
+      expect(fetchMock).toHaveBeenCalledWith(expect.any(URL), {
+        method: 'PATCH',
+        body: JSON.stringify({
+          key: fieldKey,
+          value: longInput
+        }),
+        headers: {
+          'content-type': 'application/json'
         }
-      );
+      });
     });
   }
 }
 
-async function testTextAreaInput(
-  fieldKey: string,
-  options: TestFieldOptions
-): Promise<void> {
+async function testTextAreaInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, fieldInput, maxLength } = options;
 
   const textarea = fieldset!.querySelector('textarea');
@@ -287,27 +271,21 @@ async function testTextAreaInput(
     await fireEvent.blur(textarea!);
 
     await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith(
-        expect.any(URL),
-        {
-          method: 'PATCH',
-          body: JSON.stringify({
-            key: fieldKey,
-            value: longInput
-          }),
-          headers: {
-            "content-type": "application/json",
-          },
+      expect(fetchMock).toHaveBeenCalledWith(expect.any(URL), {
+        method: 'PATCH',
+        body: JSON.stringify({
+          key: fieldKey,
+          value: longInput
+        }),
+        headers: {
+          'content-type': 'application/json'
         }
-      );
+      });
     });
   }
 }
 
-async function testNumberInput(
-  fieldKey: string,
-  options: TestFieldOptions
-): Promise<void> {
+async function testNumberInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, fieldInput } = options;
 
   const input = within(fieldset!).getByRole('spinbutton');
@@ -349,10 +327,7 @@ async function testNumberInput(
   });
 }
 
-async function testDateInput(
-  fieldKey: string,
-  options: TestFieldOptions
-): Promise<void> {
+async function testDateInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, fieldInput } = options;
 
   const input = fieldset!.querySelector('input[type="date"]') as HTMLInputElement;
@@ -379,10 +354,7 @@ async function testDateInput(
   });
 }
 
-async function testSelectInput(
-  fieldKey: string,
-  options: TestFieldOptions
-): Promise<void> {
+async function testSelectInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, selectOptionText, selectOptionValue, requiredMessage } = options;
 
   const previousCallCount = fetchMock.mock.calls.length;
@@ -419,9 +391,7 @@ async function testSelectInput(
 
   await waitFor(() => {
     const selectedOptions = screen.getAllByText(selectOptionText!);
-    const selectOption = selectedOptions.find(el =>
-      el.getAttribute('aria-selected') === 'true'
-    );
+    const selectOption = selectedOptions.find((el) => el.getAttribute('aria-selected') === 'true');
     expect(selectOption).toBeDefined();
   });
 
@@ -430,15 +400,14 @@ async function testSelectInput(
   });
 }
 
-async function testRadioInput(
-  fieldKey: string,
-  options: TestFieldOptions
-): Promise<void> {
+async function testRadioInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, radioOptionKey } = options;
 
   const previousCallCount = fetchMock.mock.calls.length;
 
-  const radioInput = fieldset!.querySelector(`input[value="${radioOptionKey}"]`) as HTMLInputElement;
+  const radioInput = fieldset!.querySelector(
+    `input[value="${radioOptionKey}"]`
+  ) as HTMLInputElement;
   expect(radioInput).toBeInTheDocument();
 
   await userEvent.click(radioInput);
@@ -460,10 +429,7 @@ async function testRadioInput(
   });
 }
 
-async function testSwitchInput(
-  fieldKey: string,
-  options: TestFieldOptions
-): Promise<void> {
+async function testSwitchInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, switchValue = true } = options;
 
   await waitFor(() => {
@@ -484,8 +450,8 @@ async function testSwitchInput(
           value: switchValue
         }),
         headers: {
-          'content-type': 'application/json',
-        },
+          'content-type': 'application/json'
+        }
       })
     );
   });
@@ -504,10 +470,7 @@ async function testSwitchInput(
   });
 }
 
-async function testMultiSelectInput(
-  fieldKey: string,
-  options: TestFieldOptions
-): Promise<void> {
+async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, multiSelectOptions = [], testProgress } = options;
 
   let initialProgress: number | undefined;
@@ -541,9 +504,7 @@ async function testMultiSelectInput(
       expect(within(fieldset!).queryByText('multiselectinput.noOptions')).not.toBeInTheDocument();
     });
 
-    const menuItem = await waitFor(() =>
-      within(fieldset!).getByText(optionText)
-    );
+    const menuItem = await waitFor(() => within(fieldset!).getByText(optionText));
     await userEvent.click(menuItem);
 
     const requestInit = await waitForNewPatchCall(previousCallCount);
@@ -573,17 +534,20 @@ async function testMultiSelectInput(
   }
 
   if (testProgress && progressBar && initialProgress !== undefined) {
-    await waitFor(() => {
-      const newProgress = getProgressValue(progressBar!);
+    await waitFor(
+      () => {
+        const newProgress = getProgressValue(progressBar!);
 
-      if (testProgress.expectIncrease) {
-        expect(newProgress).toBeGreaterThan(initialProgress!);
-      } else if (testProgress.expectDecrease) {
-        expect(newProgress).toBeLessThan(initialProgress!);
-      } else if (testProgress.expectNoChange) {
-        expect(newProgress).toBe(initialProgress!);
-      }
-    }, { timeout: 3000 });
+        if (testProgress.expectIncrease) {
+          expect(newProgress).toBeGreaterThan(initialProgress!);
+        } else if (testProgress.expectDecrease) {
+          expect(newProgress).toBeLessThan(initialProgress!);
+        } else if (testProgress.expectNoChange) {
+          expect(newProgress).toBe(initialProgress!);
+        }
+      },
+      { timeout: 3000 }
+    );
   }
 
   if (multiSelectOptions.length > 0) {
@@ -624,20 +588,20 @@ async function testMultiSelectInput(
   });
 }
 
-async function testCollectionInput(
-  options: TestFieldOptions
-): Promise<void> {
+async function testCollectionInput(options: TestFieldOptions): Promise<void> {
   const n = within(options.fieldset!).queryAllByRole('button', { name: 'delete' }).length;
 
-  await userEvent.click(
-    within(options.fieldset!).getByTitle(options.addButtonTitle!)
-  );
+  await userEvent.click(within(options.fieldset!).getByTitle(options.addButtonTitle!));
 
   const nNew = within(options.fieldset!).queryAllByRole('button', { name: 'delete' }).length;
 
   await waitFor(async () => {
-    expect(within(options.fieldset!).queryAllByRole('button', { name: 'delete' }).length).toBeGreaterThan(0);
-    expect(within(options.fieldset!).getAllByRole('button', { name: 'delete' })[0]).not.toBeDisabled();
+    expect(
+      within(options.fieldset!).queryAllByRole('button', { name: 'delete' }).length
+    ).toBeGreaterThan(0);
+    expect(
+      within(options.fieldset!).getAllByRole('button', { name: 'delete' })[0]
+    ).not.toBeDisabled();
     expect(nNew).toBe(n + 1);
   });
 
@@ -665,7 +629,9 @@ async function testCollectionInput(
           expect(input).toHaveValue(fieldConfig.fieldInput as string);
         });
       } else if (fieldConfig.fieldType === 'select') {
-        const option = await waitFor(() => within(fieldset!).getByRole('option', { name: String(fieldConfig.fieldInput) }));
+        const option = await waitFor(() =>
+          within(fieldset!).getByRole('option', { name: String(fieldConfig.fieldInput) })
+        );
         await userEvent.click(option);
       } else {
         throw new Error(`Unsupported field type in collection: ${fieldConfig.fieldType}`);
@@ -675,8 +641,7 @@ async function testCollectionInput(
         expect(fetchMock.mock.calls.length).toBeGreaterThan(initialCallCount);
       });
 
-      const patchCalls = fetchMock.mock.calls
-        .filter(([_, init]) => init?.method === 'PATCH');
+      const patchCalls = fetchMock.mock.calls.filter(([_, init]) => init?.method === 'PATCH');
 
       expect(patchCalls.length).toBeGreaterThan(0);
 
@@ -685,8 +650,7 @@ async function testCollectionInput(
         const requestInit = lastPatchCall[1] as RequestInit;
         const body = JSON.parse(requestInit.body as string);
 
-
-        expect(body.value).toHaveLength(nNew)
+        expect(body.value).toHaveLength(nNew);
 
         expect(extractBaseKey(body.key)).toBe(extractBaseKey(fieldConfig.fieldKey));
 
@@ -704,20 +668,15 @@ async function testCollectionInput(
       await new Promise((r) => setTimeout(r, 50));
     }
   }
-};
+}
 
 export const isRequiredField = (fieldKey: string, section: string) => {
-  return FieldConfigs.some(config =>
-    config.key === fieldKey &&
-    config.section === section &&
-    config.required
+  return FieldConfigs.some(
+    (config) => config.key === fieldKey && config.section === section && config.required
   );
 };
 
-export async function testField(
-  fieldKey: string,
-  options: TestFieldOptions
-): Promise<void> {
+export async function testField(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldType = 'text', testProgress } = options;
 
   let initialProgress: number | undefined;
@@ -782,16 +741,19 @@ export async function testField(
   }
 
   if (testProgress && fieldType !== 'multiselect' && progressBar && initialProgress !== undefined) {
-    await waitFor(() => {
-      const newProgress = getProgressValue(progressBar!);
+    await waitFor(
+      () => {
+        const newProgress = getProgressValue(progressBar!);
 
-      if (testProgress.expectIncrease) {
-        expect(newProgress).toBeGreaterThan(initialProgress!);
-      } else if (testProgress.expectDecrease) {
-        expect(newProgress).toBeLessThan(initialProgress!);
-      } else if (testProgress.expectNoChange) {
-        expect(newProgress).toBe(initialProgress!);
-      }
-    }, { timeout: 3000 });
+        if (testProgress.expectIncrease) {
+          expect(newProgress).toBeGreaterThan(initialProgress!);
+        } else if (testProgress.expectDecrease) {
+          expect(newProgress).toBeLessThan(initialProgress!);
+        } else if (testProgress.expectNoChange) {
+          expect(newProgress).toBe(initialProgress!);
+        }
+      },
+      { timeout: 3000 }
+    );
   }
 }

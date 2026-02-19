@@ -1,18 +1,9 @@
-import {
-  describe,
-  it,
-  expect,
-  beforeEach
-} from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import { render } from '@testing-library/svelte';
 
 import FormHarness from '../helpers/FormHarness.svelte';
-import {
-  resetTestMetadata,
-  setMockRoles,
-  setMockUserId
-} from '../setup';
+import { resetTestMetadata, setMockRoles, setMockUserId } from '../setup';
 import metadata1 from '../fixtures/metadata1';
 import {
   checkFooterButtonVisibility,
@@ -177,7 +168,7 @@ describe('Metadata Workflow - Integration test', () => {
 
       await openAssignmentDialog();
 
-      await approveMetadata()
+      await approveMetadata();
 
       await assignToRole({
         role: 'MdeEditor',
@@ -252,7 +243,7 @@ describe('Metadata Workflow - Integration test', () => {
       await assignToRole({ role: 'MdeEditor' });
       unmount();
 
-      // Step 3: Editor validates 
+      // Step 3: Editor validates
       setMockRoles(['MdeEditor']);
 
       ({ unmount } = render(FormHarness, {
@@ -299,7 +290,7 @@ describe('Metadata Workflow - Integration test', () => {
         }
       }));
 
-      await approveMetadata()
+      await approveMetadata();
 
       await openAssignmentDialog();
 

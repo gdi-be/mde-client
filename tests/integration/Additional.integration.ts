@@ -1,19 +1,7 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  within,
-  cleanup
-} from '@testing-library/svelte';
+import { render, screen, fireEvent, waitFor, within, cleanup } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 
-import {
-  describe,
-  it,
-  expect,
-  beforeEach
-} from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
@@ -33,7 +21,7 @@ export async function testAdditional(role: string) {
         }
       });
 
-      const additionalTab = screen.queryByText('form.additional') as HTMLElement
+      const additionalTab = screen.queryByText('form.additional') as HTMLElement;
       expect(additionalTab).toBeInTheDocument();
       fireEvent.click(additionalTab);
     });
@@ -75,9 +63,7 @@ export async function testAdditional(role: string) {
         const fieldsets = within(container).getAllByRole('group');
         expect(fieldsets).toHaveLength(1);
 
-        await userEvent.click(
-          screen.getByTitle('32_Lineage.add')
-        );
+        await userEvent.click(screen.getByTitle('32_Lineage.add'));
 
         await waitFor(async () => {
           expect(screen.queryAllByRole('group', { name: 'delete' }).length).toBeGreaterThan(0);
@@ -85,39 +71,29 @@ export async function testAdditional(role: string) {
 
         const fieldset = within(container).getAllByRole('group')[2];
 
-        await testField(
-          'isoMetadata.lineage[0].title',
-          {
-            fieldset: fieldset,
-            fieldInput: 'Test Title',
-            help: true
-          }
-        )
+        await testField('isoMetadata.lineage[0].title', {
+          fieldset: fieldset,
+          fieldInput: 'Test Title',
+          help: true
+        });
 
-        await testField(
-          'isoMetadata.lineage[0].date',
-          {
-            fieldset: fieldset,
-            fieldInput: 'Test Date',
-            help: true
-          }
-        )
+        await testField('isoMetadata.lineage[0].date', {
+          fieldset: fieldset,
+          fieldInput: 'Test Date',
+          help: true
+        });
 
-        await testField(
-          'isoMetadata.lineage[0].identifier',
-          {
-            fieldset: fieldset,
-            fieldInput: 'Test Identifier',
-            help: true
-          }
-        )
+        await testField('isoMetadata.lineage[0].identifier', {
+          fieldset: fieldset,
+          fieldInput: 'Test Identifier',
+          help: true
+        });
 
-        await userEvent.click(
-          screen.getByTitle('32_Lineage.add')
-        );
+        await userEvent.click(screen.getByTitle('32_Lineage.add'));
 
-
-        const inputFields = within(document.querySelector('.lineages-field') as HTMLElement).getAllByRole('group');
+        const inputFields = within(
+          document.querySelector('.lineages-field') as HTMLElement
+        ).getAllByRole('group');
 
         await waitFor(() => {
           expect(inputFields).toHaveLength(9);
@@ -138,7 +114,9 @@ export async function testAdditional(role: string) {
               fieldInput: 'Test Title',
               help: true,
               fieldsetSelector: () => {
-                const container = document.querySelector('.contentDescriptions-field') as HTMLElement;
+                const container = document.querySelector(
+                  '.contentDescriptions-field'
+                ) as HTMLElement;
                 return within(container).getAllByRole('group')[2] as HTMLElement;
               }
             },
@@ -149,7 +127,9 @@ export async function testAdditional(role: string) {
               optionsCode: 'order',
               help: true,
               fieldsetSelector: () => {
-                const container = document.querySelector('.contentDescriptions-field') as HTMLElement;
+                const container = document.querySelector(
+                  '.contentDescriptions-field'
+                ) as HTMLElement;
                 return within(container).getAllByRole('group')[3] as HTMLElement;
               }
             },
@@ -160,7 +140,9 @@ export async function testAdditional(role: string) {
               optionsCode: 'download',
               help: true,
               fieldsetSelector: () => {
-                const container = document.querySelector('.contentDescriptions-field') as HTMLElement;
+                const container = document.querySelector(
+                  '.contentDescriptions-field'
+                ) as HTMLElement;
                 return within(container).getAllByRole('group')[3] as HTMLElement;
               }
             },
@@ -171,7 +153,9 @@ export async function testAdditional(role: string) {
               optionsCode: 'information',
               help: true,
               fieldsetSelector: () => {
-                const container = document.querySelector('.contentDescriptions-field') as HTMLElement;
+                const container = document.querySelector(
+                  '.contentDescriptions-field'
+                ) as HTMLElement;
                 return within(container).getAllByRole('group')[3] as HTMLElement;
               }
             },
@@ -182,7 +166,9 @@ export async function testAdditional(role: string) {
               optionsCode: 'offlineAccess',
               help: true,
               fieldsetSelector: () => {
-                const container = document.querySelector('.contentDescriptions-field') as HTMLElement;
+                const container = document.querySelector(
+                  '.contentDescriptions-field'
+                ) as HTMLElement;
                 return within(container).getAllByRole('group')[3] as HTMLElement;
               }
             },
@@ -193,7 +179,9 @@ export async function testAdditional(role: string) {
               optionsCode: 'search',
               help: true,
               fieldsetSelector: () => {
-                const container = document.querySelector('.contentDescriptions-field') as HTMLElement;
+                const container = document.querySelector(
+                  '.contentDescriptions-field'
+                ) as HTMLElement;
                 return within(container).getAllByRole('group')[3] as HTMLElement;
               }
             },
@@ -203,15 +191,18 @@ export async function testAdditional(role: string) {
               fieldInput: 'https://test.com',
               help: true,
               fieldsetSelector: () => {
-                const container = document.querySelector('.contentDescriptions-field') as HTMLElement;
+                const container = document.querySelector(
+                  '.contentDescriptions-field'
+                ) as HTMLElement;
                 return within(container).getAllByRole('group')[4] as HTMLElement;
               }
             }
           ]
         });
 
-
-        const inputFields = within(document.querySelector('.contentDescriptions-field') as HTMLElement).getAllByRole('group');
+        const inputFields = within(
+          document.querySelector('.contentDescriptions-field') as HTMLElement
+        ).getAllByRole('group');
 
         await waitFor(() => {
           expect(inputFields).toHaveLength(9);
@@ -219,4 +210,4 @@ export async function testAdditional(role: string) {
       });
     });
   });
-};
+}

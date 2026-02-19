@@ -63,26 +63,26 @@ export const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestIn
   }
 
   if (url.includes('/privacy')) {
-    return mockJson([{ key: 'TEST', label: 'Test' }, { key: 'NONE', label: 'Keine Einschränkung' }]);
+    return mockJson([
+      { key: 'TEST', label: 'Test' },
+      { key: 'NONE', label: 'Keine Einschränkung' }
+    ]);
   }
 
   if (url === '/data/iso_themes') {
     return Promise.resolve(
-      new Response(
-        JSON.stringify([
-          { isoID: 'Land use', isoName: 'Land use' }
-        ]),
-        { status: 200 }
-      )
+      new Response(JSON.stringify([{ isoID: 'Land use', isoName: 'Land use' }]), { status: 200 })
     );
   }
 
   if (url.includes('inspire_themes')) {
     return Promise.resolve(
-      new Response(JSON.stringify([
-        { key: '001', label: 'Addresses' },
-        { key: '002', label: 'Administrative units' }
-      ]))
+      new Response(
+        JSON.stringify([
+          { key: '001', label: 'Addresses' },
+          { key: '002', label: 'Administrative units' }
+        ])
+      )
     );
   }
 
@@ -116,13 +116,11 @@ export const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestIn
 
   if (url === '/data/spatial_representation_types') {
     return Promise.resolve(
-      new Response(JSON.stringify([
-        { key: 'test representation', label: 'test representation' }
-      ]))
+      new Response(JSON.stringify([{ key: 'test representation', label: 'test representation' }]))
     );
   }
 
-  // Keywords 
+  // Keywords
 
   if (url.startsWith('/data/keywords')) {
     return Promise.resolve({
@@ -143,14 +141,16 @@ export const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestIn
 
   if (url.includes('hvd_categories')) {
     return Promise.resolve(
-      new Response(JSON.stringify([
-        { key: 'A', label: 'Kategorie A' },
-        { key: 'B', label: 'Kategorie B' }
-      ]))
+      new Response(
+        JSON.stringify([
+          { key: 'A', label: 'Kategorie A' },
+          { key: 'B', label: 'Kategorie B' }
+        ])
+      )
     );
   }
 
-  // PATCH Requests 
+  // PATCH Requests
 
   if (init?.method === 'PATCH') {
     if (!currentMetadata) {
@@ -202,10 +202,8 @@ export const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestIn
         }
 
         current[lastKey] = value;
-      }
-
-      else if (!body.key) {
-        Object.keys(body).forEach(key => {
+      } else if (!body.key) {
+        Object.keys(body).forEach((key) => {
           if (
             typeof body[key] === 'object' &&
             body[key] !== null &&
@@ -237,7 +235,7 @@ export const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestIn
 
 global.fetch = fetchMock as any;
 
-// Mock External Libraries 
+// Mock External Libraries
 
 vi.mock('svelte-french-toast', () => ({
   toast: {
@@ -246,7 +244,7 @@ vi.mock('svelte-french-toast', () => ({
   }
 }));
 
-// Mock FormContext 
+// Mock FormContext
 
 vi.mock('$lib/context/FormContext.svelte', async () => {
   const actual = await vi.importActual('$lib/context/FormContext.svelte');
@@ -256,7 +254,7 @@ vi.mock('$lib/context/FormContext.svelte', async () => {
   };
 });
 
-// Mock User Context 
+// Mock User Context
 
 let mockMetadataId = 'default-metadata-id';
 let mockRoles = ['MdeEditor'];
@@ -295,12 +293,14 @@ vi.mock('$lib/context/ServerEventContext.svelte', async () => {
   return {
     ...actual,
     sseContext: {
-      getSseContext: () => ([{
-        validation: {
-          status: 'FINISHED',
-          metadataId: mockMetadataId
+      getSseContext: () => [
+        {
+          validation: {
+            status: 'FINISHED',
+            metadataId: mockMetadataId
+          }
         }
-      }])
+      ]
     }
   };
 });
@@ -319,4 +319,3 @@ vi.mock('@material/dom/focus-trap', () => ({
     releaseFocus: vi.fn()
   }))
 }));
-

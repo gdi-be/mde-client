@@ -1,8 +1,4 @@
-import {
-  screen,
-  waitFor,
-  within
-} from '@testing-library/svelte';
+import { screen, waitFor, within } from '@testing-library/svelte';
 
 import { expect } from 'vitest';
 
@@ -26,7 +22,7 @@ export function checkFooterButtonVisibility(): FooterButtonVisibility {
     download: screen.queryByRole('button', { name: 'formfooter.download' }) !== null,
     validate: screen.queryByRole('button', { name: 'formfooter.validate' }) !== null,
     assign: screen.queryByRole('button', { name: 'formfooter.assign' }) !== null,
-    publish: screen.queryByRole('button', { name: 'formfooter.publish' }) !== null,
+    publish: screen.queryByRole('button', { name: 'formfooter.publish' }) !== null
   };
 }
 
@@ -66,8 +62,8 @@ export function verifyAdminButtons() {
   expect(visibility.comments).toBe(true);
   expect(visibility.download).toBe(true);
   expect(visibility.validate).toBe(true);
-  expect(visibility.assign).toBe(true); 
-  expect(visibility.publish).toBe(true); 
+  expect(visibility.assign).toBe(true);
+  expect(visibility.publish).toBe(true);
 }
 
 interface AssignmentDialogOptions {
@@ -114,10 +110,7 @@ export async function assignToRole(options: AssignmentDialogOptions) {
       await userEvent.click(approvalSwitch);
 
       await waitFor(() => {
-        expect(approvalSwitch).toHaveAttribute(
-          'aria-checked',
-          approvalState ? 'true' : 'false'
-        );
+        expect(approvalSwitch).toHaveAttribute('aria-checked', approvalState ? 'true' : 'false');
       });
     }
   }
@@ -129,7 +122,7 @@ export async function assignToRole(options: AssignmentDialogOptions) {
     const roleMap: Record<Role, string> = {
       MdeEditor: 'assignment.handoverToRole',
       MdeDataOwner: 'assignment.handoverToRole',
-      MdeQualityAssurance:'assignment.handoverToRole',
+      MdeQualityAssurance: 'assignment.handoverToRole',
       MdeAdministrator: 'assignment.handoverToRole'
     };
 
@@ -146,15 +139,18 @@ export async function assignToRole(options: AssignmentDialogOptions) {
           role: role
         }),
         headers: {
-          'content-type': 'application/json',
-        },
+          'content-type': 'application/json'
+        }
       })
     );
   });
 
-  await waitFor(() => {
-    expect(document.querySelector('.assign-panel') as HTMLElement).not.toBeInTheDocument();
-  }, { timeout: 3000 });
+  await waitFor(
+    () => {
+      expect(document.querySelector('.assign-panel') as HTMLElement).not.toBeInTheDocument();
+    },
+    { timeout: 3000 }
+  );
 }
 
 export async function assignToSelf(userId: string) {
@@ -176,15 +172,18 @@ export async function assignToSelf(userId: string) {
           userId: userId
         }),
         headers: {
-          'content-type': 'application/json',
-        },
+          'content-type': 'application/json'
+        }
       })
     );
   });
 
-  await waitFor(() => {
-    expect(document.querySelector('.assign-panel') as HTMLElement).not.toBeInTheDocument();
-  }, { timeout: 3000 });
+  await waitFor(
+    () => {
+      expect(document.querySelector('.assign-panel') as HTMLElement).not.toBeInTheDocument();
+    },
+    { timeout: 3000 }
+  );
 }
 
 export async function unassignFromSelf() {
@@ -195,9 +194,12 @@ export async function unassignFromSelf() {
   const unassignButton = screen.getByRole('button', { name: 'assignment.unassign' });
   await userEvent.click(unassignButton);
 
-  await waitFor(() => {
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-  }, { timeout: 3000 });
+  await waitFor(
+    () => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    },
+    { timeout: 3000 }
+  );
 }
 
 export async function openValidationDialog() {
@@ -210,7 +212,9 @@ export async function openValidationDialog() {
   await waitFor(() => {
     const validatePanel = document.querySelector('.validation-content') as HTMLElement;
     expect(validatePanel).toBeInTheDocument();
-    expect(within(validatePanel).getByRole('button', { name: 'validationdialog.start' })).toBeVisible();
+    expect(
+      within(validatePanel).getByRole('button', { name: 'validationdialog.start' })
+    ).toBeVisible();
   });
 }
 
@@ -231,7 +235,7 @@ export async function startValidation() {
     expect(fetchMock).toHaveBeenCalledWith(
       expect.stringContaining('validate'),
       expect.objectContaining({
-        method: 'GET',
+        method: 'GET'
       })
     );
   });
@@ -243,14 +247,17 @@ export async function startValidation() {
 }
 
 export async function waitForValidationComplete(timeout = 10000) {
-  await waitFor(() => {
-    const dialog = screen.getByRole('dialog');
-    const resultsText = within(dialog).queryByText('validationdialog.results');
-    const noErrorsText = within(dialog).queryByText('validationdialog.noErrors');
-    const errorText = within(dialog).queryByText('validationdialog.failed');
+  await waitFor(
+    () => {
+      const dialog = screen.getByRole('dialog');
+      const resultsText = within(dialog).queryByText('validationdialog.results');
+      const noErrorsText = within(dialog).queryByText('validationdialog.noErrors');
+      const errorText = within(dialog).queryByText('validationdialog.failed');
 
-    expect(resultsText || noErrorsText || errorText).toBeInTheDocument();
-  }, { timeout });
+      expect(resultsText || noErrorsText || errorText).toBeInTheDocument();
+    },
+    { timeout }
+  );
 }
 
 export async function openPublishDialog() {
@@ -263,7 +270,9 @@ export async function openPublishDialog() {
   await waitFor(() => {
     const publishPanel = document.querySelector('.publish-content') as HTMLElement;
     expect(publishPanel).toBeInTheDocument();
-    expect(within(publishPanel).getByRole('button', { name: 'publishdialog.action' })).toBeVisible();
+    expect(
+      within(publishPanel).getByRole('button', { name: 'publishdialog.action' })
+    ).toBeVisible();
   });
 }
 
@@ -283,18 +292,21 @@ export async function publishMetadata() {
 
   await userEvent.click(publishButton);
 
-   await waitFor(() => {
+  await waitFor(() => {
     expect(fetchMock).toHaveBeenCalledWith(
       expect.stringContaining('publish'),
       expect.objectContaining({
-        method: 'POST',
+        method: 'POST'
       })
     );
   });
 
-  await waitFor(() => {
-    expect(screen.getByText('publishdialog.success')).toBeInTheDocument();
-  }, { timeout: 5000 });
+  await waitFor(
+    () => {
+      expect(screen.getByText('publishdialog.success')).toBeInTheDocument();
+    },
+    { timeout: 5000 }
+  );
 }
 
 export async function checkPublishPreconditions() {
@@ -329,7 +341,7 @@ export async function approveMetadata() {
     expect(fetchMock).toHaveBeenCalledWith(
       expect.stringContaining('approved'),
       expect.objectContaining({
-        method: 'POST',
+        method: 'POST'
       })
     );
   });

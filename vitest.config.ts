@@ -17,7 +17,7 @@ export default defineConfig({
       $lib: resolve('./src/lib'),
       '$app/state': resolve('./tests/mocks/app/state'),
       '$app/navigation': resolve('./tests/mocks/app/navigation'),
-      '$env': resolve('./tests/mocks/env')
+      $env: resolve('./tests/mocks/env')
     }
   },
   test: {
@@ -44,4 +44,3 @@ export default defineConfig({
     }
   }
 });
-

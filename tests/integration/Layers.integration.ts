@@ -1,16 +1,7 @@
-import {
-  screen,
-  waitFor,
-  within
-} from '@testing-library/svelte';
+import { screen, waitFor, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 
-import {
-  describe,
-  it,
-  expect,
-  beforeEach
-} from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
 import { fetchMock } from '../setup';
@@ -31,9 +22,7 @@ export async function testLayersForm(role: string) {
       const fieldsets = within(container).getAllByRole('group');
       expect(fieldsets).toHaveLength(1);
 
-      await userEvent.click(
-        within(container).getByText('add')
-      );
+      await userEvent.click(within(container).getByText('add'));
       await waitFor(() => {
         const tabs = container.querySelectorAll('.tab-container');
         expect(tabs.length).toBeGreaterThan(1);
@@ -43,7 +32,6 @@ export async function testLayersForm(role: string) {
     describe('49_LayerTitle', () => {
       it('can set layer title correctly', async () => {
         const fieldset = document.querySelector('.layer-title-field') as HTMLElement;
-
 
         await waitFor(() => {
           expect(fieldset).toBeInTheDocument();
@@ -198,7 +186,9 @@ export async function testLayersForm(role: string) {
     describe('68_LayerSecondaryDatasource', () => {
       if (role === 'MdeEditor' || role === 'MdeAdministrator') {
         it('can set secondary datasource correctly with role MdeEditor or MdeAdministrator', async () => {
-          const fieldset = document.querySelector('.layer-secondary-datasource-field') as HTMLElement;
+          const fieldset = document.querySelector(
+            '.layer-secondary-datasource-field'
+          ) as HTMLElement;
 
           await waitFor(() => {
             expect(fieldset).toBeInTheDocument();
@@ -212,20 +202,27 @@ export async function testLayersForm(role: string) {
             testProgress: {
               section: 'services',
               label: 'form.services',
-              expectIncrease: isRequiredField('clientMetadata.layers.secondaryDatasource', 'services')
+              expectIncrease: isRequiredField(
+                'clientMetadata.layers.secondaryDatasource',
+                'services'
+              )
             }
           });
         });
       } else {
         it('can not set secondary datasource with role MdeDataOwner or MdeQualityAssurance', async () => {
-          expect(fetchMock).not.toHaveBeenCalledWith('/help/clientMetadata.layers.secondaryDatasource');
+          expect(fetchMock).not.toHaveBeenCalledWith(
+            '/help/clientMetadata.layers.secondaryDatasource'
+          );
 
           await waitFor(() => {
-            const fieldset = document.querySelector('.layer-secondary-datasource-field') as HTMLElement;
+            const fieldset = document.querySelector(
+              '.layer-secondary-datasource-field'
+            ) as HTMLElement;
             expect(fieldset).not.toBeInTheDocument();
           });
         });
       }
     });
   });
-};
+}

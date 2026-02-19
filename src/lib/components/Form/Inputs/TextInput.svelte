@@ -69,7 +69,7 @@
     <FieldHint {validationResult} {fieldConfig} {fieldHasFocus} {explanation} />
     {#if maxlength}
       <div class="character-counter">
-        {(value?.length ?? 0)} / {maxlength}
+        {value?.length ?? 0} / {maxlength}
       </div>
     {/if}
   </div>

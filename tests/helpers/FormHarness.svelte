@@ -2,7 +2,11 @@
   import { setContext, onMount } from 'svelte';
   import Form from '../../src/lib/components/Form/Form.svelte';
   import Popconfirm from '../../src/lib/components/Popconfirm.svelte';
-  import { FORMSTATE_CONTEXT, initializeFormContext, type FormState } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    initializeFormContext,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import { initializePopconfirmContext } from '$lib/context/PopConfirmContext.svelte';
   import { initializeStatusesContext } from '$lib/context/StatusesContext.svelte';
 

@@ -1,19 +1,7 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  cleanup,
-  within
-} from '@testing-library/svelte';
+import { render, screen, fireEvent, waitFor, cleanup, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 
-import {
-  describe,
-  it,
-  expect,
-  beforeEach
-} from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import { fetchMock, setMockMetadataId, setMockRoles } from '../setup';
 import metadata3 from '../fixtures/metadata3';
@@ -33,7 +21,7 @@ export async function testTempAndSpatial(role: string) {
         }
       });
 
-      const timeTab = screen.queryByText('form.temp_and_spatial') as HTMLElement
+      const timeTab = screen.queryByText('form.temp_and_spatial') as HTMLElement;
       expect(timeTab).toBeInTheDocument();
       fireEvent.click(timeTab);
     });
@@ -46,20 +34,17 @@ export async function testTempAndSpatial(role: string) {
           expect(createdField).toBeInTheDocument();
         });
 
-        await testField(
-          'isoMetadata.created',
-          {
-            fieldset: createdField,
-            fieldInput: '2025-06-05',
-            fieldType: 'date',
-            help: true,
-            testProgress: {
-              section: 'temp_and_spatial',
-              label: 'form.temp_and_spatial',
-              expectIncrease: isRequiredField('isoMetadata.created', 'temp_and_spatial')
-            }
+        await testField('isoMetadata.created', {
+          fieldset: createdField,
+          fieldInput: '2025-06-05',
+          fieldType: 'date',
+          help: true,
+          testProgress: {
+            section: 'temp_and_spatial',
+            label: 'form.temp_and_spatial',
+            expectIncrease: isRequiredField('isoMetadata.created', 'temp_and_spatial')
           }
-        )
+        });
       });
     });
 
@@ -71,15 +56,12 @@ export async function testTempAndSpatial(role: string) {
           expect(publishedField).toBeInTheDocument();
         });
 
-        await testField(
-          'isoMetadata.published',
-          {
-            fieldset: publishedField,
-            fieldInput: '2026-01-01',
-            fieldType: 'date',
-            help: true
-          }
-        )
+        await testField('isoMetadata.published', {
+          fieldset: publishedField,
+          fieldInput: '2026-01-01',
+          fieldType: 'date',
+          help: true
+        });
       });
     });
 
@@ -89,18 +71,15 @@ export async function testTempAndSpatial(role: string) {
 
         waitFor(() => {
           expect(fieldset).toBeInTheDocument();
-        })
+        });
 
-        await testField(
-          'isoMetadata.maintenanceFrequency',
-          {
-            fieldset: fieldset,
-            fieldType: 'select',
-            selectOptionText: 'monatlich',
-            selectOptionValue: 'monthly',
-            help: true
-          }
-        );
+        await testField('isoMetadata.maintenanceFrequency', {
+          fieldset: fieldset,
+          fieldType: 'select',
+          selectOptionText: 'monatlich',
+          selectOptionValue: 'monthly',
+          help: true
+        });
       });
     });
 
@@ -110,23 +89,18 @@ export async function testTempAndSpatial(role: string) {
 
         waitFor(() => {
           expect(fieldset).toBeInTheDocument();
-        })
+        });
 
-        const input = fieldset.querySelector(
-          'input[type="date"]'
-        ) as HTMLInputElement;
+        const input = fieldset.querySelector('input[type="date"]') as HTMLInputElement;
 
         expect(input).toBeEnabled();
 
-        await testField(
-          'isoMetadata.modified',
-          {
-            fieldset: fieldset,
-            fieldInput: '2024-06-21',
-            fieldType: 'date',
-            help: true
-          }
-        )
+        await testField('isoMetadata.modified', {
+          fieldset: fieldset,
+          fieldInput: '2024-06-21',
+          fieldType: 'date',
+          help: true
+        });
       });
     });
 
@@ -136,22 +110,19 @@ export async function testTempAndSpatial(role: string) {
 
         waitFor(() => {
           expect(fieldset).toBeInTheDocument();
-        })
+        });
 
-        await testField(
-          'isoMetadata.validFrom',
-          {
-            fieldset: within(fieldset).getAllByRole('group')[1],
-            fieldType: 'date',
-            fieldInput: '2025-01-01',
-            help: false,
-            testProgress: {
-              section: 'temp_and_spatial',
-              label: 'form.temp_and_spatial',
-              expectIncrease: true
-            }
+        await testField('isoMetadata.validFrom', {
+          fieldset: within(fieldset).getAllByRole('group')[1],
+          fieldType: 'date',
+          fieldInput: '2025-01-01',
+          help: false,
+          testProgress: {
+            section: 'temp_and_spatial',
+            label: 'form.temp_and_spatial',
+            expectIncrease: true
           }
-        );
+        });
       });
 
       it('can set valid to date', async () => {
@@ -159,22 +130,19 @@ export async function testTempAndSpatial(role: string) {
 
         waitFor(() => {
           expect(fieldset).toBeInTheDocument();
-        })
+        });
 
-        await testField(
-          'isoMetadata.validTo',
-          {
-            fieldset: within(fieldset).getAllByRole('group')[2],
-            fieldType: 'date',
-            fieldInput: '2025-12-31',
-            help: false,
-            testProgress: {
-              section: 'temp_and_spatial',
-              label: 'form.temp_and_spatial',
-              expectIncrease: true
-            }
+        await testField('isoMetadata.validTo', {
+          fieldset: within(fieldset).getAllByRole('group')[2],
+          fieldType: 'date',
+          fieldInput: '2025-12-31',
+          help: false,
+          testProgress: {
+            section: 'temp_and_spatial',
+            label: 'form.temp_and_spatial',
+            expectIncrease: true
           }
-        );
+        });
       });
     });
 
@@ -184,21 +152,18 @@ export async function testTempAndSpatial(role: string) {
 
         waitFor(() => {
           expect(fieldset).toBeInTheDocument();
-        })
+        });
 
-        await testField(
-          'technicalMetadata.deliveredCrs',
-          {
-            fieldset: fieldset,
-            fieldInput: 'New coordinate system...',
-            help: true,
-            testProgress: {
-              section: 'temp_and_spatial',
-              label: 'form.temp_and_spatial',
-              expectIncrease: true
-            }
+        await testField('technicalMetadata.deliveredCrs', {
+          fieldset: fieldset,
+          fieldInput: 'New coordinate system...',
+          help: true,
+          testProgress: {
+            section: 'temp_and_spatial',
+            label: 'form.temp_and_spatial',
+            expectIncrease: true
           }
-        )
+        });
       });
     });
 
@@ -212,18 +177,15 @@ export async function testTempAndSpatial(role: string) {
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-          })
+          });
 
-          await testField(
-            'isoMetadata.crs',
-            {
-              fieldset: fieldset,
-              fieldType: 'select',
-              selectOptionText: 'EPSG:4326',
-              selectOptionValue: 'http://www.opengis.net/def/crs/EPSG/0/4326',
-              help: true
-            }
-          );
+          await testField('isoMetadata.crs', {
+            fieldset: fieldset,
+            fieldType: 'select',
+            selectOptionText: 'EPSG:4326',
+            selectOptionValue: 'http://www.opengis.net/def/crs/EPSG/0/4326',
+            help: true
+          });
         });
       } else {
         it('can not set CRS with role MdeDataOwner', async () => {
@@ -238,7 +200,6 @@ export async function testTempAndSpatial(role: string) {
           await waitFor(() => {
             expect(screen.getByText('Koordinatensystem')).toBeInTheDocument();
           });
-
 
           await waitFor(() => {
             expect(fetchMock).toHaveBeenCalledWith(`/help/isoMetadata.extent`);
@@ -260,29 +221,26 @@ export async function testTempAndSpatial(role: string) {
 
           const previousCallCount = fetchMock.mock.calls.length;
 
-          await setValue(inputs[0], '13')
-          await setValue(inputs[1], '14')
-          await setValue(inputs[2], '52')
-          await setValue(inputs[3], '53')
+          await setValue(inputs[0], '13');
+          await setValue(inputs[1], '14');
+          await setValue(inputs[2], '52');
+          await setValue(inputs[3], '53');
 
           await waitFor(() => {
             expect(fetchMock.mock.calls.length).toBeGreaterThan(previousCallCount);
           });
 
           await waitFor(() => {
-            expect(fetchMock).toHaveBeenCalledWith(
-              expect.any(URL),
-              {
-                method: 'PATCH',
-                body: JSON.stringify({
-                  key: 'isoMetadata.extent',
-                  value: { minx: 13, miny: 52, maxx: 14, maxy: 53 }
-                }),
-                headers: {
-                  "content-type": "application/json",
-                },
+            expect(fetchMock).toHaveBeenCalledWith(expect.any(URL), {
+              method: 'PATCH',
+              body: JSON.stringify({
+                key: 'isoMetadata.extent',
+                value: { minx: 13, miny: 52, maxx: 14, maxy: 53 }
+              }),
+              headers: {
+                'content-type': 'application/json'
               }
-            );
+            });
           });
         });
       } else {
@@ -299,7 +257,7 @@ export async function testTempAndSpatial(role: string) {
 
         waitFor(() => {
           expect(fieldset).toBeInTheDocument();
-        })
+        });
 
         await testField('isoMetadata.resolutions', {
           fieldset: fieldset,
@@ -313,7 +271,6 @@ export async function testTempAndSpatial(role: string) {
             expectIncrease: isRequiredField('isoMetadata.resolutions', 'temp_and_spatial')
           }
         });
-
       });
 
       it('can set scale correctly', async () => {
@@ -321,9 +278,11 @@ export async function testTempAndSpatial(role: string) {
 
         waitFor(() => {
           expect(fieldset).toBeInTheDocument();
-        })
+        });
 
-        const radioInput = fieldset!.querySelector(`input[value="isoMetadata.resolutions"]`) as HTMLInputElement;
+        const radioInput = fieldset!.querySelector(
+          `input[value="isoMetadata.resolutions"]`
+        ) as HTMLInputElement;
         expect(radioInput).toBeInTheDocument();
 
         await userEvent.click(radioInput);
@@ -351,40 +310,42 @@ export async function testTempAndSpatial(role: string) {
             expect(fetchMock).toHaveBeenCalledWith('/data/spatial_representation_types');
           });
 
-          const fieldset = document.querySelector('.spatial-representation-field') as HTMLElement
+          const fieldset = document.querySelector('.spatial-representation-field') as HTMLElement;
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-          })
+          });
 
-          await testField(
-            'isoMetadata.spatialRepresentationTypes',
-            {
-              fieldset: fieldset,
-              fieldType: 'multiselect',
-              multiSelectOptions: ['test representation'],
-              help: true,
-              testProgress: {
-                section: 'temp_and_spatial',
-                label: 'form.temp_and_spatial',
-                expectIncrease: isRequiredField('isoMetadata.spatialRepresentationTypes', 'temp_and_spatial')
-              }
+          await testField('isoMetadata.spatialRepresentationTypes', {
+            fieldset: fieldset,
+            fieldType: 'multiselect',
+            multiSelectOptions: ['test representation'],
+            help: true,
+            testProgress: {
+              section: 'temp_and_spatial',
+              label: 'form.temp_and_spatial',
+              expectIncrease: isRequiredField(
+                'isoMetadata.spatialRepresentationTypes',
+                'temp_and_spatial'
+              )
             }
-          );
+          });
 
           await new Promise((r) => setTimeout(r, 300));
         });
       } else {
         it('can not set extent with role MdeDataOwner or MdeQualityAssurance', async () => {
-          expect(fetchMock).not.toHaveBeenCalledWith('/help/isoMetadata.spatialRepresentationTypes');
+          expect(fetchMock).not.toHaveBeenCalledWith(
+            '/help/isoMetadata.spatialRepresentationTypes'
+          );
 
-          const fieldset = document.querySelector('.spatial-representation-field') as HTMLElement
+          const fieldset = document.querySelector('.spatial-representation-field') as HTMLElement;
 
           waitFor(() => {
             expect(fieldset).not.toBeInTheDocument();
-          })
+          });
         });
       }
     });
   });
-};
+}

@@ -48,7 +48,7 @@ export default {
           width: 234,
           height: 235
         },
-        preview: 'preview.png',
+        preview: 'preview.png'
       },
       {
         title: 'ewfewf',

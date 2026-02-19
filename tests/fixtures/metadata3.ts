@@ -70,6 +70,5 @@ export default {
     ],
     spatialRepresentationTypes: ['test']
   },
-  technicalMetadata: {
-  }
+  technicalMetadata: {}
 } satisfies MetadataCollection;

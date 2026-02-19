@@ -1,19 +1,7 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  cleanup,
-  within
-} from '@testing-library/svelte';
+import { render, screen, fireEvent, waitFor, cleanup, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 
-import {
-  describe,
-  it,
-  expect,
-  beforeEach
-} from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import { fetchMock, setMockMetadataId, setMockRoles } from '../setup';
 import metadata3 from '../fixtures/metadata3';
@@ -34,7 +22,7 @@ export async function testServices(role: string) {
         }
       });
 
-      const servicesTab = screen.queryByText('form.services') as HTMLElement
+      const servicesTab = screen.queryByText('form.services') as HTMLElement;
       expect(servicesTab).toBeInTheDocument();
       fireEvent.click(servicesTab);
     });
@@ -55,27 +43,26 @@ export async function testServices(role: string) {
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-            expect(within(fieldset).getByText('📥 58_ServiceType.atom')).toBeInTheDocument()
-            expect(within(fieldset).getByText('📥 58_ServiceType.wfs')).toBeInTheDocument()
-            expect(within(fieldset).getByText('🌎 58_ServiceType.wms')).toBeInTheDocument()
-            expect(within(fieldset).getByText('🌎 58_ServiceType.wmts')).toBeInTheDocument()
-          })
+            expect(within(fieldset).getByText('📥 58_ServiceType.atom')).toBeInTheDocument();
+            expect(within(fieldset).getByText('📥 58_ServiceType.wfs')).toBeInTheDocument();
+            expect(within(fieldset).getByText('🌎 58_ServiceType.wms')).toBeInTheDocument();
+            expect(within(fieldset).getByText('🌎 58_ServiceType.wmts')).toBeInTheDocument();
+          });
 
-          await testField(
-            'isoMetadata.services',
-            {
-              fieldType: 'select',
-              fieldset: fieldset,
-              selectOptionText: '📥 58_ServiceType.atom',
-              selectOptionValue: 'ATOM',
-              help: false
-            }
-          )
+          await testField('isoMetadata.services', {
+            fieldType: 'select',
+            fieldset: fieldset,
+            selectOptionText: '📥 58_ServiceType.atom',
+            selectOptionValue: 'ATOM',
+            help: false
+          });
         });
 
         it('switching to WFS toggles subforms', async () => {
           const fieldset = document.querySelector('.service-type-field') as HTMLElement;
-          expect(document.querySelector('.featuretypes-form') as HTMLElement).not.toBeInTheDocument();
+          expect(
+            document.querySelector('.featuretypes-form') as HTMLElement
+          ).not.toBeInTheDocument();
 
           const previousCallCount = fetchMock.mock.calls.length;
 
@@ -114,12 +101,11 @@ export async function testServices(role: string) {
 
       describe('59_ServiceTitle', () => {
         it('can set service title correctly', async () => {
-
           const fieldset = document.querySelector('.service-title-field') as HTMLElement;
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-          })
+          });
 
           await testField('isoMetadata.services.title', {
             fieldset: fieldset,
@@ -137,12 +123,11 @@ export async function testServices(role: string) {
 
       describe('60_ServiceShortDescription', () => {
         it('can set service description correctly', async () => {
-
           const fieldset = document.querySelector('.service-description-field') as HTMLElement;
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-          })
+          });
 
           await testField('isoMetadata.services.shortDescription', {
             fieldset: fieldset,
@@ -166,13 +151,14 @@ export async function testServices(role: string) {
 
             waitFor(() => {
               expect(fieldset).toBeInTheDocument();
-            })
+            });
 
             await testField('isoMetadata.services.workspace', {
               fieldset: fieldset,
               fieldType: 'text',
               fieldInput: 'NewValidServiceWorkspace',
-              requiredMessage: 'Bitte geben Sie einen gültigen Workspace an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.',
+              requiredMessage:
+                'Bitte geben Sie einen gültigen Workspace an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.',
               help: true,
               testProgress: {
                 section: 'services',
@@ -185,11 +171,11 @@ export async function testServices(role: string) {
           it('can not set service workspace with role MdeDataOwner or MdeQualityAssurance', async () => {
             expect(fetchMock).not.toHaveBeenCalledWith('/help/isoMetadata.services.workspace');
 
-            const fieldset = document.querySelector('.service-id-field') as HTMLElement
+            const fieldset = document.querySelector('.service-id-field') as HTMLElement;
 
             waitFor(() => {
               expect(fieldset).not.toBeInTheDocument();
-            })
+            });
           });
         }
       });
@@ -200,18 +186,18 @@ export async function testServices(role: string) {
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-          })
+          });
 
           await testField('isoMetadata.services.preview', {
             fieldset: fieldset,
             fieldType: 'text',
             fieldInput: 'https://gdi.berlin.de/data/example.json',
-            help: true, testProgress: {
+            help: true,
+            testProgress: {
               section: 'services',
               label: 'form.services',
               expectIncrease: false
             }
-
           });
         });
       });
@@ -231,15 +217,17 @@ export async function testServices(role: string) {
           const fieldsets = within(container).getAllByRole('group');
           expect(fieldsets).toHaveLength(1);
 
-          await userEvent.click(
-            within(container).getByText('add')
-          );
-        })
+          await userEvent.click(within(container).getByText('add'));
+        });
 
         it('can add feature type', async () => {
           await waitFor(async () => {
-            expect(document.querySelector('.featuretype-title-field') as HTMLElement).toBeInTheDocument();
-            expect(document.querySelector('.featuretype-short-description-field') as HTMLElement).toBeInTheDocument();
+            expect(
+              document.querySelector('.featuretype-title-field') as HTMLElement
+            ).toBeInTheDocument();
+            expect(
+              document.querySelector('.featuretype-short-description-field') as HTMLElement
+            ).toBeInTheDocument();
             expect(document.querySelector('.columns-form') as HTMLElement).toBeInTheDocument();
           });
         });
@@ -250,7 +238,7 @@ export async function testServices(role: string) {
 
             waitFor(() => {
               expect(fieldset).toBeInTheDocument();
-            })
+            });
 
             await testField('isoMetadata.services.featureTypes.title', {
               fieldset: fieldset,
@@ -273,7 +261,7 @@ export async function testServices(role: string) {
 
               waitFor(() => {
                 expect(fieldset).toBeInTheDocument();
-              })
+              });
 
               await testField('isoMetadata.services.featureTypes.name', {
                 fieldset: fieldset,
@@ -289,24 +277,28 @@ export async function testServices(role: string) {
             });
           } else {
             it('can not set feature type name with role MdeDataOwner or MdeQualityAssurance', async () => {
-              expect(fetchMock).not.toHaveBeenCalledWith('/help/isoMetadata.services.featureTypes.name');
+              expect(fetchMock).not.toHaveBeenCalledWith(
+                '/help/isoMetadata.services.featureTypes.name'
+              );
 
-              const fieldset = document.querySelector('.featuretype-name-field') as HTMLElement
+              const fieldset = document.querySelector('.featuretype-name-field') as HTMLElement;
 
               waitFor(() => {
                 expect(fieldset).not.toBeInTheDocument();
-              })
+              });
             });
           }
         });
 
         describe('69_FeatureTypeDescription', () => {
           it('can set feature type description correctly', async () => {
-            const fieldset = document.querySelector('.featuretype-short-description-field') as HTMLElement;
+            const fieldset = document.querySelector(
+              '.featuretype-short-description-field'
+            ) as HTMLElement;
 
             waitFor(() => {
               expect(fieldset).toBeInTheDocument();
-            })
+            });
 
             await testField('isoMetadata.services.featureTypes.shortDescription', {
               fieldset: fieldset,
@@ -317,7 +309,10 @@ export async function testServices(role: string) {
               testProgress: {
                 section: 'services',
                 label: 'form.services',
-                expectIncrease: isRequiredField('isoMetadata.services.featureTypes.shortDescription', 'services')
+                expectIncrease: isRequiredField(
+                  'isoMetadata.services.featureTypes.shortDescription',
+                  'services'
+                )
               }
             });
           });
@@ -333,9 +328,7 @@ export async function testServices(role: string) {
             const fieldsets = within(container).getAllByRole('group');
             expect(fieldsets).toHaveLength(1);
 
-            await userEvent.click(
-              within(container).getByText('add')
-            );
+            await userEvent.click(within(container).getByText('add'));
           });
 
           describe('64_AttributeName', () => {
@@ -344,7 +337,7 @@ export async function testServices(role: string) {
 
               waitFor(() => {
                 expect(fieldset).toBeInTheDocument();
-              })
+              });
 
               await testField('isoMetadata.services.featureTypes.columns.name', {
                 fieldset: fieldset,
@@ -366,7 +359,7 @@ export async function testServices(role: string) {
 
               waitFor(() => {
                 expect(fieldset).toBeInTheDocument();
-              })
+              });
 
               await testField('isoMetadata.services.featureTypes.columns.alias', {
                 fieldset: fieldset,
@@ -388,45 +381,44 @@ export async function testServices(role: string) {
                 const fieldset = document.querySelector('.attribute-type-field') as HTMLElement;
                 waitFor(() => {
                   expect(fieldset).toBeInTheDocument();
-                  expect(within(fieldset).getByText('BigDecimal')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Boolean')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Date')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Double')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Float')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Geometry')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Integer')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Link')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Long')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Short')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Text')).toBeInTheDocument()
-                  expect(within(fieldset).getByText('Timestamp')).toBeInTheDocument()
-                })
+                  expect(within(fieldset).getByText('BigDecimal')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Boolean')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Date')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Double')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Float')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Geometry')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Integer')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Link')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Long')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Short')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Text')).toBeInTheDocument();
+                  expect(within(fieldset).getByText('Timestamp')).toBeInTheDocument();
+                });
 
-                await testField(
-                  'isoMetadata.services.featureTypes.columns.type',
-                  {
-                    fieldType: 'select',
-                    selectOptionText: 'Date',
-                    selectOptionValue: 'Date',
-                    fieldset: fieldset,
-                    help: false,
-                    testProgress: {
-                      section: 'services',
-                      label: 'form.services',
-                      expectIncrease: false
-                    }
+                await testField('isoMetadata.services.featureTypes.columns.type', {
+                  fieldType: 'select',
+                  selectOptionText: 'Date',
+                  selectOptionValue: 'Date',
+                  fieldset: fieldset,
+                  help: false,
+                  testProgress: {
+                    section: 'services',
+                    label: 'form.services',
+                    expectIncrease: false
                   }
-                )
+                });
               });
             } else {
               it('can not set attribute datatype with role MdeDataOwner or MdeQualityAssurance', async () => {
-                expect(fetchMock).not.toHaveBeenCalledWith('/help/isoMetadata.services.featureTypes.columns.type');
+                expect(fetchMock).not.toHaveBeenCalledWith(
+                  '/help/isoMetadata.services.featureTypes.columns.type'
+                );
 
-                const fieldset = document.querySelector('.attribute-type-field') as HTMLElement
+                const fieldset = document.querySelector('.attribute-type-field') as HTMLElement;
 
                 waitFor(() => {
                   expect(fieldset).not.toBeInTheDocument();
-                })
+                });
               });
             }
           });
@@ -452,11 +444,13 @@ export async function testServices(role: string) {
         });
 
         it('can set legend url correctly', async () => {
-          const fieldset = document.querySelectorAll('.legend-text-fields .field-wrapper')[0] as HTMLElement;
+          const fieldset = document.querySelectorAll(
+            '.legend-text-fields .field-wrapper'
+          )[0] as HTMLElement;
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-          })
+          });
 
           await testField('isoMetadata.services.legendImage', {
             fieldset: fieldset,
@@ -472,11 +466,13 @@ export async function testServices(role: string) {
         });
 
         it('can set legend format correctly', async () => {
-          const fieldset = document.querySelectorAll('.legend-text-fields .field-wrapper')[1] as HTMLElement;
+          const fieldset = document.querySelectorAll(
+            '.legend-text-fields .field-wrapper'
+          )[1] as HTMLElement;
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-          })
+          });
 
           await testField('isoMetadata.services.legendImage', {
             fieldset: fieldset,
@@ -496,7 +492,7 @@ export async function testServices(role: string) {
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-          })
+          });
 
           await testField('isoMetadata.services.legendImage', {
             fieldset: fieldset.querySelectorAll('.field-wrapper')[0] as HTMLElement,
@@ -516,7 +512,7 @@ export async function testServices(role: string) {
 
           waitFor(() => {
             expect(fieldset).toBeInTheDocument();
-          })
+          });
 
           await testField('isoMetadata.services.legendImage', {
             fieldset: fieldset.querySelectorAll('.field-wrapper')[1] as HTMLElement,
@@ -534,4 +530,4 @@ export async function testServices(role: string) {
     });
     testLayersForm(role);
   });
-};
+}
