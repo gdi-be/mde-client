@@ -1,18 +1,19 @@
 <script lang="ts">
   import { setContext } from 'svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
-  import MetadataDisplay from '$lib/components/ReadOnly/MetadataDisplay.svelte';
   import type { MetadataCollection } from '$lib/models/metadata';
+  import type { FullFieldConfig } from '$lib/components/Form/FieldsConfig';
+  import MetadataDisplay from '$lib/components/ReadOnly/MetadataDisplay.svelte';
 
   const { metadata, fieldConfigs } = $props<{
     metadata: MetadataCollection;
-    fieldConfigs?: any;
+    fieldConfigs?: FullFieldConfig[];
   }>();
 
-  // svelte-ignore state_referenced_locally
   const formState: FormState = $state({
-    // svelte-ignore state_referenced_locally
+    // eslint-disable-next-line
     metadata: metadata,
+    // eslint-disable-next-line
     fieldConfigs: fieldConfigs,
     activeHelpKey: undefined
   });

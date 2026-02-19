@@ -15,7 +15,6 @@
     validationResult?: ValidationResult;
   } & HTMLInputAttributes;
 
-  // eslint-disable-next-line
   let {
     key,
     label,
@@ -24,6 +23,7 @@
     explanation,
     fieldConfig,
     validationResult,
+    // eslint-disable-next-line
     ...restProps
   }: InputProps = $props();
 

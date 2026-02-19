@@ -17,11 +17,11 @@
 
   initializePopconfirmContext();
   initializeStatusesContext();
-  // svelte-ignore state_referenced_locally
+  // eslint-disable-next-line
   initializeFormContext(metadata);
 
   const formState: FormState = $state({
-    // svelte-ignore state_referenced_locally
+    // eslint-disable-next-line
     metadata: metadata,
     activeHelpKey: undefined
   });
@@ -35,6 +35,7 @@
   onMount(() => {
     const originalFetch = window.fetch;
 
+    // eslint-disable-next-line
     window.fetch = async function (input: string | Request | URL, init?: RequestInit) {
       const isPatch = init?.method === 'PATCH';
 

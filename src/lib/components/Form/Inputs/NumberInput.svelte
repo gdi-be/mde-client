@@ -17,7 +17,6 @@
     validationResult?: ValidationResult;
   } & HTMLInputAttributes;
 
-  // eslint-disable-next-line
   let {
     value = $bindable(),
     key,
@@ -28,6 +27,7 @@
     onblur,
     fieldConfig,
     onfocus,
+    // eslint-disable-next-line
     ...restProps
   }: InputProps = $props();
 

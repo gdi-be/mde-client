@@ -17,7 +17,6 @@
     validationResult?: ValidationResult;
   } & HTMLInputAttributes;
 
-  // eslint-disable-next-line
   let {
     maxlength,
     label,
@@ -28,6 +27,7 @@
     onblur,
     onfocus,
     explanation,
+    // eslint-disable-next-line
     ...restProps
   }: InputProps = $props();
 

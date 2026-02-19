@@ -53,7 +53,7 @@ function mockJson(data: unknown) {
   return Promise.resolve(createResponse() as Response);
 }
 
-export const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+export const fetchMock = vi.fn(async (input: string | Request | URL, init?: RequestInit) => {
   const url = input.toString();
 
   // Static Data Endpoints
