@@ -108,7 +108,6 @@ export class MetadataService {
    * @returns The server response
    */
   static async persistValue(key: string, value: unknown) {
-    logger.trace(`Persisting value for key: ${key} with value:`, value);
     return MetadataUpdateService.pushToQueue(key, value);
   }
 

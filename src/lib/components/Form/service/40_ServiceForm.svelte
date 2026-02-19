@@ -83,6 +83,7 @@
           (s: Service) => s.serviceIdentification === service.serviceIdentification
         )?.legendImage;
         if (value) {
+          toast.success(t('serviceform.legend_autoupdate_info'));
           service = setNestedValue(service, 'legendImage', value);
         }
       }
