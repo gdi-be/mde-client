@@ -36,13 +36,17 @@
   }: InputProps = $props();
 
   // Remove duplicates
-  options = Array.from(new Map(options.map((item) => [item.key, item])).values());
+  const cleanOptions = $derived(
+    Array.from(new Map(options.map((item) => [item.key, item])).values())
+  );
 
   const onSelect = (newValue: string) => {
     onChange?.(newValue);
   };
 
-  const selectedDescription = $derived(options.find((item) => item.key === value)?.description);
+  const selectedDescription = $derived(
+    cleanOptions.find((item) => item.key === value)?.description
+  );
 
   let isInvalid = $derived.by(() => {
     if (!fieldConfig) return false;
@@ -57,7 +61,7 @@
 <fieldset class={['select-input', wrapperClass, isInvalid && 'invalid']}>
   <legend>{label}</legend>
   <Select bind:value {disabled} menu$anchorElement={document.body} {...restProps}>
-    {#each options as option}
+    {#each cleanOptions as option}
       <SelectOption
         onSMUIAction={() => {
           if (option.disabled) return;

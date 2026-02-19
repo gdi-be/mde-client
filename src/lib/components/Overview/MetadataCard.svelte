@@ -25,7 +25,10 @@
   const highestRole = $derived(getHighestRole(token));
   const assignedToMe = $derived(metadata.assignedUserId === userId);
   const isTeamMember = $derived(userId && metadata.teamMemberIds?.includes(userId));
-  let previewNotAvailable = $state(!metadata.isoMetadata?.preview);
+  let previewNotAvailable = $state(false);
+  $effect(() => {
+    previewNotAvailable = !metadata.isoMetadata?.preview;
+  });
   const showDeleteAction = $derived(
     highestRole === 'MdeAdministrator' || (assignedToMe && highestRole === 'MdeEditor')
   );

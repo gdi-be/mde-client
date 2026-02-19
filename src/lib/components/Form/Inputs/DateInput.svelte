@@ -2,8 +2,8 @@
   import type { HTMLInputAttributes } from 'svelte/elements';
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
-  import { getAccessToken } from '../../../context/TokenContext.svelte';
-  import { getHighestRole } from '../../../util';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
 
   type InputProps = {
     value?: string;
