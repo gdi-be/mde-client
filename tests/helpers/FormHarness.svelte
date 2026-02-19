@@ -9,9 +9,10 @@
   } from '$lib/context/FormContext.svelte';
   import { initializePopconfirmContext } from '$lib/context/PopConfirmContext.svelte';
   import { initializeStatusesContext } from '$lib/context/StatusesContext.svelte';
+  import type { MetadataCollection } from '$lib/models/metadata';
 
-  const { metadata, fieldConfigs } = $props<{
-    metadata: any;
+  const { metadata } = $props<{
+    metadata: MetadataCollection;
   }>();
 
   initializePopconfirmContext();
@@ -34,7 +35,7 @@
   onMount(() => {
     const originalFetch = window.fetch;
 
-    window.fetch = async function (input: RequestInfo | URL, init?: RequestInit) {
+    window.fetch = async function (input: string | Request | URL, init?: RequestInit) {
       const isPatch = init?.method === 'PATCH';
 
       const response = await (init !== undefined
@@ -47,7 +48,7 @@
         if (typeof clonedResponse.json === 'function') {
           clonedResponse
             .json()
-            .then((updatedMetadata: any) => {
+            .then((updatedMetadata: MetadataCollection) => {
               formState.metadata = updatedMetadata;
             })
             .catch(() => {

@@ -13,6 +13,7 @@
 
   let { data } = $props();
 
+  // svelte-ignore state_referenced_locally
   initializeFormContext(data.metadata);
 
   const metadata = $derived(data.metadata);

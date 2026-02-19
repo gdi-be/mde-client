@@ -193,8 +193,7 @@ function testFieldVisibility(
         props: {
           metadata: {
             ...metadata1,
-            assignedUserId: TEST_USER_ID,
-            responsibleRole: role
+            assignedUserId: TEST_USER_ID
           }
         }
       });
@@ -227,8 +226,7 @@ function testFieldVisibility(
         props: {
           metadata: {
             ...metadata1,
-            assignedUserId: TEST_USER_ID,
-            responsibleRole: role
+            assignedUserId: TEST_USER_ID
           }
         }
       });
