@@ -38,6 +38,7 @@ export default defineConfig(({ mode }) => ({
       exclude: [
         'node_modules/',
         'tests/',
+        'src/lib/i18n/',
         '**/*.spec.ts',
         '**/*.test.ts',
         '**/setup.ts',
