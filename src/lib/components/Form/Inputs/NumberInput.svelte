@@ -17,6 +17,7 @@
     validationResult?: ValidationResult;
   } & HTMLInputAttributes;
 
+  // eslint-disable-next-line
   let {
     value = $bindable(),
     key,

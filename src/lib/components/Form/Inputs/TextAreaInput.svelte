@@ -20,6 +20,7 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
+  // eslint-disable-next-line
   let {
     maxlength,
     fieldConfig,
