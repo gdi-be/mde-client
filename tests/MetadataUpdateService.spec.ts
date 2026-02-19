@@ -1,7 +1,10 @@
 import { describe, expect, test } from 'bun:test';
 import './setup';
 import { contactsRenameAddQueue } from './fixtures/contacts';
-import { serviceFeaturetyeDescriptionAndAttributeAddQueue, servicesRenameAddQueue } from './fixtures/services';
+import {
+  serviceFeaturetyeDescriptionAndAttributeAddQueue,
+  servicesRenameAddQueue
+} from './fixtures/services';
 
 // Import after setup to ensure mocks are loaded first
 const { MetadataUpdateService } = await import('../src/lib/services/MetadataUpdateService');
@@ -228,7 +231,7 @@ describe('MetadataUpdateService.mergeUpdates', () => {
       const { merged: result } = MetadataUpdateService.mergeUpdates(updates);
 
       expect(result).toHaveLength(4);
-      expect(result.map(r => r.key)).toEqual([
+      expect(result.map((r) => r.key)).toEqual([
         'isoMetadata.ttestle',
         'isoMetadata.services[0].ttestle',
         'isoMetadata.pointsOfContact',
@@ -292,10 +295,11 @@ describe('MetadataUpdateService.mergeUpdates', () => {
   });
 
   describe('Real world scenarios', () => {
-
     describe('Contact updates', () => {
       test('merging a name change and an add click', () => {
-        const { merged: result } = MetadataUpdateService.mergeUpdates(contactsRenameAddQueue) as any;
+        const { merged: result } = MetadataUpdateService.mergeUpdates(
+          contactsRenameAddQueue
+        ) as any;
         expect(result).toHaveLength(1);
         expect(result[0].key).toBe('isoMetadata.pointsOfContact');
         expect(result[0].value).toHaveLength(2);
@@ -307,7 +311,9 @@ describe('MetadataUpdateService.mergeUpdates', () => {
 
     describe('Service updates', () => {
       test('merging a short description change and an add click', () => {
-        const { merged: result } = MetadataUpdateService.mergeUpdates(servicesRenameAddQueue) as any;
+        const { merged: result } = MetadataUpdateService.mergeUpdates(
+          servicesRenameAddQueue
+        ) as any;
         expect(result).toHaveLength(1);
         expect(result[0].key).toBe('isoMetadata.services');
         expect(result[0].value).toHaveLength(3);
@@ -318,7 +324,9 @@ describe('MetadataUpdateService.mergeUpdates', () => {
       });
 
       test('Featuretype description update and attribute add', () => {
-        const { merged: result } = MetadataUpdateService.mergeUpdates(serviceFeaturetyeDescriptionAndAttributeAddQueue) as any;
+        const { merged: result } = MetadataUpdateService.mergeUpdates(
+          serviceFeaturetyeDescriptionAndAttributeAddQueue
+        ) as any;
         expect(result).toHaveLength(1);
         expect(result[0].key).toBe('isoMetadata.services');
 
@@ -335,9 +343,9 @@ describe('MetadataUpdateService.mergeUpdates', () => {
         const service3ft2 = service3featuretypes[1];
         expect(service3ft1.id).toBe('b081dea4-1fb7-4b0b-9ed2-8c48d8713ab1');
         expect(service3ft2.id).toBe('e1d0dac0-a5a8-4ce3-aaeb-7f520ffb97cf');
-        expect(service3ft2.shortDescription).toBe('FT 2 Beschreibung dies ist meine neue Beschreibung');
-
-        console.log('service3ft2.columns:', service3ft2.columns);
+        expect(service3ft2.shortDescription).toBe(
+          'FT 2 Beschreibung dies ist meine neue Beschreibung'
+        );
 
         const service3ft2columns = service3ft2.columns;
         expect(service3ft2columns).toHaveLength(3);
@@ -345,8 +353,6 @@ describe('MetadataUpdateService.mergeUpdates', () => {
         expect(service3ft2columns[1].id).toBe('679df2ad-665d-43f2-94fe-3563cf9c3540');
         expect(service3ft2columns[2].id).toBe('e0a2158a-5b29-4512-801a-34b9f707fbbe');
       });
-
     });
   });
-
 });

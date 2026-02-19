@@ -29,7 +29,6 @@ export class MetadataUpdateService {
   static pendingUpdates: PendingUpdate[] = [];
 
   static async pushToQueue(key: string, value: unknown): Promise<Response> {
-    console.log(`Queueing update - Key: ${key}, Value:`, JSON.parse(JSON.stringify(value)));
     return new Promise((resolve) => {
       MetadataUpdateService.pendingUpdates.push({
         update: { key, value },
@@ -65,7 +64,7 @@ export class MetadataUpdateService {
     MetadataUpdateService.executionTimeout = null;
 
     // Extract just the updates for merging
-    const updates = pendingUpdates.map(p => p.update);
+    const updates = pendingUpdates.map((p) => p.update);
 
     // Merge updates and get mapping from original to merged
     const { merged, mapping } = MetadataUpdateService.mergeUpdates(updates);
@@ -132,7 +131,7 @@ export class MetadataUpdateService {
         updateMap.set(key, update);
       } else {
         // Multiple updates for same key - merge intelligently
-        const keyUpdates = originalIndices.map(i => updates[i]);
+        const keyUpdates = originalIndices.map((i) => updates[i]);
         const merged = MetadataUpdateService.mergeArrayUpdates(keyUpdates);
         updateMap.set(key, merged);
       }
@@ -270,13 +269,11 @@ export class MetadataUpdateService {
     const key = updates[0].key;
 
     // Check if all values are arrays with objects that have 'id' property
-    const allArraysWithIds = updates.every(u =>
-      Array.isArray(u.value) &&
-      (u.value.length === 0 || (
-        typeof u.value[0] === 'object' &&
-        u.value[0] !== null &&
-        'id' in u.value[0]
-      ))
+    const allArraysWithIds = updates.every(
+      (u) =>
+        Array.isArray(u.value) &&
+        (u.value.length === 0 ||
+          (typeof u.value[0] === 'object' && u.value[0] !== null && 'id' in u.value[0]))
     );
 
     // If not all are arrays with IDs, just take the last one
@@ -368,6 +365,5 @@ export class MetadataUpdateService {
     }
 
     return response;
-  };
-
+  }
 }
