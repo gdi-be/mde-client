@@ -16,7 +16,8 @@
 
   initializePopconfirmContext();
   initializeStatusesContext();
-  initializeFormContext(metadata);
+  // svelte-ignore state_referenced_locally
+    initializeFormContext(metadata);
 
   const formState: FormState = $state({
     // svelte-ignore state_referenced_locally
