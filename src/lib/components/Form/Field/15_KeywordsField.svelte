@@ -259,6 +259,7 @@
 
     :global(.keyword-search-input) {
       width: 100%;
+      background-color: white;
     }
 
     :global(.mdc-text-field) {
