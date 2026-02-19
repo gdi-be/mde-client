@@ -235,15 +235,6 @@ export const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestIn
 
 global.fetch = fetchMock as any;
 
-// Mock External Libraries
-
-vi.mock('svelte-french-toast', () => ({
-  toast: {
-    error: vi.fn(),
-    success: vi.fn()
-  }
-}));
-
 // Mock FormContext
 
 vi.mock('$lib/context/FormContext.svelte', async () => {
