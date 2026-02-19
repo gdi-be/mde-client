@@ -111,6 +111,74 @@ const metadataWithServices = {
   }
 };
 
+const metadataWithWFSService = {
+  ...metadata1,
+  isoMetadata: {
+    ...metadata1.isoMetadata,
+    services: [
+      {
+        serviceType: 'WFS',
+        title: 'WFS Service',
+        shortDescription: 'WFS Beschreibung',
+        workspace: 'ws',
+        serviceIdentification: 'wfs-id',
+        fileIdentifier: 'fid-2',
+        featureTypes: [
+          {
+            name: 'my_feature',
+            title: 'Feature Type',
+            shortDescription: 'FT Beschreibung',
+            columns: [
+              { name: 'fid', alias: 'Feature ID', type: 'integer' },
+              { name: 'geom', alias: 'Geometrie', type: 'geometry' }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+};
+
+const metadataWithWMSService = {
+  ...metadata1,
+  isoMetadata: {
+    ...metadata1.isoMetadata,
+    services: [
+      {
+        serviceType: 'WMS',
+        title: 'WMS Service',
+        shortDescription: 'WMS Beschreibung',
+        workspace: 'ws',
+        serviceIdentification: 'wms-id',
+        fileIdentifier: 'fid-1',
+        legendImage: {
+          url: 'https://example.com/legend.png',
+          format: 'image/png',
+          width: 200,
+          height: 100
+        },
+        featureTypes: []
+      }
+    ]
+  },
+  clientMetadata: {
+    ...metadata1.clientMetadata,
+    layers: {
+      'wms-id': [
+        {
+          title: 'Layer1',
+          name: 'layer_one',
+          styleTitle: 'Default',
+          styleName: 'default',
+          shortDescription: 'Layer Beschreibung',
+          datasource: 'ds',
+          secondaryDatasource: null
+        }
+      ]
+    }
+  }
+};
+
 function testFieldVisibility(
   role: string,
   fieldLabel: string,
@@ -468,11 +536,26 @@ describe('MetadataDisplay - Integration test', () => {
       });
     });
 
+    it('does not show legend image fields for WFS service', async () => {
+      render(ReadonlyHarness, { props: { metadata: metadataWithWFSService } });
+      await waitFor(() => {
+        expect(screen.queryByText('47_ServiceLegendImage.label')).not.toBeInTheDocument();
+      });
+    });
+
     it('shows feature types for WFS service', async () => {
       render(ReadonlyHarness, { props: { metadata: metadataWithServices } });
       await waitFor(() => {
         expect(screen.getByText('my_feature')).toBeInTheDocument();
         expect(screen.getByText('Feature Type')).toBeInTheDocument();
+      });
+    });
+
+    it('does not show feature types for WMS service', async () => {
+      render(ReadonlyHarness, { props: { metadata: metadataWithWMSService } });
+      await waitFor(() => {
+        expect(screen.queryByText('56_FeatureTypeForm.label')).not.toBeInTheDocument();
+        expect(screen.queryByText('Feature Type')).not.toBeInTheDocument();
       });
     });
 
@@ -491,6 +574,13 @@ describe('MetadataDisplay - Integration test', () => {
         expect(screen.getByText('Layer1')).toBeInTheDocument();
         expect(screen.getByText('layer_one')).toBeInTheDocument();
         expect(screen.getByText('Default')).toBeInTheDocument();
+      });
+    });
+
+    it('does not show layers for WFS service', async () => {
+      render(ReadonlyHarness, { props: { metadata: metadataWithWFSService } });
+      await waitFor(() => {
+        expect(screen.queryByText('48_LayersForm.label')).not.toBeInTheDocument();
       });
     });
 
