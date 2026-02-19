@@ -193,7 +193,7 @@
     <h4>{t('assignment.assignEditor')}</h4>
     <div class="actions">
       {#if users?.length > 0 && highestRole !== 'MdeDataOwner'}
-        {#each users as user}
+        {#each users as user (user.keycloakId)}
           <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
             <Label>{t('assignment.handoverTo', { name: user.displayName })}</Label>
           </Button>
@@ -229,7 +229,7 @@
     <h4>{t('assignment.assignQuality')}</h4>
     <div class="actions">
       {#if users?.length > 0}
-        {#each users as user}
+        {#each users as user (user.keycloakId)}
           <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
             <Label>{t('assignment.handoverTo', { name: user.displayName })}</Label>
           </Button>

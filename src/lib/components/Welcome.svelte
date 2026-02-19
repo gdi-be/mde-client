@@ -2,6 +2,7 @@
   import Button, { Label } from '@smui/button';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { page } from '$app/state';
+  import { resolve } from '$app/paths';
 
   const t = $derived(page.data.t);
 
@@ -12,14 +13,14 @@
   {#if !token}
     <h2>{t('welcome.welcomeTitle')}</h2>
     <p>{t('welcome.loginText')}</p>
-    <Button variant="outlined" href="/login" type="button">
+    <Button variant="outlined" href={resolve('/login')} type="button">
       <Label>{t('welcome.loginButtonText')}</Label>
     </Button>
   {:else}
     <h1>{`Hallo ${token?.given_name || token?.preferred_username}`}</h1>
     <p>{t('welcome.welcomeText')}</p>
     <p>
-      <a href="/metadata">{t('welcome.overviewLinkText')}</a>
+      <a href={resolve('/metadata')}>{t('welcome.overviewLinkText')}</a>
     </p>
   {/if}
 </div>

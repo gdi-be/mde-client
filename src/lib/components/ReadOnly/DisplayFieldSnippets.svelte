@@ -209,7 +209,7 @@
     {DEFAULT_NULL_STRING}
   {:else}
     <div class="list">
-      {#each value as contact}
+      {#each value as contact (contact.id)}
         <div class="list-item">
           <div class="list-item-field">
             <strong>Name</strong>
@@ -388,7 +388,7 @@
     {DEFAULT_NULL_STRING}
   {:else}
     <div class="list">
-      {#each value as lineage}
+      {#each value as lineage (lineage.id)}
         <div class="list-item">
           <div class="list-item-field">
             <!-- Lineage-Title -->
@@ -416,7 +416,7 @@
     {DEFAULT_NULL_STRING}
   {:else}
     <div class="list">
-      {#each value as contentDescription}
+      {#each value as contentDescription (contentDescription.id)}
         <div class="list-item">
           <div class="list-item-field">
             <strong>{t('displayfieldsnippets.contentDescriptionDescription')}</strong>
@@ -454,7 +454,7 @@
   {:else}
     <strong>Anzahl: {services.length}</strong>
     <div class="list">
-      {#each services as service}
+      {#each services as service (service.id)}
         {@const layers = getLayers(service, metadata)}
         <div class="list-item">
           <div class="list-item-field">
@@ -555,7 +555,7 @@
             <div class="list-item-field">
               <strong>{t('56_FeatureTypeForm.label')} ({service.featureTypes?.length})</strong>
               <div class="list">
-                {#each service?.featureTypes || [] as featureType}
+                {#each service?.featureTypes || [] as featureType (featureType.id)}
                   <div class="list-item">
                     <div class="list-item-field">
                       <!-- FeatureType-Name -->
@@ -576,7 +576,7 @@
                       <div class="list-item-field">
                         <strong>{t('63_ColumnsForm.label')}</strong>
                         <div class="list">
-                          {#each featureType?.columns || [] as columnInfo}
+                          {#each featureType?.columns || [] as columnInfo (columnInfo.id)}
                             <div class="list-item">
                               <div class="list-item-field">
                                 <!-- Attribute-Name -->
@@ -608,7 +608,7 @@
             <div class="list-item-field">
               <strong>{t('48_LayersForm.label')} ({layers?.length})</strong>
               <div class="list">
-                {#each layers || [] as layer}
+                {#each layers || [] as layer (layer.id)}
                   <div class="list-item">
                     <div class="list-item-field">
                       <!-- Layer-Title -->

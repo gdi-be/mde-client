@@ -30,7 +30,7 @@
     <li>
       <a href="/">🏠</a>
     </li>
-    {#each breadcrumbs as { name, url }}
+    {#each breadcrumbs as { name, url } (url)}
       <li>
         {#if url === page.url.pathname}
           <i>/</i>{getUrlPartName(name as keyof TranslatedParts)}

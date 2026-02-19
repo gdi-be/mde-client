@@ -11,11 +11,7 @@
 
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
-  let value = $state('');
-  $effect(() => {
-    value = valueFromData || '';
-  });
-
+  let value = $derived(valueFromData || '');
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(2);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;

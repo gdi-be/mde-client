@@ -10,6 +10,7 @@
   import MetadataSearchField from '$lib/components/MetadataSearchField.svelte';
   import CharacterCounter from '@smui/textfield/character-counter';
   import toast from 'svelte-french-toast';
+  import { resolve } from '$app/paths';
 
   const t = $derived(page.data.t);
   let title = $state<string>('');
@@ -37,7 +38,7 @@
       const { metadataId } = await response.json();
 
       if (metadataId) {
-        goto(`/metadata/${metadataId}`);
+        goto(resolve(`/metadata/${metadataId}`));
       } else {
         logger.error('No metadataId in response');
       }
