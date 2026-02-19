@@ -216,7 +216,7 @@ describe('Metadata Workflow - Integration test', () => {
         props: {
           metadata: {
             ...metadata1,
-            assignedUserId: null,
+            assignedUserId: '',
             responsibleRole: 'MdeDataOwner'
           }
         }
