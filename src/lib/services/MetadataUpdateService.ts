@@ -187,7 +187,7 @@ export class MetadataUpdateService {
   /**
    * Deep merges two values, with special handling for arrays with ID properties
    */
-  static deepMergeValues(earlierValue: any, laterValue: any): any {
+  static deepMergeValues(earlierValue: unknown, laterValue: unknown): unknown {
     // If either is not defined, return the other
     if (earlierValue === undefined) return laterValue;
     if (laterValue === undefined) return earlierValue;
@@ -206,7 +206,7 @@ export class MetadataUpdateService {
       'id' in laterValue[0]
     ) {
       // Build map from later array (base structure)
-      const itemMap = new Map<string, any>();
+      const itemMap = new Map<string, Record<string, unknown>>();
       for (const item of laterValue) {
         itemMap.set(item.id, { ...item });
       }
@@ -216,8 +216,14 @@ export class MetadataUpdateService {
         const id = earlierItem.id;
         if (itemMap.has(id)) {
           // Recursively merge the matching item
-          const laterItem = itemMap.get(id);
-          itemMap.set(id, MetadataUpdateService.deepMergeObjects(earlierItem, laterItem));
+          const laterItem = itemMap.get(id)!;
+          itemMap.set(
+            id,
+            MetadataUpdateService.deepMergeObjects(
+              earlierItem as Record<string, unknown>,
+              laterItem
+            )
+          );
         }
         // If ID doesn't exist in later array, it was deleted - don't add it back
       }
@@ -232,7 +238,10 @@ export class MetadataUpdateService {
   /**
    * Deep merges two objects, recursively handling nested arrays with IDs
    */
-  static deepMergeObjects(earlierObj: any, laterObj: any): any {
+  static deepMergeObjects(
+    earlierObj: Record<string, unknown>,
+    laterObj: Record<string, unknown>
+  ): Record<string, unknown> {
     const result = { ...laterObj }; // Start with later object (base structure)
 
     // Overlay properties from earlier object
@@ -248,7 +257,10 @@ export class MetadataUpdateService {
         !Array.isArray(earlierValue) &&
         !Array.isArray(laterValue)
       ) {
-        result[prop] = MetadataUpdateService.deepMergeObjects(earlierValue, laterValue);
+        result[prop] = MetadataUpdateService.deepMergeObjects(
+          earlierValue as Record<string, unknown>,
+          laterValue as Record<string, unknown>
+        );
       } else {
         // Use deep merge for arrays or direct value for primitives
         result[prop] = MetadataUpdateService.deepMergeValues(earlierValue, laterValue);
@@ -282,12 +294,14 @@ export class MetadataUpdateService {
     }
 
     // Merge arrays by ID recursively
-    let mergedArray = updates[updates.length - 1].value as Array<any>;
+    let mergedArray = updates[updates.length - 1].value as Array<Record<string, unknown>>;
 
     // Go through earlier updates in reverse order and merge
     for (let i = updates.length - 2; i >= 0; i--) {
-      const earlierArray = updates[i].value as Array<any>;
-      mergedArray = MetadataUpdateService.deepMergeValues(earlierArray, mergedArray);
+      const earlierArray = updates[i].value as Array<Record<string, unknown>>;
+      mergedArray = MetadataUpdateService.deepMergeValues(earlierArray, mergedArray) as Array<
+        Record<string, unknown>
+      >;
     }
 
     return {
