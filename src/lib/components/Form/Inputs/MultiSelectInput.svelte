@@ -77,15 +77,6 @@
     onChange?.(newValue);
   };
 
-  const onRemove = (eventOrObj: CustomEvent<{ chipId: Option }> | { chipId: Option }) => {
-    if ('detail' in eventOrObj) {
-      eventOrObj.preventDefault?.();
-      removeChip(eventOrObj.detail.chipId);
-    } else {
-      removeChip(eventOrObj.chipId);
-    }
-  };
-
   const getLabel = (option: Option) => {
     if (!option) return '';
     return option.label || option.key;
@@ -105,7 +96,7 @@
   <legend>{label}</legend>
   <ChipSet {chips} nonInteractive key={(chip) => `${chip.key}`}>
     {#snippet chip(chip)}
-      <Chip {chip} onSMUIChipRemoval={onRemove}>
+      <Chip {chip}>
         <Text>{chip.label}</Text>
         {#if !disabled}
           <TrailingIcon
