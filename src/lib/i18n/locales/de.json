@@ -62,7 +62,7 @@
     "dialog_label": "Schlagwörter",
     "dialog_title": "Neue Schlagwörter",
     "no_matches": "Eigene Schlagwörter hinzufügen",
-    "remove": "Schlagwort {chip} entfernen",
+    "remove": "Schlagwort {keyword} entfernen",
     "label": "Schlagwörter",
     "explanation": "Mit welchen Begriffen soll ihr Datenbestand gefunden werden? Geben sie prägnante Schlagwörter an, die ihren Datenbestand charakterisieren."
   },
@@ -509,7 +509,8 @@
     "newEntry": "Neuerfassung"
   },
   "multiselectinput": {
-    "noOptions": "Keine weiteren Optionen verfügbar"
+    "noOptions": "Keine weiteren Optionen verfügbar",
+    "remove": "Schlagwort {keyword} entfernen"
   },
   "pagination": {
     "pageLabel": "Seite",

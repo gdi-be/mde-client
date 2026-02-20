@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Chip, { Set as ChipSet, Text, TrailingAction } from '@smui/chips';
+  import Chip, { Set as ChipSet, Text, TrailingIcon } from '@smui/chips';
   import Autocomplete from '@smui-extra/autocomplete';
   import type { Option } from '$lib/models/form';
   import { page } from '$app/state';
@@ -71,10 +71,8 @@
     onChange?.(uniqueValues);
   };
 
-  const onRemove = (event: CustomEvent<{ chipId: Option }>) => {
-    event.preventDefault();
-    const removedChip = event.detail;
-    const removedKey = removedChip.chipId.key;
+  const removeChip = (chip: Option) => {
+    const removedKey = chip.key;
     const newValue = value.filter((val) => val !== removedKey);
     onChange?.(newValue);
   };
@@ -98,10 +96,16 @@
   <legend>{label}</legend>
   <ChipSet {chips} nonInteractive key={(chip) => `${chip.key}`}>
     {#snippet chip(chip)}
-      <Chip {chip} onSMUIChipRemoval={onRemove}>
+      <Chip {chip}>
         <Text>{chip.label}</Text>
         {#if !disabled}
-          <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+          <TrailingIcon
+            title={t('multiselectinput.remove', { keyword: chip.label })}
+            class="material-icons remove-icon"
+            onclick={() => removeChip(chip)}
+          >
+            close
+          </TrailingIcon>
         {/if}
       </Chip>
     {/snippet}
@@ -128,6 +132,9 @@
 <style lang="scss">
   :global(.multi-select-input) {
     padding-top: 1.2em;
+    :global(.remove-icon) {
+      cursor: pointer;
+    }
     border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
