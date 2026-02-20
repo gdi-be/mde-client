@@ -19,14 +19,14 @@ jobs:
       - name: Create .env file
         run: cp .env.example .env
 
+      - name: Run tests
+        run: bun run test
+
       - name: Run typecheck
         run: bun run check
 
       - name: Run lint
         run: bun run lint
-
-      - name: Run tests
-        run: bun run test
 
       - name: Build artifacts
         run: bun run build
