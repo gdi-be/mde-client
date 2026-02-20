@@ -234,12 +234,35 @@ export class MetadataUpdateService {
   }
 
   /**
-   * Deep merges two values, with special handling for arrays with ID properties
+   * Deep merges two values, with special handling for arrays with ID properties.
+   * For arrays of objects with 'id' properties, the merge is done by combining
+   * items based on their IDs. For other types of values, the earlier value takes precedence.
+   * This method also includes protection against circular references by using a WeakSet to
+   * track visited objects.
+   *
+   * @param earlierValue The earlier value to merge
+   * @param laterValue The later value to merge
+   * @param visited WeakSet to track visited objects and prevent circular references
+   * @returns The merged value
    */
-  static deepMergeValues(earlierValue: unknown, laterValue: unknown): unknown {
+  static deepMergeValues(
+    earlierValue: unknown,
+    laterValue: unknown,
+    visited: WeakSet<object> = new WeakSet()
+  ): unknown {
     // If either is not defined, return the other
     if (earlierValue === undefined) return laterValue;
     if (laterValue === undefined) return earlierValue;
+
+    // Protection against circular references
+    if (typeof earlierValue === 'object' && earlierValue !== null) {
+      if (visited.has(earlierValue)) return laterValue;
+      visited.add(earlierValue);
+    }
+    if (typeof laterValue === 'object' && laterValue !== null) {
+      if (visited.has(laterValue)) return earlierValue;
+      visited.add(laterValue);
+    }
 
     // If both are arrays with objects that have 'id' property, merge by ID
     if (
@@ -270,7 +293,8 @@ export class MetadataUpdateService {
             id,
             MetadataUpdateService.deepMergeObjects(
               earlierItem as Record<string, unknown>,
-              laterItem
+              laterItem,
+              visited
             )
           );
         }
@@ -289,14 +313,18 @@ export class MetadataUpdateService {
    * The later object serves as the base structure, and properties from the earlier object
    * are overlaid on top. For arrays with objects that have 'id' properties, the merge is done
    * intelligently by combining items based on their IDs instead of just taking the last value.
+   * This method also includes protection against circular references by using a WeakSet to track
+   * visited objects.
    *
    * @param earlierObj The earlier object to merge
    * @param laterObj The later object to merge
+   * @param visited WeakSet to track visited objects and prevent circular references
    * @returns The merged object
    */
   static deepMergeObjects(
     earlierObj: Record<string, unknown>,
-    laterObj: Record<string, unknown>
+    laterObj: Record<string, unknown>,
+    visited: WeakSet<object> = new WeakSet()
   ): Record<string, unknown> {
     const result = { ...laterObj }; // Start with later object (base structure)
 
@@ -315,11 +343,12 @@ export class MetadataUpdateService {
       ) {
         result[prop] = MetadataUpdateService.deepMergeObjects(
           earlierValue as Record<string, unknown>,
-          laterValue as Record<string, unknown>
+          laterValue as Record<string, unknown>,
+          visited
         );
       } else {
         // Use deep merge for arrays or direct value for primitives
-        result[prop] = MetadataUpdateService.deepMergeValues(earlierValue, laterValue);
+        result[prop] = MetadataUpdateService.deepMergeValues(earlierValue, laterValue, visited);
       }
     }
 
