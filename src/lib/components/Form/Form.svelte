@@ -301,16 +301,40 @@
         margin: 10px;
       }
 
-      :global(.mdc-linear-progress:hover) {
-        scale: 1 2;
+      :global(.mdc-linear-progress) {
+        overflow: hidden;
+        border-radius: 2px;
+        transform: translateZ(0) scaleY(1);
+        transform-origin: center;
+        transition:
+          transform 180ms ease,
+          border-radius 180ms ease;
+      }
+
+      &:hover :global(.mdc-linear-progress) {
+        transform: translateZ(0) scaleY(2);
+      }
+
+      :global(.mdc-linear-progress__buffer) {
+        z-index: 1;
+      }
+
+      :global(.mdc-linear-progress__bar) {
+        z-index: 2;
       }
 
       :global(.mdc-linear-progress__bar-inner) {
-        border-color: var(--ready-for-release-color, var(--mdc-theme-secondary));
+        border-top-width: 0;
+        height: 100%;
+        background-color: var(--ready-for-release-color, var(--mdc-theme-secondary));
       }
 
       :global(.mdc-linear-progress__buffer-bar) {
         background-color: var(--mdc-theme-error);
+      }
+
+      :global(.mdc-linear-progress__buffer-dots) {
+        display: none;
       }
 
       &:hover {
