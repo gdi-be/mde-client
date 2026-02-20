@@ -17,7 +17,7 @@ type PendingUpdate = {
 
 export class MetadataUpdateService {
   /** Delay in milliseconds for batching updates before processing */
-  static TIMEOUT_DELAY = 10;
+  static TIMEOUT_DELAY = 50;
 
   /** Timer reference for the current batching timeout */
   static executionTimeout: ReturnType<typeof setTimeout> | null = null;

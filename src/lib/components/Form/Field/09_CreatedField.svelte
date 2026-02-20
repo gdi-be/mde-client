@@ -40,7 +40,7 @@
     label={t('09_CreatedField.label')}
     explanation={t('09_CreatedField.explanation')}
     {fieldConfig}
-    onchange={onBlur}
+    onblur={onBlur}
     {validationResult}
   />
   <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
