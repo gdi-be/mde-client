@@ -28,6 +28,20 @@ export class MetadataUpdateService {
   /** Pending updates with their resolvers */
   static pendingUpdates: PendingUpdate[] = [];
 
+  /**
+   * Push an update to the queue for processing. If updates are already being
+   * processed, the new update will be added to the queue and processed in the
+   * next batch after the current one finishes. If there is already a timeout
+   * scheduled to process the queue, it will be reset to ensure the new update
+   * is included in the batch.
+   *
+   * @param key The metadata key to update (e.g., 'isoMetadata.services')
+   * @param value The new value for the metadata key
+   * @returns A promise that resolves with the server response for this update.
+   * If the update was merged with other updates, the promise resolves with the
+   * response of the merged update. If the update was overridden by a parent update,
+   * the promise resolves with a synthetic 204 No Content response indicating it was merged.
+   */
   static async pushToQueue(key: string, value: unknown): Promise<Response> {
     return new Promise((resolve) => {
       MetadataUpdateService.pendingUpdates.push({
@@ -46,12 +60,32 @@ export class MetadataUpdateService {
       }
 
       // Start processing after timeout
-      MetadataUpdateService.executionTimeout = setTimeout(() => {
-        MetadataUpdateService.processQueue();
-      }, MetadataUpdateService.TIMEOUT_DELAY);
+      MetadataUpdateService.processQueueWithDelay();
     });
   }
 
+  /**
+   * Process the queue of pending updates after the configured delay. This allows
+   * batching multiple updates together.
+   */
+  static async processQueueWithDelay() {
+    MetadataUpdateService.executionTimeout = setTimeout(() => {
+      MetadataUpdateService.processQueue();
+    }, MetadataUpdateService.TIMEOUT_DELAY);
+  }
+
+  /**
+   * Process the queue of pending updates immediately. This method is called
+   * after the timeout expires to send the batch of updates to the server. It merges
+   * updates for the same keys, handles parent-child relationships between keys to avoid
+   * sending redundant updates, and maps server responses back to the original updates.
+   *
+   * If there are already updates being processed or there are no pending updates,
+   * this method will return early and the new updates will be handled in the next batch
+   * after the current one finishes.
+   *
+   * @returns
+   */
   static async processQueue() {
     if (MetadataUpdateService.isProcessing || MetadataUpdateService.pendingUpdates.length === 0) {
       return;
@@ -59,9 +93,11 @@ export class MetadataUpdateService {
 
     MetadataUpdateService.isProcessing = true;
 
+    // Clear the timeout reference since we're now processing the queue
+    MetadataUpdateService.executionTimeout = null;
+
     const pendingUpdates = [...MetadataUpdateService.pendingUpdates];
     MetadataUpdateService.pendingUpdates = [];
-    MetadataUpdateService.executionTimeout = null;
 
     // Extract just the updates for merging
     const updates = pendingUpdates.map((p) => p.update);
@@ -97,12 +133,25 @@ export class MetadataUpdateService {
 
     // If new updates came in during processing, process them
     if (MetadataUpdateService.pendingUpdates.length > 0) {
-      MetadataUpdateService.executionTimeout = setTimeout(() => {
-        MetadataUpdateService.processQueue();
-      }, MetadataUpdateService.TIMEOUT_DELAY);
+      MetadataUpdateService.processQueueWithDelay();
     }
   }
 
+  /**
+   * This method takes a list of updates and merges them according to the following rules:
+   * 1. If there are multiple updates for the same key, they are merged into a single update.
+   *    For array values with objects that have 'id' properties, the merge "intelligently" combines
+   *    items by ID instead of just taking the last value.
+   * 2. If there are updates for parent and child keys (e.g., 'isoMetadata.services'),
+   *    the child update is considered overridden by the parent update and is not included in
+   *    the final merged list. Instead, any original updates that mapped to the child key will
+   *    be remapped to the parent key's position in the final result.
+   *
+   * @param updates The list of updates to merge
+   * @returns An object containing the merged list of updates and a mapping from original
+   * update index to merged update index. The mapping allows us to resolve which server response
+   * corresponds to each original update after merging.
+   */
   static mergeUpdates(updates: UpdateQueue): { merged: UpdateQueue; mapping: Map<number, number> } {
     if (updates.length === 0) {
       return { merged: [], mapping: new Map() };
@@ -236,7 +285,14 @@ export class MetadataUpdateService {
   }
 
   /**
-   * Deep merges two objects, recursively handling nested arrays with IDs
+   * Deep merges two objects, recursively handling nested arrays with IDs.
+   * The later object serves as the base structure, and properties from the earlier object
+   * are overlaid on top. For arrays with objects that have 'id' properties, the merge is done
+   * intelligently by combining items based on their IDs instead of just taking the last value.
+   *
+   * @param earlierObj The earlier object to merge
+   * @param laterObj The later object to merge
+   * @returns The merged object
    */
   static deepMergeObjects(
     earlierObj: Record<string, unknown>,
@@ -271,7 +327,19 @@ export class MetadataUpdateService {
   }
 
   /**
-   * Merges multiple updates for the same array key by intelligently combining array items by ID
+   * Merges multiple updates for the same array key by intelligently combining array items by ID.
+   * If the values are not arrays with objects that have 'id' properties, it simply
+   * takes the last update. This method is used to merge multiple updates to the same array key
+   * into a single update that can be sent to the server, while preserving the intent of all
+   * updates as much as possible.
+   *
+   * For example, if there are multiple updates to 'isoMetadata.services' that add, modify, or delete
+   * services by ID, this method will combine those updates into a single array that reflects all
+   * the changes. If there are updates that change the same service by ID, the earlier update takes
+   * precedence for that service, but other services from later updates will still be included.
+   *
+   * @param updates The list of updates for the same key to merge
+   * @returns A single merged update that combines the intent of all provided updates
    */
   static mergeArrayUpdates(updates: Update[]): Update {
     if (updates.length === 1) {
@@ -311,11 +379,16 @@ export class MetadataUpdateService {
   }
 
   /**
-   * Checks if parentPath is a parent/ancestor of childPath
+   * Checks if parentPath is a parent/ancestor of childPath.
+   *
    * @example
    * isParentPath('isoMetadata.services', 'isoMetadata.services[0].title') => true
    * isParentPath('isoMetadata.services[0]', 'isoMetadata.services[0].title') => true
    * isParentPath('isoMetadata.services[0]', 'isoMetadata.services[1].title') => false
+   *
+   * @param parentPath The potential parent path (e.g., 'isoMetadata.services')
+   * @param childPath The potential child path (e.g., 'isoMetadata.services[0].title')
+   * @returns True if parentPath is a parent of childPath, false otherwise
    */
   static isParentPath(parentPath: string, childPath: string): boolean {
     // If paths are equal, parent is not ancestor
@@ -343,8 +416,17 @@ export class MetadataUpdateService {
     return false;
   }
 
-  // TODO: get rid of svelte specific code here and move it to a separate adapter layer
+  /**
+   * Executes an update by sending a PATCH request to the server with the provided key and value.
+   * Handles different response statuses and displays appropriate messages or redirects.
+   *
+   * @param key The key of the metadata to update
+   * @param value The new value for the metadata
+   * @returns A promise that resolves to the server response
+   */
   static async executeUpdate(key: string, value: unknown): Promise<Response> {
+    //TODO: get rid of svelte specific code (invalidateAll, goto, toast, page)
+    // here and move it to a separate adapter layer
     const response = await fetch(page.url, {
       method: 'PATCH',
       headers: {
