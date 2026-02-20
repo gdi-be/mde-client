@@ -38,6 +38,7 @@
 
   const t = $derived(page.data.t);
   const metadata = $derived(getFormContext()?.formState.metadata);
+  const clonedFromId = $derived(metadata?.clonedFromId);
 
   const popconfirm = $derived(getPopconfirm());
 
@@ -47,8 +48,8 @@
     return true;
   };
 
-  const getValueFromOriginal = async () => {
-    const response = await fetch(`/metadata/${metadata?.clonedFromId}`, {
+  const getValueFromOriginal = async (sourceId: string, fieldKey: FieldKey) => {
+    const response = await fetch(`/metadata/${sourceId}`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -56,12 +57,16 @@
 
     if (!response.ok) {
       toast.error(t('fieldtools.fetchOriginalError'));
-      return null;
+      throw new Error('Failed to fetch original metadata');
     }
 
     const originalMetadata = await response.json();
-    return MetadataService.getValue(key, originalMetadata);
+    return MetadataService.getValue(fieldKey, originalMetadata);
   };
+
+  const valueFromOriginalPromise = $derived.by(() =>
+    clonedFromId && !noCloneButton ? getValueFromOriginal(clonedFromId, key) : undefined
+  );
 
   const copyFromOriginal = async (k: string, valueFromOriginal: unknown, evt: MouseEvent) => {
     if (valueFromOriginal) {
@@ -96,11 +101,9 @@
   {#if !noCopyButton}
     <CopyButton {value} {key} {fieldConfig} />
   {/if}
-  {#if metadata?.clonedFromId && !noCloneButton}
-    {#await getValueFromOriginal()}
-      <IconButton type="button" size="button" disabled>
-        <Icon class="material-icons">settings_backup_restore</Icon>
-      </IconButton>
+  {#if valueFromOriginalPromise}
+    {#await valueFromOriginalPromise}
+      <div class="clone-loading-slot"></div>
     {:then valueFromOriginal}
       {#if valueFromOriginal}
         <IconButton
@@ -151,6 +154,11 @@
 
     :global(.checkmark) {
       margin: 10px 0;
+    }
+
+    .clone-loading-slot {
+      min-height: 40px;
+      width: 100%;
     }
   }
 </style>
