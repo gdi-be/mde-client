@@ -23,7 +23,6 @@
   const { getValue } = getFormContext();
   let contacts = $state<Contact[]>([]);
   const valueFromData = $derived(getValue<Contacts>(KEY));
-  let isEditing = $state<boolean>(false);
 
   // important that this is not a state
   let previousValueAsString: string;
@@ -84,15 +83,6 @@
     persistContacts();
   };
 
-  const onBlur = async (evt?: FocusEvent) => {
-    await persistContacts(evt);
-    isEditing = false;
-  };
-
-  const onFocus = () => {
-    isEditing = true;
-  };
-
   const persistContacts = async (evt?: FocusEvent) => {
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
@@ -106,7 +96,6 @@
     setTimeout(() => {
       const elementToFocus = document.getElementById(focusedElement.id);
       elementToFocus?.focus();
-      isEditing = true;
     }, 10);
   };
 
@@ -167,8 +156,7 @@
       <span>{t('19_ContactsField.label')}</span>
       <IconButton
         class="material-icons"
-        disabled={isEditing}
-        onclick={(evt) => addItem(evt)}
+        onclick={(evt: MouseEvent) => addItem(evt)}
         size="button"
         type="button"
         title={t('19_ContactsField.add')}
@@ -182,8 +170,7 @@
         <legend>
           <IconButton
             class="material-icons"
-            disabled={isEditing}
-            onclick={(evt) => removeItem(contact.id, evt)}
+            onclick={(evt: MouseEvent) => removeItem(contact.id, evt)}
             size="button"
             type="button"
             title={t('19_ContactsField.delete')}
@@ -195,8 +182,7 @@
           <TextInput
             bind:value={contact.name}
             label={t('19_ContactsField.name')}
-            onblur={onBlur}
-            onfocus={onFocus}
+            onblur={persistContacts}
             fieldConfig={nameConfig}
             validationResult={nameConfig?.validator(contact.name)}
             id={`${KEY}-${index}-name`}
@@ -213,8 +199,7 @@
           <TextInput
             bind:value={contact.organisation}
             label={t('19_ContactsField.organisation')}
-            onblur={onBlur}
-            onfocus={onFocus}
+            onblur={persistContacts}
             fieldConfig={organisationConfig}
             validationResult={organisationConfig?.validator(contact.organisation)}
             id={`${KEY}-${index}-organisation`}
@@ -231,8 +216,7 @@
           <TextInput
             bind:value={contact.phone}
             label={t('19_ContactsField.phone')}
-            onblur={onBlur}
-            onfocus={onFocus}
+            onblur={persistContacts}
             fieldConfig={phoneConfig}
             validationResult={phoneConfig?.validator(contact.phone)}
             id={`${KEY}-${index}-phone`}
@@ -249,8 +233,7 @@
           <TextInput
             bind:value={contact.email}
             label={t('19_ContactsField.email')}
-            onblur={onBlur}
-            onfocus={onFocus}
+            onblur={persistContacts}
             fieldConfig={emailConfig}
             validationResult={emailConfig?.validator(contact.email)}
             id={`${KEY}-${index}-email`}

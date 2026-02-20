@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { MetadataCollection } from '$lib/models/metadata';
 import { FieldConfigs, type FullFieldConfig } from '$lib/components/Form/FieldsConfig';
-import { page } from '$app/state';
-import { goto, invalidateAll } from '$app/navigation';
-import { toast } from 'svelte-french-toast';
 import { logger } from 'loggisch';
+import { MetadataUpdateService } from './MetadataUpdateService';
 
 /**
  * MetadataService provides utilities for accessing and manipulating metadata collections.
@@ -109,41 +107,8 @@ export class MetadataService {
    * @param value - The value to persist
    * @returns The server response
    */
-  static async persistValue(key: string, value: unknown): Promise<Response> {
-    const response = await fetch(page.url, {
-      method: 'PATCH',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        key,
-        value
-      })
-    });
-
-    if (response.ok) {
-      // Invalidate all data to refetch from the server
-      await invalidateAll();
-    } else {
-      let message = 'Fehler beim Speichern der Daten';
-      try {
-        const data = await response.json();
-        message = data?.message ?? JSON.stringify(data);
-      } catch {
-        message = await response.text();
-      }
-      if (response.status === 401) {
-        // If unauthorized, redirect to login
-        logger.warning('Unauthorized access, redirecting to login');
-        goto('/login');
-      } else if (response.status === 409) {
-        toast.error('Konflikt beim Speichern eines eindeutigen Werts.');
-      } else {
-        toast.error(message);
-      }
-    }
-
-    return response;
+  static async persistValue(key: string, value: unknown) {
+    return MetadataUpdateService.pushToQueue(key, value);
   }
 
   /**

@@ -548,7 +548,8 @@
     "pageSizeLabel": "Datensätze pro Seite"
   },
   "serviceform": {
-    "layer_update_error": "Fehler beim aktualisieren der Layer: {statusText}"
+    "layer_update_error": "Fehler beim aktualisieren der Layer: {statusText}",
+    "legend_autoupdate_info": "Format und Größe der Gesamtlegende wurde automatisch berechnet."
   },
   "servicessection": {
     "add_button": "Dienst hinzufügen",
