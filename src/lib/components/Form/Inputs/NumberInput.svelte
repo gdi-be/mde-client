@@ -27,6 +27,7 @@
     onblur,
     fieldConfig,
     onfocus,
+    // eslint-disable-next-line
     ...restProps
   }: InputProps = $props();
 

@@ -30,6 +30,7 @@
     validationResult,
     onblur,
     onfocus,
+    // eslint-disable-next-line
     ...restProps
   }: InputProps = $props();
 

@@ -13,6 +13,7 @@
   const t = $derived(page.data.t);
   let { children, data } = $props();
 
+  // eslint-disable-next-line
   initializeTokenContext(data.token, data.refreshToken);
   initializePopconfirmContext();
   initializeStatusesContext();

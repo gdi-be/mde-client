@@ -97,7 +97,7 @@
   };
 </script>
 
-<div class="title-field">
+<div class="resolution-field">
   <fieldset class={[hasInvalidFields ? 'invalid' : '']}>
     <legend>{t('28_ResolutionField.label')}</legend>
     <FieldHint explanation={t('28_ResolutionField.explanation')} />
@@ -163,7 +163,7 @@
 </div>
 
 <style lang="scss">
-  .title-field {
+  .resolution-field {
     position: relative;
     display: flex;
     gap: 0.25em;

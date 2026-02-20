@@ -23,3 +23,7 @@ vite.config.ts.timestamp-*
 # Svelte
 smui.css
 smui-dark.css
+
+# Test
+/coverage
+/html

@@ -28,7 +28,7 @@
   };
 </script>
 
-<div class="technical-description-field">
+<div class="content-description-field">
   <TextInput
     bind:value
     label={t('30_ContentDescription.label')}
@@ -41,7 +41,7 @@
 </div>
 
 <style lang="scss">
-  .technical-description-field {
+  .content-description-field {
     position: relative;
     display: flex;
     gap: 0.25em;

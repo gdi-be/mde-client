@@ -13,6 +13,7 @@
 
   let { data } = $props();
 
+  // eslint-disable-next-line
   initializeFormContext(data.metadata);
 
   const metadata = $derived(data.metadata);

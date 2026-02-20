@@ -32,10 +32,12 @@
     options,
     disabled = false,
     validationResult,
+    // eslint-disable-next-line
     ...restProps
   }: InputProps = $props();
 
   // Remove duplicates
+  // eslint-disable-next-line
   options = Array.from(new Map(options.map((item) => [item.key, item])).values());
 
   const onSelect = (newValue: string) => {

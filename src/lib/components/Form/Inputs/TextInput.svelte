@@ -27,6 +27,7 @@
     onblur,
     onfocus,
     explanation,
+    // eslint-disable-next-line
     ...restProps
   }: InputProps = $props();
 
@@ -69,7 +70,7 @@
     <FieldHint {validationResult} {fieldConfig} {fieldHasFocus} {explanation} />
     {#if maxlength}
       <div class="character-counter">
-        {value.length} / {maxlength}
+        {value?.length ?? 0} / {maxlength}
       </div>
     {/if}
   </div>
