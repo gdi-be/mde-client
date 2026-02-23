@@ -1,3 +1,19 @@
+# [6.1.0](https://github.com/gdi-be/mde-client/compare/v6.0.4...v6.1.0) (2026-02-23)
+
+
+### Bug Fixes
+
+* improve progress bar scaling and styling ([9fa93cb](https://github.com/gdi-be/mde-client/commit/9fa93cb890eeb3649b61f5998ae3b78308c8db19))
+* resolve flickering in FieldTools ([420a23d](https://github.com/gdi-be/mde-client/commit/420a23dba62044c840bd727beff3b51ce623e04e))
+* update chip removal functionality and localization keys in MultiSelectInput ([a844580](https://github.com/gdi-be/mde-client/commit/a844580a3665ba357d323291b87a844e11ffe57c))
+* update default value for number input binding ([07c5ec4](https://github.com/gdi-be/mde-client/commit/07c5ec4f62ce3861ec9360da3bdd85f42156f4ac))
+* update loggisch to fix browser logging ([6309318](https://github.com/gdi-be/mde-client/commit/6309318121afc15b41c9392b364c2e37d4b5f277))
+
+
+### Features
+
+* introduces MetadataUpdateService ([#252](https://github.com/gdi-be/mde-client/issues/252)) ([f450c8f](https://github.com/gdi-be/mde-client/commit/f450c8f9bc001b3a60e5c648ad6d39e96cebd2dc))
+
 ## [6.0.4](https://github.com/gdi-be/mde-client/compare/v6.0.3...v6.0.4) (2026-02-13)
 
 
