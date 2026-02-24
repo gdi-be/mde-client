@@ -55,7 +55,7 @@
           <TextInput
             label={t('47_ServiceLegendImage.url')}
             value={value?.url}
-            onchange={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
+            onblur={(e: Event) => update('url', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigUrl}
             validationResult={validationResultUrl}
           />
@@ -65,7 +65,7 @@
           <TextInput
             label={t('47_ServiceLegendImage.format')}
             value={value?.format}
-            onchange={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
+            onblur={(e: Event) => update('format', (e.target as HTMLInputElement).value)}
             fieldConfig={fieldConfigFormat}
             validationResult={validationResultFormat}
           />
@@ -77,7 +77,7 @@
           <NumberInput
             label={t('47_ServiceLegendImage.width')}
             value={value?.width}
-            onblur={(e: Event) => update('width', Number((e.target as HTMLInputElement).value))}
+            onchange={(e: Event) => update('width', Number((e.target as HTMLInputElement).value))}
             fieldConfig={fieldConfigWidth}
             validationResult={validationResultWidth}
           />
@@ -87,7 +87,7 @@
           <NumberInput
             label={t('47_ServiceLegendImage.height')}
             value={value?.height}
-            onblur={(e: Event) => update('height', Number((e.target as HTMLInputElement).value))}
+            onchange={(e: Event) => update('height', Number((e.target as HTMLInputElement).value))}
             fieldConfig={fieldConfigHeight}
             validationResult={validationResultHeight}
           />
