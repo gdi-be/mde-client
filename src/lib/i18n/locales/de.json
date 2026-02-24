@@ -80,7 +80,9 @@
     "label_max_x": "Maximaler X-Wert",
     "label_min_y": "Minimaler Y-Wert",
     "label_max_y": "Maximaler Y-Wert",
-    "explanation": "Welchen räumlichen Bereich deckt Ihr Datenbestand ab?"
+    "explanation": "Welchen räumlichen Bereich deckt Ihr Datenbestand ab?",
+    "error_transforming_coordinates": "Fehler bei der Transformation der Koordinaten. Bitte überprüfen Sie die {key} Koordinate.",
+    "error_transforming_coordinates_from_server": "Fehler bei der Transformation der gespeicherten Koordinaten der Ausdehnung."
   },
   "19_ContactsField": {
     "add": "Kontakt hinzufügen",
@@ -425,7 +427,7 @@
   "general": {
     "add": "Hinzufügen",
     "appTitle": "Metadaten Editor",
-    "autofill": "Wert aus Vorlage übernehmen",
+    "autofill": "Wert aus Basisangaben übernehmen",
     "broken_metadata_title": "Metadaten konnten nicht korrekt geladen werden",
     "broken_metadata_message": "Die Metadaten konnten nicht korrekt geladen werden. Es könnte sein, dass die Metadaten unvollständig oder beschädigt sind. Bitte wenden Sie sich an den Administrator.",
     "cancel": "Abbrechen",
