@@ -1,3 +1,11 @@
+## [6.1.2](https://github.com/gdi-be/mde-client/compare/v6.1.1...v6.1.2) (2026-02-25)
+
+
+### Bug Fixes
+
+* no toast on automated legend update ([856d8e5](https://github.com/gdi-be/mde-client/commit/856d8e5b77956b448ffc30f5eefbc515fee65020))
+* use TextInput for Extent inputs ([88f3fbc](https://github.com/gdi-be/mde-client/commit/88f3fbceec863e93cf7600f5915cbd30244885e2))
+
 ## [6.1.1](https://github.com/gdi-be/mde-client/compare/v6.1.0...v6.1.1) (2026-02-25)
 
 
