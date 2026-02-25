@@ -1,3 +1,12 @@
+## [6.1.1](https://github.com/gdi-be/mde-client/compare/v6.1.0...v6.1.1) (2026-02-25)
+
+
+### Bug Fixes
+
+* improve error handling of coordinate transformation ([d38ee58](https://github.com/gdi-be/mde-client/commit/d38ee58981673a7daa3360c303478b3e2311e6c3))
+* remove clone button from layer section ([2cdef7a](https://github.com/gdi-be/mde-client/commit/2cdef7acb8e5c78c7574f0be01a7db4a4c733dab))
+* update service legend field ([5e76c0d](https://github.com/gdi-be/mde-client/commit/5e76c0d5218f2dad9dff31ae5c0674dc5c0634de))
+
 # [6.1.0](https://github.com/gdi-be/mde-client/compare/v6.0.4...v6.1.0) (2026-02-23)
 
 
