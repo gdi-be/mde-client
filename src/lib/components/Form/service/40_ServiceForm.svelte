@@ -79,12 +79,13 @@
       } else if (key === 'legendImage') {
         // legend sizes are determined and returned in the backend
         const json = await response.json();
-        value = json.isoMetadata.services?.find(
+        const oldLegendImage = service.legendImage;
+        const newLegendImage = json.isoMetadata.services?.find(
           (s: Service) => s.serviceIdentification === service.serviceIdentification
         )?.legendImage;
-        if (value) {
+        if (newLegendImage && JSON.stringify(oldLegendImage) !== JSON.stringify(newLegendImage)) {
           toast.success(t('serviceform.legend_autoupdate_info'));
-          service = setNestedValue(service, 'legendImage', value);
+          service = setNestedValue(service, 'legendImage', newLegendImage);
         }
       }
       await invalidateAll();

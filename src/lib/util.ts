@@ -85,16 +85,20 @@ export function transformExtent(extent: PartialExtent, fromEPSG: CRS, toEPSG: CR
 
   const min: PartialCoordinate = [extent.minx, extent.miny];
   const max: PartialCoordinate = [extent.maxx, extent.maxy];
-  const transformedMin = transformCoordinate(min, fromEPSG, toEPSG);
-  const transformedMax = transformCoordinate(max, fromEPSG, toEPSG);
+  try {
+    const transformedMin = transformCoordinate(min, fromEPSG, toEPSG);
+    const transformedMax = transformCoordinate(max, fromEPSG, toEPSG);
 
-  // If the original extent had a 0 value, keep it as 0
-  return {
-    minx: extent.minx === 0 ? 0 : transformedMin[0],
-    miny: extent.miny === 0 ? 0 : transformedMin[1],
-    maxx: extent.maxx === 0 ? 0 : transformedMax[0],
-    maxy: extent.maxy === 0 ? 0 : transformedMax[1]
-  };
+    // If the original extent had a 0 value, keep it as 0
+    return {
+      minx: extent.minx === 0 ? 0 : transformedMin[0],
+      miny: extent.miny === 0 ? 0 : transformedMin[1],
+      maxx: extent.maxx === 0 ? 0 : transformedMax[0],
+      maxy: extent.maxy === 0 ? 0 : transformedMax[1]
+    };
+  } catch (error) {
+    throw Error(`Error transforming extent: ${error}`);
+  }
 }
 
 export function transformCoordinate(
@@ -104,13 +108,22 @@ export function transformCoordinate(
 ): PartialCoordinate {
   if (coordinate[0] === undefined || coordinate[1] === undefined) {
     logger.warning(`Can't apply transformation, coordinate value is undefined: ${coordinate}`);
-    return coordinate;
+    throw Error('Coordinate value is undefined');
   }
-  const transformedCoordinate = proj4(fromEPSG, toEPSG, [coordinate[0], coordinate[1]]);
-  const decimalPlaces = proj4.defs(toEPSG).units === 'm' ? 0 : 5;
-  return transformedCoordinate.map((value: number) =>
-    parseFloat(value.toFixed(decimalPlaces))
-  ) as PartialCoordinate;
+  try {
+    const transformedCoordinate = proj4(fromEPSG, toEPSG, [coordinate[0], coordinate[1]]);
+
+    if (!Number.isFinite(transformedCoordinate[0]) || !Number.isFinite(transformedCoordinate[1])) {
+      logger.warning(`Error transforming coordinate: ${coordinate} from ${fromEPSG} to ${toEPSG}`);
+      throw Error('Transformed coordinate is not finite');
+    }
+    const decimalPlaces = proj4.defs(toEPSG).units === 'm' ? 0 : 5;
+    return transformedCoordinate.map((value: number) =>
+      parseFloat(value.toFixed(decimalPlaces))
+    ) as PartialCoordinate;
+  } catch (error) {
+    throw Error(`Error transforming coordinate: ${error}`);
+  }
 }
 
 export const getHighestRole = (token?: Token): Role => {
