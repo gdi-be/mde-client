@@ -2,7 +2,6 @@
   import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
-  import NumberInput from '../Inputs/NumberInput.svelte';
   import type { CRS, PartialExtent } from '$lib/models/metadata';
   import { MetadataService } from '$lib/services/MetadataService';
   import Button, { Icon, Label } from '@smui/button';
@@ -15,6 +14,7 @@
   import { page } from '$app/state';
   import { ValidationService } from '$lib/services/ValidationService';
   import { logger } from 'loggisch';
+  import TextInput from '../Inputs/TextInput.svelte';
 
   const t = $derived(page.data.t);
 
@@ -167,7 +167,7 @@
       </div>
       <div class="extent-fields">
         <div class="inline-fields">
-          <NumberInput
+          <TextInput
             label={t('18_ExtentField.label_min_x')}
             fieldConfig={minXFieldConfig}
             bind:value={inputValue.minx}
@@ -178,7 +178,7 @@
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
             validationResult={validationResultMinX}
           />
-          <NumberInput
+          <TextInput
             bind:value={inputValue.maxx}
             label={t('18_ExtentField.label_max_x')}
             fieldConfig={maxXFieldConfig}
@@ -191,7 +191,7 @@
           />
         </div>
         <div class="inline-fields">
-          <NumberInput
+          <TextInput
             bind:value={inputValue.miny}
             label={t('18_ExtentField.label_min_y')}
             fieldConfig={minYFieldConfig}
@@ -202,7 +202,7 @@
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
             validationResult={validationResultMinY}
           />
-          <NumberInput
+          <TextInput
             bind:value={inputValue.maxy}
             label={t('18_ExtentField.label_max_y')}
             fieldConfig={maxYFieldConfig}
