@@ -206,7 +206,7 @@
     </div>
   </fieldset>
   {#if fieldConfig?.key}
-    <FieldTools noCopyButton key={fieldConfig.key} />
+    <FieldTools key={fieldConfig.key} noCopyButton noCloneButton />
   {/if}
 </div>
 
