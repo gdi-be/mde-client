@@ -18,15 +18,9 @@
   const { getValue } = getFormContext();
 
   const checkedValueFromData = $derived(getValue<boolean>(CHECKED_KEY));
-  let checkedValue = $state(false);
-  $effect(() => {
-    checkedValue = checkedValueFromData || false;
-  });
+  let checkedValue = $derived(checkedValueFromData ?? false);
   const selectionValueFromData = $derived(getValue<string[]>(CATEGORY_KEY));
-  let selectionValue = $state<string[]>();
-  $effect(() => {
-    selectionValue = selectionValueFromData;
-  });
+  let selectionValue = $derived(selectionValueFromData ?? []);
 
   const checkedFieldConfig = MetadataService.getFieldConfig<boolean>(6);
   const categoryFieldConfig = MetadataService.getFieldConfig<string[]>(8);

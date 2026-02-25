@@ -2,6 +2,7 @@ import { page } from '$app/state';
 import { goto, invalidateAll } from '$app/navigation';
 import { toast } from 'svelte-french-toast';
 import { logger } from 'loggisch';
+import { resolve } from '$app/paths';
 
 export type Update = {
   key: string;
@@ -471,7 +472,7 @@ export class MetadataUpdateService {
       // Invalidate all data to refetch from the server
       await invalidateAll();
     } else {
-      let message = 'Fehler beim Speichern der Daten';
+      let message;
       try {
         const data = await response.json();
         message = data?.message ?? JSON.stringify(data);
@@ -481,7 +482,7 @@ export class MetadataUpdateService {
       if (response.status === 401) {
         // If unauthorized, redirect to login
         logger.warning('Unauthorized access, redirecting to login');
-        goto('/login');
+        goto(resolve('/login'));
       } else if (response.status === 409) {
         toast.error(`Konflikt beim Speichern eines eindeutigen Werts: ${key} - ${value}`);
       } else {

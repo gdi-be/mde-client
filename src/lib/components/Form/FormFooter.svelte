@@ -37,9 +37,9 @@
   const highestRole = $derived(getHighestRole(token));
   const userId = $derived(token?.sub);
   const assignedToMe = $derived(userId && metadata?.assignedUserId === userId);
-  let commentsPanelVisible = $state(false);
-  let publishPanelVisible = $state(false);
-  let assignmentPanelVisible = $state(false);
+  let commentsPanelVisible = $derived(commentsPanelVisibleProp ?? false);
+  let publishPanelVisible = $derived(publishPanelVisibleProp ?? false);
+  let assignmentPanelVisible = $derived(assignmentPanelVisibleProp ?? false);
   let validationPanelVisible = $state(false);
   let isValidationLoading = $state(false);
   let showMask = $derived(
@@ -60,18 +60,6 @@
     highestRole === 'MdeAdministrator' || assignedToMe || highestRole === metadata?.responsibleRole
   );
   let hideDownloadButton = $derived(highestRole === 'MdeDataOwner');
-
-  $effect(() => {
-    commentsPanelVisible = commentsPanelVisibleProp ?? false;
-  });
-
-  $effect(() => {
-    publishPanelVisible = publishPanelVisibleProp ?? false;
-  });
-
-  $effect(() => {
-    assignmentPanelVisible = assignmentPanelVisibleProp ?? false;
-  });
 
   $effect(() => {
     const lastItem = validation

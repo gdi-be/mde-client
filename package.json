@@ -43,6 +43,7 @@
     "vite": "^7.3.1"
   },
   "dependencies": {
+    "@eslint/js": "^10.0.1",
     "@smui-extra/autocomplete": "^8.0.3",
     "@smui-extra/chip-input": "^8.0.3",
     "@smui/button": "^8.0.3",

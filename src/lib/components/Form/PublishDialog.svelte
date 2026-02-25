@@ -114,7 +114,7 @@
           <p class="success">{t('publishdialog.success')}</p>
           <p>{t('publishdialog.uuids')}</p>
           <ul>
-            {#each responseUuids?.publishedCatalogRecords ?? [] as uuid}
+            {#each responseUuids?.publishedCatalogRecords ?? [] as uuid (uuid)}
               <li>
                 <a
                   target="_blank"

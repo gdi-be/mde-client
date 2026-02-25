@@ -24,10 +24,7 @@
 
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
-  let value = $state('');
-  $effect(() => {
-    value = valueFromData || '';
-  });
+  let value = $derived(valueFromData || '');
 
   let metadataProfile = $derived(getValue<string>(PROFILE_KEY, metadata));
 

@@ -35,7 +35,7 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
-  let columns = $state<ColumnInfo[]>([]);
+  let columns = $derived<ColumnInfo[]>(initialColumns || []);
   let tabs = $derived<Tab[]>(
     columns.map((column) => {
       return {
@@ -58,10 +58,6 @@
     if (featureTypeName) {
       activeTabId = undefined;
     }
-  });
-
-  $effect(() => {
-    columns = initialColumns || [];
   });
 
   function addColumn() {
@@ -120,7 +116,7 @@
     <legend>{t('63_ColumnsForm.label')}</legend>
     <FieldHint {fieldConfig} {validationResult} explanation={t('63_ColumnsForm.explanation')} />
     <nav>
-      {#each tabs as tab}
+      {#each tabs as tab (tab.id)}
         <div
           class={[
             'tab-container',

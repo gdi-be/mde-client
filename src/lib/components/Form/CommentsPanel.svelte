@@ -135,7 +135,7 @@
       <FieldHint explanation={t('commentspanel.explanation')} />
       {#if comments?.length > 0}
         <ul class="comments">
-          {#each comments as comment, index}
+          {#each comments as comment, index (comment.id)}
             <li class="comment {comment.userId === myUserId ? 'my-comment' : ''}">
               <span class="user">
                 {#if isDeletable(comment, index)}

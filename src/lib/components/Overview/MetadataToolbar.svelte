@@ -2,10 +2,10 @@
   import Button, { Label } from '@smui/button';
   import StatusFilterField from './StatusFilterField.svelte';
   import TextFilterField from './TextFilterField.svelte';
-  import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { getHighestRole } from '$lib/util';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { resolve } from '$app/paths';
 
   const t = $derived(page.data.t);
   const token = $derived(getAccessToken());
@@ -14,7 +14,7 @@
 
 <div class="toolbar-inner">
   {#if highestRole !== 'MdeQualityAssurance'}
-    <Button variant="raised" onclick={() => goto('/metadata/create')} type="button">
+    <Button variant="raised" href={resolve(`/metadata/create`)} type="button">
       <Label>{t('metadatatoolbar.newEntry')}</Label>
     </Button>
   {/if}

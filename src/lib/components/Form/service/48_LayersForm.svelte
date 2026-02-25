@@ -40,7 +40,7 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
-  let layers = $state<Layer[]>([]);
+  let layers = $derived<Layer[]>(initialLayers || []);
   let tabs = $derived<Tab[]>(
     layers.map((layer) => {
       return {
@@ -67,10 +67,6 @@
     if (serviceId) {
       activeTabId = undefined;
     }
-  });
-
-  $effect(() => {
-    layers = initialLayers || [];
   });
 
   function addLayer() {
@@ -130,7 +126,7 @@
     <legend>{t('48_LayersForm.label')} </legend>
     <FieldHint {fieldConfig} {validationResult} />
     <nav>
-      {#each tabs as tab}
+      {#each tabs as tab (tab.id)}
         <div
           class={[
             'tab-container',
