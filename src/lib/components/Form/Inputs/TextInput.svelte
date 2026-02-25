@@ -7,11 +7,11 @@
 
   type InputProps = {
     maxlength?: number;
-    value?: string;
+    value?: string | number;
     class?: string;
     explanation?: string;
     label?: string;
-    fieldConfig?: FullFieldConfig<string>;
+    fieldConfig?: FullFieldConfig;
     onfocus?: (evt: FocusEvent) => void;
     onblur?: (evt: FocusEvent) => void;
     validationResult?: ValidationResult;
