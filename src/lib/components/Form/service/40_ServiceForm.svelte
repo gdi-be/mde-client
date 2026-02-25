@@ -19,6 +19,7 @@
   import { page } from '$app/state';
   import { toast } from 'svelte-french-toast';
   import { invalidateAll } from '$app/navigation';
+  import { logger } from 'loggisch';
 
   const t = $derived(page.data.t);
 
@@ -84,7 +85,7 @@
           (s: Service) => s.serviceIdentification === service.serviceIdentification
         )?.legendImage;
         if (newLegendImage && JSON.stringify(oldLegendImage) !== JSON.stringify(newLegendImage)) {
-          toast.success(t('serviceform.legend_autoupdate_info'));
+          logger.info(t('serviceform.legend_autoupdate_info'));
           service = setNestedValue(service, 'legendImage', newLegendImage);
         }
       }
