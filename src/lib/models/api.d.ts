@@ -1,4 +1,5 @@
 import type { Option } from './form';
+import type { CRS } from './metadata';
 
 type QueryConfig = {
   searchTerm: string;
@@ -21,6 +22,7 @@ type PageableProps = {
 
 export type CRSOption = Option & {
   definition: string;
+  label: CRS;
 };
 
 export type PageableResponse<T> = {

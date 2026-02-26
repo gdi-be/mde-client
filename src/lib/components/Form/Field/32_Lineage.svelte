@@ -30,7 +30,6 @@
   let titleSearchListId = $state<string>();
 
   let showCheckmark = $state(false);
-  let isEditing = $state<boolean>(false);
 
   const fieldConfig = MetadataService.getFieldConfig<Lineage[]>(32);
   const titleFieldConfig = MetadataService.getFieldConfig<string>(33);
@@ -96,15 +95,6 @@
     return data?.content || [];
   };
 
-  const onBlur = async (evt?: FocusEvent) => {
-    await persistLineages(evt);
-    isEditing = false;
-  };
-
-  const onFocus = () => {
-    isEditing = true;
-  };
-
   const persistLineages = async (evt?: FocusEvent) => {
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
@@ -123,7 +113,6 @@
     setTimeout(() => {
       const elementToFocus = document.getElementById(focusedElement.id);
       elementToFocus?.focus();
-      isEditing = true;
     }, 10);
   };
 
@@ -175,7 +164,6 @@
     });
 
     persistLineages();
-    isEditing = false;
     metadataCollections = [];
   };
 
@@ -191,7 +179,6 @@
       return;
     }
     await persistLineages(evt);
-    isEditing = false;
   };
 
   let hasInvalidFields = $derived.by(() => {
@@ -216,7 +203,6 @@
       {t('32_Lineage.label')}
       <IconButton
         class="material-icons"
-        disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
         type="button"
@@ -231,7 +217,6 @@
         <legend>
           <IconButton
             class="material-icons"
-            disabled={isEditing}
             onclick={(evt) => removeItem(lineage.id, evt)}
             size="button"
             type="button"
@@ -246,7 +231,6 @@
               bind:value={lineage.title}
               label={t('32_Lineage.title')}
               onblur={onTitleBlur}
-              onfocus={onFocus}
               onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
               fieldConfig={titleFieldConfig}
               validationResult={titleFieldConfig?.validator(lineage.title)}
@@ -279,8 +263,7 @@
               bind:value={lineage.date}
               key={KEY}
               label={t('32_Lineage.publish_date')}
-              onblur={onBlur}
-              onfocus={onFocus}
+              onblur={persistLineages}
               fieldConfig={dateFieldConfig}
               validationResult={dateFieldConfig?.validator(lineage.date)}
               id={`${KEY}-${index}-date`}
@@ -291,8 +274,7 @@
             <TextInput
               bind:value={lineage.identifier}
               label={t('32_Lineage.identifier')}
-              onblur={onBlur}
-              onfocus={onFocus}
+              onblur={persistLineages}
               fieldConfig={identifierFieldConfig}
               validationResult={identifierFieldConfig?.validator(lineage.identifier)}
               id={`${KEY}-${index}-identifier`}

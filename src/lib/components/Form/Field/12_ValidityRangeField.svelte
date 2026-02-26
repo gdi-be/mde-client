@@ -15,7 +15,7 @@
   const startValueFromData = $derived(getValue<string>(FROM_KEY));
   let startValue = $state('');
   $effect(() => {
-    if (startValueFromData) {
+    if (startValueFromData && !startValue) {
       startValue = new Date(startValueFromData).toISOString().split('T')[0];
     }
   });
@@ -23,7 +23,7 @@
   const endValueFromData = $derived(getValue<string>(TO_KEY));
   let endValue = $state('');
   $effect(() => {
-    if (endValueFromData) {
+    if (endValueFromData && !endValue) {
       endValue = new Date(endValueFromData).toISOString().split('T')[0];
     }
   });
@@ -35,7 +35,7 @@
   const toFieldConfig = MetadataService.getFieldConfig<string>(24);
   let toValidationResult = $derived(toFieldConfig?.validator(endValue, [startValue]));
 
-  const onChange = async (key: string) => {
+  const onBlur = async (key: string) => {
     const value = key === FROM_KEY ? startValue : endValue!;
     const valueToPersist = value ? new Date(value).toISOString() : null;
     const response = await MetadataService.persistValue(key, valueToPersist);
@@ -68,14 +68,14 @@
       <DateInput
         bind:value={startValue}
         label={t('12_ValidityRangeField.label_from')}
-        onchange={() => onChange(FROM_KEY)}
+        onblur={() => onBlur(FROM_KEY)}
         fieldConfig={fromFieldConfig}
         validationResult={fromValidationResult}
       />
       <DateInput
         bind:value={endValue}
         label={t('12_ValidityRangeField.label_to')}
-        onchange={() => onChange(TO_KEY)}
+        onblur={() => onBlur(TO_KEY)}
         fieldConfig={toFieldConfig}
         validationResult={toValidationResult}
       />

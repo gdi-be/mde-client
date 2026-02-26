@@ -13,7 +13,7 @@
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   $effect(() => {
-    if (valueFromData) {
+    if (valueFromData && !value) {
       value = new Date(valueFromData).toISOString().split('T')[0];
     }
   });
@@ -22,7 +22,7 @@
   const fieldConfig = MetadataService.getFieldConfig<string>(9);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  const onChange = async () => {
+  const onBlur = async () => {
     const response = await MetadataService.persistValue(
       KEY,
       value ? new Date(value!).toISOString() : ''
@@ -40,7 +40,7 @@
     label={t('09_CreatedField.label')}
     explanation={t('09_CreatedField.explanation')}
     {fieldConfig}
-    onchange={onChange}
+    onblur={onBlur}
     {validationResult}
   />
   <FieldTools {fieldConfig} key={KEY} bind:checkMarkAnmiationRunning={showCheckmark} />

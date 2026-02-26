@@ -2,7 +2,6 @@
   import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
-  import NumberInput from '../Inputs/NumberInput.svelte';
   import type { CRS, PartialExtent } from '$lib/models/metadata';
   import { MetadataService } from '$lib/services/MetadataService';
   import Button, { Icon, Label } from '@smui/button';
@@ -14,6 +13,8 @@
   import type { CRSOption } from '$lib/models/api';
   import { page } from '$app/state';
   import { ValidationService } from '$lib/services/ValidationService';
+  import { logger } from 'loggisch';
+  import TextInput from '../Inputs/TextInput.svelte';
 
   const t = $derived(page.data.t);
 
@@ -25,6 +26,17 @@
   const KEY = 'isoMetadata.extent';
   const CRS_KEY = 'isoMetadata.crs';
   const CRS_LABEL = 'Koordinatensystem';
+  const emptyExtent: PartialExtent = {
+    minx: undefined,
+    maxx: undefined,
+    miny: undefined,
+    maxy: undefined
+  };
+
+  const minXFieldConfig = MetadataService.getFieldConfig<number>(71);
+  const maxXFieldConfig = MetadataService.getFieldConfig<number>(72);
+  const minYFieldConfig = MetadataService.getFieldConfig<number>(73);
+  const maxYFieldConfig = MetadataService.getFieldConfig<number>(74);
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -32,12 +44,7 @@
   const { getValue } = getFormContext();
   let initialCRSKey = getValue<CRS>(CRS_KEY);
   const valueFromData = $derived(getValue<PartialExtent>(KEY));
-  let value4326 = $state<PartialExtent>({
-    minx: undefined,
-    maxx: undefined,
-    miny: undefined,
-    maxy: undefined
-  });
+  let value4326 = $state<PartialExtent>(emptyExtent);
 
   $effect(() => {
     if (valueFromData) {
@@ -50,9 +57,7 @@
   let crsKey = $state(initialCRSKey);
   let crs = $derived(crsOptions.find((option) => option.key === crsKey));
   let showCheckmark = $state(false);
-  let transformedValue = $derived(
-    crs && value4326 ? transformExtent(value4326, 'EPSG:4326', crs.label as CRS) : value4326
-  );
+  let inputValue = $state<PartialExtent>(emptyExtent);
   let matchingOption = $derived(
     extentOptions.find((option) => {
       return (
@@ -64,22 +69,17 @@
     })
   );
 
-  const minXFieldConfig = MetadataService.getFieldConfig<number>(71);
-  const maxXFieldConfig = MetadataService.getFieldConfig<number>(72);
-  const minYFieldConfig = MetadataService.getFieldConfig<number>(73);
-  const maxYFieldConfig = MetadataService.getFieldConfig<number>(74);
-
   let validationResultMinX = $derived(
-    ValidationService.validateField(minXFieldConfig, transformedValue.minx)
+    ValidationService.validateField(minXFieldConfig, inputValue.minx)
   );
   let validationResultMinY = $derived(
-    ValidationService.validateField(minXFieldConfig, transformedValue.miny)
+    ValidationService.validateField(minXFieldConfig, inputValue.miny)
   );
   let validationResultMaxX = $derived(
-    ValidationService.validateField(minXFieldConfig, transformedValue.maxx)
+    ValidationService.validateField(minXFieldConfig, inputValue.maxx)
   );
   let validationResultMaxY = $derived(
-    ValidationService.validateField(minXFieldConfig, transformedValue.maxy)
+    ValidationService.validateField(minXFieldConfig, inputValue.maxy)
   );
 
   let hasInvalidFields = $derived(
@@ -89,12 +89,29 @@
       validationResultMaxY?.valid === false
   );
 
+  $effect(() => {
+    try {
+      const newTransformedValue = transformExtent(value4326, 'EPSG:4326', crs?.label as CRS);
+      inputValue = newTransformedValue;
+    } catch {
+      logger.error(t('18_ExtentField.error_transforming_coordinates_from_server'), {
+        value4326,
+        targetCRS: crs?.label
+      });
+    }
+  });
+
   const onChange = (newValue: number, key: keyof PartialExtent) => {
     const newTransformedValue = {
-      ...transformedValue,
+      ...inputValue,
       [key]: newValue
     };
-    value4326 = transformExtent(newTransformedValue, crs?.label as CRS, 'EPSG:4326');
+    try {
+      value4326 = transformExtent(newTransformedValue, crs?.label as CRS, 'EPSG:4326');
+      sendValue();
+    } catch {
+      toast.error(t('18_ExtentField.error_transforming_coordinates', { key }));
+    }
   };
 
   const sendValue = async () => {
@@ -150,11 +167,10 @@
       </div>
       <div class="extent-fields">
         <div class="inline-fields">
-          <NumberInput
-            value={transformedValue.minx}
+          <TextInput
             label={t('18_ExtentField.label_min_x')}
             fieldConfig={minXFieldConfig}
-            onblur={sendValue}
+            bind:value={inputValue.minx}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
               onChange(Number(target.value), 'minx');
@@ -162,11 +178,10 @@
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
             validationResult={validationResultMinX}
           />
-          <NumberInput
-            value={transformedValue.maxx}
+          <TextInput
+            bind:value={inputValue.maxx}
             label={t('18_ExtentField.label_max_x')}
             fieldConfig={maxXFieldConfig}
-            onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
               onChange(Number(target.value), 'maxx');
@@ -176,11 +191,10 @@
           />
         </div>
         <div class="inline-fields">
-          <NumberInput
-            value={transformedValue.miny}
+          <TextInput
+            bind:value={inputValue.miny}
             label={t('18_ExtentField.label_min_y')}
             fieldConfig={minYFieldConfig}
-            onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
               onChange(Number(target.value), 'miny');
@@ -188,11 +202,10 @@
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
             validationResult={validationResultMinY}
           />
-          <NumberInput
-            value={transformedValue.maxy}
+          <TextInput
+            bind:value={inputValue.maxy}
             label={t('18_ExtentField.label_max_y')}
             fieldConfig={maxYFieldConfig}
-            onblur={sendValue}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
               onChange(Number(target.value), 'maxy');

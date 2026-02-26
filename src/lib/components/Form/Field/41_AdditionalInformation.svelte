@@ -22,7 +22,6 @@
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<ContentDescription[]>(KEY));
   let contentDescriptions = $state<ContentDescription[]>([]);
-  let isEditing = $state<boolean>(false);
 
   const popconfirm = $derived(getPopconfirm());
 
@@ -57,15 +56,6 @@
   const codeFieldConfig = MetadataService.getFieldConfig<string>(43);
   const urlFieldConfig = MetadataService.getFieldConfig<string>(44);
 
-  const onBlur = async (evt: FocusEvent) => {
-    await persistContentDescriptions(evt);
-    isEditing = false;
-  };
-
-  const onFocus = () => {
-    isEditing = true;
-  };
-
   const persistContentDescriptions = async (evt?: FocusEvent) => {
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
@@ -79,7 +69,6 @@
     setTimeout(() => {
       const elementToFocus = document.getElementById(focusedElement.id);
       elementToFocus?.focus();
-      isEditing = true;
     }, 10);
   };
 
@@ -139,7 +128,6 @@
       {t('41_AdditionalInformation.label')}
       <IconButton
         class="material-icons"
-        disabled={isEditing}
         onclick={(evt) => addItem(evt)}
         size="button"
         title={t('41_AdditionalInformation.add')}
@@ -154,7 +142,6 @@
         <legend>
           <IconButton
             class="material-icons"
-            disabled={isEditing}
             onclick={(evt) => removeItem(contentDescription.id, evt)}
             size="button"
             type="button"
@@ -167,8 +154,7 @@
           <TextInput
             bind:value={contentDescription.description}
             label={t('41_AdditionalInformation.description')}
-            onblur={onBlur}
-            onfocus={onFocus}
+            onblur={persistContentDescriptions}
             fieldConfig={descriptionFieldConfig}
             validationResult={descriptionFieldConfig?.validator(contentDescription.description)}
             id={`${KEY}-${index}-description`}
@@ -205,8 +191,7 @@
             <TextInput
               bind:value={contentDescription.url}
               label={t('44_AdditionalInformationUrl.label')}
-              onblur={onBlur}
-              onfocus={onFocus}
+              onblur={persistContentDescriptions}
               fieldConfig={urlFieldConfig}
               validationResult={urlFieldConfig?.validator(contentDescription.url)}
               id={`${KEY}-${index}-url`}

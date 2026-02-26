@@ -64,25 +64,25 @@ describe('util - coordinate transformation functions', () => {
       expect(result[1]).toBeCloseTo(52.516, 2);
     });
 
-    it('should return original coordinate when x is undefined', () => {
+    it('should throw error when x is undefined', () => {
       const coordinate: PartialCoordinate = [undefined, 52.5];
-      const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
-
-      expect(result).toEqual(coordinate);
+      expect(() => transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857')).toThrow(
+        'Coordinate value is undefined'
+      );
     });
 
-    it('should return original coordinate when y is undefined', () => {
+    it('should throw error when y is undefined', () => {
       const coordinate: PartialCoordinate = [13.4, undefined];
-      const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
-
-      expect(result).toEqual(coordinate);
+      expect(() => transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857')).toThrow(
+        'Coordinate value is undefined'
+      );
     });
 
-    it('should return original coordinate when both values are undefined', () => {
+    it('should throw error when both values are undefined', () => {
       const coordinate: PartialCoordinate = [undefined, undefined];
-      const result = transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857');
-
-      expect(result).toEqual(coordinate);
+      expect(() => transformCoordinate(coordinate, 'EPSG:4326', 'EPSG:3857')).toThrow(
+        'Coordinate value is undefined'
+      );
     });
 
     it('should round to 5 decimal places for degree-based CRS', () => {
@@ -266,17 +266,12 @@ describe('util - coordinate transformation functions', () => {
       expect(result.miny).toBeCloseTo(52.516, 2);
     });
 
-    it('should handle partial extent with missing coordinates', () => {
+    it('should throw error for partial extent with missing max coordinates', () => {
       const extent: PartialExtent = {
         minx: 1489000,
         miny: 6894000
       };
-      const result = transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
-
-      expect(result.minx).toBeCloseTo(13.375, 2);
-      expect(result.miny).toBeCloseTo(52.516, 2);
-      expect(result.maxx).toBeUndefined();
-      expect(result.maxy).toBeUndefined();
+      expect(() => transformExtent(extent, 'EPSG:3857', 'EPSG:4326')).toThrow();
     });
 
     it('should transform extent between different meter-based CRS', () => {

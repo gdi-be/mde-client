@@ -19,6 +19,7 @@
   import { page } from '$app/state';
   import { toast } from 'svelte-french-toast';
   import { invalidateAll } from '$app/navigation';
+  import { logger } from 'loggisch';
 
   const t = $derived(page.data.t);
 
@@ -79,11 +80,13 @@
       } else if (key === 'legendImage') {
         // legend sizes are determined and returned in the backend
         const json = await response.json();
-        value = json.isoMetadata.services?.find(
+        const oldLegendImage = service.legendImage;
+        const newLegendImage = json.isoMetadata.services?.find(
           (s: Service) => s.serviceIdentification === service.serviceIdentification
         )?.legendImage;
-        if (value) {
-          service = setNestedValue(service, 'legendImage', value);
+        if (newLegendImage && JSON.stringify(oldLegendImage) !== JSON.stringify(newLegendImage)) {
+          logger.info(t('serviceform.legend_autoupdate_info'));
+          service = setNestedValue(service, 'legendImage', newLegendImage);
         }
       }
       await invalidateAll();
