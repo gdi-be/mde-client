@@ -182,7 +182,7 @@ const metadataWithWMSService = {
 function testFieldVisibility(
   role: string,
   fieldLabel: string,
-  fieldValue: string | undefined,
+  fieldValue: string | RegExp | undefined,
   sectionId: string,
   shouldBeVisible: boolean
 ) {
@@ -664,26 +664,38 @@ describe('MetadataDisplay - Integration test', () => {
         true
       );
       testFieldVisibility(role, '07_AnnexThemeField.label', 'Addresses', '#classification', true);
-      testFieldVisibility(role, '09_CreatedField.label', '05/06/2025', '#temp_and_spatial', true);
-      testFieldVisibility(role, '10_PublishedField.label', '21/06/2025', '#temp_and_spatial', true);
+      testFieldVisibility(
+        role,
+        '09_CreatedField.label',
+        /0?5[./]0?6[./]2025/,
+        '#temp_and_spatial',
+        true
+      );
+      testFieldVisibility(
+        role,
+        '10_PublishedField.label',
+        /21[./]0?6[./]2025/,
+        '#temp_and_spatial',
+        true
+      );
       testFieldVisibility(
         role,
         '11_LastUpdatedField.label',
-        '21/06/2024',
+        /21[./]0?6[./]2024/,
         '#temp_and_spatial',
         true
       );
       testFieldVisibility(
         role,
         '12_ValidityRangeField.label_from',
-        '08/06/2025',
+        /0?8[./]0?6[./]2025/,
         '#temp_and_spatial',
         true
       );
       testFieldVisibility(
         role,
         '12_ValidityRangeField.label_to',
-        '11/06/2025',
+        /11[./]0?6[./]2025/,
         '#temp_and_spatial',
         true
       );

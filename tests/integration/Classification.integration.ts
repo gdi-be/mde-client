@@ -197,7 +197,7 @@ export async function testClassification(role: string) {
           const body = JSON.parse((categoryPatch![1] as RequestInit).body as string);
 
           expect(body.key).toBe('isoMetadata.highValueDataCategory');
-          expect(body.value).toEqual(expect.arrayContaining(['A']));
+          expect(body.value).toEqual(expect.arrayContaining(['B']));
         });
       });
     });

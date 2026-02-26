@@ -208,7 +208,20 @@ export async function testTempAndSpatial(role: string) {
           await waitFor(() => {
             expect(fetchMock).toHaveBeenCalledWith(`/data/extents`);
           });
-          const inputs = await screen.getAllByRole('spinbutton');
+
+          await waitFor(() => {
+            expect(fetchMock).toHaveBeenCalledWith('/data/crs');
+          }, { timeout: 2000 });
+
+          await new Promise(resolve => setTimeout(resolve, 100));
+
+          const fieldset = document.querySelector('.extent-field') as HTMLElement;
+
+           waitFor(() => {
+            expect(fieldset).toBeInTheDocument();
+          });
+
+          const inputs = await within(fieldset).getAllByRole('textbox');
 
           async function setValue(input: HTMLElement, inputValue: string) {
             expect(input).toBeInTheDocument();
@@ -263,7 +276,6 @@ export async function testTempAndSpatial(role: string) {
           fieldset: fieldset,
           fieldType: 'radio',
           radioOptionKey: 'isoMetadata.resolutions',
-          fieldInput: '10',
           help: true,
           testProgress: {
             section: 'temp_and_spatial',

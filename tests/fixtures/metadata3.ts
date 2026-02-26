@@ -61,6 +61,13 @@ export default {
         email: 'kaivol@wefewf.de'
       }
     ],
+    crs: 'http://www.opengis.net/def/crs/EPSG/0/25833',
+    extent: {
+      minx: 13.079,
+      miny: 52.3284,
+      maxx: 13.7701,
+      maxy: 52.68779
+    },
     contentDescriptions: [
       {
         url: '',

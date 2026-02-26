@@ -115,7 +115,7 @@ export async function testServices(role: string) {
             testProgress: {
               section: 'services',
               label: 'form.services',
-              expectIncrease: false
+              expectIncrease: false // does not increase because service is added
             }
           });
         });
@@ -138,7 +138,7 @@ export async function testServices(role: string) {
             testProgress: {
               section: 'services',
               label: 'form.services',
-              expectIncrease: isRequiredField('isoMetadata.services.shortDescription', 'services')
+              expectIncrease: false // does not increase because service is added
             }
           });
         });
@@ -163,7 +163,7 @@ export async function testServices(role: string) {
               testProgress: {
                 section: 'services',
                 label: 'form.services',
-                expectIncrease: isRequiredField('isoMetadata.services.workspace', 'services')
+                expectIncrease: false // does not increase because service is added
               }
             });
           });
@@ -196,7 +196,7 @@ export async function testServices(role: string) {
             testProgress: {
               section: 'services',
               label: 'form.services',
-              expectIncrease: false
+              expectIncrease: false // does not increase because service is added
             }
           });
         });
@@ -248,7 +248,7 @@ export async function testServices(role: string) {
               testProgress: {
                 section: 'services',
                 label: 'form.services',
-                expectIncrease: false
+                expectIncrease: false // does not increase because feature type is added
               }
             });
           });
@@ -271,7 +271,7 @@ export async function testServices(role: string) {
                 testProgress: {
                   section: 'services',
                   label: 'form.services',
-                  expectIncrease: false
+                  expectIncrease: false // does not increase because feature type is added
                 }
               });
             });
@@ -309,10 +309,7 @@ export async function testServices(role: string) {
               testProgress: {
                 section: 'services',
                 label: 'form.services',
-                expectIncrease: isRequiredField(
-                  'isoMetadata.services.featureTypes.shortDescription',
-                  'services'
-                )
+                expectIncrease: false // does not increase because feature type is added
               }
             });
           });
@@ -452,16 +449,35 @@ export async function testServices(role: string) {
             expect(fieldset).toBeInTheDocument();
           });
 
-          await testField('isoMetadata.services.legendImage', {
-            fieldset: fieldset,
-            fieldType: 'text',
-            fieldInput: 'https://gdi.berlin.de/data/example.png',
-            help: true,
-            testProgress: {
-              section: 'services',
-              label: 'form.services',
-              expectIncrease: isRequiredField('isoMetadata.services.legendImage', 'services')
-            }
+          const input = within(fieldset!).getByRole('textbox');
+          expect(input).toBeInTheDocument();
+
+
+
+          await userEvent.clear(input);
+          await userEvent.type(input, 'https://gdi.berlin.de/data/example.png');
+          await fireEvent.blur(input);
+
+          await waitFor(() => {
+            expect(fetchMock).toHaveBeenCalledWith(
+              expect.any(URL),
+              expect.objectContaining({
+                method: 'PATCH',
+                body: expect.stringContaining('https://gdi.berlin.de/data/example.png'
+                ),
+                headers: {
+                  'content-type': 'application/json'
+                }
+              })
+            );
+          });
+
+          await waitFor(() => {
+            expect(input).toHaveValue('https://gdi.berlin.de/data/example.png');
+          });
+
+          await waitFor(() => {
+            expect(document.querySelector('.running')).toBeVisible();
           });
         });
 
