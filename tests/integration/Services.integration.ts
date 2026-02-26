@@ -452,8 +452,6 @@ export async function testServices(role: string) {
           const input = within(fieldset!).getByRole('textbox');
           expect(input).toBeInTheDocument();
 
-
-
           await userEvent.clear(input);
           await userEvent.type(input, 'https://gdi.berlin.de/data/example.png');
           await fireEvent.blur(input);
@@ -463,8 +461,7 @@ export async function testServices(role: string) {
               expect.any(URL),
               expect.objectContaining({
                 method: 'PATCH',
-                body: expect.stringContaining('https://gdi.berlin.de/data/example.png'
-                ),
+                body: expect.stringContaining('https://gdi.berlin.de/data/example.png'),
                 headers: {
                   'content-type': 'application/json'
                 }

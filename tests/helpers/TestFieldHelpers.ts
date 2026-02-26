@@ -111,19 +111,22 @@ function getProgressValue(bar: Element): number {
   return progress;
 }
 
-async function waitForNewPatchCall(previousCallCount: number, timeout = 5000): Promise<RequestInit> {
+async function waitForNewPatchCall(
+  previousCallCount: number,
+  timeout = 5000
+): Promise<RequestInit> {
   const startTime = Date.now();
 
   while (Date.now() - startTime < timeout) {
     const patchCalls = fetchMock.mock.calls
       .slice(previousCallCount)
-      .filter(call => call[1]?.method === 'PATCH');
+      .filter((call) => call[1]?.method === 'PATCH');
 
     if (patchCalls.length > 0) {
       return patchCalls[patchCalls.length - 1][1] as RequestInit;
     }
 
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise((resolve) => setTimeout(resolve, 50));
   }
 
   throw new Error(`No PATCH call found after ${previousCallCount} calls within ${timeout}ms`);
@@ -157,7 +160,7 @@ async function testTextInput(fieldKey: string, options: TestFieldOptions): Promi
 
   const requestInit = await waitForNewPatchCall(previousCallCount);
   const body = JSON.parse(requestInit.body as string);
-  
+
   if (body.key) {
     expect(extractBaseKey(body.key)).toBe(extractBaseKey(fieldKey));
   }
@@ -337,7 +340,7 @@ async function testDateInput(fieldKey: string, options: TestFieldOptions): Promi
   expect(input).toBeInTheDocument();
 
   await userEvent.click(input);
-  
+
   const previousCallCount = fetchMock.mock.calls.length;
   await fireEvent.change(input, { target: { value: fieldInput } });
   await fireEvent.blur(input);
@@ -361,17 +364,17 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
   const { fieldset, selectOptionText, selectOptionValue, requiredMessage } = options;
 
   await userEvent.click(fieldset!);
-  
+
   if (requiredMessage) {
     await waitFor(() => {
       expect(screen.queryByText(requiredMessage)).toBeVisible();
     });
   }
-  
+
   const option = await waitFor(() => within(fieldset!).getByText(selectOptionText!));
 
   const previousCallCount = fetchMock.mock.calls.length;
-  
+
   await userEvent.click(option);
 
   const requestInit = await waitForNewPatchCall(previousCallCount);
@@ -492,7 +495,6 @@ async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions)
   }
 
   for (const optionText of multiSelectOptions) {
-
     const autocomplete = fieldset!.querySelector('.smui-autocomplete') as HTMLElement;
 
     const input = within(autocomplete).getByRole('textbox');
@@ -645,7 +647,7 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
           expect.objectContaining({
             method: 'PATCH',
             body: expect.stringContaining(
-              (fieldConfig.fieldType === 'text')
+              fieldConfig.fieldType === 'text'
                 ? String(fieldConfig.fieldInput)
                 : String(fieldConfig.optionsCode)
             ),
@@ -659,7 +661,6 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
       await waitFor(() => {
         expect(document.querySelector('.running')).toBeVisible();
       });
-
 
       await new Promise((r) => setTimeout(r, 50));
     }

@@ -209,15 +209,18 @@ export async function testTempAndSpatial(role: string) {
             expect(fetchMock).toHaveBeenCalledWith(`/data/extents`);
           });
 
-          await waitFor(() => {
-            expect(fetchMock).toHaveBeenCalledWith('/data/crs');
-          }, { timeout: 2000 });
+          await waitFor(
+            () => {
+              expect(fetchMock).toHaveBeenCalledWith('/data/crs');
+            },
+            { timeout: 2000 }
+          );
 
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 100));
 
           const fieldset = document.querySelector('.extent-field') as HTMLElement;
 
-           waitFor(() => {
+          waitFor(() => {
             expect(fieldset).toBeInTheDocument();
           });
 

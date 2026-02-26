@@ -667,35 +667,35 @@ describe('MetadataDisplay - Integration test', () => {
       testFieldVisibility(
         role,
         '09_CreatedField.label',
-        /0?5[./]0?6[./]2025/,
+        /0?5[./]0?6[./]2025|0?6[./]0?5[./]2025/,
         '#temp_and_spatial',
         true
       );
       testFieldVisibility(
         role,
         '10_PublishedField.label',
-        /21[./]0?6[./]2025/,
+        /21[./]0?6[./]2025|0?6[./]21[./]2025/,
         '#temp_and_spatial',
         true
       );
       testFieldVisibility(
         role,
         '11_LastUpdatedField.label',
-        /21[./]0?6[./]2024/,
+        /21[./]0?6[./]2024|0?6[./]21[./]2024/,
         '#temp_and_spatial',
         true
       );
       testFieldVisibility(
         role,
         '12_ValidityRangeField.label_from',
-        /0?8[./]0?6[./]2025/,
+        /0?8[./]0?6[./]2025|0?6[./]0?8[./]2025/,
         '#temp_and_spatial',
         true
       );
       testFieldVisibility(
         role,
         '12_ValidityRangeField.label_to',
-        /11[./]0?6[./]2025/,
+        /11[./]0?6[./]2025|0?6[./]11[./]2025/,
         '#temp_and_spatial',
         true
       );
