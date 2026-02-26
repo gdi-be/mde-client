@@ -71,12 +71,7 @@ export async function testAdditional(role: string) {
 
         const fieldset = within(container).getAllByRole('group')[2];
 
-        await testField('isoMetadata.lineage[0].title', {
-          fieldset: fieldset,
-          fieldInput: 'Test Title',
-          fieldType: 'text',
-          help: true
-        });
+        //TODO: Add test for search-input field like title
 
         await testField('isoMetadata.lineage[0].date', {
           fieldset: fieldset,

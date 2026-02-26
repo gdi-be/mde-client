@@ -153,10 +153,11 @@ async function testTextInput(fieldKey: string, options: TestFieldOptions): Promi
     });
   }
 
-  const previousCallCount = fetchMock.mock.calls.length;
-
   await userEvent.clear(input);
   await userEvent.type(input, fieldInput as string);
+
+  const previousCallCount = fetchMock.mock.calls.length;
+
   await fireEvent.blur(input);
 
   const requestInit = await waitForNewPatchCall(previousCallCount);
@@ -690,7 +691,12 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
 
   await userEvent.clear(input);
   await userEvent.type(input, fieldInput as string);
+
+  const previousCallCount = fetchMock.mock.calls.length;
+
   await fireEvent.blur(input);
+
+  await waitForNewPatchCall(previousCallCount);
 
   await waitFor(() => {
     expect(fetchMock).toHaveBeenCalledWith(
