@@ -74,6 +74,7 @@ export async function testAdditional(role: string) {
         await testField('isoMetadata.lineage[0].title', {
           fieldset: fieldset,
           fieldInput: 'Test Title',
+          fieldType: 'text',
           help: true
         });
 

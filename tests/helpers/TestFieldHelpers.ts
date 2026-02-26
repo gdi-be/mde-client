@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { screen, fireEvent, waitFor, within } from '@testing-library/svelte';
+import { screen, fireEvent, waitFor, within, prettyDOM } from '@testing-library/svelte';
 import { expect } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
@@ -15,7 +15,8 @@ type FieldType =
   | 'radio' // RadioInput.svelte
   | 'multiselect' // MultiSelectInput.svelte
   | 'switch'
-  | 'collection'; // Multiple fields in a collection item
+  | 'collection' // Multiple fields in a collection item
+  | 'service'; // fields in the layer subform
 
 interface TestFieldOptions {
   fieldset?: HTMLElement;
@@ -637,6 +638,12 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
           within(fieldset!).getByRole('option', { name: String(fieldConfig.fieldInput) })
         );
         await userEvent.click(option);
+      } else if (fieldConfig.fieldType === 'date') {
+        const input = fieldset!.querySelector('input[type="date"]') as HTMLInputElement;
+        expect(input).toBeInTheDocument();
+        await userEvent.click(input);
+        await fireEvent.change(input, { target: { value: String(fieldConfig.fieldInput) } });
+        await fireEvent.blur(input);
       } else {
         throw new Error(`Unsupported field type in collection: ${fieldConfig.fieldType}`);
       }
@@ -647,9 +654,9 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
           expect.objectContaining({
             method: 'PATCH',
             body: expect.stringContaining(
-              fieldConfig.fieldType === 'text'
-                ? String(fieldConfig.fieldInput)
-                : String(fieldConfig.optionsCode)
+              fieldConfig.fieldType === 'select'
+                ? String(fieldConfig.optionsCode)
+                : String(fieldConfig.fieldInput)
             ),
             headers: {
               'content-type': 'application/json'
@@ -665,6 +672,47 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
       await new Promise((r) => setTimeout(r, 50));
     }
   }
+}
+
+async function testServiceInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
+  const { fieldset, fieldInput, requiredMessage } = options;
+
+  const input = within(fieldset!).getByRole('textbox');
+  expect(input).toBeInTheDocument();
+
+  await userEvent.click(input);
+
+  if (requiredMessage) {
+    await waitFor(() => {
+      expect(screen.queryByText(requiredMessage)).toBeVisible();
+    });
+  }
+
+  await userEvent.clear(input);
+  await userEvent.type(input, fieldInput as string);
+  await fireEvent.blur(input);
+
+  await waitFor(() => {
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        method: 'PATCH',
+        body: expect.stringContaining(fieldInput as string),
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+    );
+  });
+
+  await waitFor(() => {
+    expect(input).toHaveValue(fieldInput as string);
+  });
+
+
+  await waitFor(() => {
+    expect(document.querySelector('.running')).toBeVisible();
+  });
 }
 
 export const isRequiredField = (fieldKey: string, section: string) => {
@@ -734,6 +782,10 @@ export async function testField(fieldKey: string, options: TestFieldOptions): Pr
 
     case 'collection':
       await testCollectionInput(options);
+      break;
+
+    case 'service':
+      await testServiceInput(fieldKey, options);
       break;
   }
 

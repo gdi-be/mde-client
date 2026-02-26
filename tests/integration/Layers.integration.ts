@@ -39,7 +39,7 @@ export async function testLayersForm(role: string) {
 
         await testField('clientMetadata.layers', {
           fieldset: fieldset,
-          fieldType: 'text',
+          fieldType: 'service',
           fieldInput: 'New Layer Title',
           help: true,
           testProgress: {
@@ -62,7 +62,7 @@ export async function testLayersForm(role: string) {
 
           await testField('clientMetadata.layers', {
             fieldset: fieldset,
-            fieldType: 'text',
+            fieldType: 'service',
             fieldInput: 'New Layer Name',
             help: true,
             testProgress: {
@@ -95,7 +95,7 @@ export async function testLayersForm(role: string) {
 
           await testField('clientMetadata.layers', {
             fieldset: fieldset as HTMLElement,
-            fieldType: 'text',
+            fieldType: 'service',
             fieldInput: 'New Layer Style Name',
             help: true,
             testProgress: {
@@ -127,7 +127,7 @@ export async function testLayersForm(role: string) {
 
         await testField('clientMetadata.layers', {
           fieldset: fieldset,
-          fieldType: 'text',
+          fieldType: 'service',
           fieldInput: 'examplelegend.png',
           help: true,
           testProgress: {
@@ -149,7 +149,7 @@ export async function testLayersForm(role: string) {
 
         await testField('clientMetadata.layers', {
           fieldset: fieldset,
-          fieldType: 'text',
+          fieldType: 'service',
           fieldInput: 'New Description...',
           help: true,
           testProgress: {
@@ -171,7 +171,7 @@ export async function testLayersForm(role: string) {
 
         await testField('clientMetadata.layers', {
           fieldset: fieldset,
-          fieldType: 'text',
+          fieldType: 'service',
           fieldInput: 'New Datasource...',
           help: true,
           testProgress: {
@@ -196,7 +196,7 @@ export async function testLayersForm(role: string) {
 
           await testField('clientMetadata.layers', {
             fieldset: fieldset,
-            fieldType: 'text',
+            fieldType: 'service',
             fieldInput: 'Secondary Datasource...',
             help: true,
             testProgress: {

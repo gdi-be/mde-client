@@ -109,7 +109,7 @@ export async function testServices(role: string) {
 
           await testField('isoMetadata.services.title', {
             fieldset: fieldset,
-            fieldType: 'text',
+            fieldType: 'service',
             fieldInput: 'New Service',
             help: true,
             testProgress: {
@@ -131,7 +131,7 @@ export async function testServices(role: string) {
 
           await testField('isoMetadata.services.shortDescription', {
             fieldset: fieldset,
-            fieldType: 'text',
+            fieldType: 'service',
             fieldInput: 'New Service Description...',
             requiredMessage: 'Bitte geben Sie eine kurze Beschreibung für den Service an.',
             help: true,
@@ -155,7 +155,7 @@ export async function testServices(role: string) {
 
             await testField('isoMetadata.services.workspace', {
               fieldset: fieldset,
-              fieldType: 'text',
+              fieldType: 'service',
               fieldInput: 'NewValidServiceWorkspace',
               requiredMessage:
                 'Bitte geben Sie einen gültigen Workspace an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.',
@@ -190,7 +190,7 @@ export async function testServices(role: string) {
 
           await testField('isoMetadata.services.preview', {
             fieldset: fieldset,
-            fieldType: 'text',
+            fieldType: 'service',
             fieldInput: 'https://gdi.berlin.de/data/example.json',
             help: true,
             testProgress: {
@@ -449,32 +449,16 @@ export async function testServices(role: string) {
             expect(fieldset).toBeInTheDocument();
           });
 
-          const input = within(fieldset!).getByRole('textbox');
-          expect(input).toBeInTheDocument();
-
-          await userEvent.clear(input);
-          await userEvent.type(input, 'https://gdi.berlin.de/data/example.png');
-          await fireEvent.blur(input);
-
-          await waitFor(() => {
-            expect(fetchMock).toHaveBeenCalledWith(
-              expect.any(URL),
-              expect.objectContaining({
-                method: 'PATCH',
-                body: expect.stringContaining('https://gdi.berlin.de/data/example.png'),
-                headers: {
-                  'content-type': 'application/json'
-                }
-              })
-            );
-          });
-
-          await waitFor(() => {
-            expect(input).toHaveValue('https://gdi.berlin.de/data/example.png');
-          });
-
-          await waitFor(() => {
-            expect(document.querySelector('.running')).toBeVisible();
+          await testField('isoMetadata.services.legendImage', {
+            fieldset: fieldset,
+            fieldType: 'service',
+            fieldInput: 'https://gdi.berlin.de/data/example.png',
+            help: true,
+            testProgress: {
+              section: 'services',
+              label: 'form.services',
+              expectIncrease: isRequiredField('isoMetadata.services.legendImage', 'services')
+            }
           });
         });
 
