@@ -37,7 +37,7 @@ export default {
     privacy: 'NONE',
     services: [
       {
-        workspace: 'ewfewf',
+        workspace: 'workspace1',
         title: '123 Datentest',
         shortDescription: 'dewf',
         serviceIdentification: '00e19242-8d3c-4617-ad73-d5a6b79ae55f',
@@ -46,9 +46,9 @@ export default {
           format: 'wefwef',
           url: 'weffwe',
           width: 234,
-          height: 234
+          height: 235
         },
-        preview: 'eeeee'
+        preview: 'preview.png'
       },
       {
         title: 'ewfewf',
@@ -100,9 +100,9 @@ export default {
         }
       ]
     },
-    inspireTheme: ['AC'],
+    inspireTheme: ['001'],
     inspireFormatName: '0185 GML Application Schema',
-    inspireAnnexVersion: '0815',
+    inspireAnnexVersion: '1.0',
     thesauri: {},
     highValueDataset: false,
     created: '2025-06-05T00:00:00Z',

@@ -15,6 +15,7 @@
   let assignmentPanelVisible = $state(false);
 
   const metadata = $derived(data.metadata);
+  // eslint-disable-next-line
   initializeFormContext(data.metadata);
 
   const formState = $derived(getFormContext().formState);

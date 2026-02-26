@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { SvelteHTMLElements } from 'svelte/elements';
 
+  // eslint-disable-next-line
   let { ...others }: SvelteHTMLElements['div'] = $props();
 </script>
 
