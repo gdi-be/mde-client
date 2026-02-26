@@ -51,19 +51,19 @@ describe('Form - Integration test', () => {
     testServices('MdeAdministrator');
   });
 
-  // describe('Form completion with role MdeEditor', () => {
-  //   testBasedata('MdeEditor');
-  //   testClassification('MdeEditor');
-  //   testTempAndSpatial('MdeEditor');
-  //   testAdditional('MdeEditor');
-  //   testServices('MdeEditor');
-  // });
+  describe('Form completion with role MdeEditor', () => {
+    testBasedata('MdeEditor');
+    testClassification('MdeEditor');
+    testTempAndSpatial('MdeEditor');
+    testAdditional('MdeEditor');
+    testServices('MdeEditor');
+  });
 
-  // describe('Form completion with role MdeDataOwner', () => {
-  //   testBasedata('MdeDataOwner');
-  //   testClassification('MdeDataOwner');
-  //   testTempAndSpatial('MdeDataOwner');
-  //   testAdditional('MdeDataOwner');
-  //   testServices('MdeDataOwner');
-  // });
+  describe('Form completion with role MdeDataOwner', () => {
+    testBasedata('MdeDataOwner');
+    testClassification('MdeDataOwner');
+    testTempAndSpatial('MdeDataOwner');
+    testAdditional('MdeDataOwner');
+    testServices('MdeDataOwner');
+  });
 });

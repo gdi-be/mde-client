@@ -46,7 +46,12 @@ export default defineConfig(({ mode }) => ({
         '**/dist/',
         '**/.svelte-kit/'
       ],
-      include: ['src/lib/**/*.{js,ts,svelte}']
+      include: ['src/lib/**/*.{js,ts,svelte}'],
+      onConsoleLog: (log: string | string[]) => {
+        if (log.includes('Tried to dispatch event without element')) {
+          return false;
+        }
+      }
     }
   }
 }));

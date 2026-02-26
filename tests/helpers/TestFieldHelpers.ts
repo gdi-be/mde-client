@@ -709,7 +709,6 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
     expect(input).toHaveValue(fieldInput as string);
   });
 
-
   await waitFor(() => {
     expect(document.querySelector('.running')).toBeVisible();
   });

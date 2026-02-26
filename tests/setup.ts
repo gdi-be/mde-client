@@ -310,16 +310,3 @@ vi.mock('@material/dom/focus-trap', () => ({
     releaseFocus: vi.fn()
   }))
 }));
-
-// Suppress Test-Specific Errors
-
-const originalError = console.error;
-console.error = (...args: any[]) => {
-  const errorString = args[0]?.toString() || '';
-
-  if (errorString.includes('Tried to dispatch event without element')) {
-    return;
-  }
-
-  originalError.apply(console, args);
-};
