@@ -22,7 +22,7 @@ export const fetchPublicKey = async () => {
     data = await response.json();
   } catch (error) {
     logger.error('Failed to parse Keycloak certs response:', error);
-    throw new Error('Invalid JSON response from Keycloak certs endpoint');
+    throw new Error('Invalid JSON response from Keycloak certs endpoint', { cause: error });
   }
 
   if (!data?.keys || data?.keys?.length === 0) {

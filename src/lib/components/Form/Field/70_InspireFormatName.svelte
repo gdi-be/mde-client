@@ -36,10 +36,7 @@
   let metadataProfile = $derived(getValue<MetadataProfile>(PROFILE_KEY, metadata));
 
   const valueFromData = $derived(getValue<string>(KEY));
-  let value = $state<string>();
-  $effect(() => {
-    value = valueFromData;
-  });
+  let value = $derived<string | undefined>(valueFromData);
 
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(PROFILE_ID);

@@ -16,10 +16,7 @@
 
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string[]>(KEY));
-  let value = $state<string[]>();
-  $effect(() => {
-    value = valueFromData;
-  });
+  let value = $derived<string[] | undefined>(valueFromData);
 
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string[]>(39);

@@ -15,6 +15,7 @@
   let assignmentPanelVisible = $state(false);
 
   const metadata = $derived(data.metadata);
+  // svelte-ignore state_referenced_locally
   initializeFormContext(data.metadata);
 
   const formState = $derived(getFormContext().formState);
