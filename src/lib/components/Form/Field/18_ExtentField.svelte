@@ -150,7 +150,7 @@
       <legend>{t('18_ExtentField.label')}</legend>
       <div class="tools">
         <SelectInput bind:value={crsKey} label={CRS_LABEL} options={crsOptions} />
-        {#each extentOptions as option (option.key)}
+        {#each extentOptions as option (option.value)}
           <Button
             type="button"
             variant={matchingOption?.title === option.title ? 'raised' : 'text'}
