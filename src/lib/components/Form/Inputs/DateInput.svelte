@@ -2,8 +2,9 @@
   import type { HTMLInputAttributes } from 'svelte/elements';
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
-  import { getAccessToken } from '../../../context/TokenContext.svelte';
-  import { getHighestRole } from '../../../util';
+  import { getAccessToken } from '$lib/context/TokenContext.svelte';
+  import { getHighestRole } from '$lib/util';
+  import { onMount } from 'svelte';
 
   type InputProps = {
     value?: string;
@@ -26,8 +27,26 @@
     ...restProps
   }: InputProps = $props();
 
+  let inputElement: HTMLInputElement;
+  let isActive = $state(false);
+
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
+
+  // This special handling is needed as the input[type="date"] is not automatically
+  // focused when the datepicker is opened.
+  onMount(() => {
+    const handleFocus = () => (isActive = true);
+    const handleBlur = () => (isActive = false);
+
+    inputElement.addEventListener('focus', handleFocus);
+    inputElement.addEventListener('blur', handleBlur);
+
+    return () => {
+      inputElement.removeEventListener('focus', handleFocus);
+      inputElement.removeEventListener('blur', handleBlur);
+    };
+  });
 
   let invalid = $derived.by(() => {
     if (!fieldConfig) return false;
@@ -42,6 +61,8 @@
 <fieldset class={['date-input', wrapperClass, invalid && 'invalid']}>
   <legend>{label}</legend>
   <input
+    class={[isActive && 'active']}
+    bind:this={inputElement}
     type="date"
     id={key}
     name={key}
@@ -78,6 +99,13 @@
       margin-top: 0.5em;
       outline-width: 0;
       align-self: flex-start;
+
+      &.active,
+      &:focus,
+      &:focus-visible {
+        border-color: var(--mdc-theme-primary);
+        outline: 1px solid var(--mdc-theme-primary);
+      }
     }
 
     .field-footer {
