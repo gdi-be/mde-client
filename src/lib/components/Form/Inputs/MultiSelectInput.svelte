@@ -130,7 +130,7 @@
 </fieldset>
 
 <style lang="scss">
-  :global(.multi-select-input) {
+  .multi-select-input {
     padding-top: 1.2em;
     :global(.remove-icon) {
       cursor: pointer;
@@ -139,6 +139,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    :global(.smui-autocomplete) {
+      background-color: white;
+    }
 
     &.invalid {
       border: 2px solid var(--mdc-theme-error) !important;

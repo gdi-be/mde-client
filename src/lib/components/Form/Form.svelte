@@ -256,6 +256,10 @@
     display: flex;
     flex-direction: column;
 
+    :global(fieldset:has(*:focus)) {
+      background-color: var(--primary-90);
+    }
+
     fieldset.inspire-fieldset {
       padding-top: 1.2em;
       border-radius: 0.25rem;
