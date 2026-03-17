@@ -25,7 +25,6 @@ export async function testBasedata(role: string) {
       const baseTab = await screen.findByText('form.basedata');
 
       await fireEvent.click(baseTab);
-
       await tick();
       await new Promise((r) => setTimeout(r, 0));
     });
@@ -112,6 +111,8 @@ export async function testBasedata(role: string) {
       it('can add new keywords', async () => {
         const noMatches = await screen.findByText('15_KeywordsField.no_matches');
         await userEvent.click(noMatches);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(() => {
           expect(screen.getByText('15_KeywordsField.dialog_title')).toBeVisible();
@@ -119,8 +120,12 @@ export async function testBasedata(role: string) {
 
         const textarea = screen.getByLabelText('15_KeywordsField.dialog_label');
         await userEvent.type(textarea, 'Custom1, Custom2');
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await userEvent.click(screen.getByText('general.add'));
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(() => {
           expect(screen.getByText('Custom1')).toBeVisible();
@@ -156,6 +161,8 @@ export async function testBasedata(role: string) {
         expect(screen.getByRole('button', { name: 'delete' })).not.toBeDisabled();
 
         await userEvent.click(screen.getByRole('button', { name: 'delete' }));
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(async () => {
           expect(screen.getByText('19_ContactsField.delete_confirm')).toBeInTheDocument();
@@ -164,6 +171,8 @@ export async function testBasedata(role: string) {
         const popconfirm = document.querySelector('.popconfirm') as HTMLDialogElement;
 
         await userEvent.click(within(popconfirm).getByText('19_ContactsField.delete'));
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(() => {
           expect(fetchMock).toHaveBeenCalledWith(expect.any(URL), {
@@ -249,6 +258,8 @@ export async function testBasedata(role: string) {
         });
 
         fireEvent.click(contactBtn);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(() => {
           expect(fetchMock).toHaveBeenCalledWith('/userdetails', {

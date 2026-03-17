@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/svelte';
 
-import { describe, it, expect, afterEach, vi, beforeEach, beforeAll } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
@@ -31,12 +31,16 @@ describe('Form - Integration test', () => {
       });
 
       await fireEvent.click(screen.getByRole('button', { name: 'form.next' }));
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
 
       await waitFor(() => {
         expect(screen.getByText('form.inspireLegend')).toBeInTheDocument();
       });
 
       await fireEvent.click(screen.getByRole('button', { name: 'form.back' }));
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
 
       await waitFor(() => {
         expect(

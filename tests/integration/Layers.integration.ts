@@ -5,6 +5,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
 import { fetchMock } from '../setup';
+import { tick } from 'svelte';
 
 export async function testLayersForm(role: string) {
   describe('48_LayerForm', () => {
@@ -16,7 +17,11 @@ export async function testLayersForm(role: string) {
       });
 
       await userEvent.click(fieldset!);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
       await userEvent.click(screen.getAllByText('🌎 58_ServiceType.wms')[0]);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
 
       await waitFor(() => {
         expect(document.querySelector('.layers-form') as HTMLElement).toBeVisible();
@@ -27,6 +32,8 @@ export async function testLayersForm(role: string) {
       expect(fieldsets).toHaveLength(1);
 
       await userEvent.click(within(container).getByText('add'));
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
       await waitFor(() => {
         const tabs = container.querySelectorAll('.tab-container');
         expect(tabs.length).toBeGreaterThan(1);

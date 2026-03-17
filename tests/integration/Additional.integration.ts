@@ -7,6 +7,7 @@ import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
 import { setMockMetadataId, setMockRoles } from '../setup';
+import { tick } from 'svelte';
 
 export async function testAdditional(role: string) {
   describe('Additional Information', () => {
@@ -21,9 +22,11 @@ export async function testAdditional(role: string) {
         }
       });
 
-      const additionalTab = screen.queryByText('form.additional') as HTMLElement;
-      expect(additionalTab).toBeInTheDocument();
+      const additionalTab = await screen.findByText('form.additional');
+
       fireEvent.click(additionalTab);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
     });
 
     describe('30_ContentDescription', () => {
@@ -64,6 +67,8 @@ export async function testAdditional(role: string) {
         expect(fieldsets).toHaveLength(1);
 
         await userEvent.click(screen.getByTitle('32_Lineage.add'));
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(async () => {
           expect(screen.queryAllByRole('group', { name: 'delete' }).length).toBeGreaterThan(0);
@@ -86,6 +91,8 @@ export async function testAdditional(role: string) {
         });
 
         await userEvent.click(screen.getByTitle('32_Lineage.add'));
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         const inputFields = within(
           document.querySelector('.lineages-field') as HTMLElement

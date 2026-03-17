@@ -8,6 +8,7 @@ import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
 import { testLayersForm } from './Layers.integration';
+import { tick } from 'svelte';
 
 export async function testServices(role: string) {
   describe('Dienste', () => {
@@ -22,15 +23,19 @@ export async function testServices(role: string) {
         }
       });
 
-      const servicesTab = screen.queryByText('form.services') as HTMLElement;
-      expect(servicesTab).toBeInTheDocument();
+      const servicesTab = await screen.findByText('form.services');
+
       fireEvent.click(servicesTab);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
     });
 
     describe('40_ServiceForm', () => {
       beforeEach(async () => {
         const addButton = screen.getByTitle('servicessection.add_button');
         await userEvent.click(addButton);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
       });
       it('can add a service', async () => {
         const tab = screen.getByTitle('servicessection.add_button');
@@ -75,7 +80,11 @@ export async function testServices(role: string) {
           const previousCallCount = fetchMock.mock.calls.length;
 
           await userEvent.click(fieldset!);
+          await tick();
+          await new Promise((r) => setTimeout(r, 0));
           await userEvent.click(screen.getByText('📥 58_ServiceType.wfs'));
+          await tick();
+          await new Promise((r) => setTimeout(r, 0));
 
           await waitFor(() => {
             expect(fetchMock.mock.calls.length).toBeGreaterThan(previousCallCount);
@@ -99,7 +108,11 @@ export async function testServices(role: string) {
           const previousCallCount = fetchMock.mock.calls.length;
 
           await userEvent.click(fieldset!);
+          await tick();
+          await new Promise((r) => setTimeout(r, 0));
           await userEvent.click(screen.getByText('🌎 58_ServiceType.wms'));
+          await tick();
+          await new Promise((r) => setTimeout(r, 0));
 
           await waitFor(() => {
             expect(fetchMock.mock.calls.length).toBeGreaterThan(previousCallCount);
@@ -223,7 +236,11 @@ export async function testServices(role: string) {
           });
 
           await userEvent.click(fieldset!);
+          await tick();
+          await new Promise((r) => setTimeout(r, 0));
           await userEvent.click(screen.getByText('📥 58_ServiceType.wfs'));
+          await tick();
+          await new Promise((r) => setTimeout(r, 0));
 
           await waitFor(() => {
             expect(document.querySelector('.featuretypes-form') as HTMLElement).toBeVisible();
@@ -234,6 +251,8 @@ export async function testServices(role: string) {
           expect(fieldsets).toHaveLength(1);
 
           await userEvent.click(within(container).getByText('add'));
+          await tick();
+          await new Promise((r) => setTimeout(r, 0));
         });
 
         it('can add feature type', async () => {
@@ -340,6 +359,8 @@ export async function testServices(role: string) {
             expect(fieldsets).toHaveLength(1);
 
             await userEvent.click(within(container).getByText('add'));
+            await tick();
+            await new Promise((r) => setTimeout(r, 0));
           });
 
           describe('64_AttributeName', () => {
@@ -455,7 +476,11 @@ export async function testServices(role: string) {
           });
 
           await userEvent.click(fieldset!);
+          await tick();
+          await new Promise((r) => setTimeout(r, 0));
           await userEvent.click(screen.getByText('🌎 58_ServiceType.wms'));
+          await tick();
+          await new Promise((r) => setTimeout(r, 0));
 
           await waitFor(() => {
             expect(document.querySelector('.legend-fieldset') as HTMLElement).toBeVisible();

@@ -22,9 +22,12 @@ export async function testTempAndSpatial(role: string) {
         }
       });
 
-      const timeTab = screen.queryByText('form.temp_and_spatial') as HTMLElement;
-      expect(timeTab).toBeInTheDocument();
+      const timeTab = await screen.findByText('form.temp_and_spatial');
+
       fireEvent.click(timeTab);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
+
     });
 
     describe('09_CreatedField', () => {
@@ -232,9 +235,16 @@ export async function testTempAndSpatial(role: string) {
             expect(input).toBeInTheDocument();
 
             await userEvent.clear(input);
+            await tick();
+            await new Promise((r) => setTimeout(r, 0));
 
             await userEvent.type(input, inputValue);
+            await tick();
+            await new Promise((r) => setTimeout(r, 0));
+
             await fireEvent.blur(input);
+            await tick();
+            await new Promise((r) => setTimeout(r, 0));
           }
 
           const previousCallCount = fetchMock.mock.calls.length;

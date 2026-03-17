@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 import type { Role } from '$lib/models/keycloak';
 
 import { fetchMock } from '../setup';
+import { tick } from 'svelte';
 
 export interface FooterButtonVisibility {
   comments: boolean;
@@ -82,6 +83,8 @@ export async function openAssignmentDialog() {
   expect(assignButton).toBeInTheDocument();
 
   await userEvent.click(assignButton);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitFor(() => {
     const assignmentPanel = document.querySelector('.assignment-panel') as HTMLElement;
@@ -108,6 +111,8 @@ export async function assignToRole(options: AssignmentDialogOptions) {
 
     if (currentState !== approvalState) {
       await userEvent.click(approvalSwitch);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
 
       await waitFor(() => {
         expect(approvalSwitch).toHaveAttribute('aria-checked', approvalState ? 'true' : 'false');
@@ -118,6 +123,8 @@ export async function assignToRole(options: AssignmentDialogOptions) {
   if (userName) {
     const userButton = screen.getByRole('button', { name: new RegExp(userName, 'i') });
     await userEvent.click(userButton);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
   } else if (role) {
     const roleMap: Record<Role, string> = {
       MdeEditor: 'assignment.handoverToRole',
@@ -128,6 +135,8 @@ export async function assignToRole(options: AssignmentDialogOptions) {
 
     const roleButton = screen.getByText(roleMap[role]);
     await userEvent.click(roleButton);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
   }
 
   await waitFor(() => {
@@ -162,6 +171,8 @@ export async function assignToSelf(userId: string) {
   expect(selfAssignButton).toBeInTheDocument();
 
   await userEvent.click(selfAssignButton);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitFor(() => {
     expect(fetchMock).toHaveBeenCalledWith(
@@ -193,6 +204,8 @@ export async function unassignFromSelf() {
 
   const unassignButton = screen.getByRole('button', { name: 'assignment.unassign' });
   await userEvent.click(unassignButton);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitFor(
     () => {
@@ -208,6 +221,8 @@ export async function openValidationDialog() {
   expect(validateButton).toBeInTheDocument();
 
   await userEvent.click(validateButton);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitFor(() => {
     const validatePanel = document.querySelector('.validation-content') as HTMLElement;
@@ -230,6 +245,8 @@ export async function startValidation() {
 
   const startButton = screen.getByRole('button', { name: 'validationdialog.start' });
   await userEvent.click(startButton);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitFor(() => {
     expect(fetchMock).toHaveBeenCalledWith(
@@ -266,6 +283,8 @@ export async function openPublishDialog() {
   expect(publishButton).toBeInTheDocument();
 
   await userEvent.click(publishButton);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitFor(() => {
     const publishPanel = document.querySelector('.publish-content') as HTMLElement;
@@ -291,6 +310,8 @@ export async function publishMetadata() {
   expect(publishButton).not.toBeDisabled();
 
   await userEvent.click(publishButton);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitFor(() => {
     expect(fetchMock).toHaveBeenCalledWith(
@@ -336,6 +357,8 @@ export async function approveMetadata() {
   });
 
   await userEvent.click(approvalSwitch);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitFor(() => {
     expect(fetchMock).toHaveBeenCalledWith(

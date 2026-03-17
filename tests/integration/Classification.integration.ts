@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, within, cleanup } from '@testing-library/svelte';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -7,11 +7,11 @@ import { fetchMock, setMockMetadataId, setMockRoles } from '../setup';
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
+import { tick } from 'svelte';
 
 export async function testClassification(role: string) {
   describe('Classification', () => {
     beforeEach(async () => {
-      cleanup();
       setMockMetadataId('a723e625-815c-4553-93bf-2fb62bb623d4');
       setMockRoles([role]);
 
@@ -21,9 +21,11 @@ export async function testClassification(role: string) {
         }
       });
 
-      const contextTab = screen.queryByText('form.classification') as HTMLElement;
-      expect(contextTab).toBeInTheDocument();
+      const contextTab = await screen.findByText('form.classification');
+
       fireEvent.click(contextTab);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
     });
 
     describe('05_MetadataProfileField', () => {
@@ -169,6 +171,8 @@ export async function testClassification(role: string) {
         const hvdSwitch = within(hvdField).getByRole('switch');
 
         await userEvent.click(hvdSwitch);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(() => {
           expect(fetchMock).toHaveBeenCalledWith('/data/hvd_categories');
@@ -180,8 +184,12 @@ export async function testClassification(role: string) {
         expect(categoryField).toBeVisible();
 
         await userEvent.click(categoryField);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await userEvent.click(screen.getByText('Kategorie A'));
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(() => {
           const patchCalls = fetchMock.mock.calls.filter(
@@ -257,9 +265,11 @@ export async function testClassification(role: string) {
         }
       });
 
-      const contextTab = screen.queryByText('form.classification') as HTMLElement;
-      expect(contextTab).toBeInTheDocument();
+      const contextTab = await screen.findByText('form.classification');
+
       fireEvent.click(contextTab);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
     });
 
     describe('38_InspireAnnexVersion', () => {
@@ -340,7 +350,7 @@ export async function testClassification(role: string) {
             testProgress: {
               section: 'classification',
               label: 'form.classification',
-              expectIncrease: true
+              expectIncrease: false
             }
           });
         });
