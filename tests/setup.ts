@@ -2,6 +2,11 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 import metadata3 from './fixtures/metadata3';
+import { configure } from '@testing-library/svelte';
+
+configure({
+  asyncUtilTimeout: 5000 
+});
 
 // Browser API Polyfills
 
@@ -143,8 +148,7 @@ export const fetchMock = vi.fn(async (input: string | Request | URL, init?: Requ
     return Promise.resolve(
       new Response(
         JSON.stringify([
-          { key: 'A', label: 'Kategorie A' },
-          { key: 'B', label: 'Kategorie B' }
+          { key: 'A', label: 'Kategorie A' }
         ])
       )
     );

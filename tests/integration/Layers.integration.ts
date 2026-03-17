@@ -9,7 +9,11 @@ import { fetchMock } from '../setup';
 export async function testLayersForm(role: string) {
   describe('48_LayerForm', () => {
     beforeEach(async () => {
-      const fieldset = document.querySelector('.service-type-field') as HTMLElement;
+      const fieldset = await waitFor(() => {
+        const el = document.querySelector('.service-type-field');
+        expect(el).toBeInTheDocument();
+        return el as HTMLElement;
+      });
 
       await userEvent.click(fieldset!);
       await userEvent.click(screen.getAllByText('🌎 58_ServiceType.wms')[0]);
@@ -31,10 +35,10 @@ export async function testLayersForm(role: string) {
 
     describe('49_LayerTitle', () => {
       it('can set layer title correctly', async () => {
-        const fieldset = document.querySelector('.layer-title-field') as HTMLElement;
-
-        await waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.layer-title-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('clientMetadata.layers', {
@@ -54,10 +58,10 @@ export async function testLayersForm(role: string) {
     describe('50_LayerName', () => {
       if (role === 'MdeEditor' || role === 'MdeAdministrator') {
         it('can set layer name correctly with role MdeEditor or MdeAdministrator', async () => {
-          const fieldset = document.querySelector('.layer-name-field') as HTMLElement;
-
-          await waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.layer-name-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('clientMetadata.layers', {
@@ -87,10 +91,10 @@ export async function testLayersForm(role: string) {
     describe('51_LayerStyleName', () => {
       if (role === 'MdeEditor' || role === 'MdeAdministrator') {
         it('can set layer style name correctly with role MdeEditor or MdeAdministrator', async () => {
-          const fieldset = document.querySelector('.layer-style-name-field') as HTMLElement;
-
-          await waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.layer-style-name-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('clientMetadata.layers', {
@@ -119,10 +123,10 @@ export async function testLayersForm(role: string) {
 
     describe('53_LayerLegendImage', () => {
       it('can set layer legend correctly', async () => {
-        const fieldset = document.querySelector('.layer-legend-image-field') as HTMLElement;
-
-        await waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.layer-legend-image-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('clientMetadata.layers', {
@@ -141,10 +145,10 @@ export async function testLayersForm(role: string) {
 
     describe('54_Description', () => {
       it('can set layer description correctly', async () => {
-        const fieldset = document.querySelector('.layer-short-description-field') as HTMLElement;
-
-        await waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.layer-short-description-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('clientMetadata.layers', {
@@ -163,10 +167,10 @@ export async function testLayersForm(role: string) {
 
     describe('55_LayerDatasource', () => {
       it('can set layer datasource correctly', async () => {
-        const fieldset = document.querySelector('.layer-datasource-field') as HTMLElement;
-
-        await waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.layer-datasource-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('clientMetadata.layers', {
@@ -186,12 +190,10 @@ export async function testLayersForm(role: string) {
     describe('68_LayerSecondaryDatasource', () => {
       if (role === 'MdeEditor' || role === 'MdeAdministrator') {
         it('can set secondary datasource correctly with role MdeEditor or MdeAdministrator', async () => {
-          const fieldset = document.querySelector(
-            '.layer-secondary-datasource-field'
-          ) as HTMLElement;
-
-          await waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.layer-secondary-datasource-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('clientMetadata.layers', {

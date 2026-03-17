@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, cleanup, within } from '@testing-library/svelte';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -7,11 +7,11 @@ import { fetchMock, resetTestMetadata, setMockMetadataId, setMockRoles } from '.
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
+import { tick } from 'svelte';
 
 export async function testBasedata(role: string) {
   describe('Basedata', () => {
     beforeEach(async () => {
-      cleanup();
       setMockMetadataId('a723e625-815c-4553-93bf-2fb62bb623d4');
       setMockRoles([role]);
       resetTestMetadata(metadata3);
@@ -22,17 +22,20 @@ export async function testBasedata(role: string) {
         }
       });
 
-      const baseTab = screen.queryByText('form.basedata') as HTMLElement;
-      expect(baseTab).toBeInTheDocument();
-      fireEvent.click(baseTab);
+      const baseTab = await screen.findByText('form.basedata');
+
+      await fireEvent.click(baseTab);
+
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
     });
 
     describe('01_TitleField', () => {
       it('can set title correctly', async () => {
-        const fieldset = document.querySelector('.title-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.title-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.title', {
@@ -53,10 +56,10 @@ export async function testBasedata(role: string) {
 
     describe('02_DescriptionField', () => {
       it('can set description correctly', async () => {
-        const fieldset = document.querySelector('.description-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.description-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.description', {
@@ -77,7 +80,11 @@ export async function testBasedata(role: string) {
 
     describe('15_KeywordsField', () => {
       it('can set keywords correctly', async () => {
-        const fieldset = document.querySelector('.keywords-field') as HTMLElement;
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.keywords-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
 
         await waitFor(() => {
           expect(fieldset).toBeVisible();
@@ -124,10 +131,10 @@ export async function testBasedata(role: string) {
 
     describe('29_PreviewField', () => {
       it('can set preview correctly', async () => {
-        const fieldset = document.querySelector('.preview-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        await waitFor(() => {
+          const el = document.querySelector('.preview-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.preview', {

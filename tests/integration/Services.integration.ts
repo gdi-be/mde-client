@@ -39,10 +39,13 @@ export async function testServices(role: string) {
 
       describe('58_ServiceType', () => {
         it('can set service type correctly', async () => {
-          const fieldset = document.querySelector('.service-type-field') as HTMLElement;
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.service-type-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
+          });
 
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          await waitFor(() => {
             expect(within(fieldset).getByText('📥 58_ServiceType.atom')).toBeInTheDocument();
             expect(within(fieldset).getByText('📥 58_ServiceType.wfs')).toBeInTheDocument();
             expect(within(fieldset).getByText('🌎 58_ServiceType.wms')).toBeInTheDocument();
@@ -59,7 +62,12 @@ export async function testServices(role: string) {
         });
 
         it('switching to WFS toggles subforms', async () => {
-          const fieldset = document.querySelector('.service-type-field') as HTMLElement;
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.service-type-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
+          });
+
           expect(
             document.querySelector('.featuretypes-form') as HTMLElement
           ).not.toBeInTheDocument();
@@ -79,7 +87,12 @@ export async function testServices(role: string) {
         });
 
         it('switching to WMS toggles subforms', async () => {
-          const fieldset = document.querySelector('.service-type-field') as HTMLElement;
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.service-type-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
+          });
+
           expect(document.querySelector('.layers-form') as HTMLElement).not.toBeInTheDocument();
           expect(document.querySelector('.legend-fieldset') as HTMLElement).not.toBeInTheDocument();
 
@@ -101,10 +114,10 @@ export async function testServices(role: string) {
 
       describe('59_ServiceTitle', () => {
         it('can set service title correctly', async () => {
-          const fieldset = document.querySelector('.service-title-field') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.service-title-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('isoMetadata.services.title', {
@@ -123,12 +136,11 @@ export async function testServices(role: string) {
 
       describe('60_ServiceShortDescription', () => {
         it('can set service description correctly', async () => {
-          const fieldset = document.querySelector('.service-description-field') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.service-description-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
-
           await testField('isoMetadata.services.shortDescription', {
             fieldset: fieldset,
             fieldType: 'service',
@@ -147,10 +159,10 @@ export async function testServices(role: string) {
       describe('45_ServiceWorkspace', () => {
         if (role === 'MdeEditor' || role === 'MdeAdministrator') {
           it('can set service workspace correctly with role MdeEditor or MdeAdministrator', async () => {
-            const fieldset = document.querySelector('.service-id-field') as HTMLElement;
-
-            waitFor(() => {
-              expect(fieldset).toBeInTheDocument();
+            const fieldset = await waitFor(() => {
+              const el = document.querySelector('.service-id-field');
+              expect(el).toBeInTheDocument();
+              return el as HTMLElement;
             });
 
             await testField('isoMetadata.services.workspace', {
@@ -173,7 +185,7 @@ export async function testServices(role: string) {
 
             const fieldset = document.querySelector('.service-id-field') as HTMLElement;
 
-            waitFor(() => {
+            await waitFor(() => {
               expect(fieldset).not.toBeInTheDocument();
             });
           });
@@ -182,10 +194,10 @@ export async function testServices(role: string) {
 
       describe('46_ServicePreview', () => {
         it('can set service preview correctly', async () => {
-          const fieldset = document.querySelector('.service-preview-field') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.service-preview-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('isoMetadata.services.preview', {
@@ -204,7 +216,11 @@ export async function testServices(role: string) {
 
       describe('56_FeatureTypeForm', () => {
         beforeEach(async () => {
-          const fieldset = document.querySelector('.service-type-field') as HTMLElement;
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.service-type-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
+          });
 
           await userEvent.click(fieldset!);
           await userEvent.click(screen.getByText('📥 58_ServiceType.wfs'));
@@ -234,10 +250,10 @@ export async function testServices(role: string) {
 
         describe('61_FeatureTypeTitle', () => {
           it('can set feature type title correctly', async () => {
-            const fieldset = document.querySelector('.featuretype-title-field') as HTMLElement;
-
-            waitFor(() => {
-              expect(fieldset).toBeInTheDocument();
+            const fieldset = await waitFor(() => {
+              const el = document.querySelector('.featuretype-title-field');
+              expect(el).toBeInTheDocument();
+              return el as HTMLElement;
             });
 
             await testField('isoMetadata.services.featureTypes.title', {
@@ -257,10 +273,10 @@ export async function testServices(role: string) {
         describe('62_FeatureTypeName', () => {
           if (role === 'MdeEditor' || role === 'MdeAdministrator') {
             it('can set feature type name correctly with role MdeEditor or MdeAdministrator', async () => {
-              const fieldset = document.querySelector('.featuretype-name-field') as HTMLElement;
-
-              waitFor(() => {
-                expect(fieldset).toBeInTheDocument();
+              const fieldset = await waitFor(() => {
+                const el = document.querySelector('.featuretype-name-field');
+                expect(el).toBeInTheDocument();
+                return el as HTMLElement;
               });
 
               await testField('isoMetadata.services.featureTypes.name', {
@@ -283,7 +299,7 @@ export async function testServices(role: string) {
 
               const fieldset = document.querySelector('.featuretype-name-field') as HTMLElement;
 
-              waitFor(() => {
+              await waitFor(() => {
                 expect(fieldset).not.toBeInTheDocument();
               });
             });
@@ -292,12 +308,10 @@ export async function testServices(role: string) {
 
         describe('69_FeatureTypeDescription', () => {
           it('can set feature type description correctly', async () => {
-            const fieldset = document.querySelector(
-              '.featuretype-short-description-field'
-            ) as HTMLElement;
-
-            waitFor(() => {
-              expect(fieldset).toBeInTheDocument();
+            const fieldset = await waitFor(() => {
+              const el = document.querySelector('.featuretype-short-description-field');
+              expect(el).toBeInTheDocument();
+              return el as HTMLElement;
             });
 
             await testField('isoMetadata.services.featureTypes.shortDescription', {
@@ -330,10 +344,10 @@ export async function testServices(role: string) {
 
           describe('64_AttributeName', () => {
             it('can set attribute name correctly', async () => {
-              const fieldset = document.querySelector('.attribute-name-field') as HTMLElement;
-
-              waitFor(() => {
-                expect(fieldset).toBeInTheDocument();
+              const fieldset = await waitFor(() => {
+                const el = document.querySelector('.attribute-name-field');
+                expect(el).toBeInTheDocument();
+                return el as HTMLElement;
               });
 
               await testField('isoMetadata.services.featureTypes.columns.name', {
@@ -352,10 +366,10 @@ export async function testServices(role: string) {
 
           describe('65_AttributeAlias', () => {
             it('can set attribute alias correctly', async () => {
-              const fieldset = document.querySelector('.attribute-alias-field') as HTMLElement;
-
-              waitFor(() => {
-                expect(fieldset).toBeInTheDocument();
+              const fieldset = await waitFor(() => {
+                const el = document.querySelector('.attribute-alias-field');
+                expect(el).toBeInTheDocument();
+                return el as HTMLElement;
               });
 
               await testField('isoMetadata.services.featureTypes.columns.alias', {
@@ -375,9 +389,13 @@ export async function testServices(role: string) {
           describe('66_AttributeDatatype', () => {
             if (role === 'MdeEditor' || role === 'MdeAdministrator') {
               it('can set attribute datatype correctly with role MdeEditor or MdeAdministrator', async () => {
-                const fieldset = document.querySelector('.attribute-type-field') as HTMLElement;
-                waitFor(() => {
-                  expect(fieldset).toBeInTheDocument();
+                const fieldset = await waitFor(() => {
+                  const el = document.querySelector('.attribute-type-field');
+                  expect(el).toBeInTheDocument();
+                  return el as HTMLElement;
+                });
+
+                await waitFor(() => {
                   expect(within(fieldset).getByText('BigDecimal')).toBeInTheDocument();
                   expect(within(fieldset).getByText('Boolean')).toBeInTheDocument();
                   expect(within(fieldset).getByText('Date')).toBeInTheDocument();
@@ -413,7 +431,7 @@ export async function testServices(role: string) {
 
                 const fieldset = document.querySelector('.attribute-type-field') as HTMLElement;
 
-                waitFor(() => {
+                await waitFor(() => {
                   expect(fieldset).not.toBeInTheDocument();
                 });
               });
@@ -430,7 +448,11 @@ export async function testServices(role: string) {
             }
           });
 
-          const fieldset = document.querySelector('.service-type-field') as HTMLElement;
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.service-type-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
+          });
 
           await userEvent.click(fieldset!);
           await userEvent.click(screen.getByText('🌎 58_ServiceType.wms'));
@@ -441,12 +463,10 @@ export async function testServices(role: string) {
         });
 
         it('can set legend url correctly', async () => {
-          const fieldset = document.querySelectorAll(
-            '.legend-text-fields .field-wrapper'
-          )[0] as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelectorAll('.legend-text-fields .field-wrapper')[0];
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('isoMetadata.services.legendImage', {
@@ -463,14 +483,11 @@ export async function testServices(role: string) {
         });
 
         it('can set legend format correctly', async () => {
-          const fieldset = document.querySelectorAll(
-            '.legend-text-fields .field-wrapper'
-          )[1] as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelectorAll('.legend-text-fields .field-wrapper')[1];
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
-
           await testField('isoMetadata.services.legendImage', {
             fieldset: fieldset,
             fieldType: 'text',
@@ -485,10 +502,10 @@ export async function testServices(role: string) {
         });
 
         it('can set legend width correctly', async () => {
-          const fieldset = document.querySelector('.legend-size-fields') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.legend-size-fields');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('isoMetadata.services.legendImage', {
@@ -505,10 +522,10 @@ export async function testServices(role: string) {
         });
 
         it('can set legend height correctly', async () => {
-          const fieldset = document.querySelector('.legend-size-fields') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.legend-size-fields');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('isoMetadata.services.legendImage', {

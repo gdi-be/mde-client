@@ -7,6 +7,7 @@ import { fetchMock, setMockMetadataId, setMockRoles } from '../setup';
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
+import { tick } from 'svelte';
 
 export async function testTempAndSpatial(role: string) {
   describe('Temporal and Spatial Information', () => {
@@ -67,10 +68,10 @@ export async function testTempAndSpatial(role: string) {
 
     describe('14_MaintenanceFrequencyField', () => {
       it('can set maintenance frequency', async () => {
-        const fieldset = document.querySelector('.maintenance-frequency-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.maintenance-frequency-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.maintenanceFrequency', {
@@ -85,10 +86,10 @@ export async function testTempAndSpatial(role: string) {
 
     describe('11_LastUpdatedField', () => {
       it('can set last updated date correctly', async () => {
-        const fieldset = document.querySelector('.last-updated-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.last-updated-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         const input = fieldset.querySelector('input[type="date"]') as HTMLInputElement;
@@ -106,10 +107,10 @@ export async function testTempAndSpatial(role: string) {
 
     describe('12_ValidityRangeField', () => {
       it('can set valid from date', async () => {
-        const fieldset = document.querySelector('.validity-range-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.validity-range-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.validFrom', {
@@ -126,10 +127,10 @@ export async function testTempAndSpatial(role: string) {
       });
 
       it('can set valid to date', async () => {
-        const fieldset = document.querySelector('.validity-range-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.validity-range-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.validTo', {
@@ -148,10 +149,10 @@ export async function testTempAndSpatial(role: string) {
 
     describe('16_DeliveredCoordinateSystemField', () => {
       it('can set delivered crs correctly', async () => {
-        const fieldset = document.querySelector('.delivered-crs-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.delivered-crs-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('technicalMetadata.deliveredCrs', {
@@ -173,10 +174,11 @@ export async function testTempAndSpatial(role: string) {
           await waitFor(() => {
             expect(fetchMock).toHaveBeenCalledWith(`/data/crs`);
           });
-          const fieldset = document.querySelector('.crs-field') as HTMLElement;
 
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.crs-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('isoMetadata.crs', {
@@ -218,10 +220,10 @@ export async function testTempAndSpatial(role: string) {
 
           await new Promise((resolve) => setTimeout(resolve, 100));
 
-          const fieldset = document.querySelector('.extent-field') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.extent-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           const inputs = await within(fieldset).getAllByRole('textbox');
@@ -269,10 +271,10 @@ export async function testTempAndSpatial(role: string) {
 
     describe('28_ResolutionField', () => {
       it('can set resolution correctly', async () => {
-        const fieldset = document.querySelector('.resolution-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.resolution-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.resolutions', {
@@ -289,10 +291,10 @@ export async function testTempAndSpatial(role: string) {
       });
 
       it('can set scale correctly', async () => {
-        const fieldset = document.querySelector('.resolution-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.resolution-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         const radioInput = fieldset!.querySelector(
@@ -301,8 +303,14 @@ export async function testTempAndSpatial(role: string) {
         expect(radioInput).toBeInTheDocument();
 
         await userEvent.click(radioInput);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
-        const fieldsetNew = document.querySelector('.resolution-field') as HTMLElement;
+        const fieldsetNew = await waitFor(() => {
+          const el = document.querySelector('.resolution-field .number-input');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
 
         await testField('isoMetadata.resolutions', {
           fieldset: fieldsetNew,
@@ -325,10 +333,10 @@ export async function testTempAndSpatial(role: string) {
             expect(fetchMock).toHaveBeenCalledWith('/data/spatial_representation_types');
           });
 
-          const fieldset = document.querySelector('.spatial-representation-field') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.spatial-representation-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('isoMetadata.spatialRepresentationTypes', {
@@ -356,7 +364,7 @@ export async function testTempAndSpatial(role: string) {
 
           const fieldset = document.querySelector('.spatial-representation-field') as HTMLElement;
 
-          waitFor(() => {
+          await waitFor(() => {
             expect(fieldset).not.toBeInTheDocument();
           });
         });

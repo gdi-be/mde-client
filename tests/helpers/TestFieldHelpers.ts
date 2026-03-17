@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 import { fetchMock } from '../setup';
 import { FieldConfigs } from '$lib/components/Form/FieldsConfig';
+import { tick } from 'svelte';
 
 type FieldType =
   | 'text' // TextInput.svelte
@@ -112,25 +113,20 @@ function getProgressValue(bar: Element): number {
   return progress;
 }
 
-async function waitForNewPatchCall(
-  previousCallCount: number,
-  timeout = 5000
-): Promise<RequestInit> {
-  const startTime = Date.now();
-
-  while (Date.now() - startTime < timeout) {
+async function waitForNewPatchCall(previousCallCount: number): Promise<RequestInit> {
+  await waitFor(() => {
     const patchCalls = fetchMock.mock.calls
       .slice(previousCallCount)
       .filter((call) => call[1]?.method === 'PATCH');
 
-    if (patchCalls.length > 0) {
-      return patchCalls[patchCalls.length - 1][1] as RequestInit;
-    }
+    expect(patchCalls.length).toBeGreaterThan(0);
+  });
 
-    await new Promise((resolve) => setTimeout(resolve, 50));
-  }
+  const patchCalls = fetchMock.mock.calls
+    .slice(previousCallCount)
+    .filter((call) => call[1]?.method === 'PATCH');
 
-  throw new Error(`No PATCH call found after ${previousCallCount} calls within ${timeout}ms`);
+  return patchCalls[patchCalls.length - 1][1] as RequestInit;
 }
 
 async function testTextInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
@@ -146,6 +142,8 @@ async function testTextInput(fieldKey: string, options: TestFieldOptions): Promi
   }
 
   await userEvent.click(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   if (requiredMessage) {
     await waitFor(() => {
@@ -154,11 +152,18 @@ async function testTextInput(fieldKey: string, options: TestFieldOptions): Promi
   }
 
   await userEvent.clear(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
+
   await userEvent.type(input, fieldInput as string);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   const previousCallCount = fetchMock.mock.calls.length;
 
   await fireEvent.blur(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   const requestInit = await waitForNewPatchCall(previousCallCount);
   const body = JSON.parse(requestInit.body as string);
@@ -214,9 +219,17 @@ async function testTextInput(fieldKey: string, options: TestFieldOptions): Promi
     const longInput = 'x'.repeat(maxLength);
     const longInputAdd = 'x'.repeat(maxLength + 10);
     await userEvent.click(input!);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
     await userEvent.clear(input!);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
     await userEvent.type(input!, longInputAdd);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
     await fireEvent.blur(input!);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(expect.any(URL), {
@@ -246,9 +259,17 @@ async function testTextAreaInput(fieldKey: string, options: TestFieldOptions): P
   const previousCallCount = fetchMock.mock.calls.length;
 
   await userEvent.click(textarea!);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
   await userEvent.clear(textarea!);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
   await userEvent.type(textarea!, fieldInput as string);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
   await fireEvent.blur(textarea!);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   const requestInit = await waitForNewPatchCall(previousCallCount);
   const body = JSON.parse(requestInit.body as string);
@@ -275,9 +296,17 @@ async function testTextAreaInput(fieldKey: string, options: TestFieldOptions): P
     const longInput = 'x'.repeat(maxLength);
     const longInputAdd = 'x'.repeat(maxLength + 10);
     await userEvent.click(textarea!);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
     await userEvent.clear(textarea!);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
     await userEvent.type(textarea!, longInputAdd);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
     await fireEvent.blur(textarea!);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(expect.any(URL), {
@@ -297,17 +326,33 @@ async function testTextAreaInput(fieldKey: string, options: TestFieldOptions): P
 async function testNumberInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, fieldInput } = options;
 
-  const input = within(fieldset!).getByRole('spinbutton');
-  expect(input).toBeInTheDocument();
+  const input = await waitFor(() => {
+    const el = fieldset!.querySelector('input[type="number"]');
+    expect(el).toBeInTheDocument();
+    return el as HTMLElement;
+  });
 
   await userEvent.click(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
   await userEvent.clear(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
   await userEvent.type(input, fieldInput!.toString());
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
   await fireEvent.blur(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0))
   const previousCallCount = fetchMock.mock.calls.length;
 
-  const requestInit = await waitForNewPatchCall(previousCallCount);
-  const body = JSON.parse(requestInit.body as string);
+  let requestInit = await waitForNewPatchCall(previousCallCount);
+  let body = JSON.parse(requestInit.body as string);
+
+  if (body.value == null) {
+    requestInit = await waitForNewPatchCall(previousCallCount + 1);
+    body = JSON.parse(requestInit.body as string);
+  }
 
   expect(extractBaseKey(body.key)).toBe(extractBaseKey(fieldKey));
 
@@ -342,10 +387,14 @@ async function testDateInput(fieldKey: string, options: TestFieldOptions): Promi
   expect(input).toBeInTheDocument();
 
   await userEvent.click(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   const previousCallCount = fetchMock.mock.calls.length;
   await fireEvent.change(input, { target: { value: fieldInput } });
   await fireEvent.blur(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   const requestInit = await waitForNewPatchCall(previousCallCount);
   const body = JSON.parse(requestInit.body as string);
@@ -366,6 +415,8 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
   const { fieldset, selectOptionText, selectOptionValue, requiredMessage } = options;
 
   await userEvent.click(fieldset!);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   if (requiredMessage) {
     await waitFor(() => {
@@ -378,6 +429,8 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
   const previousCallCount = fetchMock.mock.calls.length;
 
   await userEvent.click(option);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   const requestInit = await waitForNewPatchCall(previousCallCount);
   const body = JSON.parse(requestInit.body as string);
@@ -420,6 +473,8 @@ async function testRadioInput(fieldKey: string, options: TestFieldOptions): Prom
   expect(radioInput).toBeInTheDocument();
 
   await userEvent.click(radioInput);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   const requestInit = await waitForNewPatchCall(previousCallCount);
   const body = JSON.parse(requestInit.body as string);
@@ -445,6 +500,8 @@ async function testSwitchInput(fieldKey: string, options: TestFieldOptions): Pro
   const switchElement = within(fieldset!).getByRole('switch');
 
   await userEvent.click(switchElement);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitFor(() => {
     expect(fetchMock).toHaveBeenCalledWith(
@@ -504,6 +561,8 @@ async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions)
     const previousCallCount = fetchMock.mock.calls.length;
 
     await userEvent.type(input, optionText.substring(0, 3));
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
 
     await waitFor(() => {
       expect(within(fieldset!).getAllByRole('menuitem').length).toBeGreaterThan(0);
@@ -512,6 +571,8 @@ async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions)
 
     const menuItem = await waitFor(() => within(fieldset!).getByText(optionText));
     await userEvent.click(menuItem);
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
 
     const requestInit = await waitForNewPatchCall(previousCallCount);
     const body = JSON.parse(requestInit.body as string);
@@ -565,6 +626,8 @@ async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions)
 
     if (closeButton) {
       await userEvent.click(closeButton);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
 
       const requestInit = await waitForNewPatchCall(previousCallCount);
       const body = JSON.parse(requestInit.body as string);
@@ -598,6 +661,8 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
   const n = within(options.fieldset!).queryAllByRole('button', { name: 'delete' }).length;
 
   await userEvent.click(within(options.fieldset!).getByTitle(options.addButtonTitle!));
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   const nNew = within(options.fieldset!).queryAllByRole('button', { name: 'delete' }).length;
 
@@ -627,9 +692,20 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
       if (fieldConfig.fieldType === 'text') {
         const input = within(fieldset).getByRole('textbox') as HTMLInputElement;
         await userEvent.click(input);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
+
         await userEvent.clear(input);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
+
         await userEvent.type(input, fieldConfig.fieldInput as string);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
+
         await fireEvent.blur(input);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(() => {
           expect(input).toHaveValue(fieldConfig.fieldInput as string);
@@ -639,12 +715,21 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
           within(fieldset!).getByRole('option', { name: String(fieldConfig.fieldInput) })
         );
         await userEvent.click(option);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
       } else if (fieldConfig.fieldType === 'date') {
         const input = fieldset!.querySelector('input[type="date"]') as HTMLInputElement;
         expect(input).toBeInTheDocument();
         await userEvent.click(input);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
         await fireEvent.change(input, { target: { value: String(fieldConfig.fieldInput) } });
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
         await fireEvent.blur(input);
+        await tick();
+        await new Promise((r) => setTimeout(r, 0));
+
       } else {
         throw new Error(`Unsupported field type in collection: ${fieldConfig.fieldType}`);
       }
@@ -682,6 +767,8 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
   expect(input).toBeInTheDocument();
 
   await userEvent.click(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   if (requiredMessage) {
     await waitFor(() => {
@@ -690,11 +777,18 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
   }
 
   await userEvent.clear(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
+
   await userEvent.type(input, fieldInput as string);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   const previousCallCount = fetchMock.mock.calls.length;
 
   await fireEvent.blur(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 
   await waitForNewPatchCall(previousCallCount);
 

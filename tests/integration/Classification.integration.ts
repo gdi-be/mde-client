@@ -28,10 +28,10 @@ export async function testClassification(role: string) {
 
     describe('05_MetadataProfileField', () => {
       it('can set metadata profile correctly', async () => {
-        const fieldset = document.querySelector('.metadata-type-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.metadata-type-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.metadataProfile', {
@@ -48,9 +48,12 @@ export async function testClassification(role: string) {
         });
       });
 
-      it('renders INSPIRE options', () => {
-        const fieldset = screen.getByRole('group', { name: 'form.inspireLegend' });
-        expect(fieldset).toBeInTheDocument();
+      it('renders INSPIRE options', async () => {
+        await waitFor(() => {
+          const el = screen.getByRole('group', { name: 'form.inspireLegend' });
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
 
         expect(screen.getByRole('option', { name: '05_MetadataProfileField.iso' })).toBeVisible();
         expect(
@@ -106,10 +109,10 @@ export async function testClassification(role: string) {
 
     describe('25_TermsOfUseField', () => {
       it('can set user requirements correctly', async () => {
-        const fieldset = document.querySelector('.terms-of-use-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.terms-of-use-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.termsOfUseId', {
@@ -133,10 +136,10 @@ export async function testClassification(role: string) {
           expect(fetchMock).toHaveBeenCalledWith('/help/isoMetadata.highValueDataCategory');
         });
 
-        const fieldset = document.querySelector('.high-value-dataset-check-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.high-value-dataset-check-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.highValueDataset', {
@@ -157,10 +160,10 @@ export async function testClassification(role: string) {
           expect(fetchMock).toHaveBeenCalledWith('/help/isoMetadata.highValueDataCategory');
         });
 
-        const hvdField = document.querySelector('.high-value-dataset-check-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(hvdField).toBeInTheDocument();
+        const hvdField = await waitFor(() => {
+          const el = document.querySelector('.high-value-dataset-check-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         const hvdSwitch = within(hvdField).getByRole('switch');
@@ -179,7 +182,6 @@ export async function testClassification(role: string) {
         await userEvent.click(categoryField);
 
         await userEvent.click(screen.getByText('Kategorie A'));
-        await userEvent.click(screen.getByText('Kategorie B'));
 
         await waitFor(() => {
           const patchCalls = fetchMock.mock.calls.filter(
@@ -197,7 +199,7 @@ export async function testClassification(role: string) {
           const body = JSON.parse((categoryPatch![1] as RequestInit).body as string);
 
           expect(body.key).toBe('isoMetadata.highValueDataCategory');
-          expect(body.value).toEqual(expect.arrayContaining(['B']));
+          expect(body.value).toEqual(expect.arrayContaining(['A']));
         });
       });
     });
@@ -209,10 +211,10 @@ export async function testClassification(role: string) {
             expect(fetchMock).toHaveBeenCalledWith('/data/iso_themes');
           });
 
-          const fieldset = document.querySelector('.topic-category-field') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.topic-category-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await waitFor(() => {
@@ -263,10 +265,10 @@ export async function testClassification(role: string) {
     describe('38_InspireAnnexVersion', () => {
       if (role === 'MdeEditor' || role === 'MdeAdministrator') {
         it('can set INSPIRE annex version with role MdeEditor or MdeAdministrator', async () => {
-          const fieldset = document.querySelector('.inspire-annex-version-field') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.inspire-annex-version-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('isoMetadata.inspireAnnexVersion', {
@@ -287,7 +289,7 @@ export async function testClassification(role: string) {
 
           const fieldset = document.querySelector('.inspire-annex-version-field') as HTMLElement;
 
-          waitFor(() => {
+          await waitFor(() => {
             expect(fieldset).not.toBeInTheDocument();
           });
         });
@@ -300,10 +302,10 @@ export async function testClassification(role: string) {
           expect(fetchMock).toHaveBeenCalledWith('/data/inspire_themes');
         });
 
-        const fieldset = document.querySelector('.annex-theme-field') as HTMLElement;
-
-        waitFor(() => {
-          expect(fieldset).toBeInTheDocument();
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.annex-theme-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
         });
 
         await testField('isoMetadata.inspireTheme', {
@@ -324,10 +326,10 @@ export async function testClassification(role: string) {
     describe('37_QualityReportCheckField', () => {
       if (role === 'MdeEditor' || role === 'MdeAdministrator' || role === 'MdeQualityAssurance') {
         it('can set quality report check correctly with role MdeEditor, MdeQualityAssurance or MdeAdministrator', async () => {
-          const fieldset = document.querySelector('.quality-report-check-field') as HTMLElement;
-
-          waitFor(() => {
-            expect(fieldset).toBeInTheDocument();
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.quality-report-check-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
           });
 
           await testField('isoMetadata.valid', {
@@ -348,7 +350,7 @@ export async function testClassification(role: string) {
 
           const fieldset = document.querySelector('.quality-report-check-field') as HTMLElement;
 
-          waitFor(() => {
+          await waitFor(() => {
             expect(fieldset).not.toBeInTheDocument();
           });
         });

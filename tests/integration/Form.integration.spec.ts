@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/svelte';
 
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect, afterEach, vi, beforeEach, beforeAll } from 'vitest';
 
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
@@ -9,12 +9,17 @@ import { testClassification } from './Classification.integration';
 import { testTempAndSpatial } from './TempAndSpatial.integration';
 import { testAdditional } from './Additional.integration';
 import { testServices } from './Services.integration';
+import { tick } from 'svelte';
 
 describe('Form - Integration test', () => {
   afterEach(async () => {
+    await tick();
+
+    await new Promise((r) => setTimeout(r, 0));
+
     cleanup();
+
     vi.clearAllMocks();
-    await Promise.resolve();
   });
 
   describe('Form navigation', () => {

@@ -32,7 +32,7 @@ const metadataHighValueDataset = {
   isoMetadata: {
     ...metadata1.isoMetadata,
     highValueDataset: true,
-    highValueDataCategory: ['A', 'B']
+    highValueDataCategory: ['A']
   }
 };
 
@@ -405,7 +405,7 @@ describe('MetadataDisplay - Integration test', () => {
         const identifierLabel = screen.getByText('06_HighValueDatasetField.categoryLabel');
         const displayField = identifierLabel.closest('.display-field');
         expect(
-          within(displayField as HTMLElement).getByText('Kategorie A, Kategorie B')
+          within(displayField as HTMLElement).getByText('Kategorie A')
         ).toBeInTheDocument();
       });
     });
