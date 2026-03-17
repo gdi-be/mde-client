@@ -97,7 +97,7 @@ export function transformExtent(extent: PartialExtent, fromEPSG: CRS, toEPSG: CR
       maxy: extent.maxy === 0 ? 0 : transformedMax[1]
     };
   } catch (error) {
-    throw Error(`Error transforming extent: ${error}`);
+    throw Error(`Error transforming extent: ${error}`, { cause: error });
   }
 }
 
@@ -122,7 +122,7 @@ export function transformCoordinate(
       parseFloat(value.toFixed(decimalPlaces))
     ) as PartialCoordinate;
   } catch (error) {
-    throw Error(`Error transforming coordinate: ${error}`);
+    throw Error(`Error transforming coordinate: ${error}`, { cause: error });
   }
 }
 

@@ -37,14 +37,17 @@
   }: InputProps = $props();
 
   // Remove duplicates
-  // eslint-disable-next-line
-  options = Array.from(new Map(options.map((item) => [item.key, item])).values());
+  const uniqueOptions = $derived(
+    Array.from(new Map(options.map((item) => [item.key, item])).values())
+  );
 
   const onSelect = (newValue: string) => {
     onChange?.(newValue);
   };
 
-  const selectedDescription = $derived(options.find((item) => item.key === value)?.description);
+  const selectedDescription = $derived(
+    uniqueOptions.find((item) => item.key === value)?.description
+  );
 
   let isInvalid = $derived.by(() => {
     if (!fieldConfig) return false;
@@ -59,7 +62,7 @@
 <fieldset class={['select-input', wrapperClass, isInvalid && 'invalid']}>
   <legend>{label}</legend>
   <Select bind:value {disabled} menu$anchorElement={document.body} {...restProps}>
-    {#each options as option}
+    {#each options as option (option.key)}
       <SelectOption
         onSMUIAction={() => {
           if (option.disabled) return;

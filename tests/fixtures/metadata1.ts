@@ -17,6 +17,7 @@ export default {
     layers: {
       '00e19242-8d3c-4617-ad73-d5a6b79ae55f': [
         {
+          id: 'layer-1',
           name: 'ewfwefew',
           title: 'a',
           styleName: 'gggg',
@@ -37,6 +38,7 @@ export default {
     privacy: 'NONE',
     services: [
       {
+        id: 'svc-1',
         workspace: 'workspace1',
         title: '123 Datentest',
         shortDescription: 'dewf',
@@ -51,6 +53,7 @@ export default {
         preview: 'preview.png'
       },
       {
+        id: 'svc-2',
         title: 'ewfewf',
         shortDescription: 'ewfewfew',
         serviceIdentification: '3a5b3081-a5e0-4133-ad18-ea756331e33f',
@@ -66,6 +69,7 @@ export default {
         preview: 'eeeee'
       },
       {
+        id: 'svc-3',
         workspace: 'ewfewf',
         title: 'WFS Titel',
         shortDescription: 'WFS Kurzbeschreibung',
@@ -73,13 +77,16 @@ export default {
         serviceType: 'WFS',
         featureTypes: [
           {
+            id: 'ft-1',
             columns: [
               {
+                id: 'col-1',
                 name: 'Mein Attribut',
                 alias: 'Der andere Name meines Attributs',
                 type: 'Date'
               },
               {
+                id: 'col-2',
                 name: 'Mein zweites Attribut ',
                 alias: 'Attribut 2',
                 type: 'Double'
@@ -131,6 +138,7 @@ export default {
     maintenanceFrequency: 'annually',
     contentDescriptions: [
       {
+        id: 'cd-1',
         description: 'wef',
         url: '',
         code: 'information'
@@ -140,6 +148,7 @@ export default {
     contentDescription: 'ewf',
     lineage: [
       {
+        id: 'lin-1',
         identifier: '',
         title: 'ggg',
         date: '2025-06-24T00:00:00Z'

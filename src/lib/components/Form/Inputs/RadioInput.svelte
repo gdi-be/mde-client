@@ -49,7 +49,7 @@
 <fieldset class={['radio-input', isInvalid && 'invalid']}>
   <legend>{label}</legend>
   <div id={`${key}-radio-group`} class="radio-group">
-    {#each options as option}
+    {#each options as option (option.key)}
       <FormField>
         <Radio id={option.key} onchange={onSelect} bind:group={value} value={option.key} />
         {#snippet label()}

@@ -244,7 +244,7 @@
           </div>
           {#if metadataCollections.length > 0 && titleSearchListId === lineage.id}
             <ul class="search-results" bind:this={searchResultsElement}>
-              {#each metadataCollections as metadataCollection}
+              {#each metadataCollections as metadataCollection (metadataCollection.id)}
                 <li class="search-result">
                   <button
                     type="button"

@@ -13,6 +13,7 @@
 
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { page } from '$app/state';
+  import { resolve } from '$app/paths';
 
   const t = $derived(page.data.t);
 
@@ -73,7 +74,7 @@
       return Promise.reject('Failed to assign metadata to role');
     }
 
-    goto('/metadata', {
+    goto(resolve('/metadata'), {
       invalidateAll: true
     });
 
@@ -96,7 +97,7 @@
       return Promise.reject('Failed to assign metadata to user');
     }
 
-    goto('/metadata', {
+    goto(resolve('/metadata'), {
       invalidateAll: true
     });
 
@@ -118,7 +119,7 @@
       toast.error(t('assignment.unassignError'));
     }
 
-    goto('/metadata', {
+    goto(resolve('/metadata'), {
       invalidateAll: true
     });
 
@@ -193,7 +194,7 @@
     <h4>{t('assignment.assignEditor')}</h4>
     <div class="actions">
       {#if users?.length > 0 && highestRole !== 'MdeDataOwner'}
-        {#each users as user}
+        {#each users as user (user.keycloakId)}
           <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
             <Label>{t('assignment.handoverTo', { name: user.displayName })}</Label>
           </Button>
@@ -229,7 +230,7 @@
     <h4>{t('assignment.assignQuality')}</h4>
     <div class="actions">
       {#if users?.length > 0}
-        {#each users as user}
+        {#each users as user (user.keycloakId)}
           <Button variant="raised" onclick={() => assignToUser(user.keycloakId)} type="button">
             <Label>{t('assignment.handoverTo', { name: user.displayName })}</Label>
           </Button>

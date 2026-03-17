@@ -148,11 +148,11 @@
             {#if validationResult?.['gdi-inspire'].length}
               <h3>{t('validationdialog.gdiInspire')}</h3>
               <ol>
-                {#each validationResult?.['gdi-inspire'] as message}
-                  {#each message as entry}
+                {#each validationResult?.['gdi-inspire'] as message (message)}
+                  {#each message as entry (entry)}
                     <li>{t('general.error')}</li>
                     <ul>
-                      {#each entry as e}
+                      {#each entry as e (e)}
                         <li
                           class={[
                             e.toLowerCase().startsWith('fehler') && 'error',
@@ -170,11 +170,11 @@
             {#if validationResult?.['gdi-de'].length}
               <h3>{t('validationdialog.gdiDe')}</h3>
               <ol>
-                {#each validationResult?.['gdi-de'] as message}
-                  {#each message as entry}
+                {#each validationResult?.['gdi-de'] as message (message)}
+                  {#each message as entry (entry)}
                     <li>{t('general.error')}</li>
                     <ul>
-                      {#each entry as e}
+                      {#each entry as e (e)}
                         <li
                           class={[
                             e.toLowerCase().startsWith('fehler') && 'error',
@@ -192,11 +192,11 @@
             {#if validationResult?.['inspire-validator'].length}
               <h3>{t('validationdialog.inspireValidator')}</h3>
               <ol>
-                {#each validationResult?.['inspire-validator'] as message}
-                  {#each message as entry}
+                {#each validationResult?.['inspire-validator'] as message (message)}
+                  {#each message as entry (entry)}
                     <li>{t('general.error')}</li>
                     <ul>
-                      {#each entry as e}
+                      {#each entry as e (e)}
                         <li
                           class={[
                             e.toLowerCase().includes('with errors') && 'error',
@@ -219,7 +219,7 @@
             {#if validationResult?.['internal-etf-errors'].length}
               <h3>{t('validationdialog.internalEtfErrors')}</h3>
               <ul>
-                {#each validationResult?.['internal-etf-errors'] as message}
+                {#each validationResult?.['internal-etf-errors'] as message (message)}
                   <li class="error">
                     {@html message}
                   </li>

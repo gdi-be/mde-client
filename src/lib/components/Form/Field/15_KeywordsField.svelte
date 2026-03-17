@@ -23,11 +23,8 @@
   let { metadataid } = page.params;
 
   const { getValue } = getFormContext();
-  let value = $state<string[]>([]);
   const valueFromData = $derived(getValue<Keywords>(KEY));
-  $effect(() => {
-    value = valueFromData?.default?.map((entry: { keyword: string }) => entry.keyword) || [];
-  });
+  let value = $derived<string[]>(valueFromData?.default?.map((entry) => entry.keyword) || []);
 
   let showCheckmark = $state(false);
   let autoKeywords = $state<string[]>([]);

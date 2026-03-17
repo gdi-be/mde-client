@@ -11,6 +11,7 @@
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { validateService } from './validation';
   import { MetadataService } from '$lib/services/MetadataService';
+  import { SvelteSet } from 'svelte/reactivity';
 
   const t = $derived(page.data.t);
 
@@ -30,7 +31,7 @@
   const highestRole = $derived(getHighestRole(token));
 
   let initialServices = getValue<Service[]>(KEY);
-  let services = $state<Service[]>([]);
+  let services = $derived<Service[]>(initialServices || []);
   let tabs = $derived<Tab[]>(
     services.map((service) => {
       const mappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
@@ -50,7 +51,7 @@
 
   // Track which services have invalid fields - validate all services
   const invalidServiceIds = $derived.by(() => {
-    const invalidIds = new Set<string>();
+    const invalidIds = new SvelteSet<string>();
     const allLayers = getValue<Record<string, Layer[]>>(LAYERS_KEY) || {};
 
     services.forEach((service) => {
@@ -175,7 +176,7 @@
 
 <FieldHint {fieldConfig} {validationResult} explanation={t('40_ServicesSection.explanation')} />
 <nav class="tabs">
-  {#each tabs as tab}
+  {#each tabs as tab (tab.id)}
     <div
       class={[
         'tab-container',

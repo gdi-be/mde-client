@@ -27,7 +27,7 @@ export async function getTranslator({
         data = await localeResponse.json();
       } catch (e) {
         logger.error('Failed to parse locale response:', e);
-        throw new Error('Invalid response when loading locale ' + locale);
+        throw new Error('Invalid response when loading locale ' + locale, { cause: e });
       }
       if (!data) throw new Error('Could not load locale ' + locale);
       loadedTranslations[locale] = data;

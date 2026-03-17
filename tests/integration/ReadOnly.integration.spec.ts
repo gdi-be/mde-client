@@ -58,6 +58,7 @@ const metadataWithServices = {
     ...metadata1.isoMetadata,
     services: [
       {
+        id: 'wms-1',
         serviceType: 'WMS',
         title: 'WMS Service',
         shortDescription: 'WMS Beschreibung',
@@ -73,6 +74,7 @@ const metadataWithServices = {
         featureTypes: []
       },
       {
+        id: 'wfs-1',
         serviceType: 'WFS',
         title: 'WFS Service',
         shortDescription: 'WFS Beschreibung',
@@ -81,12 +83,13 @@ const metadataWithServices = {
         fileIdentifier: 'fid-2',
         featureTypes: [
           {
+            id: 'ft-1',
             name: 'my_feature',
             title: 'Feature Type',
             shortDescription: 'FT Beschreibung',
             columns: [
-              { name: 'fid', alias: 'Feature ID', type: 'integer' },
-              { name: 'geom', alias: 'Geometrie', type: 'geometry' }
+              { id: 'col-1', name: 'fid', alias: 'Feature ID', type: 'integer' },
+              { id: 'col-2', name: 'geom', alias: 'Geometrie', type: 'geometry' }
             ]
           }
         ]
@@ -98,6 +101,7 @@ const metadataWithServices = {
     layers: {
       'wms-id': [
         {
+          id: 'layer-1',
           title: 'Layer1',
           name: 'layer_one',
           styleTitle: 'Default',
@@ -117,6 +121,7 @@ const metadataWithWFSService = {
     ...metadata1.isoMetadata,
     services: [
       {
+        id: 'wfs-1',
         serviceType: 'WFS',
         title: 'WFS Service',
         shortDescription: 'WFS Beschreibung',
@@ -125,12 +130,13 @@ const metadataWithWFSService = {
         fileIdentifier: 'fid-2',
         featureTypes: [
           {
+            id: 'ft-1',
             name: 'my_feature',
             title: 'Feature Type',
             shortDescription: 'FT Beschreibung',
             columns: [
-              { name: 'fid', alias: 'Feature ID', type: 'integer' },
-              { name: 'geom', alias: 'Geometrie', type: 'geometry' }
+              { id: 'col-1', name: 'fid', alias: 'Feature ID', type: 'integer' },
+              { id: 'col-2', name: 'geom', alias: 'Geometrie', type: 'geometry' }
             ]
           }
         ]
@@ -145,6 +151,7 @@ const metadataWithWMSService = {
     ...metadata1.isoMetadata,
     services: [
       {
+        id: 'wms-1',
         serviceType: 'WMS',
         title: 'WMS Service',
         shortDescription: 'WMS Beschreibung',
@@ -166,6 +173,7 @@ const metadataWithWMSService = {
     layers: {
       'wms-id': [
         {
+          id: 'layer-1',
           title: 'Layer1',
           name: 'layer_one',
           styleTitle: 'Default',

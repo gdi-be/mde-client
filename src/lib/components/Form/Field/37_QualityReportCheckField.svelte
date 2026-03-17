@@ -27,10 +27,7 @@
   const metadataProfile = $derived(getValue<string>('isoMetadata.metadataProfile', metadata));
 
   const valueFromData = $derived(getValue<boolean>(KEY));
-  let value = $state<boolean>(false);
-  $effect(() => {
-    value = !!valueFromData;
-  });
+  let value = $derived<boolean>(valueFromData ?? false);
 
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<boolean>(37);

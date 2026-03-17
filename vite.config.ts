@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => ({
             $lib: resolve('./src/lib'),
             '$app/state': resolve('./tests/mocks/app/state'),
             '$app/navigation': resolve('./tests/mocks/app/navigation'),
+            '$app/paths': resolve('./tests/mocks/app/paths'),
             $env: resolve('./tests/mocks/env'),
             'svelte-french-toast': resolve('./tests/mocks/svelte-french-toast.ts')
           }
@@ -31,6 +32,10 @@ export default defineConfig(({ mode }) => ({
   test: {
     environment: 'happy-dom',
     globals: true,
+    testTimeout: 20 * 1000,
+    fakeTimers: {
+      // auto-mock all timers
+    },
     setupFiles: ['./tests/setup.ts'],
     coverage: {
       reporter: ['text', 'lcov', 'html'],
@@ -46,12 +51,7 @@ export default defineConfig(({ mode }) => ({
         '**/dist/',
         '**/.svelte-kit/'
       ],
-      include: ['src/lib/**/*.{js,ts,svelte}'],
-      onConsoleLog: (log: string | string[]) => {
-        if (log.includes('Tried to dispatch event without element')) {
-          return false;
-        }
-      }
+      include: ['src/lib/**/*.{js,ts,svelte}']
     }
   }
 }));
