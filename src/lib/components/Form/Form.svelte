@@ -133,7 +133,7 @@
 
 <div class="metadata-form">
   <nav class="tabs">
-    {#each SECTIONS as { section, label, disabledCheck }, i}
+    {#each SECTIONS as { section, label, disabledCheck }, i (section)}
       {@const progressInfo = ValidationService.getProgress(metadata!, highestRole, section)}
       <div class="tab-container" class:active={activeSection === section}>
         <button

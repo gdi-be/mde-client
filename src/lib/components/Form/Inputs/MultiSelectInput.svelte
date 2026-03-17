@@ -62,7 +62,7 @@
       element.querySelector('input')?.blur();
     }
 
-    let uniqueValues = [];
+    let uniqueValues;
     if (value) {
       uniqueValues = Array.from(new Set([...value, selectedOption.key]));
     } else {

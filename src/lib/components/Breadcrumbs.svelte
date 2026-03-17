@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
 
   type TranslatedParts = {
@@ -28,9 +29,9 @@
 <nav>
   <ul>
     <li>
-      <a href="/">🏠</a>
+      <a href={resolve('/')}>🏠</a>
     </li>
-    {#each breadcrumbs as { name, url }}
+    {#each breadcrumbs as { name, url } (url)}
       <li>
         {#if url === page.url.pathname}
           <i>/</i>{getUrlPartName(name as keyof TranslatedParts)}

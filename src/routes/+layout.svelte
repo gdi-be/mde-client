@@ -13,6 +13,7 @@
   const t = $derived(page.data.t);
   let { children, data } = $props();
 
+  // svelte-ignore state_referenced_locally
   initializeTokenContext(data.token, data.refreshToken);
   initializePopconfirmContext();
   initializeStatusesContext();

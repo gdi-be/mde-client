@@ -1,6 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { mock } from 'bun:test';
 
+// Mock $app/paths
+mock.module('$app/paths', () => {
+  return {
+    asset: (path: string) => path,
+    match: (path: string) => ({ id: path }),
+    resolve: (path: string) => path,
+    resolveRoute: (path: string) => path
+  };
+});
+
 // Mock $app/state
 mock.module('$app/state', () => {
   return {

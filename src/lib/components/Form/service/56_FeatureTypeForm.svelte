@@ -36,7 +36,7 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
-  let featureTypes = $state<FeatureType[]>([]);
+  let featureTypes = $derived<FeatureType[]>(initialFeatureTypes || []);
   let tabs = $derived<Tab[]>(
     featureTypes.map((featureType) => {
       return {
@@ -63,10 +63,6 @@
     if (serviceId) {
       activeTabId = undefined;
     }
-  });
-
-  $effect(() => {
-    featureTypes = initialFeatureTypes || [];
   });
 
   function addFeatureType() {
@@ -129,7 +125,7 @@
     </legend>
     <FieldHint {fieldConfig} {validationResult} />
     <nav>
-      {#each tabs as tab}
+      {#each tabs as tab (tab.id)}
         <div
           class={[
             'tab-container',

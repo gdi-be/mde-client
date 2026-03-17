@@ -25,7 +25,8 @@ async function parseJSON<T>(response: Response, context: string): Promise<T> {
   } catch (error) {
     logger.error(`Failed to parse JSON response in ${context}:`, error);
     throw new Error(
-      `Failed to parse response JSON in ${context}: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to parse response JSON in ${context}: ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error }
     );
   }
 }

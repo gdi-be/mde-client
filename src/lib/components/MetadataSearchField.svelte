@@ -73,7 +73,7 @@
 
   {#snippet match(item)}
     <Text title={item.label}>
-      {#each splitLabel(item.label) as part}
+      {#each splitLabel(item.label) as part (part)}
         {#if part.toLowerCase() === text.toLowerCase()}
           <strong>{part}</strong>
         {:else}

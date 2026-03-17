@@ -14,10 +14,7 @@
   const valueFromData = $derived(getValue<string>(KEY));
   const termsOfUseId = $derived(getValue<number>(TERMS_OF_USE_KEY));
 
-  let value = $state('');
-  $effect(() => {
-    value = valueFromData || '';
-  });
+  let value = $derived(valueFromData ?? '');
 
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(26);
