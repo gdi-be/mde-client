@@ -182,15 +182,13 @@
 {/snippet}
 
 {#snippet isoMetadataKeywords(value: Keywords)}
-  {#if !value?.default?.length}
-    {DEFAULT_NULL_STRING}
-  {:else}
+  {#await getAutoKeywords()}
+    {t('general.loading')}
+  {:then autoKeywords}
+    {autoKeywords.join(', ')}
+  {/await}
+  {#if value?.default?.length}
     {value?.default?.map(({ keyword }) => keyword)?.join(', ') + ','}
-    {#await getAutoKeywords()}
-      {t('general.loading')}
-    {:then autoKeywords}
-      {autoKeywords.join(', ')}
-    {/await}
   {/if}
 {/snippet}
 
