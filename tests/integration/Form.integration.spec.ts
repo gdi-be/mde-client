@@ -16,8 +16,11 @@ describe('Form - Integration test', () => {
     await tick();
 
     await new Promise((r) => setTimeout(r, 0));
+    await new Promise((r) => setTimeout(r, 0));
 
     cleanup();
+
+    await new Promise((r) => setTimeout(r, 0));
 
     vi.clearAllMocks();
   });

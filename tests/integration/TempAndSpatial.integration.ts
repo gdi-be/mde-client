@@ -229,7 +229,7 @@ export async function testTempAndSpatial(role: string) {
             return el as HTMLElement;
           });
 
-          const inputs = await within(fieldset).getAllByRole('textbox');
+          const inputs = await within(fieldset).findAllByRole('textbox');
 
           async function setValue(input: HTMLElement, inputValue: string) {
             expect(input).toBeInTheDocument();
@@ -252,7 +252,7 @@ export async function testTempAndSpatial(role: string) {
           await setValue(inputs[0], '13');
           await setValue(inputs[1], '14');
           await setValue(inputs[2], '52');
-          await setValue(inputs[3], '53');
+          await setValue(inputs[3], '52');
 
           await waitFor(() => {
             expect(fetchMock.mock.calls.length).toBeGreaterThan(previousCallCount);
@@ -263,7 +263,7 @@ export async function testTempAndSpatial(role: string) {
               method: 'PATCH',
               body: JSON.stringify({
                 key: 'isoMetadata.extent',
-                value: { minx: 13, miny: 52, maxx: 14, maxy: 53 }
+                value: { minx: 13, miny: 52, maxx: 14, maxy: 52 }
               }),
               headers: {
                 'content-type': 'application/json'

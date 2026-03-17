@@ -101,8 +101,10 @@ export async function canOpenAssignmentDialog(): Promise<boolean> {
 export async function assignToRole(options: AssignmentDialogOptions) {
   const { role, userName, expectApprovalToggle, approvalState } = options;
 
-  const assignmentPanel = document.querySelector('.assignment-panel') as HTMLElement;
-  expect(assignmentPanel).toBeInTheDocument();
+  await waitFor(() => {
+    const assignmentPanel = document.querySelector('.assignment-panel') as HTMLElement;
+    expect(assignmentPanel).toBeInTheDocument();
+  });
 
   if (expectApprovalToggle && approvalState !== undefined) {
     const approvalSwitch = screen.getByRole('switch', { name: 'assignment.reviewStatus' });
@@ -305,7 +307,7 @@ export async function publishMetadata() {
     expect(document.querySelector('.publish-content') as HTMLElement).toBeInTheDocument();
   });
 
-  const publishButton = screen.getByRole('button', { name: 'publishdialog.action' });
+  const publishButton = await screen.findByRole('button', { name: 'publishdialog.action' });
 
   expect(publishButton).not.toBeDisabled();
 

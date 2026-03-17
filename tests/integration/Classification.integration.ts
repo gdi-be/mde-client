@@ -89,7 +89,11 @@ export async function testClassification(role: string) {
           expect(fetchMock).toHaveBeenCalledWith('/data/privacy');
         });
 
-        const container = document.querySelector('.data-protection-field') as HTMLElement;
+        const container = await waitFor(() => {
+          const el = document.querySelector('.data-protection-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
 
         await waitFor(() => {
           expect(within(container).queryByText('general.loading_options')).not.toBeInTheDocument();
@@ -111,6 +115,10 @@ export async function testClassification(role: string) {
 
     describe('25_TermsOfUseField', () => {
       it('can set user requirements correctly', async () => {
+        await waitFor(() => {
+          expect(fetchMock).toHaveBeenCalledWith('/data/terms_of_use');
+        });
+
         const fieldset = await waitFor(() => {
           const el = document.querySelector('.terms-of-use-field');
           expect(el).toBeInTheDocument();

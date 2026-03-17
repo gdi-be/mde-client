@@ -132,7 +132,7 @@ async function waitForNewPatchCall(previousCallCount: number): Promise<RequestIn
 async function testTextInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, fieldInput, requiredMessage, maxLength, expectInvalidClass } = options;
 
-  const input = within(fieldset!).getByRole('textbox');
+  const input = await within(fieldset!).findByRole('textbox');
   expect(input).toBeInTheDocument();
 
   if (maxLength) {
@@ -249,8 +249,11 @@ async function testTextInput(fieldKey: string, options: TestFieldOptions): Promi
 async function testTextAreaInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, fieldInput, maxLength } = options;
 
-  const textarea = fieldset!.querySelector('textarea');
-  expect(textarea).toBeInTheDocument();
+  const textarea = await waitFor(() => {
+    const el = fieldset!.querySelector('textarea');
+    expect(el).toBeInTheDocument();
+    return el as HTMLElement;
+  });
 
   if (maxLength) {
     expect(textarea).toHaveAttribute('maxlength', maxLength.toString());
@@ -383,8 +386,12 @@ async function testNumberInput(fieldKey: string, options: TestFieldOptions): Pro
 async function testDateInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, fieldInput } = options;
 
-  const input = fieldset!.querySelector('input[type="date"]') as HTMLInputElement;
-  expect(input).toBeInTheDocument();
+  const input = await waitFor(() => {
+    const el = fieldset!.querySelector('input[type="date"]');
+    expect(el).toBeInTheDocument();
+    return el as HTMLElement;
+  });
+
 
   await userEvent.click(input);
   await tick();
@@ -392,6 +399,8 @@ async function testDateInput(fieldKey: string, options: TestFieldOptions): Promi
 
   const previousCallCount = fetchMock.mock.calls.length;
   await fireEvent.change(input, { target: { value: fieldInput } });
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
   await fireEvent.blur(input);
   await tick();
   await new Promise((r) => setTimeout(r, 0));
@@ -467,10 +476,15 @@ async function testRadioInput(fieldKey: string, options: TestFieldOptions): Prom
 
   const previousCallCount = fetchMock.mock.calls.length;
 
-  const radioInput = fieldset!.querySelector(
-    `input[value="${radioOptionKey}"]`
-  ) as HTMLInputElement;
-  expect(radioInput).toBeInTheDocument();
+
+  const radioInput = await waitFor(() => {
+    const el = fieldset!.querySelector(
+      `input[value="${radioOptionKey}"]`
+    );
+    expect(el).toBeInTheDocument();
+    return el as HTMLElement;
+  });
+
 
   await userEvent.click(radioInput);
   await tick();
@@ -763,8 +777,7 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
 async function testServiceInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
   const { fieldset, fieldInput, requiredMessage } = options;
 
-  const input = within(fieldset!).getByRole('textbox');
-  expect(input).toBeInTheDocument();
+  const input = await within(fieldset!).findByRole('textbox');
 
   await userEvent.click(input);
   await tick();

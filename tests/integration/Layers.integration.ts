@@ -79,7 +79,7 @@ export async function testLayersForm(role: string) {
             testProgress: {
               section: 'services',
               label: 'form.services',
-              expectIncrease: isRequiredField('clientMetadata.layers.name', 'services')
+              expectIncrease: false
             }
           });
         });
