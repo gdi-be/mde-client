@@ -19,13 +19,13 @@ export default defineConfig(({ mode }) => ({
     alias:
       mode === 'test'
         ? {
-          $lib: resolve('./src/lib'),
-          '$app/state': resolve('./tests/mocks/app/state'),
-          '$app/navigation': resolve('./tests/mocks/app/navigation'),
-          '$app/paths': resolve('./tests/mocks/app/paths'),
-          $env: resolve('./tests/mocks/env'),
-          'svelte-french-toast': resolve('./tests/mocks/svelte-french-toast.ts')
-        }
+            $lib: resolve('./src/lib'),
+            '$app/state': resolve('./tests/mocks/app/state'),
+            '$app/navigation': resolve('./tests/mocks/app/navigation'),
+            '$app/paths': resolve('./tests/mocks/app/paths'),
+            $env: resolve('./tests/mocks/env'),
+            'svelte-french-toast': resolve('./tests/mocks/svelte-french-toast.ts')
+          }
         : undefined
   },
 
