@@ -303,30 +303,24 @@ vi.mock('$lib/util', async () => {
 });
 
 vi.mock('@material/dom/focus-trap', () => ({
-  FocusTrap: vi.fn(() => ({
-    trapFocus: vi.fn(),
-    releaseFocus: vi.fn()
-  }))
+  FocusTrap: class {
+    constructor() {}
+    trapFocus() {}
+    releaseFocus() {}
+    destroy() {}
+    handleKeydown() {}
+  }
 }));
 
-// set timers
+Object.defineProperty(window, 'requestAnimationFrame', {
+  value: (cb: FrameRequestCallback) => setTimeout(cb, 0)
+});
 
-let allowTimers = true;
+const originalQuerySelector = Element.prototype.querySelector;
 
-export function setAllowTimers(timers: boolean) {
-  allowTimers = timers;
-}
-
-const originalSetTimeout = global.setTimeout;
-
-global.setTimeout = ((fn: any, delay?: number, ...args: any[]) => {
-  const stack = new Error().stack || '';
-
-  const isSmui = stack.includes('@material') || stack.includes('@smui');
-
-  if (!allowTimers && isSmui) {
-    return 0 as any;
+Element.prototype.querySelector = function (...args: [selectors: string]) {
+  if (!this) {
+    return null;
   }
-
-  return originalSetTimeout(fn, delay, ...args);
-}) as typeof setTimeout;
+  return originalQuerySelector.apply(this, args);
+};

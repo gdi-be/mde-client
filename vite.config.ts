@@ -33,9 +33,6 @@ export default defineConfig(({ mode }) => ({
     environment: 'happy-dom',
     globals: true,
     testTimeout: 20 * 1000,
-    fakeTimers: {
-      // auto-mock all timers
-    },
     setupFiles: ['./tests/setup.ts'],
     coverage: {
       reporter: ['text', 'lcov', 'html'],

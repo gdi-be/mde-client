@@ -10,26 +10,11 @@ import { testTempAndSpatial } from './TempAndSpatial.integration';
 import { testAdditional } from './Additional.integration';
 import { testServices } from './Services.integration';
 import { tick } from 'svelte';
-import { setAllowTimers } from '../setup';
 
 describe('Form - Integration test', () => {
   afterEach(async () => {
-    await tick();
-
-    for (let i = 0; i < 10; i++) {
-      await new Promise((r) => setTimeout(r, 0));
-    }
-
-    setAllowTimers(false);
-
+    await Promise.resolve();
     cleanup();
-
-    for (let i = 0; i < 10; i++) {
-      await new Promise((r) => setTimeout(r, 0));
-    }
-
-    setAllowTimers(true);
-
     vi.clearAllMocks();
   });
 
