@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, cleanup, within } from '@testing-library/svelte';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -12,7 +12,6 @@ import { tick } from 'svelte';
 export async function testTempAndSpatial(role: string) {
   describe('Temporal and Spatial Information', () => {
     beforeEach(async () => {
-      cleanup();
       setMockMetadataId('a723e625-815c-4553-93bf-2fb62bb623d4');
       setMockRoles([role]);
 
