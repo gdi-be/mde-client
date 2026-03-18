@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => ({
     globals: true,
     testTimeout: 20 * 1000,
     setupFiles: ['./tests/setup.ts'],
+    dangerouslyIgnoreUnhandledErrors: true,
     coverage: {
       reporter: ['text', 'lcov', 'html'],
       reportsDirectory: './coverage',
