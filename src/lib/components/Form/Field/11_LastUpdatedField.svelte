@@ -39,7 +39,7 @@
   };
 </script>
 
-<div class="date-time-field">
+<div class="last-updated-field">
   <DateInput
     bind:value
     key={KEY}
@@ -53,7 +53,7 @@
 </div>
 
 <style lang="scss">
-  .date-time-field {
+  .last-updated-field {
     position: relative;
     display: flex;
     gap: 0.25em;

@@ -43,7 +43,7 @@
   };
 </script>
 
-<div class="metadata-type-field">
+<div class="maintenance-frequency-field">
   <SelectInput
     label={t('14_MaintenanceFrequencyField.label')}
     explanation={t('14_MaintenanceFrequencyField.explanation')}
@@ -57,7 +57,7 @@
 </div>
 
 <style lang="scss">
-  .metadata-type-field {
+  .maintenance-frequency-field {
     position: relative;
     display: flex;
     gap: 0.25em;
