@@ -822,6 +822,8 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
       expect(screen.queryByText(requiredMessage)).toBeVisible();
     });
   }
+  
+  const previousCallCount = fetchMock.mock.calls.length;
 
   await userEvent.clear(input);
   await tick();
@@ -831,7 +833,6 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
   await tick();
   await new Promise((r) => setTimeout(r, 0));
 
-  const previousCallCount = fetchMock.mock.calls.length;
 
   await fireEvent.blur(input);
   await tick();

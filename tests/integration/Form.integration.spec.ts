@@ -13,6 +13,7 @@ import { tick } from 'svelte';
 
 describe('Form - Integration test', () => {
   afterEach(async () => {
+    await tick();
     await Promise.resolve();
     cleanup();
     vi.clearAllMocks();

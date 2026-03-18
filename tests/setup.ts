@@ -16,6 +16,8 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
 };
 
+Element.prototype.scrollIntoView = vi.fn();
+
 if (!Element.prototype.animate) {
   Element.prototype.animate = function () {
     return {
@@ -311,16 +313,3 @@ vi.mock('@material/dom/focus-trap', () => ({
     handleKeydown() {}
   }
 }));
-
-Object.defineProperty(window, 'requestAnimationFrame', {
-  value: (cb: FrameRequestCallback) => setTimeout(cb, 0)
-});
-
-const originalQuerySelector = Element.prototype.querySelector;
-
-Element.prototype.querySelector = function (...args: [selectors: string]) {
-  if (!this) {
-    return null;
-  }
-  return originalQuerySelector.apply(this, args);
-};
