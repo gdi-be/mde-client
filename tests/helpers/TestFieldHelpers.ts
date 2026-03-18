@@ -439,6 +439,9 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
 
   await userEvent.click(option);
   await tick();
+  await waitFor(() => {
+    expect(document.body).toBeInTheDocument();
+  });
   await new Promise((r) => setTimeout(r, 0));
 
   const requestInit = await waitForNewPatchCall(previousCallCount);
@@ -586,6 +589,9 @@ async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions)
     const menuItem = await waitFor(() => within(fieldset!).getByText(optionText));
     await userEvent.click(menuItem);
     await tick();
+    await waitFor(() => {
+      expect(document.body).toBeInTheDocument();
+    });
     await new Promise((r) => setTimeout(r, 0));
 
     const requestInit = await waitForNewPatchCall(previousCallCount);
@@ -676,6 +682,9 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
 
   await userEvent.click(within(options.fieldset!).getByTitle(options.addButtonTitle!));
   await tick();
+  await waitFor(() => {
+    expect(document.body).toBeInTheDocument();
+  });
   await new Promise((r) => setTimeout(r, 0));
 
   const nNew = within(options.fieldset!).queryAllByRole('button', { name: 'delete' }).length;
@@ -729,6 +738,9 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
           within(fieldset!).getByRole('option', { name: String(fieldConfig.fieldInput) })
         );
         await userEvent.click(option);
+        await waitFor(() => {
+          expect(document.body).toBeInTheDocument();
+        });
         await tick();
         await new Promise((r) => setTimeout(r, 0));
       } else if (fieldConfig.fieldType === 'date') {

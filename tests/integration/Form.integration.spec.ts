@@ -15,12 +15,15 @@ describe('Form - Integration test', () => {
   afterEach(async () => {
     await tick();
 
-    await new Promise((r) => setTimeout(r, 0));
-    await new Promise((r) => setTimeout(r, 0));
+    for (let i = 0; i < 10; i++) {
+      await new Promise((r) => setTimeout(r, 0));
+    }
 
     cleanup();
 
-    await new Promise((r) => setTimeout(r, 0));
+    for (let i = 0; i < 10; i++) {
+      await new Promise((r) => setTimeout(r, 0));
+    }
 
     vi.clearAllMocks();
   });

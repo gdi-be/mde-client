@@ -215,6 +215,9 @@ export async function unassignFromSelf() {
     },
     { timeout: 3000 }
   );
+
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
 }
 
 export async function openValidationDialog() {

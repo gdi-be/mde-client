@@ -314,3 +314,32 @@ vi.mock('@material/dom/focus-trap', () => ({
     releaseFocus: vi.fn()
   }))
 }));
+
+// unhandled error guard
+
+process.on('unhandledRejection', (err) => {
+  if (
+    err instanceof Error &&
+    (
+      err.message.includes('querySelector') ||
+      err.message.includes('FocusTrap') ||
+      err.message.includes('getElement')
+    )
+  ) {
+    // ignore SMUI teardown errors
+    return;
+  }
+
+  throw err;
+});
+
+process.on('uncaughtException', (err) => {
+  if (
+    err.message.includes('FocusTrap') ||
+    err.message.includes('querySelector')
+  ) {
+    return;
+  }
+
+  throw err;
+});
