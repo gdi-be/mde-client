@@ -62,7 +62,12 @@ export async function testAdditional(role: string) {
 
     describe('32_Lineage', () => {
       it('can set lineage correctly', async () => {
-        const container = document.querySelector('.lineages-field') as HTMLElement;
+        const container = await waitFor(() => {
+          const el = document.querySelector('.lineages-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
+
         const fieldsets = within(container).getAllByRole('group');
         expect(fieldsets).toHaveLength(1);
 
@@ -106,8 +111,14 @@ export async function testAdditional(role: string) {
 
     describe('41_AdditionalInformation', () => {
       it('can set additional information correctly', async () => {
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.contentDescriptions-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
+
         await testField('isoMetadata.contentDescriptions', {
-          fieldset: document.querySelector('.contentDescriptions-field') as HTMLElement,
+          fieldset: fieldset,
           fieldType: 'collection',
           addButtonTitle: '41_AdditionalInformation.add',
           collectionFields: [

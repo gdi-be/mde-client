@@ -315,31 +315,26 @@ vi.mock('@material/dom/focus-trap', () => ({
   }))
 }));
 
-// unhandled error guard
+// set timers
 
-process.on('unhandledRejection', (err) => {
-  if (
-    err instanceof Error &&
-    (
-      err.message.includes('querySelector') ||
-      err.message.includes('FocusTrap') ||
-      err.message.includes('getElement')
-    )
-  ) {
-    // ignore SMUI teardown errors
-    return;
+let allowTimers = true;
+
+export function setAllowTimers(timers: boolean) {
+  allowTimers = timers;
+}
+
+const originalSetTimeout = global.setTimeout;
+
+global.setTimeout = ((fn: any, delay?: number, ...args: any[]) => {
+  const stack = new Error().stack || '';
+
+  const isSmui =
+    stack.includes('@material') ||
+    stack.includes('@smui');
+
+  if (!allowTimers && isSmui) {
+    return 0 as any;
   }
 
-  throw err;
-});
-
-process.on('uncaughtException', (err) => {
-  if (
-    err.message.includes('FocusTrap') ||
-    err.message.includes('querySelector')
-  ) {
-    return;
-  }
-
-  throw err;
-});
+  return originalSetTimeout(fn, delay, ...args);
+}) as typeof setTimeout;

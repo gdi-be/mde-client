@@ -234,6 +234,8 @@ export async function testTempAndSpatial(role: string) {
           async function setValue(input: HTMLElement, inputValue: string) {
             expect(input).toBeInTheDocument();
 
+            const previousCallCount = fetchMock.mock.calls.length;
+
             await userEvent.clear(input);
             await tick();
             await new Promise((r) => setTimeout(r, 0));
@@ -245,18 +247,16 @@ export async function testTempAndSpatial(role: string) {
             await fireEvent.blur(input);
             await tick();
             await new Promise((r) => setTimeout(r, 0));
-          }
 
-          const previousCallCount = fetchMock.mock.calls.length;
+            await waitFor(() => {
+              expect(fetchMock.mock.calls.length).toBeGreaterThan(previousCallCount);
+            });
+          }
 
           await setValue(inputs[0], '13');
           await setValue(inputs[1], '14');
           await setValue(inputs[2], '52');
           await setValue(inputs[3], '52');
-
-          await waitFor(() => {
-            expect(fetchMock.mock.calls.length).toBeGreaterThan(previousCallCount);
-          });
 
           await waitFor(() => {
             expect(fetchMock).toHaveBeenCalledWith(expect.any(URL), {
