@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { screen, fireEvent, waitFor, within, prettyDOM } from '@testing-library/svelte';
+import { screen, fireEvent, waitFor, within } from '@testing-library/svelte';
 import { expect } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
@@ -457,9 +457,6 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
 
   await userEvent.click(option);
   await tick();
-  await waitFor(() => {
-    expect(document.body).toBeInTheDocument();
-  });
   await new Promise((r) => setTimeout(r, 0));
 
   const requestInit = await waitForPatchCall(previousCallCount, (body) => {
@@ -482,17 +479,19 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
   } else {
     expect(value).toBe(selectOptionValue);
   }
+  
+  if (selectOptionText) {
+    await waitFor(() => {
+      const candidates = Array.from(document.querySelectorAll('[aria-selected="true"]'));
+      const match = candidates.find(el =>
+        el.textContent?.includes(selectOptionText!)
+      );
+      expect(match).toBeDefined();
+    });
+  };
 
   await waitFor(() => {
     expect(document.querySelector('.running')).toBeVisible();
-  });
-
-  await waitFor(() => {
-    const candidates = Array.from(document.querySelectorAll('[aria-selected="true"]'));
-    const match = candidates.find(el =>
-      el.textContent?.includes(selectOptionText!)
-    );
-    expect(match).toBeDefined();
   });
 }
 
