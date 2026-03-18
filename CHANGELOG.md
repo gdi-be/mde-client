@@ -1,3 +1,16 @@
+# [6.2.0](https://github.com/gdi-be/mde-client/compare/v6.1.2...v6.2.0) (2026-03-18)
+
+
+### Bug Fixes
+
+* allow deletion of dates ([9a16ad9](https://github.com/gdi-be/mde-client/commit/9a16ad9e112714fae6ef72bc0450176f12dcd65e))
+* always show default keywords in readonly ([0a24e30](https://github.com/gdi-be/mde-client/commit/0a24e308778c3ad5a882f0ea8e85e38981906b12))
+
+
+### Features
+
+* **deps:** update dependencies ([#261](https://github.com/gdi-be/mde-client/issues/261)) ([36e14f6](https://github.com/gdi-be/mde-client/commit/36e14f6041d52313ff153286e5123a1e53de685d))
+
 ## [6.1.2](https://github.com/gdi-be/mde-client/compare/v6.1.1...v6.1.2) (2026-02-25)
 
 
