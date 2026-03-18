@@ -32,6 +32,7 @@
     options,
     disabled = false,
     validationResult,
+    // eslint-disable-next-line
     ...restProps
   }: InputProps = $props();
 

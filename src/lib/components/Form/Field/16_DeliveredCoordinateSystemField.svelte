@@ -28,7 +28,7 @@
   };
 </script>
 
-<div class="title-field">
+<div class="delivered-crs-field">
   <TextInput
     bind:value
     label={t('16_DeliveredCoordinateSystemField.label')}
@@ -41,7 +41,7 @@
 </div>
 
 <style lang="scss">
-  .title-field {
+  .delivered-crs-field {
     position: relative;
     display: flex;
     gap: 0.25em;

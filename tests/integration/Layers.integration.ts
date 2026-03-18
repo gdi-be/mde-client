@@ -1,0 +1,237 @@
+import { screen, waitFor, within } from '@testing-library/svelte';
+import userEvent from '@testing-library/user-event';
+
+import { describe, it, expect, beforeEach } from 'vitest';
+
+import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
+import { fetchMock } from '../setup';
+import { tick } from 'svelte';
+
+export async function testLayersForm(role: string) {
+  describe('48_LayerForm', () => {
+    beforeEach(async () => {
+      const fieldset = await waitFor(() => {
+        const el = document.querySelector('.service-type-field');
+        expect(el).toBeInTheDocument();
+        return el as HTMLElement;
+      });
+
+      await userEvent.click(fieldset!);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
+      await userEvent.click(screen.getAllByText('🌎 58_ServiceType.wms')[0]);
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
+
+      await waitFor(() => {
+        expect(document.querySelector('.layers-form') as HTMLElement).toBeVisible();
+      });
+
+      const container = document.querySelector('.layers-form') as HTMLElement;
+      const fieldsets = within(container).getAllByRole('group');
+      expect(fieldsets).toHaveLength(1);
+
+      await userEvent.click(within(container).getByText('add'));
+      await tick();
+      await new Promise((r) => setTimeout(r, 0));
+      await waitFor(() => {
+        const tabs = container.querySelectorAll('.tab-container');
+        expect(tabs.length).toBeGreaterThan(1);
+      });
+    });
+
+    describe('49_LayerTitle', () => {
+      it('can set layer title correctly', async () => {
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.layer-title-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
+
+        await testField('clientMetadata.layers', {
+          fieldset: fieldset,
+          fieldType: 'service',
+          fieldInput: 'New Layer Title',
+          help: true,
+          testProgress: {
+            section: 'services',
+            label: 'form.services',
+            expectIncrease: isRequiredField('clientMetadata.layers.title', 'services')
+          }
+        });
+      });
+    });
+
+    describe('50_LayerName', () => {
+      if (role === 'MdeEditor' || role === 'MdeAdministrator') {
+        it('can set layer name correctly with role MdeEditor or MdeAdministrator', async () => {
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.layer-name-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
+          });
+
+          await testField('clientMetadata.layers', {
+            fieldset: fieldset,
+            fieldType: 'service',
+            fieldInput: 'New Layer Name',
+            help: true,
+            testProgress: {
+              section: 'services',
+              label: 'form.services',
+              expectIncrease: false
+            }
+          });
+        });
+      } else {
+        it('can not set layer name with role MdeDataOwner or MdeQualityAssurance', async () => {
+          expect(fetchMock).not.toHaveBeenCalledWith('/help/clientMetadata.layers.name');
+
+          await waitFor(() => {
+            const fieldset = document.querySelector('.layer-name-field') as HTMLElement;
+            expect(fieldset).not.toBeInTheDocument();
+          });
+        });
+      }
+    });
+
+    describe('51_LayerStyleName', () => {
+      if (role === 'MdeEditor' || role === 'MdeAdministrator') {
+        it('can set layer style name correctly with role MdeEditor or MdeAdministrator', async () => {
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.layer-style-name-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
+          });
+
+          await testField('clientMetadata.layers', {
+            fieldset: fieldset as HTMLElement,
+            fieldType: 'service',
+            fieldInput: 'New Layer Style Name',
+            help: true,
+            testProgress: {
+              section: 'services',
+              label: 'form.services',
+              expectIncrease: isRequiredField('clientMetadata.layers.styleName', 'services')
+            }
+          });
+        });
+      } else {
+        it('can not set layer name with role MdeDataOwner or MdeQualityAssurance', async () => {
+          expect(fetchMock).not.toHaveBeenCalledWith('/help/clientMetadata.layers.styleName');
+
+          await waitFor(() => {
+            const fieldset = document.querySelector('.layer-style-name-field') as HTMLElement;
+            expect(fieldset).not.toBeInTheDocument();
+          });
+        });
+      }
+    });
+
+    describe('53_LayerLegendImage', () => {
+      it('can set layer legend correctly', async () => {
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.layer-legend-image-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
+
+        await testField('clientMetadata.layers', {
+          fieldset: fieldset,
+          fieldType: 'service',
+          fieldInput: 'examplelegend.png',
+          help: true,
+          testProgress: {
+            section: 'services',
+            label: 'form.services',
+            expectIncrease: isRequiredField('clientMetadata.layers.legendImage', 'services')
+          }
+        });
+      });
+    });
+
+    describe('54_Description', () => {
+      it('can set layer description correctly', async () => {
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.layer-short-description-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
+
+        await testField('clientMetadata.layers', {
+          fieldset: fieldset,
+          fieldType: 'service',
+          fieldInput: 'New Description...',
+          help: true,
+          testProgress: {
+            section: 'services',
+            label: 'form.services',
+            expectIncrease: isRequiredField('clientMetadata.layers.shortDescription', 'services')
+          }
+        });
+      });
+    });
+
+    describe('55_LayerDatasource', () => {
+      it('can set layer datasource correctly', async () => {
+        const fieldset = await waitFor(() => {
+          const el = document.querySelector('.layer-datasource-field');
+          expect(el).toBeInTheDocument();
+          return el as HTMLElement;
+        });
+
+        await testField('clientMetadata.layers', {
+          fieldset: fieldset,
+          fieldType: 'service',
+          fieldInput: 'New Datasource...',
+          help: true,
+          testProgress: {
+            section: 'services',
+            label: 'form.services',
+            expectIncrease: isRequiredField('clientMetadata.layers.datasource', 'services')
+          }
+        });
+      });
+    });
+
+    describe('68_LayerSecondaryDatasource', () => {
+      if (role === 'MdeEditor' || role === 'MdeAdministrator') {
+        it('can set secondary datasource correctly with role MdeEditor or MdeAdministrator', async () => {
+          const fieldset = await waitFor(() => {
+            const el = document.querySelector('.layer-secondary-datasource-field');
+            expect(el).toBeInTheDocument();
+            return el as HTMLElement;
+          });
+
+          await testField('clientMetadata.layers', {
+            fieldset: fieldset,
+            fieldType: 'service',
+            fieldInput: 'Secondary Datasource...',
+            help: true,
+            testProgress: {
+              section: 'services',
+              label: 'form.services',
+              expectIncrease: isRequiredField(
+                'clientMetadata.layers.secondaryDatasource',
+                'services'
+              )
+            }
+          });
+        });
+      } else {
+        it('can not set secondary datasource with role MdeDataOwner or MdeQualityAssurance', async () => {
+          expect(fetchMock).not.toHaveBeenCalledWith(
+            '/help/clientMetadata.layers.secondaryDatasource'
+          );
+
+          await waitFor(() => {
+            const fieldset = document.querySelector(
+              '.layer-secondary-datasource-field'
+            ) as HTMLElement;
+            expect(fieldset).not.toBeInTheDocument();
+          });
+        });
+      }
+    });
+  });
+}
