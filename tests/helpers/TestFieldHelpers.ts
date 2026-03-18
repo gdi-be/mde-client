@@ -479,16 +479,14 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
   } else {
     expect(value).toBe(selectOptionValue);
   }
-  
+
   if (selectOptionText) {
     await waitFor(() => {
       const candidates = Array.from(document.querySelectorAll('[aria-selected="true"]'));
-      const match = candidates.find(el =>
-        el.textContent?.includes(selectOptionText!)
-      );
+      const match = candidates.find((el) => el.textContent?.includes(selectOptionText));
       expect(match).toBeDefined();
     });
-  };
+  }
 
   await waitFor(() => {
     expect(document.querySelector('.running')).toBeVisible();

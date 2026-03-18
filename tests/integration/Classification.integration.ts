@@ -128,7 +128,6 @@ export async function testClassification(role: string) {
         await testField('isoMetadata.termsOfUseId', {
           fieldType: 'select',
           fieldset: fieldset,
-          selectOptionText: 'Test Terms',
           selectOptionValue: 1,
           help: true,
           testProgress: {
