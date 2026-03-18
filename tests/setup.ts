@@ -5,7 +5,7 @@ import metadata3 from './fixtures/metadata3';
 import { configure } from '@testing-library/svelte';
 
 configure({
-  asyncUtilTimeout: 5000 
+  asyncUtilTimeout: 5000
 });
 
 // Browser API Polyfills
@@ -145,13 +145,7 @@ export const fetchMock = vi.fn(async (input: string | Request | URL, init?: Requ
   }
 
   if (url.includes('hvd_categories')) {
-    return Promise.resolve(
-      new Response(
-        JSON.stringify([
-          { key: 'A', label: 'Kategorie A' }
-        ])
-      )
-    );
+    return Promise.resolve(new Response(JSON.stringify([{ key: 'A', label: 'Kategorie A' }])));
   }
 
   // PATCH Requests
@@ -328,9 +322,7 @@ const originalSetTimeout = global.setTimeout;
 global.setTimeout = ((fn: any, delay?: number, ...args: any[]) => {
   const stack = new Error().stack || '';
 
-  const isSmui =
-    stack.includes('@material') ||
-    stack.includes('@smui');
+  const isSmui = stack.includes('@material') || stack.includes('@smui');
 
   if (!allowTimers && isSmui) {
     return 0 as any;

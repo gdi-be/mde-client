@@ -404,9 +404,7 @@ describe('MetadataDisplay - Integration test', () => {
       await waitFor(() => {
         const identifierLabel = screen.getByText('06_HighValueDatasetField.categoryLabel');
         const displayField = identifierLabel.closest('.display-field');
-        expect(
-          within(displayField as HTMLElement).getByText('Kategorie A')
-        ).toBeInTheDocument();
+        expect(within(displayField as HTMLElement).getByText('Kategorie A')).toBeInTheDocument();
       });
     });
 

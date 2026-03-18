@@ -26,7 +26,6 @@ export async function testTempAndSpatial(role: string) {
       fireEvent.click(timeTab);
       await tick();
       await new Promise((r) => setTimeout(r, 0));
-
     });
 
     describe('09_CreatedField', () => {

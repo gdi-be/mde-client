@@ -125,9 +125,7 @@ async function waitForPatchCall(
 
       if (requestInit?.method !== 'PATCH') continue;
 
-      const body = requestInit.body
-        ? JSON.parse(requestInit.body as string)
-        : null;
+      const body = requestInit.body ? JSON.parse(requestInit.body as string) : null;
 
       if (predicate(body, call)) {
         return requestInit as RequestInit;
@@ -174,12 +172,9 @@ async function testTextInput(fieldKey: string, options: TestFieldOptions): Promi
   await tick();
   await new Promise((r) => setTimeout(r, 0));
 
-  const requestInit = await waitForPatchCall(
-    previousCallCount,
-    (body) => {
-      return JSON.stringify(body).includes(fieldInput as string);
-    }
-  );
+  const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+    return JSON.stringify(body).includes(fieldInput as string);
+  });
   const body = JSON.parse(requestInit.body as string);
 
   if (body.key) {
@@ -288,12 +283,9 @@ async function testTextAreaInput(fieldKey: string, options: TestFieldOptions): P
   await tick();
   await new Promise((r) => setTimeout(r, 0));
 
-  const requestInit = await waitForPatchCall(
-    previousCallCount,
-    (body) => {
-      return JSON.stringify(body).includes(fieldKey!);
-    }
-  );
+  const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+    return JSON.stringify(body).includes(fieldKey!);
+  });
   const body = JSON.parse(requestInit.body as string);
 
   expect(extractBaseKey(body.key)).toBe(extractBaseKey(fieldKey));
@@ -365,24 +357,18 @@ async function testNumberInput(fieldKey: string, options: TestFieldOptions): Pro
   await new Promise((r) => setTimeout(r, 0));
   await fireEvent.blur(input);
   await tick();
-  await new Promise((r) => setTimeout(r, 0))
+  await new Promise((r) => setTimeout(r, 0));
   const previousCallCount = fetchMock.mock.calls.length;
 
-  const requestInit = await waitForPatchCall(
-    previousCallCount,
-    (body) => {
-      return JSON.stringify(body).includes(fieldInput as string);
-    }
-  );
+  const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+    return JSON.stringify(body).includes(fieldInput as string);
+  });
   let body = JSON.parse(requestInit.body as string);
 
   if (body.value == null) {
-    const requestInit = await waitForPatchCall(
-      previousCallCount + 1,
-      (body) => {
-        return JSON.stringify(body).includes(fieldKey!);
-      }
-    );
+    const requestInit = await waitForPatchCall(previousCallCount + 1, (body) => {
+      return JSON.stringify(body).includes(fieldKey!);
+    });
     body = JSON.parse(requestInit.body as string);
   }
 
@@ -421,7 +407,6 @@ async function testDateInput(fieldKey: string, options: TestFieldOptions): Promi
     return el as HTMLElement;
   });
 
-
   await userEvent.click(input);
   await tick();
   await new Promise((r) => setTimeout(r, 0));
@@ -434,12 +419,9 @@ async function testDateInput(fieldKey: string, options: TestFieldOptions): Promi
   await tick();
   await new Promise((r) => setTimeout(r, 0));
 
-  const requestInit = await waitForPatchCall(
-    previousCallCount,
-    (body) => {
-      return JSON.stringify(body).includes(fieldKey!);
-    }
-  );
+  const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+    return JSON.stringify(body).includes(fieldKey!);
+  });
   const body = JSON.parse(requestInit.body as string);
 
   expect(extractBaseKey(body.key)).toBe(extractBaseKey(fieldKey));
@@ -480,12 +462,9 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
   });
   await new Promise((r) => setTimeout(r, 0));
 
-  const requestInit = await waitForPatchCall(
-    previousCallCount,
-    (body) => {
-      return JSON.stringify(body).includes(selectOptionValue as string);
-    }
-  );
+  const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+    return JSON.stringify(body).includes(selectOptionValue as string);
+  });
   const body = JSON.parse(requestInit.body as string);
 
   expect(extractBaseKey(body.key)).toBe(extractBaseKey(fieldKey));
@@ -504,9 +483,8 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
     expect(value).toBe(selectOptionValue);
   }
 
-  const selectedOptions = await screen.findAllByText(selectOptionText!);
-
   await waitFor(() => {
+    const selectedOptions = screen.getAllByText(selectOptionText!);
     const selectOption = selectedOptions.find((el) => el.getAttribute('aria-selected') === 'true');
     expect(selectOption).toBeDefined();
   });
@@ -521,26 +499,19 @@ async function testRadioInput(fieldKey: string, options: TestFieldOptions): Prom
 
   const previousCallCount = fetchMock.mock.calls.length;
 
-
   const radioInput = await waitFor(() => {
-    const el = fieldset!.querySelector(
-      `input[value="${radioOptionKey}"]`
-    );
+    const el = fieldset!.querySelector(`input[value="${radioOptionKey}"]`);
     expect(el).toBeInTheDocument();
     return el as HTMLElement;
   });
-
 
   await userEvent.click(radioInput);
   await tick();
   await new Promise((r) => setTimeout(r, 0));
 
-  const requestInit = await waitForPatchCall(
-    previousCallCount,
-    (body) => {
-      return JSON.stringify(body).includes(fieldKey!);
-    }
-  );
+  const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+    return JSON.stringify(body).includes(fieldKey!);
+  });
   const body = JSON.parse(requestInit.body as string);
 
   expect(extractBaseKey(body.key)).toBe(fieldKey);
@@ -641,12 +612,9 @@ async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions)
     });
     await new Promise((r) => setTimeout(r, 0));
 
-    const requestInit = await waitForPatchCall(
-      previousCallCount,
-      (body) => {
-        return JSON.stringify(body).includes(fieldKey!);
-      }
-    );
+    const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+      return JSON.stringify(body).includes(fieldKey!);
+    });
     const body = JSON.parse(requestInit.body as string);
     expect(extractBaseKey(body.key)).toBe(fieldKey);
 
@@ -701,12 +669,9 @@ async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions)
       await tick();
       await new Promise((r) => setTimeout(r, 0));
 
-      const requestInit = await waitForPatchCall(
-        previousCallCount,
-        (body) => {
-          return JSON.stringify(body).includes(fieldKey!);
-        }
-      );
+      const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+        return JSON.stringify(body).includes(fieldKey!);
+      });
       const body = JSON.parse(requestInit.body as string);
 
       expect(extractBaseKey(body.key)).toBe(fieldKey);
@@ -721,12 +686,9 @@ async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions)
 
       expect(value).not.toContain(firstChipText);
 
-      await waitForPatchCall(
-        previousCallCount,
-        (body) => {
-          return JSON.stringify(body).includes(fieldKey!);
-        }
-      );
+      await waitForPatchCall(previousCallCount, (body) => {
+        return JSON.stringify(body).includes(fieldKey!);
+      });
 
       await waitFor(() => {
         expect(within(fieldset!).queryAllByText(firstChipText)).toHaveLength(1);
@@ -817,7 +779,6 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
         await fireEvent.blur(input);
         await tick();
         await new Promise((r) => setTimeout(r, 0));
-
       } else {
         throw new Error(`Unsupported field type in collection: ${fieldConfig.fieldType}`);
       }
@@ -877,12 +838,9 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
   await tick();
   await new Promise((r) => setTimeout(r, 0));
 
-  await waitForPatchCall(
-    previousCallCount,
-    (body) => {
-      return JSON.stringify(body).includes(fieldInput as string);
-    }
-  );
+  await waitForPatchCall(previousCallCount, (body) => {
+    return JSON.stringify(body).includes(fieldInput as string);
+  });
 
   await waitFor(() => {
     expect(fetchMock).toHaveBeenCalledWith(
