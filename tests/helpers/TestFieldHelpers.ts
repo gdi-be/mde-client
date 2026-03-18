@@ -484,13 +484,15 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
   }
 
   await waitFor(() => {
-    const selectedOptions = screen.getAllByText(selectOptionText!);
-    const selectOption = selectedOptions.find((el) => el.getAttribute('aria-selected') === 'true');
-    expect(selectOption).toBeDefined();
+    expect(document.querySelector('.running')).toBeVisible();
   });
 
   await waitFor(() => {
-    expect(document.querySelector('.running')).toBeVisible();
+    const candidates = Array.from(document.querySelectorAll('[aria-selected="true"]'));
+    const match = candidates.find(el =>
+      el.textContent?.includes(selectOptionText!)
+    );
+    expect(match).toBeDefined();
   });
 }
 
