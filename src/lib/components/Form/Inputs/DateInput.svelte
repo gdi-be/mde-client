@@ -24,7 +24,6 @@
     explanation,
     fieldConfig,
     validationResult,
-    // eslint-disable-next-line
     ...restProps
   }: InputProps = $props();
 
