@@ -78,7 +78,10 @@ export const fetchMock = vi.fn(async (input: string | Request | URL, init?: Requ
 
   if (url === '/data/iso_themes') {
     return Promise.resolve(
-      new Response(JSON.stringify([{ isoID: 'Land use', isoName: 'Land use' }]), { status: 200 })
+      new Response(JSON.stringify([
+        { isoID: 'Land use', isoName: 'Land use' },
+        { isoID: 'Land use', isoName: 'Land use' }
+      ]), { status: 200 })
     );
   }
 
