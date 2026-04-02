@@ -147,7 +147,8 @@ export default {
     ],
     valid: false,
     topicCategory: ['location'],
-    termsOfUseId: 1,
+    termsOfUseId: 2,
+    termsOfUseSource: 'Test Terms',
     spatialRepresentationTypes: ['vector']
   },
   technicalMetadata: {

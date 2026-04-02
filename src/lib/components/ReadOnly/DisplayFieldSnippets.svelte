@@ -75,6 +75,15 @@
     search: 'Suche'
   };
 
+  const spatialRepresentationTypeMap: Record<string, string> = {
+    vector: 'Vektor',
+    grid: 'Raster',
+    textTable: 'Text/Tabelle',
+    tin: 'TIN',
+    stereoModel: 'Stereomodell',
+    video: 'Video'
+  };
+
   const getAutoKeywords = async () => {
     const metadata = getFormContext()?.formState?.metadata;
     const metadataId = metadata?.metadataId;
@@ -189,6 +198,14 @@
   {/await}
   {#if value?.default?.length}
     {value?.default?.map(({ keyword }) => keyword)?.join(', ') + ','}
+  {/if}
+{/snippet}
+
+{#snippet spatialRepresentationTypes(value: string[])}
+  {#if !value?.length}
+    {DEFAULT_NULL_STRING}
+  {:else}
+    {value.map((type) => spatialRepresentationTypeMap[type] || type).join(', ')}
   {/if}
 {/snippet}
 
@@ -742,6 +759,8 @@
   {@render isoMetadataQualityReportCheck(value as string)}
 {:else if key === 'isoMetadata.resolutions'}
   {@render isoMetadataResolutions(value as string)}
+{:else if key === 'isoMetadata.spatialRepresentationTypes'}
+  {@render spatialRepresentationTypes(value as string[])}
 {:else if key === 'isoMetadata.services'}
   {@render isoMetadataServices(value as Service[], metadata)}
 {:else if key === 'isoMetadata.technicalDescription'}
