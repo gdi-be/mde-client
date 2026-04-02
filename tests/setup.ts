@@ -66,7 +66,7 @@ export const fetchMock = vi.fn(async (input: string | Request | URL, init?: Requ
   // Static Data Endpoints
 
   if (url.includes('/terms_of_use')) {
-    return mockJson([{ id: 1, shortname: 'Test Terms', active: true }]);
+    return mockJson([{ id: 2, shortname: 'Test Terms', active: true }]);
   }
 
   if (url.includes('/privacy')) {

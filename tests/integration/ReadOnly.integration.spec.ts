@@ -746,7 +746,7 @@ describe('MetadataDisplay - Integration test', () => {
       testFieldVisibility(
         role,
         '26_TermsOfUseSourceField.label',
-        'displayfield.noValue',
+        'Test Terms',
         '#classification',
         true
       );
