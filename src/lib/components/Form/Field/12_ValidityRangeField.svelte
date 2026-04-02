@@ -13,20 +13,14 @@
 
   const { getValue } = getFormContext();
   const startValueFromData = $derived(getValue<string>(FROM_KEY));
-  let startValue = $state('');
-  $effect(() => {
-    if (startValueFromData && !startValue) {
-      startValue = new Date(startValueFromData).toISOString().split('T')[0];
-    }
-  });
+  let startValue = $derived(
+    startValueFromData ? new Date(startValueFromData).toISOString().split('T')[0] : ''
+  );
 
   const endValueFromData = $derived(getValue<string>(TO_KEY));
-  let endValue = $state('');
-  $effect(() => {
-    if (endValueFromData && !endValue) {
-      endValue = new Date(endValueFromData).toISOString().split('T')[0];
-    }
-  });
+  let endValue = $derived(
+    endValueFromData ? new Date(endValueFromData).toISOString().split('T')[0] : ''
+  );
 
   let showCheckmark = $state(false);
   const fromFieldConfig = MetadataService.getFieldConfig<string>(12);

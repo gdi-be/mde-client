@@ -19,20 +19,17 @@
 
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY, metadata));
-  let value = $state('');
-
-  $effect(() => {
-    if (valueFromData && !value) {
-      value = new Date(valueFromData).toISOString().split('T')[0];
-    }
-  });
+  let value = $derived(valueFromData ? new Date(valueFromData).toISOString().split('T')[0] : '');
   const fieldConfig = MetadataService.getFieldConfig<string>(11);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   let showCheckmark = $state(false);
 
   const onBlur = async () => {
-    const response = await MetadataService.persistValue(KEY, new Date(value!).toISOString());
+    const response = await MetadataService.persistValue(
+      KEY,
+      value ? new Date(value!).toISOString() : ''
+    );
     if (response.ok) {
       showCheckmark = true;
     }
