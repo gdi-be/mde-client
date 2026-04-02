@@ -22,8 +22,7 @@
   "06_HighValueDatasetField": {
     "label": "High Value Datensatz",
     "explanation": "Ist Ihr Datenbestand ein High Value Datensatz im Sinne der EU-Verordnung?",
-    "categoryLabel": "HVD Kategorien",
-    "categoryExplanation": "Welchem High Value Thema lässt sich ihr Datenbestand zuordnen?"
+    "categoryLabel": "HVD Kategorien"
   },
   "07_AnnexThemeField": {
     "label": "INSPIRE Annex Thema",
@@ -94,17 +93,8 @@
     "name": "Name",
     "organisation": "Organisation",
     "phone": "Telefon",
-    "remove": "Kontakt entfernen",
     "label": "Kontaktangaben",
-    "explanation": "Welche Person kann über den Datenbestand Auskunft geben und soll in den Metadaten genannt werden?",
-    "label_name": "Name",
-    "explanation_name": "Wer kann Auskunft geben?",
-    "label_organisation": "Organisation",
-    "explanation_organisation": "Wo arbeitet die Person, die Auskunft geben kann?",
-    "label_phone": "Telefon",
-    "explanation_phone": "Unter welcher Telefonnummer kann die Person erreicht werden?",
-    "label_email": "E-Mail",
-    "explanation_email": "Unter welcher E-Mail-Adresse kann die Person erreicht werden?"
+    "explanation": "Welche Person kann über den Datenbestand Auskunft geben und soll in den Metadaten genannt werden?"
   },
   "25_TermsOfUseField": {
     "label": "Nutzungsbestimmungen",
@@ -143,11 +133,8 @@
     "label": "Herkunft der Daten",
     "explanation": "Auf welchen Daten basiert ihr Datenbestand? Woher stammen ihre Daten?",
     "label_title": "Titel",
-    "explanation_title": "Titel des Datenbestandes, auf dem ihr Datenbestand basiert.",
     "label_date": "Datum der Veröffentlichung",
-    "explanation_date": "Wann wurden die Daten veröffentlicht?",
-    "label_identifier": "Identifier",
-    "explanation_identifier": "Identifier des Datenbestandes, auf dem ihr Datenbestand basiert."
+    "label_identifier": "Identifier"
   },
   "37_QualityReportCheckField": {
     "label": "Überprüfung des Qualitätsberichts"
@@ -159,9 +146,6 @@
     "label": "Räumliche Darstellungsart",
     "errorFetching": "Fehler beim Abrufen der räumlichen Darstellungsarten"
   },
-  "40_ServiceForm": {
-    "label": "Dienst"
-  },
   "40_ServicesSection": {
     "label": "Dienste",
     "explanation": "Hier sollen Angaben zu bereitzustellenden Karten- und Download-Diensten gemacht werden"
@@ -172,7 +156,6 @@
     "delete_confirm": "Möchten Sie diese Information wirklich löschen?",
     "remove": "Information entfernen",
     "description": "Titel",
-    "url": "Url",
     "label": "Weitere Informationen",
     "explanation": "Gibt es weitere Informationsquellen zu Ihrem Datenbestand im Internet?"
   },
@@ -185,8 +168,7 @@
     "search": "Suche"
   },
   "44_AdditionalInformationUrl": {
-    "label": "Url",
-    "explanation": "Wo kann die Informationsquelle gefunden werden?"
+    "label": "Url"
   },
   "45_ServiceWorkspace": {
     "label": "Dienst-ID"
@@ -203,17 +185,12 @@
     "label": "Gesamtlegende",
     "explanation": "Tragen Sie hier einen Link zu der Gesamtlegende Ihres Kartendienstes ein",
     "label_url": "Url",
-    "explanation_url": "Wo kann die Gesamtlegende gefunden werden?",
     "label_format": "Format",
-    "explanation_format": "In welchem Format liegt die Gesamtlegende vor?",
     "label_width": "Breite",
-    "explanation_width": "In welcher Breite wird die Gesamtlegende bereitgestellt?",
-    "label_height": "Höhe",
-    "explanation_height": "In welcher Höhe wird die Gesamtlegende bereitgestellt?"
+    "label_height": "Höhe"
   },
   "48_LayersForm": {
-    "label": "Kartenebenen",
-    "explanation": "Ihr Kartendienst muss mindestens aus einer Ebene bestehen. Geben Sie hier an, wieviele Ebenen ihr Kartendienst hat"
+    "label": "Kartenebenen"
   },
   "49_LayerTitle": {
     "label": "Titel der Kartenebene",
@@ -241,8 +218,7 @@
     "explanation": "Wo liegen die Daten für diese Ebene vor? Beschreiben oder verweisen Sie auf den Ablageort bzw. die Datenbank oder Internetressource."
   },
   "56_FeatureTypeForm": {
-    "label": "FeatureTypes",
-    "explanation": "Welche FeatureTypes sind im Dienst enthalten?"
+    "label": "FeatureTypes"
   },
   "58_ServiceType": {
     "atom": "ATOM",
@@ -283,8 +259,7 @@
     "label": "Attribut-Datentyp"
   },
   "68_LayerSecondaryDatasource": {
-    "label": "sekundäre Datenhaltung",
-    "explanation": "Gibt es eine sekundäre Datenhaltung für diese Ebene?"
+    "label": "sekundäre Datenhaltung"
   },
   "69_FeatureTypeDescription": {
     "label": "Kurzbeschreibung des FeatureTypes",
@@ -324,14 +299,6 @@
     "create": "Neuerfassung",
     "metadata": "Metadaten"
   },
-  "columnsform": {
-    "add_button": "Attribut hinzufügen",
-    "delete_button": "Löschen",
-    "delete_confirm": "Sind sie sicher, dass sie dieses Attribut löschen möchten?",
-    "new_attribute": "Neues Attribut",
-    "remove_button": "Attribut entfernen",
-    "unknown": "Unbekanntes Attribut"
-  },
   "commentsdisplay": {
     "noComments": "Keine Kommentare"
   },
@@ -353,7 +320,6 @@
     "sendError": "Fehler beim Senden des Kommentars"
   },
   "copybutton": {
-    "copied": "Kopiert",
     "copyError": "Fehler beim Abrufen des Wertes für die Zwischenablage.",
     "title": "Wert in Zwischenablage kopieren"
   },
@@ -381,16 +347,7 @@
   "error": {
     "notFound": "Seite nicht gefunden"
   },
-  "featuretypeform": {
-    "add_button": "Featuretype hinzufügen",
-    "delete_button": "Löschen",
-    "delete_confirm": "Sind sie sicher, dass sie diesen FeatureType löschen möchten?",
-    "remove_button": "Featuretype entfernen",
-    "unknown": "Unbekannter Featuretype"
-  },
   "fieldtools": {
-    "checkingHelp": "Es wird geprüft ob eine Hilfe konfiguriert wurde.",
-    "checkingOriginal": "Es wird geprüft, ob der Wert im Vorlagedatensatz gesetzt ist.",
     "copy": "Übernehmen",
     "copyConfirm": "Möchten Sie den Wert wirklich aus der Vorlage übernehmen? Änderungen gehen verloren.",
     "copyError": "Kein Wert im Vorlagedatensatz gefunden",
@@ -399,9 +356,6 @@
     "helpError": "Fehler beim Prüfen der Hilfe.",
     "originalError": "Fehler beim Prüfen des Vorlagedatensatzes."
   },
-  "footer": {
-    "default": "Footer"
-  },
   "form": {
     "additional": "4. Weitere Angaben",
     "back": "Zurück",
@@ -409,18 +363,13 @@
     "classification": "2. Einordnung",
     "inspireLegend": "Angaben zu INSPIRE",
     "next": "Weiter",
-    "progress": "Fortschritt: {percent} %",
-    "progressAria": "{label} Fortschritt",
     "services": "5. Dienste",
     "temp_and_spatial": "3. Zeitliche und Räumliche Angaben"
   },
   "formfooter": {
     "assign": "Zuweisen",
-    "back": "Zurück",
     "comments": "Kommentare",
     "download": "Download",
-    "downloadError": "Fehler beim Herunterladen der Metadaten. Bitte versuchen Sie es später erneut.",
-    "next": "Weiter",
     "publish": "Freigabe",
     "validate": "Validieren"
   },
@@ -438,26 +387,13 @@
     "loading": "Lädt ...",
     "loading_options": "Lade Optionen",
     "no": "Nein",
-    "warning": "Warnung",
     "yes": "Ja"
-  },
-  "header": {
-    "appTitle": "Metadaten Editor"
   },
   "helpbutton": {
     "title": "Hilfe zum Feld anzeigen"
   },
   "helppanel": {
-    "fetchError": "Fehler beim Abrufen der Hilfe",
     "noHelp": "Für dieses Eingabefeld ist keine Hilfe verfügbar."
-  },
-  "layersform": {
-    "add_button": "Layer hinzufügen",
-    "delete_button": "Löschen",
-    "delete_confirm": "Sind sie sicher, dass sie diesen Layer löschen möchten?",
-    "legend": "Layers",
-    "remove_button": "Layer entfernen",
-    "unknown": "Unbekannter Layer"
   },
   "layout": {
     "fallback": "Fehler beim Laden der Seite. Wenden Sie sich an den Administrator."
@@ -518,10 +454,6 @@
     "pageLabel": "Seite",
     "pageSizeLabel": "Datensätze pro Seite"
   },
-  "popconfirm": {
-    "cancel": "Abbrechen",
-    "confirm": "Bestätigen"
-  },
   "progress": {
     "allValid": "Alle Felder wurde ausgefüllt und sind valide.",
     "invalidFields": "Von insgesamt {total} Feldern sind {invalid} ungültig bzw leer. Darunter {required} Pflichtfeld(er)."
@@ -570,13 +502,6 @@
     "account": "Mein Account",
     "login": "Anmeldung",
     "logout": "Logout"
-  },
-  "userprofile": {
-    "admin": "Administrator",
-    "dataowner": "Datenhaltende Stelle",
-    "editor": "Redakteur",
-    "quality": "Qualitätsmanagement",
-    "sessionExpires": "Sitzung läuft ab in:"
   },
   "validation_popup": {
     "finished": "Validierung abgeschlossen für"
