@@ -9,10 +9,12 @@
 
   const KEY = 'isoMetadata.termsOfUseSource';
   const TERMS_OF_USE_KEY = 'isoMetadata.termsOfUseId';
+  const PRIVACY_KEY = 'isoMetadata.privacy';
 
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   const termsOfUseId = $derived(getValue<number>(TERMS_OF_USE_KEY));
+  const privacy = $derived(getValue<string>(PRIVACY_KEY));
 
   let value = $derived(valueFromData ?? '');
 
@@ -28,7 +30,7 @@
   };
 </script>
 
-{#if termsOfUseId && termsOfUseId !== 1}
+{#if termsOfUseId && termsOfUseId !== 1 && privacy === 'NONE'}
   <div class="terms-of-use-source-field">
     <TextInput
       bind:value
