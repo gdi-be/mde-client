@@ -46,7 +46,13 @@
     }
 
     const data = await response.json();
-    return data.map((entry: IsoTheme) => ({
+    const set: { [key: string]: IsoTheme } = {};
+    for (const entry of data) {
+      if (!set[entry.isoID]) {
+        set[entry.isoID] = entry;
+      }
+    }
+    return Object.values(set).map((entry: IsoTheme) => ({
       key: entry.isoID,
       label: entry.isoName
     }));
