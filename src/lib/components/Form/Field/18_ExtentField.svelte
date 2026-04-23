@@ -73,13 +73,13 @@
     ValidationService.validateField(minXFieldConfig, inputValue.minx)
   );
   let validationResultMinY = $derived(
-    ValidationService.validateField(minXFieldConfig, inputValue.miny)
+    ValidationService.validateField(minYFieldConfig, inputValue.miny)
   );
   let validationResultMaxX = $derived(
-    ValidationService.validateField(minXFieldConfig, inputValue.maxx)
+    ValidationService.validateField(maxXFieldConfig, inputValue.maxx)
   );
   let validationResultMaxY = $derived(
-    ValidationService.validateField(minXFieldConfig, inputValue.maxy)
+    ValidationService.validateField(maxYFieldConfig, inputValue.maxy)
   );
 
   let hasInvalidFields = $derived(
