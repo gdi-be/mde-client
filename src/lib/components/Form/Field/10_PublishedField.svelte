@@ -11,17 +11,7 @@
 
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
-  let value = $state('');
-  let initialized = false;
-
-  // TODO: this should be replaced by deriving "value". This
-  // should be possible after svelte is updated to the latest version
-  // https://github.com/gdi-be/mde-client/pull/261
-  $effect(() => {
-    if (valueFromData && !initialized) {
-      value = new Date(valueFromData).toISOString().split('T')[0];
-    }
-  });
+  let value = $derived(valueFromData ? new Date(valueFromData).toISOString().split('T')[0] : '');
 
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(10);
