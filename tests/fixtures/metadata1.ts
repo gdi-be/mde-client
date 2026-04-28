@@ -54,6 +54,7 @@ export default {
       },
       {
         id: 'svc-2',
+        workspace: 'workspace_atom',
         title: 'ewfewf',
         shortDescription: 'ewfewfew',
         serviceIdentification: '3a5b3081-a5e0-4133-ad18-ea756331e33f',

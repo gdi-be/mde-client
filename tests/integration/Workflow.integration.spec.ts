@@ -37,7 +37,7 @@ describe('Metadata Workflow - Integration test', () => {
       render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeDataOwner'
           }
@@ -53,7 +53,7 @@ describe('Metadata Workflow - Integration test', () => {
       render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: 'someone-else',
             responsibleRole: 'MdeDataOwner',
             approved: false
@@ -72,7 +72,7 @@ describe('Metadata Workflow - Integration test', () => {
       render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             approved: true,
             responsibleRole: 'MdeEditor'
@@ -89,7 +89,7 @@ describe('Metadata Workflow - Integration test', () => {
       render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: 'current-user-id',
             responsibleRole: 'MdeQualityAssurance'
           }
@@ -117,7 +117,7 @@ describe('Metadata Workflow - Integration test', () => {
       const { unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeDataOwner'
           }
@@ -136,7 +136,7 @@ describe('Metadata Workflow - Integration test', () => {
       const { unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeEditor'
           }
@@ -158,7 +158,7 @@ describe('Metadata Workflow - Integration test', () => {
       const { unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeQualityAssurance',
             approved: false
@@ -185,7 +185,7 @@ describe('Metadata Workflow - Integration test', () => {
       const { unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeEditor',
             approved: true
@@ -215,7 +215,7 @@ describe('Metadata Workflow - Integration test', () => {
       let { unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: '',
             responsibleRole: 'MdeDataOwner'
           }
@@ -232,7 +232,7 @@ describe('Metadata Workflow - Integration test', () => {
       ({ unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeDataOwner'
           }
@@ -249,7 +249,7 @@ describe('Metadata Workflow - Integration test', () => {
       ({ unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeEditor'
           }
@@ -265,7 +265,7 @@ describe('Metadata Workflow - Integration test', () => {
       ({ unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeEditor'
           }
@@ -282,7 +282,7 @@ describe('Metadata Workflow - Integration test', () => {
       ({ unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeQualityAssurance',
             approved: false
@@ -307,7 +307,7 @@ describe('Metadata Workflow - Integration test', () => {
       ({ unmount } = render(FormHarness, {
         props: {
           metadata: {
-            ...metadata1,
+            ...structuredClone(metadata1),
             assignedUserId: TEST_USER_ID,
             responsibleRole: 'MdeEditor',
             approved: true
