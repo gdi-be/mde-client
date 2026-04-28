@@ -11,13 +11,7 @@
 
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
-  let value = $state('');
-
-  $effect(() => {
-    if (valueFromData && !value) {
-      value = new Date(valueFromData).toISOString().split('T')[0];
-    }
-  });
+  let value = $derived(valueFromData ? new Date(valueFromData).toISOString().split('T')[0] : '');
 
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(10);
@@ -35,7 +29,7 @@
   };
 </script>
 
-<div class="date-time-field">
+<div class="published-field">
   <DateInput
     bind:value
     key={KEY}
@@ -49,7 +43,7 @@
 </div>
 
 <style lang="scss">
-  .date-time-field {
+  .published-field {
     position: relative;
     display: flex;
     gap: 0.25em;

@@ -12,6 +12,8 @@
   const highValueDataset = $derived(
     MetadataService.getValue('isoMetadata.highValueDataset', metadata)
   );
+  const privacy = $derived(MetadataService.getValue('isoMetadata.privacy', metadata));
+  const termsOfUseId = $derived(MetadataService.getValue('isoMetadata.termsOfUseId', metadata));
 
   const t = $derived(page.data.t);
 </script>
@@ -51,10 +53,12 @@
       {/if}
       <DisplayField key="isoMetadata.privacy" label={t('04_PrivacyField.label')} />
       <DisplayField key="isoMetadata.termsOfUseId" label={t('25_TermsOfUseField.label')} />
-      <DisplayField
-        key="isoMetadata.termsOfUseSource"
-        label={t('26_TermsOfUseSourceField.label')}
-      />
+      {#if privacy === 'NONE' && termsOfUseId && termsOfUseId !== 1}
+        <DisplayField
+          key="isoMetadata.termsOfUseSource"
+          label={t('26_TermsOfUseSourceField.label')}
+        />
+      {/if}
       <DisplayField
         key="isoMetadata.highValueDataset"
         label={t('06_HighValueDatasetField.label')}
@@ -86,6 +90,10 @@
       <DisplayField key="isoMetadata.extent" label={t('18_ExtentField.label')} />
       <DisplayField key="isoMetadata.resolutions" label={t('28_ResolutionField.label')} />
       <DisplayField key="isoMetadata.scale" label={t('28_ResolutionField.label_scale')} />
+      <DisplayField
+        key="isoMetadata.spatialRepresentationTypes"
+        label={t('39_SpatialRepresentationField.label')}
+      />
     </section>
     <section id="additional">
       <h2>{t('metadatadisplay.sectionAdditional')}</h2>

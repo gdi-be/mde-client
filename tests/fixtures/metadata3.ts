@@ -6,49 +6,61 @@ export default {
   modified: '2025-06-25T08:51:17.210619Z',
   metadataId: 'a723e625-815c-4553-93bf-2fb62bb623d4',
   clonedFromId: null,
-  title: '123 Datentest',
   approved: false,
   status: 'NEW',
   teamMemberIds: ['9282dbab-a97d-44fa-8f06-042ab34f6de6', '813793c7-bc20-48e9-8010-3474eeaa3908'],
   ownerId: '813793c7-bc20-48e9-8010-3474eeaa3908',
   assignedUserId: '9282dbab-a97d-44fa-8f06-042ab34f6de6',
-  responsibleRole: 'MdeEditor',
-  clientMetadata: {},
-  isoMetadata: {
-    metadataProfile: 'INSPIRE_HARMONISED',
-    identifier: 'a723e625-815c-4553-93bf-2fb62bb623d4',
-    title: '123 Datentest',
-    description: 'wergwergergergergergrge',
-    privacy: 'NONE',
-    services: [],
-    keywords: {
-      default: [
+  responsibleRole: 'MdeDataOwner',
+  clientMetadata: {
+    layers: {
+      '00e19242-8d3c-4617-ad73-d5a6b79ae55f': [
         {
-          keyword: 'Betriebswasser'
+          name: 'ewfwefew',
+          title: 'a',
+          styleName: 'gggg',
+          styleTitle: 'ewwefwe',
+          shortDescription: 'ewewff',
+          legendImage: 'wef',
+          datasource: 'ewfefwefw',
+          secondaryDatasource: 'ewfewf'
         }
       ]
-    },
-    inspireTheme: ['AC'],
+    }
+  },
+  isoMetadata: {
+    metadataProfile: 'ISO',
+    privacy: 'NONE',
+    services: [
+      {
+        workspace: 'ewfewf',
+        shortDescription: 'dewf',
+        serviceIdentification: '00e19242-8d3c-4617-ad73-d5a6b79ae55f',
+        serviceType: 'WMS',
+        legendImage: {
+          format: 'wefwef',
+          url: 'weffwe',
+          width: 234,
+          height: 234
+        },
+        preview: 'eeeee'
+      }
+    ],
     inspireFormatName: '0185 GML Application Schema',
     inspireAnnexVersion: '0815',
     thesauri: {},
     highValueDataset: false,
     created: '2025-06-05T00:00:00Z',
-    published: '2025-06-21T00:00:00Z',
+    published: '2026-01-01T00:00:00Z',
     modified: '2024-06-21T00:00:00Z',
-    validFrom: '2025-06-08T00:00:00Z',
-    validTo: '2025-06-11T00:00:00Z',
     pointsOfContact: [
       {
-        id: 'b3e1c2d4-5f6a-4e7b-8c9d-0a1b2c3d4e5f',
         name: 'Peter Klose',
         organisation: 'terrestris GmbH & Co Kg',
         phone: '123123123',
-        email: 'klose@wefewf.de'
+        email: 'kaivol@wefewf.de'
       }
     ],
-    resolutions: [222],
-    preview: 'wefwefwef.png',
     crs: 'http://www.opengis.net/def/crs/EPSG/0/25833',
     extent: {
       minx: 13.079,
@@ -56,7 +68,6 @@ export default {
       maxx: 13.7701,
       maxy: 52.68779
     },
-    maintenanceFrequency: 'annually',
     contentDescriptions: [
       {
         url: '',
@@ -64,22 +75,7 @@ export default {
         code: 'information'
       }
     ],
-    technicalDescription: 'ewf',
-    contentDescription: 'ewf',
-    lineage: [
-      {
-        identifier: '',
-        title: 'ggg',
-        date: '2025-06-24T00:00:00Z'
-      }
-    ],
-    valid: false,
-    topicCategory: ['location'],
-    termsOfUseId: 2,
-    termsOfUseSource: 'Test Terms',
-    spatialRepresentationTypes: ['vector']
+    spatialRepresentationTypes: ['test']
   },
-  technicalMetadata: {
-    deliveredCrs: 'EPSG:25833'
-  }
+  technicalMetadata: {}
 } satisfies MetadataCollection;

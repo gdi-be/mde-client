@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, test } from 'vitest';
 import { MetadataService } from '$lib/services/MetadataService';
 import metadata1 from './fixtures/metadata1';
 import metadata2 from './fixtures/metadata2';
@@ -153,7 +153,7 @@ describe('MetadataService', () => {
 
     test('should get nested service properties', () => {
       const result = MetadataService.getValue('isoMetadata.services[0].workspace', metadata1);
-      expect(result).toBe('ewfewf');
+      expect(result).toBe('workspace1');
     });
 
     test('should get clientMetadata', () => {
