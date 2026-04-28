@@ -13,10 +13,7 @@ configure({
 // has already removed them. These are benign and do not affect test results.
 function isSmuiJsdomError(error: unknown): boolean {
   const msg = error instanceof Error ? (error.message ?? '') : String(error);
-  return (
-    msg.includes('Cannot read properties of null') ||
-    msg.includes("Cannot use 'in' operator")
-  );
+  return msg.includes('Cannot read properties of null') || msg.includes("Cannot use 'in' operator");
 }
 
 process.on('uncaughtException', (error: Error) => {
