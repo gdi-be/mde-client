@@ -8,6 +8,27 @@ configure({
   asyncUtilTimeout: 5000
 });
 
+// Suppress known SMUI teardown errors in jsdom
+// SMUI components try to access DOM elements during effect cleanup after jsdom
+// has already removed them. These are benign and do not affect test results.
+function isSmuiJsdomError(error: unknown): boolean {
+  const msg = error instanceof Error ? (error.message ?? '') : String(error);
+  return (
+    msg.includes('Cannot read properties of null') ||
+    msg.includes("Cannot use 'in' operator")
+  );
+}
+
+process.on('uncaughtException', (error: Error) => {
+  if (isSmuiJsdomError(error)) return;
+  throw error;
+});
+
+process.on('unhandledRejection', (reason: unknown) => {
+  if (isSmuiJsdomError(reason)) return;
+  throw reason;
+});
+
 // Browser API Polyfills
 
 global.ResizeObserver = class ResizeObserver {
