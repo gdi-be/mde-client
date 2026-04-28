@@ -1,3 +1,15 @@
+## [6.1.3](https://github.com/gdi-be/mde-client/compare/v6.1.2...v6.1.3) (2026-04-28)
+
+
+### Bug Fixes
+
+* allow deletion of dates ([679903c](https://github.com/gdi-be/mde-client/commit/679903c68c590fd61d835b5fe4a480faef05b18b))
+* always show default keywords in readonly ([d1e3ada](https://github.com/gdi-be/mde-client/commit/d1e3ada84751bdec760f4351487d49b9f7b691bb))
+* filter out duplicate ISO categories ([224d19c](https://github.com/gdi-be/mde-client/commit/224d19c0dc6bb8ab246972e5372db10665bd14e7))
+* fix readonly issues ([6227b4a](https://github.com/gdi-be/mde-client/commit/6227b4a3fa2e099920e5d1b81fa66b7d95642b10))
+* only show terms of use source for privacy free datasets ([7dc734f](https://github.com/gdi-be/mde-client/commit/7dc734f3d11af12b5d8f6f4e4b142b2d5f4e023b))
+* simplify date value derivation in form fields ([25a50d2](https://github.com/gdi-be/mde-client/commit/25a50d222bac281d90ac478a9b339ab52587fff0))
+
 ## [6.1.2](https://github.com/gdi-be/mde-client/compare/v6.1.1...v6.1.2) (2026-02-25)
 
 
