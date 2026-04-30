@@ -1,5 +1,8 @@
 branches:
   - main
+  - name: v6.1.x
+    range: '6.1.x'
+    channel: false
 
 plugins:
   - '@semantic-release/commit-analyzer'
