@@ -20,10 +20,17 @@
   const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY, metadata));
   let value = $state('');
+  let initialized = false;
 
+  // TODO: this should be replaced by deriving "value". This
+  // should be possible after svelte is updated to the latest version
+  // https://github.com/gdi-be/mde-client/pull/261
   $effect(() => {
-    if (valueFromData && !value) {
-      value = new Date(valueFromData).toISOString().split('T')[0];
+    if (!initialized) {
+      if (valueFromData) {
+        value = new Date(valueFromData).toISOString().split('T')[0];
+      }
+      initialized = true;
     }
   });
   const fieldConfig = MetadataService.getFieldConfig<string>(11);
@@ -31,8 +38,13 @@
 
   let showCheckmark = $state(false);
 
-  const onBlur = async () => {
-    const response = await MetadataService.persistValue(KEY, new Date(value!).toISOString());
+  const onBlur = async (evt: FocusEvent) => {
+    const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
+    value = inputValue;
+    const response = await MetadataService.persistValue(
+      KEY,
+      inputValue ? new Date(inputValue).toISOString() : null
+    );
     if (response.ok) {
       showCheckmark = true;
     }
