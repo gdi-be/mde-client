@@ -12,23 +12,30 @@
   };
 
   let { value, onChange }: ComponentProps = $props();
+  let localValue = $state(value || '');
+  $effect(() => {
+    localValue = value || '';
+  });
 
   const HELP_KEY = 'clientMetadata.layers.legendImage';
   let showCheckmark = $state(false);
 
   const fieldConfig = MetadataService.getFieldConfig(53);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const validationResult = $derived(fieldConfig?.validator(localValue));
 </script>
 
 <div class="layer-legend-image-field">
   <TextInput
     label={t('53_LayerLegendImage.label')}
     explanation={t('53_LayerLegendImage.explanation')}
-    {value}
+    value={localValue}
     {fieldConfig}
     {validationResult}
     onchange={async (e: Event) => {
-      const response = await onChange((e.target as HTMLInputElement).value);
+      const newValue = (e.target as HTMLInputElement).value;
+      localValue = newValue;
+      if (fieldConfig?.validator(newValue).valid === false) return;
+      const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;
       }

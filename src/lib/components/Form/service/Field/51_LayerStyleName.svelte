@@ -14,6 +14,10 @@
   };
 
   let { value, onChange }: ComponentProps = $props();
+  let localValue = $state(value || '');
+  $effect(() => {
+    localValue = value || '';
+  });
 
   const HELP_KEY = 'clientMetadata.layers.styleName';
   let showCheckmark = $state(false);
@@ -23,7 +27,7 @@
 
   const fieldConfig = MetadataService.getFieldConfig(51);
   const validationResult = $derived(
-    fieldConfig?.validator(value, {
+    fieldConfig?.validator(localValue, {
       ['HIGHEST_ROLE']: highestRole
     })
   );
@@ -31,6 +35,14 @@
 
   const onChangeInternal = async (e: Event) => {
     const newValue = (e.target as HTMLInputElement).value;
+    localValue = newValue;
+    if (
+      fieldConfig?.validator(newValue, {
+        ['HIGHEST_ROLE']: highestRole
+      }).valid === false
+    ) {
+      return;
+    }
     const response = await onChange(newValue);
     if (response.ok) {
       showCheckmark = true;
@@ -42,7 +54,7 @@
   <div class="layer-style-name-field">
     <TextInput
       label={t('51_LayerStyleName.label')}
-      {value}
+      value={localValue}
       maxlength={100}
       {fieldConfig}
       {validationResult}

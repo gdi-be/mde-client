@@ -17,22 +17,39 @@
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
+  let localValue = $state(value);
+  $effect(() => {
+    localValue = value;
+  });
 
   const fieldConfig = MetadataService.getFieldConfig(47);
   const fieldConfigUrl = MetadataService.getFieldConfig(75);
   const fieldConfigFormat = MetadataService.getFieldConfig(76);
   const fieldConfigWidth = MetadataService.getFieldConfig(77);
   const fieldConfigHeight = MetadataService.getFieldConfig(78);
-  const validationResult = $derived(fieldConfig?.validator(value));
-  const validationResultUrl = $derived(fieldConfigUrl?.validator(value?.url));
-  const validationResultFormat = $derived(fieldConfigFormat?.validator(value?.format));
-  const validationResultWidth = $derived(fieldConfigWidth?.validator(value?.width));
-  const validationResultHeight = $derived(fieldConfigHeight?.validator(value?.height));
+  const validationResult = $derived(fieldConfig?.validator(localValue));
+  const validationResultUrl = $derived(fieldConfigUrl?.validator(localValue?.url));
+  const validationResultFormat = $derived(fieldConfigFormat?.validator(localValue?.format));
+  const validationResultWidth = $derived(fieldConfigWidth?.validator(localValue?.width));
+  const validationResultHeight = $derived(fieldConfigHeight?.validator(localValue?.height));
   let showCheckmark = $state(false);
 
   const update = async (key: string, val: string | number) => {
+    localValue = {
+      ...localValue,
+      [key]: val
+    };
+    const fieldValidationMap: Record<string, { valid?: boolean } | undefined> = {
+      url: fieldConfigUrl?.validator(key === 'url' ? val : localValue?.url),
+      format: fieldConfigFormat?.validator(key === 'format' ? val : localValue?.format),
+      width: fieldConfigWidth?.validator(key === 'width' ? val : localValue?.width),
+      height: fieldConfigHeight?.validator(key === 'height' ? val : localValue?.height)
+    };
+    if (fieldValidationMap[key]?.valid === false) {
+      return;
+    }
     const response = await onChange({
-      ...value,
+      ...localValue,
       [key]: val
     });
     if (response.ok) {

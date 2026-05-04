@@ -115,6 +115,9 @@
   };
 
   const sendValue = async () => {
+    if (hasInvalidFields) {
+      return;
+    }
     const response = await MetadataService.persistValue(KEY, value4326);
     if (response.ok) {
       showCheckmark = true;

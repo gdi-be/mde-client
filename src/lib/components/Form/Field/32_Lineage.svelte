@@ -96,6 +96,9 @@
   };
 
   const persistLineages = async (evt?: FocusEvent) => {
+    if (hasInvalidFields) {
+      return;
+    }
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
     const focusedElement = evt?.relatedTarget as HTMLElement | null;

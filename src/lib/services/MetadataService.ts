@@ -102,12 +102,25 @@ export class MetadataService {
   /**
    * Persists a metadata value to the server.
    * Handles server communication, data invalidation, error handling, and user notifications.
+   * For required fields with empty values, returns a local 422 response instead of
+   * sending a request to the backend.
    *
    * @param key - Path to the value to persist (e.g., 'isoMetadata.title')
    * @param value - The value to persist
-   * @returns The server response
+   * @returns The server response, or a local 422 validation response
    */
   static async persistValue(key: string, value: unknown) {
+    const fieldConfig = FieldConfigs.find((config) => config.key === key);
+    const isEmptyValue =
+      value === null ||
+      value === undefined ||
+      value === '' ||
+      (Array.isArray(value) && value.length === 0);
+
+    if (fieldConfig?.required && isEmptyValue) {
+      return new Response(null, { status: 422, statusText: 'Validation failed' });
+    }
+
     return MetadataUpdateService.pushToQueue(key, value);
   }
 
