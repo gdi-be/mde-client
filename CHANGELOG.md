@@ -1,3 +1,16 @@
+## [6.1.3](https://github.com/gdi-be/mde-client/compare/v6.1.2...v6.1.3) (2026-05-04)
+
+
+### Bug Fixes
+
+* allow deletion of dates ([9b882c9](https://github.com/gdi-be/mde-client/commit/9b882c937cb35f91957c670529e78b27ad8bbdf7))
+* always show default keywords in readonly ([5a5a0fc](https://github.com/gdi-be/mde-client/commit/5a5a0fc832d337dd6dde0aeaac6058ef37e4705b))
+* apply patch for date inputs ([#29039](https://github.com/gdi-be/mde-client/issues/29039)) ([0c8aaa4](https://github.com/gdi-be/mde-client/commit/0c8aaa448e5b860de5b47b2959bcea57a0acc19e))
+* filter out duplicate ISO categories ([fc86dcc](https://github.com/gdi-be/mde-client/commit/fc86dcccd3f8231174d3060d6558b1cf96abc822))
+* fix readonly issues ([385c8e5](https://github.com/gdi-be/mde-client/commit/385c8e50db3333750d95918f0df1187d2adc4062))
+* make atom service ID a required field ([#29499](https://github.com/gdi-be/mde-client/issues/29499)) ([ac8ff84](https://github.com/gdi-be/mde-client/commit/ac8ff840e757ed051cf93f61dbda94c1aded2591))
+* only show terms of use source for privacy free datasets ([e832750](https://github.com/gdi-be/mde-client/commit/e832750803248048afc375ab69834484aa39593c))
+
 ## [6.1.2](https://github.com/gdi-be/mde-client/compare/v6.1.1...v6.1.2) (2026-02-25)
 
 
