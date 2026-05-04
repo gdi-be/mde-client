@@ -13,24 +13,31 @@
   };
 
   let { value, onChange }: ComponentProps = $props();
+  let localValue = $state(value || '');
+  $effect(() => {
+    localValue = value || '';
+  });
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.shortDescription';
   let showCheckmark = $state(false);
 
   const fieldConfig = MetadataService.getFieldConfig(69);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const validationResult = $derived(fieldConfig?.validator(localValue));
 </script>
 
 <div class="featuretype-short-description-field">
   <TextAreaInput
     label={t('69_FeatureTypeDescription.label')}
     explanation={t('69_FeatureTypeDescription.explanation')}
-    {value}
+    value={localValue}
     maxlength={500}
     {fieldConfig}
     {validationResult}
     onchange={async (e: Event) => {
-      const response = await onChange((e.target as HTMLInputElement).value);
+      const newValue = (e.target as HTMLInputElement).value;
+      localValue = newValue;
+      if (fieldConfig?.validator(newValue).valid === false) return;
+      const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;
       }

@@ -42,6 +42,7 @@
   };
 
   const onChange = async (newValue: string) => {
+    if (fieldConfig?.validator(Number(newValue)).valid === false) return;
     const response = await MetadataService.persistValue(KEY, Number(newValue));
     if (response.ok) {
       showCheckmark = true;
