@@ -1,3 +1,15 @@
+## [6.1.4](https://github.com/gdi-be/mde-client/compare/v6.1.3...v6.1.4) (2026-05-06)
+
+
+### Bug Fixes
+
+* refine assignment logic to include user context for editors and QA roles ([ed325cf](https://github.com/gdi-be/mde-client/commit/ed325cfdbcc04ff30d227da070081fdbb282655d))
+
+
+### Features
+
+* enhance validation handling across form fields ([#29500](https://github.com/gdi-be/mde-client/issues/29500)) ([1eba9f8](https://github.com/gdi-be/mde-client/commit/1eba9f8d19efe4903308bf92a67eacd8b7cf8cd5))
+
 ## [6.1.3](https://github.com/gdi-be/mde-client/compare/v6.1.2...v6.1.3) (2026-05-04)
 
 
