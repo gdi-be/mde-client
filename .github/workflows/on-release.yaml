@@ -22,6 +22,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Use maintenance release config on maintenance branches
+        if: ${{ startsWith(github.ref_name, 'v') && endsWith(github.ref_name, '.x') }}
+        run: cp .releaserc-maintenance.yml .releaserc.yml
+
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
