@@ -30,8 +30,10 @@
   const canAssignToDataOwner = $derived(
     // Admin can do anything
     highestRole === 'MdeAdministrator' ||
-      // Editors are responsible and I'm an Editor
-      (responsibleRole === 'MdeEditor' && highestRole === 'MdeEditor')
+      (assignedToMe &&
+        // Editors are responsible and I'm an Editor
+        responsibleRole === 'MdeEditor' &&
+        highestRole === 'MdeEditor')
   );
 
   const canAssignToEditor = $derived(
@@ -44,12 +46,14 @@
   const canAssignToQualityAssurance = $derived(
     // Admin can do anything
     highestRole === 'MdeAdministrator' ||
-      // Editors are responsible and I'm an Editor
-      (responsibleRole === 'MdeEditor' && highestRole === 'MdeEditor')
+      (assignedToMe &&
+        // Editors are responsible and I'm an Editor
+        responsibleRole === 'MdeEditor' &&
+        highestRole === 'MdeEditor')
   );
 
   const canApproveMetadata = $derived(
-    ['MdeAdministrator', 'MdeQualityAssurance'].includes(highestRole)
+    highestRole === 'MdeAdministrator' || (assignedToMe && highestRole === 'MdeQualityAssurance')
   );
 
   const canAssignToMe = $derived(canAssignSelf(token, metadata));
