@@ -53,6 +53,9 @@
   <input
     type="text"
     autocomplete="off"
+    oninput={(evt) => {
+      restProps.onchange?.(evt as Event & { currentTarget: EventTarget & HTMLInputElement });
+    }}
     onfocus={(evt) => {
       fieldHasFocus = true;
       onfocus?.(evt);

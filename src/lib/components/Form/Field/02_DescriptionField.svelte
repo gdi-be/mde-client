@@ -1,15 +1,21 @@
 <script lang="ts">
   import type { ValidationResult } from '../FieldsConfig';
   import FieldTools from '../FieldTools.svelte';
-  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getFormContext,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import TextAreaInput from '../Inputs/TextAreaInput.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
   import { page } from '$app/state';
+  import { getContext } from 'svelte';
   const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.description';
 
   const { getValue } = getFormContext();
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   $effect(() => {
@@ -19,6 +25,24 @@
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(2);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
+
+  $effect(() => {
+    if (!formState.metadata?.isoMetadata) {
+      return;
+    }
+
+    if (formState.metadata.isoMetadata.description === value) {
+      return;
+    }
+
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        description: value
+      }
+    };
+  });
 
   const onBlur = async () => {
     if (validationResult?.valid === false) return;

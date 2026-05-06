@@ -7,7 +7,7 @@
   import Button, { Icon, Label } from '@smui/button';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import { getHighestRole, registerCRSCodes, transformExtent } from '$lib/util';
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import type { CRSOption } from '$lib/models/api';
@@ -158,8 +158,9 @@
             type="button"
             variant={matchingOption?.title === option.title ? 'raised' : 'text'}
             title={option.title}
-            onclick={() => {
+            onclick={async () => {
               value4326 = option.value;
+              await tick();
               sendValue();
             }}
           >
