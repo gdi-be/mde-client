@@ -1,3 +1,15 @@
+## [6.1.5](https://github.com/gdi-be/mde-client/compare/v6.1.4...v6.1.5) (2026-05-06)
+
+
+### Bug Fixes
+
+* update progress display logic for services section ([ffbc1e8](https://github.com/gdi-be/mde-client/commit/ffbc1e8be731e9fc59577d5855509918680a61b7))
+
+
+### Features
+
+* enhance form fields to synchronize metadata state and improve validation handling ([8efb2e5](https://github.com/gdi-be/mde-client/commit/8efb2e5ee96559b7ae279a25343f2cc6cb20388b))
+
 ## [6.1.4](https://github.com/gdi-be/mde-client/compare/v6.1.3...v6.1.4) (2026-05-06)
 
 
