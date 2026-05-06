@@ -1,9 +1,11 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
   import { onMount } from 'svelte';
+  import { getContext } from 'svelte';
   import Chip, { Set as ChipSet, Text, TrailingIcon } from '@smui/chips';
   import Autocomplete from '@smui-extra/autocomplete';
   import Dialog, { Actions, Content, Title } from '@smui/dialog';
@@ -23,8 +25,9 @@
   let { metadataid } = page.params;
 
   const { getValue } = getFormContext();
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
+  let value = $state<string[]>([]);
   const valueFromData = $derived(getValue<Keywords>(KEY));
-  let value = $derived<string[]>(valueFromData?.default?.map((entry) => entry.keyword) || []);
 
   let showCheckmark = $state(false);
   let autoKeywords = $state<string[]>([]);
@@ -32,7 +35,10 @@
   let uniqueKeywords = $derived(Array.from(new Set([...autoKeywords, ...value])));
   let searchValue = $state('');
   const fieldConfig = MetadataService.getFieldConfig<Keywords>(15);
-  let validationResult = $derived(fieldConfig?.validator(valueFromData));
+  const toKeywords = (keywords: string[]): Keywords => ({
+    default: keywords.map((entry) => ({ keyword: entry }))
+  });
+  let validationResult = $derived(fieldConfig?.validator(toKeywords(value)));
 
   let dialogOpen = $state(false);
   let newKeyword = $state('');
@@ -96,14 +102,19 @@
   };
 
   const persistKeywords = async () => {
+    const keywords: Keywords = toKeywords(value);
+
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          keywords
+        }
+      };
+    }
+
     if (validationResult?.valid === false) return;
-    const keywords: Keywords = valueFromData || {
-      default: []
-    };
-    keywords.default = value
-      // filter autokeywords from value to avoid duplicates
-      .filter((kw) => !autoKeywords.includes(kw))
-      .map((entry) => ({ keyword: entry }));
 
     const response = await MetadataService.persistValue(KEY, keywords);
     if (response.ok) {

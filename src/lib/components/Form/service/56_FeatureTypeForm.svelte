@@ -77,6 +77,7 @@
         columns: []
       }
     ];
+    syncLocalFeatureTypes(featureTypes);
     activeTabId = id;
     onChange(featureTypes);
   }
@@ -88,6 +89,7 @@
       targetEl,
       async () => {
         featureTypes = featureTypes.filter((featureType) => featureType.id !== id);
+        syncLocalFeatureTypes(featureTypes);
         if (activeTabId === id) {
           activeTabId = featureTypes.length > 1 ? featureTypes[0].id : undefined;
         }
@@ -114,7 +116,60 @@
       }
       return featureType;
     });
+    syncLocalFeatureTypes(featureTypes);
     return onChange(featureTypes);
+  }
+
+  function syncLocalFeatureTypes(nextFeatureTypes: FeatureType[]) {
+    if (!formState.metadata?.isoMetadata?.services) {
+      return;
+    }
+
+    let hasMatchedService = false;
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        services: formState.metadata.isoMetadata.services.map((entry: Service) => {
+          const isTargetService =
+            entry.id === service.id ||
+            entry.serviceIdentification === service.serviceIdentification;
+
+          if (!isTargetService) {
+            return entry;
+          }
+
+          hasMatchedService = true;
+          return {
+            ...entry,
+            featureTypes: nextFeatureTypes
+          };
+        })
+      }
+    };
+
+    if (hasMatchedService) {
+      return;
+    }
+
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        services: formState.metadata.isoMetadata.services.map((entry: Service) => {
+          const hasFeatureTypeFromCurrentService = entry.featureTypes?.some((ft: FeatureType) =>
+            nextFeatureTypes.some((nextFt) => nextFt.id === ft.id)
+          );
+          if (!hasFeatureTypeFromCurrentService) {
+            return entry;
+          }
+          return {
+            ...entry,
+            featureTypes: nextFeatureTypes
+          };
+        })
+      }
+    };
   }
 </script>
 

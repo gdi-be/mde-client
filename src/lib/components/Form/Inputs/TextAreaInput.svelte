@@ -51,6 +51,9 @@
   <textarea
     {maxlength}
     bind:value
+    oninput={(evt) => {
+      restProps.onchange?.(evt as Event & { currentTarget: EventTarget & HTMLTextAreaElement });
+    }}
     onfocus={(evt) => {
       fieldHasFocus = true;
       onfocus?.(evt);

@@ -51,12 +51,6 @@
       onchange={async (e: Event) => {
         const newValue = (e.target as HTMLInputElement).value;
         localValue = newValue;
-        const nextValidation = ValidationService.validateField(fieldConfig, newValue, {
-          HIGHEST_ROLE: highestRole,
-          PARENT_VALUE: featureType,
-          metadata
-        });
-        if (nextValidation.valid === false) return;
         const response = await onChange(newValue);
         if (response.ok) {
           showCheckmark = true;

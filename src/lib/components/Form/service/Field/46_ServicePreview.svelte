@@ -61,10 +61,6 @@
     onchange={async (e: Event) => {
       const newValue = (e.target as HTMLInputElement).value;
       localValue = newValue;
-      const nextValidation = fieldConfig?.validator(newValue, {
-        ['PARENT_VALUE']: service
-      });
-      if (nextValidation?.valid === false) return;
       const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;
