@@ -61,14 +61,31 @@
     !resolutionValidationResult?.valid && !scaleValidationResult?.valid
   );
 
+  const syncLocalResolutionState = () => {
+    if (!formState.metadata?.isoMetadata) {
+      return;
+    }
+
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        resolutions: resolutionValue ? [resolutionValue] : null,
+        scale: scaleValue
+      }
+    };
+  };
+
   const clearAllValues = async () => {
     scaleValue = null;
     resolutionValue = null;
+    syncLocalResolutionState();
     await updateResolution(null);
     await updateScale(null);
   };
 
   const onBlur = async (event: FocusEvent) => {
+    syncLocalResolutionState();
     const target = event.target as HTMLInputElement;
     const minValue = target.getAttribute('min');
     const min = Number(minValue);

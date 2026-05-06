@@ -103,8 +103,7 @@
     formContext.clearActiveHelp();
 
     goto(`#${section}`, {
-      replaceState: true,
-      invalidateAll: true
+      replaceState: true
     });
     await tick();
   };

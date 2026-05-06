@@ -36,7 +36,6 @@
     onchange={async (e: Event) => {
       const newValue = (e.target as HTMLInputElement).value;
       localValue = newValue;
-      if (fieldConfig?.validator(newValue).valid === false) return;
       const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;

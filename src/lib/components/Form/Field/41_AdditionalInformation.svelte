@@ -1,6 +1,7 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
   import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
@@ -11,6 +12,7 @@
   import { page } from '$app/state';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
+  import { getContext } from 'svelte';
 
   const t = $derived(page.data.t);
 
@@ -20,6 +22,7 @@
   const KEY = 'isoMetadata.contentDescriptions';
 
   const { getValue } = getFormContext();
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const valueFromData = $derived(getValue<ContentDescription[]>(KEY));
   let contentDescriptions = $state<ContentDescription[]>([]);
 
@@ -57,6 +60,8 @@
   const urlFieldConfig = MetadataService.getFieldConfig<string>(44);
 
   const persistContentDescriptions = async (evt?: FocusEvent) => {
+    syncLocalContentDescriptionsState();
+
     if (hasInvalidFields) {
       return;
     }
@@ -74,6 +79,29 @@
       elementToFocus?.focus();
     }, 10);
   };
+
+  const syncLocalContentDescriptionsState = () => {
+    if (!formState.metadata?.isoMetadata) {
+      return;
+    }
+
+    const currentContentDescriptions = formState.metadata.isoMetadata.contentDescriptions || [];
+    if (JSON.stringify(currentContentDescriptions) === JSON.stringify(contentDescriptions)) {
+      return;
+    }
+
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        contentDescriptions
+      }
+    };
+  };
+
+  $effect(() => {
+    syncLocalContentDescriptionsState();
+  });
 
   const addItem = (evt: MouseEvent) => {
     evt.preventDefault();

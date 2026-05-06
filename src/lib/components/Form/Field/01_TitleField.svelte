@@ -1,14 +1,20 @@
 <script lang="ts">
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
-  import { getFormContext } from '$lib/context/FormContext.svelte';
+  import {
+    FORMSTATE_CONTEXT,
+    getFormContext,
+    type FormState
+  } from '$lib/context/FormContext.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
+  import { getContext } from 'svelte';
   const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.title';
 
   const formContext = $derived(getFormContext());
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const valueFromData = $derived(formContext.getValue<string>(KEY));
   let value = $state('');
   $effect(() => {
@@ -18,6 +24,24 @@
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(1);
   let validationResult = $derived(fieldConfig?.validator(value));
+
+  $effect(() => {
+    if (!formState.metadata?.isoMetadata) {
+      return;
+    }
+
+    if (formState.metadata.isoMetadata.title === value) {
+      return;
+    }
+
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        title: value
+      }
+    };
+  });
 
   const onBlur = async () => {
     if (validationResult?.valid === false) return;
