@@ -39,6 +39,7 @@
   let validationResult = $derived(fieldConfig?.validator(value));
 
   const onChange = async (newValue?: string[]) => {
+    if (fieldConfig?.validator(newValue).valid === false) return;
     const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;

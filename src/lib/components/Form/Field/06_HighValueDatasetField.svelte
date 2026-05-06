@@ -47,6 +47,13 @@
   };
 
   const onSelectionChange = async (newSelection?: string[]) => {
+    if (
+      categoryFieldConfig?.validator(newSelection, {
+        'isoMetadata.highValueDataset': checkedValue
+      }).valid === false
+    ) {
+      return;
+    }
     const response = await MetadataService.persistValue(CATEGORY_KEY, newSelection);
     if (response.ok) {
       showCheckmark = true;

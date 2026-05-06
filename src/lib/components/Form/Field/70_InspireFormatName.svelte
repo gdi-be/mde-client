@@ -51,6 +51,8 @@
   let options: Option[] = $state([]);
 
   const onChange = async (newValue?: string) => {
+    if (ValidationService.validateField(fieldConfig, newValue, { metadata }).valid === false)
+      return;
     const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;

@@ -12,23 +12,30 @@
   };
 
   let { value, onChange }: ComponentProps = $props();
+  let localValue = $state(value || '');
+  $effect(() => {
+    localValue = value || '';
+  });
 
   const HELP_KEY = 'clientMetadata.layers.datasource';
   let showCheckmark = $state(false);
 
   const fieldConfig = MetadataService.getFieldConfig(55);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const validationResult = $derived(fieldConfig?.validator(localValue));
 </script>
 
 <div class="layer-short-description-field">
   <TextInput
     label={t('55_LayerDatasource.label')}
     explanation={t('55_LayerDatasource.explanation')}
-    {value}
+    value={localValue}
     {fieldConfig}
     {validationResult}
     onchange={async (e: Event) => {
-      const response = await onChange((e.target as HTMLInputElement).value);
+      const newValue = (e.target as HTMLInputElement).value;
+      localValue = newValue;
+      if (fieldConfig?.validator(newValue).valid === false) return;
+      const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;
       }

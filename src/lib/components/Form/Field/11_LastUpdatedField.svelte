@@ -41,6 +41,7 @@
   const onBlur = async (evt: FocusEvent) => {
     const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
     value = inputValue;
+    if (fieldConfig?.validator(inputValue).valid === false) return;
     const response = await MetadataService.persistValue(
       KEY,
       inputValue ? new Date(inputValue).toISOString() : null
