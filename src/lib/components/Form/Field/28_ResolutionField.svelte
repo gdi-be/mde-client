@@ -8,6 +8,7 @@
   import FieldTools from '../FieldTools.svelte';
   import NumberInput from '../Inputs/NumberInput.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
+  import { MetadataUpdateService } from '$lib/services/MetadataUpdateService';
   import FormField from '@smui/form-field';
   import Radio from '@smui/radio';
 
@@ -24,24 +25,37 @@
   let selected = $state<typeof RESOLUTION_KEY | typeof SCALE_KEY>();
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
+  let hasUnsavedLocalChange = $state(false);
 
   // TODO: check why this is a List
   const resolutionValueFromData = $derived(getValue<number[]>(RESOLUTION_KEY)?.[0]);
   let resolutionValue = $state<number | null>(null);
-  $effect(() => {
-    if (resolutionValueFromData) {
-      resolutionValue = resolutionValueFromData;
-      selected = RESOLUTION_KEY;
-    }
-  });
-
   const scaleValueFromData = $derived(getValue<number>(SCALE_KEY));
   let scaleValue = $state<number | null>(null);
   $effect(() => {
-    if (scaleValueFromData) {
-      scaleValue = scaleValueFromData;
-      selected = SCALE_KEY;
+    if (hasUnsavedLocalChange) {
+      return;
     }
+    const hasResolution = resolutionValueFromData !== undefined && resolutionValueFromData !== null;
+    const hasScale = scaleValueFromData !== undefined && scaleValueFromData !== null;
+
+    if (hasResolution) {
+      resolutionValue = resolutionValueFromData;
+      scaleValue = hasScale ? scaleValueFromData : null;
+      selected = RESOLUTION_KEY;
+      return;
+    }
+
+    if (hasScale) {
+      scaleValue = scaleValueFromData;
+      resolutionValue = null;
+      selected = SCALE_KEY;
+      return;
+    }
+
+    resolutionValue = null;
+    scaleValue = null;
+    selected = undefined;
   });
 
   let showCheckmark = $state(false);
@@ -61,36 +75,50 @@
     !resolutionValidationResult?.valid && !scaleValidationResult?.valid
   );
 
-  const syncLocalResolutionState = () => {
-    if (!formState.metadata?.isoMetadata) {
-      return;
-    }
-
-    formState.metadata = {
-      ...formState.metadata,
-      isoMetadata: {
-        ...formState.metadata.isoMetadata,
-        resolutions: resolutionValue ? [resolutionValue] : null,
-        scale: scaleValue
-      }
-    };
-  };
-
   const clearAllValues = async () => {
-    scaleValue = null;
-    resolutionValue = null;
-    syncLocalResolutionState();
-    await updateResolution(null);
-    await updateScale(null);
+    hasUnsavedLocalChange = true;
+    if (selected === RESOLUTION_KEY) {
+      resolutionValue = null;
+      if (formState.metadata?.isoMetadata) {
+        formState.metadata = {
+          ...formState.metadata,
+          isoMetadata: {
+            ...formState.metadata.isoMetadata,
+            resolutions: null
+          }
+        };
+      }
+    } else if (selected === SCALE_KEY) {
+      scaleValue = null;
+      if (formState.metadata?.isoMetadata) {
+        formState.metadata = {
+          ...formState.metadata,
+          isoMetadata: {
+            ...formState.metadata.isoMetadata,
+            scale: null
+          }
+        };
+      }
+    }
   };
 
   const onBlur = async (event: FocusEvent) => {
-    syncLocalResolutionState();
+    hasUnsavedLocalChange = true;
     const target = event.target as HTMLInputElement;
     const minValue = target.getAttribute('min');
     const min = Number(minValue);
     if (!Number.isNaN(min) && Number(target.value) < min) {
       return;
+    }
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          resolutions: selected === RESOLUTION_KEY && resolutionValue ? [resolutionValue] : null,
+          scale: selected === SCALE_KEY ? scaleValue : null
+        }
+      };
     }
     const selectedValidationResult =
       selected === RESOLUTION_KEY ? resolutionValidationResult : scaleValidationResult;
@@ -98,24 +126,40 @@
       return;
     }
     if (selected === RESOLUTION_KEY) {
-      await updateResolution(resolutionValue ? [resolutionValue] : null);
+      await updateScale(null);
+      const saved = await updateResolution(resolutionValue ? [resolutionValue] : null);
+      if (saved) {
+        hasUnsavedLocalChange = false;
+      }
     } else {
-      await updateScale(scaleValue);
+      await updateResolution(null);
+      const saved = await updateScale(scaleValue);
+      if (saved) {
+        hasUnsavedLocalChange = false;
+      }
     }
   };
 
   const updateResolution = async (newValue: [number] | null) => {
-    const response = await MetadataService.persistValue(RESOLUTION_KEY, newValue);
+    const response =
+      newValue === null
+        ? await MetadataUpdateService.pushToQueue(RESOLUTION_KEY, null)
+        : await MetadataService.persistValue(RESOLUTION_KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }
+    return response.ok;
   };
 
   const updateScale = async (newValue: number | null) => {
-    const response = await MetadataService.persistValue(SCALE_KEY, newValue);
+    const response =
+      newValue === null
+        ? await MetadataUpdateService.pushToQueue(SCALE_KEY, null)
+        : await MetadataService.persistValue(SCALE_KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
     }
+    return response.ok;
   };
 </script>
 

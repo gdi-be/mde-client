@@ -10,7 +10,7 @@
 
   export type ComponentProps = {
     value?: Layer['name'];
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
@@ -32,9 +32,14 @@
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
   let showCheckmark = $state(false);
 
-  const onChangeInternal = async (e: Event) => {
+  const onChangeInternal = (e: Event) => {
     const newValue = (e.target as HTMLInputElement).value;
     localValue = newValue;
+    void onChange(newValue, false);
+  };
+
+  const onBlurInternal = async (e: Event) => {
+    const newValue = (e.target as HTMLInputElement).value;
     if (
       fieldConfig?.validator(newValue, {
         ['HIGHEST_ROLE']: highestRole
@@ -58,6 +63,7 @@
       {fieldConfig}
       {validationResult}
       onchange={onChangeInternal}
+      onblur={onBlurInternal}
     />
     <FieldTools {value} key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>

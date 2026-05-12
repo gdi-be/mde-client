@@ -11,7 +11,7 @@
 
   export type ServiceTypeProps = {
     value?: ColumnInfo['type'];
-    onChange: (newValue: ColumnInfo['type']) => Promise<Response>;
+    onChange: (newValue: ColumnInfo['type'], persist?: boolean) => Promise<Response>;
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
@@ -55,10 +55,7 @@
       onChange={async (newValue) => {
         const typedValue = newValue as ColumnInfo['type'];
         localValue = typedValue;
-        if (typedValue === undefined) {
-          return;
-        }
-        const response = await onChange(typedValue);
+        const response = await onChange(typedValue, typedValue !== undefined);
         if (response.ok) {
           showCheckmark = true;
         }
