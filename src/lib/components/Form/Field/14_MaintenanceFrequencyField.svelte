@@ -27,7 +27,7 @@
     { key: 'unknown', label: 'unbekannt' }
   ];
 
-  const { getValue } = getFormContext();
+  const { getValue, formState } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   $effect(() => {
@@ -39,6 +39,15 @@
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue?: string) => {
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          maintenanceFrequency: newValue as MaintenanceFrequency
+        }
+      };
+    }
     if (fieldConfig?.validator(newValue).valid === false) return;
     const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {

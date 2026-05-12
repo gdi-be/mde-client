@@ -11,7 +11,7 @@
 
   export type ComponentProps = {
     value?: Layer['styleTitle'];
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
@@ -51,9 +51,13 @@
       maxlength={250}
       {fieldConfig}
       {validationResult}
-      onchange={async (e: Event) => {
+      onchange={(e: Event) => {
         const newValue = (e.target as HTMLInputElement).value;
         localValue = newValue;
+        void onChange(newValue, false);
+      }}
+      onblur={async (e: Event) => {
+        const newValue = (e.target as HTMLInputElement).value;
         if (
           fieldConfig?.validator(newValue, {
             HIGHEST_ROLE: highestRole,

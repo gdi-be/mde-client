@@ -24,7 +24,7 @@
   export type FeatureTypeFormProps = {
     value?: FeatureType[];
     service: Service;
-    onChange: (featureTypes: FeatureType[]) => Promise<Response>;
+    onChange: (featureTypes: FeatureType[], persist?: boolean) => Promise<Response>;
   };
 
   let { value: initialFeatureTypes, onChange, service }: FeatureTypeFormProps = $props();
@@ -110,7 +110,7 @@
     );
   }
 
-  function set(key: string, value: FeatureType[keyof FeatureType]) {
+  function set(key: string, value: FeatureType[keyof FeatureType], persist?: boolean) {
     featureTypes = featureTypes.map((featureType) => {
       if (featureType.id === activeTabId) {
         return {
@@ -121,7 +121,7 @@
       return featureType;
     });
     syncLocalFeatureTypes(featureTypes);
-    return onChange(featureTypes);
+    return onChange(featureTypes, persist);
   }
 
   function syncLocalFeatureTypes(nextFeatureTypes: FeatureType[]) {
@@ -232,21 +232,22 @@
       {#if activeTabId && activeFeatureType}
         <FeatureTypeTitle_61
           value={activeFeatureType?.title}
-          onChange={(title) => set('title', title)}
+          onChange={(title, persist) => set('title', title, persist)}
         />
         <FeatureTypeName_62
           featureType={activeFeatureType}
           value={activeFeatureType?.name}
-          onChange={(name) => set('name', name)}
+          onChange={(name, persist) => set('name', name, persist)}
         />
         <FeatureTypeDescription_69
           value={activeFeatureType?.shortDescription}
-          onChange={(shortDescription) => set('shortDescription', shortDescription)}
+          onChange={(shortDescription, persist) =>
+            set('shortDescription', shortDescription, persist)}
         />
         <ColumnsForm_63
           featureType={activeFeatureType}
           value={activeFeatureType?.columns}
-          onChange={(columns) => set('columns', columns)}
+          onChange={(columns, persist) => set('columns', columns, persist)}
         />
       {/if}
     </div>

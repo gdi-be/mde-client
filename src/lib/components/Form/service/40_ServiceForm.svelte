@@ -22,6 +22,8 @@
   import { logger } from 'loggisch';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
+  import { validateFeatureTypes } from './validation';
+  import { ValidationService } from '$lib/services/ValidationService';
 
   const t = $derived(page.data.t);
 
@@ -74,9 +76,10 @@
     return onChange(service, true);
   }
 
-  async function set<K extends keyof Service>(key: K, value: Service[K]) {
+  async function set<K extends keyof Service>(key: K, value: Service[K], persist?: boolean) {
     service = setNestedValue(service, key, value);
-    const response = await onChange(service, shouldPersistFieldValue(key, value));
+    const shouldPersist = persist ?? shouldPersistFieldValue(key, value);
+    const response = await onChange(service, shouldPersist);
     if (response.ok) {
       if (key === 'serviceType') {
         onServiceTypeChange(value as ServiceType);
@@ -100,9 +103,10 @@
   const shouldPersistFieldValue = <K extends keyof Service>(key: K, value: Service[K]) => {
     if (key === 'workspace') {
       const fieldConfig = MetadataService.getFieldConfig<string>(45);
-      return fieldConfig?.validator(value as Service['workspace'], {
+      return ValidationService.validateField(fieldConfig, value as Service['workspace'], {
         ['PARENT_VALUE']: service,
-        ['HIGHEST_ROLE']: highestRole
+        ['HIGHEST_ROLE']: highestRole,
+        metadata
       }).valid;
     }
     if (key === 'preview') {
@@ -121,9 +125,16 @@
     }
     if (key === 'featureTypes') {
       const fieldConfig = MetadataService.getFieldConfig<Service['featureTypes']>(56);
-      return fieldConfig?.validator(value as Service['featureTypes'], {
+      const featureTypes = value as Service['featureTypes'];
+      const hasValidFeatureTypeCollection = fieldConfig?.validator(featureTypes, {
         ['PARENT_VALUE']: service
       }).valid;
+      const hasInvalidFeatureTypes =
+        validateFeatureTypes(featureTypes || [], {
+          metadata,
+          HIGHEST_ROLE: highestRole
+        }).size > 0;
+      return hasValidFeatureTypeCollection && !hasInvalidFeatureTypes;
     }
     if (key === 'serviceType') {
       const fieldConfig = MetadataService.getFieldConfig<ServiceType>(58);
@@ -133,9 +144,26 @@
     return true;
   };
 
-  async function onLayersChange(layers: Layer[]) {
+  async function onLayersChange(layers: Layer[], persist = true) {
     const serviceIdentification = service?.serviceIdentification;
     if (!serviceIdentification) return Promise.reject('Service identification is missing');
+
+    if (formContext.metadata) {
+      formContext.metadata = {
+        ...formContext.metadata,
+        clientMetadata: {
+          ...formContext.metadata.clientMetadata,
+          layers: {
+            ...(formContext.metadata.clientMetadata?.layers || {}),
+            [serviceIdentification]: layers
+          }
+        }
+      };
+    }
+
+    if (!persist) {
+      return new Response(null, { status: 422, statusText: 'Validation failed' });
+    }
 
     const response = await fetch(
       `${page.url.origin}${page.url.pathname}/updateLayers/${serviceIdentification}`,
@@ -152,23 +180,27 @@
 
     if (!response.ok) {
       toast.error(t('serviceform.layer_update_error', { statusText: response.statusText }));
+    } else {
+      await invalidateAll();
     }
-    invalidateAll();
     return response;
   }
 </script>
 
 <div class="service-form">
   <ServiceType_58 value={service.serviceType} onChange={onServiceTypeChange} />
-  <ServiceTitle_59 value={service.title} onChange={(title) => set('title', title)} />
+  <ServiceTitle_59
+    value={service.title}
+    onChange={(title, persist) => set('title', title, persist)}
+  />
   <ServiceShortDescription_60
     value={service.shortDescription}
-    onChange={(shortDescription) => set('shortDescription', shortDescription)}
+    onChange={(shortDescription, persist) => set('shortDescription', shortDescription, persist)}
   />
   <ServiceWorkspace_45
     value={service.workspace}
     {service}
-    onChange={(workspace) => set('workspace', workspace)}
+    onChange={(workspace, persist) => set('workspace', workspace, persist)}
   />
   <ServicePreview_46
     value={service.preview}
@@ -186,7 +218,7 @@
     <FeatureTypeForm_56
       {service}
       value={service.featureTypes}
-      onChange={(featureTypes) => set('featureTypes', featureTypes)}
+      onChange={(featureTypes, persist) => set('featureTypes', featureTypes, persist)}
     />
   {/if}
 </div>

@@ -12,7 +12,7 @@
 
   export type ServiceTypeProps = {
     value: Service['title'];
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
@@ -52,9 +52,13 @@
     {fieldConfig}
     {validationResult}
     maxlength={250}
-    onchange={async (e: Event) => {
+    onchange={(e: Event) => {
       const newValue = (e.target as HTMLInputElement).value;
       localValue = newValue;
+      void onChange(newValue, false);
+    }}
+    onblur={async (e: Event) => {
+      const newValue = (e.target as HTMLInputElement).value;
       const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;
