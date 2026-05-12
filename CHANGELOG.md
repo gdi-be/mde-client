@@ -1,3 +1,10 @@
+## [6.1.6](https://github.com/gdi-be/mde-client/compare/v6.1.5...v6.1.6) (2026-05-12)
+
+
+### Bug Fixes
+
+* field updates for persisitng consistency ([286e4c6](https://github.com/gdi-be/mde-client/commit/286e4c63a2feca93c32e3de3811550d6460c38c5))
+
 ## [6.1.5](https://github.com/gdi-be/mde-client/compare/v6.1.4...v6.1.5) (2026-05-06)
 
 
