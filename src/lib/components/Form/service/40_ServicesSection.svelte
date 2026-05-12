@@ -11,6 +11,7 @@
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { validateService } from './validation';
   import { MetadataService } from '$lib/services/MetadataService';
+  import { ValidationService } from '$lib/services/ValidationService';
 
   const t = $derived(page.data.t);
 
@@ -31,6 +32,7 @@
 
   let initialServices = getValue<Service[]>(KEY);
   let services = $state<Service[]>([]);
+  let lastPersistedServices = $state<Service[]>(initialServices || []);
   let tabs = $derived<Tab[]>(
     services.map((service) => {
       const mappingService = service.serviceType === 'WMS' || service.serviceType === 'WMTS';
@@ -74,14 +76,42 @@
 
   $effect(() => {
     services = initialServices || [];
+    lastPersistedServices = initialServices || [];
     activeTab = initialServices?.length ? initialServices[0].id : '';
   });
 
   let visibleCheckmarks = $state<Record<string, boolean>>({});
 
+  const isWorkspacePersistable = (service: Service, serviceList: Service[]) => {
+    const fieldConfig = MetadataService.getFieldConfig<string>(45);
+    const validation = ValidationService.validateField(fieldConfig, service.workspace, {
+      metadata,
+      PARENT_VALUE: service,
+      HIGHEST_ROLE: highestRole
+    });
+    if (validation.valid === false) return false;
+
+    return !serviceList.some(
+      (entry) => entry.id !== service.id && entry.workspace === service.workspace
+    );
+  };
+
+  const getPersistableServices = (serviceList: Service[]) => {
+    return serviceList.map((service) => {
+      if (isWorkspacePersistable(service, serviceList)) {
+        return service;
+      }
+
+      const lastPersisted = lastPersistedServices.find((entry) => entry.id === service.id);
+      return lastPersisted ? { ...service, workspace: lastPersisted.workspace } : service;
+    });
+  };
+
   const persistServices = async (id: string) => {
-    const response = await MetadataService.persistValue(KEY, services);
+    const persistableServices = getPersistableServices(services);
+    const response = await MetadataService.persistValue(KEY, persistableServices);
     if (response.ok) {
+      lastPersistedServices = persistableServices;
       visibleCheckmarks[id] = true;
     }
     return response;
@@ -242,7 +272,7 @@
       <ServiceForm_40
         service={activeService}
         onChange={(newService, persist) => {
-          return updateService(activeService?.id, newService, persist);
+          return updateService(newService?.id, newService, persist);
         }}
       />
     </span>

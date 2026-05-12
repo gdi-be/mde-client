@@ -14,7 +14,7 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
-  const { getValue } = getFormContext();
+  const { getValue, formState } = getFormContext();
   const valueFromData = $derived(getValue<string[]>(KEY));
   let value = $state<string[]>();
   $effect(() => {
@@ -26,6 +26,15 @@
   let validationResult = $derived(fieldConfig?.validator(value));
 
   const onChange = async (newValue?: string[]) => {
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          spatialRepresentationTypes: newValue
+        }
+      };
+    }
     if (fieldConfig?.validator(newValue).valid === false) return;
     const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
