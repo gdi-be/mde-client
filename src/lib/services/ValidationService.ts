@@ -293,7 +293,10 @@ export class ValidationService {
         const parentConfig = FieldConfigs.find(({ key }) => key === field.collectionKey);
         if (!parentConfig) return;
 
-        const parentCollection = MetadataService.getAllValues(parentConfig.key, metadata!) as any[];
+        const parentCollection =
+          field.collectionKey === 'clientMetadata.layers'
+            ? (MetadataService.getValue<Service[]>('isoMetadata.services', metadata!) as any[])
+            : (MetadataService.getAllValues(parentConfig.key, metadata!) as any[]);
 
         // If parent collection is empty or not an array, skip validation
         if (!Array.isArray(parentCollection) || parentCollection.length === 0) {
