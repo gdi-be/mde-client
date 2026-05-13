@@ -1,0 +1,75 @@
+{
+  "cookies": [
+    {
+      "name": "AUTH_SESSION_ID",
+      "value": "ODU1NTdmYzUtMjdlYS00NzA5LTkyZTktNDgyNzkxMDIwMjVkLnlYQUstZ1NWZ2sxbS1md0Q3VFNoVGJ2aTZUaFMzR3NpX3hhWHRoaHlwaEVJdWJQa19IUlhtMjFZNkpqWm9lNzN2aDBkX1NiS3p1REJJZmtidXFJQnhR.mde-keycloak-48462",
+      "domain": "sensw-geoportal-berlin-mde.intranet.terrestris.de",
+      "path": "/auth/realms/metadata-editor/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "KC_AUTH_SESSION_HASH",
+      "value": "\"8n8nfCv/ZwNxhtxTLalbj2e5mVncmH0MmOV/bfL4onk\"",
+      "domain": "sensw-geoportal-berlin-mde.intranet.terrestris.de",
+      "path": "/auth/realms/metadata-editor/",
+      "expires": 1778667150.588955,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "KC_RESTART",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..nXXAXfxPvIbsZhEI6YQSqQ.awh0AIKiU7l75iABLZvAzhlCh66Zmee5fenDuyO2_kPuR6r6DNJpPlxtobdgLfQRl6fYauPoWpP2S8ECmcphyEDRYKaTk5nZAzsh2BtPWA8TvKi57yuHaL3mvR47m76DwPAoq2VHjOrwxSCahO74UwcT0Y1vSoRw1BMQJhDjfgmqp8t7fDEJTBhAAETDl8sG_GrrbBCkYVMxFaP5fno_qfVEoumfSFG2VguMbIHlW4M1nstQqnVcyWB4cl9eOOkYF-VP7S00kVbUnePlKRJ-KQs1-LILXbqYcCilD-cgf4VN6oPEIPSbVQIOLq7zBf8XpwwNSet6-_G70GPM310vODgerU3Gmo-KPsRpkmGtDl2Pg2Jd3aTlhBuxvrNlyXLR9_kZfkLifgLek8XBKX3fj6iJAcEWG_H6KfJ5th9mTeP6TmJcrwJUHKwb9B5n-FfyEx2t75yIVWYwdSL9ErKLgWPeVBR3pKYz0TcyabSVU-8KBjLHm3jadTb1s94wP9181Me5QJ1iQpBsKUmYwAeGfVB-ZLpzNuEzmwnCNeStYvnBHGoqq7AKnPSMuDgHfsLeOy6ZzMCMcO9nUqYd0dlVsH51h2B-vWvr9taWjKkhxfOKMxN0XjaQNyKQ-Aq2rQzZ_0_S-4BTv-BDshSO42kv-djCKrN_A1-9DfLSy2iBCL_q6OFwtt4FOB_BMLNyJskUgbJKPAEuZj2cubhtAsozGomEY9ZJRq6BIY7M9lngAo-H7FOZDN-VI_3mHWB0uP10ld6WvbSHXgJk7UTwae9C33e_ge_kgZq2FlTOQKeHUP7OjG5bakPdeGwKCpt9NSflZUKk0bYCP2Vv-OlgV0v_Yxyn67VxaXWLFEsIszrmkIi5JVsf2e4LGWJ67h5WiH1JXdGQ0oPM8KI5mLk1OqtrPaRKrKUwh_8C5TGFkVqsFDQQBGNNSKHMxHFcyx7HoAz2.nNPx_3vN99pvI6RdRjMRUg",
+      "domain": "sensw-geoportal-berlin-mde.intranet.terrestris.de",
+      "path": "/auth/realms/metadata-editor/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "KEYCLOAK_IDENTITY",
+      "value": "eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhNWU2ZjZjMi0yNjNhLTRlNDAtODAzYy1lNDExMjk2M2JiZTEifQ.eyJleHAiOjE3Nzg3MDMwOTEsImlhdCI6MTc3ODY2NzA5MSwianRpIjoiZjU5MTE1YWItOTkxOS00NGMwLTgxOWQtNzAzYzA3ZTcyOGI4IiwiaXNzIjoiaHR0cHM6Ly9zZW5zdy1nZW9wb3J0YWwtYmVybGluLW1kZS5pbnRyYW5ldC50ZXJyZXN0cmlzLmRlL2F1dGgvcmVhbG1zL21ldGFkYXRhLWVkaXRvciIsInN1YiI6ImRkM2U0YWY1LTg3YjAtNDQ1Ny04NTYzLTQzZWMzZDg4MzZhMiIsInR5cCI6IlNlcmlhbGl6ZWQtSUQiLCJzaWQiOiI4NTU1N2ZjNS0yN2VhLTQ3MDktOTJlOS00ODI3OTEwMjAyNWQiLCJzdGF0ZV9jaGVja2VyIjoiSWExN0UzdGlta0FUMkpRRkNrZHJLSVhIWURyRWxlcEw0SXNKdnJrd3hXSSJ9.mevWAztHs603acvrD1sKxuPE61GjkLmU__giZkHensoPSwsP4N6qSthyJE0lEFzJJ9B0_CxSAmdIzwFLYnLtlQ",
+      "domain": "sensw-geoportal-berlin-mde.intranet.terrestris.de",
+      "path": "/auth/realms/metadata-editor/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "KEYCLOAK_SESSION",
+      "value": "8n8nfCv_ZwNxhtxTLalbj2e5mVncmH0MmOV_bfL4onk",
+      "domain": "sensw-geoportal-berlin-mde.intranet.terrestris.de",
+      "path": "/auth/realms/metadata-editor/",
+      "expires": 1778703091.60151,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "access_token",
+      "value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJweURqMndhWXd0QklnZ1dXT2YxQTM0VFpkYl9vUWc2STV4dGtuc2M2VG5JIn0.eyJleHAiOjE3Nzg2NjczOTEsImlhdCI6MTc3ODY2NzA5MSwiYXV0aF90aW1lIjoxNzc4NjY3MDkxLCJqdGkiOiJvbnJ0YWM6MTEyNWM5OTYtYmEyMS00M2IwLWFlOGItMjRmMmY4MDVlZmJkIiwiaXNzIjoiaHR0cHM6Ly9zZW5zdy1nZW9wb3J0YWwtYmVybGluLW1kZS5pbnRyYW5ldC50ZXJyZXN0cmlzLmRlL2F1dGgvcmVhbG1zL21ldGFkYXRhLWVkaXRvciIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJkZDNlNGFmNS04N2IwLTQ0NTctODU2My00M2VjM2Q4ODM2YTIiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJtZGUiLCJzaWQiOiI4NTU1N2ZjNS0yN2VhLTQ3MDktOTJlOS00ODI3OTEwMjAyNWQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vc2Vuc3ctZ2VvcG9ydGFsLWJlcmxpbi1tZGUuaW50cmFuZXQudGVycmVzdHJpcy5kZSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiQWRtaW5pc3RyYXRvciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJNZGVBZG1pbmlzdHJhdG9yIiwiZGVmYXVsdC1yb2xlcy1tZXRhZGF0YS1lZGl0b3IiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBZG1pbiBBZG1pbiIsInByZWZlcnJlZF91c2VybmFtZSI6ImFkbWluIiwiZ2l2ZW5fbmFtZSI6IkFkbWluIiwiZmFtaWx5X25hbWUiOiJBZG1pbiIsImVtYWlsIjoiYXNjaG1pdHpAdGVycmVzdHJpcy5kZSJ9.BLV2zq9azA1d9WOKdeiHQISeU5MCgmlrhQPS9VmbC8UClklbIHkbTbeeNfhMP_u34Rhs8Af6_NaGPZtvR5cRMGAsZFWZ80ErqIULViJXi4gn7lAuSa1IwmsW--xTnjWrx3totpU-sknILt1RiacFbORiWvIjOMuEDTuyk2BdK3xvpMJ8WJTT862vF-UMmgaHEBzmdZknJzwx1lhGhx8HBcxJVdGH7bT0yCOTZz8KrAY9k9DRRQm1OxBrOhp-H0TIeVVlJfXhSS-GIqSqGjDMEP8yhmlmKc3URjmsvJKGQ4pOfZQZhdooNJHyDW944Y59TlsAjuiBwt-J39XdFnCCvg",
+      "domain": "sensw-geoportal-berlin-mde.intranet.terrestris.de",
+      "path": "/",
+      "expires": 1778667391.614752,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "refresh_token",
+      "value": "eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJhNWU2ZjZjMi0yNjNhLTRlNDAtODAzYy1lNDExMjk2M2JiZTEifQ.eyJleHAiOjE3Nzg2Njg4OTEsImlhdCI6MTc3ODY2NzA5MSwianRpIjoiYWNkOWFjNGUtYTY1NS00NDc1LTg5M2QtYzUyZTUyMTRhMjRmIiwiaXNzIjoiaHR0cHM6Ly9zZW5zdy1nZW9wb3J0YWwtYmVybGluLW1kZS5pbnRyYW5ldC50ZXJyZXN0cmlzLmRlL2F1dGgvcmVhbG1zL21ldGFkYXRhLWVkaXRvciIsImF1ZCI6Imh0dHBzOi8vc2Vuc3ctZ2VvcG9ydGFsLWJlcmxpbi1tZGUuaW50cmFuZXQudGVycmVzdHJpcy5kZS9hdXRoL3JlYWxtcy9tZXRhZGF0YS1lZGl0b3IiLCJzdWIiOiJkZDNlNGFmNS04N2IwLTQ0NTctODU2My00M2VjM2Q4ODM2YTIiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoibWRlIiwic2lkIjoiODU1NTdmYzUtMjdlYS00NzA5LTkyZTktNDgyNzkxMDIwMjVkIiwic2NvcGUiOiJvcGVuaWQgd2ViLW9yaWdpbnMgZW1haWwgYmFzaWMgYWNyIHByb2ZpbGUgcm9sZXMgc2VydmljZV9hY2NvdW50In0.wJWj12f-mFiRB-ddnrYk-CyZosKx5hXyuR0aIylbh8fv3G9SJVD1Z9uc6xFNONCTKw7dkJUH8Zde8WF6MAIItQ",
+      "domain": "sensw-geoportal-berlin-mde.intranet.terrestris.de",
+      "path": "/",
+      "expires": 1778668891.614851,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Strict"
+    }
+  ],
+  "origins": []
+}

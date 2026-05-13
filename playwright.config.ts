@@ -1,0 +1,42 @@
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests/e2e',
+  workers: 1,
+  use: {
+    baseURL: 'https://sensw-geoportal-berlin-mde.intranet.terrestris.de',
+    headless: false,
+    launchOptions: {
+      slowMo: 200,
+    },
+  },
+
+  projects: [
+    {
+      name: 'setup',
+      testMatch: /auth.setup\.ts/
+    },
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome']
+      },
+      dependencies: ['setup']
+    },
+    // {
+    //   name: 'firefox',
+    //   use: {
+    //     ...devices['Desktop Firefox']
+    //   },
+    //   dependencies: ['setup']
+    // },
+    // {
+    //   name: 'webkit',
+    //   use: {
+    //     ...devices['Desktop Safari']
+    //   },
+    //   dependencies: ['setup']
+    // }
+  ]
+});
