@@ -526,10 +526,11 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 26,
     key: 'isoMetadata.termsOfUseSource',
-    extraParams: ['isoMetadata.termsOfUseId'],
+    extraParams: ['isoMetadata.termsOfUseId', 'isoMetadata.privacy'],
     validator: (val, extraParams) => {
       const termsOfUseId = extraParams?.['isoMetadata.termsOfUseId'];
-      const isRequired = termsOfUseId !== 1;
+      const privacy = extraParams?.['isoMetadata.privacy'];
+      const isRequired = privacy === 'NONE' && !!termsOfUseId && termsOfUseId !== 1;
       if (isRequired && !isDefined(val)) {
         return {
           valid: false,
