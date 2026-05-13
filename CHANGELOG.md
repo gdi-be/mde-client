@@ -1,3 +1,10 @@
+## [6.1.10](https://github.com/gdi-be/mde-client/compare/v6.1.9...v6.1.10) (2026-05-13)
+
+
+### Bug Fixes
+
+* add provenance flag ([5d37d7b](https://github.com/gdi-be/mde-client/commit/5d37d7b9376fc93f1337e2265c15c776cdf6dccc))
+
 ## [6.1.9](https://github.com/gdi-be/mde-client/compare/v6.1.8...v6.1.9) (2026-05-13)
 
 
