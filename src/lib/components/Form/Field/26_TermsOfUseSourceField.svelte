@@ -4,14 +4,13 @@
   import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '../FieldTools.svelte';
   import { page } from '$app/state';
-  import { ValidationService } from '$lib/services/ValidationService';
   const t = $derived(page.data.t);
 
   const KEY = 'isoMetadata.termsOfUseSource';
   const TERMS_OF_USE_KEY = 'isoMetadata.termsOfUseId';
   const PRIVACY_KEY = 'isoMetadata.privacy';
 
-  const { getValue } = getFormContext();
+  const { getValue, formState } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   const termsOfUseId = $derived(getValue<number>(TERMS_OF_USE_KEY));
   const privacy = $derived(getValue<string>(PRIVACY_KEY));
@@ -21,9 +20,19 @@
     value = valueFromData || '';
   });
 
+  $effect(() => {
+    if (!formState.metadata?.isoMetadata) return;
+    formState.metadata.isoMetadata.termsOfUseSource = value;
+  });
+
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(26);
-  let validationResult = $derived(ValidationService.validateField(fieldConfig, value));
+  let validationResult = $derived(
+    fieldConfig?.validator(value, {
+      'isoMetadata.termsOfUseId': termsOfUseId,
+      'isoMetadata.privacy': privacy
+    })
+  );
 
   const onBlur = async () => {
     if (validationResult?.valid === false) return;
