@@ -1,3 +1,10 @@
+## [6.1.8](https://github.com/gdi-be/mde-client/compare/v6.1.7...v6.1.8) (2026-05-13)
+
+
+### Bug Fixes
+
+* improve service layer persistence during validation updates ([8a9eb46](https://github.com/gdi-be/mde-client/commit/8a9eb46f02616ecad4bc547b449741ec7c3840b5))
+
 ## [6.1.7](https://github.com/gdi-be/mde-client/compare/v6.1.6...v6.1.7) (2026-05-13)
 
 
