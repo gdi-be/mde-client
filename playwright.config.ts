@@ -8,8 +8,8 @@ export default defineConfig({
     baseURL: 'https://sensw-geoportal-berlin-mde.intranet.terrestris.de',
     headless: false,
     launchOptions: {
-      slowMo: 200,
-    },
+      slowMo: 200
+    }
   },
 
   projects: [
@@ -23,7 +23,7 @@ export default defineConfig({
         ...devices['Desktop Chrome']
       },
       dependencies: ['setup']
-    },
+    }
     // {
     //   name: 'firefox',
     //   use: {

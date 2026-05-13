@@ -1,4 +1,4 @@
-import { expect, type Page, type Locator } from "@playwright/test";
+import { expect, type Page, type Locator } from '@playwright/test';
 
 export type FormFieldTestOptions = {
   label?: string;
@@ -19,7 +19,9 @@ export type FormFieldTestOptions = {
   };
 };
 
-async function getProgress(progressBar: FormFieldTestOptions['progressBar']): Promise<number | undefined> {
+async function getProgress(
+  progressBar: FormFieldTestOptions['progressBar']
+): Promise<number | undefined> {
   if (progressBar && progressBar.element) {
     await expect(progressBar.element).toBeVisible();
     const transform = await progressBar.element.getAttribute('style');
@@ -66,7 +68,9 @@ export async function testFormField(
   }
 
   if (checkForCopy) {
-    const copyButton = field.locator('button[title="Wert in Zwischenablage kopieren"], .copy-button');
+    const copyButton = field.locator(
+      'button[title="Wert in Zwischenablage kopieren"], .copy-button'
+    );
     await expect(copyButton).toBeVisible();
     await copyButton.hover();
   }
@@ -91,7 +95,6 @@ export async function testFormField(
     const selectInput = field.locator('select');
 
     if (await textInput.isVisible().catch(() => false)) {
-
       input = textInput;
       await input.clear();
 
@@ -109,9 +112,7 @@ export async function testFormField(
         const counter = field.locator('.character-counter');
         await expect(counter).toContainText(`${String(value).length} / ${maxLength}`);
       }
-
     } else if (await textAreaInput.isVisible().catch(() => false)) {
-
       input = textAreaInput;
       await input.clear();
 
@@ -131,9 +132,7 @@ export async function testFormField(
         const counter = field.locator('.character-counter');
         await expect(counter).toContainText(`${String(value).length} / ${maxLength}`);
       }
-
     } else if (await numberInput.isVisible().catch(() => false)) {
-
       input = numberInput;
       await input.clear();
 
@@ -147,9 +146,7 @@ export async function testFormField(
       await input.fill(String(value));
       await expect(input).toHaveValue(String(value));
       await input.evaluate((element) => (element as HTMLElement).blur());
-
     } else if (await dateInput.isVisible().catch(() => false)) {
-
       input = dateInput;
       await input.clear();
 
@@ -163,14 +160,11 @@ export async function testFormField(
       await input.fill(String(value));
       await expect(input).toHaveValue(String(value));
       await input.evaluate((element) => (element as HTMLElement).blur());
-
     } else if (await selectInput.isVisible().catch(() => false)) {
-
       input = selectInput;
 
       await input.selectOption(String(value));
       await expect(input).toHaveValue(String(value));
-
     }
   }
 
@@ -184,21 +178,24 @@ export async function testFormField(
 
       await page.waitForTimeout(400);
 
-      const menuList = page.locator('ul.mdc-deprecated-list, ul.mdc-list').filter({ hasText: selectOptionText }).first();
+      const menuList = page
+        .locator('ul.mdc-deprecated-list, ul.mdc-list')
+        .filter({ hasText: selectOptionText })
+        .first();
       await expect(menuList).toBeVisible();
       const menuItem = menuList.locator('li').filter({ hasText: selectOptionText }).first();
       await expect(menuItem).toBeVisible();
       await menuItem.click();
       await page.getByRole('heading').click(); // Click outside to close the dropdown
 
-
       const chip = field.locator(`.mdc-chip__text:has-text("${selectOptionText}")`);
       await expect(chip).toBeVisible();
-
     } else if (await selectField.isVisible().catch(() => false)) {
       await selectField.click();
       await page.waitForTimeout(300); // Wait for dropdown to open
-      const menuList = page.locator('ul.mdc-deprecated-list, ul.mdc-list').filter({ hasText: selectOptionText });
+      const menuList = page
+        .locator('ul.mdc-deprecated-list, ul.mdc-list')
+        .filter({ hasText: selectOptionText });
       await expect(menuList).toBeVisible();
       await menuList.locator('li').filter({ hasText: selectOptionText }).first().click();
     }
@@ -242,7 +239,7 @@ export async function login(page: Page, filePath: string, username: string, pass
   await page.getByRole('textbox', { name: 'Password' }).fill(password);
   await page.getByRole('button', { name: 'Sign In' }).click();
 
-  // Save signed-in state 
+  // Save signed-in state
   await page.context().storageState({
     path: filePath
   });
@@ -262,10 +259,11 @@ export async function createMetadata(page: Page, title: string) {
 
   await page.getByRole('link', { name: 'Metadaten' }).click();
 
-  await expect(page
-    .locator('.metadata-card', {
+  await expect(
+    page.locator('.metadata-card', {
       has: page.getByText(title)
-    })).toBeVisible();
+    })
+  ).toBeVisible();
 }
 
 export async function deleteMetadata(page: Page, title: string) {
@@ -280,8 +278,9 @@ export async function deleteMetadata(page: Page, title: string) {
 
   await page.getByRole('button', { name: 'Ok' }).click();
 
-  await expect(page
-    .locator('.metadata-card', {
+  await expect(
+    page.locator('.metadata-card', {
       has: page.getByText(title)
-    })).not.toBeVisible();
+    })
+  ).not.toBeVisible();
 }

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { createMetadata, deleteMetadata, testFormField } from '../helpers';
 
 test.use({
-  storageState: 'tests/e2e/.auth/editor.json',
+  storageState: 'tests/e2e/.auth/editor.json'
 });
 
 test.describe('Metadata form - Classification section', () => {
@@ -30,14 +30,14 @@ test.describe('Metadata form - Classification section', () => {
       label: 'Metadaten-Typ',
       selectOptionText: 'ISO',
       checkForHelp: true,
-      checkForCopy: true,
+      checkForCopy: true
     });
 
     await testFormField(page, '.data-protection-field', {
       label: 'Datenschutz-Einstellungen',
       radioOptionLabel: 'Schutz von persönlichen Daten bei natürlichen Personen',
       checkForHelp: true,
-      checkForCopy: true,
+      checkForCopy: true
     });
 
     await testFormField(page, '.terms-of-use-field', {
@@ -45,7 +45,7 @@ test.describe('Metadata form - Classification section', () => {
       selectOptionText: 'Dienstgebrauch',
       required: true,
       checkForHelp: true,
-      checkForCopy: true,
+      checkForCopy: true
     });
 
     await expect(page.locator('.high-value-dataset-check-field')).toBeVisible();
@@ -57,7 +57,7 @@ test.describe('Metadata form - Classification section', () => {
       label: 'HVD Kategorien',
       selectOptionText: 'Meteorologie',
       required: true,
-      checkForHelp: true,
+      checkForHelp: true
     });
 
     await testFormField(page, '.topic-category-field', {
@@ -65,7 +65,7 @@ test.describe('Metadata form - Classification section', () => {
       selectOptionText: 'Geowissenschaften',
       required: true,
       checkForHelp: true,
-      checkForCopy: true,
+      checkForCopy: true
     });
 
     await expect(page.locator('.annex-theme-field')).not.toBeVisible();
@@ -97,21 +97,21 @@ test.describe('Metadata form - Classification section', () => {
       label: 'INSPIRE Annex Thema',
       selectOptionText: 'Boden',
       checkForHelp: true,
-      checkForCopy: true,
+      checkForCopy: true
     });
 
     await testFormField(page, '.inspire-format-name-field', {
       label: 'INSPIRE Schema Name',
       selectOptionText: 'Soil GML Application Schema',
       checkForHelp: true,
-      checkForCopy: true,
+      checkForCopy: true
     });
 
     await testFormField(page, '.inspire-annex-version-field', {
       label: 'Schema-Version des INSPIRE Themas',
       value: '2.0',
       checkForHelp: true,
-      checkForCopy: true,
+      checkForCopy: true
     });
 
     await expect(page.locator('.quality-report-check-field')).toBeVisible();
@@ -127,7 +127,8 @@ test.describe('Metadata form - Classification section', () => {
     await page
       .locator('.metadata-card', {
         has: page.getByText(title)
-      }).click();
+      })
+      .click();
 
     await expect(page.getByRole('heading', { name: title })).toBeVisible();
     await page.getByRole('heading', { name: title }).hover();
@@ -162,7 +163,9 @@ test.describe('Metadata form - Classification section', () => {
     const inspireFormatNameField = page.locator('section#classification .display-field', {
       has: page.locator('strong', { hasText: 'INSPIRE Schema Name' })
     });
-    await expect(inspireFormatNameField.locator('.value')).toContainText('Soil GML Application Schema');
+    await expect(inspireFormatNameField.locator('.value')).toContainText(
+      'Soil GML Application Schema'
+    );
     await inspireFormatNameField.hover();
 
     const inspireAnnexVersionField = page.locator('section#classification .display-field', {
@@ -248,7 +251,12 @@ test.describe('Metadata form - Classification section', () => {
     const select = termsOfUseField.locator('.mdc-select');
     await select.click();
 
-    const options = ['Dienstgebrauch', 'Baufertigstellungen', 'Dienstgebrauch Aufgaben', 'Dienstgebrauch und PD'];
+    const options = [
+      'Dienstgebrauch',
+      'Baufertigstellungen',
+      'Dienstgebrauch Aufgaben',
+      'Dienstgebrauch und PD'
+    ];
     for (const optionText of options) {
       const option = page.getByRole('option', { name: optionText, exact: true });
       await expect(option).toBeVisible();

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { createMetadata, deleteMetadata, testFormField } from '../helpers';
 
 test.use({
-  storageState: 'tests/e2e/.auth/editor.json',
+  storageState: 'tests/e2e/.auth/editor.json'
 });
 
 test.describe('Metadata form - Basedata section', () => {
@@ -13,17 +13,20 @@ test.describe('Metadata form - Basedata section', () => {
   });
 
   test('fill basedata tab', async ({ page }) => {
-
     await page.goto('/metadata');
 
-    const progressBar = page.locator('.tab-container', {
-      has: page.getByText('1. Basisangaben')
-    }).locator('.mdc-linear-progress__bar.mdc-linear-progress__primary-bar');
+    const progressBar = page
+      .locator('.tab-container', {
+        has: page.getByText('1. Basisangaben')
+      })
+      .locator('.mdc-linear-progress__bar.mdc-linear-progress__primary-bar');
 
     await page
       .locator('.metadata-card', {
         has: page.getByText('Test dataset (Playwright)')
-      }).getByTitle('Bearbeiten').click();
+      })
+      .getByTitle('Bearbeiten')
+      .click();
 
     await testFormField(page, '.title-field', {
       label: 'Titel',
@@ -81,7 +84,9 @@ test.describe('Metadata form - Basedata section', () => {
     await page.locator('[id="isoMetadata.pointsOfContact-0-name"]').click();
     await page.locator('[id="isoMetadata.pointsOfContact-0-name"]').fill('Test Contact');
     await page.locator('[id="isoMetadata.pointsOfContact-0-organisation"]').click();
-    await page.locator('[id="isoMetadata.pointsOfContact-0-organisation"]').fill('Test Organisation');
+    await page
+      .locator('[id="isoMetadata.pointsOfContact-0-organisation"]')
+      .fill('Test Organisation');
     await page.locator('[id="isoMetadata.pointsOfContact-0-phone"]').click();
     await page.locator('[id="isoMetadata.pointsOfContact-0-phone"]').fill('Test Phone');
     await page.locator('[id="isoMetadata.pointsOfContact-0-email"]').click();
@@ -99,7 +104,8 @@ test.describe('Metadata form - Basedata section', () => {
     await page
       .locator('.metadata-card', {
         has: page.getByText('Test Title')
-      }).click();
+      })
+      .click();
 
     await expect(page.getByRole('heading', { name: 'Test Title' })).toBeVisible();
     await page.getByRole('heading', { name: 'Test Title' }).hover();
@@ -135,7 +141,9 @@ test.describe('Metadata form - Basedata section', () => {
       has: page.locator('strong', { hasText: 'Kontaktangaben' })
     });
     await expect(contactField.locator('.list-item-value').nth(0)).toContainText('Test Contact');
-    await expect(contactField.locator('.list-item-value').nth(1)).toContainText('Test Organisation');
+    await expect(contactField.locator('.list-item-value').nth(1)).toContainText(
+      'Test Organisation'
+    );
     await expect(contactField.locator('.list-item-value').nth(2)).toContainText('Test Phone');
     await expect(contactField.locator('.list-item-value').nth(3)).toContainText('test@example.com');
     await contactField.hover();
@@ -147,9 +155,13 @@ test.describe('Metadata form - Basedata section', () => {
     await page
       .locator('.metadata-card', {
         has: page.getByText('Test Title')
-      }).getByTitle('Bearbeiten').click();
+      })
+      .getByTitle('Bearbeiten')
+      .click();
 
-    const deleteButton = page.locator('.contacts-field fieldset.contact button[title="Löschen"]').first();
+    const deleteButton = page
+      .locator('.contacts-field fieldset.contact button[title="Löschen"]')
+      .first();
     await expect(deleteButton).toBeVisible();
     await deleteButton.click();
 
@@ -166,5 +178,4 @@ test.describe('Metadata form - Basedata section', () => {
 
     await deleteMetadata(page, 'Test Title');
   });
-
 });

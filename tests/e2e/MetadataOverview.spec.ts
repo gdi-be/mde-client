@@ -2,11 +2,10 @@ import { test, expect } from '@playwright/test';
 import { createMetadata, deleteMetadata } from './helpers';
 
 test.use({
-  storageState: 'tests/e2e/.auth/editor.json',
+  storageState: 'tests/e2e/.auth/editor.json'
 });
 
 test.describe('Metadata overview page', () => {
-
   test('metadata overview page as editor', async ({ page }) => {
     await page.goto('/');
 
@@ -59,7 +58,7 @@ test.describe('Metadata overview page', () => {
 
   test.describe('data owner tests', () => {
     test.use({
-      storageState: 'tests/e2e/.auth/data-owner.json',
+      storageState: 'tests/e2e/.auth/data-owner.json'
     });
 
     test('metadata overview page as data owner', async ({ page }) => {
@@ -90,9 +89,9 @@ test.describe('Metadata overview page', () => {
     });
   });
 
-    test.describe('quality tests', () => {
+  test.describe('quality tests', () => {
     test.use({
-      storageState: 'tests/e2e/.auth/quality.json',
+      storageState: 'tests/e2e/.auth/quality.json'
     });
 
     test('metadata overview page as quality', async ({ page }) => {
@@ -134,7 +133,9 @@ test.describe('Metadata overview page', () => {
     await page.getByRole('textbox', { name: 'Titel*' }).fill('Test (Playwright)');
     await page.getByRole('button', { name: 'Metadaten anlegen' }).click();
 
-    await expect(await page.getByText('Ein Datensatz mit diesem Titel existiert bereits.')).toBeVisible();
+    await expect(
+      await page.getByText('Ein Datensatz mit diesem Titel existiert bereits.')
+    ).toBeVisible();
   });
 
   test('metadata deletion', async ({ page }) => {

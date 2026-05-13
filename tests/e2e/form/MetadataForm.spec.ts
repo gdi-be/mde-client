@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { createMetadata, deleteMetadata } from '../helpers';
 
 test.use({
-  storageState: 'tests/e2e/.auth/editor.json',
+  storageState: 'tests/e2e/.auth/editor.json'
 });
 
 test.describe('Metadata form', () => {
@@ -18,7 +18,9 @@ test.describe('Metadata form', () => {
     await page
       .locator('.metadata-card', {
         has: page.getByText('Test dataset (Playwright)')
-      }).getByTitle('Bearbeiten').click();
+      })
+      .getByTitle('Bearbeiten')
+      .click();
 
     await expect(page.locator('.application-header')).toBeVisible();
     await page.locator('.application-header').hover();
