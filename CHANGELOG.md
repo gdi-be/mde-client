@@ -1,3 +1,10 @@
+## [6.1.9](https://github.com/gdi-be/mde-client/compare/v6.1.8...v6.1.9) (2026-05-13)
+
+
+### Bug Fixes
+
+* add sbom flag ([f83c3d5](https://github.com/gdi-be/mde-client/commit/f83c3d5e0666a907460805024bf752c7a1ff0d8e))
+
 ## [6.1.8](https://github.com/gdi-be/mde-client/compare/v6.1.7...v6.1.8) (2026-05-13)
 
 
