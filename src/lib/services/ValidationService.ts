@@ -246,6 +246,9 @@ export class ValidationService {
                 // No service found for this layer, skip it
                 continue;
               }
+              if (layerService.id !== v.id) {
+                continue;
+              }
 
               const fieldPath = `clientMetadata.layers['${serviceId}']`;
               // handle the 'clientMetadata.layers' collection itself
