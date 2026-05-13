@@ -93,7 +93,10 @@
     if (validation.valid === false) return false;
 
     return !serviceList.some(
-      (entry) => entry.id !== service.id && entry.workspace === service.workspace
+      (entry) =>
+        entry.id !== service.id &&
+        entry.workspace === service.workspace &&
+        entry.serviceType === service.serviceType
     );
   };
 
