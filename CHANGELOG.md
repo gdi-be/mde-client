@@ -1,3 +1,12 @@
+## [6.1.7](https://github.com/gdi-be/mde-client/compare/v6.1.6...v6.1.7) (2026-05-13)
+
+
+### Bug Fixes
+
+* enhance field validation for terms of use source based on privacy ([ede512c](https://github.com/gdi-be/mde-client/commit/ede512ced602448e18e133a0d11aa4aa70479b8d))
+* ensure workspace duplicate validation is performed ([af87a07](https://github.com/gdi-be/mde-client/commit/af87a07f423eb19dc8e55a3ab9c4a50b43cdfb22))
+* update terms of use deletion to use MetadataUpdateService ([525b6bf](https://github.com/gdi-be/mde-client/commit/525b6bfb8a494daf0764120193ab75cfdb04b8b4))
+
 ## [6.1.6](https://github.com/gdi-be/mde-client/compare/v6.1.5...v6.1.6) (2026-05-12)
 
 
