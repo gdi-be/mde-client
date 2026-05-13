@@ -14,6 +14,12 @@ test.describe('Metadata form - Classification section', () => {
   });
 
   test('fill classification tab - ISO', async ({ page }) => {
+     const progressBar = page
+      .locator('.tab-container', {
+        has: page.getByText('2. Einordnung')
+      })
+      .locator('.mdc-linear-progress__bar.mdc-linear-progress__primary-bar');
+
     await page.goto('/metadata');
 
     await page
@@ -37,7 +43,12 @@ test.describe('Metadata form - Classification section', () => {
       label: 'Datenschutz-Einstellungen',
       radioOptionLabel: 'Schutz von persönlichen Daten bei natürlichen Personen',
       checkForHelp: true,
-      checkForCopy: true
+      checkForCopy: true,
+      required: true,
+      progressBar: {
+        expectedIncrease: 0.2,
+        element: progressBar
+      }
     });
 
     await testFormField(page, '.terms-of-use-field', {
