@@ -77,6 +77,11 @@
   }
 
   async function set<K extends keyof Service>(key: K, value: Service[K], persist?: boolean) {
+    const serviceIdentification = service?.serviceIdentification;
+    const localLayersBeforePersist = serviceIdentification
+      ? formContext.metadata?.clientMetadata?.layers?.[serviceIdentification]
+      : undefined;
+
     service = setNestedValue(service, key, value);
     const shouldPersist = persist ?? shouldPersistFieldValue(key, value);
     const response = await onChange(service, shouldPersist);
@@ -96,6 +101,25 @@
         }
       }
       await invalidateAll();
+      // keep local layer edits (including invalid, not persisted values) when only service fields change
+      if (
+        key !== 'serviceType' &&
+        serviceIdentification &&
+        (service.serviceType === 'WMS' || service.serviceType === 'WMTS') &&
+        localLayersBeforePersist &&
+        formContext.metadata
+      ) {
+        formContext.metadata = {
+          ...formContext.metadata,
+          clientMetadata: {
+            ...formContext.metadata.clientMetadata,
+            layers: {
+              ...(formContext.metadata.clientMetadata?.layers || {}),
+              [serviceIdentification]: localLayersBeforePersist
+            }
+          }
+        };
+      }
     }
     return response;
   }
