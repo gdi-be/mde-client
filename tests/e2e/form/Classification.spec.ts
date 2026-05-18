@@ -14,7 +14,7 @@ test.describe('Metadata form - Classification section', () => {
   });
 
   test('fill classification tab - ISO', async ({ page }) => {
-     const progressBar = page
+    const progressBar = page
       .locator('.tab-container', {
         has: page.getByText('2. Einordnung')
       })
