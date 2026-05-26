@@ -12,14 +12,10 @@
   };
 
   let { value, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.columns.name';
   const fieldConfig = MetadataService.getFieldConfig(64);
-  const validationResult = $derived(fieldConfig?.validator(localValue));
+  const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 </script>
 
@@ -27,14 +23,11 @@
   <TextInput
     label={t('64_AttributeName.label')}
     explanation={t('64_AttributeName.explanation')}
-    value={localValue}
+    {value}
     {fieldConfig}
     {validationResult}
     onchange={async (e: Event) => {
-      const newValue = (e.target as HTMLInputElement).value;
-      localValue = newValue;
-      if (fieldConfig?.validator(newValue).valid === false) return;
-      const response = await onChange(newValue);
+      const response = await onChange((e.target as HTMLInputElement).value);
       if (response.ok) {
         showCheckmark = true;
       }

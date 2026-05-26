@@ -30,7 +30,6 @@
 
   const getAutoFillValues = async () => {
     if (!metadataDescription) return;
-    if (fieldConfig?.validator(metadataDescription).valid === false) return;
     const response = await onChange(metadataDescription);
     if (response.ok) {
       showCheckmark = true;
@@ -48,9 +47,7 @@
     {validationResult}
     rows={5}
     onchange={async (e: Event) => {
-      const newValue = (e.target as HTMLInputElement).value;
-      if (fieldConfig?.validator(newValue).valid === false) return;
-      const response = await onChange(newValue);
+      const response = await onChange((e.target as HTMLInputElement).value);
       if (response.ok) {
         showCheckmark = true;
       }

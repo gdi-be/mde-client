@@ -99,7 +99,6 @@
   };
 
   const persistKeywords = async () => {
-    if (validationResult?.valid === false) return;
     const keywords: Keywords = valueFromData || {
       default: []
     };

@@ -15,10 +15,6 @@
   };
 
   let { value, service, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -33,7 +29,7 @@
         helpText: 'Der angegebene Identifikator ist bereits vergeben.'
       };
     }
-    return fieldConfig?.validator(localValue, {
+    return fieldConfig?.validator(value, {
       ['PARENT_VALUE']: service,
       ['HIGHEST_ROLE']: highestRole
     });
@@ -46,21 +42,12 @@
   <div class="service-id-field">
     <TextInput
       label={t('45_ServiceWorkspace.label')}
-      value={localValue}
+      {value}
       {fieldConfig}
       {validationResult}
       onchange={async (e: Event) => {
         hasDuplicatedValue = false;
-        const newValue = (e.target as HTMLInputElement).value;
-        localValue = newValue;
-        const newValidationResult = fieldConfig?.validator(newValue, {
-          ['PARENT_VALUE']: service,
-          ['HIGHEST_ROLE']: highestRole
-        });
-        if (newValidationResult?.valid === false) {
-          return;
-        }
-        const response = await onChange(newValue);
+        const response = await onChange((e.target as HTMLInputElement).value);
         if (response.ok) {
           showCheckmark = true;
         } else if (response.status === 409) {

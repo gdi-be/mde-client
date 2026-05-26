@@ -12,13 +12,9 @@
     onChange: (newValue: ServiceType) => Promise<Response>;
   };
   let { value, onChange }: ServiceTypeProps = $props();
-  let localValue = $state(value);
-  $effect(() => {
-    localValue = value;
-  });
 
   const fieldConfig = MetadataService.getFieldConfig(58);
-  const validationResult = $derived(fieldConfig?.validator(localValue));
+  const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
   const HELP_KEY = 'isoMetadata.services.type';
 </script>
@@ -27,7 +23,7 @@
   <SelectInput
     label={t('58_ServiceType.label')}
     explanation={t('58_ServiceType.explanation')}
-    value={localValue}
+    {value}
     {fieldConfig}
     {validationResult}
     options={[
@@ -49,10 +45,7 @@
       }
     ]}
     onChange={async (value) => {
-      const newValue = value as ServiceType;
-      localValue = newValue;
-      if (fieldConfig?.validator(newValue).valid === false) return;
-      const response = await onChange(newValue);
+      const response = await onChange(value as ServiceType);
       if (response.ok) {
         showCheckmark = true;
       }

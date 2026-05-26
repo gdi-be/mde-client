@@ -52,9 +52,6 @@
   let toValidationResult = $derived(toFieldConfig?.validator(endValue, [startValue]));
 
   const onBlur = async (key: string) => {
-    if (hasInvalidFields) {
-      return;
-    }
     const value = key === FROM_KEY ? startValue : endValue!;
     const valueToPersist = value ? new Date(value).toISOString() : null;
     const response = await MetadataService.persistValue(key, valueToPersist);

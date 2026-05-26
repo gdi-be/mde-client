@@ -20,7 +20,6 @@
   let validationResult = $derived(fieldConfig?.validator(value));
 
   const onBlur = async () => {
-    if (validationResult?.valid === false) return;
     const response = await MetadataService.persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;

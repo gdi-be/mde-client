@@ -75,11 +75,6 @@
     if (!Number.isNaN(min) && Number(target.value) < min) {
       return;
     }
-    const selectedValidationResult =
-      selected === RESOLUTION_KEY ? resolutionValidationResult : scaleValidationResult;
-    if (selectedValidationResult?.valid === false) {
-      return;
-    }
     if (selected === RESOLUTION_KEY) {
       await updateResolution(resolutionValue ? [resolutionValue] : null);
     } else {

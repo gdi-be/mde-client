@@ -18,10 +18,6 @@
   };
 
   let { value, featureType, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
@@ -30,7 +26,7 @@
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
   const validationResult = $derived(
-    ValidationService.validateField(fieldConfig, localValue, {
+    ValidationService.validateField(fieldConfig, value, {
       HIGHEST_ROLE: highestRole,
       PARENT_VALUE: featureType,
       metadata
@@ -44,20 +40,12 @@
   <div class="featuretype-name-field">
     <TextInput
       label={t('62_FeatureTypeName.label')}
-      value={localValue}
+      {value}
       maxlength={100}
       {fieldConfig}
       {validationResult}
       onchange={async (e: Event) => {
-        const newValue = (e.target as HTMLInputElement).value;
-        localValue = newValue;
-        const nextValidation = ValidationService.validateField(fieldConfig, newValue, {
-          HIGHEST_ROLE: highestRole,
-          PARENT_VALUE: featureType,
-          metadata
-        });
-        if (nextValidation.valid === false) return;
-        const response = await onChange(newValue);
+        const response = await onChange((e.target as HTMLInputElement).value);
         if (response.ok) {
           showCheckmark = true;
         }

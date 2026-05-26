@@ -17,14 +17,10 @@
   };
 
   let { value, service, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
 
   const fieldConfig = MetadataService.getFieldConfig(46);
   const validationResult = $derived(
-    fieldConfig?.validator(localValue, {
+    fieldConfig?.validator(value, {
       ['PARENT_VALUE']: service
     })
   );
@@ -40,10 +36,6 @@
 
   const getAutoFillValues = async () => {
     if (!metadataPreview) return;
-    const nextValidation = fieldConfig?.validator(metadataPreview, {
-      ['PARENT_VALUE']: service
-    });
-    if (nextValidation?.valid === false) return;
     const response = await onChange(metadataPreview);
     if (response.ok) {
       showCheckmark = true;
@@ -55,17 +47,11 @@
   <TextInput
     label={t('46_ServicePreview.label')}
     explanation={t('46_ServicePreview.explanation')}
-    value={localValue}
+    {value}
     {fieldConfig}
     {validationResult}
     onchange={async (e: Event) => {
-      const newValue = (e.target as HTMLInputElement).value;
-      localValue = newValue;
-      const nextValidation = fieldConfig?.validator(newValue, {
-        ['PARENT_VALUE']: service
-      });
-      if (nextValidation?.valid === false) return;
-      const response = await onChange(newValue);
+      const response = await onChange((e.target as HTMLInputElement).value);
       if (response.ok) {
         showCheckmark = true;
       }
