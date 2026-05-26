@@ -192,12 +192,7 @@ export function validateService(
   const allServices = (context?.metadata?.isoMetadata?.services || []) as Service[];
   const hasDuplicateWorkspace =
     !!service?.workspace &&
-    allServices.some(
-      (entry) =>
-        entry.id !== service.id &&
-        entry.workspace === service.workspace &&
-        entry.serviceType === service.serviceType
-    );
+    allServices.some((entry) => entry.id !== service.id && entry.workspace === service.workspace);
   const featureTypesRequired = service.serviceType === 'WFS';
   const layersRequired = ['WMS', 'WMTS'].includes(service?.serviceType || '');
   let hasInvalidLayersFlag = false;

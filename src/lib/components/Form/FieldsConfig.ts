@@ -758,10 +758,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       const service = extraParams?.['PARENT_VALUE'] as Service;
       const services = (extraParams?.['isoMetadata.services'] || []) as Service[];
       const hasDuplicateWorkspace = services.some(
-        (entry) =>
-          entry.id !== service?.id &&
-          entry.workspace === workspace &&
-          entry.serviceType === service?.serviceType
+        (entry) => entry.id !== service?.id && entry.workspace === workspace
       );
       if (hasDuplicateWorkspace) {
         return {

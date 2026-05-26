@@ -30,12 +30,7 @@
   let hasDuplicatedValue = $state<boolean>(false);
   const isDuplicateServiceId = (nextValue: string) => {
     const allServices = getValue<Service[]>('isoMetadata.services') || [];
-    return allServices.some(
-      (entry) =>
-        entry.id !== service.id &&
-        entry.workspace === nextValue &&
-        entry.serviceType === service.serviceType
-    );
+    return allServices.some((entry) => entry.id !== service.id && entry.workspace === nextValue);
   };
   const isInvalidWorkspace = (nextValue: string) => {
     const nextValidation = fieldConfig?.validator(nextValue, {
