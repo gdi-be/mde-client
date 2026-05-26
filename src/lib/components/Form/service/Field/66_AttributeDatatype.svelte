@@ -11,21 +11,17 @@
 
   export type ServiceTypeProps = {
     value?: ColumnInfo['type'];
-    onChange: (newValue: ColumnInfo['type'], persist?: boolean) => Promise<Response>;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
-  let localValue = $state(value);
-  $effect(() => {
-    localValue = value;
-  });
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.columns.type';
   const fieldConfig = MetadataService.getFieldConfig(66);
-  const validationResult = $derived(fieldConfig?.validator(localValue));
+  const validationResult = $derived(fieldConfig?.validator(value));
   let showCheckmark = $state(false);
 
   const options: Option[] = [
@@ -50,12 +46,10 @@
       label={t('66_AttributeDatatype.label')}
       {fieldConfig}
       {validationResult}
-      value={localValue}
+      {value}
       {options}
       onChange={async (newValue) => {
-        const typedValue = newValue as ColumnInfo['type'];
-        localValue = typedValue;
-        const response = await onChange(typedValue, typedValue !== undefined);
+        const response = await onChange(newValue);
         if (response.ok) {
           showCheckmark = true;
         }

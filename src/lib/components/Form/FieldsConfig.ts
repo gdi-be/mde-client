@@ -526,11 +526,10 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 26,
     key: 'isoMetadata.termsOfUseSource',
-    extraParams: ['isoMetadata.termsOfUseId', 'isoMetadata.privacy'],
+    extraParams: ['isoMetadata.termsOfUseId'],
     validator: (val, extraParams) => {
       const termsOfUseId = extraParams?.['isoMetadata.termsOfUseId'];
-      const privacy = extraParams?.['isoMetadata.privacy'];
-      const isRequired = privacy === 'NONE' && !!termsOfUseId && termsOfUseId !== 1;
+      const isRequired = termsOfUseId !== 1;
       if (isRequired && !isDefined(val)) {
         return {
           valid: false,
@@ -741,7 +740,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 45,
     key: 'isoMetadata.services.workspace',
     collectionKey: 'isoMetadata.services',
-    extraParams: ['PARENT_VALUE', 'HIGHEST_ROLE', 'isoMetadata.services'],
+    extraParams: ['PARENT_VALUE', 'HIGHEST_ROLE'],
     validator: (workspace: Service['workspace'], extraParams) => {
       const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
       const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
@@ -754,20 +753,6 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
           valid: false,
           helpText:
             'Bitte geben Sie einen gültigen Workspace an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.'
-        };
-      }
-      const service = extraParams?.['PARENT_VALUE'] as Service;
-      const services = (extraParams?.['isoMetadata.services'] || []) as Service[];
-      const hasDuplicateWorkspace = services.some(
-        (entry) =>
-          entry.id !== service?.id &&
-          entry.workspace === workspace &&
-          entry.serviceType === service?.serviceType
-      );
-      if (hasDuplicateWorkspace) {
-        return {
-          valid: false,
-          helpText: 'Der angegebene Identifikator ist bereits vergeben.'
         };
       }
       return { valid };

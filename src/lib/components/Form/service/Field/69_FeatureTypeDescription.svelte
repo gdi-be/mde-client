@@ -9,38 +9,28 @@
 
   export type ComponentProps = {
     value?: FeatureType['shortDescription'];
-    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.shortDescription';
   let showCheckmark = $state(false);
 
   const fieldConfig = MetadataService.getFieldConfig(69);
-  const validationResult = $derived(fieldConfig?.validator(localValue));
+  const validationResult = $derived(fieldConfig?.validator(value));
 </script>
 
 <div class="featuretype-short-description-field">
   <TextAreaInput
     label={t('69_FeatureTypeDescription.label')}
     explanation={t('69_FeatureTypeDescription.explanation')}
-    value={localValue}
+    {value}
     maxlength={500}
     {fieldConfig}
     {validationResult}
-    onchange={(e: Event) => {
-      const newValue = (e.target as HTMLInputElement).value;
-      localValue = newValue;
-      void onChange(newValue, false);
-    }}
-    onblur={async (e: Event) => {
-      const newValue = (e.target as HTMLInputElement).value;
-      const response = await onChange(newValue);
+    onchange={async (e: Event) => {
+      const response = await onChange((e.target as HTMLInputElement).value);
       if (response.ok) {
         showCheckmark = true;
       }

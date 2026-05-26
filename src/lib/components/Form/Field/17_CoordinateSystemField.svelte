@@ -17,7 +17,7 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
-  const { getValue, formState } = getFormContext();
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   $effect(() => {
@@ -29,16 +29,6 @@
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onSelectionChange = async (newValue?: string) => {
-    if (formState.metadata?.isoMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        isoMetadata: {
-          ...formState.metadata.isoMetadata,
-          crs: newValue as string
-        }
-      };
-    }
-    if (fieldConfig?.validator(newValue).valid === false) return;
     const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;

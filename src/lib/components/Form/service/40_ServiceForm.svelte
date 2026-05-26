@@ -20,16 +20,12 @@
   import { toast } from 'svelte-french-toast';
   import { invalidateAll } from '$app/navigation';
   import { logger } from 'loggisch';
-  import { getAccessToken } from '$lib/context/TokenContext.svelte';
-  import { getHighestRole } from '$lib/util';
-  import { validateFeatureTypes } from './validation';
-  import { ValidationService } from '$lib/services/ValidationService';
 
   const t = $derived(page.data.t);
 
   export type ServiceFormProps = {
     service: Service;
-    onChange: (service: Service, persist?: boolean) => Promise<Response>;
+    onChange: (service: Service) => Promise<Response>;
   };
 
   let { service, onChange }: ServiceFormProps = $props();
@@ -37,8 +33,6 @@
   const { getValue } = getFormContext();
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
-  const token = $derived(getAccessToken());
-  const highestRole = $derived(getHighestRole(token));
 
   const layers = $derived.by((): Layer[] => {
     const layersMap: Record<string, Layer[]> = metadata?.clientMetadata?.layers;
@@ -73,18 +67,13 @@
       // Remove feature types associated with the service
       delete service.featureTypes;
     }
-    return onChange(service, true);
+    return onChange(service);
   }
 
-  async function set<K extends keyof Service>(key: K, value: Service[K], persist?: boolean) {
-    const serviceIdentification = service?.serviceIdentification;
-    const localLayersBeforePersist = serviceIdentification
-      ? formContext.metadata?.clientMetadata?.layers?.[serviceIdentification]
-      : undefined;
-
+  async function set(key: string, value: Service[keyof Service]) {
     service = setNestedValue(service, key, value);
-    const shouldPersist = persist ?? shouldPersistFieldValue(key, value);
-    const response = await onChange(service, shouldPersist);
+
+    const response = await onChange(service);
     if (response.ok) {
       if (key === 'serviceType') {
         onServiceTypeChange(value as ServiceType);
@@ -101,93 +90,13 @@
         }
       }
       await invalidateAll();
-      // keep local layer edits (including invalid, not persisted values) when only service fields change
-      if (
-        key !== 'serviceType' &&
-        serviceIdentification &&
-        (service.serviceType === 'WMS' || service.serviceType === 'WMTS') &&
-        localLayersBeforePersist &&
-        formContext.metadata
-      ) {
-        formContext.metadata = {
-          ...formContext.metadata,
-          clientMetadata: {
-            ...formContext.metadata.clientMetadata,
-            layers: {
-              ...(formContext.metadata.clientMetadata?.layers || {}),
-              [serviceIdentification]: localLayersBeforePersist
-            }
-          }
-        };
-      }
     }
     return response;
   }
 
-  const shouldPersistFieldValue = <K extends keyof Service>(key: K, value: Service[K]) => {
-    if (key === 'workspace') {
-      const fieldConfig = MetadataService.getFieldConfig<string>(45);
-      return ValidationService.validateField(fieldConfig, value as Service['workspace'], {
-        ['PARENT_VALUE']: service,
-        ['HIGHEST_ROLE']: highestRole,
-        metadata
-      }).valid;
-    }
-    if (key === 'preview') {
-      const fieldConfig = MetadataService.getFieldConfig<string>(46);
-      return fieldConfig?.validator(value as Service['preview'], {
-        ['PARENT_VALUE']: service
-      }).valid;
-    }
-    if (key === 'title') {
-      const fieldConfig = MetadataService.getFieldConfig<string>(59);
-      return fieldConfig?.validator(value as Service['title']).valid;
-    }
-    if (key === 'shortDescription') {
-      const fieldConfig = MetadataService.getFieldConfig<string>(60);
-      return fieldConfig?.validator(value as Service['shortDescription']).valid;
-    }
-    if (key === 'featureTypes') {
-      const fieldConfig = MetadataService.getFieldConfig<Service['featureTypes']>(56);
-      const featureTypes = value as Service['featureTypes'];
-      const hasValidFeatureTypeCollection = fieldConfig?.validator(featureTypes, {
-        ['PARENT_VALUE']: service
-      }).valid;
-      const hasInvalidFeatureTypes =
-        validateFeatureTypes(featureTypes || [], {
-          metadata,
-          HIGHEST_ROLE: highestRole
-        }).size > 0;
-      return hasValidFeatureTypeCollection && !hasInvalidFeatureTypes;
-    }
-    if (key === 'serviceType') {
-      const fieldConfig = MetadataService.getFieldConfig<ServiceType>(58);
-      return fieldConfig?.validator(value as Service['serviceType']).valid;
-    }
-
-    return true;
-  };
-
-  async function onLayersChange(layers: Layer[], persist = true) {
+  async function onLayersChange(layers: Layer[]) {
     const serviceIdentification = service?.serviceIdentification;
     if (!serviceIdentification) return Promise.reject('Service identification is missing');
-
-    if (formContext.metadata) {
-      formContext.metadata = {
-        ...formContext.metadata,
-        clientMetadata: {
-          ...formContext.metadata.clientMetadata,
-          layers: {
-            ...(formContext.metadata.clientMetadata?.layers || {}),
-            [serviceIdentification]: layers
-          }
-        }
-      };
-    }
-
-    if (!persist) {
-      return new Response(null, { status: 422, statusText: 'Validation failed' });
-    }
 
     const response = await fetch(
       `${page.url.origin}${page.url.pathname}/updateLayers/${serviceIdentification}`,
@@ -204,27 +113,23 @@
 
     if (!response.ok) {
       toast.error(t('serviceform.layer_update_error', { statusText: response.statusText }));
-    } else {
-      await invalidateAll();
     }
+    invalidateAll();
     return response;
   }
 </script>
 
 <div class="service-form">
   <ServiceType_58 value={service.serviceType} onChange={onServiceTypeChange} />
-  <ServiceTitle_59
-    value={service.title}
-    onChange={(title, persist) => set('title', title, persist)}
-  />
+  <ServiceTitle_59 value={service.title} onChange={(title) => set('title', title)} />
   <ServiceShortDescription_60
     value={service.shortDescription}
-    onChange={(shortDescription, persist) => set('shortDescription', shortDescription, persist)}
+    onChange={(shortDescription) => set('shortDescription', shortDescription)}
   />
   <ServiceWorkspace_45
     value={service.workspace}
     {service}
-    onChange={(workspace, persist) => set('workspace', workspace, persist)}
+    onChange={(workspace) => set('workspace', workspace)}
   />
   <ServicePreview_46
     value={service.preview}
@@ -242,7 +147,7 @@
     <FeatureTypeForm_56
       {service}
       value={service.featureTypes}
-      onChange={(featureTypes, persist) => set('featureTypes', featureTypes, persist)}
+      onChange={(featureTypes) => set('featureTypes', featureTypes)}
     />
   {/if}
 </div>

@@ -189,15 +189,6 @@ export function validateService(
   ];
 
   const fieldsValid = validateFields(validations);
-  const allServices = (context?.metadata?.isoMetadata?.services || []) as Service[];
-  const hasDuplicateWorkspace =
-    !!service?.workspace &&
-    allServices.some(
-      (entry) =>
-        entry.id !== service.id &&
-        entry.workspace === service.workspace &&
-        entry.serviceType === service.serviceType
-    );
   const featureTypesRequired = service.serviceType === 'WFS';
   const layersRequired = ['WMS', 'WMTS'].includes(service?.serviceType || '');
   let hasInvalidLayersFlag = false;
@@ -211,7 +202,7 @@ export function validateService(
   }
 
   return {
-    hasInvalidFields: !fieldsValid || hasDuplicateWorkspace,
+    hasInvalidFields: !fieldsValid,
     hasInvalidLayers: hasInvalidLayersFlag,
     hasInvalidFeatureTypes: hasInvalidFeatureTypesFlag
   };

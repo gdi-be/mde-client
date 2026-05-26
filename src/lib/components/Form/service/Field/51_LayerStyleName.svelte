@@ -10,14 +10,10 @@
 
   export type ComponentProps = {
     value?: Layer['styleName'];
-    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
 
   const HELP_KEY = 'clientMetadata.layers.styleName';
   let showCheckmark = $state(false);
@@ -27,27 +23,14 @@
 
   const fieldConfig = MetadataService.getFieldConfig(51);
   const validationResult = $derived(
-    fieldConfig?.validator(localValue, {
+    fieldConfig?.validator(value, {
       ['HIGHEST_ROLE']: highestRole
     })
   );
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 
-  const onChangeInternal = (e: Event) => {
+  const onChangeInternal = async (e: Event) => {
     const newValue = (e.target as HTMLInputElement).value;
-    localValue = newValue;
-    void onChange(newValue, false);
-  };
-
-  const onBlurInternal = async (e: Event) => {
-    const newValue = (e.target as HTMLInputElement).value;
-    if (
-      fieldConfig?.validator(newValue, {
-        ['HIGHEST_ROLE']: highestRole
-      }).valid === false
-    ) {
-      return;
-    }
     const response = await onChange(newValue);
     if (response.ok) {
       showCheckmark = true;
@@ -59,12 +42,11 @@
   <div class="layer-style-name-field">
     <TextInput
       label={t('51_LayerStyleName.label')}
-      value={localValue}
+      {value}
       maxlength={100}
       {fieldConfig}
       {validationResult}
       onchange={onChangeInternal}
-      onblur={onBlurInternal}
     />
     <FieldTools {value} key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>

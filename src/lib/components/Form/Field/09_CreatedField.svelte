@@ -9,7 +9,7 @@
   const t = $derived(page.data.t);
   const KEY = 'isoMetadata.created';
 
-  const { getValue, formState } = getFormContext();
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   let initialized = false;
@@ -30,33 +30,9 @@
   const fieldConfig = MetadataService.getFieldConfig<string>(9);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  const onChange = (evt: Event) => {
-    const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
-    value = inputValue;
-    if (formState.metadata?.isoMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        isoMetadata: {
-          ...formState.metadata.isoMetadata,
-          created: inputValue ? new Date(inputValue).toISOString() : null
-        }
-      };
-    }
-  };
-
   const onBlur = async (evt: FocusEvent) => {
     const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
     value = inputValue;
-    if (formState.metadata?.isoMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        isoMetadata: {
-          ...formState.metadata.isoMetadata,
-          created: inputValue ? new Date(inputValue).toISOString() : null
-        }
-      };
-    }
-    if (fieldConfig?.validator(inputValue).valid === false) return;
     const response = await MetadataService.persistValue(
       KEY,
       inputValue ? new Date(inputValue).toISOString() : null
@@ -74,7 +50,6 @@
     label={t('09_CreatedField.label')}
     explanation={t('09_CreatedField.explanation')}
     {fieldConfig}
-    onchange={onChange}
     onblur={onBlur}
     {validationResult}
   />
