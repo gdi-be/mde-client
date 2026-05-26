@@ -9,7 +9,7 @@
   const t = $derived(page.data.t);
   const KEY = 'isoMetadata.published';
 
-  const { getValue, formState } = getFormContext();
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   let initialized = false;
@@ -29,45 +29,18 @@
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(10);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
-  const toIsoDate = (inputValue: string) =>
-    inputValue ? new Date(inputValue).toISOString() : null;
-  let hasUnsavedLocalChange = $state(false);
-
-  $effect(() => {
-    if (!hasUnsavedLocalChange) {
-      return;
-    }
-    if (!formState.metadata?.isoMetadata) {
-      return;
-    }
-    const localValue = toIsoDate(value);
-    if (formState.metadata.isoMetadata.published === localValue) {
-      return;
-    }
-    formState.metadata = {
-      ...formState.metadata,
-      isoMetadata: {
-        ...formState.metadata.isoMetadata,
-        published: localValue
-      }
-    };
-  });
-
-  const onChange = (evt: Event) => {
-    const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
-    value = inputValue;
-    hasUnsavedLocalChange = true;
-  };
 
   const onBlur = async (evt: FocusEvent) => {
     const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
     value = inputValue;
     if (fieldConfig?.required && !inputValue) return;
     if (fieldConfig?.validator(inputValue).valid === false) return;
-    const response = await MetadataService.persistValue(KEY, toIsoDate(inputValue));
+    const response = await MetadataService.persistValue(
+      KEY,
+      inputValue ? new Date(inputValue).toISOString() : null
+    );
 
     if (response.ok) {
-      hasUnsavedLocalChange = false;
       showCheckmark = true;
     }
   };
@@ -80,7 +53,6 @@
     label={t('10_PublishedField.label')}
     explanation={t('10_PublishedField.explanation')}
     {fieldConfig}
-    onchange={onChange}
     onblur={onBlur}
     {validationResult}
   />

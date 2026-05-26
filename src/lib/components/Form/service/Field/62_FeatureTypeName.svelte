@@ -14,7 +14,7 @@
   export type ComponentProps = {
     value?: FeatureType['name'];
     featureType: FeatureType;
-    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, featureType, onChange }: ComponentProps = $props();
@@ -48,13 +48,9 @@
       maxlength={100}
       {fieldConfig}
       {validationResult}
-      onchange={(e: Event) => {
+      onchange={async (e: Event) => {
         const newValue = (e.target as HTMLInputElement).value;
         localValue = newValue;
-        void onChange(newValue, false);
-      }}
-      onblur={async (e: Event) => {
-        const newValue = (e.target as HTMLInputElement).value;
         const response = await onChange(newValue);
         if (response.ok) {
           showCheckmark = true;

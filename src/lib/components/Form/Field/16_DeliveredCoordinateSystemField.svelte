@@ -9,7 +9,7 @@
   const t = $derived(page.data.t);
   const KEY = 'technicalMetadata.deliveredCrs';
 
-  const { getValue, formState } = getFormContext();
+  const { getValue } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
   $effect(() => {
@@ -21,15 +21,6 @@
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onBlur = async () => {
-    if (formState.metadata?.technicalMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        technicalMetadata: {
-          ...formState.metadata.technicalMetadata,
-          deliveredCrs: value
-        }
-      };
-    }
     if (validationResult?.valid === false) return;
     const response = await MetadataService.persistValue(KEY, value);
     if (response.ok) {

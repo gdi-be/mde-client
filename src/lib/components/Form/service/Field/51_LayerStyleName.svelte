@@ -10,7 +10,7 @@
 
   export type ComponentProps = {
     value?: Layer['styleName'];
-    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
@@ -33,14 +33,9 @@
   );
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
 
-  const onChangeInternal = (e: Event) => {
+  const onChangeInternal = async (e: Event) => {
     const newValue = (e.target as HTMLInputElement).value;
     localValue = newValue;
-    void onChange(newValue, false);
-  };
-
-  const onBlurInternal = async (e: Event) => {
-    const newValue = (e.target as HTMLInputElement).value;
     if (
       fieldConfig?.validator(newValue, {
         ['HIGHEST_ROLE']: highestRole
@@ -64,7 +59,6 @@
       {fieldConfig}
       {validationResult}
       onchange={onChangeInternal}
-      onblur={onBlurInternal}
     />
     <FieldTools {value} key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>

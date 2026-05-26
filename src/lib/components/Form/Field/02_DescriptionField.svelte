@@ -18,11 +18,7 @@
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const valueFromData = $derived(getValue<string>(KEY));
   let value = $state('');
-  let hasUnsavedLocalChange = $state(false);
   $effect(() => {
-    if (hasUnsavedLocalChange) {
-      return;
-    }
     value = valueFromData || '';
   });
 
@@ -52,7 +48,6 @@
     if (validationResult?.valid === false) return;
     const response = await MetadataService.persistValue(KEY, value);
     if (response.ok) {
-      hasUnsavedLocalChange = false;
       showCheckmark = true;
     }
   };
@@ -62,9 +57,6 @@
   <TextAreaInput
     bind:value
     maxlength={500}
-    onchange={() => {
-      hasUnsavedLocalChange = true;
-    }}
     onblur={onBlur}
     label={t('02_DescriptionField.label')}
     explanation={t('02_DescriptionField.explanation')}

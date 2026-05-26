@@ -8,7 +8,7 @@
 
   export type ComponentProps = {
     value?: Layer['title'];
-    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
@@ -31,13 +31,9 @@
     {fieldConfig}
     {validationResult}
     maxlength={250}
-    onchange={(e: Event) => {
+    onchange={async (e: Event) => {
       const newValue = (e.target as HTMLInputElement).value;
       localValue = newValue;
-      void onChange(newValue, false);
-    }}
-    onblur={async (e: Event) => {
-      const newValue = (e.target as HTMLInputElement).value;
       if (fieldConfig?.validator(newValue).valid === false) return;
       const response = await onChange(newValue);
       if (response.ok) {

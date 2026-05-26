@@ -23,7 +23,7 @@
   export type ColumnsFormProps = {
     featureType: FeatureType;
     value?: ColumnInfo[];
-    onChange: (columns: ColumnInfo[], persist?: boolean) => Promise<Response>;
+    onChange: (columns: ColumnInfo[]) => Promise<Response>;
   };
 
   let { value: initialColumns, onChange, featureType }: ColumnsFormProps = $props();
@@ -101,7 +101,7 @@
     );
   }
 
-  function set(key: string, value: ColumnInfo[keyof ColumnInfo], persist?: boolean) {
+  function set(key: string, value: ColumnInfo[keyof ColumnInfo]) {
     columns = columns.map((column) => {
       if (column.id === activeTabId) {
         return {
@@ -111,7 +111,7 @@
       }
       return column;
     });
-    return onChange(columns, persist);
+    return onChange(columns);
   }
 </script>
 
@@ -166,18 +166,9 @@
     </nav>
     <div class="content">
       {#if activeTabId && activeColumn}
-        <AttributeName_64
-          value={activeColumn?.name}
-          onChange={(name, persist) => set('name', name, persist)}
-        />
-        <AttributeAlias_65
-          value={activeColumn?.alias}
-          onChange={(alias, persist) => set('alias', alias, persist)}
-        />
-        <AttributeDatatype_66
-          value={activeColumn?.type}
-          onChange={(type, persist) => set('type', type, persist)}
-        />
+        <AttributeName_64 value={activeColumn?.name} onChange={(name) => set('name', name)} />
+        <AttributeAlias_65 value={activeColumn?.alias} onChange={(alias) => set('alias', alias)} />
+        <AttributeDatatype_66 value={activeColumn?.type} onChange={(type) => set('type', type)} />
       {/if}
     </div>
   </fieldset>

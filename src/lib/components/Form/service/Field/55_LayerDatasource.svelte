@@ -31,12 +31,9 @@
     value={localValue}
     {fieldConfig}
     {validationResult}
-    onchange={(e: Event) => {
+    onchange={async (e: Event) => {
       const newValue = (e.target as HTMLInputElement).value;
       localValue = newValue;
-    }}
-    onblur={async (e: Event) => {
-      const newValue = (e.target as HTMLInputElement).value;
       if (fieldConfig?.validator(newValue).valid === false) return;
       const response = await onChange(newValue);
       if (response.ok) {
