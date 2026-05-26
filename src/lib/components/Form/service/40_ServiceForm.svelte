@@ -20,14 +20,12 @@
   import { toast } from 'svelte-french-toast';
   import { invalidateAll } from '$app/navigation';
   import { logger } from 'loggisch';
-  import { getAccessToken } from '$lib/context/TokenContext.svelte';
-  import { getHighestRole } from '$lib/util';
 
   const t = $derived(page.data.t);
 
   export type ServiceFormProps = {
     service: Service;
-    onChange: (service: Service, persist?: boolean) => Promise<Response>;
+    onChange: (service: Service) => Promise<Response>;
   };
 
   let { service, onChange }: ServiceFormProps = $props();
@@ -35,8 +33,6 @@
   const { getValue } = getFormContext();
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
-  const token = $derived(getAccessToken());
-  const highestRole = $derived(getHighestRole(token));
 
   const layers = $derived.by((): Layer[] => {
     const layersMap: Record<string, Layer[]> = metadata?.clientMetadata?.layers;
@@ -71,12 +67,13 @@
       // Remove feature types associated with the service
       delete service.featureTypes;
     }
-    return onChange(service, true);
+    return onChange(service);
   }
 
-  async function set<K extends keyof Service>(key: K, value: Service[K]) {
+  async function set(key: string, value: Service[keyof Service]) {
     service = setNestedValue(service, key, value);
-    const response = await onChange(service, shouldPersistFieldValue(key, value));
+
+    const response = await onChange(service);
     if (response.ok) {
       if (key === 'serviceType') {
         onServiceTypeChange(value as ServiceType);
@@ -96,42 +93,6 @@
     }
     return response;
   }
-
-  const shouldPersistFieldValue = <K extends keyof Service>(key: K, value: Service[K]) => {
-    if (key === 'workspace') {
-      const fieldConfig = MetadataService.getFieldConfig<string>(45);
-      return fieldConfig?.validator(value as Service['workspace'], {
-        ['PARENT_VALUE']: service,
-        ['HIGHEST_ROLE']: highestRole
-      }).valid;
-    }
-    if (key === 'preview') {
-      const fieldConfig = MetadataService.getFieldConfig<string>(46);
-      return fieldConfig?.validator(value as Service['preview'], {
-        ['PARENT_VALUE']: service
-      }).valid;
-    }
-    if (key === 'title') {
-      const fieldConfig = MetadataService.getFieldConfig<string>(59);
-      return fieldConfig?.validator(value as Service['title']).valid;
-    }
-    if (key === 'shortDescription') {
-      const fieldConfig = MetadataService.getFieldConfig<string>(60);
-      return fieldConfig?.validator(value as Service['shortDescription']).valid;
-    }
-    if (key === 'featureTypes') {
-      const fieldConfig = MetadataService.getFieldConfig<Service['featureTypes']>(56);
-      return fieldConfig?.validator(value as Service['featureTypes'], {
-        ['PARENT_VALUE']: service
-      }).valid;
-    }
-    if (key === 'serviceType') {
-      const fieldConfig = MetadataService.getFieldConfig<ServiceType>(58);
-      return fieldConfig?.validator(value as Service['serviceType']).valid;
-    }
-
-    return true;
-  };
 
   async function onLayersChange(layers: Layer[]) {
     const serviceIdentification = service?.serviceIdentification;

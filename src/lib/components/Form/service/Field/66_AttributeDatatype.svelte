@@ -11,7 +11,7 @@
 
   export type ServiceTypeProps = {
     value?: ColumnInfo['type'];
-    onChange: (newValue: ColumnInfo['type']) => Promise<Response>;
+    onChange: (newValue: string) => Promise<Response>;
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
@@ -55,9 +55,8 @@
       onChange={async (newValue) => {
         const typedValue = newValue as ColumnInfo['type'];
         localValue = typedValue;
-        if (typedValue === undefined) {
-          return;
-        }
+        if (!typedValue) return;
+        if (fieldConfig?.validator(typedValue).valid === false) return;
         const response = await onChange(typedValue);
         if (response.ok) {
           showCheckmark = true;

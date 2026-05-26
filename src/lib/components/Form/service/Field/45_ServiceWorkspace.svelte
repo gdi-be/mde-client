@@ -53,6 +53,13 @@
         hasDuplicatedValue = false;
         const newValue = (e.target as HTMLInputElement).value;
         localValue = newValue;
+        const newValidationResult = fieldConfig?.validator(newValue, {
+          ['PARENT_VALUE']: service,
+          ['HIGHEST_ROLE']: highestRole
+        });
+        if (newValidationResult?.valid === false) {
+          return;
+        }
         const response = await onChange(newValue);
         if (response.ok) {
           showCheckmark = true;

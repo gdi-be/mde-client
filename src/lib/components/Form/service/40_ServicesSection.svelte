@@ -145,7 +145,7 @@
     );
   }
 
-  async function updateService(id: string, newService: Service, persist = true) {
+  async function updateService(id: string, newService: Service) {
     if (!id || !newService) {
       return Promise.reject('Invalid parameters');
     }
@@ -155,21 +155,6 @@
       }
       return service;
     });
-
-    if (formState.metadata?.isoMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        isoMetadata: {
-          ...formState.metadata.isoMetadata,
-          services
-        }
-      };
-    }
-
-    if (!persist) {
-      return new Response(null, { status: 422, statusText: 'Validation failed' });
-    }
-
     return persistServices(id);
   }
 
@@ -241,8 +226,8 @@
     <span>
       <ServiceForm_40
         service={activeService}
-        onChange={(newService, persist) => {
-          return updateService(activeService?.id, newService, persist);
+        onChange={(newService) => {
+          return updateService(activeService?.id, newService);
         }}
       />
     </span>

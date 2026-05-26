@@ -2,7 +2,6 @@
   import type { Lineage, MetadataCollection } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import { getFormContext } from '$lib/context/FormContext.svelte';
-  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import TextInput from '../Inputs/TextInput.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '../FieldTools.svelte';
@@ -13,7 +12,6 @@
   import { getPopconfirm } from '$lib/context/PopConfirmContext.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
-  import { getContext } from 'svelte';
 
   const t = $derived(page.data.t);
 
@@ -23,7 +21,6 @@
   const KEY = 'isoMetadata.lineage';
 
   const { getValue } = getFormContext();
-  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const valueFromData = $derived(getValue<Lineage[]>(KEY));
   let lineages = $state<Lineage[]>([]);
 
@@ -99,8 +96,6 @@
   };
 
   const persistLineages = async (evt?: FocusEvent) => {
-    syncLocalLineageState();
-
     if (hasInvalidFields) {
       return;
     }
@@ -123,29 +118,6 @@
       elementToFocus?.focus();
     }, 10);
   };
-
-  const syncLocalLineageState = () => {
-    if (!formState.metadata?.isoMetadata) {
-      return;
-    }
-
-    const currentLineage = formState.metadata.isoMetadata.lineage || [];
-    if (JSON.stringify(currentLineage) === JSON.stringify(lineages)) {
-      return;
-    }
-
-    formState.metadata = {
-      ...formState.metadata,
-      isoMetadata: {
-        ...formState.metadata.isoMetadata,
-        lineage: lineages
-      }
-    };
-  };
-
-  $effect(() => {
-    syncLocalLineageState();
-  });
 
   const addItem = (evt: MouseEvent) => {
     evt.preventDefault();

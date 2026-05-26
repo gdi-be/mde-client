@@ -2,7 +2,6 @@
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import { getFormContext } from '$lib/context/FormContext.svelte';
-  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
@@ -13,7 +12,6 @@
   import { page } from '$app/state';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
-  import { getContext } from 'svelte';
 
   const t = $derived(page.data.t);
 
@@ -23,7 +21,6 @@
   const KEY = 'isoMetadata.pointsOfContact';
 
   const { getValue } = getFormContext();
-  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   let contacts = $state<Contact[]>([]);
   const valueFromData = $derived(getValue<Contacts>(KEY));
 
@@ -87,16 +84,6 @@
   };
 
   const persistContacts = async (evt?: FocusEvent) => {
-    if (formState.metadata?.isoMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        isoMetadata: {
-          ...formState.metadata.isoMetadata,
-          pointsOfContact: contacts
-        }
-      };
-    }
-
     if (hasInvalidFields) {
       return;
     }
