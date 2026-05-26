@@ -1,3 +1,16 @@
+## [6.1.11](https://github.com/gdi-be/mde-client/compare/v6.1.10...v6.1.11) (2026-05-26)
+
+
+### Reverts
+
+* Revert "feat: enhance form fields to synchronize metadata state and improve validation handling" ([9013ae9](https://github.com/gdi-be/mde-client/commit/9013ae92afe6622e25becab5d563cb2f4ca1d355))
+* Revert "feat: enhance validation handling across form fields ([#29500](https://github.com/gdi-be/mde-client/issues/29500))" ([500b81b](https://github.com/gdi-be/mde-client/commit/500b81baffb3e6431a10435b5f0ab34267ddb6eb))
+* Revert "fix: enhance field validation for terms of use source based on privacy" ([c809162](https://github.com/gdi-be/mde-client/commit/c809162d436fd8ed9464f0725d752edbbe038a55))
+* Revert "fix: ensure workspace duplicate validation is performed" ([9bdf139](https://github.com/gdi-be/mde-client/commit/9bdf1399c8ef64e3c1ccc464569c6cd3f958d4c1))
+* Revert "fix: field updates for persisitng consistency" ([e937287](https://github.com/gdi-be/mde-client/commit/e9372876f699eca090044bb8532998fc22315937))
+* Revert "fix: improve service layer persistence during validation updates" ([257f696](https://github.com/gdi-be/mde-client/commit/257f69606c7f08f2d883b5f4008ebdabedb27c29))
+* Revert "fix: update terms of use deletion to use MetadataUpdateService" ([3616dfa](https://github.com/gdi-be/mde-client/commit/3616dfab12c073650d27fde6b6818095b01d0363))
+
 ## [6.1.10](https://github.com/gdi-be/mde-client/compare/v6.1.9...v6.1.10) (2026-05-13)
 
 
