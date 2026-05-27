@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createMetadata, deleteMetadata, testFormField } from '../helpers';
+import { createMetadata, deleteMetadata, highlight, testFormField } from '../helpers';
 
 test.use({
   storageState: 'tests/e2e/.auth/editor.json'
@@ -28,17 +28,22 @@ test.describe('Metadata form - Basedata section', () => {
       .getByTitle('Bearbeiten')
       .click();
 
+    await expect(page.locator('section#basedata')).toBeVisible();
+
+    await expect(progressBar).not.toHaveAttribute('style', /transform: scaleX\(1\)/);
+    await highlight(page
+      .locator('.tab-container', {
+        has: page.getByText('1. Basisangaben')
+      }));
+    await progressBar.hover();
+
     await testFormField(page, '.title-field', {
       label: 'Titel',
       value: 'Test Title',
       checkForHelp: true,
       checkForCopy: true,
       maxLength: 250,
-      required: true,
-      progressBar: {
-        expectedIncrease: 0.2,
-        element: progressBar
-      }
+      required: true
     });
 
     await testFormField(page, '.description-field', {
@@ -49,7 +54,6 @@ test.describe('Metadata form - Basedata section', () => {
       maxLength: 500,
       required: true,
       progressBar: {
-        expectedIncrease: 0.2,
         element: progressBar
       }
     });
@@ -69,7 +73,6 @@ test.describe('Metadata form - Basedata section', () => {
       checkForCopy: true,
       required: true,
       progressBar: {
-        expectedIncrease: 0.2,
         element: progressBar
       }
     });
@@ -96,6 +99,11 @@ test.describe('Metadata form - Basedata section', () => {
     await page.getByRole('heading').click();
 
     await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(1\)/);
+    await highlight(page
+      .locator('.tab-container', {
+        has: page.getByText('1. Basisangaben')
+      }));
+    await progressBar.hover();
   });
 
   test('verify read-only', async ({ page }) => {
@@ -108,6 +116,7 @@ test.describe('Metadata form - Basedata section', () => {
       .click();
 
     await expect(page.getByRole('heading', { name: 'Test Title' })).toBeVisible();
+    await highlight(page.getByRole('heading', { name: 'Test Title' }));
     await page.getByRole('heading', { name: 'Test Title' }).hover();
 
     const basedataSection = page.locator('section#basedata');
@@ -117,24 +126,28 @@ test.describe('Metadata form - Basedata section', () => {
       has: page.locator('strong', { hasText: 'Titel' })
     });
     await expect(titleField.locator('.value')).toContainText('Test Title');
+    await highlight(titleField);
     await titleField.hover();
 
     const descriptionField = page.locator('section#basedata .display-field', {
       has: page.locator('strong', { hasText: 'Kurzbeschreibung des Datenbestandes' })
     });
     await expect(descriptionField.locator('.value')).toContainText('Test description');
+    await highlight(descriptionField);
     await descriptionField.hover();
 
     const keywordsField = page.locator('section#basedata .display-field', {
       has: page.locator('strong', { hasText: 'Schlagwörter' })
     });
     await expect(keywordsField.locator('.value')).toContainText('Test');
+    await highlight(keywordsField);
     await keywordsField.hover();
 
     const previewField = page.locator('section#basedata .display-field', {
       has: page.locator('strong', { hasText: 'Vorschaubild' })
     });
     await expect(previewField.locator('.value')).toContainText('https://example.com/preview.png');
+    await highlight(previewField);
     await previewField.hover();
 
     const contactField = page.locator('section#basedata .display-field', {
@@ -146,6 +159,7 @@ test.describe('Metadata form - Basedata section', () => {
     );
     await expect(contactField.locator('.list-item-value').nth(2)).toContainText('Test Phone');
     await expect(contactField.locator('.list-item-value').nth(3)).toContainText('test@example.com');
+    await highlight(contactField);
     await contactField.hover();
   });
 

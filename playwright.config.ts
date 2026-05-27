@@ -6,7 +6,7 @@ export default defineConfig({
   workers: 1,
   use: {
     baseURL: 'https://sensw-geoportal-berlin-mde.intranet.terrestris.de',
-    headless: false,
+    headless: true,
     launchOptions: {
       slowMo: 200
     }

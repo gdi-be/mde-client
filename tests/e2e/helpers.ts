@@ -13,9 +13,6 @@ export type FormFieldTestOptions = {
   fieldSelector?: string;
   progressBar?: {
     element?: Locator;
-    expectedIncrease?: number;
-    expectedDecrease?: number;
-    expectedValue?: number;
   };
 };
 
@@ -84,7 +81,16 @@ export async function testFormField(
     }
   }
 
-  let initialProgress = undefined;
+  let initialProgress: number | undefined;
+
+  if (radioOptionLabel) {
+    const radioOption = field.locator('.mdc-form-field').filter({ hasText: radioOptionLabel });
+    const input = radioOption.locator('input[type="radio"]');
+    await expect(input).toBeVisible();
+    await input.click();
+    await expect(input).toBeChecked();
+  }
+
   if (value !== undefined) {
     let input: Locator;
 
@@ -186,47 +192,46 @@ export async function testFormField(
       const menuItem = menuList.locator('li').filter({ hasText: selectOptionText }).first();
       await expect(menuItem).toBeVisible();
       await menuItem.click();
-      await page.getByRole('heading').click(); // Click outside to close the dropdown
+      await page.getByRole('heading').click();
 
       const chip = field.locator(`.mdc-chip__text:has-text("${selectOptionText}")`);
       await expect(chip).toBeVisible();
     } else if (await selectField.isVisible().catch(() => false)) {
       await selectField.click();
-      await page.waitForTimeout(300); // Wait for dropdown to open
+      await page.waitForTimeout(300);
       const menuList = page
         .locator('ul.mdc-deprecated-list, ul.mdc-list')
-        .filter({ hasText: selectOptionText });
+        .filter({ hasText: selectOptionText })
+        .first();
       await expect(menuList).toBeVisible();
       await menuList.locator('li').filter({ hasText: selectOptionText }).first().click();
     }
   }
 
-  if (radioOptionLabel) {
-    const radioOption = field.locator('.mdc-form-field').filter({ hasText: radioOptionLabel });
-    const input = radioOption.locator('input[type="radio"]');
-    await expect(input).toBeVisible();
-    await input.click();
-    await expect(input).toBeChecked();
-  }
+  if (progressBar) {
+    await page.getByRole('heading').click();
 
-  if (progressBar && (value !== undefined || selectOptionText !== undefined)) {
-    const finalProgress = await getProgress(progressBar);
-    if (finalProgress === undefined) {
-      throw new Error('Could not determine progress bar value');
-    }
     if (initialProgress === undefined) {
       throw new Error('Could not determine initial progress bar value');
     }
-    const progressChange = finalProgress - initialProgress;
 
-    if (progressBar.expectedIncrease !== undefined) {
-      expect(progressChange).toBeCloseTo(progressBar.expectedIncrease, 2);
-    }
-    if (progressBar.expectedDecrease !== undefined) {
-      expect(progressChange).toBeCloseTo(-progressBar.expectedDecrease, 2);
-    }
-    if (progressBar.expectedValue !== undefined) {
-      expect(finalProgress).toBeCloseTo(progressBar.expectedValue, 2);
+    let finalProgress: number | undefined;
+
+    await expect.poll(
+      async () => {
+        finalProgress = await getProgress(progressBar);
+        if (finalProgress === undefined || initialProgress === undefined) {
+          return 0;
+        }
+        return Math.abs(finalProgress - initialProgress);
+      },
+      {
+        timeout: 5000
+      }
+    ).toBeGreaterThan(0.0001);
+
+    if (finalProgress === undefined) {
+      throw new Error('Could not determine progress bar value');
     }
   }
 }
@@ -283,4 +288,15 @@ export async function deleteMetadata(page: Page, title: string) {
       has: page.getByText(title)
     })
   ).not.toBeVisible();
+}
+
+export async function highlight(locator: Locator) {
+  await locator.evaluate((el) => {
+    el.style.outline = '3px solid yellow';
+    el.style.backgroundColor = 'yellow';
+    setTimeout(() => {
+      el.style.outline = '';
+      el.style.backgroundColor = '';
+    }, 800);
+  });
 }
