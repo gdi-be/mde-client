@@ -110,10 +110,11 @@ test.describe('Metadata form - Services section', () => {
       .locator('.mdc-linear-progress__bar.mdc-linear-progress__primary-bar');
 
     await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(1\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('5. Dienste')
-      }));
+      })
+    );
     await progressBar.hover();
   });
 
@@ -128,19 +129,31 @@ test.describe('Metadata form - Services section', () => {
       previewUrl: 'https://example.com/wms-preview.png'
     });
 
-    const legendUrlInput = page.locator('.legend-fieldset .legend-text-fields .field-wrapper').first().locator('input');
+    const legendUrlInput = page
+      .locator('.legend-fieldset .legend-text-fields .field-wrapper')
+      .first()
+      .locator('input');
     await legendUrlInput.fill('https://example.com/wms-legend.png');
     await legendUrlInput.evaluate((el) => (el as HTMLElement).blur());
 
-    const legendFormatInput = page.locator('.legend-fieldset .legend-text-fields .field-wrapper').nth(1).locator('input');
+    const legendFormatInput = page
+      .locator('.legend-fieldset .legend-text-fields .field-wrapper')
+      .nth(1)
+      .locator('input');
     await legendFormatInput.fill('image/png');
     await legendFormatInput.evaluate((el) => (el as HTMLElement).blur());
 
-    const legendWidthInput = page.locator('.legend-fieldset .legend-size-fields .field-wrapper').first().locator('input');
+    const legendWidthInput = page
+      .locator('.legend-fieldset .legend-size-fields .field-wrapper')
+      .first()
+      .locator('input');
     await legendWidthInput.fill('200');
     await legendWidthInput.evaluate((el) => (el as HTMLElement).blur());
 
-    const legendHeightInput = page.locator('.legend-fieldset .legend-size-fields .field-wrapper').nth(1).locator('input');
+    const legendHeightInput = page
+      .locator('.legend-fieldset .legend-size-fields .field-wrapper')
+      .nth(1)
+      .locator('input');
     await legendHeightInput.fill('200');
     await legendHeightInput.evaluate((el) => (el as HTMLElement).blur());
 
@@ -191,26 +204,38 @@ test.describe('Metadata form - Services section', () => {
       checkForCopy: true
     });
 
-    await testFormField(page, '.layers-form .layer-short-description-field:has(legend:has-text("Kurzbeschreibung"))', {
-      label: 'Kurzbeschreibung',
-      value: 'Test WMS Layer Description',
-      checkForHelp: true,
-      checkForCopy: true
-    });
+    await testFormField(
+      page,
+      '.layers-form .layer-short-description-field:has(legend:has-text("Kurzbeschreibung"))',
+      {
+        label: 'Kurzbeschreibung',
+        value: 'Test WMS Layer Description',
+        checkForHelp: true,
+        checkForCopy: true
+      }
+    );
 
-    await testFormField(page, '.layers-form .layer-short-description-field:has(legend:has-text("Ablageort der Daten"))', {
-      label: 'Ablageort der Daten',
-      value: 'https://example.com/wms/datasource',
-      checkForHelp: true,
-      checkForCopy: true
-    });
+    await testFormField(
+      page,
+      '.layers-form .layer-short-description-field:has(legend:has-text("Ablageort der Daten"))',
+      {
+        label: 'Ablageort der Daten',
+        value: 'https://example.com/wms/datasource',
+        checkForHelp: true,
+        checkForCopy: true
+      }
+    );
 
-    await testFormField(page, '.layers-form .layer-short-description-field:has(legend:has-text("Sekundäre Datenhaltung"))', {
-      label: 'Sekundäre Datenhaltung',
-      value: 'https://example.com/wms/secondary-datasource',
-      checkForHelp: true,
-      checkForCopy: true
-    });
+    await testFormField(
+      page,
+      '.layers-form .layer-short-description-field:has(legend:has-text("Sekundäre Datenhaltung"))',
+      {
+        label: 'Sekundäre Datenhaltung',
+        value: 'https://example.com/wms/secondary-datasource',
+        checkForHelp: true,
+        checkForCopy: true
+      }
+    );
 
     const progressBar = page
       .locator('.tab-container', {
@@ -219,10 +244,11 @@ test.describe('Metadata form - Services section', () => {
       .locator('.mdc-linear-progress__bar.mdc-linear-progress__primary-bar');
 
     await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(1\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('5. Dienste')
-      }));
+      })
+    );
     await progressBar.hover();
   });
 
@@ -234,7 +260,7 @@ test.describe('Metadata form - Services section', () => {
       serviceTitle: 'Test WFS Service Title',
       serviceDescription: 'Test WFS Service Description',
       serviceId: 'TestWFSIdentifier',
-      previewUrl: 'https://example.com/wfs-preview.png',
+      previewUrl: 'https://example.com/wfs-preview.png'
     });
 
     await expect(page.locator('.featuretypes-form')).toBeVisible({ timeout: 10000 });
@@ -296,10 +322,11 @@ test.describe('Metadata form - Services section', () => {
       .locator('.mdc-linear-progress__bar.mdc-linear-progress__primary-bar');
 
     await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(1\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('5. Dienste')
-      }));
+      })
+    );
     await progressBar.hover();
   });
 

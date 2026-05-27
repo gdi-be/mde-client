@@ -33,19 +33,27 @@ test.describe('Metadata form - Additional section', () => {
     await page.getByRole('button', { name: '4. Weitere Angaben' }).click();
     await expect(page.locator('section#additional')).toBeVisible();
 
-    await testFormField(page, 'section#additional .technical-description-field:has(legend:has-text("Inhaltliche Beschreibung"))', {
-      label: 'Inhaltliche Beschreibung',
-      value: 'Dies ist eine inhaltliche Beschreibung',
-      checkForHelp: true,
-      checkForCopy: true
-    });
+    await testFormField(
+      page,
+      'section#additional .technical-description-field:has(legend:has-text("Inhaltliche Beschreibung"))',
+      {
+        label: 'Inhaltliche Beschreibung',
+        value: 'Dies ist eine inhaltliche Beschreibung',
+        checkForHelp: true,
+        checkForCopy: true
+      }
+    );
 
-    await testFormField(page, 'section#additional .technical-description-field:has-text("Technische Beschreibung")', {
-      label: 'Technische Beschreibung',
-      value: 'Dies ist eine technische Beschreibung',
-      checkForHelp: true,
-      checkForCopy: true
-    });
+    await testFormField(
+      page,
+      'section#additional .technical-description-field:has-text("Technische Beschreibung")',
+      {
+        label: 'Technische Beschreibung',
+        value: 'Dies ist eine technische Beschreibung',
+        checkForHelp: true,
+        checkForCopy: true
+      }
+    );
 
     const addLineageButton = page.getByTitle('Daten hinzufügen');
     await expect(addLineageButton).toBeVisible();
@@ -79,13 +87,14 @@ test.describe('Metadata form - Additional section', () => {
 
     await page.getByRole('heading').click();
 
-
     const addContentDescriptionButton = page.getByTitle('Information hinzufügen');
     await expect(addContentDescriptionButton).toBeVisible();
     await addContentDescriptionButton.click();
 
     const contentDescriptionField = page.locator('.contentDescriptions-field');
-    const contentDescriptionFieldset = contentDescriptionField.locator('fieldset.contentDescription').first();
+    const contentDescriptionFieldset = contentDescriptionField
+      .locator('fieldset.contentDescription')
+      .first();
     await expect(contentDescriptionFieldset).toBeVisible();
 
     const descriptionInput = contentDescriptionFieldset.locator('input[type="text"]').first();
@@ -97,10 +106,11 @@ test.describe('Metadata form - Additional section', () => {
     await urlInput.evaluate((el) => (el as HTMLElement).blur());
 
     await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(1\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('4. Weitere Angaben')
-      }));
+      })
+    );
     await progressBar.hover();
   });
 
@@ -140,8 +150,12 @@ test.describe('Metadata form - Additional section', () => {
       has: page.locator('strong', { hasText: 'Herkunft der Daten' })
     });
     await expect(lineageField).toBeVisible();
-    await expect(lineageField.locator('.list-item-value').nth(0)).toContainText('Test Lineage Title');
-    await expect(lineageField.locator('.list-item-value').nth(1)).toContainText('2026-01-01T00:00:00Z');
+    await expect(lineageField.locator('.list-item-value').nth(0)).toContainText(
+      'Test Lineage Title'
+    );
+    await expect(lineageField.locator('.list-item-value').nth(1)).toContainText(
+      '2026-01-01T00:00:00Z'
+    );
     await expect(lineageField.locator('.list-item-value').nth(2)).toContainText('Test Identifier');
     await highlight(lineageField);
     await lineageField.hover();
@@ -150,9 +164,15 @@ test.describe('Metadata form - Additional section', () => {
       has: page.locator('strong', { hasText: 'Weitere Informationen' })
     });
     await expect(additionalInformationField).toBeVisible();
-    await expect(additionalInformationField.locator('.list-item-value').nth(0)).toContainText('Test Information Title');
-    await expect(additionalInformationField.locator('.list-item-value').nth(1)).toContainText('Information');
-    await expect(additionalInformationField.locator('.list-item-value').nth(2)).toContainText('https://example.com/info');
+    await expect(additionalInformationField.locator('.list-item-value').nth(0)).toContainText(
+      'Test Information Title'
+    );
+    await expect(additionalInformationField.locator('.list-item-value').nth(1)).toContainText(
+      'Information'
+    );
+    await expect(additionalInformationField.locator('.list-item-value').nth(2)).toContainText(
+      'https://example.com/info'
+    );
     await highlight(additionalInformationField);
     await additionalInformationField.hover();
   });

@@ -34,10 +34,11 @@ test.describe('Metadata form - Temp and Spatial section', () => {
     await expect(page.locator('section#temp_and_spatial')).toBeVisible();
 
     await expect(progressBar).not.toHaveAttribute('style', /transform: scaleX\(1\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('3. Zeitliche und Räumliche Angaben')
-      }));
+      })
+    );
     await progressBar.hover();
 
     await testFormField(page, '.date-time-field:has(input[name="isoMetadata.created"])', {
@@ -47,7 +48,7 @@ test.describe('Metadata form - Temp and Spatial section', () => {
       checkForCopy: true
     });
 
-    await testFormField(page,'.date-time-field:has(input[name="isoMetadata.published"])', {
+    await testFormField(page, '.date-time-field:has(input[name="isoMetadata.published"])', {
       label: 'Veröffentlichungsdatum',
       value: '2026-01-01',
       checkForHelp: true,
@@ -81,19 +82,27 @@ test.describe('Metadata form - Temp and Spatial section', () => {
     const validToInput = validityRangeField.locator('input[type="date"]').last();
     await validToInput.fill('2025-12-31');
 
-    await testFormField(page, 'section#temp_and_spatial .title-field:has(legend:has-text("geliefertes Koordinatensystem"))', {
-      label: 'geliefertes Koordinatensystem',
-      value: 'EPSG:25833',
-      checkForHelp: true,
-      checkForCopy: true
-    });
+    await testFormField(
+      page,
+      'section#temp_and_spatial .title-field:has(legend:has-text("geliefertes Koordinatensystem"))',
+      {
+        label: 'geliefertes Koordinatensystem',
+        value: 'EPSG:25833',
+        checkForHelp: true,
+        checkForCopy: true
+      }
+    );
 
-    await testFormField(page, 'section#temp_and_spatial .title-field:has(legend:has-text("abzugebendes Koordinatensystem"))', {
-      label: 'abzugebendes Koordinatensystem',
-      selectOptionText: 'EPSG:4326',
-      checkForHelp: true,
-      checkForCopy: true
-    });
+    await testFormField(
+      page,
+      'section#temp_and_spatial .title-field:has(legend:has-text("abzugebendes Koordinatensystem"))',
+      {
+        label: 'abzugebendes Koordinatensystem',
+        selectOptionText: 'EPSG:4326',
+        checkForHelp: true,
+        checkForCopy: true
+      }
+    );
 
     const extentField = page.locator('.extent-field');
     await expect(extentField).toBeVisible();
@@ -109,15 +118,19 @@ test.describe('Metadata form - Temp and Spatial section', () => {
 
     await page.getByRole('button', { name: 'Berlin' }).click();
 
-    await testFormField(page, 'section#temp_and_spatial .title-field:has(legend:has-text("Räumliche Auflösung"))', {
-      label: 'Räumliche Auflösung',
-      radioOptionLabel: 'Bodenauflösung in Metern',
-      value: 10,
-      checkForHelp: true,
-      progressBar: {
-        element: progressBar
+    await testFormField(
+      page,
+      'section#temp_and_spatial .title-field:has(legend:has-text("Räumliche Auflösung"))',
+      {
+        label: 'Räumliche Auflösung',
+        radioOptionLabel: 'Bodenauflösung in Metern',
+        value: 10,
+        checkForHelp: true,
+        progressBar: {
+          element: progressBar
+        }
       }
-    });
+    );
 
     await testFormField(page, '.spatial-representation-field', {
       label: 'Räumliche Darstellungsart',
@@ -127,10 +140,11 @@ test.describe('Metadata form - Temp and Spatial section', () => {
     });
 
     await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(1\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('3. Zeitliche und Räumliche Angaben')
-      }));
+      })
+    );
     await progressBar.hover();
   });
 

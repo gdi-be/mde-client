@@ -59,7 +59,7 @@ test.describe('Metadata overview page', () => {
     await highlight(page.getByRole('button', { name: 'Metadatensatz Löschen' }).first());
     await page.getByRole('button', { name: 'Metadatensatz Löschen' }).first().hover();
     await expect(page.getByRole('button', { name: 'Kommentare anzeigen' }).first()).toBeVisible();
-      await highlight(page.getByRole('button', { name: 'Kommentare anzeigen' }).first());
+    await highlight(page.getByRole('button', { name: 'Kommentare anzeigen' }).first());
     await page.getByRole('button', { name: 'Kommentare anzeigen' }).first().hover();
     await expect(page.getByRole('button', { name: 'Drucken' }).first()).toBeVisible();
     await highlight(page.getByRole('button', { name: 'Drucken' }).first());

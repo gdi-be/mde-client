@@ -217,18 +217,20 @@ export async function testFormField(
 
     let finalProgress: number | undefined;
 
-    await expect.poll(
-      async () => {
-        finalProgress = await getProgress(progressBar);
-        if (finalProgress === undefined || initialProgress === undefined) {
-          return 0;
+    await expect
+      .poll(
+        async () => {
+          finalProgress = await getProgress(progressBar);
+          if (finalProgress === undefined || initialProgress === undefined) {
+            return 0;
+          }
+          return Math.abs(finalProgress - initialProgress);
+        },
+        {
+          timeout: 5000
         }
-        return Math.abs(finalProgress - initialProgress);
-      },
-      {
-        timeout: 5000
-      }
-    ).toBeGreaterThan(0.0001);
+      )
+      .toBeGreaterThan(0.0001);
 
     if (finalProgress === undefined) {
       throw new Error('Could not determine progress bar value');

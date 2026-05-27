@@ -31,10 +31,11 @@ test.describe('Metadata form - Basedata section', () => {
     await expect(page.locator('section#basedata')).toBeVisible();
 
     await expect(progressBar).not.toHaveAttribute('style', /transform: scaleX\(1\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('1. Basisangaben')
-      }));
+      })
+    );
     await progressBar.hover();
 
     await testFormField(page, '.title-field', {
@@ -99,10 +100,11 @@ test.describe('Metadata form - Basedata section', () => {
     await page.getByRole('heading').click();
 
     await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(1\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('1. Basisangaben')
-      }));
+      })
+    );
     await progressBar.hover();
   });
 

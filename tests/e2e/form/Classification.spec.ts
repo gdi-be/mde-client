@@ -33,10 +33,11 @@ test.describe('Metadata form - Classification section', () => {
     await expect(page.locator('section#classification')).toBeVisible();
 
     await expect(progressBar).not.toHaveAttribute('style', /transform: scaleX\(1\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('2. Einordnung')
-      }));
+      })
+    );
     await progressBar.hover();
 
     await testFormField(page, '.metadata-type-field', {
@@ -89,10 +90,11 @@ test.describe('Metadata form - Classification section', () => {
 
     // TODO: The progress bar should be at 100% after filling all fields, but currently it only reaches 90%. This needs to be fixed in the implementation.
     await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(0.9\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('2. Einordnung')
-      }));;
+      })
+    );
     await progressBar.hover();
   });
 
@@ -150,10 +152,11 @@ test.describe('Metadata form - Classification section', () => {
 
     //TODO: The progress bar should be at 100% after filling all fields, but currently it only reaches 90%. This needs to be fixed in the implementation.
     await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(0.9\)/);
-    await highlight(page
-      .locator('.tab-container', {
+    await highlight(
+      page.locator('.tab-container', {
         has: page.getByText('2. Einordnung')
-      }));
+      })
+    );
     await progressBar.hover();
   });
 
