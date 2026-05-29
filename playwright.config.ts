@@ -3,10 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
-  reporter: [
-    ['list'],
-    ['html', { outputFolder: 'test-results/', open: 'never' }]
-  ],
+  reporter: [['list'], ['html', { outputFolder: 'test-results/', open: 'never' }]],
   workers: 1,
   use: {
     baseURL: 'https://sensw-geoportal-berlin-mde.intranet.terrestris.de',

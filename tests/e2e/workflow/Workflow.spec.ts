@@ -80,15 +80,21 @@ test.describe('Metadata Workflow - DataOwner', () => {
     await page.getByRole('textbox', { name: 'Suche' }).fill('Playwright');
     await page.getByRole('textbox', { name: 'Suche' }).press('Enter');
 
-    await expect(page
-      .locator('.metadata-card', {
-        has: page.getByText(title)
-      }).getByTitle('Bearbeiten')).not.toBeVisible({ timeout: 5000 });
+    await expect(
+      page
+        .locator('.metadata-card', {
+          has: page.getByText(title)
+        })
+        .getByTitle('Bearbeiten')
+    ).not.toBeVisible({ timeout: 5000 });
 
-    await expect(page
-      .locator('.metadata-card', {
-        has: page.getByText(title)
-      }).getByText('Redaktion')).toBeVisible({ timeout: 5000 });
+    await expect(
+      page
+        .locator('.metadata-card', {
+          has: page.getByText(title)
+        })
+        .getByText('Redaktion')
+    ).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -187,13 +193,15 @@ test.describe('Metadata Workflow - Editor', () => {
 
     const startButton = validationDialog
       .locator('button')
-      .filter({ hasText: "Validierung starten" })
+      .filter({ hasText: 'Validierung starten' })
       .first();
 
     await expect(startButton).toBeVisible();
     await startButton.click();
 
-    await expect(validationDialog.locator('[class*="results"], [class*="running"]')).toBeVisible({ timeout: 15000 });
+    await expect(validationDialog.locator('[class*="results"], [class*="running"]')).toBeVisible({
+      timeout: 15000
+    });
 
     await expect(page.getByText('Validierung abgeschlossen')).toBeVisible({ timeout: 15000 });
   });
@@ -230,7 +238,6 @@ test.describe('Metadata Workflow - Editor', () => {
     expect(filename).toBeTruthy();
 
     expect(filename.endsWith('.zip')).toBeTruthy();
-
   });
 
   test('Assign metadata to QualityAssurance', async ({ page }) => {
@@ -269,15 +276,21 @@ test.describe('Metadata Workflow - Editor', () => {
     await page.getByRole('textbox', { name: 'Suche' }).fill('Playwright');
     await page.getByRole('textbox', { name: 'Suche' }).press('Enter');
 
-    await expect(page
-      .locator('.metadata-card', {
-        has: page.getByText(title)
-      }).getByTitle('Bearbeiten')).not.toBeVisible({ timeout: 5000 });
+    await expect(
+      page
+        .locator('.metadata-card', {
+          has: page.getByText(title)
+        })
+        .getByTitle('Bearbeiten')
+    ).not.toBeVisible({ timeout: 5000 });
 
-    await expect(page
-      .locator('.metadata-card', {
-        has: page.getByText(title)
-      }).getByText('Qualitätssicherung')).toBeVisible({ timeout: 5000 });
+    await expect(
+      page
+        .locator('.metadata-card', {
+          has: page.getByText(title)
+        })
+        .getByText('Qualitätssicherung')
+    ).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -302,7 +315,7 @@ test.describe('Metadata Workflow - QualityAssurance', () => {
     await expect(page.getByRole('heading', { name: title })).toBeVisible();
     await highlight(page.getByRole('heading', { name: title }));
 
-    const commentsButton = page.getByRole('button', { name: 'Kommentare' })
+    const commentsButton = page.getByRole('button', { name: 'Kommentare' });
     const downloadButton = page.getByTitle('Download');
     const validateButton = page.getByTitle('Validieren');
     const assignButton = page.getByTitle('Zuweisen');
@@ -387,7 +400,7 @@ test.describe('Metadata Workflow - Administrator', () => {
     await expect(page.getByRole('heading', { name: title })).toBeVisible();
     await highlight(page.getByRole('heading', { name: title }));
 
-    const commentsButton = page.getByRole('button', { name: 'Kommentare' })
+    const commentsButton = page.getByRole('button', { name: 'Kommentare' });
     const downloadButton = page.getByTitle('Download');
     const validateButton = page.getByTitle('Validieren');
     const assignButton = page.getByTitle('Zuweisen');
