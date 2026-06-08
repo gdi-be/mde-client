@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { ValidationService, type ValidationContext } from '$lib/services/ValidationService';
 import metadata1 from './fixtures/metadata1';
 import type { FullFieldConfig } from '../src/lib/components/Form/FieldsConfig';
+import type { MetadataCollection } from '../src/lib/models/metadata';
 
 describe('ValidationService', () => {
   describe('canEditField', () => {
@@ -187,6 +188,23 @@ describe('ValidationService', () => {
       // @ts-expect-error - Testing behavior when no role is provided
       const result = ValidationService.allFieldsValid(metadata1, undefined);
       expect(result).toBe(true);
+    });
+  });
+
+  describe('getProgress', () => {
+    test('should ignore termsOfUseSource when the field is not visible', () => {
+      const metadata = {
+        ...metadata1,
+        isoMetadata: {
+          ...metadata1.isoMetadata,
+          privacy: 'PERSONAL_DATA',
+          termsOfUseId: 2,
+          termsOfUseSource: undefined
+        }
+      } as MetadataCollection;
+
+      const result = ValidationService.getProgress(metadata, 'MdeAdministrator', 'classification');
+      expect(result.progress).toBe(1);
     });
   });
 });
