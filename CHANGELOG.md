@@ -1,3 +1,10 @@
+## [6.1.12](https://github.com/gdi-be/mde-client/compare/v6.1.11...v6.1.12) (2026-06-09)
+
+
+### Bug Fixes
+
+* enhance validation logic for termsOfUseSource field ([ccee215](https://github.com/gdi-be/mde-client/commit/ccee2151966c1b18884bc4661f83bfb833b74218))
+
 ## [6.1.11](https://github.com/gdi-be/mde-client/compare/v6.1.10...v6.1.11) (2026-05-26)
 
 
