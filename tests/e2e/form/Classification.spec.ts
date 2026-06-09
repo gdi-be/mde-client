@@ -89,7 +89,7 @@ test.describe('Metadata form - Classification section', () => {
     await expect(page.locator('.quality-report-check-field')).not.toBeVisible();
 
     // TODO: The progress bar should be at 100% after filling all fields, but currently it only reaches 90%. This needs to be fixed in the implementation.
-    await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(0.9\)/);
+    await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(1\)/);
     await highlight(
       page.locator('.tab-container', {
         has: page.getByText('2. Einordnung')
@@ -151,7 +151,7 @@ test.describe('Metadata form - Classification section', () => {
       .locator('.mdc-linear-progress__bar.mdc-linear-progress__primary-bar');
 
     //TODO: The progress bar should be at 100% after filling all fields, but currently it only reaches 90%. This needs to be fixed in the implementation.
-    await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(0.9\)/);
+    await expect(progressBar).toHaveAttribute('style', /transform: scaleX\(1\)/);
     await highlight(
       page.locator('.tab-container', {
         has: page.getByText('2. Einordnung')
