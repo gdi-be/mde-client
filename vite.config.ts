@@ -41,6 +41,7 @@ export default defineConfig(({ mode }) => ({
     testTimeout: 20 * 1000,
     setupFiles: ['./tests/setup.ts'],
     dangerouslyIgnoreUnhandledErrors: true,
+    exclude: ['tests/e2e/**', 'node_modules', 'dist'],
     coverage: {
       reporter: ['text', 'lcov', 'html'],
       reportsDirectory: './coverage',

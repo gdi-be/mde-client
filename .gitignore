@@ -27,3 +27,5 @@ smui-dark.css
 # Test
 /coverage
 /html
+/test-results
+/tests/e2e/.auth
