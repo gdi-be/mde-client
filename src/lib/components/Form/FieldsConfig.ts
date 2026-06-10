@@ -526,10 +526,11 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
   {
     profileId: 26,
     key: 'isoMetadata.termsOfUseSource',
-    extraParams: ['isoMetadata.termsOfUseId'],
+    extraParams: ['isoMetadata.termsOfUseId', 'isoMetadata.privacy'],
     validator: (val, extraParams) => {
       const termsOfUseId = extraParams?.['isoMetadata.termsOfUseId'];
-      const isRequired = termsOfUseId !== 1;
+      const privacy = extraParams?.['isoMetadata.privacy'];
+      const isRequired = privacy === 'NONE' && !!termsOfUseId && termsOfUseId !== 1;
       if (isRequired && !isDefined(val)) {
         return {
           valid: false,
@@ -744,8 +745,7 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     validator: (workspace: Service['workspace'], extraParams) => {
       const highestRole = extraParams?.['HIGHEST_ROLE'] as string;
       const required = ['MdeEditor', 'MdeAdministrator'].includes(highestRole);
-      const service = extraParams?.['PARENT_VALUE'];
-      if (!required || (service?.serviceType === 'ATOM' && !isDefined(workspace))) {
+      if (!required) {
         return { valid: true };
       }
       const valid = !!(isDefined(workspace) && /^[a-zA-Z0-9_]+$/.test(workspace));

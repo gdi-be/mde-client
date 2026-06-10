@@ -304,12 +304,20 @@ vi.mock('$lib/util', async () => {
   };
 });
 
-vi.mock('@material/dom/focus-trap', () => ({
-  FocusTrap: class {
-    constructor() {}
-    trapFocus() {}
-    releaseFocus() {}
-    destroy() {}
-    handleKeydown() {}
-  }
-}));
+vi.mock('@material/dom', async () => {
+  const actual = await vi.importActual<typeof import('@material/dom')>('@material/dom');
+
+  return {
+    ...actual,
+    focusTrap: {
+      ...actual.focusTrap,
+      FocusTrap: class {
+        constructor() {}
+        trapFocus() {}
+        releaseFocus() {}
+        destroy() {}
+        handleKeydown() {}
+      }
+    }
+  };
+});

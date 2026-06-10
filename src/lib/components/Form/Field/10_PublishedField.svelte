@@ -18,8 +18,11 @@
   // should be possible after svelte is updated to the latest version
   // https://github.com/gdi-be/mde-client/pull/261
   $effect(() => {
-    if (valueFromData && !initialized) {
-      value = new Date(valueFromData).toISOString().split('T')[0];
+    if (!initialized) {
+      if (valueFromData) {
+        value = new Date(valueFromData).toISOString().split('T')[0];
+      }
+      initialized = true;
     }
   });
 
@@ -27,10 +30,12 @@
   const fieldConfig = MetadataService.getFieldConfig<string>(10);
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
-  const onBlur = async () => {
+  const onBlur = async (evt: FocusEvent) => {
+    const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
+    value = inputValue;
     const response = await MetadataService.persistValue(
       KEY,
-      value ? new Date(value!).toISOString() : ''
+      inputValue ? new Date(inputValue).toISOString() : null
     );
 
     if (response.ok) {

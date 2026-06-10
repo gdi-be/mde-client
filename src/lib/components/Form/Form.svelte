@@ -125,8 +125,16 @@
     }
   });
 
-  const getProgressTitle = (progressInfo: ProgressInfo) => {
-    let baseText = `Fortschritt: ${Math.floor(progressInfo.progress * 100)} %`;
+  const getDisplayedProgress = (section: Section, progress: number) => {
+    if (section === 'services' && progress >= 0.98 && progress < 1) {
+      return 0.98;
+    }
+    return progress;
+  };
+
+  const getProgressTitle = (section: Section, progressInfo: ProgressInfo) => {
+    const displayedProgress = getDisplayedProgress(section, progressInfo.progress);
+    let baseText = `Fortschritt: ${Math.floor(displayedProgress * 100)} %`;
     return baseText;
   };
 </script>
@@ -146,9 +154,9 @@
           <Label>{label}</Label>
         </button>
         <LinearProgress
-          progress={progressInfo.progress}
+          progress={getDisplayedProgress(section, progressInfo.progress)}
           aria-label={label + ' Fortschritt'}
-          title={getProgressTitle(progressInfo)}
+          title={getProgressTitle(section, progressInfo)}
         />
       </div>
       {#if i + 1 < SECTIONS.length}

@@ -24,6 +24,7 @@
     explanation,
     fieldConfig,
     validationResult,
+    onblur,
     ...restProps
   }: InputProps = $props();
 
@@ -66,7 +67,11 @@
     type="date"
     id={key}
     name={key}
-    bind:value={() => value?.split('T')[0] || '', (v) => (value = v)}
+    bind:value
+    onblur={(evt) => {
+      value = (evt.currentTarget as HTMLInputElement).value;
+      onblur?.(evt);
+    }}
     {...restProps}
   />
   <div class="field-footer">
