@@ -54,7 +54,7 @@ jobs:
       - name: Generate SBOM for Docker image
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main@sha256-${{ github.sha }}
           format: spdx-json
           output-file: sbom.spdx.json
 
