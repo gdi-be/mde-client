@@ -61,7 +61,7 @@
 
 <fieldset class={['select-input', wrapperClass, isInvalid && 'invalid']}>
   <legend>{label}</legend>
-  <Select bind:value {disabled} menu$anchorElement={document.body} {...restProps}>
+  <Select bind:value {disabled} {...restProps}>
     {#each options as option (option.key)}
       <SelectOption
         onSMUIAction={() => {

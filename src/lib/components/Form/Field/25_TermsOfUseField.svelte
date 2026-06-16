@@ -1,3 +1,9 @@
+<script module lang="ts">
+  import type { TermsOfUse } from '$lib/models/metadata';
+
+  const optionsPromises = new Map<string, Promise<TermsOfUse[]>>();
+</script>
+
 <script lang="ts">
   import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
@@ -17,6 +23,8 @@
   const { getValue } = getFormContext();
   const value = $derived(getValue<number>(KEY));
   const privacy = $derived(getValue<Privacy>(PRIVACY_KEY));
+  let options = $state<Option[]>([]);
+  let isLoading = $state(false);
 
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<number>(25);
@@ -24,22 +32,62 @@
 
   const fetchOptions = async () => {
     const url = privacy !== 'NONE' ? '/data/terms_of_use_privacy' : '/data/terms_of_use';
-    const response = await fetch(url);
 
-    if (!response.ok) {
-      toast.error(t('general.error_fetch_options'));
-      return [];
+    let optionsPromise = optionsPromises.get(url);
+    if (!optionsPromise) {
+      optionsPromise = (async () => {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          optionsPromises.delete(url);
+          toast.error(t('general.error_fetch_options'));
+          return [];
+        }
+
+        const data: TermsOfUse[] = await response.json();
+        data.sort((a, b) => {
+          if (a.active === b.active) {
+            return a.shortname.localeCompare(b.shortname);
+          }
+          return a.active ? -1 : 1;
+        });
+        return data;
+      })();
+
+      optionsPromises.set(url, optionsPromise);
     }
 
-    const data: TermsOfUse[] = await response.json();
-    data.sort((a, b) => {
-      if (a.active === b.active) {
-        return a.shortname.localeCompare(b.shortname);
-      }
-      return a.active ? -1 : 1;
-    });
-    return data;
+    return optionsPromise;
   };
+
+  $effect(() => {
+    privacy;
+
+    let isActive = true;
+    isLoading = true;
+
+    fetchOptions()
+      .then((data) => {
+        if (!isActive) return;
+
+        options = data.map(
+          (item: TermsOfUse): Option => ({
+            key: item.id.toString(),
+            label: item.shortname,
+            description: item.description,
+            disabled: !item.active
+          })
+        );
+      })
+      .finally(() => {
+        if (!isActive) return;
+        isLoading = false;
+      });
+
+    return () => {
+      isActive = false;
+    };
+  });
 
   const onChange = async (newValue: string) => {
     const response = await MetadataService.persistValue(KEY, Number(newValue));
@@ -50,28 +98,22 @@
 </script>
 
 <div class="terms-of-use-field">
-  {#await fetchOptions()}
-    <p>{t('general.loading_options')}</p>
-  {:then OPTIONS}
-    <div class="input-wrapper">
+  <div class="input-wrapper">
+    {#if options.length > 0}
       <SelectInput
         label={t('25_TermsOfUseField.label')}
         explanation={t('25_TermsOfUseField.explanation')}
         fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
-        options={OPTIONS.map(
-          (item: TermsOfUse): Option => ({
-            key: item.id.toString(),
-            label: item.shortname,
-            disabled: !item.active,
-            description: item.description
-          })
-        )}
+        options={options}
         value={value?.toString()}
         {onChange}
         {validationResult}
       />
-    </div>
-  {/await}
+    {/if}
+    {#if isLoading}
+      <p class="loading-options">{t('general.loading_options')}</p>
+    {/if}
+  </div>
   <FieldTools key={KEY} {fieldConfig} bind:checkMarkAnmiationRunning={showCheckmark} />
 </div>
 
@@ -85,8 +127,12 @@
     display: flex;
     gap: 0.25em;
 
-    :global(.input-wrapper) {
+    .input-wrapper {
       flex: 1;
+    }
+
+    .loading-options {
+      margin: 0.5em 0 0;
     }
   }
 </style>
