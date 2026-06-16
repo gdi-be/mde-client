@@ -29,6 +29,14 @@
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<number>(25);
   let validationResult = $derived(fieldConfig?.validator(value));
+  const selectedValue = $derived.by(() => {
+    const stringValue = value?.toString();
+    if (!stringValue || isLoading) {
+      return undefined;
+    }
+
+    return options.some((option) => option.key === stringValue) ? stringValue : undefined;
+  });
 
   const fetchOptions = async () => {
     const url = privacy !== 'NONE' ? '/data/terms_of_use_privacy' : '/data/terms_of_use';
@@ -105,7 +113,7 @@
         explanation={t('25_TermsOfUseField.explanation')}
         fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
         options={options}
-        value={value?.toString()}
+        value={selectedValue}
         {onChange}
         {validationResult}
       />
