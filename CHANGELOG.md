@@ -1,3 +1,31 @@
+## [6.2.1](https://github.com/gdi-be/mde-client/compare/v6.2.0...v6.2.1) (2026-06-18)
+
+
+### Bug Fixes
+
+* add provenance flag ([3d6d8c1](https://github.com/gdi-be/mde-client/commit/3d6d8c1442631afb4ce3fded0d09237f05fdafe6))
+* add sbom flag ([264bc92](https://github.com/gdi-be/mde-client/commit/264bc928bd2353914b02746393c8d9a267662a44))
+* apply patch for date inputs ([#29039](https://github.com/gdi-be/mde-client/issues/29039)) ([f93fef5](https://github.com/gdi-be/mde-client/commit/f93fef5f53dd5e59a0b3d1d2a8846df8d9060938))
+* enhance validation logic for termsOfUseSource field ([f9bd330](https://github.com/gdi-be/mde-client/commit/f9bd330b01f7b08c32f61037cdfa31dfa9591409))
+* exclude e2e-tests from vitest runs ([dc067b7](https://github.com/gdi-be/mde-client/commit/dc067b7e28f64b0005b1d2ead0c79fa2eba402be))
+* filter out duplicate ISO categories ([a563d48](https://github.com/gdi-be/mde-client/commit/a563d4816a022bdaf4c4ded582f052b8e31ff7f7))
+* fix readonly issues ([c53e4a4](https://github.com/gdi-be/mde-client/commit/c53e4a4bb29dc6de721cbc6316258cef13cb3eee))
+* fix sbom generation ([a5af968](https://github.com/gdi-be/mde-client/commit/a5af9680064a8b770a3f44b2730386025b3555ef))
+* fix sbom generation ([066fe25](https://github.com/gdi-be/mde-client/commit/066fe254546eadfcded29418275f7c8e5fcdfca5))
+* fix sbom generation ([c8648f3](https://github.com/gdi-be/mde-client/commit/c8648f3822f17e4f96ea89ccfced05dc00dbb902))
+* fix sbom generation ([cf51540](https://github.com/gdi-be/mde-client/commit/cf515405a3682a0a8a4874f852625edd06ffa07c))
+* fix sbom generation ([a007c74](https://github.com/gdi-be/mde-client/commit/a007c745bda58a30755fc68190b324fb0a42b635))
+* format ([e94c245](https://github.com/gdi-be/mde-client/commit/e94c24536d4797d4698b03f8db99b17a2c929d59))
+* format config ([c08fefd](https://github.com/gdi-be/mde-client/commit/c08fefd43be074f2a95493395a48f5df0f84a2f3))
+* format test files ([045f52c](https://github.com/gdi-be/mde-client/commit/045f52c7b6529ccfedfb40c043935463381fff6f))
+* linting issues ([9495ffe](https://github.com/gdi-be/mde-client/commit/9495ffe73c9518e2920fc569440fb0b008740b3c))
+* make atom service ID a required field ([#29499](https://github.com/gdi-be/mde-client/issues/29499)) ([592ae63](https://github.com/gdi-be/mde-client/commit/592ae632e10dc0b379a3f938394580e67c508f2b))
+* only show terms of use source for privacy free datasets ([ff82120](https://github.com/gdi-be/mde-client/commit/ff821204427345094bd58a485bd6a808c1f8b65c))
+* refine assignment logic to include user context for editors and QA roles ([66e0f6d](https://github.com/gdi-be/mde-client/commit/66e0f6d548ad63a991d2e834cd9c2935151cedd2))
+* remove unneeded test files ([9cbfe38](https://github.com/gdi-be/mde-client/commit/9cbfe380cfe60d4b0ae5bc04eebb15b030efaef3))
+* update bun to latest version ([f621074](https://github.com/gdi-be/mde-client/commit/f621074ab45e2f7b7999106d8bf9ae8b34049285))
+* update progress display logic for services section ([5c86eb4](https://github.com/gdi-be/mde-client/commit/5c86eb4476f1d1d8a70322fc2ce3fbb58d820b92))
+
 # [6.2.0](https://github.com/gdi-be/mde-client/compare/v6.1.2...v6.2.0) (2026-03-18)
 
 
