@@ -65,7 +65,7 @@ jobs:
       - name: Generate SBOM for Docker image
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:{{ steps.semantic-release.outputs.new_release_version }}
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.semantic-release.outputs.new_release_version }}
           format: spdx-json
           output-file: sbom.spdx.json
 
