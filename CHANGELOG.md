@@ -1,3 +1,10 @@
+## [6.2.2](https://github.com/gdi-be/mde-client/compare/v6.2.1...v6.2.2) (2026-06-19)
+
+
+### Bug Fixes
+
+* fix sbom generation for release ([605e2aa](https://github.com/gdi-be/mde-client/commit/605e2aa0267a7252692e20a36f981dfb40240cac))
+
 ## [6.2.1](https://github.com/gdi-be/mde-client/compare/v6.2.0...v6.2.1) (2026-06-19)
 
 
