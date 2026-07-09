@@ -112,7 +112,7 @@
         label={t('25_TermsOfUseField.label')}
         explanation={t('25_TermsOfUseField.explanation')}
         fieldConfig={fieldConfig as unknown as FullFieldConfig<string>}
-        options={options}
+        {options}
         value={selectedValue}
         {onChange}
         {validationResult}
