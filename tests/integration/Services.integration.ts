@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { fetchMock, setMockMetadataId, setMockRoles } from '../setup';
+import { fetchMock, resetTestMetadata, setMockMetadataId, setMockRoles } from '../setup';
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
@@ -15,6 +15,7 @@ export async function testServices(role: string) {
     beforeEach(async () => {
       setMockMetadataId('a723e625-815c-4553-93bf-2fb62bb623d4');
       setMockRoles([role]);
+      resetTestMetadata(metadata3);
 
       render(FormHarness, {
         props: {
@@ -462,12 +463,6 @@ export async function testServices(role: string) {
 
       describe('47_ServiceLegendImage', () => {
         beforeEach(async () => {
-          render(FormHarness, {
-            props: {
-              metadata: structuredClone(metadata3)
-            }
-          });
-
           const fieldset = await waitFor(() => {
             const el = document.querySelector('.service-type-field');
             expect(el).toBeInTheDocument();

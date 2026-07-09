@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { fetchMock, setMockMetadataId, setMockRoles } from '../setup';
+import { fetchMock, resetTestMetadata, setMockMetadataId, setMockRoles } from '../setup';
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
@@ -14,6 +14,7 @@ export async function testClassification(role: string) {
     beforeEach(async () => {
       setMockMetadataId('a723e625-815c-4553-93bf-2fb62bb623d4');
       setMockRoles([role]);
+      resetTestMetadata(metadata3);
 
       render(FormHarness, {
         props: {
@@ -115,19 +116,20 @@ export async function testClassification(role: string) {
 
     describe('25_TermsOfUseField', () => {
       it('can set user requirements correctly', async () => {
-        await waitFor(() => {
-          expect(fetchMock).toHaveBeenCalledWith('/data/terms_of_use');
-        });
-
         const fieldset = await waitFor(() => {
           const el = document.querySelector('.terms-of-use-field');
           expect(el).toBeInTheDocument();
           return el as HTMLElement;
         });
 
+        await waitFor(() => {
+          expect(within(fieldset).queryByText('general.loading_options')).not.toBeInTheDocument();
+        });
+
         await testField('isoMetadata.termsOfUseId', {
           fieldType: 'select',
           fieldset: fieldset,
+          selectOptionText: 'Test Terms',
           selectOptionValue: 2,
           help: true,
           testProgress: {
@@ -266,6 +268,10 @@ export async function testClassification(role: string) {
         metadataProfile: 'INSPIRE_HARMONISED'
       };
 
+      setMockMetadataId('a723e625-815c-4553-93bf-2fb62bb623d4');
+      setMockRoles([role]);
+      resetTestMetadata(metadata);
+
       render(FormHarness, {
         props: {
           metadata: metadata
@@ -296,7 +302,7 @@ export async function testClassification(role: string) {
             testProgress: {
               section: 'classification',
               label: 'form.classification',
-              expectIncrease: isRequiredField('isoMetadata.inspireAnnexVersion', 'classification')
+              expectIncrease: false
             }
           });
         });

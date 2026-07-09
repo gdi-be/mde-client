@@ -6,7 +6,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
-import { setMockMetadataId, setMockRoles } from '../setup';
+import { resetTestMetadata, setMockMetadataId, setMockRoles } from '../setup';
 import { tick } from 'svelte';
 
 export async function testAdditional(role: string) {
@@ -14,6 +14,7 @@ export async function testAdditional(role: string) {
     beforeEach(async () => {
       setMockMetadataId('a723e625-815c-4553-93bf-2fb62bb623d4');
       setMockRoles([role]);
+      resetTestMetadata(metadata3);
 
       render(FormHarness, {
         props: {
