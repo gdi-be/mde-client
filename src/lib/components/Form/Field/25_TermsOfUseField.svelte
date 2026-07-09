@@ -1,7 +1,8 @@
 <script module lang="ts">
+  import { SvelteMap } from 'svelte/reactivity';
   import type { TermsOfUse } from '$lib/models/metadata';
 
-  const optionsPromises = new Map<string, Promise<TermsOfUse[]>>();
+  const optionsPromises = new SvelteMap<string, Promise<TermsOfUse[]>>();
 </script>
 
 <script lang="ts">
@@ -38,8 +39,8 @@
     return options.some((option) => option.key === stringValue) ? stringValue : undefined;
   });
 
-  const fetchOptions = async () => {
-    const url = privacy !== 'NONE' ? '/data/terms_of_use_privacy' : '/data/terms_of_use';
+  const fetchOptions = async (selectedPrivacy: Privacy | undefined) => {
+    const url = selectedPrivacy !== 'NONE' ? '/data/terms_of_use_privacy' : '/data/terms_of_use';
 
     let optionsPromise = optionsPromises.get(url);
     if (!optionsPromise) {
@@ -69,12 +70,12 @@
   };
 
   $effect(() => {
-    privacy;
+    const selectedPrivacy = privacy;
 
     let isActive = true;
     isLoading = true;
 
-    fetchOptions()
+    fetchOptions(selectedPrivacy)
       .then((data) => {
         if (!isActive) return;
 
