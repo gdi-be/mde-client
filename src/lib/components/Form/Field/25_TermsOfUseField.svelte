@@ -9,7 +9,7 @@
   import FieldTools from '../FieldTools.svelte';
   import SelectInput from '../Inputs/SelectInput.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
-  import type { Privacy, TermsOfUse } from '$lib/models/metadata';
+  import type { Privacy } from '$lib/models/metadata';
   import type { Option } from '$lib/models/form';
   import type { FullFieldConfig } from '../FieldsConfig';
   import { toast } from 'svelte-french-toast';
