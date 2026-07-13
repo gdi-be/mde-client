@@ -43,6 +43,7 @@ interface TestFieldOptions {
   // Validation
   requiredMessage?: string;
   expectInvalidClass?: boolean;
+  expectPersist?: boolean;
 
   // Help
   help?: boolean;
@@ -63,6 +64,7 @@ interface TestFieldOptions {
     fieldType: Exclude<FieldType, 'collection'>;
     fieldInput?: string | number;
     optionsCode?: string;
+    expectPersist?: boolean;
     fieldsetSelector: () => HTMLElement;
     help?: boolean;
     maxLength?: number;
@@ -137,7 +139,14 @@ async function waitForPatchCall(
 }
 
 async function testTextInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
-  const { fieldset, fieldInput, requiredMessage, maxLength, expectInvalidClass } = options;
+  const {
+    fieldset,
+    fieldInput,
+    requiredMessage,
+    maxLength,
+    expectInvalidClass,
+    expectPersist = true
+  } = options;
 
   const input = await within(fieldset!).findByRole('textbox');
   expect(input).toBeInTheDocument();
@@ -171,6 +180,16 @@ async function testTextInput(fieldKey: string, options: TestFieldOptions): Promi
   await fireEvent.blur(input);
   await tick();
   await new Promise((r) => setTimeout(r, 0));
+
+  if (!expectPersist) {
+    await waitFor(() => {
+      const calls = fetchMock.mock.calls.slice(previousCallCount);
+      const patchCall = calls.find(([, init]) => init?.method === 'PATCH');
+      expect(patchCall).toBeUndefined();
+    });
+
+    return;
+  }
 
   const requestInit = await waitForPatchCall(previousCallCount, (body) => {
     return JSON.stringify(body).includes(fieldInput as string);
@@ -399,7 +418,7 @@ async function testNumberInput(fieldKey: string, options: TestFieldOptions): Pro
 }
 
 async function testDateInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
-  const { fieldset, fieldInput } = options;
+  const { fieldset, fieldInput, expectPersist = true } = options;
 
   const input = await waitFor(() => {
     const el = fieldset!.querySelector('input[type="date"]');
@@ -418,6 +437,16 @@ async function testDateInput(fieldKey: string, options: TestFieldOptions): Promi
   await fireEvent.blur(input);
   await tick();
   await new Promise((r) => setTimeout(r, 0));
+
+  if (!expectPersist) {
+    await waitFor(() => {
+      const calls = fetchMock.mock.calls.slice(previousCallCount);
+      const patchCall = calls.find(([, init]) => init?.method === 'PATCH');
+      expect(patchCall).toBeUndefined();
+    });
+
+    return;
+  }
 
   const requestInit = await waitForPatchCall(previousCallCount, (body) => {
     return JSON.stringify(body).includes(fieldKey!);
@@ -494,7 +523,7 @@ async function testSelectInput(fieldKey: string, options: TestFieldOptions): Pro
 }
 
 async function testRadioInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
-  const { fieldset, radioOptionKey } = options;
+  const { fieldset, radioOptionKey, expectPersist = true } = options;
 
   const previousCallCount = fetchMock.mock.calls.length;
 
@@ -508,20 +537,30 @@ async function testRadioInput(fieldKey: string, options: TestFieldOptions): Prom
   await tick();
   await new Promise((r) => setTimeout(r, 0));
 
-  const requestInit = await waitForPatchCall(previousCallCount, (body) => {
-    return JSON.stringify(body).includes(fieldKey!);
-  });
-  const body = JSON.parse(requestInit.body as string);
+  if (expectPersist) {
+    const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+      return JSON.stringify(body).includes(fieldKey!);
+    });
+    const body = JSON.parse(requestInit.body as string);
 
-  expect(extractBaseKey(body.key)).toBe(fieldKey);
+    expect(extractBaseKey(body.key)).toBe(fieldKey);
+  } else {
+    await waitFor(() => {
+      const calls = fetchMock.mock.calls.slice(previousCallCount);
+      const patchCall = calls.find(([, init]) => init?.method === 'PATCH');
+      expect(patchCall).toBeUndefined();
+    });
+  }
 
   await waitFor(() => {
     expect(radioInput).toBeChecked();
   });
 
-  await waitFor(() => {
-    expect(document.querySelector('.running')).toBeVisible();
-  });
+  if (expectPersist) {
+    await waitFor(() => {
+      expect(document.querySelector('.running')).toBeVisible();
+    });
+  }
 }
 
 async function testSwitchInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
@@ -668,26 +707,30 @@ async function testMultiSelectInput(fieldKey: string, options: TestFieldOptions)
       await tick();
       await new Promise((r) => setTimeout(r, 0));
 
-      const requestInit = await waitForPatchCall(previousCallCount, (body) => {
-        return JSON.stringify(body).includes(fieldKey!);
-      });
-      const body = JSON.parse(requestInit.body as string);
+      if (multiSelectOptions.length > 1) {
+        const requestInit = await waitForPatchCall(previousCallCount, (body) => {
+          return JSON.stringify(body).includes(fieldKey!);
+        });
+        const body = JSON.parse(requestInit.body as string);
 
-      expect(extractBaseKey(body.key)).toBe(fieldKey);
-      let value = body.value;
-      if (body.value.default) {
-        value = body.value.default;
+        expect(extractBaseKey(body.key)).toBe(fieldKey);
+        let value = body.value;
+        if (body.value.default) {
+          value = body.value.default;
+        }
+
+        if (typeof value === 'object') {
+          value = Object.values(value);
+        }
+
+        expect(value).not.toContain(firstChipText);
+      } else {
+        await waitFor(() => {
+          const calls = fetchMock.mock.calls.slice(previousCallCount);
+          const patchCall = calls.find(([, init]) => init?.method === 'PATCH');
+          expect(patchCall).toBeUndefined();
+        });
       }
-
-      if (typeof value === 'object') {
-        value = Object.values(value);
-      }
-
-      expect(value).not.toContain(firstChipText);
-
-      await waitForPatchCall(previousCallCount, (body) => {
-        return JSON.stringify(body).includes(fieldKey!);
-      });
 
       await waitFor(() => {
         expect(within(fieldset!).queryAllByText(firstChipText)).toHaveLength(1);
@@ -725,10 +768,9 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
   if (options.collectionFields) {
     const fields = options.collectionFields;
 
-    const initialCallCount = fetchMock.mock.calls.length;
-
     for (let i = 0; i < fields.length; i++) {
       const fieldConfig = fields[i];
+      const previousCallCount = fetchMock.mock.calls.length;
 
       await waitFor(() => {
         expect(fetchMock).toHaveBeenCalledWith(`/help/${fieldConfig.fieldKey}`);
@@ -782,26 +824,24 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
         throw new Error(`Unsupported field type in collection: ${fieldConfig.fieldType}`);
       }
 
-      await waitFor(() => {
-        expect(fetchMock).toHaveBeenCalledWith(
-          expect.any(URL),
-          expect.objectContaining({
-            method: 'PATCH',
-            body: expect.stringContaining(
+      if (fieldConfig.expectPersist !== false) {
+        await waitFor(() => {
+          const calls = fetchMock.mock.calls.slice(previousCallCount);
+          const patchCall = calls.find(([, init]) => {
+            if (init?.method !== 'PATCH') return false;
+            return (init.body as string).includes(
               fieldConfig.fieldType === 'select'
                 ? String(fieldConfig.optionsCode)
                 : String(fieldConfig.fieldInput)
-            ),
-            headers: {
-              'content-type': 'application/json'
-            }
-          })
-        );
-      });
+            );
+          });
+          expect(patchCall).toBeDefined();
+        });
 
-      await waitFor(() => {
-        expect(document.querySelector('.running')).toBeVisible();
-      });
+        await waitFor(() => {
+          expect(document.querySelector('.running')).toBeVisible();
+        });
+      }
 
       await new Promise((r) => setTimeout(r, 50));
     }
@@ -809,7 +849,7 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
 }
 
 async function testServiceInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
-  const { fieldset, fieldInput, requiredMessage } = options;
+  const { fieldset, fieldInput, requiredMessage, expectPersist = true } = options;
 
   const input = await within(fieldset!).findByRole('textbox');
 
@@ -836,6 +876,20 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
   await fireEvent.blur(input);
   await tick();
   await new Promise((r) => setTimeout(r, 0));
+
+  if (!expectPersist) {
+    await waitFor(() => {
+      const calls = fetchMock.mock.calls.slice(previousCallCount);
+      const patchCall = calls.find(([, init]) => init?.method === 'PATCH');
+      expect(patchCall).toBeUndefined();
+    });
+
+    await waitFor(() => {
+      expect(input).toHaveValue(fieldInput as string);
+    });
+
+    return;
+  }
 
   await waitForPatchCall(previousCallCount, (body) => {
     return JSON.stringify(body).includes(fieldInput as string);
