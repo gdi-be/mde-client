@@ -14,10 +14,7 @@
   };
 
   let { value, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
+  let localValue = $derived(value || '');
 
   const HELP_KEY = 'clientMetadata.layers.secondaryDatasource';
   let showCheckmark = $state(false);

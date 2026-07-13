@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { getFormContext } from '$lib/context/FormContext.svelte';
   import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
@@ -24,10 +23,8 @@
   let containerElement = $state<HTMLDivElement>();
   let { metadataid } = page.params;
 
-  const { getValue } = getFormContext();
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   let value = $state<string[]>([]);
-  const valueFromData = $derived(getValue<Keywords>(KEY));
 
   let showCheckmark = $state(false);
   let autoKeywords = $state<string[]>([]);

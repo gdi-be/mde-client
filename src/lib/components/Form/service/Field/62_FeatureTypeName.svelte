@@ -18,10 +18,7 @@
   };
 
   let { value, featureType, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
+  let localValue = $derived(value || '');
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 

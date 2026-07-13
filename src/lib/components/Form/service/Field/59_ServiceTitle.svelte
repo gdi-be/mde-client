@@ -26,10 +26,7 @@
   const metadataTitle = $derived(getValue<string>(METADATA_TITLE_KEY, metadata));
 
   const fieldConfig = MetadataService.getFieldConfig(59);
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
+  let localValue = $derived(value || '');
   const validationResult = $derived(fieldConfig?.validator(localValue));
   let showCheckmark = $state(false);
 

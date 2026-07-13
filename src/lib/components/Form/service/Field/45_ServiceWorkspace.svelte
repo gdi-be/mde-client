@@ -16,10 +16,7 @@
   };
 
   let { value, service, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
+  let localValue = $derived(value || '');
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -27,7 +24,6 @@
 
   const HELP_KEY = 'isoMetadata.services.workspace';
   const fieldConfig = MetadataService.getFieldConfig(45);
-  let hasDuplicatedValue = $state<boolean>(false);
   const isDuplicateServiceId = (nextValue: string) => {
     const allServices = getValue<Service[]>('isoMetadata.services') || [];
     return allServices.some(
@@ -37,6 +33,7 @@
         entry.serviceType === service.serviceType
     );
   };
+  let hasDuplicatedValue = $derived(isDuplicateServiceId(localValue));
   const isInvalidWorkspace = (nextValue: string) => {
     const nextValidation = fieldConfig?.validator(nextValue, {
       ['PARENT_VALUE']: service,
@@ -55,9 +52,6 @@
       ['PARENT_VALUE']: service,
       ['HIGHEST_ROLE']: highestRole
     });
-  });
-  $effect(() => {
-    hasDuplicatedValue = isDuplicateServiceId(localValue);
   });
   let showCheckmark = $state(false);
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));

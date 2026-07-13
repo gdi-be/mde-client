@@ -12,10 +12,7 @@
   };
 
   let { value, onChange }: ComponentProps = $props();
-  let localValue = $state(value || '');
-  $effect(() => {
-    localValue = value || '';
-  });
+  let localValue = $derived(value || '');
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.columns.alias';
   const fieldConfig = MetadataService.getFieldConfig(65);

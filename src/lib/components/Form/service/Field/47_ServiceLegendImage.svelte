@@ -17,10 +17,7 @@
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
-  let localValue = $state(value);
-  $effect(() => {
-    localValue = value;
-  });
+  let localValue = $derived(value);
 
   const fieldConfig = MetadataService.getFieldConfig(47);
   const fieldConfigUrl = MetadataService.getFieldConfig(75);

@@ -15,10 +15,7 @@
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
-  let localValue = $state(value);
-  $effect(() => {
-    localValue = value;
-  });
+  let localValue = $derived(value);
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
