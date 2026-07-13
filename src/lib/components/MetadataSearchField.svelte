@@ -45,6 +45,10 @@
   }
 
   const splitLabel = (l: string) => {
+    if (text === '') {
+      return [l];
+    }
+
     const regex = new RegExp(`(${text})`, 'gi');
     const parts = l.split(regex);
     return parts;
@@ -73,7 +77,7 @@
 
   {#snippet match(item)}
     <Text title={item.label}>
-      {#each splitLabel(item.label) as part (part)}
+      {#each splitLabel(item.label) as part, index (`${index}-${part}`)}
         {#if part.toLowerCase() === text.toLowerCase()}
           <strong>{part}</strong>
         {:else}

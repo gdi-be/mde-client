@@ -1,4 +1,6 @@
+import { SvelteSet } from 'svelte/reactivity';
 import { getContext, setContext } from 'svelte';
+import { invalidateAll } from '$app/navigation';
 
 import { EventSource } from 'eventsource';
 
@@ -47,6 +49,10 @@ const createSseListener = () => {
 
   let eventSource: EventSource | null = null;
   let isConnected = false;
+  let connectionUrl: string | null = null;
+  let tokenGetter: (() => string | undefined) | undefined;
+  const subscribedEvents = new SvelteSet<SseEvent>();
+  let reconnectAttempts = 0;
 
   const setSseContext = () => {
     setContext<EventState>(CONTEXT_KEY, eventState);
@@ -56,15 +62,18 @@ const createSseListener = () => {
     return getContext<EventState>(CONTEXT_KEY);
   };
 
-  const connect = (url: string, token?: string) => {
+  const connect = (url: string, getToken?: () => string | undefined) => {
     if (isConnected) {
       console.warn('[SSE] Already connected.');
       return;
     }
 
+    connectionUrl = url;
+    tokenGetter = getToken;
     isConnected = true;
 
     const initConnection = () => {
+      const token = tokenGetter?.();
       const customHeaders: HeadersInit = {};
 
       if (token) {
@@ -83,6 +92,7 @@ const createSseListener = () => {
       });
 
       eventSource.onopen = () => {
+        reconnectAttempts = 0;
         console.log('[SSE] Connected');
       };
 
@@ -95,17 +105,34 @@ const createSseListener = () => {
         }
       };
 
-      eventSource.onerror = () => {
-        console.warn('[SSE] Connection lost. Retrying in 3s…');
+      eventSource.onerror = async () => {
+        reconnectAttempts += 1;
+
+        if (reconnectAttempts === 1) {
+          console.info('[SSE] Connection interrupted. Reconnecting in 3s…');
+        } else {
+          console.warn(`[SSE] Connection interrupted. Retry ${reconnectAttempts} in 3s…`);
+        }
+
         eventSource?.close();
-        setTimeout(initConnection, 3000);
+        isConnected = false;
+        await invalidateAll();
+        setTimeout(() => {
+          if (connectionUrl) {
+            connect(connectionUrl, tokenGetter);
+          }
+        }, 3000);
       };
+
+      for (const eventName of subscribedEvents) {
+        attachEventListener(eventName);
+      }
     };
 
     initConnection();
   };
 
-  const listenTo = (eventName: SseEvent) => {
+  const attachEventListener = (eventName: SseEvent) => {
     if (!eventSource) {
       return;
     }
@@ -133,11 +160,18 @@ const createSseListener = () => {
     });
   };
 
+  const listenTo = (eventName: SseEvent) => {
+    subscribedEvents.add(eventName);
+    attachEventListener(eventName);
+  };
+
   const disconnect = () => {
     if (eventSource) {
       eventSource.close();
       eventSource = null;
       isConnected = false;
+      connectionUrl = null;
+      tokenGetter = undefined;
 
       eventState.generic = [];
       eventState.heartbeat = [];

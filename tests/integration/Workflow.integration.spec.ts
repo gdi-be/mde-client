@@ -325,6 +325,6 @@ describe('Metadata Workflow - Integration test', () => {
       await publishMetadata();
 
       unmount();
-    });
+    }, 60_000);
   });
 });

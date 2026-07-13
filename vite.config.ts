@@ -34,7 +34,8 @@ export default defineConfig(({ mode }) => ({
     pool: 'forks',
     poolOptions: {
       forks: {
-        singleFork: true
+        minForks: 1,
+        maxForks: 1
       }
     },
     globals: true,

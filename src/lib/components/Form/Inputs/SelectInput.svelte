@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte';
-  import Select, { Option as SelectOption } from '@smui/select';
+  import Select from '@smui/select';
   import type { Option } from '$lib/models/form';
   import { type FullFieldConfig, type ValidationResult } from '$lib/components/Form/FieldsConfig';
   import FieldHint from '../FieldHint.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
+  import SafeSelectOption from './SafeSelectOption.svelte';
 
   type InputProps = {
     onChange?: (value: string) => void;
@@ -61,9 +62,9 @@
 
 <fieldset class={['select-input', wrapperClass, isInvalid && 'invalid']}>
   <legend>{label}</legend>
-  <Select bind:value {disabled} menu$anchorElement={document.body} {...restProps}>
+  <Select bind:value {disabled} menu$managed {...restProps}>
     {#each options as option (option.key)}
-      <SelectOption
+      <SafeSelectOption
         onSMUIAction={() => {
           if (option.disabled) return;
           onSelect(option.key);
@@ -72,7 +73,7 @@
         disabled={option.disabled}
       >
         {option.label}
-      </SelectOption>
+      </SafeSelectOption>
       {#if option.description && !option.disabled}
         <div class="option-description">{option.description}</div>
       {/if}

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { getContext, tick } from 'svelte';
-  import { fade } from 'svelte/transition';
   import LinearProgress from '@smui/linear-progress';
   import {
     getFormContext,
@@ -102,9 +101,13 @@
     activeSection = section;
     formContext.clearActiveHelp();
 
+    if (page.url.hash === `#${section}`) {
+      await tick();
+      return;
+    }
+
     goto(`#${section}`, {
-      replaceState: true,
-      invalidateAll: true
+      replaceState: true
     });
     await tick();
   };
@@ -166,63 +169,53 @@
   </nav>
   <div class="form-wrapper">
     <form bind:this={formElement}>
-      {#if activeSection === 'basedata'}
-        <section id="basedata" transition:fade>
-          <F01_TitleField />
-          <F02_DescriptionField />
-          <F15_KeywordsField />
-          <F29_PreviewField />
-          <F19_ContactsField />
-          <ScrollToTopButton target={formElement} />
-        </section>
-      {/if}
-      {#if activeSection === 'classification'}
-        <section id="classification" transition:fade>
-          <fieldset class="inspire-fieldset">
-            <legend>{t('form.inspireLegend')}</legend>
-            <F05_MetadataProfileField />
-            <F07_AnnexThemeField />
-            <F70_InspireFormatNameField />
-            <F38_InspireAnnexVersionField />
-            <F37_QualityReportCheckField />
-          </fieldset>
-          <F04_PrivacyField />
-          <F25_TermsOfUseField />
-          <F26_TermsOfUseSourceField />
-          <F06_HighValueDatasetField />
-          <F13_TopicCategory />
-          <ScrollToTopButton target={formElement} />
-        </section>
-      {/if}
-      {#if activeSection === 'temp_and_spatial'}
-        <section id="temp_and_spatial" transition:fade>
-          <F09_CreatedField />
-          <F10_PublishedField />
-          <F14_MaintenanceFrequencyField />
-          <F11_LastUpdatedField />
-          <F12_ValidityRangeField />
-          <F16_DeliveredCoordinateSystemField />
-          <F17_CoordinateSystemField />
-          <F18_ExtentField />
-          <F28_ResolutionField />
-          <F39_SpatialRepresentationField />
-          <ScrollToTopButton target={formElement} />
-        </section>
-      {/if}
-      {#if activeSection === 'additional'}
-        <section id="additional" transition:fade>
-          <F30_ContentDescription />
-          <F31_TechnicalDescription />
-          <F32_Lineage />
-          <F41_AdditionalInformation />
-          <ScrollToTopButton target={formElement} />
-        </section>
-      {/if}
-      {#if activeSection === 'services'}
-        <section id="services" transition:fade>
-          <F40_ServicesSection />
-        </section>
-      {/if}
+      <section id="basedata" hidden={activeSection !== 'basedata'}>
+        <F01_TitleField />
+        <F02_DescriptionField />
+        <F15_KeywordsField />
+        <F29_PreviewField />
+        <F19_ContactsField />
+        <ScrollToTopButton target={formElement} />
+      </section>
+      <section id="classification" hidden={activeSection !== 'classification'}>
+        <fieldset class="inspire-fieldset">
+          <legend>{t('form.inspireLegend')}</legend>
+          <F05_MetadataProfileField />
+          <F07_AnnexThemeField />
+          <F70_InspireFormatNameField />
+          <F38_InspireAnnexVersionField />
+          <F37_QualityReportCheckField />
+        </fieldset>
+        <F04_PrivacyField />
+        <F25_TermsOfUseField />
+        <F26_TermsOfUseSourceField />
+        <F06_HighValueDatasetField />
+        <F13_TopicCategory />
+        <ScrollToTopButton target={formElement} />
+      </section>
+      <section id="temp_and_spatial" hidden={activeSection !== 'temp_and_spatial'}>
+        <F09_CreatedField />
+        <F10_PublishedField />
+        <F14_MaintenanceFrequencyField />
+        <F11_LastUpdatedField />
+        <F12_ValidityRangeField />
+        <F16_DeliveredCoordinateSystemField />
+        <F17_CoordinateSystemField />
+        <F18_ExtentField />
+        <F28_ResolutionField />
+        <F39_SpatialRepresentationField />
+        <ScrollToTopButton target={formElement} />
+      </section>
+      <section id="additional" hidden={activeSection !== 'additional'}>
+        <F30_ContentDescription />
+        <F31_TechnicalDescription />
+        <F32_Lineage />
+        <F41_AdditionalInformation />
+        <ScrollToTopButton target={formElement} />
+      </section>
+      <section id="services" hidden={activeSection !== 'services'}>
+        <F40_ServicesSection />
+      </section>
     </form>
     <HelpPanel />
   </div>
@@ -406,7 +399,25 @@
           &#services {
             gap: 1em;
           }
+
+          &[hidden] {
+            display: none;
+          }
+
+          &:not([hidden]) {
+            animation: section-fade-in 180ms ease;
+          }
         }
+      }
+    }
+
+    @keyframes section-fade-in {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
       }
     }
 
