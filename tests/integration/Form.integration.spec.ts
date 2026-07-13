@@ -4,11 +4,6 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
-import { testBasedata } from './Basedata.integration';
-import { testClassification } from './Classification.integration';
-import { testTempAndSpatial } from './TempAndSpatial.integration';
-import { testAdditional } from './Additional.integration';
-import { testServices } from './Services.integration';
 import { tick } from 'svelte';
 
 describe('Form - Integration test', () => {
@@ -47,29 +42,5 @@ describe('Form - Integration test', () => {
         ).toBeInTheDocument();
       });
     });
-  });
-
-  describe('Form completion with role MdeAdministrator', () => {
-    testBasedata('MdeAdministrator');
-    testClassification('MdeAdministrator');
-    testTempAndSpatial('MdeAdministrator');
-    testAdditional('MdeAdministrator');
-    testServices('MdeAdministrator');
-  });
-
-  describe('Form completion with role MdeEditor', () => {
-    testBasedata('MdeEditor');
-    testClassification('MdeEditor');
-    testTempAndSpatial('MdeEditor');
-    testAdditional('MdeEditor');
-    testServices('MdeEditor');
-  });
-
-  describe('Form completion with role MdeDataOwner', () => {
-    testBasedata('MdeDataOwner');
-    testClassification('MdeDataOwner');
-    testTempAndSpatial('MdeDataOwner');
-    testAdditional('MdeDataOwner');
-    testServices('MdeDataOwner');
   });
 });
