@@ -58,11 +58,11 @@
     onchange={(e: Event) => {
       const newValue = (e.target as HTMLInputElement).value;
       localValue = newValue;
-      void onChange(newValue, false);
     }}
     onblur={async (e: Event) => {
       const newValue = (e.target as HTMLInputElement).value;
-      const response = await onChange(newValue);
+      if (fieldConfig?.validator(newValue, { ['PARENT_VALUE']: service }).valid === false) return;
+      const response = await onChange(newValue, true);
       if (response.ok) {
         showCheckmark = true;
       }

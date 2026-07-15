@@ -13,6 +13,7 @@
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
   import { getContext } from 'svelte';
+  import { getPersistableItems } from '../persistableItems';
 
   const t = $derived(page.data.t);
 
@@ -21,7 +22,7 @@
 
   const KEY = 'isoMetadata.contentDescriptions';
 
-  const { getValue } = getFormContext();
+  const { getValue, updateFormState } = getFormContext();
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const valueFromData = $derived(getValue<ContentDescription[]>(KEY));
   let contentDescriptions = $state<ContentDescription[]>([]);
@@ -30,8 +31,13 @@
 
   // important that this is not a state
   let previousValueAsString: string;
+  let lastPersistedContentDescriptions = $state<ContentDescription[]>([]);
+  let hasUnsavedLocalChange = $state(false);
 
   $effect(() => {
+    if (hasUnsavedLocalChange) {
+      return;
+    }
     // this check prevents rerendering if nothing has actually changed
     const newValueAsString = JSON.stringify(valueFromData);
     if (
@@ -51,6 +57,7 @@
       };
     });
     previousValueAsString = JSON.stringify(valueFromData);
+    lastPersistedContentDescriptions = valueFromData || [];
   });
 
   let showCheckmark = $state(false);
@@ -59,17 +66,23 @@
   const codeFieldConfig = MetadataService.getFieldConfig<string>(43);
   const urlFieldConfig = MetadataService.getFieldConfig<string>(44);
 
-  const persistContentDescriptions = async (evt?: FocusEvent) => {
+  const persistContentDescriptions = async (evt?: FocusEvent, fieldIsValid = true) => {
     syncLocalContentDescriptionsState();
+    const persistableContentDescriptions = getPersistableContentDescriptions();
 
-    if (hasInvalidFields) {
+    if (!fieldIsValid) {
       return;
     }
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
     const focusedElement = evt?.relatedTarget as HTMLElement | null;
-    const response = await MetadataService.persistValue(KEY, contentDescriptions);
+    const response = await MetadataService.persistValue(KEY, persistableContentDescriptions);
     if (response.ok) {
+      lastPersistedContentDescriptions = persistableContentDescriptions;
+      updateFormState(KEY, contentDescriptions);
+      previousValueAsString = JSON.stringify(contentDescriptions);
+      hasUnsavedLocalChange =
+        JSON.stringify(contentDescriptions) !== JSON.stringify(persistableContentDescriptions);
       showCheckmark = true;
     }
 
@@ -78,6 +91,26 @@
       const elementToFocus = document.getElementById(focusedElement.id);
       elementToFocus?.focus();
     }, 10);
+  };
+
+  const getPersistableContentDescriptions = () => {
+    return getPersistableItems(contentDescriptions, lastPersistedContentDescriptions, [
+      {
+        key: 'code',
+        isValid: (contentDescription) =>
+          codeFieldConfig?.validator(contentDescription.code)?.valid === true
+      },
+      {
+        key: 'description',
+        isValid: (contentDescription) =>
+          descriptionFieldConfig?.validator(contentDescription.description)?.valid === true
+      },
+      {
+        key: 'url',
+        isValid: (contentDescription) =>
+          urlFieldConfig?.validator(contentDescription.url)?.valid === true
+      }
+    ]);
   };
 
   const syncLocalContentDescriptionsState = () => {
@@ -90,13 +123,8 @@
       return;
     }
 
-    formState.metadata = {
-      ...formState.metadata,
-      isoMetadata: {
-        ...formState.metadata.isoMetadata,
-        contentDescriptions
-      }
-    };
+    hasUnsavedLocalChange = true;
+    updateFormState(KEY, contentDescriptions);
   };
 
   $effect(() => {
@@ -115,7 +143,7 @@
       },
       ...contentDescriptions
     ];
-    persistContentDescriptions();
+    syncLocalContentDescriptionsState();
   };
 
   const removeItem = (id: string, evt: MouseEvent) => {
@@ -144,9 +172,9 @@
       (editingRoles ? editingRoles?.includes(highestRole) : true);
     const hasInvalidFields = contentDescriptions.some((contentDescription) => {
       const descriptionValid =
-        descriptionFieldConfig?.validator(contentDescription.description).valid ?? true;
-      const urlValid = urlFieldConfig?.validator(contentDescription.url).valid ?? true;
-      const codeValid = codeFieldConfig?.validator(contentDescription.code).valid ?? true;
+        descriptionFieldConfig?.validator(contentDescription.description)?.valid ?? true;
+      const urlValid = urlFieldConfig?.validator(contentDescription.url)?.valid ?? true;
+      const codeValid = codeFieldConfig?.validator(contentDescription.code)?.valid ?? true;
       return !descriptionValid || !urlValid || !codeValid;
     });
     return isEditingRole && hasInvalidFields;
@@ -185,7 +213,17 @@
           <TextInput
             bind:value={contentDescription.description}
             label={t('41_AdditionalInformation.description')}
-            onblur={persistContentDescriptions}
+            onchange={(evt) => {
+              contentDescription.description = (evt.target as HTMLInputElement).value;
+              syncLocalContentDescriptionsState();
+            }}
+            onblur={(evt) => {
+              contentDescription.description = (evt.target as HTMLInputElement).value;
+              persistContentDescriptions(
+                evt,
+                descriptionFieldConfig?.validator(contentDescription.description)?.valid === true
+              );
+            }}
             fieldConfig={descriptionFieldConfig}
             validationResult={descriptionFieldConfig?.validator(contentDescription.description)}
             id={`${KEY}-${index}-description`}
@@ -199,7 +237,7 @@
         <div class="inline-fields">
           <div class="subfield-wrapper code-select-field">
             <SelectInput
-              value={contentDescription.code}
+              bind:value={contentDescription.code}
               onChange={(code) => {
                 contentDescription.code = code as CI_OnLineFunctionCode;
                 persistContentDescriptions();
@@ -222,7 +260,17 @@
             <TextInput
               bind:value={contentDescription.url}
               label={t('44_AdditionalInformationUrl.label')}
-              onblur={persistContentDescriptions}
+              onchange={(evt) => {
+                contentDescription.url = (evt.target as HTMLInputElement).value;
+                syncLocalContentDescriptionsState();
+              }}
+              onblur={(evt) => {
+                contentDescription.url = (evt.target as HTMLInputElement).value;
+                persistContentDescriptions(
+                  evt,
+                  urlFieldConfig?.validator(contentDescription.url)?.valid === true
+                );
+              }}
               fieldConfig={urlFieldConfig}
               validationResult={urlFieldConfig?.validator(contentDescription.url)}
               id={`${KEY}-${index}-url`}

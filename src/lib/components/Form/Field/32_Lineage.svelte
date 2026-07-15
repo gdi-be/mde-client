@@ -14,6 +14,7 @@
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
   import { getContext } from 'svelte';
+  import { getPersistableItems } from '../persistableItems';
 
   const t = $derived(page.data.t);
 
@@ -22,7 +23,7 @@
 
   const KEY = 'isoMetadata.lineage';
 
-  const { getValue } = getFormContext();
+  const { getValue, updateFormState } = getFormContext();
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const valueFromData = $derived(getValue<Lineage[]>(KEY));
   let lineages = $state<Lineage[]>([]);
@@ -43,8 +44,13 @@
 
   // important that this is not a state
   let previousValueAsString: string;
+  let lastPersistedLineages = $state<Lineage[]>([]);
+  let hasUnsavedLocalChange = $state(false);
 
   $effect(() => {
+    if (hasUnsavedLocalChange) {
+      return;
+    }
     // this check prevents rerendering if nothing has actually changed
     const newValueAsString = JSON.stringify(valueFromData);
     if (
@@ -63,11 +69,12 @@
       };
     });
     previousValueAsString = JSON.stringify(valueFromData);
+    lastPersistedLineages = valueFromData || [];
   });
 
   // add global click listener if titleSearchResults are open
   // to close the search results when clicking outside
-  $effect(() => {
+  $effect.pre(() => {
     if (metadataCollections.length > 0) {
       const closeSearchResults = () => {
         metadataCollections = [];
@@ -98,22 +105,35 @@
     return data?.content || [];
   };
 
-  const persistLineages = async (evt?: FocusEvent) => {
+  const persistLineages = async (evt?: FocusEvent, fieldIsValid = true) => {
     syncLocalLineageState();
+    const persistableLineages = getPersistableLineages();
 
-    if (hasInvalidFields) {
+    if (!fieldIsValid) {
       return;
     }
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
     const focusedElement = evt?.relatedTarget as HTMLElement | null;
 
-    const value = lineages.map((lineage) => ({
+    const value = persistableLineages.map((lineage) => ({
       ...lineage,
-      date: lineage.date ? new Date(lineage.date).toISOString() : ''
+      date: lineage.date ? new Date(lineage.date).toISOString() : undefined
     }));
     const response = await MetadataService.persistValue(KEY, value);
     if (response.ok) {
+      lastPersistedLineages = value;
+      lineages = value.map((lineage: Lineage) => {
+        return {
+          id: lineage.id,
+          title: lineage.title || '',
+          identifier: lineage.identifier || '',
+          date: lineage.date ? new Date(lineage.date).toISOString().split('T')[0] : ''
+        };
+      });
+      updateFormState(KEY, value);
+      previousValueAsString = JSON.stringify(value);
+      hasUnsavedLocalChange = false;
       showCheckmark = true;
     }
 
@@ -122,6 +142,23 @@
       const elementToFocus = document.getElementById(focusedElement.id);
       elementToFocus?.focus();
     }, 10);
+  };
+
+  const getPersistableLineages = () => {
+    return getPersistableItems(lineages, lastPersistedLineages, [
+      {
+        key: 'title',
+        isValid: (lineage) => titleFieldConfig?.validator(lineage.title)?.valid === true
+      },
+      {
+        key: 'date',
+        isValid: (lineage) => dateFieldConfig?.validator(lineage.date)?.valid === true
+      },
+      {
+        key: 'identifier',
+        isValid: (lineage) => identifierFieldConfig?.validator(lineage.identifier)?.valid === true
+      }
+    ]);
   };
 
   const syncLocalLineageState = () => {
@@ -134,13 +171,8 @@
       return;
     }
 
-    formState.metadata = {
-      ...formState.metadata,
-      isoMetadata: {
-        ...formState.metadata.isoMetadata,
-        lineage: lineages
-      }
-    };
+    hasUnsavedLocalChange = true;
+    updateFormState(KEY, lineages);
   };
 
   $effect(() => {
@@ -159,7 +191,7 @@
       },
       ...lineages
     ];
-    persistLineages();
+    syncLocalLineageState();
   };
 
   const removeItem = (id: string, evt: MouseEvent) => {
@@ -204,12 +236,12 @@
     titleSearchListId = lineage.id;
   };
 
-  const onTitleBlur = async (evt: FocusEvent) => {
+  const onTitleBlur = async (evt: FocusEvent, lineage: Lineage) => {
     const focusedElement = evt.relatedTarget as HTMLElement;
     if (searchResultsElement && focusedElement && searchResultsElement.contains(focusedElement)) {
       return;
     }
-    await persistLineages(evt);
+    await persistLineages(evt, titleFieldConfig?.validator(lineage.title)?.valid === true);
   };
 
   let hasInvalidFields = $derived.by(() => {
@@ -219,9 +251,9 @@
       highestRole === 'MdeAdministrator' ||
       (editingRoles ? editingRoles?.includes(highestRole) : true);
     const hasInvalidFields = lineages.some((lineage) => {
-      const titleValid = titleFieldConfig?.validator(lineage.title).valid ?? true;
-      const dateValid = dateFieldConfig?.validator(lineage.date).valid ?? true;
-      const identifierValid = identifierFieldConfig?.validator(lineage.identifier).valid ?? true;
+      const titleValid = titleFieldConfig?.validator(lineage.title)?.valid ?? true;
+      const dateValid = dateFieldConfig?.validator(lineage.date)?.valid ?? true;
+      const identifierValid = identifierFieldConfig?.validator(lineage.identifier)?.valid ?? true;
       return !titleValid || !dateValid || !identifierValid;
     });
     return isEditingRole && hasInvalidFields;
@@ -261,7 +293,7 @@
             <TextInput
               bind:value={lineage.title}
               label={t('32_Lineage.title')}
-              onblur={onTitleBlur}
+              onblur={(evt) => onTitleBlur(evt, lineage)}
               onkeyup={(evt) => onTitleKeyUp(evt, lineage)}
               fieldConfig={titleFieldConfig}
               validationResult={titleFieldConfig?.validator(lineage.title)}
@@ -294,7 +326,8 @@
               bind:value={lineage.date}
               key={KEY}
               label={t('32_Lineage.publish_date')}
-              onblur={persistLineages}
+              onblur={(evt) =>
+                persistLineages(evt, dateFieldConfig?.validator(lineage.date)?.valid === true)}
               fieldConfig={dateFieldConfig}
               validationResult={dateFieldConfig?.validator(lineage.date)}
               id={`${KEY}-${index}-date`}
@@ -305,7 +338,11 @@
             <TextInput
               bind:value={lineage.identifier}
               label={t('32_Lineage.identifier')}
-              onblur={persistLineages}
+              onblur={(evt) =>
+                persistLineages(
+                  evt,
+                  identifierFieldConfig?.validator(lineage.identifier)?.valid === true
+                )}
               fieldConfig={identifierFieldConfig}
               validationResult={identifierFieldConfig?.validator(lineage.identifier)}
               id={`${KEY}-${index}-identifier`}

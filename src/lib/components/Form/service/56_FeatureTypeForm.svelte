@@ -1,7 +1,7 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
   import ColumnsForm_63 from './63_ColumnsForm.svelte';
-  import type { FeatureType, Service } from '$lib/models/metadata';
+  import type { ColumnInfo, FeatureType, Service } from '$lib/models/metadata';
   import FeatureTypeTitle_61 from './Field/61_FeatureTypeTitle.svelte';
   import FeatureTypeName_62 from './Field/62_FeatureTypeName.svelte';
   import FeatureTypeDescription_69 from './Field/69_FeatureTypeDescription.svelte';
@@ -14,6 +14,8 @@
   import { page } from '$app/state';
   import { validateFeatureTypes } from './validation';
   import { MetadataService } from '$lib/services/MetadataService';
+  import { getPersistableItems, persistItems } from '../persistableItems';
+  import type { FullFieldConfig } from '../FieldsConfig';
   const t = $derived(page.data.t);
 
   type Tab = {
@@ -49,6 +51,9 @@
   let activeFeatureType = $derived(featureTypes.find((ft) => ft.id === activeTabId));
 
   const fieldConfig = MetadataService.getFieldConfig(56);
+  const titleFieldConfig = MetadataService.getFieldConfig<string>(61);
+  const nameFieldConfig = MetadataService.getFieldConfig<string>(62);
+  const descriptionFieldConfig = MetadataService.getFieldConfig<string>(69);
   const validationResult = $derived(
     fieldConfig?.validator(featureTypes, { PARENT_VALUE: service })
   );
@@ -57,11 +62,15 @@
     validateFeatureTypes(featureTypes, { metadata, HIGHEST_ROLE: highestRole })
   );
   const isInvalid = $derived(featureTypes.length === 0 || invalidTabIds.size > 0);
+  let lastPersistedFeatureTypes = $state<FeatureType[]>([]);
+  let lastServiceId: string | undefined;
 
   $effect(() => {
     // if the serviceId changes set activeTabIndex to undefined
-    if (serviceId) {
+    if (serviceId && serviceId !== lastServiceId) {
       activeTabId = undefined;
+      lastPersistedFeatureTypes = initialFeatureTypes || [];
+      lastServiceId = serviceId;
     }
   });
 
@@ -79,7 +88,6 @@
     ];
     syncLocalFeatureTypes(featureTypes);
     activeTabId = id;
-    onChange(featureTypes);
   }
 
   function removeFeatureType(id: string, evt: MouseEvent) {
@@ -93,7 +101,7 @@
         if (activeTabId === id) {
           activeTabId = featureTypes.length > 1 ? featureTypes[0].id : undefined;
         }
-        onChange(featureTypes);
+        persistFeatureTypes(featureTypes);
         activeTabId = featureTypes.length > 0 ? activeTabId : undefined;
         if (activeTabId && !featureTypes.find((ft) => ft.id === activeTabId)) {
           activeTabId = featureTypes[0]?.id;
@@ -117,7 +125,87 @@
       return featureType;
     });
     syncLocalFeatureTypes(featureTypes);
-    return onChange(featureTypes, persist);
+    return persist === false ? onChange(featureTypes, false) : persistFeatureTypes(featureTypes);
+  }
+
+  async function persistFeatureTypes(nextFeatureTypes: FeatureType[]) {
+    const { response, persistableItems } = await persistItems(
+      nextFeatureTypes,
+      lastPersistedFeatureTypes,
+      [
+        {
+          key: 'title',
+          isValid: (featureType) =>
+            isFeatureTypeFieldValid(titleFieldConfig, featureType.title, featureType)
+        },
+        {
+          key: 'name',
+          isValid: (featureType) =>
+            isFeatureTypeFieldValid(nameFieldConfig, featureType.name, featureType)
+        },
+        {
+          key: 'shortDescription',
+          isValid: (featureType) =>
+            isFeatureTypeFieldValid(
+              descriptionFieldConfig,
+              featureType.shortDescription,
+              featureType
+            )
+        }
+      ],
+      onChange,
+      (featureTypes) => addPersistableColumns(featureTypes, nextFeatureTypes)
+    );
+    if (response.ok) {
+      lastPersistedFeatureTypes = persistableItems;
+    }
+    return response;
+  }
+
+  function addPersistableColumns(featureTypes: FeatureType[], nextFeatureTypes: FeatureType[]) {
+    return featureTypes.map((featureType) => {
+      const localFeatureType = nextFeatureTypes.find((entry) => entry.id === featureType.id);
+      const previous = lastPersistedFeatureTypes.find((entry) => entry.id === featureType.id);
+      return {
+        ...featureType,
+        columns: getPersistableColumns(localFeatureType?.columns || [], previous?.columns || [])
+      };
+    });
+  }
+
+  function isFeatureTypeFieldValid<T>(
+    fieldConfig: FullFieldConfig<T>,
+    value: T | undefined,
+    featureType: FeatureType
+  ) {
+    return (
+      fieldConfig?.validator(value, {
+        metadata,
+        HIGHEST_ROLE: highestRole,
+        PARENT_VALUE: featureType
+      })?.valid === true
+    );
+  }
+
+  function getPersistableColumns(columns: ColumnInfo[], previousColumns: ColumnInfo[]) {
+    const nameFieldConfig = MetadataService.getFieldConfig<string>(64);
+    const aliasFieldConfig = MetadataService.getFieldConfig<string>(65);
+    const typeFieldConfig = MetadataService.getFieldConfig<ColumnInfo['type']>(66);
+
+    return getPersistableItems(columns, previousColumns, [
+      {
+        key: 'name',
+        isValid: (column) => nameFieldConfig?.validator(column.name)?.valid === true
+      },
+      {
+        key: 'alias',
+        isValid: (column) => aliasFieldConfig?.validator(column.alias)?.valid === true
+      },
+      {
+        key: 'type',
+        isValid: (column) => typeFieldConfig?.validator(column.type)?.valid === true
+      }
+    ]);
   }
 
   function syncLocalFeatureTypes(nextFeatureTypes: FeatureType[]) {
