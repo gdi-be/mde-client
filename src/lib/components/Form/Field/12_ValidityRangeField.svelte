@@ -11,7 +11,7 @@
   const FROM_KEY = 'isoMetadata.validFrom';
   const TO_KEY = 'isoMetadata.validTo';
 
-  const { getValue } = getFormContext();
+  const { getValue, formState } = getFormContext();
   const startValueFromData = $derived(getValue<string>(FROM_KEY));
   let startValue = $state('');
   let startInitialized = false;
@@ -52,6 +52,19 @@
   let toValidationResult = $derived(toFieldConfig?.validator(endValue, [startValue]));
 
   const onBlur = async (key: string) => {
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          validFrom: startValue ? new Date(startValue).toISOString() : null,
+          validTo: endValue ? new Date(endValue).toISOString() : null
+        }
+      };
+    }
+    if (hasInvalidFields) {
+      return;
+    }
     const value = key === FROM_KEY ? startValue : endValue!;
     const valueToPersist = value ? new Date(value).toISOString() : null;
     const response = await MetadataService.persistValue(key, valueToPersist);
@@ -59,6 +72,25 @@
       showCheckmark = true;
     }
     invalidateAll();
+  };
+
+  const onChange = (key: string, evt: Event) => {
+    const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
+    if (key === FROM_KEY) {
+      startValue = inputValue;
+    } else {
+      endValue = inputValue;
+    }
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          validFrom: startValue ? new Date(startValue).toISOString() : null,
+          validTo: endValue ? new Date(endValue).toISOString() : null
+        }
+      };
+    }
   };
 
   let hasInvalidFields = $derived.by(() => {
@@ -84,6 +116,7 @@
       <DateInput
         bind:value={startValue}
         label={t('12_ValidityRangeField.label_from')}
+        onchange={(evt) => onChange(FROM_KEY, evt)}
         onblur={() => onBlur(FROM_KEY)}
         fieldConfig={fromFieldConfig}
         validationResult={fromValidationResult}
@@ -91,6 +124,7 @@
       <DateInput
         bind:value={endValue}
         label={t('12_ValidityRangeField.label_to')}
+        onchange={(evt) => onChange(TO_KEY, evt)}
         onblur={() => onBlur(TO_KEY)}
         fieldConfig={toFieldConfig}
         validationResult={toValidationResult}

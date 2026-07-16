@@ -13,14 +13,15 @@
   export type ComponentProps = {
     value?: Service['preview'];
     service: Service;
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   let { value, service, onChange }: ComponentProps = $props();
+  let localValue = $derived(value || '');
 
   const fieldConfig = MetadataService.getFieldConfig(46);
   const validationResult = $derived(
-    fieldConfig?.validator(value, {
+    fieldConfig?.validator(localValue, {
       ['PARENT_VALUE']: service
     })
   );
@@ -36,6 +37,10 @@
 
   const getAutoFillValues = async () => {
     if (!metadataPreview) return;
+    const nextValidation = fieldConfig?.validator(metadataPreview, {
+      ['PARENT_VALUE']: service
+    });
+    if (nextValidation?.valid === false) return;
     const response = await onChange(metadataPreview);
     if (response.ok) {
       showCheckmark = true;
@@ -47,11 +52,17 @@
   <TextInput
     label={t('46_ServicePreview.label')}
     explanation={t('46_ServicePreview.explanation')}
-    {value}
+    value={localValue}
     {fieldConfig}
     {validationResult}
-    onchange={async (e: Event) => {
-      const response = await onChange((e.target as HTMLInputElement).value);
+    onchange={(e: Event) => {
+      const newValue = (e.target as HTMLInputElement).value;
+      localValue = newValue;
+      void onChange(newValue, false);
+    }}
+    onblur={async (e: Event) => {
+      const newValue = (e.target as HTMLInputElement).value;
+      const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;
       }

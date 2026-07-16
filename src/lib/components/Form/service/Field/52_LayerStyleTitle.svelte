@@ -11,13 +11,14 @@
 
   export type ComponentProps = {
     value?: Layer['styleTitle'];
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   const PROFILE_KEY = 'isoMetadata.metadataProfile';
   const HELP_KEY = 'clientMetadata.layers.styleTitle';
 
   let { value, onChange }: ComponentProps = $props();
+  let localValue = $derived(value || '');
   let showCheckmark = $state(false);
 
   const { getValue } = getFormContext();
@@ -27,7 +28,7 @@
   const highestRole = $derived(getHighestRole(token));
   const fieldConfig = MetadataService.getFieldConfig(52);
   const validationResult = $derived(
-    fieldConfig?.validator(value, {
+    fieldConfig?.validator(localValue, {
       HIGHEST_ROLE: highestRole,
       'isoMetadata.metadataProfile': metadataProfile
     })
@@ -43,12 +44,26 @@
   <div class="layer-style-title-field">
     <TextInput
       label={t('52_LayerStyleTitle.label')}
-      {value}
+      value={localValue}
       maxlength={250}
       {fieldConfig}
       {validationResult}
-      onchange={async (e: Event) => {
-        const response = await onChange((e.target as HTMLInputElement).value);
+      onchange={(e: Event) => {
+        const newValue = (e.target as HTMLInputElement).value;
+        localValue = newValue;
+        void onChange(newValue, false);
+      }}
+      onblur={async (e: Event) => {
+        const newValue = (e.target as HTMLInputElement).value;
+        if (
+          fieldConfig?.validator(newValue, {
+            HIGHEST_ROLE: highestRole,
+            'isoMetadata.metadataProfile': metadataProfile
+          }).valid === false
+        ) {
+          return;
+        }
+        const response = await onChange(newValue);
         if (response.ok) {
           showCheckmark = true;
         }

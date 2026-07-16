@@ -101,7 +101,8 @@ export async function testBasedata(role: string) {
           testProgress: {
             section: 'basedata',
             label: 'form.basedata',
-            expectIncrease: isRequiredField('isoMetadata.keywords', 'basedata')
+            expectIncrease:
+              role === 'MdeAdministrator' && isRequiredField('isoMetadata.keywords', 'basedata')
           }
         });
 
@@ -169,22 +170,16 @@ export async function testBasedata(role: string) {
         });
 
         const popconfirm = document.querySelector('.popconfirm') as HTMLDialogElement;
+        const previousCallCount = fetchMock.mock.calls.length;
 
         await userEvent.click(within(popconfirm).getByText('19_ContactsField.delete'));
         await tick();
         await new Promise((r) => setTimeout(r, 0));
 
         await waitFor(() => {
-          expect(fetchMock).toHaveBeenCalledWith(expect.any(URL), {
-            method: 'PATCH',
-            body: JSON.stringify({
-              key: 'isoMetadata.pointsOfContact',
-              value: []
-            }),
-            headers: {
-              'content-type': 'application/json'
-            }
-          });
+          const calls = fetchMock.mock.calls.slice(previousCallCount);
+          const patchCall = calls.find(([, init]) => init?.method === 'PATCH');
+          expect(patchCall).toBeUndefined();
         });
 
         await waitFor(async () => {
@@ -202,6 +197,7 @@ export async function testBasedata(role: string) {
               fieldKey: 'isoMetadata.pointsOfContact[0].name',
               fieldType: 'text',
               fieldInput: 'John Doe',
+              expectPersist: false,
               fieldsetSelector: () =>
                 (
                   document.querySelector(
@@ -213,6 +209,7 @@ export async function testBasedata(role: string) {
               fieldKey: 'isoMetadata.pointsOfContact[0].organisation',
               fieldType: 'text',
               fieldInput: 'Test Organisation',
+              expectPersist: false,
               fieldsetSelector: () =>
                 (
                   document.querySelector(
@@ -224,6 +221,7 @@ export async function testBasedata(role: string) {
               fieldKey: 'isoMetadata.pointsOfContact[0].phone',
               fieldType: 'text',
               fieldInput: '+49-123-0123',
+              expectPersist: false,
               fieldsetSelector: () =>
                 (
                   document.querySelector(
@@ -256,6 +254,7 @@ export async function testBasedata(role: string) {
         const contactBtn = screen.getByRole('button', {
           name: '19_ContactsField.autofill'
         });
+        const previousCallCount = fetchMock.mock.calls.length;
 
         fireEvent.click(contactBtn);
         await tick();
@@ -271,13 +270,9 @@ export async function testBasedata(role: string) {
         });
 
         await waitFor(() => {
-          expect(fetchMock).toHaveBeenCalledWith(expect.any(URL), {
-            method: 'PATCH',
-            body: expect.stringContaining('"key":"isoMetadata.pointsOfContact"'),
-            headers: {
-              'content-type': 'application/json'
-            }
-          });
+          const calls = fetchMock.mock.calls.slice(previousCallCount);
+          const patchCall = calls.find(([, init]) => init?.method === 'PATCH');
+          expect(patchCall).toBeUndefined();
         });
       });
     });

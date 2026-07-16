@@ -12,7 +12,7 @@
 
   export type ServiceTypeProps = {
     value: Service['shortDescription'];
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   let { value = $bindable(), onChange }: ServiceTypeProps = $props();
@@ -30,6 +30,7 @@
 
   const getAutoFillValues = async () => {
     if (!metadataDescription) return;
+    if (fieldConfig?.validator(metadataDescription).valid === false) return;
     const response = await onChange(metadataDescription);
     if (response.ok) {
       showCheckmark = true;
@@ -46,8 +47,14 @@
     {fieldConfig}
     {validationResult}
     rows={5}
-    onchange={async (e: Event) => {
-      const response = await onChange((e.target as HTMLInputElement).value);
+    onchange={(e: Event) => {
+      const newValue = (e.target as HTMLInputElement).value;
+      value = newValue;
+      void onChange(newValue, false);
+    }}
+    onblur={async (e: Event) => {
+      const newValue = (e.target as HTMLInputElement).value;
+      const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;
       }

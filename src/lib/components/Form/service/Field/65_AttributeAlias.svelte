@@ -8,14 +8,15 @@
 
   export type ComponentProps = {
     value?: ColumnInfo['alias'];
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
+  let localValue = $derived(value || '');
 
   const HELP_KEY = 'isoMetadata.services.featureTypes.columns.alias';
   const fieldConfig = MetadataService.getFieldConfig(65);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const validationResult = $derived(fieldConfig?.validator(localValue));
   let showCheckmark = $state(false);
 </script>
 
@@ -23,11 +24,17 @@
   <TextInput
     label={t('65_AttributeAlias.label')}
     explanation={t('65_AttributeAlias.explanation')}
-    {value}
+    value={localValue}
     {fieldConfig}
     {validationResult}
-    onchange={async (e: Event) => {
-      const response = await onChange((e.target as HTMLInputElement).value);
+    onchange={(e: Event) => {
+      const newValue = (e.target as HTMLInputElement).value;
+      localValue = newValue;
+      void onChange(newValue, false);
+    }}
+    onblur={async (e: Event) => {
+      const newValue = (e.target as HTMLInputElement).value;
+      const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;
       }

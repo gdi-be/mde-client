@@ -290,6 +290,7 @@ export async function testTempAndSpatial(role: string) {
           fieldset: fieldset,
           fieldType: 'radio',
           radioOptionKey: 'isoMetadata.resolutions',
+          expectPersist: false,
           help: true,
           testProgress: {
             section: 'temp_and_spatial',

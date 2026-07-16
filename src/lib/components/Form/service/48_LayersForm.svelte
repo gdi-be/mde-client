@@ -28,7 +28,7 @@
   export type LayersFormProps = {
     value?: Layer[];
     service?: Service;
-    onChange: (layers: Layer[]) => Promise<Response>;
+    onChange: (layers: Layer[], persist?: boolean) => Promise<Response>;
   };
 
   let { value: initialLayers, service, onChange }: LayersFormProps = $props();
@@ -80,6 +80,7 @@
         styleName: ''
       }
     ];
+    syncLocalLayers(layers);
     activeTabId = id;
     onChange(layers);
   }
@@ -91,6 +92,7 @@
       targetEl,
       async () => {
         layers = layers.filter((layer) => layer.id !== layerId);
+        syncLocalLayers(layers);
         if (activeTabId === layerId) {
           activeTabId = layers.length > 0 ? layers[layers.length - 1]?.id : undefined;
         }
@@ -107,7 +109,7 @@
     );
   }
 
-  function set(key: string, value: Layer[keyof Layer]) {
+  function set(key: string, value: Layer[keyof Layer], persist?: boolean) {
     layers = layers.map((layer) => {
       if (layer.id === activeTabId) {
         return {
@@ -117,7 +119,25 @@
       }
       return layer;
     });
-    return onChange(layers);
+    syncLocalLayers(layers);
+    return onChange(layers, persist);
+  }
+
+  function syncLocalLayers(nextLayers: Layer[]) {
+    if (!formState.metadata || !serviceId) {
+      return;
+    }
+
+    formState.metadata = {
+      ...formState.metadata,
+      clientMetadata: {
+        ...formState.metadata.clientMetadata,
+        layers: {
+          ...(formState.metadata.clientMetadata?.layers || {}),
+          [serviceId]: nextLayers
+        }
+      }
+    };
   }
 </script>
 
@@ -172,15 +192,21 @@
     </nav>
     <div class="content">
       {#if activeTabId && activeLayer}
-        <LayerTitle_49 value={activeLayer?.title} onChange={(title) => set('title', title)} />
-        <LayerName_50 value={activeLayer?.name} onChange={(name) => set('name', name)} />
+        <LayerTitle_49
+          value={activeLayer?.title}
+          onChange={(title, persist) => set('title', title, persist)}
+        />
+        <LayerName_50
+          value={activeLayer?.name}
+          onChange={(name, persist) => set('name', name, persist)}
+        />
         <LayerStyleTitle_52
           value={activeLayer?.styleTitle}
-          onChange={(styleTitle) => set('styleTitle', styleTitle)}
+          onChange={(styleTitle, persist) => set('styleTitle', styleTitle, persist)}
         />
         <LayerStyleName_51
           value={activeLayer?.styleName}
-          onChange={(styleName) => set('styleName', styleName)}
+          onChange={(styleName, persist) => set('styleName', styleName, persist)}
         />
         <LayerLegendImage_53
           value={activeLayer?.legendImage}
@@ -188,7 +214,8 @@
         />
         <LayerDescription_54
           value={activeLayer?.shortDescription}
-          onChange={(shortDescription) => set('shortDescription', shortDescription)}
+          onChange={(shortDescription, persist) =>
+            set('shortDescription', shortDescription, persist)}
         />
         <LayerDatasource_55
           value={activeLayer?.datasource}

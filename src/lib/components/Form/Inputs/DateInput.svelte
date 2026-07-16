@@ -68,6 +68,10 @@
     id={key}
     name={key}
     bind:value
+    oninput={(evt) => {
+      value = (evt.currentTarget as HTMLInputElement).value;
+      restProps.onchange?.(evt as Event & { currentTarget: EventTarget & HTMLInputElement });
+    }}
     onblur={(evt) => {
       value = (evt.currentTarget as HTMLInputElement).value;
       onblur?.(evt);

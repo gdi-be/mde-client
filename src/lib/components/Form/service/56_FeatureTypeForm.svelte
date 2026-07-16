@@ -24,7 +24,7 @@
   export type FeatureTypeFormProps = {
     value?: FeatureType[];
     service: Service;
-    onChange: (featureTypes: FeatureType[]) => Promise<Response>;
+    onChange: (featureTypes: FeatureType[], persist?: boolean) => Promise<Response>;
   };
 
   let { value: initialFeatureTypes, onChange, service }: FeatureTypeFormProps = $props();
@@ -77,6 +77,7 @@
         columns: []
       }
     ];
+    syncLocalFeatureTypes(featureTypes);
     activeTabId = id;
     onChange(featureTypes);
   }
@@ -88,6 +89,7 @@
       targetEl,
       async () => {
         featureTypes = featureTypes.filter((featureType) => featureType.id !== id);
+        syncLocalFeatureTypes(featureTypes);
         if (activeTabId === id) {
           activeTabId = featureTypes.length > 1 ? featureTypes[0].id : undefined;
         }
@@ -104,7 +106,7 @@
     );
   }
 
-  function set(key: string, value: FeatureType[keyof FeatureType]) {
+  function set(key: string, value: FeatureType[keyof FeatureType], persist?: boolean) {
     featureTypes = featureTypes.map((featureType) => {
       if (featureType.id === activeTabId) {
         return {
@@ -114,7 +116,60 @@
       }
       return featureType;
     });
-    return onChange(featureTypes);
+    syncLocalFeatureTypes(featureTypes);
+    return onChange(featureTypes, persist);
+  }
+
+  function syncLocalFeatureTypes(nextFeatureTypes: FeatureType[]) {
+    if (!formState.metadata?.isoMetadata?.services) {
+      return;
+    }
+
+    let hasMatchedService = false;
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        services: formState.metadata.isoMetadata.services.map((entry: Service) => {
+          const isTargetService =
+            entry.id === service.id ||
+            entry.serviceIdentification === service.serviceIdentification;
+
+          if (!isTargetService) {
+            return entry;
+          }
+
+          hasMatchedService = true;
+          return {
+            ...entry,
+            featureTypes: nextFeatureTypes
+          };
+        })
+      }
+    };
+
+    if (hasMatchedService) {
+      return;
+    }
+
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        services: formState.metadata.isoMetadata.services.map((entry: Service) => {
+          const hasFeatureTypeFromCurrentService = entry.featureTypes?.some((ft: FeatureType) =>
+            nextFeatureTypes.some((nextFt) => nextFt.id === ft.id)
+          );
+          if (!hasFeatureTypeFromCurrentService) {
+            return entry;
+          }
+          return {
+            ...entry,
+            featureTypes: nextFeatureTypes
+          };
+        })
+      }
+    };
   }
 </script>
 
@@ -173,21 +228,22 @@
       {#if activeTabId && activeFeatureType}
         <FeatureTypeTitle_61
           value={activeFeatureType?.title}
-          onChange={(title) => set('title', title)}
+          onChange={(title, persist) => set('title', title, persist)}
         />
         <FeatureTypeName_62
           featureType={activeFeatureType}
           value={activeFeatureType?.name}
-          onChange={(name) => set('name', name)}
+          onChange={(name, persist) => set('name', name, persist)}
         />
         <FeatureTypeDescription_69
           value={activeFeatureType?.shortDescription}
-          onChange={(shortDescription) => set('shortDescription', shortDescription)}
+          onChange={(shortDescription, persist) =>
+            set('shortDescription', shortDescription, persist)}
         />
         <ColumnsForm_63
           featureType={activeFeatureType}
           value={activeFeatureType?.columns}
-          onChange={(columns) => set('columns', columns)}
+          onChange={(columns, persist) => set('columns', columns, persist)}
         />
       {/if}
     </div>

@@ -10,10 +10,11 @@
 
   export type ComponentProps = {
     value?: Layer['name'];
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   let { value, onChange }: ComponentProps = $props();
+  let localValue = $derived(value || '');
 
   const HELP_KEY = 'clientMetadata.layers.name';
 
@@ -21,15 +22,28 @@
   const highestRole = $derived(getHighestRole(token));
   const fieldConfig = MetadataService.getFieldConfig(50);
   const validationResult = $derived(
-    fieldConfig?.validator(value, {
+    fieldConfig?.validator(localValue, {
       ['HIGHEST_ROLE']: highestRole
     })
   );
   const fieldVisible = $derived(['MdeEditor', 'MdeAdministrator'].includes(highestRole));
   let showCheckmark = $state(false);
 
-  const onChangeInternal = async (e: Event) => {
+  const onChangeInternal = (e: Event) => {
     const newValue = (e.target as HTMLInputElement).value;
+    localValue = newValue;
+    void onChange(newValue, false);
+  };
+
+  const onBlurInternal = async (e: Event) => {
+    const newValue = (e.target as HTMLInputElement).value;
+    if (
+      fieldConfig?.validator(newValue, {
+        ['HIGHEST_ROLE']: highestRole
+      }).valid === false
+    ) {
+      return;
+    }
     const response = await onChange(newValue);
     if (response.ok) {
       showCheckmark = true;
@@ -41,11 +55,12 @@
   <div class="layer-name-field">
     <TextInput
       label={t('50_LayerName.label')}
-      {value}
+      value={localValue}
       maxlength={100}
       {fieldConfig}
       {validationResult}
       onchange={onChangeInternal}
+      onblur={onBlurInternal}
     />
     <FieldTools {value} key={HELP_KEY} bind:checkMarkAnmiationRunning={showCheckmark} />
   </div>

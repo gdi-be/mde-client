@@ -279,6 +279,7 @@ export async function testServices(role: string) {
               fieldset: fieldset,
               fieldType: 'text',
               fieldInput: 'New FeatureType Title',
+              expectPersist: false,
               help: true,
               testProgress: {
                 section: 'services',
@@ -302,6 +303,7 @@ export async function testServices(role: string) {
                 fieldset: fieldset,
                 fieldType: 'text',
                 fieldInput: 'New FeatureType Name',
+                expectPersist: false,
                 help: true,
                 testProgress: {
                   section: 'services',
@@ -338,6 +340,7 @@ export async function testServices(role: string) {
               fieldType: 'text',
               fieldInput: 'New featureType Description...',
               requiredMessage: 'Bitte geben Sie eine Kurzbeschreibung für den FeatureType an.',
+              expectPersist: false,
               help: true,
               testProgress: {
                 section: 'services',
@@ -375,6 +378,7 @@ export async function testServices(role: string) {
                 fieldset: fieldset,
                 fieldType: 'text',
                 fieldInput: 'New FeatureType Name',
+                expectPersist: false,
                 help: true,
                 testProgress: {
                   section: 'services',
@@ -397,6 +401,7 @@ export async function testServices(role: string) {
                 fieldset: fieldset,
                 fieldType: 'text',
                 fieldInput: 'New FeatureType Alias',
+                expectPersist: false,
                 help: true,
                 testProgress: {
                   section: 'services',

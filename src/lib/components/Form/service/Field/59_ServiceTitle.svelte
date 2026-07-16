@@ -12,7 +12,7 @@
 
   export type ServiceTypeProps = {
     value: Service['title'];
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   let { value, onChange }: ServiceTypeProps = $props();
@@ -26,11 +26,14 @@
   const metadataTitle = $derived(getValue<string>(METADATA_TITLE_KEY, metadata));
 
   const fieldConfig = MetadataService.getFieldConfig(59);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  let localValue = $derived(value || '');
+  const validationResult = $derived(fieldConfig?.validator(localValue));
   let showCheckmark = $state(false);
 
   const getAutoFillValues = async () => {
     if (!metadataTitle) return;
+    if (fieldConfig?.validator(metadataTitle).valid === false) return;
+    localValue = metadataTitle;
     const response = await onChange(metadataTitle);
     if (response.ok) {
       showCheckmark = true;
@@ -42,12 +45,18 @@
   <TextInput
     label={t('59_ServiceTitle.label')}
     explanation={t('59_ServiceTitle.explanation')}
-    {value}
+    value={localValue}
     {fieldConfig}
     {validationResult}
     maxlength={250}
-    onchange={async (e: Event) => {
-      const response = await onChange((e.target as HTMLInputElement).value);
+    onchange={(e: Event) => {
+      const newValue = (e.target as HTMLInputElement).value;
+      localValue = newValue;
+      void onChange(newValue, false);
+    }}
+    onblur={async (e: Event) => {
+      const newValue = (e.target as HTMLInputElement).value;
+      const response = await onChange(newValue);
       if (response.ok) {
         showCheckmark = true;
       }

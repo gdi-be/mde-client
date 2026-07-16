@@ -17,7 +17,7 @@
   const formContext = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formContext.metadata);
 
-  const { getValue } = getFormContext();
+  const { getValue, formState } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY, metadata));
   let value = $state('');
   let initialized = false;
@@ -38,9 +38,33 @@
 
   let showCheckmark = $state(false);
 
+  const onChange = (evt: Event) => {
+    const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
+    value = inputValue;
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          modified: inputValue ? new Date(inputValue).toISOString() : null
+        }
+      };
+    }
+  };
+
   const onBlur = async (evt: FocusEvent) => {
     const inputValue = (evt.currentTarget as HTMLInputElement | null)?.value ?? '';
     value = inputValue;
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          modified: inputValue ? new Date(inputValue).toISOString() : null
+        }
+      };
+    }
+    if (fieldConfig?.validator(inputValue).valid === false) return;
     const response = await MetadataService.persistValue(
       KEY,
       inputValue ? new Date(inputValue).toISOString() : null
@@ -57,6 +81,7 @@
     key={KEY}
     label={t('11_LastUpdatedField.label')}
     explanation={t('11_LastUpdatedField.explanation')}
+    onchange={onChange}
     onblur={onBlur}
     {fieldConfig}
     {validationResult}

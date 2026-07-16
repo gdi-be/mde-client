@@ -10,23 +10,40 @@
   const TERMS_OF_USE_KEY = 'isoMetadata.termsOfUseId';
   const PRIVACY_KEY = 'isoMetadata.privacy';
 
-  const { getValue } = getFormContext();
+  const { getValue, formState } = getFormContext();
   const valueFromData = $derived(getValue<string>(KEY));
   const termsOfUseId = $derived(getValue<number>(TERMS_OF_USE_KEY));
   const privacy = $derived(getValue<string>(PRIVACY_KEY));
 
   let value = $derived(valueFromData ?? '');
 
+  $effect(() => {
+    if (!formState.metadata?.isoMetadata) return;
+
+    if (formState.metadata.isoMetadata.termsOfUseSource === value) {
+      return;
+    }
+
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        termsOfUseSource: value
+      }
+    };
+  });
+
   let showCheckmark = $state(false);
   const fieldConfig = MetadataService.getFieldConfig<string>(26);
   let validationResult = $derived(
-    fieldConfig.validator(value, {
+    fieldConfig?.validator(value, {
       'isoMetadata.termsOfUseId': termsOfUseId,
       'isoMetadata.privacy': privacy
     })
   );
 
   const onBlur = async () => {
+    if (validationResult?.valid === false) return;
     const response = await MetadataService.persistValue(KEY, value);
     if (response.ok) {
       showCheckmark = true;

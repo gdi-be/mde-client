@@ -4,6 +4,7 @@
   import RadioInput from '../Inputs/RadioInput.svelte';
   import type { ValidationResult } from '../FieldsConfig';
   import { MetadataService } from '$lib/services/MetadataService';
+  import { MetadataUpdateService } from '$lib/services/MetadataUpdateService';
   import type { Option } from '$lib/models/form';
   import { toast } from 'svelte-french-toast';
   import { page } from '$app/state';
@@ -21,12 +22,13 @@
   let validationResult = $derived(fieldConfig?.validator(value)) as ValidationResult;
 
   const onChange = async (newValue: string) => {
+    if (fieldConfig?.validator(newValue).valid === false) return;
     const response = await MetadataService.persistValue(KEY, newValue);
     if (response.ok) {
       showCheckmark = true;
 
       // delete terms of use value if privacy is changed
-      await MetadataService.persistValue(TERMS_OF_USE_KEY, null);
+      await MetadataUpdateService.pushToQueue(TERMS_OF_USE_KEY, null);
     }
   };
 

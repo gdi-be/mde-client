@@ -14,12 +14,13 @@
   };
 
   let { value, onChange }: ComponentProps = $props();
+  let localValue = $derived(value || '');
 
   const HELP_KEY = 'clientMetadata.layers.secondaryDatasource';
   let showCheckmark = $state(false);
 
   const fieldConfig = MetadataService.getFieldConfig(68);
-  const validationResult = $derived(fieldConfig?.validator(value));
+  const validationResult = $derived(fieldConfig?.validator(localValue));
 
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
@@ -30,11 +31,17 @@
   <div class="layer-secondary-datasource-field">
     <TextInput
       label={t('68_LayerSecondaryDatasource.label')}
-      {value}
+      value={localValue}
       {fieldConfig}
       {validationResult}
-      onchange={async (e: Event) => {
-        const response = await onChange((e.target as HTMLInputElement).value);
+      onchange={(e: Event) => {
+        const newValue = (e.target as HTMLInputElement).value;
+        localValue = newValue;
+      }}
+      onblur={async (e: Event) => {
+        const newValue = (e.target as HTMLInputElement).value;
+        if (fieldConfig?.validator(newValue).valid === false) return;
+        const response = await onChange(newValue);
         if (response.ok) {
           showCheckmark = true;
         }

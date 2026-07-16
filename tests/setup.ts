@@ -60,6 +60,23 @@ function mockJson(data: unknown) {
   return Promise.resolve(createResponse() as Response);
 }
 
+function applyPathValue(target: any, path: string, value: unknown) {
+  const keys = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  let current = target;
+
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i];
+    const nextKey = keys[i + 1];
+
+    if (!current[key]) {
+      current[key] = /^\d+$/.test(nextKey) ? [] : {};
+    }
+    current = current[key];
+  }
+
+  current[keys[keys.length - 1]] = value;
+}
+
 export const fetchMock = vi.fn(async (input: string | Request | URL, init?: RequestInit) => {
   const url = input.toString();
 
@@ -180,18 +197,6 @@ export const fetchMock = vi.fn(async (input: string | Request | URL, init?: Requ
       const body = JSON.parse(init.body as string);
 
       if (body.key && body.value !== undefined) {
-        const keys = body.key.split('.');
-        let current: any = currentMetadata;
-
-        for (let i = 0; i < keys.length - 1; i++) {
-          if (!current[keys[i]]) {
-            current[keys[i]] = {};
-          }
-          current = current[keys[i]];
-        }
-
-        const lastKey = keys[keys.length - 1];
-
         let value = body.value;
         if (typeof value === 'string') {
           try {
@@ -201,7 +206,7 @@ export const fetchMock = vi.fn(async (input: string | Request | URL, init?: Requ
           }
         }
 
-        current[lastKey] = value;
+        applyPathValue(currentMetadata, body.key, value);
       } else if (!body.key) {
         Object.keys(body).forEach((key) => {
           if (

@@ -14,10 +14,11 @@
   export type ComponentProps = {
     value?: FeatureType['name'];
     featureType: FeatureType;
-    onChange: (newValue: string) => Promise<Response>;
+    onChange: (newValue: string, persist?: boolean) => Promise<Response>;
   };
 
   let { value, featureType, onChange }: ComponentProps = $props();
+  let localValue = $derived(value || '');
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
@@ -26,7 +27,7 @@
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   const metadata = $derived(formState.metadata);
   const validationResult = $derived(
-    ValidationService.validateField(fieldConfig, value, {
+    ValidationService.validateField(fieldConfig, localValue, {
       HIGHEST_ROLE: highestRole,
       PARENT_VALUE: featureType,
       metadata
@@ -40,12 +41,18 @@
   <div class="featuretype-name-field">
     <TextInput
       label={t('62_FeatureTypeName.label')}
-      {value}
+      value={localValue}
       maxlength={100}
       {fieldConfig}
       {validationResult}
-      onchange={async (e: Event) => {
-        const response = await onChange((e.target as HTMLInputElement).value);
+      onchange={(e: Event) => {
+        const newValue = (e.target as HTMLInputElement).value;
+        localValue = newValue;
+        void onChange(newValue, false);
+      }}
+      onblur={async (e: Event) => {
+        const newValue = (e.target as HTMLInputElement).value;
+        const response = await onChange(newValue);
         if (response.ok) {
           showCheckmark = true;
         }

@@ -2,6 +2,7 @@
   import type { Contact, Contacts } from '$lib/models/metadata';
   import IconButton from '@smui/icon-button';
   import { getFormContext } from '$lib/context/FormContext.svelte';
+  import { FORMSTATE_CONTEXT, type FormState } from '$lib/context/FormContext.svelte';
   import TextInput from '$lib/components/Form/Inputs/TextInput.svelte';
   import { MetadataService } from '$lib/services/MetadataService';
   import FieldTools from '$lib/components/Form/FieldTools.svelte';
@@ -12,6 +13,7 @@
   import { page } from '$app/state';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
+  import { getContext } from 'svelte';
 
   const t = $derived(page.data.t);
 
@@ -21,15 +23,20 @@
   const KEY = 'isoMetadata.pointsOfContact';
 
   const { getValue } = getFormContext();
+  const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   let contacts = $state<Contact[]>([]);
   const valueFromData = $derived(getValue<Contacts>(KEY));
 
   // important that this is not a state
   let previousValueAsString: string;
+  let hasUnsavedLocalChange = $state(false);
 
   const popconfirm = $derived(getPopconfirm());
 
   $effect(() => {
+    if (hasUnsavedLocalChange) {
+      return;
+    }
     // this check prevents rerendering if nothing has actually changed
     const newValueAsString = JSON.stringify(valueFromData);
     if (
@@ -84,11 +91,25 @@
   };
 
   const persistContacts = async (evt?: FocusEvent) => {
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          pointsOfContact: contacts
+        }
+      };
+    }
+
+    if (hasInvalidFields) {
+      return;
+    }
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
     const focusedElement = evt?.relatedTarget as HTMLElement | null;
     const response = await MetadataService.persistValue(KEY, contacts);
     if (response.ok) {
+      hasUnsavedLocalChange = false;
       showCheckmark = true;
     }
 
@@ -130,6 +151,37 @@
       }
     );
   };
+
+  const onContactChange = () => {
+    hasUnsavedLocalChange = true;
+    if (formState.metadata?.isoMetadata) {
+      formState.metadata = {
+        ...formState.metadata,
+        isoMetadata: {
+          ...formState.metadata.isoMetadata,
+          pointsOfContact: contacts
+        }
+      };
+    }
+  };
+
+  $effect(() => {
+    if (!hasUnsavedLocalChange || !formState.metadata?.isoMetadata) {
+      return;
+    }
+    const serverValue = JSON.stringify(formState.metadata.isoMetadata.pointsOfContact || []);
+    const localValue = JSON.stringify(contacts || []);
+    if (serverValue === localValue) {
+      return;
+    }
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        pointsOfContact: contacts
+      }
+    };
+  });
 
   let hasInvalidFields = $derived.by(() => {
     if (!fieldConfig) return false;
@@ -182,6 +234,7 @@
           <TextInput
             bind:value={contact.name}
             label={t('19_ContactsField.name')}
+            onchange={onContactChange}
             onblur={persistContacts}
             fieldConfig={nameConfig}
             validationResult={nameConfig?.validator(contact.name)}
@@ -199,6 +252,7 @@
           <TextInput
             bind:value={contact.organisation}
             label={t('19_ContactsField.organisation')}
+            onchange={onContactChange}
             onblur={persistContacts}
             fieldConfig={organisationConfig}
             validationResult={organisationConfig?.validator(contact.organisation)}
@@ -216,6 +270,7 @@
           <TextInput
             bind:value={contact.phone}
             label={t('19_ContactsField.phone')}
+            onchange={onContactChange}
             onblur={persistContacts}
             fieldConfig={phoneConfig}
             validationResult={phoneConfig?.validator(contact.phone)}
@@ -233,6 +288,7 @@
           <TextInput
             bind:value={contact.email}
             label={t('19_ContactsField.email')}
+            onchange={onContactChange}
             onblur={persistContacts}
             fieldConfig={emailConfig}
             validationResult={emailConfig?.validator(contact.email)}
