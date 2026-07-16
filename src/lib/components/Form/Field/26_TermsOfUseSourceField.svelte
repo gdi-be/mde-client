@@ -19,7 +19,18 @@
 
   $effect(() => {
     if (!formState.metadata?.isoMetadata) return;
-    formState.metadata.isoMetadata.termsOfUseSource = value;
+
+    if (formState.metadata.isoMetadata.termsOfUseSource === value) {
+      return;
+    }
+
+    formState.metadata = {
+      ...formState.metadata,
+      isoMetadata: {
+        ...formState.metadata.isoMetadata,
+        termsOfUseSource: value
+      }
+    };
   });
 
   let showCheckmark = $state(false);

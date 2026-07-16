@@ -79,10 +79,11 @@ export async function testAdditional(role: string) {
           expect(screen.queryAllByRole('group', { name: 'delete' }).length).toBeGreaterThan(0);
         });
 
-        const titleFieldset = (
-          document.querySelector('#isoMetadata\\.lineage-0-title') as HTMLInputElement
-        )?.closest('fieldset') as HTMLElement;
-
+        const titleInput = document.querySelector(
+          '#isoMetadata\\.lineage-0-title'
+        ) as HTMLInputElement | null;
+        expect(titleInput).toBeInTheDocument();
+        const titleFieldset = titleInput!.closest('fieldset') as HTMLElement;
         //TODO: Add test for search-input field like title
         await testField('isoMetadata.lineage[0].title', {
           fieldset: titleFieldset,
@@ -91,10 +92,11 @@ export async function testAdditional(role: string) {
           help: true
         });
 
-        const dateFieldset = (
-          document.querySelector('#isoMetadata\\.lineage-0-date') as HTMLInputElement
-        )?.closest('fieldset') as HTMLElement;
-
+        const dateInput = document.querySelector(
+          '#isoMetadata\\.lineage-0-date'
+        ) as HTMLInputElement | null;
+        expect(dateInput).toBeInTheDocument();
+        const dateFieldset = dateInput!.closest('fieldset') as HTMLElement;
         await testField('isoMetadata.lineage[0].date', {
           fieldset: dateFieldset,
           fieldType: 'date',
@@ -103,10 +105,11 @@ export async function testAdditional(role: string) {
           help: true
         });
 
-        const identifierFieldset = (
-          document.querySelector('#isoMetadata\\.lineage-0-identifier') as HTMLInputElement
-        )?.closest('fieldset') as HTMLElement;
-
+        const identifierInput = document.querySelector(
+          '#isoMetadata\\.lineage-0-identifier'
+        ) as HTMLInputElement | null;
+        expect(identifierInput).toBeInTheDocument();
+        const identifierFieldset = identifierInput!.closest('fieldset') as HTMLElement;
         await testField('isoMetadata.lineage[0].identifier', {
           fieldset: identifierFieldset,
           fieldInput: 'Test Identifier',
