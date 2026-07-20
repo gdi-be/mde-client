@@ -11,7 +11,7 @@
   const FROM_KEY = 'isoMetadata.validFrom';
   const TO_KEY = 'isoMetadata.validTo';
 
-  const { getValue, formState } = getFormContext();
+  const { getValue, updateFormState } = getFormContext();
   const startValueFromData = $derived(getValue<string>(FROM_KEY));
   let startValue = $state('');
   let startInitialized = false;
@@ -51,18 +51,15 @@
   const toFieldConfig = MetadataService.getFieldConfig<string>(24);
   let toValidationResult = $derived(toFieldConfig?.validator(endValue, [startValue]));
 
+  const syncLocalValue = () => {
+    updateFormState(FROM_KEY, startValue ? new Date(startValue).toISOString() : null);
+    updateFormState(TO_KEY, endValue ? new Date(endValue).toISOString() : null);
+  };
+
   const onBlur = async (key: string) => {
-    if (formState.metadata?.isoMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        isoMetadata: {
-          ...formState.metadata.isoMetadata,
-          validFrom: startValue ? new Date(startValue).toISOString() : null,
-          validTo: endValue ? new Date(endValue).toISOString() : null
-        }
-      };
-    }
-    if (hasInvalidFields) {
+    syncLocalValue();
+    const validationResult = key === FROM_KEY ? fromValidationResult : toValidationResult;
+    if (validationResult?.valid === false) {
       return;
     }
     const value = key === FROM_KEY ? startValue : endValue!;
@@ -81,16 +78,7 @@
     } else {
       endValue = inputValue;
     }
-    if (formState.metadata?.isoMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        isoMetadata: {
-          ...formState.metadata.isoMetadata,
-          validFrom: startValue ? new Date(startValue).toISOString() : null,
-          validTo: endValue ? new Date(endValue).toISOString() : null
-        }
-      };
-    }
+    syncLocalValue();
   };
 
   let hasInvalidFields = $derived.by(() => {

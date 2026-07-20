@@ -2,11 +2,11 @@
   import { getFormContext } from '$lib/context/FormContext.svelte';
   import FieldTools from '../FieldTools.svelte';
   import FieldHint from '../FieldHint.svelte';
-  import type { CRS, PartialExtent } from '$lib/models/metadata';
+  import type { CRS, PartialCoordinate, PartialExtent } from '$lib/models/metadata';
   import { MetadataService } from '$lib/services/MetadataService';
   import Button, { Icon, Label } from '@smui/button';
   import SelectInput from '../Inputs/SelectInput.svelte';
-  import { getHighestRole, registerCRSCodes, transformExtent } from '$lib/util';
+  import { getHighestRole, registerCRSCodes, transformCoordinate } from '$lib/util';
   import { onMount, tick } from 'svelte';
   import { toast } from 'svelte-french-toast';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
@@ -41,13 +41,14 @@
   const token = $derived(getAccessToken());
   const highestRole = $derived(getHighestRole(token));
 
-  const { getValue } = getFormContext();
+  const { getValue, updateFormState } = getFormContext();
   let initialCRSKey = getValue<CRS>(CRS_KEY);
   const valueFromData = $derived(getValue<PartialExtent>(KEY));
   let value4326 = $state<PartialExtent>(emptyExtent);
+  let isEditing = $state(false);
 
   $effect(() => {
-    if (valueFromData) {
+    if (!isEditing && valueFromData) {
       value4326 = valueFromData;
     }
   });
@@ -56,8 +57,11 @@
   let crsOptions = $state<CRSOption[]>([]);
   let crsKey = $state(initialCRSKey);
   let crs = $derived(crsOptions.find((option) => option.key === crsKey));
+  let selectedCRS = $derived((crs?.label as CRS) || 'EPSG:4326');
   let showCheckmark = $state(false);
   let inputValue = $state<PartialExtent>(emptyExtent);
+  let pendingInputKeys = $state<(keyof PartialExtent)[]>([]);
+  let pendingInputValue = $state<PartialExtent>(emptyExtent);
   let matchingOption = $derived(
     extentOptions.find((option) => {
       return (
@@ -73,13 +77,13 @@
     ValidationService.validateField(minXFieldConfig, inputValue.minx)
   );
   let validationResultMinY = $derived(
-    ValidationService.validateField(minXFieldConfig, inputValue.miny)
+    ValidationService.validateField(minYFieldConfig, inputValue.miny)
   );
   let validationResultMaxX = $derived(
-    ValidationService.validateField(minXFieldConfig, inputValue.maxx)
+    ValidationService.validateField(maxXFieldConfig, inputValue.maxx)
   );
   let validationResultMaxY = $derived(
-    ValidationService.validateField(minXFieldConfig, inputValue.maxy)
+    ValidationService.validateField(maxYFieldConfig, inputValue.maxy)
   );
 
   let hasInvalidFields = $derived(
@@ -89,10 +93,87 @@
       validationResultMaxY?.valid === false
   );
 
+  const fieldConfigByKey = {
+    minx: minXFieldConfig,
+    miny: minYFieldConfig,
+    maxx: maxXFieldConfig,
+    maxy: maxYFieldConfig
+  };
+
+  const pairByKey = {
+    minx: ['minx', 'miny'],
+    miny: ['minx', 'miny'],
+    maxx: ['maxx', 'maxy'],
+    maxy: ['maxx', 'maxy']
+  } satisfies Record<keyof PartialExtent, [keyof PartialExtent, keyof PartialExtent]>;
+
+  const toCoordinate = (
+    extent: PartialExtent,
+    [xKey, yKey]: [keyof PartialExtent, keyof PartialExtent]
+  ) => [extent[xKey], extent[yKey]] as PartialCoordinate;
+
+  const hasCoordinate = (coordinate: PartialCoordinate) =>
+    coordinate.every((value) => value !== undefined && Number.isFinite(value));
+
+  const addPendingInputKey = (key: keyof PartialExtent, value: number | undefined) => {
+    pendingInputKeys = pendingInputKeys.includes(key)
+      ? pendingInputKeys
+      : [...pendingInputKeys, key];
+    pendingInputValue = {
+      ...pendingInputValue,
+      [key]: value
+    };
+  };
+
+  const removePendingInputKeys = (keys: (keyof PartialExtent)[]) => {
+    pendingInputKeys = pendingInputKeys.filter((key) => !keys.includes(key));
+    pendingInputValue = {
+      ...pendingInputValue,
+      ...Object.fromEntries(keys.map((key) => [key, undefined]))
+    };
+  };
+
+  const transformCoordinatePair = (
+    extent: PartialExtent,
+    pair: [keyof PartialExtent, keyof PartialExtent],
+    from: CRS,
+    to: CRS
+  ) => {
+    const coordinate = toCoordinate(extent, pair);
+    if (!hasCoordinate(coordinate)) return {};
+
+    if (from === to) {
+      return {
+        [pair[0]]: coordinate[0],
+        [pair[1]]: coordinate[1]
+      };
+    }
+
+    const transformed = transformCoordinate(coordinate, from, to);
+    return {
+      [pair[0]]: coordinate[0] === 0 ? 0 : transformed[0],
+      [pair[1]]: coordinate[1] === 0 ? 0 : transformed[1]
+    };
+  };
+
+  const transformAvailableExtent = (extent: PartialExtent, from: CRS, to: CRS) => {
+    if (from === to) return extent;
+
+    return {
+      ...transformCoordinatePair(extent, pairByKey.minx, from, to),
+      ...transformCoordinatePair(extent, pairByKey.maxx, from, to)
+    };
+  };
+
   $effect(() => {
+    if (isEditing) return;
+
     try {
-      const newTransformedValue = transformExtent(value4326, 'EPSG:4326', crs?.label as CRS);
-      inputValue = newTransformedValue;
+      const transformedValue = transformAvailableExtent(value4326, 'EPSG:4326', selectedCRS);
+      inputValue = {
+        ...transformedValue,
+        ...Object.fromEntries(pendingInputKeys.map((key) => [key, pendingInputValue[key]]))
+      };
     } catch {
       logger.error(t('18_ExtentField.error_transforming_coordinates_from_server'), {
         value4326,
@@ -101,27 +182,92 @@
     }
   });
 
-  const onChange = (newValue: number, key: keyof PartialExtent) => {
-    const newTransformedValue = {
-      ...inputValue,
+  const getInputValue = (target: HTMLInputElement) => {
+    const value = target.value.trim();
+    return value === '' ? undefined : Number(value);
+  };
+
+  const normalizeCoordinateValue = (value: unknown) => {
+    if (value === '' || value === undefined || value === null) return undefined;
+    return Number(value);
+  };
+
+  const normalizeInputValue = (extent: PartialExtent): PartialExtent => ({
+    minx: normalizeCoordinateValue(extent.minx),
+    miny: normalizeCoordinateValue(extent.miny),
+    maxx: normalizeCoordinateValue(extent.maxx),
+    maxy: normalizeCoordinateValue(extent.maxy)
+  });
+
+  const isValidInput = (key: keyof PartialExtent, currentInputValue: PartialExtent) =>
+    ValidationService.validateField(fieldConfigByKey[key], currentInputValue[key])?.valid === true;
+
+  const onChange = (newValue: number | undefined, key: keyof PartialExtent) => {
+    const newInputValue = {
+      ...normalizeInputValue(inputValue),
       [key]: newValue
     };
+    inputValue = newInputValue;
+    if (pendingInputKeys.includes(key)) {
+      pendingInputValue = {
+        ...pendingInputValue,
+        [key]: newValue
+      };
+    }
+
+    const validation = ValidationService.validateField(fieldConfigByKey[key], newValue);
+    if (validation?.valid !== true) {
+      return;
+    }
+
+    const pair = pairByKey[key];
+    if (!hasCoordinate(toCoordinate(newInputValue, pair))) {
+      if (selectedCRS === 'EPSG:4326') {
+        const newValue4326 = {
+          ...value4326,
+          [key]: newValue
+        };
+        value4326 = newValue4326;
+        sendValue(newInputValue, newValue4326);
+      } else {
+        addPendingInputKey(key, newValue);
+      }
+      return;
+    }
+
     try {
-      value4326 = transformExtent(newTransformedValue, crs?.label as CRS, 'EPSG:4326');
-      sendValue();
+      const newValue4326 = {
+        ...value4326,
+        ...transformCoordinatePair(newInputValue, pair, selectedCRS, 'EPSG:4326')
+      };
+      value4326 = newValue4326;
+      removePendingInputKeys([...pair]);
+      sendValue(newInputValue, newValue4326);
     } catch {
       toast.error(t('18_ExtentField.error_transforming_coordinates', { key }));
     }
   };
 
-  const sendValue = async () => {
-    if (hasInvalidFields) {
-      return;
-    }
-    const response = await MetadataService.persistValue(KEY, value4326);
+  const sendValue = async (currentInputValue = inputValue, currentValue4326 = value4326) => {
+    const persistableExtent = getPersistableExtent(currentInputValue, currentValue4326);
+    updateFormState(KEY, persistableExtent);
+
+    const response = await MetadataService.persistValue(KEY, persistableExtent);
     if (response.ok) {
       showCheckmark = true;
     }
+  };
+
+  const getPersistableExtent = (
+    currentInputValue: PartialExtent,
+    currentValue4326: PartialExtent
+  ) => {
+    return {
+      minx: isValidInput('minx', currentInputValue) ? currentValue4326.minx : valueFromData?.minx,
+      miny: isValidInput('miny', currentInputValue) ? currentValue4326.miny : valueFromData?.miny,
+      maxx: isValidInput('maxx', currentInputValue) ? currentValue4326.maxx : valueFromData?.maxx,
+      maxy: isValidInput('maxy', currentInputValue) ? currentValue4326.maxy : valueFromData?.maxy
+    };
   };
 
   onMount(async () => {
@@ -160,6 +306,8 @@
             title={option.title}
             onclick={async () => {
               value4326 = option.value;
+              pendingInputKeys = [];
+              pendingInputValue = emptyExtent;
               await tick();
               sendValue();
             }}
@@ -174,48 +322,56 @@
           <TextInput
             label={t('18_ExtentField.label_min_x')}
             fieldConfig={minXFieldConfig}
-            bind:value={inputValue.minx}
+            value={inputValue.minx}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'minx');
+              onChange(getInputValue(target), 'minx');
             }}
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
             validationResult={validationResultMinX}
+            onfocus={() => (isEditing = true)}
+            onblur={() => (isEditing = false)}
           />
           <TextInput
-            bind:value={inputValue.maxx}
+            value={inputValue.maxx}
             label={t('18_ExtentField.label_max_x')}
             fieldConfig={maxXFieldConfig}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'maxx');
+              onChange(getInputValue(target), 'maxx');
             }}
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
             validationResult={validationResultMaxX}
+            onfocus={() => (isEditing = true)}
+            onblur={() => (isEditing = false)}
           />
         </div>
         <div class="inline-fields">
           <TextInput
-            bind:value={inputValue.miny}
+            value={inputValue.miny}
             label={t('18_ExtentField.label_min_y')}
             fieldConfig={minYFieldConfig}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'miny');
+              onChange(getInputValue(target), 'miny');
             }}
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
             validationResult={validationResultMinY}
+            onfocus={() => (isEditing = true)}
+            onblur={() => (isEditing = false)}
           />
           <TextInput
-            bind:value={inputValue.maxy}
+            value={inputValue.maxy}
             label={t('18_ExtentField.label_max_y')}
             fieldConfig={maxYFieldConfig}
             onchange={(evt) => {
               const target = evt?.target as HTMLInputElement;
-              onChange(Number(target.value), 'maxy');
+              onChange(getInputValue(target), 'maxy');
             }}
             step={['EPSG:4326', 'EPSG:4258'].includes(crs?.label as CRS) ? '0.0001' : undefined}
             validationResult={validationResultMaxY}
+            onfocus={() => (isEditing = true)}
+            onblur={() => (isEditing = false)}
           />
         </div>
       </div>

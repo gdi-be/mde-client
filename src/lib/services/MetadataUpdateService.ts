@@ -278,6 +278,11 @@ export class MetadataUpdateService {
       'id' in earlierValue[0] &&
       'id' in laterValue[0]
     ) {
+      const earlierIds = new Set(earlierValue.map((item) => item.id));
+      const laterIds = new Set(laterValue.map((item) => item.id));
+      const hasSameItems =
+        earlierIds.size === laterIds.size && [...earlierIds].every((id) => laterIds.has(id));
+
       // Build map from later array (base structure)
       const itemMap = new Map<string, Record<string, unknown>>();
       for (const item of laterValue) {
@@ -292,11 +297,17 @@ export class MetadataUpdateService {
           const laterItem = itemMap.get(id)!;
           itemMap.set(
             id,
-            MetadataUpdateService.deepMergeObjects(
-              earlierItem as Record<string, unknown>,
-              laterItem,
-              visited
-            )
+            hasSameItems
+              ? MetadataUpdateService.deepMergeObjects(
+                  laterItem,
+                  earlierItem as Record<string, unknown>,
+                  visited
+                )
+              : MetadataUpdateService.deepMergeObjects(
+                  earlierItem as Record<string, unknown>,
+                  laterItem,
+                  visited
+                )
           );
         }
         // If ID doesn't exist in later array, it was deleted - don't add it back

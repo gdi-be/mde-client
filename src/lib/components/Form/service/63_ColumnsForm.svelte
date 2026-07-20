@@ -13,6 +13,7 @@
   import { page } from '$app/state';
   import { validateColumns } from './validation';
   import { MetadataService } from '$lib/services/MetadataService';
+  import { persistItems } from '../persistableItems';
   const t = $derived(page.data.t);
 
   type Tab = {
@@ -48,15 +49,22 @@
   let activeColumn = $derived(columns.find((column) => column.id === activeTabId));
 
   const fieldConfig = MetadataService.getFieldConfig(63);
+  const nameFieldConfig = MetadataService.getFieldConfig<string>(64);
+  const aliasFieldConfig = MetadataService.getFieldConfig<string>(65);
+  const typeFieldConfig = MetadataService.getFieldConfig<ColumnInfo['type']>(66);
   const validationResult = $derived(fieldConfig?.validator(columns));
 
   const invalidTabIds = $derived(validateColumns(columns, { metadata, HIGHEST_ROLE: highestRole }));
   const isInvalid = $derived(columns.length === 0 || invalidTabIds.size > 0);
+  let lastPersistedColumns = $state<ColumnInfo[]>([]);
+  let lastFeatureTypeName: string | undefined;
 
   $effect(() => {
     // if the featureType changes set activeTabIndex to undefined
-    if (featureTypeName) {
+    if (featureTypeName && featureTypeName !== lastFeatureTypeName) {
       activeTabId = undefined;
+      lastPersistedColumns = initialColumns || [];
+      lastFeatureTypeName = featureTypeName;
     }
   });
 
@@ -71,7 +79,6 @@
       }
     ];
     activeTabId = id;
-    onChange(columns);
   }
 
   function removeColumn(id: string, evt: MouseEvent) {
@@ -84,7 +91,7 @@
         if (activeTabId === id) {
           activeTabId = columns.length > 0 ? columns[0].id : undefined;
         }
-        onChange(columns);
+        persistColumns(columns);
         activeTabId = columns.length > 0 ? activeTabId : undefined;
         if (activeTabId && !columns.find((column) => column.id === activeTabId)) {
           activeTabId = columns[0]?.id;
@@ -107,7 +114,33 @@
       }
       return column;
     });
-    return onChange(columns, persist);
+    return persist === false ? onChange(columns, false) : persistColumns(columns);
+  }
+
+  async function persistColumns(nextColumns: ColumnInfo[]) {
+    const { response, persistableItems } = await persistItems(
+      nextColumns,
+      lastPersistedColumns,
+      [
+        {
+          key: 'name',
+          isValid: (column) => nameFieldConfig?.validator(column.name)?.valid === true
+        },
+        {
+          key: 'alias',
+          isValid: (column) => aliasFieldConfig?.validator(column.alias)?.valid === true
+        },
+        {
+          key: 'type',
+          isValid: (column) => typeFieldConfig?.validator(column.type)?.valid === true
+        }
+      ],
+      onChange
+    );
+    if (response.ok) {
+      lastPersistedColumns = persistableItems;
+    }
+    return response;
   }
 </script>
 

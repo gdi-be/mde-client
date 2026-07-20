@@ -22,7 +22,6 @@
   import { logger } from 'loggisch';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
-  import { validateFeatureTypes } from './validation';
   import { ValidationService } from '$lib/services/ValidationService';
 
   const t = $derived(page.data.t);
@@ -148,17 +147,7 @@
       return fieldConfig?.validator(value as Service['shortDescription']).valid;
     }
     if (key === 'featureTypes') {
-      const fieldConfig = MetadataService.getFieldConfig<Service['featureTypes']>(56);
-      const featureTypes = value as Service['featureTypes'];
-      const hasValidFeatureTypeCollection = fieldConfig?.validator(featureTypes, {
-        ['PARENT_VALUE']: service
-      }).valid;
-      const hasInvalidFeatureTypes =
-        validateFeatureTypes(featureTypes || [], {
-          metadata,
-          HIGHEST_ROLE: highestRole
-        }).size > 0;
-      return hasValidFeatureTypeCollection && !hasInvalidFeatureTypes;
+      return true;
     }
     if (key === 'serviceType') {
       const fieldConfig = MetadataService.getFieldConfig<ServiceType>(58);

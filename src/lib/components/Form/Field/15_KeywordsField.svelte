@@ -24,7 +24,20 @@
   let { metadataid } = page.params;
 
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
-  let value = $state<string[]>([]);
+  const getKeywordText = (keyword: unknown) => {
+    if (typeof keyword === 'string') return keyword.trim();
+    if (keyword && typeof keyword === 'object' && 'keyword' in keyword) {
+      const value = (keyword as { keyword?: unknown }).keyword;
+      return typeof value === 'string' ? value.trim() : '';
+    }
+    return '';
+  };
+  const fromKeywords = (keywords?: Keywords) =>
+    Array.from(new Set((keywords?.default || []).map(getKeywordText).filter(Boolean)));
+
+  let value = $state<string[]>(
+    fromKeywords(MetadataService.getValue<Keywords>(KEY, formState.metadata))
+  );
 
   let showCheckmark = $state(false);
   let autoKeywords = $state<string[]>([]);
@@ -33,7 +46,9 @@
   let searchValue = $state('');
   const fieldConfig = MetadataService.getFieldConfig<Keywords>(15);
   const toKeywords = (keywords: string[]): Keywords => ({
-    default: keywords.map((entry) => ({ keyword: entry }))
+    default: Array.from(new Set(keywords.map(getKeywordText).filter(Boolean))).map((entry) => ({
+      keyword: entry
+    }))
   });
   let validationResult = $derived(fieldConfig?.validator(toKeywords(value)));
 
@@ -82,7 +97,9 @@
   };
 
   const addSelectedKeyword = ({ detail }: CustomEvent) => {
-    value = Array.from(new Set([...value, detail]));
+    const keyword = getKeywordText(detail);
+    if (!keyword) return;
+    value = Array.from(new Set([...value, keyword]));
     searchValue = '';
     persistKeywords();
   };
@@ -90,7 +107,10 @@
   const addCustomKeywords = () => {
     if (newKeyword) {
       // split by comma and remove leading/trailing whitespaces
-      const splitValues = newKeyword.split(',').map((kw) => kw.trim());
+      const splitValues = newKeyword
+        .split(',')
+        .map((kw) => kw.trim())
+        .filter(Boolean);
       // ensure unique values
       value = Array.from(new Set([...value, ...splitValues]));
       dialogOpen = false;

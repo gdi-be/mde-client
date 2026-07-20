@@ -18,6 +18,8 @@
   import { page } from '$app/state';
   import { validateLayers } from './validation';
   import { MetadataService } from '$lib/services/MetadataService';
+  import { persistItems } from '../persistableItems';
+  import type { FullFieldConfig } from '../FieldsConfig';
   const t = $derived(page.data.t);
 
   type Tab = {
@@ -53,6 +55,14 @@
   let activeLayer = $derived(layers.find((layer) => layer.id === activeTabId));
 
   const fieldConfig = MetadataService.getFieldConfig(48);
+  const titleFieldConfig = MetadataService.getFieldConfig<string>(49);
+  const nameFieldConfig = MetadataService.getFieldConfig<string>(50);
+  const styleNameFieldConfig = MetadataService.getFieldConfig<string>(51);
+  const styleTitleFieldConfig = MetadataService.getFieldConfig<string>(52);
+  const legendImageFieldConfig = MetadataService.getFieldConfig<string>(53);
+  const descriptionFieldConfig = MetadataService.getFieldConfig<string>(54);
+  const datasourceFieldConfig = MetadataService.getFieldConfig<string>(55);
+  const secondaryDatasourceFieldConfig = MetadataService.getFieldConfig<string>(68);
   const validationResult = $derived(
     fieldConfig?.validator(layers, {
       PARENT_VALUE: service
@@ -61,11 +71,15 @@
 
   const invalidTabIds = $derived(validateLayers(layers, { metadata, HIGHEST_ROLE: highestRole }));
   const isInvalid = $derived(layers.length === 0 || invalidTabIds.size > 0);
+  let lastPersistedLayers = $state<Layer[]>([]);
+  let lastServiceId: string | undefined;
 
   $effect(() => {
     // if the serviceId changes set activeTabIndex to undefined
-    if (serviceId) {
+    if (serviceId && serviceId !== lastServiceId) {
       activeTabId = undefined;
+      lastPersistedLayers = initialLayers || [];
+      lastServiceId = serviceId;
     }
   });
 
@@ -82,7 +96,6 @@
     ];
     syncLocalLayers(layers);
     activeTabId = id;
-    onChange(layers);
   }
 
   function removeLayer(layerId: string, evt: MouseEvent) {
@@ -96,7 +109,7 @@
         if (activeTabId === layerId) {
           activeTabId = layers.length > 0 ? layers[layers.length - 1]?.id : undefined;
         }
-        onChange(layers);
+        persistLayers(layers);
         activeTabId = layers.length > 0 ? activeTabId : undefined;
         if (activeTabId && !layers.find((layer) => layer.id === activeTabId)) {
           activeTabId = layers[0]?.id;
@@ -120,7 +133,63 @@
       return layer;
     });
     syncLocalLayers(layers);
-    return onChange(layers, persist);
+    return persist === false ? onChange(layers, false) : persistLayers(layers);
+  }
+
+  async function persistLayers(nextLayers: Layer[]) {
+    const { response, persistableItems } = await persistItems(
+      nextLayers,
+      lastPersistedLayers,
+      [
+        {
+          key: 'title',
+          isValid: (layer) => isLayerFieldValid(titleFieldConfig, layer.title, layer)
+        },
+        { key: 'name', isValid: (layer) => isLayerFieldValid(nameFieldConfig, layer.name, layer) },
+        {
+          key: 'styleName',
+          isValid: (layer) => isLayerFieldValid(styleNameFieldConfig, layer.styleName, layer)
+        },
+        {
+          key: 'styleTitle',
+          isValid: (layer) => isLayerFieldValid(styleTitleFieldConfig, layer.styleTitle, layer)
+        },
+        {
+          key: 'legendImage',
+          isValid: (layer) => isLayerFieldValid(legendImageFieldConfig, layer.legendImage, layer)
+        },
+        {
+          key: 'shortDescription',
+          isValid: (layer) =>
+            isLayerFieldValid(descriptionFieldConfig, layer.shortDescription, layer)
+        },
+        {
+          key: 'datasource',
+          isValid: (layer) => isLayerFieldValid(datasourceFieldConfig, layer.datasource, layer)
+        },
+        {
+          key: 'secondaryDatasource',
+          isValid: (layer) =>
+            isLayerFieldValid(secondaryDatasourceFieldConfig, layer.secondaryDatasource, layer)
+        }
+      ],
+      onChange
+    );
+    if (response.ok) {
+      lastPersistedLayers = persistableItems;
+    }
+    return response;
+  }
+
+  function isLayerFieldValid<T>(
+    fieldConfig: FullFieldConfig<T>,
+    value: T | undefined,
+    layer: Layer
+  ) {
+    return (
+      fieldConfig?.validator(value, { metadata, HIGHEST_ROLE: highestRole, PARENT_VALUE: layer })
+        .valid === true
+    );
   }
 
   function syncLocalLayers(nextLayers: Layer[]) {

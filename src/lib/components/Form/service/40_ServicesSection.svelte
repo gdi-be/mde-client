@@ -3,7 +3,7 @@
   import { getFormContext } from '$lib/context/FormContext.svelte';
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
-  import type { Layer, Service } from '$lib/models/metadata';
+  import type { ColumnInfo, FeatureType, Layer, Service } from '$lib/models/metadata';
   import ServiceForm_40 from './40_ServiceForm.svelte';
   import Checkmark from '../Checkmark.svelte';
   import FieldHint from '../FieldHint.svelte';
@@ -13,6 +13,7 @@
   import { MetadataService } from '$lib/services/MetadataService';
   import { SvelteSet } from 'svelte/reactivity';
   import { ValidationService } from '$lib/services/ValidationService';
+  import { getPersistableItems } from '../persistableItems';
 
   const t = $derived(page.data.t);
 
@@ -101,14 +102,94 @@
   };
 
   const getPersistableServices = (serviceList: Service[]) => {
-    return serviceList.map((service) => {
-      if (isWorkspacePersistable(service, serviceList)) {
-        return service;
-      }
+    return serviceList.map((service) => getPersistableService(service, serviceList));
+  };
 
-      const lastPersisted = lastPersistedServices.find((entry) => entry.id === service.id);
-      return lastPersisted ? { ...service, workspace: lastPersisted.workspace } : service;
+  const getPersistableService = (service: Service, serviceList: Service[]) => {
+    const previous = lastPersistedServices.find((entry) => entry.id === service.id);
+    const field58 = MetadataService.getFieldConfig(58);
+    const field59 = MetadataService.getFieldConfig<string>(59);
+    const field60 = MetadataService.getFieldConfig<string>(60);
+    const field46 = MetadataService.getFieldConfig<string>(46);
+
+    const next = getPersistableItems([service], previous ? [previous] : [], [
+      {
+        key: 'serviceType',
+        isValid: (entry) => field58?.validator(entry.serviceType)?.valid === true
+      },
+      { key: 'title', isValid: (entry) => field59?.validator(entry.title)?.valid === true },
+      {
+        key: 'shortDescription',
+        isValid: (entry) => field60?.validator(entry.shortDescription)?.valid === true
+      },
+      {
+        key: 'preview',
+        isValid: (entry) =>
+          field46?.validator(entry.preview, { PARENT_VALUE: entry })?.valid === true
+      },
+      { key: 'workspace', isValid: (entry) => isWorkspacePersistable(entry, serviceList) }
+    ])[0];
+
+    next.serviceIdentification = service.serviceIdentification;
+    if (service.legendImage !== undefined) next.legendImage = service.legendImage;
+    if (service.fileIdentifier !== undefined) next.fileIdentifier = service.fileIdentifier;
+    if (service.featureTypes !== undefined) {
+      next.featureTypes = getPersistableFeatureTypes(service.featureTypes, previous?.featureTypes);
+    }
+
+    return next;
+  };
+
+  const getPersistableFeatureTypes = (
+    featureTypes: FeatureType[],
+    previousFeatureTypes: FeatureType[] = []
+  ) => {
+    const field61 = MetadataService.getFieldConfig<string>(61);
+    const field62 = MetadataService.getFieldConfig<string>(62);
+    const field69 = MetadataService.getFieldConfig<string>(69);
+
+    return getPersistableItems(featureTypes, previousFeatureTypes, [
+      {
+        key: 'title',
+        isValid: (featureType) => {
+          const context = { metadata, HIGHEST_ROLE: highestRole, PARENT_VALUE: featureType };
+          return field61?.validator(featureType.title, context)?.valid === true;
+        }
+      },
+      {
+        key: 'name',
+        isValid: (featureType) => {
+          const context = { metadata, HIGHEST_ROLE: highestRole, PARENT_VALUE: featureType };
+          return field62?.validator(featureType.name, context)?.valid === true;
+        }
+      },
+      {
+        key: 'shortDescription',
+        isValid: (featureType) => {
+          const context = { metadata, HIGHEST_ROLE: highestRole, PARENT_VALUE: featureType };
+          return field69?.validator(featureType.shortDescription, context)?.valid === true;
+        }
+      }
+    ]).map((featureType) => {
+      const localFeatureType = featureTypes.find((entry) => entry.id === featureType.id);
+      const previous = previousFeatureTypes.find((entry) => entry.id === featureType.id);
+      return {
+        ...featureType,
+        columns: getPersistableColumns(localFeatureType?.columns || [], previous?.columns || [])
+      };
     });
+  };
+
+  const getPersistableColumns = (columns: ColumnInfo[], previousColumns: ColumnInfo[] = []) => {
+    const field64 = MetadataService.getFieldConfig<string>(64);
+    const field65 = MetadataService.getFieldConfig<string>(65);
+    const field66 = MetadataService.getFieldConfig<ColumnInfo['type']>(66);
+
+    return getPersistableItems(columns, previousColumns, [
+      { key: 'name', isValid: (column) => field64?.validator(column.name)?.valid === true },
+      { key: 'alias', isValid: (column) => field65?.validator(column.alias)?.valid === true },
+      { key: 'type', isValid: (column) => field66?.validator(column.type)?.valid === true }
+    ]);
   };
 
   const persistServices = async (id: string) => {
@@ -133,7 +214,6 @@
       }
     ];
     activeTab = id;
-    persistServices(id);
   }
 
   function removeService(id: string, evt: MouseEvent) {

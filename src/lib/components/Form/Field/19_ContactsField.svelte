@@ -14,6 +14,7 @@
   import { getAccessToken } from '$lib/context/TokenContext.svelte';
   import { getHighestRole } from '$lib/util';
   import { getContext } from 'svelte';
+  import { getPersistableItems } from '../persistableItems';
 
   const t = $derived(page.data.t);
 
@@ -22,13 +23,14 @@
 
   const KEY = 'isoMetadata.pointsOfContact';
 
-  const { getValue } = getFormContext();
+  const { getValue, updateFormState } = getFormContext();
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
   let contacts = $state<Contact[]>([]);
   const valueFromData = $derived(getValue<Contacts>(KEY));
 
   // important that this is not a state
   let previousValueAsString: string;
+  let lastPersistedContacts = $state<Contacts>([]);
   let hasUnsavedLocalChange = $state(false);
 
   const popconfirm = $derived(getPopconfirm());
@@ -57,6 +59,7 @@
         };
       }) || [];
     previousValueAsString = JSON.stringify(valueFromData);
+    lastPersistedContacts = valueFromData || [];
   });
 
   let showCheckmark = $state(false);
@@ -90,26 +93,22 @@
     persistContacts();
   };
 
-  const persistContacts = async (evt?: FocusEvent) => {
-    if (formState.metadata?.isoMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        isoMetadata: {
-          ...formState.metadata.isoMetadata,
-          pointsOfContact: contacts
-        }
-      };
-    }
+  const persistContacts = async (evt?: FocusEvent, fieldIsValid = true) => {
+    const persistableContacts = getPersistableContacts();
+    updateFormState(KEY, contacts);
 
-    if (hasInvalidFields) {
+    if (!fieldIsValid) {
       return;
     }
     // Due to the SvelteKit lifecycle the blur effect gets trigger twice
     // this leads to a loss of focus on the input field. This need to be fixed.
     const focusedElement = evt?.relatedTarget as HTMLElement | null;
-    const response = await MetadataService.persistValue(KEY, contacts);
+    const response = await MetadataService.persistValue(KEY, persistableContacts);
     if (response.ok) {
-      hasUnsavedLocalChange = false;
+      lastPersistedContacts = persistableContacts;
+      updateFormState(KEY, contacts);
+      previousValueAsString = JSON.stringify(contacts);
+      hasUnsavedLocalChange = JSON.stringify(contacts) !== JSON.stringify(persistableContacts);
       showCheckmark = true;
     }
 
@@ -118,6 +117,18 @@
       const elementToFocus = document.getElementById(focusedElement.id);
       elementToFocus?.focus();
     }, 10);
+  };
+
+  const getPersistableContacts = () => {
+    return getPersistableItems(contacts, lastPersistedContacts, [
+      { key: 'name', isValid: (contact) => nameConfig?.validator(contact.name)?.valid === true },
+      {
+        key: 'organisation',
+        isValid: (contact) => organisationConfig?.validator(contact.organisation)?.valid === true
+      },
+      { key: 'phone', isValid: (contact) => phoneConfig?.validator(contact.phone)?.valid === true },
+      { key: 'email', isValid: (contact) => emailConfig?.validator(contact.email)?.valid === true }
+    ]);
   };
 
   const addItem = (evt?: MouseEvent) => {
@@ -133,7 +144,7 @@
       },
       ...contacts
     ];
-    persistContacts();
+    updateFormState(KEY, contacts);
   };
 
   const removeItem = (id: string, evt: MouseEvent) => {
@@ -154,15 +165,7 @@
 
   const onContactChange = () => {
     hasUnsavedLocalChange = true;
-    if (formState.metadata?.isoMetadata) {
-      formState.metadata = {
-        ...formState.metadata,
-        isoMetadata: {
-          ...formState.metadata.isoMetadata,
-          pointsOfContact: contacts
-        }
-      };
-    }
+    updateFormState(KEY, contacts);
   };
 
   $effect(() => {
@@ -174,13 +177,7 @@
     if (serverValue === localValue) {
       return;
     }
-    formState.metadata = {
-      ...formState.metadata,
-      isoMetadata: {
-        ...formState.metadata.isoMetadata,
-        pointsOfContact: contacts
-      }
-    };
+    updateFormState(KEY, contacts);
   });
 
   let hasInvalidFields = $derived.by(() => {
@@ -190,12 +187,12 @@
       highestRole === 'MdeAdministrator' ||
       (editingRoles ? editingRoles?.includes(highestRole) : true);
     const hasInvalidFields = contacts.some((contact) => {
-      const nameValid = nameConfig?.validator(contact.name).valid ?? true;
+      const nameValid = nameConfig?.validator(contact.name)?.valid ?? true;
       const organisationValid = organisationConfig
-        ? organisationConfig?.validator(contact.organisation).valid
+        ? organisationConfig?.validator(contact.organisation)?.valid
         : true;
-      const phoneValid = phoneConfig ? phoneConfig?.validator(contact.phone).valid : true;
-      const emailValid = emailConfig ? emailConfig?.validator(contact.email).valid : true;
+      const phoneValid = phoneConfig ? phoneConfig?.validator(contact.phone)?.valid : true;
+      const emailValid = emailConfig ? emailConfig?.validator(contact.email)?.valid : true;
       return !nameValid || !organisationValid || !phoneValid || !emailValid;
     });
     return isEditingRole && (!validationResult?.valid || hasInvalidFields);
@@ -235,7 +232,8 @@
             bind:value={contact.name}
             label={t('19_ContactsField.name')}
             onchange={onContactChange}
-            onblur={persistContacts}
+            onblur={(evt) =>
+              persistContacts(evt, nameConfig?.validator(contact.name)?.valid === true)}
             fieldConfig={nameConfig}
             validationResult={nameConfig?.validator(contact.name)}
             id={`${KEY}-${index}-name`}
@@ -253,7 +251,11 @@
             bind:value={contact.organisation}
             label={t('19_ContactsField.organisation')}
             onchange={onContactChange}
-            onblur={persistContacts}
+            onblur={(evt) =>
+              persistContacts(
+                evt,
+                organisationConfig?.validator(contact.organisation)?.valid === true
+              )}
             fieldConfig={organisationConfig}
             validationResult={organisationConfig?.validator(contact.organisation)}
             id={`${KEY}-${index}-organisation`}
@@ -271,7 +273,8 @@
             bind:value={contact.phone}
             label={t('19_ContactsField.phone')}
             onchange={onContactChange}
-            onblur={persistContacts}
+            onblur={(evt) =>
+              persistContacts(evt, phoneConfig?.validator(contact.phone)?.valid === true)}
             fieldConfig={phoneConfig}
             validationResult={phoneConfig?.validator(contact.phone)}
             id={`${KEY}-${index}-phone`}
@@ -289,7 +292,8 @@
             bind:value={contact.email}
             label={t('19_ContactsField.email')}
             onchange={onContactChange}
-            onblur={persistContacts}
+            onblur={(evt) =>
+              persistContacts(evt, emailConfig?.validator(contact.email)?.valid === true)}
             fieldConfig={emailConfig}
             validationResult={emailConfig?.validator(contact.email)}
             id={`${KEY}-${index}-email`}

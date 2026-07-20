@@ -46,6 +46,12 @@
     onChange?.(newValue);
   };
 
+  const onSelectChange = (index: number) => {
+    const option = uniqueOptions[index];
+    if (!option || option.disabled) return;
+    onSelect(option.key);
+  };
+
   const selectedDescription = $derived(
     uniqueOptions.find((item) => item.key === value)?.description
   );
@@ -62,12 +68,21 @@
 
 <fieldset class={['select-input', wrapperClass, isInvalid && 'invalid']}>
   <legend>{label}</legend>
-  <Select bind:value {disabled} menu$managed {...restProps}>
+  <Select
+    bind:value
+    {disabled}
+    menu$managed
+    {...restProps}
+    onSMUIMenuSelected={(evt) => onSelectChange(evt.detail.index)}
+  >
     {#each options as option (option.key)}
       <SafeSelectOption
-        onSMUIAction={() => {
+        onclick={() => {
           if (option.disabled) return;
           onSelect(option.key);
+        }}
+        onSMUIAction={() => {
+          if (option.disabled) return;
         }}
         value={option.key}
         disabled={option.disabled}
