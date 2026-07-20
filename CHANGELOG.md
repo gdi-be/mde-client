@@ -1,3 +1,32 @@
+# [6.3.0](https://github.com/gdi-be/mde-client/compare/v6.2.1...v6.3.0) (2026-07-20)
+
+
+### Bug Fixes
+
+* apply suggestions from code review ([8d9c7d9](https://github.com/gdi-be/mde-client/commit/8d9c7d95ec37994bd77fa96143a46e6f264844f7))
+* enhance field validation for terms of use source based on privacy ([3979be5](https://github.com/gdi-be/mde-client/commit/3979be5b0ff9f552f93f7317e8ba3ee25a03c0e9))
+* enhance SSE connection handling and event subscription logic ([706d346](https://github.com/gdi-be/mde-client/commit/706d34620e3af5797151ff10ea5f549cfb2a6151))
+* ensure workspace duplicate validation is performed ([b0decc5](https://github.com/gdi-be/mde-client/commit/b0decc565b442928ec78af6e03abd021c8789213))
+* field updates for persisitng consistency ([6971050](https://github.com/gdi-be/mde-client/commit/6971050a732b03f831e6ff3d1d448abff7bb8ddd))
+* fix field Nutzungsbedingungen ([a8d1a24](https://github.com/gdi-be/mde-client/commit/a8d1a24cfab75e0dbbc65f69b8e9fb1d3c9c40a6))
+* improve error handling and indexing in validation dialog and metadata search field ([11573c6](https://github.com/gdi-be/mde-client/commit/11573c6a1ffa2676857e74c83a9f14a43fdec761))
+* improve service layer persistence during validation updates ([332c948](https://github.com/gdi-be/mde-client/commit/332c948a2c13a6f420bb9ddba3caa37c29fb5362))
+* linting ([1dabcf4](https://github.com/gdi-be/mde-client/commit/1dabcf4f4aec369e1a6be1508dd42ab23ded5977))
+* refactor localValue handling to use $derived for improved reactivity ([c7354ce](https://github.com/gdi-be/mde-client/commit/c7354ce406973e9d2e15b50b2794aa5362818424))
+* refactor SafeSelectOption and update SelectInput ([4b7db6d](https://github.com/gdi-be/mde-client/commit/4b7db6d780bd1e96b288ec9c2e25bf026454c5fd))
+* remove unused TermsOfUse type import in TermsOfUseField component ([57d63e7](https://github.com/gdi-be/mde-client/commit/57d63e7347b273b2b589ba90d3a0625d275df466))
+* update selected value handling in TermsOfUseField component ([e63a501](https://github.com/gdi-be/mde-client/commit/e63a50191392fce8b83d3616d7d791ac97beb4cc))
+* update terms of use deletion to use MetadataUpdateService ([0ece132](https://github.com/gdi-be/mde-client/commit/0ece132789c18dd0f99d474db866b45a196e54ad))
+* update TermsOfUseField to use SvelteMap and adjust fetchOptions for selected privacy ([bef5769](https://github.com/gdi-be/mde-client/commit/bef576912be877db3fa32136165c69af28dc123d))
+* update test setup by adding resetTestMetadata and adjusting expectIncrease values ([283a600](https://github.com/gdi-be/mde-client/commit/283a6009496499fd92e5e42371385bd6710d5ad9))
+
+
+### Features
+
+* enhance form fields to synchronize metadata state and improve validation handling ([23e036f](https://github.com/gdi-be/mde-client/commit/23e036fe521d273315119d4149cd73d2aaf04ab7))
+* enhance validation handling across form fields ([#29500](https://github.com/gdi-be/mde-client/issues/29500)) ([9aecdae](https://github.com/gdi-be/mde-client/commit/9aecdaefcc23afceeba0fda0c8894e8280644835))
+* refactor form fieldset components to support single-field persistance ([e3c0cd6](https://github.com/gdi-be/mde-client/commit/e3c0cd6b69fa71e6a1a8fe4edf50049eeaaa830c))
+
 ## [6.2.1](https://github.com/gdi-be/mde-client/compare/v6.2.0...v6.2.1) (2026-06-19)
 
 
