@@ -13,36 +13,14 @@
 
   const { getValue, updateFormState } = getFormContext();
   const startValueFromData = $derived(getValue<string>(FROM_KEY));
-  let startValue = $state('');
-  let startInitialized = false;
-
-  // TODO: this should be replaced by deriving "startValue". This
-  // should be possible after svelte is updated to the latest version
-  // https://github.com/gdi-be/mde-client/pull/261
-  $effect(() => {
-    if (!startInitialized) {
-      if (startValueFromData) {
-        startValue = new Date(startValueFromData).toISOString().split('T')[0];
-      }
-      startInitialized = true;
-    }
-  });
+  let startValue = $derived(
+    startValueFromData ? new Date(startValueFromData).toISOString().split('T')[0] : ''
+  );
 
   const endValueFromData = $derived(getValue<string>(TO_KEY));
-  let endValue = $state('');
-  let endInitialized = false;
-
-  // TODO: this should be replaced by deriving "endValue". This
-  // should be possible after svelte is updated to the latest version
-  // https://github.com/gdi-be/mde-client/pull/261
-  $effect(() => {
-    if (!endInitialized) {
-      if (endValueFromData) {
-        endValue = new Date(endValueFromData).toISOString().split('T')[0];
-      }
-      endInitialized = true;
-    }
-  });
+  let endValue = $derived(
+    endValueFromData ? new Date(endValueFromData).toISOString().split('T')[0] : ''
+  );
 
   let showCheckmark = $state(false);
   const fromFieldConfig = MetadataService.getFieldConfig<string>(12);
