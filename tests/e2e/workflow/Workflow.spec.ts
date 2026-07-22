@@ -424,6 +424,10 @@ test.describe('Metadata Workflow - Editor', () => {
   test('Editor can only publish if assigned, approved, and valid', async ({ page }) => {
     await page.goto('/metadata');
 
+    await page.getByRole('textbox', { name: 'Suche' }).click();
+    await page.getByRole('textbox', { name: 'Suche' }).fill('Valid');
+    await page.getByRole('textbox', { name: 'Suche' }).press('Enter');
+
     const metadataCards = page.locator('.metadata-card');
     const cardCount = await metadataCards.count();
     let publishTestDone = false;
