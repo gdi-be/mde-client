@@ -5,6 +5,12 @@ on:
     branches: ['main']
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      playwright_base_url:
+        description: URL to test after deployment
+        required: false
+        default: https://sensw-geoportal-berlin-mde.intranet.terrestris.de
 
 env:
   REGISTRY: ghcr.io
@@ -13,6 +19,7 @@ env:
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
+    if: github.event_name == 'push' || github.event_name == 'release'
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -78,6 +85,7 @@ jobs:
 
   push_e2e_to_registry:
     name: Push E2E test Docker image to Container Registry
+    if: github.event_name == 'push' || github.event_name == 'release'
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -91,7 +99,7 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@v4
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: https://sensw-geoportal-berlin-mde.intranet.terrestris.de
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -122,3 +130,70 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-e2e
           subject-digest: ${{ steps.push-e2e.outputs.digest }}
           push-to-registry: true
+
+  run_e2e_after_deploy:
+    name: Run E2E tests after deployment
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+      contents: read
+    env:
+      PLAYWRIGHT_BASE_URL: ${{ github.event.inputs.playwright_base_url }}
+      E2E_IMAGE: ghcr.io/${{ github.repository }}-e2e:main
+    steps:
+      - name: Wait for url to be reachable
+        run: |
+          for i in {1..30}; do
+            if curl --silent --show-error --fail --location "$PLAYWRIGHT_BASE_URL" > /dev/null; then
+              echo "Deployment is reachable"
+              exit 0
+            fi
+            echo "Waiting for deployment... attempt $i/30"
+            sleep 10
+          done
+          echo "Deployment did not become reachable in time"
+          exit 1
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull E2E test image
+        run: docker pull "$E2E_IMAGE"
+
+      - name: Run E2E tests in container
+        id: e2e-run
+        run: |
+          set +e
+          docker run --name e2e-tests \
+            -e PLAYWRIGHT_BASE_URL="$PLAYWRIGHT_BASE_URL" \
+            "$E2E_IMAGE"
+          exit_code=$?
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Copy Playwright report from container
+        if: always()
+        run: |
+          mkdir -p test-results
+          docker cp e2e-tests:/app/test-results ./test-results || true
+          docker rm e2e-tests || true
+
+      - name: Upload Playwright report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: test-results
+          if-no-files-found: warn
+
+      - name: Fail workflow when E2E tests fail
+        if: steps.e2e-run.outputs.exit_code != '0'
+        run: |
+          echo "E2E tests failed with exit code ${{ steps.e2e-run.outputs.exit_code }}"
+          exit 1
+
