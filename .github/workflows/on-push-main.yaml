@@ -3,6 +3,7 @@ name: Publish Docker image
 on:
   push:
     branches: ['main']
+  pull_request:
   release:
     types: [published]
   workflow_dispatch:
@@ -11,6 +12,10 @@ on:
         description: URL to test after deployment
         required: false
         default: https://sensw-geoportal-berlin-mde.intranet.terrestris.de
+      e2e_image_tag:
+        description: E2E image tag to run
+        required: false
+        default: main
 
 env:
   REGISTRY: ghcr.io
@@ -85,7 +90,7 @@ jobs:
 
   push_e2e_to_registry:
     name: Push E2E test Docker image to Container Registry
-    if: github.event_name == 'push' || github.event_name == 'release'
+    if: github.event_name == 'push' || github.event_name == 'release' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -99,7 +104,7 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@v4
         with:
-          registry: https://sensw-geoportal-berlin-mde.intranet.terrestris.de
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -140,7 +145,7 @@ jobs:
       contents: read
     env:
       PLAYWRIGHT_BASE_URL: ${{ github.event.inputs.playwright_base_url }}
-      E2E_IMAGE: ghcr.io/${{ github.repository }}-e2e:main
+      E2E_IMAGE: ghcr.io/${{ github.repository }}-e2e:${{ github.event.inputs.e2e_image_tag }}
     steps:
       - name: Wait for url to be reachable
         run: |
