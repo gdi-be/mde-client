@@ -2,10 +2,9 @@ FROM mcr.microsoft.com/playwright:v1.59.1-jammy
 
 WORKDIR /app
 
-COPY package.json package-lock.json* bun.lock* ./
+COPY . .
+
 RUN npm i -g bun
 RUN bun install --frozen-lockfile
-
-COPY . .
 
 CMD ["bun", "run", "test:ui"]
