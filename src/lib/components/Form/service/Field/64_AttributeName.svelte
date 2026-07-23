@@ -25,6 +25,7 @@
     label={t('64_AttributeName.label')}
     explanation={t('64_AttributeName.explanation')}
     value={localValue}
+    maxlength={100}
     {fieldConfig}
     {validationResult}
     onchange={(e: Event) => {

@@ -35,7 +35,7 @@ describe('MetadataService', () => {
         'isoMetadata.services[2].featureTypes[0].columns[0].name',
         metadata1
       );
-      expect(result).toBe('Mein Attribut');
+      expect(result).toBe('mein_attribut');
     });
 
     test('should return undefined if path does not exist', () => {
@@ -86,7 +86,7 @@ describe('MetadataService', () => {
         'isoMetadata.services.featureTypes.columns.name',
         metadata1
       );
-      expect(result).toEqual(['Mein Attribut', 'Mein zweites Attribut ']);
+      expect(result).toEqual(['mein_attribut', 'mein_zweites_attribut']);
     });
 
     test('should return empty array for metadata2 services (empty collection)', () => {

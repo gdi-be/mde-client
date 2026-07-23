@@ -40,7 +40,7 @@ describe('FormContext', () => {
           'isoMetadata.services[2].featureTypes[0].columns[0].name',
           metadata1
         )
-      ).toBe('Mein Attribut');
+      ).toBe('mein_attribut');
     });
 
     test('should return undefined for non-existent paths', () => {
@@ -55,7 +55,7 @@ describe('FormContext', () => {
         'isoMetadata.services.featureTypes.columns.name',
         metadata1
       );
-      expect(names).toEqual(['Mein Attribut', 'Mein zweites Attribut ']);
+      expect(names).toEqual(['mein_attribut', 'mein_zweites_attribut']);
     });
 
     test('should collect all service titles', () => {

@@ -838,7 +838,7 @@ describe('MetadataDisplay - Integration test', () => {
       );
       testFieldVisibility(role, '62_FeatureTypeName.label', 'my_feature_type', '#services', true);
       testFieldVisibility(role, '63_ColumnsForm.label', undefined, '#services', true);
-      testFieldVisibility(role, '64_AttributeName.label', 'Mein Attribut', '#services', true);
+      testFieldVisibility(role, '64_AttributeName.label', 'mein_attribut', '#services', true);
       testFieldVisibility(
         role,
         '65_AttributeAlias.label',
