@@ -52,7 +52,7 @@ test.describe('Metadata form - Basedata section', () => {
       value: 'Test description',
       checkForHelp: true,
       checkForCopy: true,
-      maxLength: 500,
+      maxLength: 1250,
       required: true,
       progressBar: {
         element: progressBar

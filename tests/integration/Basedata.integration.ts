@@ -66,7 +66,7 @@ export async function testBasedata(role: string) {
           fieldType: 'textarea',
           fieldInput: 'New Description text...',
           requiredMessage: 'Bitte geben Sie eine Beschreibung an.',
-          maxLength: 500,
+          maxLength: 1250,
           help: true,
           testProgress: {
             section: 'basedata',

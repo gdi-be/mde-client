@@ -6,7 +6,7 @@
   },
   "02_DescriptionField": {
     "label": "Kurzbeschreibung des Datenbestandes",
-    "explanation": "Beschreiben Sie Ihren Datenbestand kurz und prägnant in 500 Zeichen. Für ausführlichere Informationen nutzen Sie die inhaltliche Beschreibung."
+    "explanation": "Beschreiben Sie Ihren Datenbestand kurz und prägnant in 1250 Zeichen. Für ausführlichere Informationen nutzen Sie die inhaltliche Beschreibung."
   },
   "04_PrivacyField": {
     "label": "Datenschutz-Einstellungen",
