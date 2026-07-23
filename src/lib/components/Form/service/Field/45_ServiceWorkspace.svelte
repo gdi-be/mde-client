@@ -64,6 +64,7 @@
       value={localValue}
       {fieldConfig}
       {validationResult}
+      maxlength={100}
       onchange={(e: Event) => {
         const newValue = (e.target as HTMLInputElement).value;
         localValue = newValue;

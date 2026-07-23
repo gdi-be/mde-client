@@ -748,12 +748,16 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
       if (!required) {
         return { valid: true };
       }
-      const valid = !!(isDefined(workspace) && /^[a-zA-Z0-9_]+$/.test(workspace));
+      const valid = !!(
+        isDefined(workspace) &&
+        workspace.length <= 100 &&
+        /^[a-z0-9_]+$/.test(workspace)
+      );
       if (!valid) {
         return {
           valid: false,
           helpText:
-            'Bitte geben Sie einen gültigen Workspace an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.'
+            'Bitte geben Sie einen gültigen Workspace an. Nur Kleinbuchstaben, Zahlen und Unterstriche sind erlaubt.'
         };
       }
       const service = extraParams?.['PARENT_VALUE'] as Service;

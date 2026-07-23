@@ -849,11 +849,22 @@ async function testCollectionInput(options: TestFieldOptions): Promise<void> {
 }
 
 async function testServiceInput(fieldKey: string, options: TestFieldOptions): Promise<void> {
-  const { fieldset, fieldInput, requiredMessage, expectPersist = true } = options;
+  const { fieldset, fieldInput, requiredMessage, maxLength, expectPersist = true } = options;
 
   const input = await within(fieldset!).findByRole('textbox');
 
+  if (maxLength) {
+    expect(input).toHaveAttribute('maxlength', maxLength.toString());
+    expect(within(fieldset!).getByText(new RegExp(`/ ${maxLength}`))).toBeInTheDocument();
+  }
+
   await userEvent.click(input);
+  await tick();
+  await new Promise((r) => setTimeout(r, 0));
+
+  const previousCallCount = fetchMock.mock.calls.length;
+
+  await userEvent.clear(input);
   await tick();
   await new Promise((r) => setTimeout(r, 0));
 
@@ -862,12 +873,6 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
       expect(screen.queryByText(requiredMessage)).toBeVisible();
     });
   }
-
-  const previousCallCount = fetchMock.mock.calls.length;
-
-  await userEvent.clear(input);
-  await tick();
-  await new Promise((r) => setTimeout(r, 0));
 
   await userEvent.type(input, fieldInput as string);
   await tick();
@@ -911,6 +916,12 @@ async function testServiceInput(fieldKey: string, options: TestFieldOptions): Pr
   await waitFor(() => {
     expect(input).toHaveValue(fieldInput as string);
   });
+
+  if (maxLength) {
+    expect(
+      within(fieldset!).getByText(new RegExp(`${(fieldInput as string).length} / ${maxLength}`))
+    ).toBeInTheDocument();
+  }
 
   await waitFor(() => {
     expect(document.querySelector('.running')).toBeVisible();

@@ -181,9 +181,10 @@ export async function testServices(role: string) {
             await testField('isoMetadata.services.workspace', {
               fieldset: fieldset,
               fieldType: 'service',
-              fieldInput: 'NewValidServiceWorkspace',
+              fieldInput: 'new_valid_service_workspace',
+              maxLength: 100,
               requiredMessage:
-                'Bitte geben Sie einen gültigen Workspace an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.',
+                'Bitte geben Sie einen gültigen Workspace an. Nur Kleinbuchstaben, Zahlen und Unterstriche sind erlaubt.',
               help: true,
               testProgress: {
                 section: 'services',
