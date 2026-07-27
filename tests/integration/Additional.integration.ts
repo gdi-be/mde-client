@@ -6,7 +6,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import metadata3 from '../fixtures/metadata3';
 import FormHarness from '../helpers/FormHarness.svelte';
 import { isRequiredField, testField } from '../helpers/TestFieldHelpers';
-import { resetTestMetadata, setMockMetadataId, setMockRoles } from '../setup';
+import { fetchMock, resetTestMetadata, setMockMetadataId, setMockRoles } from '../setup';
 import { tick } from 'svelte';
 
 export async function testAdditional(role: string) {
@@ -84,13 +84,28 @@ export async function testAdditional(role: string) {
         ) as HTMLInputElement | null;
         expect(titleInput).toBeInTheDocument();
         const titleFieldset = titleInput!.closest('fieldset') as HTMLElement;
-        //TODO: Add test for search-input field like title
         await testField('isoMetadata.lineage[0].title', {
           fieldset: titleFieldset,
           fieldInput: 'Test Title',
           expectPersist: false,
           help: true
         });
+
+        fetchMock.mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              content: [
+                {
+                  id: 1,
+                  title: 'Selected dataset',
+                  metadataId: '7af63ac1-9d95-38e6-9a9e-8b8eb9676da2'
+                }
+              ]
+            })
+          )
+        );
+        await fireEvent.keyUp(titleInput!, { target: { value: 'Selected dataset' } });
+        await userEvent.click(await screen.findByRole('button', { name: 'Selected dataset' }));
 
         const dateInput = document.querySelector(
           '#isoMetadata\\.lineage-0-date'
@@ -109,6 +124,27 @@ export async function testAdditional(role: string) {
           '#isoMetadata\\.lineage-0-identifier'
         ) as HTMLInputElement | null;
         expect(identifierInput).toBeInTheDocument();
+        expect(identifierInput).toHaveValue(
+          'https://registry.gdi-de.org/id/de.be.csw/7af63ac1-9d95-38e6-9a9e-8b8eb9676da2'
+        );
+
+        fetchMock.mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              content: [
+                {
+                  id: 2,
+                  title: 'Dataset with URL',
+                  metadataId: 'https://example.com/identifier'
+                }
+              ]
+            })
+          )
+        );
+        await fireEvent.keyUp(titleInput!, { target: { value: 'Dataset with URL' } });
+        await userEvent.click(await screen.findByRole('button', { name: 'Dataset with URL' }));
+        expect(identifierInput).toHaveValue('https://example.com/identifier');
+
         const identifierFieldset = identifierInput!.closest('fieldset') as HTMLElement;
         await testField('isoMetadata.lineage[0].identifier', {
           fieldset: identifierFieldset,
