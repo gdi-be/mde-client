@@ -303,7 +303,7 @@ export async function testServices(role: string) {
               await testField('isoMetadata.services.featureTypes.name', {
                 fieldset: fieldset,
                 fieldType: 'text',
-                fieldInput: 'New FeatureType Name',
+                fieldInput: 'new-featuretype_name',
                 expectPersist: false,
                 help: true,
                 testProgress: {
@@ -378,7 +378,7 @@ export async function testServices(role: string) {
               await testField('isoMetadata.services.featureTypes.columns.name', {
                 fieldset: fieldset,
                 fieldType: 'text',
-                fieldInput: 'New FeatureType Name',
+                fieldInput: 'new-attribute_name',
                 expectPersist: false,
                 help: true,
                 testProgress: {

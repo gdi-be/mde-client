@@ -74,7 +74,7 @@ export async function testLayersForm(role: string) {
           await testField('clientMetadata.layers', {
             fieldset: fieldset,
             fieldType: 'service',
-            fieldInput: 'New Layer Name',
+            fieldInput: 'new-layer_name',
             help: true,
             testProgress: {
               section: 'services',
@@ -107,7 +107,7 @@ export async function testLayersForm(role: string) {
           await testField('clientMetadata.layers', {
             fieldset: fieldset as HTMLElement,
             fieldType: 'service',
-            fieldInput: 'New Layer Style Name',
+            fieldInput: 'new-layer-style_name',
             help: true,
             testProgress: {
               section: 'services',

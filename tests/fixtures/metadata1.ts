@@ -82,13 +82,13 @@ export default {
             columns: [
               {
                 id: 'col-1',
-                name: 'Mein Attribut',
+                name: 'mein_attribut',
                 alias: 'Der andere Name meines Attributs',
                 type: 'Date'
               },
               {
                 id: 'col-2',
-                name: 'Mein zweites Attribut ',
+                name: 'mein_zweites_attribut',
                 alias: 'Attribut 2',
                 type: 'Double'
               }

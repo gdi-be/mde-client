@@ -107,6 +107,8 @@ const isValidEmail = (val: string) => {
   return emailRegex.test(val);
 };
 
+const isValidTechnicalName = (val: string) => /^[a-z_-][a-z0-9_-]{0,99}$/.test(val);
+
 const formatDate = (date: Date | string): string => {
   if (typeof date === 'string') {
     date = new Date(date);
@@ -868,6 +870,13 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
           helpText: 'Bitte geben Sie einen Namen für die Kartenebene an.'
         };
       }
+      if (isDefined(name) && !isValidTechnicalName(name)) {
+        return {
+          valid: false,
+          helpText:
+            'Bitte geben Sie einen gültigen Namen ein. Erlaubt sind Kleinbuchstaben, Zahlen, Unterstriche und Bindestriche. Das erste Zeichen darf keine Zahl sein.'
+        };
+      }
       return { valid: true };
     },
     section: 'services',
@@ -886,6 +895,13 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
         return {
           valid: false,
           helpText: 'Bitte geben Sie einen Style-Namen für die Kartenebene an.'
+        };
+      }
+      if (isDefined(styleName) && !isValidTechnicalName(styleName)) {
+        return {
+          valid: false,
+          helpText:
+            'Bitte geben Sie einen gültigen Namen ein. Erlaubt sind Kleinbuchstaben, Zahlen, Unterstriche und Bindestriche. Das erste Zeichen darf keine Zahl sein.'
         };
       }
       return { valid: true };
@@ -1025,11 +1041,11 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
             helpText: 'Bitte geben Sie einen Namen für den FeatureType an.'
           };
         }
-        if (isDefined(name) && !/^[a-zA-Z0-9_]+$/.test(name)) {
+        if (isDefined(name) && !isValidTechnicalName(name)) {
           return {
             valid: false,
             helpText:
-              'Bitte geben Sie einen gültigen Namen für den FeatureType an. Nur Buchstaben, Zahlen und Unterstriche sind erlaubt.'
+              'Bitte geben Sie einen gültigen Namen ein. Erlaubt sind Kleinbuchstaben, Zahlen, Unterstriche und Bindestriche. Das erste Zeichen darf keine Zahl sein.'
           };
         }
       }
@@ -1052,7 +1068,22 @@ export const FieldConfigs: FullFieldConfig<any>[] = [
     profileId: 64,
     key: 'isoMetadata.services.featureTypes.columns.name',
     collectionKey: 'isoMetadata.services.featureTypes.columns',
-    validator: requiredValidator('Bitte geben Sie einen Namen für die Spalte an.'),
+    validator: (name: string | undefined) => {
+      if (!isDefined(name)) {
+        return {
+          valid: false,
+          helpText: 'Bitte geben Sie einen Namen für die Spalte an.'
+        };
+      }
+      if (!isValidTechnicalName(name)) {
+        return {
+          valid: false,
+          helpText:
+            'Bitte geben Sie einen gültigen Namen ein. Erlaubt sind Kleinbuchstaben, Zahlen, Unterstriche und Bindestriche. Das erste Zeichen darf keine Zahl sein.'
+        };
+      }
+      return { valid: true };
+    },
     section: 'services',
     required: true
   },
