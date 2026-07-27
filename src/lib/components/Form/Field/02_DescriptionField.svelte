@@ -61,7 +61,7 @@
 <div class="description-field">
   <TextAreaInput
     bind:value
-    maxlength={500}
+    maxlength={1250}
     onchange={() => {
       hasUnsavedLocalChange = true;
     }}
