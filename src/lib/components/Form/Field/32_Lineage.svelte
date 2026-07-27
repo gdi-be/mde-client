@@ -22,6 +22,7 @@
   const highestRole = $derived(getHighestRole(token));
 
   const KEY = 'isoMetadata.lineage';
+  const IDENTIFIER_REGISTRY_URL = 'https://registry.gdi-de.org/id/de.be.csw/';
 
   const { getValue, updateFormState } = getFormContext();
   const formState = getContext<FormState>(FORMSTATE_CONTEXT);
@@ -214,12 +215,15 @@
     metadataCollection: MetadataCollection,
     targetLineage: Lineage
   ) => {
+    const identifier = metadataCollection.metadataId!;
     lineages = lineages.map((lineage) => {
       if (lineage.id === targetLineage.id) {
         return {
           ...lineage,
           title: metadataCollection.title!,
-          identifier: metadataCollection.metadataId!,
+          identifier: /^https?:\/\//.test(identifier)
+            ? identifier
+            : `${IDENTIFIER_REGISTRY_URL}${identifier}`,
           date: metadataCollection.isoMetadata?.published
         };
       }
