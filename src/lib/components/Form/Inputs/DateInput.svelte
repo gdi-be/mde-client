@@ -77,6 +77,7 @@
       onblur?.(evt);
     }}
     {...restProps}
+    autocomplete="off"
   />
   <div class="field-footer">
     <FieldHint {validationResult} {fieldConfig} {explanation} />
