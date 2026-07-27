@@ -73,7 +73,8 @@ test.describe('Metadata form - Services section', () => {
       label: 'Dienst-ID',
       value: opts.serviceId,
       checkForHelp: true,
-      checkForCopy: true
+      checkForCopy: true,
+      maxLength: 100
     });
 
     await testFormField(page, '.service-preview-field', {
@@ -99,7 +100,7 @@ test.describe('Metadata form - Services section', () => {
       serviceType: 'ATOM',
       serviceTitle: 'Test ATOM Service Title',
       serviceDescription: 'Test ATOM Service Description',
-      serviceId: 'TestATOMIdentifier',
+      serviceId: 'test_atom_identifier',
       previewUrl: 'https://example.com/atom-preview.png'
     });
 
@@ -125,7 +126,7 @@ test.describe('Metadata form - Services section', () => {
       serviceType: 'WMS',
       serviceTitle: 'Test WMS Service Title',
       serviceDescription: 'Test WMS Service Description',
-      serviceId: 'TestWMSIdentifier',
+      serviceId: 'test_wms_identifier',
       previewUrl: 'https://example.com/wms-preview.png'
     });
 
@@ -259,7 +260,7 @@ test.describe('Metadata form - Services section', () => {
       serviceType: 'WFS',
       serviceTitle: 'Test WFS Service Title',
       serviceDescription: 'Test WFS Service Description',
-      serviceId: 'TestWFSIdentifier',
+      serviceId: 'test_wfs_identifier',
       previewUrl: 'https://example.com/wfs-preview.png'
     });
 
