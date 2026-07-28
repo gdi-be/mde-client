@@ -73,7 +73,11 @@
       restProps.onchange?.(evt as Event & { currentTarget: EventTarget & HTMLInputElement });
     }}
     onblur={(evt) => {
-      value = (evt.currentTarget as HTMLInputElement).value;
+      const input = evt.currentTarget as HTMLInputElement;
+      value = input.value;
+      if (input.validity.badInput) {
+        return;
+      }
       onblur?.(evt);
     }}
     {...restProps}

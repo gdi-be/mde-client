@@ -66,6 +66,21 @@ export async function testTempAndSpatial(role: string) {
           help: true
         });
       });
+
+      it('does not persist an incomplete published date', async () => {
+        const input = document.querySelector(
+          '.published-field input[type="date"]'
+        ) as HTMLInputElement;
+        const previousCallCount = fetchMock.mock.calls.length;
+
+        Object.defineProperty(input, 'validity', {
+          value: { badInput: true }
+        });
+
+        await fireEvent.blur(input);
+
+        expect(fetchMock.mock.calls).toHaveLength(previousCallCount);
+      });
     });
 
     describe('14_MaintenanceFrequencyField', () => {
