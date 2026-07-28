@@ -1,3 +1,19 @@
+# [6.4.0](https://github.com/gdi-be/mde-client/compare/v6.3.0...v6.4.0) (2026-07-28)
+
+
+### Bug Fixes
+
+* **DateInput:** disable date field autocomplete ([8cc33af](https://github.com/gdi-be/mde-client/commit/8cc33af6c797b35bc8d23ecca97dd4fc1f2f785f))
+* increase dataset abstract length ([06ac123](https://github.com/gdi-be/mde-client/commit/06ac123ddf78c5452f1a6391078f06bb258784b9))
+* **Lineage:** add registry URL to selected identifiers ([f5cb780](https://github.com/gdi-be/mde-client/commit/f5cb7805613f44ad26e1a5e65f9cd2d405912fe4))
+* tighten service ID validation ([6706d04](https://github.com/gdi-be/mde-client/commit/6706d04c7953ff69dc2d29789f22e978532860b2))
+
+
+### Features
+
+* add job for publishing e2e-tests ([#306](https://github.com/gdi-be/mde-client/issues/306)) ([0f6522f](https://github.com/gdi-be/mde-client/commit/0f6522fc434fa57d1ebec5480f1e19366ec4a640))
+* unify technical name validation ([de87335](https://github.com/gdi-be/mde-client/commit/de87335675ca4771172dbbb2eed3f600ab16a6ab))
+
 # [6.3.0](https://github.com/gdi-be/mde-client/compare/v6.2.1...v6.3.0) (2026-07-20)
 
 
