@@ -1,3 +1,10 @@
+## [6.4.1](https://github.com/gdi-be/mde-client/compare/v6.4.0...v6.4.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **DateInput:** prevent save feedback for incomplete dates ([08c89cf](https://github.com/gdi-be/mde-client/commit/08c89cf36bd26a2e3bd951c9360071acb3bc711e))
+
 # [6.4.0](https://github.com/gdi-be/mde-client/compare/v6.3.0...v6.4.0) (2026-07-28)
 
 
