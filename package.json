@@ -57,7 +57,7 @@
     "@eslint/js": "^10.0.1",
     "@smui-extra/autocomplete": "^8.0.3",
     "@smui-extra/chip-input": "^8.0.3",
-    "@smui/button": "^8.0.3",
+    "@smui/button": "^9.0.0",
     "@smui/card": "^8.0.3",
     "@smui/checkbox": "^8.0.3",
     "@smui/chips": "^8.0.3",
