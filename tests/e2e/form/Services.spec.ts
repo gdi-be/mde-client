@@ -73,8 +73,7 @@ test.describe('Metadata form - Services section', () => {
       label: 'Dienst-ID',
       value: opts.serviceId,
       checkForHelp: true,
-      checkForCopy: true,
-      maxLength: 100
+      checkForCopy: true
     });
 
     await testFormField(page, '.service-preview-field', {
