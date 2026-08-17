@@ -179,21 +179,21 @@ test.describe('Metadata form - Services section', () => {
 
     await testFormField(page, '.layer-title-field', {
       label: 'Titel der Kartenebene',
-      value: 'Test WMS Layer Title',
+      value: 'TestWmsLayerTitle',
       checkForHelp: true,
       checkForCopy: true
     });
 
     await testFormField(page, '.layer-name-field', {
       label: 'Name der Kartenebene',
-      value: 'Test WMS Layer Name',
+      value: 'test-wms-layer-name',
       checkForHelp: true,
       checkForCopy: true
     });
 
     await testFormField(page, '.layer-style-name-field', {
       label: 'Name des Styles',
-      value: 'Test Style Name',
+      value: 'test-style-name',
       checkForHelp: true,
       checkForCopy: true
     });
@@ -218,7 +218,7 @@ test.describe('Metadata form - Services section', () => {
 
     await testFormField(
       page,
-      '.layers-form .layer-short-description-field:has(legend:has-text("Ablageort der Daten"))',
+      '.layers-form .layer-datasource-field:has(legend:has-text("Ablageort der Daten"))',
       {
         label: 'Ablageort der Daten',
         value: 'https://example.com/wms/datasource',
@@ -229,7 +229,7 @@ test.describe('Metadata form - Services section', () => {
 
     await testFormField(
       page,
-      '.layers-form .layer-short-description-field:has(legend:has-text("Sekundäre Datenhaltung"))',
+      '.layers-form .layer-secondary-datasource-field:has(legend:has-text("Sekundäre Datenhaltung"))',
       {
         label: 'Sekundäre Datenhaltung',
         value: 'https://example.com/wms/secondary-datasource',
@@ -272,14 +272,14 @@ test.describe('Metadata form - Services section', () => {
 
     await testFormField(page, '.featuretype-title-field', {
       label: 'Titel des FeatureTypes',
-      value: 'Test WFS FeatureType Title',
+      value: 'TestWfsFeatureTypeTitle',
       checkForHelp: true,
       checkForCopy: true
     });
 
     await testFormField(page, '.featuretype-name-field', {
       label: 'Name des FeatureTypes',
-      value: 'TestWFSFeatureTypeName',
+      value: 'test-wfs-featuretype-name',
       checkForHelp: true,
       checkForCopy: true
     });
@@ -297,7 +297,7 @@ test.describe('Metadata form - Services section', () => {
 
     await testFormField(page, '.attribute-name-field', {
       label: 'Attribut-Name',
-      value: 'Test Attribute Name',
+      value: 'test-attribute-name',
       checkForHelp: true,
       checkForCopy: true
     });
@@ -311,7 +311,7 @@ test.describe('Metadata form - Services section', () => {
 
     await testFormField(page, '.attribute-type-field', {
       label: 'Attribut-Datentyp',
-      selectOptionText: 'Text',
+      selectOptionText: 'Boolean',
       checkForHelp: true,
       checkForCopy: true
     });
@@ -363,14 +363,14 @@ test.describe('Metadata form - Services section', () => {
     await expect(servicesField).toContainText('Test WMS Service Description');
     await expect(servicesField).toContainText('https://example.com/wms-preview.png');
     await expect(servicesField).toContainText('Kartenebenen (1)');
-    await expect(servicesField).toContainText('Test WMS Layer Title');
+    await expect(servicesField).toContainText('TestWmsLayerTitle');
 
     await expect(servicesField).toContainText('Test WFS Service Title');
     await expect(servicesField).toContainText('WFS');
     await expect(servicesField).toContainText('Test WFS Service Description');
     await expect(servicesField).toContainText('https://example.com/wfs-preview.png');
     await expect(servicesField).toContainText('FeatureTypes (1)');
-    await expect(servicesField).toContainText('TestWFSFeatureTypeName');
+    await expect(servicesField).toContainText('TestWfsFeatureTypeTitle');
     await highlight(servicesField);
     await servicesField.hover();
   });

@@ -7,9 +7,8 @@ export default defineConfig({
   workers: 1,
   use: {
     baseURL:
-      process.env.PLAYWRIGHT_BASE_URL ??
-      'https://sensw-geoportal-berlin-mde.intranet.terrestris.de',
-    headless: true,
+      process.env.PLAYWRIGHT_BASE_URL,
+    headless: false,
     launchOptions: {
       slowMo: 200
     }
