@@ -6,10 +6,8 @@ export default defineConfig({
   reporter: [['list'], ['html', { outputFolder: 'test-results/', open: 'never' }]],
   workers: 1,
   use: {
-    baseURL:
-      process.env.PLAYWRIGHT_BASE_URL ??
-      'https://sensw-geoportal-berlin-mde.intranet.terrestris.de',
-    headless: true,
+    baseURL: process.env.PLAYWRIGHT_BASE_URL,
+    headless: false,
     launchOptions: {
       slowMo: 200
     }

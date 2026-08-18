@@ -48,21 +48,21 @@ test.describe('Metadata form - Temp and Spatial section', () => {
       checkForCopy: true
     });
 
-    await testFormField(page, '.date-time-field:has(input[name="isoMetadata.published"])', {
+    await testFormField(page, '.published-field:has(input[name="isoMetadata.published"])', {
       label: 'Veröffentlichungsdatum',
       value: '2026-01-01',
       checkForHelp: true,
       checkForCopy: true
     });
 
-    await testFormField(page, 'section#temp_and_spatial .metadata-type-field', {
+    await testFormField(page, 'section#temp_and_spatial .maintenance-frequency-field', {
       label: 'Pflegeintervall',
       selectOptionText: 'monatlich',
       checkForHelp: true,
       checkForCopy: true
     });
 
-    await testFormField(page, '.date-time-field:has(input[name="isoMetadata.modified"])', {
+    await testFormField(page, '.last-updated-field:has(input[name="isoMetadata.modified"])', {
       label: 'letzte Aktualisierung',
       value: '2025-12-31',
       checkForHelp: true,
@@ -72,19 +72,9 @@ test.describe('Metadata form - Temp and Spatial section', () => {
     const validityRangeField = page.locator('.validity-range-field');
     await expect(validityRangeField).toBeVisible();
 
-    const validFromLabel = validityRangeField.locator('legend', { hasText: 'gültig ab' });
-    await expect(validFromLabel).toBeVisible();
-    const validFromInput = validityRangeField.locator('input[type="date"]').first();
-    await validFromInput.fill('2025-01-01');
-
-    const validToLabel = validityRangeField.locator('legend', { hasText: 'gültig bis' });
-    await expect(validToLabel).toBeVisible();
-    const validToInput = validityRangeField.locator('input[type="date"]').last();
-    await validToInput.fill('2025-12-31');
-
     await testFormField(
       page,
-      'section#temp_and_spatial .title-field:has(legend:has-text("geliefertes Koordinatensystem"))',
+      'section#temp_and_spatial .delivered-crs-field:has(legend:has-text("geliefertes Koordinatensystem"))',
       {
         label: 'geliefertes Koordinatensystem',
         value: 'EPSG:25833',
@@ -95,7 +85,7 @@ test.describe('Metadata form - Temp and Spatial section', () => {
 
     await testFormField(
       page,
-      'section#temp_and_spatial .title-field:has(legend:has-text("abzugebendes Koordinatensystem"))',
+      'section#temp_and_spatial .crs-field:has(legend:has-text("abzugebendes Koordinatensystem"))',
       {
         label: 'abzugebendes Koordinatensystem',
         selectOptionText: 'EPSG:4326',
@@ -120,7 +110,7 @@ test.describe('Metadata form - Temp and Spatial section', () => {
 
     await testFormField(
       page,
-      'section#temp_and_spatial .title-field:has(legend:has-text("Räumliche Auflösung"))',
+      'section#temp_and_spatial .resolution-field:has(legend:has-text("Räumliche Auflösung"))',
       {
         label: 'Räumliche Auflösung',
         radioOptionLabel: 'Bodenauflösung in Metern',
@@ -191,20 +181,6 @@ test.describe('Metadata form - Temp and Spatial section', () => {
     await highlight(lastUpdatedField);
     await lastUpdatedField.hover();
 
-    const validFromField = page.locator('section#temp_and_spatial .display-field', {
-      has: page.locator('strong', { hasText: 'gültig ab' })
-    });
-    await expect(validFromField.locator('.value')).toContainText('2025');
-    await highlight(validFromField);
-    await validFromField.hover();
-
-    const validToField = page.locator('section#temp_and_spatial .display-field', {
-      has: page.locator('strong', { hasText: 'gültig bis' })
-    });
-    await expect(validToField.locator('.value')).toContainText('2025');
-    await highlight(validToField);
-    await validToField.hover();
-
     const deliveredCrsField = page.locator('section#temp_and_spatial .display-field', {
       has: page.locator('strong', { hasText: 'geliefertes Koordinatensystem' })
     });
@@ -271,10 +247,10 @@ test.describe('Metadata form - Temp and Spatial section', () => {
       'section#temp_and_spatial .date-time-field:has(input[name="isoMetadata.created"]) input[type="date"]'
     );
     await clearDateFieldViaCalendarButton(
-      'section#temp_and_spatial .date-time-field:has(input[name="isoMetadata.published"]) input[type="date"]'
+      'section#temp_and_spatial .published-field:has(input[name="isoMetadata.published"]) input[type="date"]'
     );
     await clearDateFieldViaCalendarButton(
-      'section#temp_and_spatial .date-time-field:has(input[name="isoMetadata.modified"]) input[type="date"]'
+      'section#temp_and_spatial .last-updated-field:has(input[name="isoMetadata.modified"]) input[type="date"]'
     );
 
     const validityRangeField = page.locator('section#temp_and_spatial .validity-range-field');

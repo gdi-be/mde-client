@@ -35,7 +35,7 @@ test.describe('Metadata form - Additional section', () => {
 
     await testFormField(
       page,
-      'section#additional .technical-description-field:has(legend:has-text("Inhaltliche Beschreibung"))',
+      'section#additional .content-description-field:has(legend:has-text("Inhaltliche Beschreibung"))',
       {
         label: 'Inhaltliche Beschreibung',
         value: 'Dies ist eine inhaltliche Beschreibung',
