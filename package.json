@@ -60,7 +60,7 @@
     "@smui/button": "^8.0.3",
     "@smui/card": "^8.0.3",
     "@smui/checkbox": "^8.0.3",
-    "@smui/chips": "^8.0.3",
+    "@smui/chips": "^9.0.0",
     "@smui/dialog": "^8.0.3",
     "@smui/form-field": "^8.0.3",
     "@smui/icon-button": "^8.0.3",
